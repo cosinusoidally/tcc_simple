@@ -19954,19 +19954,6 @@ static void tcc_add_pragma_libs(TCCState *s1)
     tcc_free(s->tcc_lib_path);
     s->tcc_lib_path = tcc_strdup(path);
 }
-typedef struct FlagDef {
-    uint16_t offset;
-    uint16_t flags;
-    const char *name;
-} FlagDef;
-static int no_flag(const char **pp)
-{
-    const char *p = *pp;
-    if (*p != 'n' || *++p != 'o' || *++p != '-')
-        return 0;
-    *pp = p + 1;
-    return 1;
-}
 
 static int strstart(const char *val, const char **str) {
     const char *p, *q;
