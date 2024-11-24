@@ -20334,16 +20334,7 @@ static void args_parser_listfile(TCCState *s,
     cstr_new(&linker_arg);
     while (optind < argc) {
         r = argv[optind];
-        if (r[0] == '@' && r[1] != '\0') {
-            args_parser_listfile(s, r + 1, optind, &argc, &argv);
-     continue;
-        }
         optind++;
-        if (tool) {
-            if (r[0] == '-' && r[1] == 'v' && r[2] == 0)
-                ++s->verbose;
-            continue;
-        }
 reparse:
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@')
@@ -20353,8 +20344,6 @@ reparse:
         for(popt = tcc_options; ; ++popt) {
             const char *p1 = popt->name;
             const char *r1 = r + 1;
-            if (p1 == ((void*)0))
-                tcc_error("invalid option -- '%s'", r);
             if (!strstart(p1, &r1))
                 continue;
             optarg = r1;
