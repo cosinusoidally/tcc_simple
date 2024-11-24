@@ -3421,7 +3421,6 @@ static Section *symtab_section;
 static Section *stab_section, *stabstr_section;
 static void tccelf_new(TCCState *s);
 static void tccelf_delete(TCCState *s);
-static void tccelf_stab_new(TCCState *s);
 static void tccelf_begin_file(TCCState *s1);
 static void tccelf_end_file(TCCState *s1);
 static Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags);
@@ -3429,7 +3428,6 @@ static void section_realloc(Section *sec, unsigned long new_size);
 static size_t section_add(Section *sec, Elf32_Addr size, int align);
 static void *section_ptr_add(Section *sec, Elf32_Addr size);
 static void section_reserve(Section *sec, unsigned long size);
-static Section *find_section(TCCState *s1, const char *name);
 static Section *new_symtab(TCCState *s1, const char *symtab_name, int sh_type, int sh_flags, const char *strtab_name, const char *hash_name, int hash_sh_flags);
 static void put_extern_sym2(Sym *sym, int sh_num, Elf32_Addr value, unsigned long size, int can_add_underscore);
 static void put_extern_sym(Sym *sym, Section *section, Elf32_Addr value, unsigned long size);
@@ -10965,10 +10963,6 @@ static void tccelf_bounds_new(TCCState *s)
                                   1, (1 << 1));
 }
 
-static void tccelf_stab_new(TCCState *s) {
-exit(1);
-}
-
 static void free_section(Section *s)
 {
     tcc_free(s->data);
@@ -10976,17 +10970,14 @@ static void free_section(Section *s)
 static void tccelf_delete(TCCState *s1)
 {
     int i;
-    for(i = 1; i < s1->nb_sections; i++)
+    for(i = 1; i < s1->nb_sections; i++) {
         free_section(s1->sections[i]);
-    dynarray_reset(&s1->sections, &s1->nb_sections);
-    for(i = 0; i < s1->nb_priv_sections; i++)
-        free_section(s1->priv_sections[i]);
-    dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
-    for ( i = 0; i < s1->nb_loaded_dlls; i++) {
-        DLLReference *ref = s1->loaded_dlls[i];
-        if ( ref->handle )
-            dlclose(ref->handle);
     }
+    dynarray_reset(&s1->sections, &s1->nb_sections);
+    for(i = 0; i < s1->nb_priv_sections; i++) {
+        free_section(s1->priv_sections[i]);
+    }
+    dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
     dynarray_reset(&s1->loaded_dlls, &s1->nb_loaded_dlls);
     tcc_free(s1->sym_attrs);
     symtab_section = ((void*)0);
@@ -11108,8 +11099,6 @@ static size_t section_add(Section *sec, Elf32_Addr size, int align)
     if (sec->sh_type != 8 && offset1 > sec->data_allocated)
         section_realloc(sec, offset1);
     sec->data_offset = offset1;
-    if (align > sec->sh_addralign)
-        sec->sh_addralign = align;
     return offset;
 }
 static void *section_ptr_add(Section *sec, Elf32_Addr size)
@@ -11124,17 +11113,7 @@ static void section_reserve(Section *sec, unsigned long size)
     if (size > sec->data_offset)
         sec->data_offset = size;
 }
-static Section *find_section(TCCState *s1, const char *name)
-{
-    Section *sec;
-    int i;
-    for(i = 1; i < s1->nb_sections; i++) {
-        sec = s1->sections[i];
-        if (!strcmp(name, sec->name))
-            return sec;
-    }
-    return new_section(s1, name, 1, (1 << 1));
-}
+
 static int put_elf_str(Section *s, const char *sym)
 {
     int offset, len;
