@@ -20359,46 +20359,6 @@ reparse:
             break;
         }
         switch(popt->index) {
-        case TCC_OPTION_HELP:
-            return 1;
-        case TCC_OPTION_HELP2:
-            return 2;
-        case TCC_OPTION_I:
-            tcc_add_include_path(s, optarg);
-            break;
-        case TCC_OPTION_D:
-            parse_option_D(s, optarg);
-            break;
-        case TCC_OPTION_U:
-            tcc_undefine_symbol(s, optarg);
-            break;
-        case TCC_OPTION_L:
-            tcc_add_library_path(s, optarg);
-            break;
-        case TCC_OPTION_B:
-            tcc_set_lib_path(s, optarg);
-            break;
-        case TCC_OPTION_l:
-            args_parser_add_file(s, optarg, 4);
-            s->nb_libraries++;
-            break;
-        case TCC_OPTION_pthread:
-            parse_option_D(s, "_REENTRANT");
-            s->option_pthread = 1;
-            break;
-        case TCC_OPTION_bench:
-            s->do_bench = 1;
-            break;
-        case TCC_OPTION_bt:
-            tcc_set_num_callers(atoi(optarg));
-            break;
-        case TCC_OPTION_b:
-            s->do_bounds_check = 1;
-            s->do_debug = 1;
-            break;
-        case TCC_OPTION_g:
-            s->do_debug = 1;
-            break;
         case TCC_OPTION_c:
             x = 4;
         set_output_type:
