@@ -9562,67 +9562,7 @@ static void gfunc_return(CType *func_type)
     }
     vtop--;
 }
-static int case_cmp(const void *pa, const void *pb)
-{
-    int64_t a = (*(struct case_t**) pa)->v1;
-    int64_t b = (*(struct case_t**) pb)->v1;
-    return a < b ? -1 : a > b;
-}
-static void gcase(struct case_t **base, int len, int *bsym)
-{
-    struct case_t *p;
-    int e;
-    int ll = (vtop->type.t & 0x000f) == 4;
-    gv(0x0001);
-    while (len > 4) {
-        p = base[len/2];
-        vdup();
- if (ll)
-     vpushll(p->v2);
- else
-     vpushi(p->v2);
-        gen_op(0x9e);
-        e = gtst(1, 0);
-        vdup();
- if (ll)
-     vpushll(p->v1);
- else
-     vpushi(p->v1);
-        gen_op(0x9d);
-        gtst_addr(0, p->sym);
-        gcase(base, len/2, bsym);
-        if (cur_switch->def_sym)
-            gjmp_addr(cur_switch->def_sym);
-        else
-            *bsym = gjmp(*bsym);
-        gsym(e);
-        e = len/2 + 1;
-        base += e; len -= e;
-    }
-    while (len--) {
-        p = *base++;
-        vdup();
- if (ll)
-     vpushll(p->v2);
- else
-     vpushi(p->v2);
-        if (p->v1 == p->v2) {
-            gen_op(0x94);
-            gtst_addr(0, p->sym);
-        } else {
-            gen_op(0x9e);
-            e = gtst(1, 0);
-            vdup();
-     if (ll)
-         vpushll(p->v1);
-     else
-         vpushi(p->v1);
-            gen_op(0x9d);
-            gtst_addr(0, p->sym);
-            gsym(e);
-        }
-    }
-}
+
 static void block(int *bsym, int *csym, int is_expr)
 {
     int a, b, c, d, cond;
