@@ -20971,22 +20971,6 @@ static void print_search_dirs(TCCState *s)
     print_dirs("crt", s->crt_paths, s->nb_crt_paths);
     printf("elfinterp:\n  %s\n", "/lib/ld-linux.so.2");
 }
-static void set_environment(TCCState *s)
-{
-    char * path;
-    path = getenv("C_INCLUDE_PATH");
-    if(path != ((void*)0)) {
-        tcc_add_sysinclude_path(s, path);
-    }
-    path = getenv("CPATH");
-    if(path != ((void*)0)) {
-        tcc_add_include_path(s, path);
-    }
-    path = getenv("LIBRARY_PATH");
-    if(path != ((void*)0)) {
-        tcc_add_library_path(s, path);
-    }
-}
 
 int main(int argc0, char **argv0) {
     TCCState *s;
@@ -20999,7 +20983,6 @@ int main(int argc0, char **argv0) {
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
     n = s->nb_files;
-    set_environment(s);
     tcc_set_output_type(s, s->output_type);
     s->ppfp = ppfp;
     for (first_file = ((void*)0), ret = 0;;) {
