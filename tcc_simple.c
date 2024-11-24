@@ -3544,7 +3544,6 @@ static void asm_clobber(uint8_t *clobber_regs, const char *str);
 static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
-static void tcc_set_num_callers(int n);
 static int gnu_ext = 1;
 static int tcc_ext = 1;
 static struct TCCState *tcc_state;
@@ -14432,85 +14431,7 @@ static void *rt_prog_main;
 static int rt_get_caller_pc(Elf32_Addr *paddr, ucontext_t *uc, int level);
 static void rt_error(ucontext_t *uc, const char *fmt, ...);
 static void set_exception_handler(void);
-static void set_pages_executable(void *ptr, unsigned long length);
-static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff);
 
-static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff)
-{
-    Section *s;
-    unsigned offset, length, fill, i, k;
-    Elf32_Addr mem;
-    if (((void*)0) == ptr) {
-        s1->nb_errors = 0;
-        tcc_add_runtime(s1);
- resolve_common_syms(s1);
-        build_got_entries(s1);
-        if (s1->nb_errors)
-            return -1;
-    }
-    offset = 0, mem = (Elf32_Addr)ptr;
-    fill = -mem & 63;
-    for (k = 0; k < 2; ++k) {
-        for(i = 1; i < s1->nb_sections; i++) {
-            s = s1->sections[i];
-            if (0 == (s->sh_flags & (1 << 1)))
-                continue;
-            if (k != !(s->sh_flags & (1 << 2)))
-                continue;
-            offset += fill;
-            if (!mem)
-                s->sh_addr = 0;
-            else if (s->sh_flags & (1 << 2))
-                s->sh_addr = mem + offset + ptr_diff;
-            else
-                s->sh_addr = mem + offset;
-            offset += s->data_offset;
-            fill = -(mem + offset) & 15;
-        }
-        fill = -(mem + offset) & 63;
-    }
-    relocate_syms(s1, s1->symtab, 1);
-    if (s1->nb_errors)
-        return -1;
-    if (0 == mem)
-        return offset + 63;
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->reloc)
-            relocate_section(s1, s);
-    }
-    relocate_plt(s1);
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (0 == (s->sh_flags & (1 << 1)))
-            continue;
-        length = s->data_offset;
-        ptr = (void*)s->sh_addr;
-        if (s->sh_flags & (1 << 2))
-            ptr = (char*)ptr - ptr_diff;
-        if (((void*)0) == s->data || s->sh_type == 8)
-            memset(ptr, 0, length);
-        else
-            memcpy(ptr, s->data, length);
-        if (s->sh_flags & (1 << 2))
-            set_pages_executable((char*)ptr + ptr_diff, length);
-    }
-    return 0;
-}
-static void set_pages_executable(void *ptr, unsigned long length)
-{
-    void __clear_cache(void *beginning, void *end);
-    Elf32_Addr start, end;
-    start = (Elf32_Addr)ptr & ~(4096 - 1);
-    end = (Elf32_Addr)ptr + length;
-    end = (end + 4096 - 1) & ~(4096 - 1);
-    if (mprotect((void *)start, end - start, 0x1 | 0x2 | 0x4))
-        tcc_error("mprotect failed: did you mean to configure --with-selinux?");
-}
-static void tcc_set_num_callers(int n)
-{
-    rt_num_callers = n;
-}
 static Elf32_Addr rt_printline(Elf32_Addr wanted_pc, const char *msg)
 {
     char func_name[128], last_func_name[128];
