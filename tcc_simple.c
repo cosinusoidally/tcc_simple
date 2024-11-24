@@ -21023,10 +21023,7 @@ redo:
             break;
         }
     }
-        if (tcc_output_file(s, s->outfile))
-            ret = 1;
-        else if (s->gen_deps)
-             gen_makedeps(s, s->outfile, s->deps_outfile);
+    tcc_output_file(s, s->outfile);
     tcc_delete(s);
     return ret;
 }
