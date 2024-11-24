@@ -1936,7 +1936,6 @@ typedef struct TCCState TCCState;
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
  void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
- void tcc_undefine_symbol(TCCState *s, const char *sym);
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_compile_string(TCCState *s, const char *buf);
  int tcc_set_output_type(TCCState *s, int output_type);
@@ -19652,15 +19651,6 @@ static int tcc_compile(TCCState *s1)
     next_nomacro();
     parse_define();
     tcc_close();
-}
- void tcc_undefine_symbol(TCCState *s1, const char *sym)
-{
-    TokenSym *ts;
-    Sym *s;
-    ts = tok_alloc(sym, strlen(sym));
-    s = define_find(ts->tok);
-    if (s)
-        define_undef(s);
 }
 
 static void tcc_cleanup(void) {
