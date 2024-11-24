@@ -17041,114 +17041,19 @@ static void asm_expr_prod(TCCState *s1, ExprValue *pe)
         }
     }
 }
-static void asm_expr_logic(TCCState *s1, ExprValue *pe)
-{
-    int op;
-    ExprValue e2;
-    asm_expr_prod(s1, pe);
-    for(;;) {
-        op = tok;
-        if (op != '&' && op != '|' && op != '^')
-            break;
-        next();
-        asm_expr_prod(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
-        case '&':
-            pe->v &= e2.v;
-            break;
-        case '|':
-            pe->v |= e2.v;
-            break;
-        default:
-        case '^':
-            pe->v ^= e2.v;
-            break;
-        }
-    }
+
+static void asm_expr_logic(TCCState *s1, ExprValue *pe) {
+exit(1);
 }
-static inline void asm_expr_sum(TCCState *s1, ExprValue *pe)
-{
-    int op;
-    ExprValue e2;
-    asm_expr_logic(s1, pe);
-    for(;;) {
-        op = tok;
-        if (op != '+' && op != '-')
-            break;
-        next();
-        asm_expr_logic(s1, &e2);
-        if (op == '+') {
-            if (pe->sym != ((void*)0) && e2.sym != ((void*)0))
-                goto cannot_relocate;
-            pe->v += e2.v;
-            if (pe->sym == ((void*)0) && e2.sym != ((void*)0))
-                pe->sym = e2.sym;
-        } else {
-            pe->v -= e2.v;
-     if (!e2.sym) {
-     } else if (pe->sym == e2.sym) {
-  pe->sym = ((void*)0);
-     } else {
-  Elf32_Sym *esym1, *esym2;
-  esym1 = elfsym(pe->sym);
-  esym2 = elfsym(e2.sym);
-  if (esym1 && esym1->st_shndx == esym2->st_shndx
-      && esym1->st_shndx != 0) {
-      pe->v += esym1->st_value - esym2->st_value;
-      pe->sym = ((void*)0);
-  } else if (esym2->st_shndx == cur_text_section->sh_num) {
-      pe->v -= esym2->st_value - ind - 4;
-      pe->pcrel = 1;
-      e2.sym = ((void*)0);
-  } else {
-cannot_relocate:
-      tcc_error("invalid operation with label");
-  }
-     }
-        }
-    }
+
+static inline void asm_expr_sum(TCCState *s1, ExprValue *pe) {
+exit(1);
 }
-static inline void asm_expr_cmp(TCCState *s1, ExprValue *pe)
-{
-    int op;
-    ExprValue e2;
-    asm_expr_sum(s1, pe);
-    for(;;) {
-        op = tok;
- if (op != 0x94 && op != 0x95
-     && (op > 0x9f || op < 0x96))
-            break;
-        next();
-        asm_expr_sum(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
- case 0x94:
-     pe->v = pe->v == e2.v;
-     break;
- case 0x95:
-     pe->v = pe->v != e2.v;
-     break;
- case 0x9c:
-     pe->v = (int64_t)pe->v < (int64_t)e2.v;
-     break;
- case 0x9d:
-     pe->v = (int64_t)pe->v >= (int64_t)e2.v;
-     break;
- case 0x9e:
-     pe->v = (int64_t)pe->v <= (int64_t)e2.v;
-     break;
- case 0x9f:
-     pe->v = (int64_t)pe->v > (int64_t)e2.v;
-     break;
-        default:
-            break;
-        }
- pe->v = -(int64_t)pe->v;
-    }
+
+static inline void asm_expr_cmp(TCCState *s1, ExprValue *pe) {
+exit(1);
 }
+
 static void asm_expr(TCCState *s1, ExprValue *pe)
 {
     asm_expr_cmp(s1, pe);
