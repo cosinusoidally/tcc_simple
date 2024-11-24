@@ -1936,7 +1936,6 @@ typedef struct TCCState TCCState;
  void tcc_set_lib_path(TCCState *s, const char *path);
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
- void tcc_set_options(TCCState *s, const char *str);
  int tcc_add_include_path(TCCState *s, const char *pathname);
  int tcc_add_sysinclude_path(TCCState *s, const char *pathname);
  void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
@@ -5432,7 +5431,6 @@ static void pragma_parse(TCCState *s1)
             dynarray_add(&s1->pragma_libs, &s1->nb_pragma_libs, p);
         } else {
             if (t == TOK_option)
-                tcc_set_options(s1, p);
             tcc_free(p);
         }
     } else if (s1->warn_unsupported) {
@@ -20350,11 +20348,6 @@ reparse:
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@')
                 args_parser_add_file(s, r, s->filetype);
-            if (run) {
-                tcc_set_options(s, run);
-                arg_start = optind - 1;
-                break;
-            }
             continue;
         }
         for(popt = tcc_options; ; ++popt) {
@@ -20584,14 +20577,6 @@ unsupported_option:
     if (s->verbose)
         return 3;
     return 1;
-}
- void tcc_set_options(TCCState *s, const char *r)
-{
-    char **argv = ((void*)0);
-    int argc = 0;
-    args_parser_make_argv(r, &argc, &argv);
-    tcc_parse_args(s, &argc, &argv, 0);
-    dynarray_reset(&argv, &argc);
 }
 
 int main(int argc0, char **argv0) {
