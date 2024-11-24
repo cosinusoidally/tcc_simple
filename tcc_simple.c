@@ -1,23 +1,3 @@
-# 1 "tcc.c"
-# 1 "<built-in>"
-# 1 "<command-line>"
-# 1 "tcc.c"
-# 21 "tcc.c"
-# 1 "tcc.h" 1
-# 25 "tcc.h"
-# 1 "config.h" 1
-# 26 "tcc.h" 2
-
-# 1 "../woody/usr/include/stdlib.h" 1
-# 25 "../woody/usr/include/stdlib.h"
-# 1 "../woody/usr/include/features.h" 1
-# 283 "../woody/usr/include/features.h"
-# 1 "../woody/usr/include/sys/cdefs.h" 1
-# 284 "../woody/usr/include/features.h" 2
-# 312 "../woody/usr/include/features.h"
-# 1 "../woody/usr/include/gnu/stubs.h" 1
-# 313 "../woody/usr/include/features.h" 2
-# 26 "../woody/usr/include/stdlib.h" 2
 
 
 
@@ -25,7 +5,7 @@
 
 
 
-# 1 "include/stddef.h" 1
+
 
 
 
@@ -53,9 +33,7 @@ typedef unsigned int uint32_t;
 
 
 typedef unsigned long long int uint64_t;
-# 37 "include/stddef.h"
 void *alloca(size_t size);
-# 34 "../woody/usr/include/stdlib.h" 2
 
 
 
@@ -64,15 +42,6 @@ void *alloca(size_t size);
 
 
 
-# 1 "../woody/usr/include/bits/waitflags.h" 1
-# 43 "../woody/usr/include/stdlib.h" 2
-# 1 "../woody/usr/include/bits/waitstatus.h" 1
-# 63 "../woody/usr/include/bits/waitstatus.h"
-# 1 "../woody/usr/include/endian.h" 1
-# 37 "../woody/usr/include/endian.h"
-# 1 "../woody/usr/include/bits/endian.h" 1
-# 38 "../woody/usr/include/endian.h" 2
-# 64 "../woody/usr/include/bits/waitstatus.h" 2
 
 union wait
   {
@@ -106,14 +75,11 @@ union wait
 
       } __wait_stopped;
   };
-# 44 "../woody/usr/include/stdlib.h" 2
-# 68 "../woody/usr/include/stdlib.h"
 typedef union
   {
     union wait *__uptr;
     int *__iptr;
   } __WAIT_STATUS __attribute__ ((__transparent_union__));
-# 94 "../woody/usr/include/stdlib.h"
 typedef struct
   {
     int quot;
@@ -137,7 +103,6 @@ __extension__ typedef struct
     long long int quot;
     long long int rem;
   } lldiv_t;
-# 133 "../woody/usr/include/stdlib.h"
 extern size_t __ctype_get_mb_cur_max (void) ;
 
 
@@ -199,9 +164,6 @@ __extension__
 extern unsigned long long int strtoull (__const char *__restrict __nptr,
      char **__restrict __endptr, int __base)
      ;
-# 211 "../woody/usr/include/stdlib.h"
-# 1 "../woody/usr/include/xlocale.h" 1
-# 28 "../woody/usr/include/xlocale.h"
 typedef struct __locale_struct
 {
 
@@ -212,7 +174,6 @@ typedef struct __locale_struct
   const int *__ctype_tolower;
   const int *__ctype_toupper;
 } *__locale_t;
-# 212 "../woody/usr/include/stdlib.h" 2
 
 
 
@@ -287,21 +248,14 @@ extern unsigned long long int __strtoull_internal (__const char *
          char **__restrict __endptr,
          int __base, int __group)
      ;
-# 384 "../woody/usr/include/stdlib.h"
 extern char *l64a (long int __n) ;
 
 
 extern long int a64l (__const char *__s) __attribute__ ((__pure__));
 
 
-# 1 "../woody/usr/include/sys/types.h" 1
-# 28 "../woody/usr/include/sys/types.h"
 
 
-# 1 "../woody/usr/include/bits/types.h" 1
-# 29 "../woody/usr/include/bits/types.h"
-# 1 "include/stddef.h" 1
-# 30 "../woody/usr/include/bits/types.h" 2
 
 
 typedef unsigned char __u_char;
@@ -311,7 +265,6 @@ typedef unsigned long __u_long;
 
 __extension__ typedef unsigned long long int __u_quad_t;
 __extension__ typedef long long int __quad_t;
-# 49 "../woody/usr/include/bits/types.h"
 typedef signed char __int8_t;
 typedef unsigned char __uint8_t;
 typedef signed short int __int16_t;
@@ -406,15 +359,10 @@ typedef unsigned int __socklen_t;
 
 
 
-# 1 "../woody/usr/include/bits/pthreadtypes.h" 1
-# 23 "../woody/usr/include/bits/pthreadtypes.h"
-# 1 "../woody/usr/include/bits/sched.h" 1
-# 68 "../woody/usr/include/bits/sched.h"
 struct __sched_param
   {
     int __sched_priority;
   };
-# 24 "../woody/usr/include/bits/pthreadtypes.h" 2
 
 typedef int __atomic_lock_t;
 
@@ -534,8 +482,6 @@ typedef struct {
 
 
 typedef unsigned long int pthread_t;
-# 144 "../woody/usr/include/bits/types.h" 2
-# 31 "../woody/usr/include/sys/types.h" 2
 
 
 
@@ -628,17 +574,10 @@ typedef __caddr_t caddr_t;
 
 
 typedef __key_t key_t;
-# 132 "../woody/usr/include/sys/types.h"
-# 1 "../woody/usr/include/time.h" 1
-# 59 "../woody/usr/include/time.h"
 typedef __clock_t clock_t;
-# 70 "../woody/usr/include/time.h"
 typedef __time_t time_t;
-# 82 "../woody/usr/include/time.h"
 typedef __clockid_t clockid_t;
-# 94 "../woody/usr/include/time.h"
 typedef __timer_t timer_t;
-# 133 "../woody/usr/include/sys/types.h" 2
 
 
 
@@ -652,30 +591,20 @@ typedef __suseconds_t suseconds_t;
 
 
 
-# 1 "include/stddef.h" 1
-# 147 "../woody/usr/include/sys/types.h" 2
 
 
 
 typedef unsigned long int ulong;
 typedef unsigned short int ushort;
 typedef unsigned int uint;
-# 196 "../woody/usr/include/sys/types.h"
 typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
 typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
 typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
 typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
 
 typedef int register_t __attribute__ ((__mode__ (__word__)));
-# 215 "../woody/usr/include/sys/types.h"
-# 1 "../woody/usr/include/sys/select.h" 1
-# 31 "../woody/usr/include/sys/select.h"
-# 1 "../woody/usr/include/bits/select.h" 1
-# 32 "../woody/usr/include/sys/select.h" 2
 
 
-# 1 "../woody/usr/include/bits/sigset.h" 1
-# 23 "../woody/usr/include/bits/sigset.h"
 typedef int __sig_atomic_t;
 
 
@@ -685,7 +614,6 @@ typedef struct
   {
     unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
   } __sigset_t;
-# 35 "../woody/usr/include/sys/select.h" 2
 
 
 
@@ -695,24 +623,17 @@ typedef __sigset_t sigset_t;
 
 
 
-# 1 "../woody/usr/include/time.h" 1
-# 106 "../woody/usr/include/time.h"
 struct timespec
   {
     __time_t tv_sec;
     long int tv_nsec;
   };
-# 45 "../woody/usr/include/sys/select.h" 2
 
-# 1 "../woody/usr/include/bits/time.h" 1
-# 67 "../woody/usr/include/bits/time.h"
 struct timeval
   {
     __time_t tv_sec;
     __suseconds_t tv_usec;
   };
-# 47 "../woody/usr/include/sys/select.h" 2
-# 55 "../woody/usr/include/sys/select.h"
 typedef long int __fd_mask;
 
 
@@ -740,7 +661,6 @@ typedef struct
 
 
 typedef __fd_mask fd_mask;
-# 95 "../woody/usr/include/sys/select.h"
 
 
 
@@ -765,11 +685,8 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
 
 
 
-# 216 "../woody/usr/include/sys/types.h" 2
 
 
-# 1 "../woody/usr/include/sys/sysmacros.h" 1
-# 219 "../woody/usr/include/sys/types.h" 2
 
 
 
@@ -790,14 +707,12 @@ typedef __fsblkcnt_t fsblkcnt_t;
 
 
 typedef __fsfilcnt_t fsfilcnt_t;
-# 257 "../woody/usr/include/sys/types.h"
 typedef __blkcnt64_t blkcnt64_t;
 typedef __fsblkcnt64_t fsblkcnt64_t;
 typedef __fsfilcnt64_t fsfilcnt64_t;
 
 
 
-# 391 "../woody/usr/include/stdlib.h" 2
 
 
 
@@ -926,7 +841,6 @@ extern int seed48_r (unsigned short int __seed16v[3],
 
 extern int lcong48_r (unsigned short int __param[7],
         struct drand48_data *__buffer) ;
-# 527 "../woody/usr/include/stdlib.h"
 extern void *malloc (size_t __size) __attribute__ ((__malloc__));
 
 extern void *calloc (size_t __nmemb, size_t __size)
@@ -946,10 +860,6 @@ extern void cfree (void *__ptr) ;
 
 
 
-# 1 "../woody/usr/include/alloca.h" 1
-# 25 "../woody/usr/include/alloca.h"
-# 1 "include/stddef.h" 1
-# 26 "../woody/usr/include/alloca.h" 2
 
 
 
@@ -964,7 +874,6 @@ extern void *alloca (size_t __size) ;
 
 
 
-# 547 "../woody/usr/include/stdlib.h" 2
 
 
 
@@ -1033,7 +942,6 @@ extern int unsetenv (__const char *__name) ;
 
 
 extern int clearenv (void) ;
-# 623 "../woody/usr/include/stdlib.h"
 extern char *mktemp (char *__template) ;
 
 
@@ -1043,9 +951,7 @@ extern char *mktemp (char *__template) ;
 
 
 extern int mkstemp (char *__template) ;
-# 640 "../woody/usr/include/stdlib.h"
 extern int mkstemp64 (char *__template) ;
-# 650 "../woody/usr/include/stdlib.h"
 extern char *mkdtemp (char *__template) ;
 
 
@@ -1059,7 +965,6 @@ extern int system (__const char *__command) ;
 
 
 extern char *canonicalize_file_name (__const char *__name) ;
-# 672 "../woody/usr/include/stdlib.h"
 extern char *realpath (__const char *__restrict __name,
          char *__restrict __resolved) ;
 
@@ -1106,7 +1011,6 @@ extern ldiv_t ldiv (long int __numer, long int __denom)
 __extension__ extern lldiv_t lldiv (long long int __numer,
         long long int __denom)
      __attribute__ ((__const__));
-# 728 "../woody/usr/include/stdlib.h"
 extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign) ;
 
@@ -1177,7 +1081,6 @@ extern size_t wcstombs (char *__restrict __s,
 
 
 extern int rpmatch (__const char *__response) ;
-# 808 "../woody/usr/include/stdlib.h"
 extern int getsubopt (char **__restrict __optionp,
         char *__const *__restrict __tokens,
         char **__restrict __valuep) ;
@@ -1235,37 +1138,14 @@ extern int getloadavg (double __loadavg[], int __nelem) ;
 
 
 
-# 28 "tcc.h" 2
-# 1 "../woody/usr/include/stdio.h" 1
-# 30 "../woody/usr/include/stdio.h"
 
 
 
 
-# 1 "include/stddef.h" 1
-# 35 "../woody/usr/include/stdio.h" 2
-# 45 "../woody/usr/include/stdio.h"
 typedef struct _IO_FILE FILE;
-# 55 "../woody/usr/include/stdio.h"
 typedef struct _IO_FILE __FILE;
-# 65 "../woody/usr/include/stdio.h"
-# 1 "../woody/usr/include/libio.h" 1
-# 32 "../woody/usr/include/libio.h"
-# 1 "../woody/usr/include/_G_config.h" 1
-# 14 "../woody/usr/include/_G_config.h"
-# 1 "include/stddef.h" 1
-# 51 "include/stddef.h"
 typedef unsigned int wint_t;
-# 15 "../woody/usr/include/_G_config.h" 2
-# 24 "../woody/usr/include/_G_config.h"
-# 1 "../woody/usr/include/wchar.h" 1
-# 48 "../woody/usr/include/wchar.h"
-# 1 "include/stddef.h" 1
-# 49 "../woody/usr/include/wchar.h" 2
 
-# 1 "../woody/usr/include/bits/wchar.h" 1
-# 51 "../woody/usr/include/wchar.h" 2
-# 67 "../woody/usr/include/wchar.h"
 typedef struct
 {
   int __count;
@@ -1275,7 +1155,6 @@ typedef struct
     char __wchb[4];
   } __value;
 } __mbstate_t;
-# 25 "../woody/usr/include/_G_config.h" 2
 
 typedef struct
 {
@@ -1287,18 +1166,8 @@ typedef struct
   __off64_t __pos;
   __mbstate_t __state;
 } _G_fpos64_t;
-# 44 "../woody/usr/include/_G_config.h"
-# 1 "../woody/usr/include/gconv.h" 1
-# 28 "../woody/usr/include/gconv.h"
-# 1 "../woody/usr/include/wchar.h" 1
-# 48 "../woody/usr/include/wchar.h"
-# 1 "include/stddef.h" 1
-# 49 "../woody/usr/include/wchar.h" 2
-# 29 "../woody/usr/include/gconv.h" 2
 
 
-# 1 "include/stddef.h" 1
-# 32 "../woody/usr/include/gconv.h" 2
 
 
 
@@ -1441,7 +1310,6 @@ typedef struct __gconv_info
   struct __gconv_step *__steps;
   __extension__ struct __gconv_step_data __data [];
 } *__gconv_t;
-# 45 "../woody/usr/include/_G_config.h" 2
 typedef union
 {
   struct __gconv_info __cd;
@@ -1456,17 +1324,9 @@ typedef int _G_int16_t __attribute__ ((__mode__ (__HI__)));
 typedef int _G_int32_t __attribute__ ((__mode__ (__SI__)));
 typedef unsigned int _G_uint16_t __attribute__ ((__mode__ (__HI__)));
 typedef unsigned int _G_uint32_t __attribute__ ((__mode__ (__SI__)));
-# 33 "../woody/usr/include/libio.h" 2
-# 53 "../woody/usr/include/libio.h"
-# 1 "include/stdarg.h" 1
-# 67 "include/stdarg.h"
 typedef char *va_list;
-# 76 "include/stdarg.h"
 typedef va_list __gnuc_va_list;
-# 54 "../woody/usr/include/libio.h" 2
-# 160 "../woody/usr/include/libio.h"
 struct _IO_jump_t; struct _IO_FILE;
-# 170 "../woody/usr/include/libio.h"
 typedef void _IO_lock_t;
 
 
@@ -1480,7 +1340,6 @@ struct _IO_marker {
 
 
   int _pos;
-# 193 "../woody/usr/include/libio.h"
 };
 
 
@@ -1491,7 +1350,6 @@ enum __codecvt_result
   __codecvt_error,
   __codecvt_noconv
 };
-# 261 "../woody/usr/include/libio.h"
 struct _IO_FILE {
   int _flags;
 
@@ -1528,7 +1386,6 @@ struct _IO_FILE {
 
 
   _IO_lock_t *_lock;
-# 305 "../woody/usr/include/libio.h"
   __off64_t _offset;
 
 
@@ -1553,7 +1410,6 @@ struct _IO_FILE_plus;
 extern struct _IO_FILE_plus _IO_2_1_stdin_;
 extern struct _IO_FILE_plus _IO_2_1_stdout_;
 extern struct _IO_FILE_plus _IO_2_1_stderr_;
-# 344 "../woody/usr/include/libio.h"
 typedef __ssize_t __io_read_fn (void *__cookie, char *__buf, size_t __nbytes);
 
 
@@ -1612,7 +1468,6 @@ extern int __overflow (_IO_FILE *, int) ;
 extern wint_t __wunderflow (_IO_FILE *) ;
 extern wint_t __wuflow (_IO_FILE *) ;
 extern wint_t __woverflow (_IO_FILE *, wint_t) ;
-# 426 "../woody/usr/include/libio.h"
 extern int _IO_getc (_IO_FILE *__fp) ;
 extern int _IO_putc (int __c, _IO_FILE *__fp) ;
 extern int _IO_feof (_IO_FILE *__fp) ;
@@ -1627,7 +1482,6 @@ extern int _IO_peekc_locked (_IO_FILE *__fp) ;
 extern void _IO_flockfile (_IO_FILE *) ;
 extern void _IO_funlockfile (_IO_FILE *) ;
 extern int _IO_ftrylockfile (_IO_FILE *) ;
-# 456 "../woody/usr/include/libio.h"
 extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
    __gnuc_va_list, int *__restrict) ;
 extern int _IO_vfprintf (_IO_FILE *__restrict, const char *__restrict,
@@ -1639,17 +1493,12 @@ extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int) ;
 extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int) ;
 
 extern void _IO_free_backup_area (_IO_FILE *) ;
-# 66 "../woody/usr/include/stdio.h" 2
-# 80 "../woody/usr/include/stdio.h"
 typedef _G_fpos_t fpos_t;
 
 
 
 
 typedef _G_fpos64_t fpos64_t;
-# 129 "../woody/usr/include/stdio.h"
-# 1 "../woody/usr/include/bits/stdio_lim.h" 1
-# 130 "../woody/usr/include/stdio.h" 2
 
 
 
@@ -1670,7 +1519,6 @@ extern int rename (__const char *__old, __const char *__new) ;
 
 
 extern FILE *tmpfile (void) ;
-# 158 "../woody/usr/include/stdio.h"
 extern FILE *tmpfile64 (void) ;
 
 
@@ -1680,7 +1528,6 @@ extern char *tmpnam (char *__s) ;
 
 
 extern char *tmpnam_r (char *__s) ;
-# 178 "../woody/usr/include/stdio.h"
 extern char *tempnam (__const char *__dir, __const char *__pfx)
      __attribute__ ((__malloc__));
 
@@ -1710,7 +1557,6 @@ extern FILE *fopen (__const char *__restrict __filename,
 extern FILE *freopen (__const char *__restrict __filename,
         __const char *__restrict __modes,
         FILE *__restrict __stream) ;
-# 222 "../woody/usr/include/stdio.h"
 extern FILE *fopen64 (__const char *__restrict __filename,
         __const char *__restrict __modes) ;
 extern FILE *freopen64 (__const char *__restrict __filename,
@@ -1907,7 +1753,6 @@ extern char *fgets_unlocked (char *__restrict __s, int __n,
 
 
 extern char *gets (char *__s) ;
-# 426 "../woody/usr/include/stdio.h"
 extern __ssize_t __getdelim (char **__restrict __lineptr,
           size_t *__restrict __n, int __delimiter,
           FILE *__restrict __stream) ;
@@ -1962,7 +1807,6 @@ extern int fseek (FILE *__stream, long int __off, int __whence) ;
 extern long int ftell (FILE *__stream) ;
 
 extern void rewind (FILE *__stream) ;
-# 489 "../woody/usr/include/stdio.h"
 extern int fseeko (FILE *__stream, __off_t __off, int __whence) ;
 
 extern __off_t ftello (FILE *__stream) ;
@@ -1973,7 +1817,6 @@ extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos)
      ;
 
 extern int fsetpos (FILE *__stream, __const fpos_t *__pos) ;
-# 523 "../woody/usr/include/stdio.h"
 extern int fseeko64 (FILE *__stream, __off64_t __off, int __whence) ;
 extern __off64_t ftello64 (FILE *__stream) ;
 extern int fgetpos64 (FILE *__restrict __stream, fpos64_t *__restrict __pos)
@@ -2068,19 +1911,13 @@ extern int ftrylockfile (FILE *__stream) ;
 
 
 extern void funlockfile (FILE *__stream) ;
-# 633 "../woody/usr/include/stdio.h"
-
-# 29 "tcc.h" 2
-
-# 1 "../woody/usr/include/string.h" 1
-# 28 "../woody/usr/include/string.h"
 
 
 
 
 
-# 1 "include/stddef.h" 1
-# 34 "../woody/usr/include/string.h" 2
+
+
 
 
 
@@ -2150,7 +1987,6 @@ extern int strcoll (__const char *__s1, __const char *__s2)
 
 extern size_t strxfrm (char *__restrict __dest,
          __const char *__restrict __src, size_t __n) ;
-# 111 "../woody/usr/include/string.h"
 extern int __strcoll_l (__const char *__s1, __const char *__s2, __locale_t __l)
      __attribute__ ((__pure__));
 
@@ -2169,7 +2005,6 @@ extern char *strdup (__const char *__s) __attribute__ ((__malloc__));
 
 extern char *strndup (__const char *__string, size_t __n)
      __attribute__ ((__malloc__));
-# 155 "../woody/usr/include/string.h"
 extern char *strchr (__const char *__s, int __c) __attribute__ ((__pure__));
 
 extern char *strrchr (__const char *__s, int __c) __attribute__ ((__pure__));
@@ -2346,63 +2181,36 @@ extern void *memfrob (void *__s, size_t __n) ;
 
 
 extern char *basename (__const char *__filename) ;
-# 364 "../woody/usr/include/string.h"
-
-# 31 "tcc.h" 2
-# 1 "../woody/usr/include/errno.h" 1
-# 32 "../woody/usr/include/errno.h"
 
 
 
 
-# 1 "../woody/usr/include/bits/errno.h" 1
-# 25 "../woody/usr/include/bits/errno.h"
-# 1 "../woody/usr/include/linux/errno.h" 1
 
 
 
-# 1 "../woody/usr/include/asm/errno.h" 1
-# 5 "../woody/usr/include/linux/errno.h" 2
-# 26 "../woody/usr/include/bits/errno.h" 2
-# 36 "../woody/usr/include/bits/errno.h"
+
 extern int errno;
 
 
 extern int *__errno_location (void) __attribute__ ((__const__));
-# 37 "../woody/usr/include/errno.h" 2
-# 55 "../woody/usr/include/errno.h"
 extern char *program_invocation_name, *program_invocation_short_name;
 
 
 
 
-# 69 "../woody/usr/include/errno.h"
 typedef int error_t;
-# 32 "tcc.h" 2
-# 1 "../woody/usr/include/math.h" 1
-# 29 "../woody/usr/include/math.h"
 
 
 
 
-# 1 "../woody/usr/include/bits/huge_val.h" 1
-# 34 "../woody/usr/include/math.h" 2
 
 
 
-# 1 "../woody/usr/include/bits/nan.h" 1
-# 38 "../woody/usr/include/math.h" 2
 
 
-# 1 "../woody/usr/include/bits/mathdef.h" 1
-# 29 "../woody/usr/include/bits/mathdef.h"
 typedef long double float_t;
 
 typedef long double double_t;
-# 41 "../woody/usr/include/math.h" 2
-# 63 "../woody/usr/include/math.h"
-# 1 "../woody/usr/include/bits/mathcalls.h" 1
-# 54 "../woody/usr/include/bits/mathcalls.h"
 extern double acos (double __x) ; extern double __acos (double __x) ;
 
 extern double asin (double __x) ; extern double __asin (double __x) ;
@@ -2682,10 +2490,6 @@ extern int __signbit (double __value)
 
 
 extern double fma (double __x, double __y, double __z) ; extern double __fma (double __x, double __y, double __z) ;
-# 64 "../woody/usr/include/math.h" 2
-# 82 "../woody/usr/include/math.h"
-# 1 "../woody/usr/include/bits/mathcalls.h" 1
-# 54 "../woody/usr/include/bits/mathcalls.h"
 extern float acosf (float __x) ; extern float __acosf (float __x) ;
 
 extern float asinf (float __x) ; extern float __asinf (float __x) ;
@@ -2965,10 +2769,6 @@ extern int __signbitf (float __value)
 
 
 extern float fmaf (float __x, float __y, float __z) ; extern float __fmaf (float __x, float __y, float __z) ;
-# 83 "../woody/usr/include/math.h" 2
-# 99 "../woody/usr/include/math.h"
-# 1 "../woody/usr/include/bits/mathcalls.h" 1
-# 54 "../woody/usr/include/bits/mathcalls.h"
 extern long double acosl (long double __x) ; extern long double __acosl (long double __x) ;
 
 extern long double asinl (long double __x) ; extern long double __asinl (long double __x) ;
@@ -3248,10 +3048,7 @@ extern int __signbitl (long double __value)
 
 
 extern long double fmal (long double __x, long double __y, long double __z) ; extern long double __fmal (long double __x, long double __y, long double __z) ;
-# 100 "../woody/usr/include/math.h" 2
-# 113 "../woody/usr/include/math.h"
 extern int signgam;
-# 154 "../woody/usr/include/math.h"
 enum
   {
     FP_NAN,
@@ -3265,7 +3062,6 @@ enum
     FP_NORMAL
 
   };
-# 240 "../woody/usr/include/math.h"
 typedef enum
 {
   _IEEE_ = -1,
@@ -3279,7 +3075,6 @@ typedef enum
 
 
 extern _LIB_VERSION_TYPE _LIB_VERSION;
-# 265 "../woody/usr/include/math.h"
 struct exception
 
   {
@@ -3294,17 +3089,11 @@ struct exception
 
 
 extern int matherr (struct exception *__exc);
-# 411 "../woody/usr/include/math.h"
-
-# 33 "tcc.h" 2
-# 1 "../woody/usr/include/fcntl.h" 1
-# 29 "../woody/usr/include/fcntl.h"
 
 
 
 
-# 1 "../woody/usr/include/bits/fcntl.h" 1
-# 136 "../woody/usr/include/bits/fcntl.h"
+
 struct flock
   {
     short int l_type;
@@ -3328,19 +3117,11 @@ struct flock64
     __off64_t l_len;
     __pid_t l_pid;
   };
-# 34 "../woody/usr/include/fcntl.h" 2
 
 
 
-# 1 "../woody/usr/include/sys/stat.h" 1
-# 32 "../woody/usr/include/sys/stat.h"
-# 1 "../woody/usr/include/time.h" 1
-# 33 "../woody/usr/include/sys/stat.h" 2
-# 96 "../woody/usr/include/sys/stat.h"
 
 
-# 1 "../woody/usr/include/bits/stat.h" 1
-# 36 "../woody/usr/include/bits/stat.h"
 struct stat
   {
     __dev_t st_dev;
@@ -3407,15 +3188,12 @@ struct stat64
     unsigned long int __unused3;
     __ino64_t st_ino;
   };
-# 99 "../woody/usr/include/sys/stat.h" 2
-# 200 "../woody/usr/include/sys/stat.h"
 extern int stat (__const char *__restrict __file,
    struct stat *__restrict __buf) ;
 
 
 
 extern int fstat (int __fd, struct stat *__buf) ;
-# 219 "../woody/usr/include/sys/stat.h"
 extern int stat64 (__const char *__restrict __file,
      struct stat64 *__restrict __buf) ;
 extern int fstat64 (int __fd, struct stat64 *__buf) ;
@@ -3427,7 +3205,6 @@ extern int fstat64 (int __fd, struct stat64 *__buf) ;
 
 extern int lstat (__const char *__restrict __file,
     struct stat *__restrict __buf) ;
-# 241 "../woody/usr/include/sys/stat.h"
 extern int lstat64 (__const char *__restrict __file,
       struct stat64 *__restrict __buf) ;
 
@@ -3468,13 +3245,11 @@ extern int mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
 
 
 extern int mkfifo (__const char *__path, __mode_t __mode) ;
-# 306 "../woody/usr/include/sys/stat.h"
 extern int __fxstat (int __ver, int __fildes, struct stat *__stat_buf) ;
 extern int __xstat (int __ver, __const char *__filename,
       struct stat *__stat_buf) ;
 extern int __lxstat (int __ver, __const char *__filename,
        struct stat *__stat_buf) ;
-# 330 "../woody/usr/include/sys/stat.h"
 extern int __fxstat64 (int __ver, int __fildes, struct stat64 *__stat_buf)
      ;
 extern int __xstat64 (int __ver, __const char *__filename,
@@ -3541,8 +3316,6 @@ extern __inline__ int fstat64 (int __fd, struct stat64 *__statbuf)
 
 
 
-# 38 "../woody/usr/include/fcntl.h" 2
-# 60 "../woody/usr/include/fcntl.h"
 extern int fcntl (int __fd, int __cmd, ...) ;
 
 
@@ -3550,7 +3323,6 @@ extern int fcntl (int __fd, int __cmd, ...) ;
 
 
 extern int open (__const char *__file, int __oflag, ...) ;
-# 76 "../woody/usr/include/fcntl.h"
 extern int open64 (__const char *__file, int __oflag, ...) ;
 
 
@@ -3559,11 +3331,8 @@ extern int open64 (__const char *__file, int __oflag, ...) ;
 
 
 extern int creat (__const char *__file, __mode_t __mode) ;
-# 93 "../woody/usr/include/fcntl.h"
 extern int creat64 (__const char *__file, __mode_t __mode) ;
-# 112 "../woody/usr/include/fcntl.h"
 extern int lockf (int __fd, int __cmd, __off_t __len) ;
-# 122 "../woody/usr/include/fcntl.h"
 extern int lockf64 (int __fd, int __cmd, __off64_t __len) ;
 
 
@@ -3574,7 +3343,6 @@ extern int lockf64 (int __fd, int __cmd, __off64_t __len) ;
 
 extern int posix_fadvise (int __fd, __off_t __offset, size_t __len,
      int __advise) ;
-# 142 "../woody/usr/include/fcntl.h"
 extern int posix_fadvise64 (int __fd, __off64_t __offset, size_t __len,
        int __advise) ;
 
@@ -3583,24 +3351,15 @@ extern int posix_fadvise64 (int __fd, __off64_t __offset, size_t __len,
 
 
 extern int posix_fallocate (int __fd, __off_t __offset, size_t __len) ;
-# 160 "../woody/usr/include/fcntl.h"
 extern int posix_fallocate64 (int __fd, __off64_t __offset, size_t __len)
      ;
 
 
 
 
-# 34 "tcc.h" 2
-# 1 "../woody/usr/include/setjmp.h" 1
-# 28 "../woody/usr/include/setjmp.h"
 
 
-# 1 "../woody/usr/include/bits/setjmp.h" 1
-# 36 "../woody/usr/include/bits/setjmp.h"
 typedef int __jmp_buf[6];
-# 31 "../woody/usr/include/setjmp.h" 2
-# 1 "../woody/usr/include/bits/sigset.h" 1
-# 32 "../woody/usr/include/setjmp.h" 2
 
 
 typedef struct __jmp_buf_tag
@@ -3627,7 +3386,6 @@ extern int _setjmp (jmp_buf __env) ;
 
 
 extern int __sigsetjmp (jmp_buf __env, int __savemask) ;
-# 73 "../woody/usr/include/setjmp.h"
 extern void longjmp (jmp_buf __env, int __val)
      __attribute__ ((__noreturn__));
 
@@ -3644,15 +3402,11 @@ extern void _longjmp (jmp_buf __env, int __val)
 
 
 typedef jmp_buf sigjmp_buf;
-# 98 "../woody/usr/include/setjmp.h"
 extern void siglongjmp (sigjmp_buf __env, int __val)
      __attribute__ ((__noreturn__));
 
 
 
-# 35 "tcc.h" 2
-# 1 "../woody/usr/include/time.h" 1
-# 30 "../woody/usr/include/time.h"
 
 
 
@@ -3661,14 +3415,9 @@ extern void siglongjmp (sigjmp_buf __env, int __val)
 
 
 
-# 1 "include/stddef.h" 1
-# 39 "../woody/usr/include/time.h" 2
 
 
 
-# 1 "../woody/usr/include/bits/time.h" 1
-# 43 "../woody/usr/include/time.h" 2
-# 118 "../woody/usr/include/time.h"
 struct tm
 {
   int tm_sec;
@@ -3701,7 +3450,6 @@ struct itimerspec
 
 
 struct sigevent;
-# 163 "../woody/usr/include/time.h"
 extern clock_t clock (void) ;
 
 
@@ -3796,7 +3544,6 @@ extern long int timezone;
 
 
 extern int stime (__const time_t *__when) ;
-# 271 "../woody/usr/include/time.h"
 extern time_t timegm (struct tm *__tp) ;
 
 
@@ -3853,7 +3600,6 @@ extern int timer_gettime (timer_t __timerid, struct itimerspec *__value)
 
 
 extern int timer_getoverrun (timer_t __timerid) ;
-# 342 "../woody/usr/include/time.h"
 extern int getdate_err;
 
 
@@ -3861,34 +3607,18 @@ extern int getdate_err;
 
 
 extern struct tm *getdate (__const char *__string) ;
-# 357 "../woody/usr/include/time.h"
 extern int getdate_r (__const char *__restrict __string,
         struct tm *__restrict __resbufp) ;
 
 
 
 
-# 36 "tcc.h" 2
-
-
-# 1 "../woody/usr/include/unistd.h" 1
-# 28 "../woody/usr/include/unistd.h"
-
-# 175 "../woody/usr/include/unistd.h"
-# 1 "../woody/usr/include/bits/posix_opt.h" 1
-# 176 "../woody/usr/include/unistd.h" 2
 
 
 
-# 1 "../woody/usr/include/bits/environments.h" 1
-# 23 "../woody/usr/include/bits/environments.h"
-# 1 "../woody/usr/include/bits/wordsize.h" 1
-# 24 "../woody/usr/include/bits/environments.h" 2
-# 180 "../woody/usr/include/unistd.h" 2
-# 199 "../woody/usr/include/unistd.h"
-# 1 "include/stddef.h" 1
-# 200 "../woody/usr/include/unistd.h" 2
-# 240 "../woody/usr/include/unistd.h"
+
+
+
 typedef __intptr_t intptr_t;
 
 
@@ -3897,16 +3627,13 @@ typedef __intptr_t intptr_t;
 
 
 typedef __socklen_t socklen_t;
-# 260 "../woody/usr/include/unistd.h"
 extern int access (__const char *__name, int __type) ;
 
 
 
 
 extern int euidaccess (__const char *__name, int __type) ;
-# 290 "../woody/usr/include/unistd.h"
 extern __off_t lseek (int __fd, __off_t __offset, int __whence) ;
-# 302 "../woody/usr/include/unistd.h"
 extern __off64_t lseek64 (int __fd, __off64_t __offset, int __whence) ;
 
 
@@ -3926,7 +3653,6 @@ extern ssize_t pread (int __fd, void *__buf, size_t __nbytes, __off_t __offset)
      ;
 extern ssize_t pwrite (int __fd, __const void *__buf, size_t __n,
          __off_t __offset) ;
-# 340 "../woody/usr/include/unistd.h"
 extern ssize_t pread64 (int __fd, void *__buf, size_t __nbytes,
    __off64_t __offset) ;
 
@@ -3941,9 +3667,7 @@ extern ssize_t pwrite64 (int __fd, __const void *__buf, size_t __n,
 
 
 extern int pipe (int __pipedes[2]) ;
-# 362 "../woody/usr/include/unistd.h"
 extern unsigned int alarm (unsigned int __seconds) ;
-# 371 "../woody/usr/include/unistd.h"
 extern unsigned int sleep (unsigned int __seconds) ;
 
 
@@ -3987,7 +3711,6 @@ extern int chdir (__const char *__path) ;
 
 
 extern int fchdir (int __fd) ;
-# 423 "../woody/usr/include/unistd.h"
 extern char *getcwd (char *__buf, size_t __size) ;
 
 
@@ -4065,8 +3788,6 @@ extern void _exit (int __status) __attribute__ ((__noreturn__));
 
 
 
-# 1 "../woody/usr/include/bits/confname.h" 1
-# 25 "../woody/usr/include/bits/confname.h"
 enum
   {
     _PC_LINK_MAX,
@@ -4608,7 +4329,6 @@ enum
     _CS_V6_WIDTH_RESTRICTED_ENVS
 
   };
-# 501 "../woody/usr/include/unistd.h" 2
 
 
 extern long int pathconf (__const char *__path, int __name) ;
@@ -4635,7 +4355,6 @@ extern __pid_t getppid (void) ;
 
 
 extern __pid_t getpgrp (void) ;
-# 536 "../woody/usr/include/unistd.h"
 extern __pid_t __getpgid (__pid_t __pid) ;
 
 extern __pid_t getpgid (__pid_t __pid) ;
@@ -4646,9 +4365,7 @@ extern __pid_t getpgid (__pid_t __pid) ;
 
 
 extern int setpgid (__pid_t __pid, __pid_t __pgid) ;
-# 562 "../woody/usr/include/unistd.h"
 extern int setpgrp (void) ;
-# 580 "../woody/usr/include/unistd.h"
 extern __pid_t setsid (void) ;
 
 
@@ -4787,11 +4504,7 @@ extern int getlogin_r (char *__name, size_t __name_len) ;
 
 
 extern int setlogin (__const char *__name) ;
-# 726 "../woody/usr/include/unistd.h"
-# 1 "../woody/usr/include/getopt.h" 1
-# 47 "../woody/usr/include/getopt.h"
 extern char *optarg;
-# 61 "../woody/usr/include/getopt.h"
 extern int optind;
 
 
@@ -4802,9 +4515,7 @@ extern int opterr;
 
 
 extern int optopt;
-# 145 "../woody/usr/include/getopt.h"
 extern int getopt (int ___argc, char *const *___argv, const char *__shortopts);
-# 727 "../woody/usr/include/unistd.h" 2
 
 
 
@@ -4904,14 +4615,12 @@ extern int getpagesize (void) __attribute__ ((__const__));
 
 
 extern int truncate (__const char *__file, __off_t __length) ;
-# 836 "../woody/usr/include/unistd.h"
 extern int truncate64 (__const char *__file, __off64_t __length) ;
 
 
 
 
 extern int ftruncate (int __fd, __off_t __length) ;
-# 851 "../woody/usr/include/unistd.h"
 extern int ftruncate64 (int __fd, __off64_t __length) ;
 
 
@@ -4919,7 +4628,6 @@ extern int ftruncate64 (int __fd, __off64_t __length) ;
 
 
 extern int getdtablesize (void) ;
-# 866 "../woody/usr/include/unistd.h"
 extern int brk (void *__addr) ;
 
 
@@ -4927,9 +4635,7 @@ extern int brk (void *__addr) ;
 
 
 extern void *sbrk (intptr_t __delta) ;
-# 887 "../woody/usr/include/unistd.h"
 extern long int syscall (long int __sysno, ...) ;
-# 938 "../woody/usr/include/unistd.h"
 extern int fdatasync (int __fildes) ;
 
 
@@ -4959,21 +4665,13 @@ extern void swab (__const void *__restrict __from, void *__restrict __to,
 
 
 extern char *ctermid (char *__s) ;
-# 983 "../woody/usr/include/unistd.h"
 extern int pthread_atfork (void (*__prepare) (void),
       void (*__parent) (void),
       void (*__child) (void)) ;
 
 
 
-# 39 "tcc.h" 2
-# 1 "../woody/usr/include/sys/time.h" 1
-# 28 "../woody/usr/include/sys/time.h"
-# 1 "../woody/usr/include/bits/time.h" 1
-# 29 "../woody/usr/include/sys/time.h" 2
-# 38 "../woody/usr/include/sys/time.h"
 
-# 56 "../woody/usr/include/sys/time.h"
 struct timezone
   {
     int tz_minuteswest;
@@ -4981,7 +4679,6 @@ struct timezone
   };
 
 typedef struct timezone *__restrict __timezone_ptr_t;
-# 72 "../woody/usr/include/sys/time.h"
 extern int gettimeofday (struct timeval *__restrict __tv,
     __timezone_ptr_t __tz) ;
 
@@ -5049,22 +4746,14 @@ extern int setitimer (__itimer_which_t __which,
 
 extern int utimes (__const char *__file, __const struct timeval __tvp[2])
      ;
-# 171 "../woody/usr/include/sys/time.h"
 
-# 40 "tcc.h" 2
 
-# 1 "../woody/usr/include/dlfcn.h" 1
-# 26 "../woody/usr/include/dlfcn.h"
-# 1 "../woody/usr/include/bits/dlfcn.h" 1
-# 57 "../woody/usr/include/bits/dlfcn.h"
 
 
 
 extern void _dl_mcount_wrapper_check (void *__selfpc) ;
 
 
-# 27 "../woody/usr/include/dlfcn.h" 2
-# 43 "../woody/usr/include/dlfcn.h"
 
 
 
@@ -5111,14 +4800,10 @@ extern int dladdr (__const void *__address, Dl_info *__info) ;
 
 
 
-# 42 "tcc.h" 2
 
 
 extern float strtof (const char *__nptr, char **__endptr);
 extern long double strtold (const char *__nptr, char **__endptr);
-# 283 "tcc.h"
-# 1 "libtcc.h" 1
-# 12 "libtcc.h"
 struct TCCState;
 
 typedef struct TCCState TCCState;
@@ -5193,18 +4878,7 @@ typedef struct TCCState TCCState;
 
 
  int tcc_relocate(TCCState *s1, void *ptr);
-# 94 "libtcc.h"
  void *tcc_get_symbol(TCCState *s, const char *name);
-# 284 "tcc.h" 2
-# 1 "elf.h" 1
-# 23 "elf.h"
-# 1 "../woody/usr/include/inttypes.h" 1
-# 28 "../woody/usr/include/inttypes.h"
-# 1 "../woody/usr/include/stdint.h" 1
-# 28 "../woody/usr/include/stdint.h"
-# 1 "../woody/usr/include/bits/wordsize.h" 1
-# 29 "../woody/usr/include/stdint.h" 2
-# 49 "../woody/usr/include/stdint.h"
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
 
@@ -5270,14 +4944,11 @@ typedef unsigned int uint_fast16_t;
 typedef unsigned int uint_fast32_t;
 __extension__
 typedef unsigned long long int uint_fast64_t;
-# 129 "../woody/usr/include/stdint.h"
 typedef unsigned int uintptr_t;
-# 138 "../woody/usr/include/stdint.h"
 __extension__
 typedef long long int intmax_t;
 __extension__
 typedef unsigned long long int uintmax_t;
-# 29 "../woody/usr/include/inttypes.h" 2
 
 
 
@@ -5285,9 +4956,7 @@ typedef unsigned long long int uintmax_t;
 
 
 typedef long int __gwchar_t;
-# 274 "../woody/usr/include/inttypes.h"
 
-# 288 "../woody/usr/include/inttypes.h"
 typedef struct
   {
     long long int quot;
@@ -5321,10 +4990,7 @@ extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      ;
-# 459 "../woody/usr/include/inttypes.h"
 
-# 24 "elf.h" 2
-# 41 "elf.h"
 typedef uint16_t Elf32_Half;
 typedef uint16_t Elf64_Half;
 
@@ -5396,7 +5062,6 @@ typedef struct
   Elf64_Half e_shnum;
   Elf64_Half e_shstrndx;
 } Elf64_Ehdr;
-# 282 "elf.h"
 typedef struct
 {
   Elf32_Word sh_name;
@@ -5424,7 +5089,6 @@ typedef struct
   Elf64_Xword sh_addralign;
   Elf64_Xword sh_entsize;
 } Elf64_Shdr;
-# 392 "elf.h"
 typedef struct
 {
   Elf32_Word st_name;
@@ -5459,7 +5123,6 @@ typedef struct
   Elf64_Half si_boundto;
   Elf64_Half si_flags;
 } Elf64_Syminfo;
-# 507 "elf.h"
 typedef struct
 {
   Elf32_Addr r_offset;
@@ -5492,7 +5155,6 @@ typedef struct
   Elf64_Xword r_info;
   Elf64_Sxword r_addend;
 } Elf64_Rela;
-# 552 "elf.h"
 typedef struct
 {
   Elf32_Word p_type;
@@ -5516,7 +5178,6 @@ typedef struct
   Elf64_Xword p_memsz;
   Elf64_Xword p_align;
 } Elf64_Phdr;
-# 658 "elf.h"
 typedef struct
 {
   Elf32_Sword d_tag;
@@ -5536,7 +5197,6 @@ typedef struct
       Elf64_Addr d_ptr;
     } d_un;
 } Elf64_Dyn;
-# 834 "elf.h"
 typedef struct
 {
   Elf32_Half vd_version;
@@ -5560,7 +5220,6 @@ typedef struct
   Elf64_Word vd_next;
 
 } Elf64_Verdef;
-# 876 "elf.h"
 typedef struct
 {
   Elf32_Word vda_name;
@@ -5599,7 +5258,6 @@ typedef struct
   Elf64_Word vn_next;
 
 } Elf64_Verneed;
-# 923 "elf.h"
 typedef struct
 {
   Elf32_Word vna_hash;
@@ -5619,7 +5277,6 @@ typedef struct
   Elf64_Word vna_next;
 
 } Elf64_Vernaux;
-# 957 "elf.h"
 typedef struct
 {
   uint32_t a_type;
@@ -5643,7 +5300,6 @@ typedef struct
 
     } a_un;
 } Elf64_auxv_t;
-# 1041 "elf.h"
 typedef struct
 {
   Elf32_Word n_namesz;
@@ -5657,7 +5313,6 @@ typedef struct
   Elf64_Word n_descsz;
   Elf64_Word n_type;
 } Elf64_Nhdr;
-# 1105 "elf.h"
 typedef struct
 {
   Elf32_Xword m_value;
@@ -5675,7 +5330,6 @@ typedef struct
   Elf64_Half m_repeat;
   Elf64_Half m_stride;
 } Elf64_Move;
-# 1489 "elf.h"
 typedef union
 {
   struct
@@ -5710,13 +5364,11 @@ typedef struct
 
   Elf32_Word info;
 } Elf_Options;
-# 1565 "elf.h"
 typedef struct
 {
   Elf32_Word hwp_flags1;
   Elf32_Word hwp_flags2;
 } Elf_Options_Hw;
-# 1726 "elf.h"
 typedef struct
 {
   Elf32_Word l_name;
@@ -5734,15 +5386,9 @@ typedef struct
   Elf64_Word l_version;
   Elf64_Word l_flags;
 } Elf64_Lib;
-# 1757 "elf.h"
 typedef Elf32_Addr Elf32_Conflict;
-# 285 "tcc.h" 2
-# 1 "stab.h" 1
-# 9 "stab.h"
 enum __stab_debug_code
 {
-# 1 "stab.def" 1
-# 24 "stab.def"
 N_GSYM=0x20,
 
 
@@ -5900,13 +5546,8 @@ N_NBLCS=0xF8,
 
 
 N_LENG=0xfe,
-# 12 "stab.h" 2
 LAST_UNUSED_STAB_CODE
 };
-# 286 "tcc.h" 2
-# 316 "tcc.h"
-# 1 "i386-gen.c" 1
-# 44 "i386-gen.c"
 enum {
     TREG_EAX = 0,
     TREG_ECX,
@@ -5915,10 +5556,6 @@ enum {
     TREG_ST0,
     TREG_ESP = 4
 };
-# 317 "tcc.h" 2
-# 1 "i386-link.c" 1
-# 318 "tcc.h" 2
-# 381 "tcc.h"
 typedef struct TokenSym {
     struct TokenSym *hash_next;
     struct Sym *sym_define;
@@ -6057,7 +5694,6 @@ typedef struct DLLReference {
     void *handle;
     char name[1];
 } DLLReference;
-# 554 "tcc.h"
 typedef struct BufferedFile {
     uint8_t *buf_ptr;
     uint8_t *buf_end;
@@ -6293,7 +5929,6 @@ struct TCCState {
 
     struct sym_attr *sym_attrs;
     int nb_sym_attrs;
-# 805 "tcc.h"
     const char *runtime_main;
     void **runtime_mem;
     int nb_runtime_mem;
@@ -6319,11 +5954,9 @@ struct filespec {
     char alacarte;
     char name[1];
 };
-# 1070 "tcc.h"
 enum tcc_token {
     TOK_LAST = 256 - 1
 
-# 1 "tcctok.h" 1
 
      ,TOK_INT
      ,TOK_VOID
@@ -6386,7 +6019,6 @@ enum tcc_token {
      ,TOK_ASM1
      ,TOK_ASM2
      ,TOK_ASM3
-# 71 "tcctok.h"
      ,TOK_DEFINE
      ,TOK_INCLUDE
      ,TOK_INCLUDE_NEXT
@@ -6462,7 +6094,6 @@ enum tcc_token {
      ,TOK_builtin_frame_address
      ,TOK_builtin_return_address
      ,TOK_builtin_expect
-# 157 "tcctok.h"
      ,TOK_pack
 
 
@@ -6496,7 +6127,6 @@ enum tcc_token {
 
      ,TOK___fixunssfdi
      ,TOK___fixunsdfdi
-# 245 "tcctok.h"
      ,TOK___fixsfdi
      ,TOK___fixdfdi
      ,TOK___fixxfdi
@@ -6504,7 +6134,6 @@ enum tcc_token {
 
 
      ,TOK_alloca
-# 285 "tcctok.h"
      ,TOK___bound_ptr_add
      ,TOK___bound_ptr_indir1
      ,TOK___bound_ptr_indir2
@@ -6569,7 +6198,6 @@ enum tcc_token {
  ,TOK_ASMDIR_section
 
 
-# 1 "i386-tok.h" 1
 
 
 
@@ -6598,7 +6226,6 @@ enum tcc_token {
  ,TOK_ASM_ebp
  ,TOK_ASM_esi
  ,TOK_ASM_edi
-# 39 "i386-tok.h"
  ,TOK_ASM_mm0
  ,TOK_ASM_mm1
  ,TOK_ASM_mm2
@@ -6655,7 +6282,6 @@ enum tcc_token {
  ,TOK_ASM_gs
  ,TOK_ASM_st
  ,TOK_ASM_rip
-# 105 "i386-tok.h"
  ,TOK_ASM_movb ,TOK_ASM_movw ,TOK_ASM_movl ,TOK_ASM_mov
 
  ,TOK_ASM_addb ,TOK_ASM_addw ,TOK_ASM_addl ,TOK_ASM_add
@@ -6780,8 +6406,6 @@ enum tcc_token {
  ,TOK_ASM_sscab ,TOK_ASM_sscaw ,TOK_ASM_sscal ,TOK_ASM_ssca
  ,TOK_ASM_stosb ,TOK_ASM_stosw ,TOK_ASM_stosl ,TOK_ASM_stos
  ,TOK_ASM_sstob ,TOK_ASM_sstow ,TOK_ASM_sstol ,TOK_ASM_ssto
-# 240 "i386-tok.h"
-# 1 "i386-asm.h" 1
      ,TOK_ASM_clc
      ,TOK_ASM_cld
      ,TOK_ASM_cli
@@ -7255,9 +6879,6 @@ enum tcc_token {
    
    
    
-# 241 "i386-tok.h" 2
-# 252 "i386-tok.h"
-# 1 "i386-asm.h" 1
     
     
     
@@ -7731,9 +7352,6 @@ enum tcc_token {
     ,TOK_ASM_rsqrtps
     ,TOK_ASM_sqrtps
     ,TOK_ASM_subps
-# 253 "i386-tok.h" 2
-# 350 "tcctok.h" 2
-# 1074 "tcc.h" 2
 
 };
 
@@ -7762,7 +7380,6 @@ static char *pstrncpy(char *out, const char *in, size_t num);
  void *tcc_mallocz(unsigned long size);
  void *tcc_realloc(void *ptr, unsigned long size);
  char *tcc_strdup(const char *str);
-# 1120 "tcc.h"
  void tcc_memcheck(void);
  void tcc_error_noabort(const char *fmt, ...);
  __attribute__((noreturn)) void tcc_error(const char *fmt, ...);
@@ -7792,14 +7409,12 @@ static int tcc_open(TCCState *s1, const char *filename);
 static void tcc_close(void);
 
 static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags);
-# 1166 "tcc.h"
 static int tcc_add_crt(TCCState *s, const char *filename);
 static int tcc_add_dll(TCCState *s, const char *filename, int flags);
 static void tcc_add_pragma_libs(TCCState *s1);
  int tcc_add_library_err(TCCState *s, const char *f);
  void tcc_print_stats(TCCState *s, unsigned total_time);
  int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
-# 1188 "tcc.h"
 static struct BufferedFile *file;
 static int ch, tok;
 static CValue tokc;
@@ -7813,7 +7428,6 @@ static int total_lines;
 static int total_bytes;
 static int tok_ident;
 static TokenSym **table_ident;
-# 1222 "tcc.h"
 static TokenSym *tok_alloc(const char *str, int len);
 static const char *get_tok_str(int v, CValue *cv);
 static void begin_macro(TokenString *str, int alloc);
@@ -7941,7 +7555,6 @@ static void gexpr(void);
 static int expr_const(void);
 
 static Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size);
-# 1362 "tcc.h"
 typedef struct {
     unsigned int n_strx;
     unsigned char n_type;
@@ -8118,7 +7731,6 @@ static void gen_addrpc32(int r, Sym *sym, int c);
 
 static void gen_bounded_ptr_add(void);
 static void gen_bounded_ptr_deref(void);
-# 1580 "tcc.h"
 static void asm_instr(void);
 static void asm_global_instr(void);
 
@@ -8138,17 +7750,13 @@ static void asm_compute_constraints(ASMOperand *operands, int nb_operands, int n
 static void subst_asm_operand(CString *add_str, SValue *sv, int modifier);
 static void asm_gen_code(ASMOperand *operands, int nb_operands, int nb_outputs, int is_output, uint8_t *clobber_regs, int out_reg);
 static void asm_clobber(uint8_t *clobber_regs, const char *str);
-# 1634 "tcc.h"
 static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
 static void tcc_set_num_callers(int n);
 
 static void tcc_run_free(TCCState *s1);
-# 22 "tcc.c" 2
 
-# 1 "libtcc.c" 1
-# 27 "libtcc.c"
 static int gnu_ext = 1;
 
 
@@ -8162,8 +7770,6 @@ static int nb_states;
 
 
 
-# 1 "tccpp.c" 1
-# 26 "tccpp.c"
 static int tok_flags;
 static int parse_flags;
 
@@ -8201,7 +7807,6 @@ static TokenString *macro_stack;
 
 static const char tcc_keywords[] =
 
-# 1 "tcctok.h" 1
 
      "int" "\0"
      "void" "\0"
@@ -8264,7 +7869,6 @@ static const char tcc_keywords[] =
      "asm" "\0"
      "__asm" "\0"
      "__asm__" "\0"
-# 71 "tcctok.h"
      "define" "\0"
      "include" "\0"
      "include_next" "\0"
@@ -8340,7 +7944,6 @@ static const char tcc_keywords[] =
      "__builtin_frame_address" "\0"
      "__builtin_return_address" "\0"
      "__builtin_expect" "\0"
-# 157 "tcctok.h"
      "pack" "\0"
 
 
@@ -8374,7 +7977,6 @@ static const char tcc_keywords[] =
 
      "__fixunssfdi" "\0"
      "__fixunsdfdi" "\0"
-# 245 "tcctok.h"
      "__fixsfdi" "\0"
      "__fixdfdi" "\0"
      "__fixxfdi" "\0"
@@ -8382,7 +7984,6 @@ static const char tcc_keywords[] =
 
 
      "alloca" "\0"
-# 285 "tcctok.h"
      "__bound_ptr_add" "\0"
      "__bound_ptr_indir1" "\0"
      "__bound_ptr_indir2" "\0"
@@ -8447,7 +8048,6 @@ static const char tcc_keywords[] =
  "." "section" "\0"
 
 
-# 1 "i386-tok.h" 1
 
 
 
@@ -8476,7 +8076,6 @@ static const char tcc_keywords[] =
  "ebp" "\0"
  "esi" "\0"
  "edi" "\0"
-# 39 "i386-tok.h"
  "mm0" "\0"
  "mm1" "\0"
  "mm2" "\0"
@@ -8533,7 +8132,6 @@ static const char tcc_keywords[] =
  "gs" "\0"
  "st" "\0"
  "rip" "\0"
-# 105 "i386-tok.h"
  "mov" "b" "\0" "mov" "w" "\0" "mov" "l" "\0" "mov" "\0"
 
  "add" "b" "\0" "add" "w" "\0" "add" "l" "\0" "add" "\0"
@@ -8658,8 +8256,6 @@ static const char tcc_keywords[] =
  "ssca" "b" "\0" "ssca" "w" "\0" "ssca" "l" "\0" "ssca" "\0"
  "stos" "b" "\0" "stos" "w" "\0" "stos" "l" "\0" "stos" "\0"
  "ssto" "b" "\0" "ssto" "w" "\0" "ssto" "l" "\0" "ssto" "\0"
-# 240 "i386-tok.h"
-# 1 "i386-asm.h" 1
      "clc" "\0"
      "cld" "\0"
      "cli" "\0"
@@ -9133,9 +8729,6 @@ static const char tcc_keywords[] =
    
    
    
-# 241 "i386-tok.h" 2
-# 252 "i386-tok.h"
-# 1 "i386-asm.h" 1
     
     
     
@@ -9609,9 +9202,6 @@ static const char tcc_keywords[] =
     "rsqrtps" "\0"
     "sqrtps" "\0"
     "subps" "\0"
-# 253 "i386-tok.h" 2
-# 350 "tcctok.h" 2
-# 64 "tccpp.c" 2
 
 ;
 
@@ -9658,7 +9248,6 @@ static void expect(const char *msg)
 {
     tcc_error("%s expected", msg);
 }
-# 142 "tccpp.c"
 typedef struct TinyAlloc {
     unsigned limit;
     unsigned size;
@@ -9701,7 +9290,6 @@ static void tal_delete(TinyAlloc *al)
 tail_call:
     if (!al)
         return;
-# 208 "tccpp.c"
     next = al->next;
     tcc_free(al->buffer);
     tcc_free(al);
@@ -9715,7 +9303,6 @@ static void tal_free_impl(TinyAlloc *al, void *p )
         return;
 tail_call:
     if (al->buffer <= (uint8_t *)p && (uint8_t *)p < al->buffer + al->size) {
-# 231 "tccpp.c"
         al->nb_allocs--;
         if (!al->nb_allocs)
             al->p = al->buffer;
@@ -10164,7 +9751,6 @@ static int handle_stray1(uint8_t *p)
     c = *p;
     return c;
 }
-# 706 "tccpp.c"
 static void minp(void)
 {
     inp();
@@ -10465,7 +10051,6 @@ _default:
  the_end: ;
     file->buf_ptr = p;
 }
-# 1042 "tccpp.c"
 static inline void tok_str_new(TokenString *s)
 {
     s->str = ((void*)0);
@@ -10610,7 +10195,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
         str[len++] = cv->tab[0];
         str[len++] = cv->tab[1];
         str[len++] = cv->tab[2];
-# 1195 "tccpp.c"
         break;
     default:
         break;
@@ -11582,7 +11166,6 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
         if (!is_long)
             cstr_ccat(outstr, c);
         else {
-# 2176 "tccpp.c"
             cstr_wccat(outstr, c);
 
         }
@@ -11956,7 +11539,6 @@ static void parse_number(const char *p)
     if (ch)
         tcc_error("invalid number\n");
 }
-# 2563 "tccpp.c"
 static inline void next_nomacro1(void)
 {
     int t, c, is_long, len;
@@ -13298,9 +12880,6 @@ static int tcc_preprocess(TCCState *s1)
     }
     return 0;
 }
-# 41 "libtcc.c" 2
-# 1 "tccgen.c" 1
-# 31 "tccgen.c"
 static int rsym, anon_sym, ind, loc;
 
 static Sym *sym_free_first;
@@ -13406,7 +12985,6 @@ static void check_vstack(void)
     if (pvtop != vtop)
         tcc_error("internal compiler error: vstack leak (%d)", vtop - pvtop);
 }
-# 154 "tccgen.c"
 static void tcc_debug_start(TCCState *s1)
 {
     if (s1->do_debug) {
@@ -13517,7 +13095,6 @@ static int tccgen_compile(TCCState *s1)
     func_old_type.ref->f.func_type = 2;
 
     tcc_debug_start(s1);
-# 273 "tccgen.c"
     parse_flags = 0x0001 | 0x0002 | 0x0040;
     next();
     decl(0x0030);
@@ -13560,7 +13137,6 @@ static void update_storage(Sym *sym)
     if (sym_bind != old_sym_bind) {
         esym->st_info = (((sym_bind) << 4) + ((((esym->st_info) & 0xf)) & 0xf));
     }
-# 332 "tccgen.c"
 }
 
 
@@ -13587,7 +13163,6 @@ static void put_extern_sym2(Sym *sym, int sh_num,
 
 
             switch(sym->v) {
-# 366 "tccgen.c"
             case TOK_memcpy:
             case TOK_memmove:
             case TOK_memset:
@@ -13614,7 +13189,6 @@ static void put_extern_sym2(Sym *sym, int sh_num,
         else
             sym_bind = 1;
         other = 0;
-# 403 "tccgen.c"
         if (tcc_state->leading_underscore && can_add_underscore) {
             buf1[0] = '_';
             pstrcpy(buf1 + 1, sizeof(buf1) - 1, name);
@@ -13848,7 +13422,6 @@ static void vsetc(CType *type, int r, CValue *vc)
 
     if (vtop >= (__vstack + 1) + (256 - 1))
         tcc_error("memory full (vstack)");
-# 649 "tccgen.c"
     if (vtop >= (__vstack + 1) && !nocode_wanted) {
         v = vtop->r & 0x003f;
         if (v == 0x0033 || (v & ~1) == 0x0034)
@@ -14235,7 +13808,6 @@ static void save_reg_upstack(int r, int n)
         }
     }
 }
-# 1062 "tccgen.c"
 static int get_reg(int rc)
 {
     int r;
@@ -14491,7 +14063,6 @@ static int gv(int rc)
 
         if (rc == 0x0004)
             rc2 = 0x0020;
-# 1326 "tccgen.c"
         if (r >= 0x0030
          || (vtop->r & 0x0100)
          || !(reg_classes[r] & rc)
@@ -14527,7 +14098,6 @@ static int gv(int rc)
                 } else
 
                 if (vtop->r & 0x0100) {
-# 1369 "tccgen.c"
                     save_reg_upstack(vtop->r, 1);
 
 
@@ -14666,7 +14236,6 @@ static void lexpand(void)
     }
     vtop[0].type.t = vtop[-1].type.t = 3 | u;
 }
-# 1539 "tccgen.c"
 static void lbuild(int t)
 {
     gv2(0x0001, 0x0001);
@@ -15366,7 +14935,6 @@ redo:
 
             }
             gen_op('*');
-# 2267 "tccgen.c"
             {
                 gen_opic(op);
             }
@@ -15701,7 +15269,6 @@ static void gen_cast(CType *type)
                     vtop[-1].r2 = vtop->r;
                     vpop();
                 }
-# 2624 "tccgen.c"
             } else if (dbt == 11) {
 
                 vpushi(0);
@@ -15774,7 +15341,6 @@ static int type_size(CType *type, int *a)
 
 
         *a = 4;
-# 2706 "tccgen.c"
         return 8;
     } else if (bt == 3 || bt == 8) {
         *a = 4;
@@ -16055,7 +15621,6 @@ static void gen_assign_cast(CType *dt)
     if (sbt == 0 || dbt == 0) {
  if (sbt == 0 && dbt == 0)
      ;
-# 2994 "tccgen.c"
  else
          tcc_error("cannot cast from/to void");
     }
@@ -16163,7 +15728,6 @@ static void vstore(void)
             vswap();
             vtop->type.t = 5;
             gaddrof();
-# 3111 "tccgen.c"
             vpush_global_sym(&func_old_type, TOK_memmove);
 
             vswap();
@@ -16678,7 +16242,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
  }
  if (align > maxalign)
      maxalign = align;
-# 3638 "tccgen.c"
  if (f->v & 0x10000000 && (f->type.t & 0x000f) == 7) {
      Sym *ass;
 
@@ -17434,7 +16997,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
     }
     return 1;
 }
-# 4401 "tccgen.c"
 static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
 {
     CType *post, *ret;
@@ -17925,7 +17487,6 @@ static void unary(void)
             }
         }
         break;
-# 4942 "tccgen.c"
     case 0xa4:
     case 0xa2:
         t = tok;
@@ -18174,7 +17735,6 @@ static void unary(void)
                 if (!ret_nregs) {
 
                     size = type_size(&s->type, &align);
-# 5199 "tccgen.c"
                     loc = (loc - size) & -align;
                     ret.type = s->type;
                     ret.r = 0x0032 | 0x0100;
@@ -19454,7 +19014,6 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 
  if ((vtop->r & (0x0200|0x0030)) == (0x0200|0x0030) &&
      vtop->sym->v >= 0x10000000 &&
-# 6488 "tccgen.c"
      (vtop->type.t & 0x000f) != 5) {
 
      Section *ssec;
@@ -19777,7 +19336,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
         init_putv(type, sec, c);
     }
 }
-# 6818 "tccgen.c"
 static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
                                    int has_init, int v, int scope)
 {
@@ -20186,7 +19744,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
                 if (tok == '{')
                     expect(";");
             }
-# 7239 "tccgen.c"
             if (tok == '{') {
                 if (l != 0x0030)
                     tcc_error("cannot use local functions");
@@ -20333,9 +19890,6 @@ static void decl(int l)
 {
     decl0(l, 0, ((void*)0));
 }
-# 42 "libtcc.c" 2
-# 1 "tccelf.c" 1
-# 29 "tccelf.c"
 static Section *text_section, *data_section, *bss_section;
 static Section *common_section;
 static Section *cur_text_section;
@@ -20354,7 +19908,6 @@ static Section *stab_section, *stabstr_section;
 
 
 static int new_undef_sym = 0;
-# 55 "tccelf.c"
 static void tccelf_new(TCCState *s)
 {
 
@@ -21008,7 +20561,6 @@ static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc)
     }
     return &s1->sym_attrs[index];
 }
-# 719 "tccelf.c"
 static void sort_syms(TCCState *s1, Section *s)
 {
     int *old_to_new_syms;
@@ -21240,13 +20792,11 @@ static struct sym_attr * put_got_entry(TCCState *s1, int dyn_reloc_type,
 
     got_offset = s1->got->data_offset;
     section_ptr_add(s1->got, 4);
-# 959 "tccelf.c"
     sym = &((Elf32_Sym *) symtab_section->data)[sym_index];
     name = (char *) symtab_section->link->data + sym->st_name;
 
     if (s1->dynsym) {
  if ((((unsigned char) (sym->st_info)) >> 4) == 0) {
-# 978 "tccelf.c"
      put_elf_reloc(s1->dynsym, s1->got, got_offset, 8,
      sym_index);
  } else {
@@ -21322,7 +20872,6 @@ static void build_got_entries(TCCState *s1)
       int dynindex;
                     if (s1->output_type == 3 && ! 0)
                         continue;
-# 1063 "tccelf.c"
       if (s1->dynsym) {
 
    dynindex = get_sym_attr(s1, sym_index, 0)->dyn_index;
@@ -21340,7 +20889,6 @@ static void build_got_entries(TCCState *s1)
    ))
                     continue;
             }
-# 1089 "tccelf.c"
             if (code_reloc(type)) {
             jmp_slot:
                 reloc_type = 7;
@@ -21447,7 +20995,6 @@ static void tcc_add_runtime(TCCState *s1)
 
     if (!s1->nostdlib) {
         tcc_add_library_err(s1, "c");
-# 1203 "tccelf.c"
         tcc_add_support(s1, "libtcc1.a");
 
         if (s1->output_type != 1)
@@ -21923,7 +21470,6 @@ static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
                     }
 
                     if (s->sh_type == 9) {
-# 1688 "tccelf.c"
                         if (dyninf->rel_size == 0)
                             dyninf->rel_addr = addr;
                         dyninf->rel_size += s->sh_size;
@@ -22032,7 +21578,6 @@ static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf)
     put_dt(dynamic, 6, s1->dynsym->sh_addr);
     put_dt(dynamic, 10, dyninf->dynstr->data_offset);
     put_dt(dynamic, 11, sizeof(Elf32_Sym));
-# 1809 "tccelf.c"
     put_dt(dynamic, 17, dyninf->rel_addr);
     put_dt(dynamic, 18, dyninf->rel_size);
     put_dt(dynamic, 19, sizeof(Elf32_Rel));
@@ -22114,7 +21659,6 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     ehdr.e_ident[4] = 1;
     ehdr.e_ident[5] = 1;
     ehdr.e_ident[6] = 1;
-# 1908 "tccelf.c"
     switch(file_type) {
     default:
     case 2:
@@ -22196,7 +21740,6 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
     else
         mode = 0777;
     unlink(filename);
-# 1997 "tccelf.c"
     f = fopen(filename, "wb");
 
     if (s1->verbose)
@@ -22744,7 +22287,6 @@ static int tcc_load_object_file(TCCState *s1,
                 rel->r_info = (((sym_index) << 8) + ((type) & 0xff));
 
                 rel->r_offset += offseti;
-# 2556 "tccelf.c"
             }
             break;
         default:
@@ -23251,25 +22793,13 @@ static int tcc_load_ldscript(TCCState *s1)
     }
     return 0;
 }
-# 43 "libtcc.c" 2
-# 1 "tccrun.c" 1
-# 27 "tccrun.c"
-# 1 "../woody/usr/include/sys/mman.h" 1
-# 26 "../woody/usr/include/sys/mman.h"
-# 1 "include/stddef.h" 1
-# 27 "../woody/usr/include/sys/mman.h" 2
-# 42 "../woody/usr/include/sys/mman.h"
-# 1 "../woody/usr/include/bits/mman.h" 1
-# 43 "../woody/usr/include/sys/mman.h" 2
 
 
 
 
 
-# 58 "../woody/usr/include/sys/mman.h"
 extern void *mmap (void *__addr, size_t __len, int __prot,
      int __flags, int __fd, __off_t __offset) ;
-# 71 "../woody/usr/include/sys/mman.h"
 extern void *mmap64 (void *__addr, size_t __len, int __prot,
        int __flags, int __fd, __off64_t __offset) ;
 
@@ -23337,21 +22867,15 @@ extern int shm_open (__const char *__name, int __oflag, mode_t __mode);
 extern int shm_unlink (__const char *__name);
 
 
-# 28 "tccrun.c" 2
 
 
 
 
-# 1 "../woody/usr/include/signal.h" 1
-# 31 "../woody/usr/include/signal.h"
 
 
-# 1 "../woody/usr/include/bits/sigset.h" 1
-# 103 "../woody/usr/include/bits/sigset.h"
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
-# 34 "../woody/usr/include/signal.h" 2
 
 
 
@@ -23359,10 +22883,6 @@ extern int __sigdelset (__sigset_t *, int);
 
 
 typedef __sig_atomic_t sig_atomic_t;
-# 56 "../woody/usr/include/signal.h"
-# 1 "../woody/usr/include/bits/signum.h" 1
-# 57 "../woody/usr/include/signal.h" 2
-# 71 "../woody/usr/include/signal.h"
 typedef void (*__sighandler_t) (int);
 
 
@@ -23380,7 +22900,6 @@ extern __sighandler_t sysv_signal (int __sig, __sighandler_t __handler)
 
 
 extern __sighandler_t signal (int __sig, __sighandler_t __handler) ;
-# 103 "../woody/usr/include/signal.h"
 extern __sighandler_t bsd_signal (int __sig, __sighandler_t __handler) ;
 
 
@@ -23410,14 +22929,12 @@ extern int gsignal (int __sig) ;
 
 
 extern void psignal (int __sig, __const char *__s) ;
-# 140 "../woody/usr/include/signal.h"
 extern int __sigpause (int __sig_or_mask, int __is_sig) ;
 
 
 
 
 extern int sigpause (int __mask) ;
-# 168 "../woody/usr/include/signal.h"
 extern int sigblock (int __mask) ;
 
 
@@ -23425,18 +22942,12 @@ extern int sigsetmask (int __mask) ;
 
 
 extern int siggetmask (void) ;
-# 183 "../woody/usr/include/signal.h"
 typedef __sighandler_t sighandler_t;
 
 
 
 
 typedef __sighandler_t sig_t;
-# 199 "../woody/usr/include/signal.h"
-# 1 "../woody/usr/include/bits/siginfo.h" 1
-# 25 "../woody/usr/include/bits/siginfo.h"
-# 1 "../woody/usr/include/bits/wordsize.h" 1
-# 26 "../woody/usr/include/bits/siginfo.h" 2
 
 
 
@@ -23449,7 +22960,6 @@ typedef union sigval
     int sival_int;
     void *sival_ptr;
   } sigval_t;
-# 51 "../woody/usr/include/bits/siginfo.h"
 typedef struct siginfo
   {
     int si_signo;
@@ -23507,7 +23017,6 @@ typedef struct siginfo
    } _sigpoll;
       } _sifields;
   } siginfo_t;
-# 128 "../woody/usr/include/bits/siginfo.h"
 enum
 {
   SI_ASYNCNL = -6,
@@ -23633,7 +23142,6 @@ enum
   POLL_HUP
 
 };
-# 271 "../woody/usr/include/bits/siginfo.h"
 struct __pthread_attr_s;
 
 typedef struct sigevent
@@ -23668,7 +23176,6 @@ enum
   SIGEV_THREAD
 
 };
-# 200 "../woody/usr/include/signal.h" 2
 
 
 
@@ -23701,8 +23208,6 @@ extern int sigorset (sigset_t *__set, __const sigset_t *__left,
 
 
 
-# 1 "../woody/usr/include/bits/sigaction.h" 1
-# 25 "../woody/usr/include/bits/sigaction.h"
 struct sigaction
   {
 
@@ -23730,7 +23235,6 @@ struct sigaction
 
     void (*sa_restorer) (void);
   };
-# 233 "../woody/usr/include/signal.h" 2
 
 
 extern int sigprocmask (int __how, __const sigset_t *__restrict __set,
@@ -23768,7 +23272,6 @@ extern int sigtimedwait (__const sigset_t *__restrict __set,
 
 extern int sigqueue (__pid_t __pid, int __sig, __const union sigval __val)
      ;
-# 278 "../woody/usr/include/signal.h"
 extern __const char *__const _sys_siglist[64];
 extern __const char *__const sys_siglist[64];
 
@@ -23781,16 +23284,11 @@ struct sigvec
     int sv_flags;
 
   };
-# 302 "../woody/usr/include/signal.h"
 extern int sigvec (int __sig, __const struct sigvec *__vec,
      struct sigvec *__ovec) ;
 
 
 
-# 1 "../woody/usr/include/bits/sigcontext.h" 1
-# 28 "../woody/usr/include/bits/sigcontext.h"
-# 1 "../woody/usr/include/asm/sigcontext.h" 1
-# 18 "../woody/usr/include/asm/sigcontext.h"
 struct _fpreg {
  unsigned short significand[4];
  unsigned short exponent;
@@ -23854,16 +23352,11 @@ struct sigcontext {
  unsigned long oldmask;
  unsigned long cr2;
 };
-# 29 "../woody/usr/include/bits/sigcontext.h" 2
-# 308 "../woody/usr/include/signal.h" 2
 
 
 extern int sigreturn (struct sigcontext *__scp) ;
-# 320 "../woody/usr/include/signal.h"
 extern int siginterrupt (int __sig, int __interrupt) ;
 
-# 1 "../woody/usr/include/bits/sigstack.h" 1
-# 26 "../woody/usr/include/bits/sigstack.h"
 struct sigstack
   {
     void *ss_sp;
@@ -23879,26 +23372,16 @@ enum
   SS_DISABLE
 
 };
-# 50 "../woody/usr/include/bits/sigstack.h"
 typedef struct sigaltstack
   {
     void *ss_sp;
     int ss_flags;
     size_t ss_size;
   } stack_t;
-# 323 "../woody/usr/include/signal.h" 2
-
-# 1 "../woody/usr/include/ucontext.h" 1
-# 27 "../woody/usr/include/ucontext.h"
-# 1 "../woody/usr/include/sys/ucontext.h" 1
-# 23 "../woody/usr/include/sys/ucontext.h"
-# 1 "../woody/usr/include/signal.h" 1
-# 24 "../woody/usr/include/sys/ucontext.h" 2
 
 
 
-# 1 "../woody/usr/include/bits/sigcontext.h" 1
-# 28 "../woody/usr/include/sys/ucontext.h" 2
+
 
 
 
@@ -23999,7 +23482,6 @@ typedef struct ucontext
     __sigset_t uc_sigmask;
     struct _libc_fpstate __fpregs_mem;
   } ucontext_t;
-# 28 "../woody/usr/include/ucontext.h" 2
 
 
 
@@ -24024,7 +23506,6 @@ extern void makecontext (ucontext_t *__ucp, void (*__func) (void),
     int __argc, ...) ;
 
 
-# 325 "../woody/usr/include/signal.h" 2
 
 
 
@@ -24058,15 +23539,12 @@ extern __sighandler_t sigset (int __sig, __sighandler_t __disp) ;
 
 
 
-# 1 "../woody/usr/include/bits/sigthread.h" 1
-# 31 "../woody/usr/include/bits/sigthread.h"
 extern int pthread_sigmask (int __how,
        __const __sigset_t *__restrict __newmask,
        __sigset_t *__restrict __oldmask);
 
 
 extern int pthread_kill (pthread_t __thread, int __signo) ;
-# 359 "../woody/usr/include/signal.h" 2
 
 
 
@@ -24080,7 +23558,6 @@ extern int __libc_current_sigrtmax (void) ;
 
 
 
-# 33 "tccrun.c" 2
 
 
 
@@ -24097,7 +23574,6 @@ static void set_exception_handler(void);
 
 static void set_pages_executable(void *ptr, unsigned long length);
 static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff);
-# 59 "tccrun.c"
  int tcc_relocate(TCCState *s1, void *ptr)
 {
     int size;
@@ -24109,7 +23585,6 @@ static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff);
     size = tcc_relocate_ex(s1, ((void*)0), 0);
     if (size < 0)
         return -1;
-# 89 "tccrun.c"
     ptr = tcc_malloc(size);
 
     tcc_relocate_ex(s1, ptr, ptr_diff);
@@ -24122,7 +23597,6 @@ static void tcc_run_free(TCCState *s1)
     int i;
 
     for (i = 0; i < s1->nb_runtime_mem; ++i) {
-# 109 "tccrun.c"
         tcc_free(s1->runtime_mem[i]);
 
     }
@@ -24186,7 +23660,6 @@ static void tcc_run_free(TCCState *s1)
 
     return (*prog_main)(argc, argv);
 }
-# 181 "tccrun.c"
 static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff)
 {
     Section *s;
@@ -24311,7 +23784,6 @@ static void set_pages_executable(void *ptr, unsigned long length)
 
 
 }
-# 333 "tccrun.c"
 static void tcc_set_num_callers(int n)
 {
     rt_num_callers = n;
@@ -24541,19 +24013,16 @@ static void set_exception_handler(void)
     sigaction(7, &sigact, ((void*)0));
     sigaction(6, &sigact, ((void*)0));
 }
-# 573 "tccrun.c"
 static int rt_get_caller_pc(Elf32_Addr *paddr, ucontext_t *uc, int level)
 {
     Elf32_Addr fp;
     int i;
 
     if (level == 0) {
-# 590 "tccrun.c"
         *paddr = uc->uc_mcontext.gregs[REG_EIP];
 
         return 0;
     } else {
-# 605 "tccrun.c"
         fp = uc->uc_mcontext.gregs[REG_EBP];
 
         for(i=1;i<level;i++) {
@@ -24566,10 +24035,7 @@ static int rt_get_caller_pc(Elf32_Addr *paddr, ucontext_t *uc, int level)
         return 0;
     }
 }
-# 44 "libtcc.c" 2
 
-# 1 "i386-gen.c" 1
-# 82 "i386-gen.c"
 static const int reg_classes[5] = {
               0x0001 | 0x0004,
               0x0001 | 0x0010,
@@ -24882,7 +24348,6 @@ static uint8_t fastcallw_regs[2] = { TREG_ECX, TREG_EDX };
 
 static int gfunc_sret(CType *vt, int variadic, CType *ret, int *ret_align, int *regsize)
 {
-# 412 "i386-gen.c"
     *ret_align = 1;
     return 0;
 
@@ -24976,7 +24441,6 @@ static void gfunc_call(int nb_args)
         gadd_sp(args_size);
     vtop--;
 }
-# 513 "i386-gen.c"
 static void gfunc_prolog(CType *func_type)
 {
     int addr, align, size, func_call, fastcall_nb_regs;
@@ -25624,9 +25088,6 @@ static void gen_vla_alloc(CType *type, int align) {
     vpop();
 
 }
-# 46 "libtcc.c" 2
-# 1 "i386-link.c" 1
-# 27 "i386-link.c"
 int code_reloc (int reloc_type)
 {
     switch (reloc_type) {
@@ -25846,9 +25307,6 @@ void relocate(TCCState *s1, Elf32_Rel *rel, int type, unsigned char *ptr, Elf32_
             return;
     }
 }
-# 47 "libtcc.c" 2
-# 1 "i386-asm.c" 1
-# 60 "i386-asm.c"
 enum {
     OPT_REG8=0,
     OPT_REG16,
@@ -25892,7 +25350,6 @@ enum {
 
     OPT_EA = 0x80
 };
-# 149 "i386-asm.c"
 typedef struct ASMInstr {
     uint16_t sym;
     uint16_t opcode;
@@ -25910,7 +25367,6 @@ typedef struct Operand {
 } Operand;
 
 static const uint8_t reg_to_size[9] = {
-# 174 "i386-asm.c"
     0, 0, 1, 0, 2, 0, 0, 0, 3
 };
 
@@ -25959,8 +25415,6 @@ static const uint8_t segment_prefixes[] = {
 };
 
 static const ASMInstr asm_instrs[] = {
-# 235 "i386-asm.c"
-# 1 "i386-asm.h" 1
     
     
     
@@ -26434,15 +25888,12 @@ static const ASMInstr asm_instrs[] = {
     { TOK_ASM_rsqrtps, ((uint64_t) ((((0x0f52) & 0xff00) == 0x0f00) ? ((((0x0f52) >> 8) & ~0xff) | ((0x0f52) & 0xff)) : (0x0f52))), ((0x08) | ((0) << 13) | ((((0x0f52) & 0xff00) == 0x0f00) ? 0x100 : 0)), 2, { OPT_EA | OPT_SSE, OPT_SSE }},
     { TOK_ASM_sqrtps, ((uint64_t) ((((0x0f51) & 0xff00) == 0x0f00) ? ((((0x0f51) >> 8) & ~0xff) | ((0x0f51) & 0xff)) : (0x0f51))), ((0x08) | ((0) << 13) | ((((0x0f51) & 0xff00) == 0x0f00) ? 0x100 : 0)), 2, { OPT_EA | OPT_SSE, OPT_SSE }},
     { TOK_ASM_subps, ((uint64_t) ((((0x0f5c) & 0xff00) == 0x0f00) ? ((((0x0f5c) >> 8) & ~0xff) | ((0x0f5c) & 0xff)) : (0x0f5c))), ((0x08) | ((0) << 13) | ((((0x0f5c) & 0xff00) == 0x0f00) ? 0x100 : 0)), 2, { OPT_EA | OPT_SSE, OPT_SSE }},
-# 236 "i386-asm.c" 2
 
 
     { 0, },
 };
 
 static const uint16_t op0_codes[] = {
-# 251 "i386-asm.c"
-# 1 "i386-asm.h" 1
      0xf8,
      0xfc,
      0xfa,
@@ -26916,7 +26367,6 @@ static const uint16_t op0_codes[] = {
    
    
    
-# 252 "i386-asm.c" 2
 
 };
 
@@ -26944,7 +26394,6 @@ static inline int get_reg_shift(TCCState *s1)
     }
     return shift;
 }
-# 320 "i386-asm.c"
 static int asm_parse_reg(unsigned int *type)
 {
     int reg = 0;
@@ -26955,7 +26404,6 @@ static int asm_parse_reg(unsigned int *type)
     if (tok >= TOK_ASM_eax && tok <= TOK_ASM_edi) {
         reg = tok - TOK_ASM_eax;
  *type = (1 << OPT_REG32);
-# 341 "i386-asm.c"
     } else {
     error_32:
         expect("register");
@@ -27106,7 +26554,6 @@ static void gen_expr32(ExprValue *pe)
     else
  gen_addr32(pe->sym ? 0x0200 : 0, pe->sym, pe->v);
 }
-# 500 "i386-asm.c"
 static void gen_disp32(ExprValue *pe)
 {
     Sym *sym = pe->sym;
@@ -27183,7 +26630,6 @@ static inline int asm_modrm(int reg, Operand *op)
     }
     return 0;
 }
-# 640 "i386-asm.c"
 static void maybe_print_stats (void)
 {
   static int already = 1;
@@ -27331,7 +26777,6 @@ again:
         }
         if (pa->nb_ops != nb_ops)
             continue;
-# 797 "i386-asm.c"
  alltypes = 0;
         for(i = 0; i < nb_ops; i++) {
             int op1, op2;
@@ -27424,7 +26869,6 @@ again:
                 tcc_error("cannot infer opcode suffix");
         }
     }
-# 900 "i386-asm.c"
     p66 = 0;
     if (s == 1)
         p66 = 1;
@@ -27439,7 +26883,6 @@ again:
     }
     if (p66)
         g(0x66);
-# 942 "i386-asm.c"
     if ((((pa->instr_type) & 0x70) == (0x10)))
         g(0x9b);
     if (seg_prefix)
@@ -27897,7 +27340,6 @@ static void asm_compute_constraints(ASMOperand *operands,
             break;
         case 'm':
         case 'g':
-# 1407 "i386-asm.c"
             if (j < nb_outputs || c == 'm') {
                 if ((op->vt->r & 0x003f) == 0x0031) {
 
@@ -27944,7 +27386,6 @@ static void asm_compute_constraints(ASMOperand *operands,
             break;
         }
     }
-# 1469 "i386-asm.c"
 }
 
 static void subst_asm_operand(CString *add_str,
@@ -28075,7 +27516,6 @@ static void asm_gen_code(ASMOperand *operands, int nb_operands,
     uint8_t regs_allocated[8];
     ASMOperand *op;
     int i, reg;
-# 1609 "i386-asm.c"
     static uint8_t reg_saved[] = { 3, 6, 7 };
 
 
@@ -28191,10 +27631,6 @@ static void asm_clobber(uint8_t *clobber_regs, const char *str)
     }
     clobber_regs[reg] = 1;
 }
-# 48 "libtcc.c" 2
-# 69 "libtcc.c"
-# 1 "tccasm.c" 1
-# 24 "tccasm.c"
 static int asm_get_local_label_name(TCCState *s1, unsigned int n)
 {
     char buf[64];
@@ -28226,7 +27662,6 @@ static Sym *asm_label_push(int v)
     sym->r = 0x0030 | 0x0200;
     return sym;
 }
-# 66 "tccasm.c"
 static Sym* get_asm_sym(int name, Sym *csym)
 {
     Sym *sym = asm_label_find(name);
@@ -29438,8 +28873,6 @@ static void asm_global_instr(void)
     cstr_free(&astr);
     nocode_wanted = saved_nocode_wanted;
 }
-# 70 "libtcc.c" 2
-# 134 "libtcc.c"
 static char *pstrcpy(char *buf, int buf_size, const char *s)
 {
     char *q, *q_end;
@@ -29495,7 +28928,6 @@ static char *pstrncpy(char *out, const char *in, size_t num)
     char *e = strrchr(b, '.');
     return e ? e : strchr(b, 0);
 }
-# 199 "libtcc.c"
  void tcc_free(void *ptr)
 {
     free(ptr);
@@ -29538,7 +28970,6 @@ static char *pstrncpy(char *out, const char *in, size_t num)
  void tcc_memcheck(void)
 {
 }
-# 403 "libtcc.c"
 static void dynarray_add(void *ptab, int *nb_ptr, void *data)
 {
     int nb, nb_alloc;
@@ -29882,7 +29313,6 @@ static void tcc_cleanup(void)
 
 
     s->seg_size = 32;
-# 754 "libtcc.c"
     tcc_set_lib_path(s, "/usr/local/lib/tcc");
 
     tccelf_new(s);
@@ -29913,20 +29343,16 @@ static void tcc_cleanup(void)
     tcc_define_symbol(s, "__i386__", ((void*)0));
     tcc_define_symbol(s, "__i386", ((void*)0));
     tcc_define_symbol(s, "i386", ((void*)0));
-# 817 "libtcc.c"
     tcc_define_symbol(s, "__unix__", ((void*)0));
     tcc_define_symbol(s, "__unix", ((void*)0));
     tcc_define_symbol(s, "unix", ((void*)0));
 
     tcc_define_symbol(s, "__linux__", ((void*)0));
     tcc_define_symbol(s, "__linux", ((void*)0));
-# 843 "libtcc.c"
     tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned int");
     tcc_define_symbol(s, "__PTRDIFF_TYPE__", "int");
     tcc_define_symbol(s, "__ILP32__", ((void*)0));
-# 862 "libtcc.c"
     tcc_define_symbol(s, "__WCHAR_TYPE__", "int");
-# 877 "libtcc.c"
     tcc_define_symbol(s, "__WINT_TYPE__", "unsigned int");
 
     tcc_define_symbol(s, "__REDIRECT(name, proto, alias)",
@@ -30015,7 +29441,6 @@ static void tcc_cleanup(void)
     }
 
     tcc_add_library_path(s, "" "/usr/" "lib" ":" "" "/" "lib" ":" "" "/usr/local/" "lib");
-# 973 "libtcc.c"
     tcc_split_path(s, &s->crt_paths, &s->nb_crt_paths, "" "/usr/" "lib");
 
     if ((output_type == 2 || output_type == 3) &&
@@ -30295,7 +29720,6 @@ static int strstart(const char *val, const char **str)
     *str = p;
     return 1;
 }
-# 1261 "libtcc.c"
 static int link_option(const char *str, const char *val, const char **ptr)
 {
     const char *p, *q;
@@ -30414,7 +29838,6 @@ static int tcc_set_linker(TCCState *s, const char *option)
             s->section_align = strtoul(p, &end, 16);
         } else if (link_option(option, "soname=", &p)) {
             copy_linker_arg(&s->soname, p, 0);
-# 1411 "libtcc.c"
         } else if (ret = link_option(option, "?whole-archive", &p), ret) {
             s->alacarte_link = ret < 0;
         } else if (p) {
@@ -30845,7 +30268,6 @@ reparse:
             if (set_flag(s, options_f, optarg) < 0)
                 goto unsupported_option;
             break;
-# 1853 "libtcc.c"
         case TCC_OPTION_m:
             if (set_flag(s, options_m, optarg) < 0) {
                 if (x = atoi(optarg), x != 32 && x != 64)
@@ -30975,10 +30397,7 @@ unsupported_option:
 
 
 }
-# 24 "tcc.c" 2
 
-# 1 "tcctools.c" 1
-# 36 "tcctools.c"
 typedef struct {
     char ar_name[16];
     char ar_date[12];
@@ -31222,7 +30641,6 @@ the_end:
         fclose(fo), remove(tfile);
     return ret;
 }
-# 482 "tcctools.c"
 static void tcc_tool_cross(TCCState *s, char **argv, int target)
 {
     char program[4096];
@@ -31244,7 +30662,6 @@ static void tcc_tool_cross(TCCState *s, char **argv, int target)
         execvp(argv[0] = program, argv);
     tcc_error("could not run '%s'", program);
 }
-# 518 "tcctools.c"
 static void gen_makedeps(TCCState *s, const char *target, const char *filename)
 {
     FILE *depout;
@@ -31272,7 +30689,6 @@ static void gen_makedeps(TCCState *s, const char *target, const char *filename)
     fprintf(depout, "\n");
     fclose(depout);
 }
-# 26 "tcc.c" 2
 
 static const char help[] =
     "Tiny C Compiler ""0.9.27"" - Copyright (C) 2001-2006 Fabrice Bellard\n"
@@ -31369,7 +30785,6 @@ static const char help2[] =
     "  -export-all-symbols           same as -rdynamic\n"
     "  -image-base= -Ttext=          set base address of executable\n"
     "  -section-alignment=           set section alignment in executable\n"
-# 131 "tcc.c"
     "  -rpath=                       set dynamic library search path\n"
     "  -enable-new-dtags             set DT_RUNPATH instead of DT_RPATH\n"
     "  -soname=                      set DT_SONAME elf tag\n"
@@ -31386,7 +30801,6 @@ static const char version[] =
     "tcc version ""0.9.27"" ("
 
         "i386"
-# 166 "tcc.c"
         " Linux"
 
     ")\n"
@@ -31441,7 +30855,6 @@ static char *default_outputfile(TCCState *s, const char *first_file)
         name = tcc_basename(first_file);
     snprintf(buf, sizeof(buf), "%s", name);
     ext = tcc_fileextension(buf);
-# 228 "tcc.c"
     if (s->output_type == 4 && !s->option_r && *ext)
         strcpy(ext, ".o");
     else
