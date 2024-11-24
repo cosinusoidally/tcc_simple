@@ -19842,22 +19842,13 @@ static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
         const char *ext = tcc_fileextension(filename);
         if (ext[0]) {
             ext++;
-            if (!strcmp(ext, "S"))
-                filetype = 3;
-            else if (!strcmp(ext, "s"))
-                filetype = 2;
-            else if (!strcmp(ext, "c") || !strcmp(ext, "i"))
-                filetype = 1;
-            else
-                flags |= 0x40;
-        } else {
             filetype = 1;
         }
         s->filetype = filetype;
     }
     return tcc_add_file_internal(s, filename, flags);
 }
- int tcc_add_library_path(TCCState *s, const char *pathname)
+int tcc_add_library_path(TCCState *s, const char *pathname)
 {
     tcc_split_path(s, &s->library_paths, &s->nb_library_paths, pathname);
     return 0;
