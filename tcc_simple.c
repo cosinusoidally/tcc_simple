@@ -21002,7 +21002,6 @@ int main(int argc0, char **argv0)
     const char *first_file;
     int argc; char **argv;
     FILE *ppfp = stdout;
-redo:
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
