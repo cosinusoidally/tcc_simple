@@ -3319,8 +3319,6 @@ static inline Sym *define_find(int v);
 static void free_defines(Sym *b);
 static Sym *label_find(int v);
 static Sym *label_push(Sym **ptop, int v, int flags);
-static void label_pop(Sym **ptop, Sym *slast, int keep);
-static void parse_define(void);
 static void preprocess(int is_bof);
 static void next_nomacro(void);
 static void next(void);
@@ -5061,153 +5059,6 @@ static Sym *label_push(Sym **ptop, int v, int flags)
     s->prev_tok = *ps;
     *ps = s;
     return s;
-}
-static void label_pop(Sym **ptop, Sym *slast, int keep)
-{
-    Sym *s, *s1;
-    for(s = *ptop; s != slast; s = s1) {
-        s1 = s->prev;
-        if (s->r == 2) {
-            tcc_warning("label '%s' declared but not used", get_tok_str(s->v, ((void*)0)));
-        } else if (s->r == 1) {
-                tcc_error("label '%s' used but not defined",
-                      get_tok_str(s->v, ((void*)0)));
-        } else {
-            if (s->c) {
-                put_extern_sym(s, cur_text_section, s->jnext, 1);
-            }
-        }
-        table_ident[s->v - 256]->sym_label = s->prev_tok;
-        if (!keep)
-            sym_free(s);
-    }
-    if (!keep)
-        *ptop = slast;
-}
-static void maybe_run_test(TCCState *s)
-{
-    const char *p;
-    if (s->include_stack_ptr != s->include_stack)
-        return;
-    p = get_tok_str(tok, ((void*)0));
-    if (0 != memcmp(p, "test_", 5))
-        return;
-    if (0 != --s->run_test)
-        return;
-    fprintf(s->ppfp, "\n[%s]\n" + !(s->dflag & 32), p), fflush(s->ppfp);
-    define_push(tok, 0, ((void*)0), ((void*)0));
-}
-static int expr_preprocess(void)
-{
-    int c, t;
-    TokenString *str;
-    str = tok_str_alloc();
-    pp_expr = 1;
-    while (tok != 10 && tok != (-1)) {
-        next();
-        if (tok == TOK_DEFINED) {
-            next_nomacro();
-            t = tok;
-            if (t == '(')
-                next_nomacro();
-            if (tok < 256)
-                expect("identifier");
-            if (tcc_state->run_test)
-                maybe_run_test(tcc_state);
-            c = define_find(tok) != 0;
-            if (t == '(') {
-                next_nomacro();
-                if (tok != ')')
-                    expect("')'");
-            }
-            tok = 0xb5;
-            tokc.i = c;
-        } else if (tok >= 256) {
-            tok = 0xb5;
-            tokc.i = 0;
-        }
-        tok_str_add_tok(str);
-    }
-    pp_expr = 0;
-    tok_str_add(str, -1);
-    tok_str_add(str, 0);
-    begin_macro(str, 1);
-    next();
-    c = expr_const();
-    end_macro();
-    return c != 0;
-}
-static void parse_define(void)
-{
-    Sym *s, *first, **ps;
-    int v, t, varg, is_vaargs, spc;
-    int saved_parse_flags = parse_flags;
-    v = tok;
-    if (v < 256 || v == TOK_DEFINED)
-        tcc_error("invalid macro name '%s'", get_tok_str(tok, &tokc));
-    first = ((void*)0);
-    t = 0;
-    parse_flags = ((parse_flags & ~0x0008) | 0x0010);
-    next_nomacro_spc();
-    if (tok == '(') {
-        int dotid = set_idnum('.', 0);
-        next_nomacro();
-        ps = &first;
-        if (tok != ')') for (;;) {
-            varg = tok;
-            next_nomacro();
-            is_vaargs = 0;
-            if (varg == 0xc8) {
-                varg = TOK___VA_ARGS__;
-                is_vaargs = 1;
-            } else if (tok == 0xc8 && gnu_ext) {
-                is_vaargs = 1;
-                next_nomacro();
-            }
-            if (varg < 256)
-        bad_list:
-                tcc_error("bad macro parameter list");
-            s = sym_push2(&define_stack, varg | 0x20000000, is_vaargs, 0);
-            *ps = s;
-            ps = &s->next;
-            if (tok == ')')
-                break;
-            if (tok != ',' || is_vaargs)
-                goto bad_list;
-            next_nomacro();
-        }
-        next_nomacro_spc();
-        t = 1;
-        set_idnum('.', dotid);
-    }
-    tokstr_buf.len = 0;
-    spc = 2;
-    parse_flags |= 0x0020 | 0x0010 | 0x0004;
-    while (tok != 10 && tok != (-1)) {
-        if (0xca == tok) {
-            if (2 == spc)
-                goto bad_twosharp;
-            if (1 == spc)
-                --tokstr_buf.len;
-            spc = 3;
-     tok = 0xcd;
-        } else if ('#' == tok) {
-            spc = 4;
-        } else if (check_space(tok, &spc)) {
-            goto skip;
-        }
-        tok_str_add2(&tokstr_buf, tok, &tokc);
-    skip:
-        next_nomacro_spc();
-    }
-    parse_flags = saved_parse_flags;
-    if (spc == 1)
-        --tokstr_buf.len;
-    tok_str_add(&tokstr_buf, 0);
-    if (3 == spc)
-bad_twosharp:
-        tcc_error("'##' cannot appear at either end of macro");
-    define_push(v, t, tok_str_dup(&tokstr_buf), first);
 }
 
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long) {
@@ -11271,7 +11122,6 @@ static void block(int *bsym, int *csym, int is_expr)
                 block(bsym, csym, is_expr);
             }
         }
-        label_pop(&local_label_stack, llabel, is_expr);
         --local_scope;
  sym_pop(&local_stack, s, is_expr);
         if (vlas_in_scope > saved_vlas_in_scope) {
@@ -12105,7 +11955,6 @@ static void gen_function(Sym *sym)
     gsym(rsym);
     gfunc_epilog();
     cur_text_section->data_offset = ind;
-    label_pop(&global_label_stack, ((void*)0), 0);
     local_scope = 0;
     sym_pop(&local_stack, ((void*)0), 0);
     elfsym(sym)->st_size = ind - func_ind;
