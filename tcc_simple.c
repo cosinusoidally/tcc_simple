@@ -3393,7 +3393,6 @@ static int type_size(CType *type, int *a);
 static void mk_pointer(CType *type);
 static void vstore(void);
 static void inc(int post, int c);
-static void parse_mult_str (CString *astr, const char *msg);
 static int lvalue_type(int t);
 static void indir(void);
 static void unary(void);
@@ -8084,49 +8083,9 @@ static void inc(int post, int c)
     if (post)
         vpop();
 }
-static void parse_mult_str (CString *astr, const char *msg)
-{
-    if (tok != 0xb9)
-        expect(msg);
-    cstr_new(astr);
-    while (tok == 0xb9) {
-        cstr_cat(astr, tokc.str.data, -1);
-        next();
-    }
-    cstr_ccat(astr, '\0');
-}
-static int exact_log2p1(int i)
-{
-  int ret;
-  if (!i)
-    return 0;
-  for (ret = 1; i >= 1 << 8; ret += 8)
-    i >>= 8;
-  if (i >= 1 << 4)
-    ret += 4, i >>= 4;
-  if (i >= 1 << 2)
-    ret += 2, i >>= 2;
-  if (i >= 1 << 1)
-    ret++;
-  return ret;
-}
 
-static Sym * find_field (CType *type, int v)
-{
-    Sym *s = type->ref;
-    v |= 0x20000000;
-    while ((s = s->next) != ((void*)0)) {
- if ((s->v & 0x20000000) &&
-     (s->type.t & 0x000f) == 7 &&
-     (s->v & ~0x20000000) >= 0x10000000) {
-     Sym *ret = find_field (&s->type, v);
-     if (ret)
-         return ret;
- }
- if (s->v == v)
-   break;
-    }
-    return s;
+static Sym * find_field (CType *type, int v) {
+exit(1);
 }
 
 static void sym_to_attr(AttributeDef *ad, Sym *s)
@@ -9007,38 +8966,6 @@ static void unary(void)
         if (tok == 0xa4 || tok == 0xa2) {
             inc(1, tok);
             next();
-        } else if (tok == '.' || tok == 0xc7 || tok == 0xbc) {
-            int qualifiers;
-            if (tok == 0xc7)
-                indir();
-            qualifiers = vtop->type.t & (0x0100 | 0x0200);
-            test_lvalue();
-            gaddrof();
-            if ((vtop->type.t & 0x000f) != 7)
-                expect("struct or union");
-            if (tok == 0xbc)
-                expect("field name");
-            next();
-            if (tok == 0xb5 || tok == 0xb6)
-                expect("field name");
-     s = find_field(&vtop->type, tok);
-            if (!s)
-                tcc_error("field not found: %s", get_tok_str(tok & ~0x20000000, &tokc));
-            vtop->type = char_pointer_type;
-            vpushi(s->c);
-            gen_op('+');
-            vtop->type = s->type;
-            vtop->type.t |= qualifiers;
-            if (!(vtop->type.t & 0x0040)) {
-                vtop->r |= lvalue_type(vtop->type.t);
-            }
-            next();
-        } else if (tok == '[') {
-            next();
-            gexpr();
-            gen_op('+');
-            indir();
-            skip(']');
         } else if (tok == '(') {
             SValue ret;
             Sym *sa;
