@@ -8508,57 +8508,24 @@ static void gfunc_param_typed(Sym *func, Sym *arg)
         gen_assign_cast(&type);
     }
 }
-static void expr_type(CType *type, void (*expr_fn)(void))
-{
-    nocode_wanted++;
-    expr_fn();
-    *type = vtop->type;
-    vpop();
-    nocode_wanted--;
+
+static void expr_type(CType *type, void (*expr_fn)(void)) {
+exit(1);
 }
-static void parse_expr_type(CType *type)
-{
-    int n;
-    AttributeDef ad;
-    skip('(');
-    if (parse_btype(type, &ad)) {
-        type_decl(type, &ad, &n, 1);
-    } else {
-        expr_type(type, gexpr);
-    }
-    skip(')');
+
+static void parse_expr_type(CType *type) {
+exit(1);
 }
-static void parse_type(CType *type)
-{
-    AttributeDef ad;
-    int n;
-    if (!parse_btype(type, &ad)) {
-        expect("type");
-    }
-    type_decl(type, &ad, &n, 1);
+
+static void parse_type(CType *type) {
+exit(1);
 }
-static void parse_builtin_params(int nc, const char *args)
-{
-    char c, sep = '(';
-    CType t;
-    if (nc)
-        nocode_wanted++;
-    next();
-    while ((c = *args++)) {
- skip(sep);
- sep = ',';
- switch (c) {
-     case 'e': expr_eq(); continue;
-     case 't': parse_type(&t); vpush(&t); continue;
-     default: tcc_error("internal error"); break;
- }
-    }
-    skip(')');
-    if (nc)
-        nocode_wanted--;
+
+static void parse_builtin_params(int nc, const char *args) {
+exit(1);
 }
-static void unary(void)
-{
+
+static void unary(void) {
     int n, t, align, size, r, sizeof_caller;
     CType type;
     Sym *s;
@@ -9611,26 +9578,11 @@ static void skip_or_save_block(TokenString **str)
  tok_str_add(*str, 0);
     }
 }
-static void parse_init_elem(int expr_type)
-{
-    int saved_global_expr;
-    switch(expr_type) {
-    case 1:
-        saved_global_expr = global_expr;
-        global_expr = 1;
-        expr_const1();
-        global_expr = saved_global_expr;
-        if (((vtop->r & (0x003f | 0x0100)) != 0x0030
-      && ((vtop->r & (0x0200|0x0100)) != (0x0200|0x0100)
-   || vtop->sym->v < 0x10000000))
-            )
-            tcc_error("initializer element is not constant");
-        break;
-    case 2:
-        expr_eq();
-        break;
-    }
+
+static void parse_init_elem(int expr_type) {
+exit(1);
 }
+
 static void init_putz(Section *sec, unsigned long c, int size)
 {
     if (sec) {
