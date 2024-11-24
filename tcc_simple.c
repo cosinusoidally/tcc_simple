@@ -1935,7 +1935,6 @@ typedef struct TCCState TCCState;
  void tcc_delete(TCCState *s);
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
- void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_compile_string(TCCState *s, const char *buf);
  int tcc_set_output_type(TCCState *s, int output_type);
@@ -7018,7 +7017,6 @@ static void preprocess_start(TCCState *s1, int is_asm)
     cstr_cat(&cstr, "\"", -1);
     cstr_cat(&cstr, file->filename, -1);
     cstr_cat(&cstr, "\"", 0);
-    tcc_define_symbol(s1, "__BASE_FILE__", cstr.data);
     cstr_reset(&cstr);
     for (i = 0; i < s1->nb_cmd_include_files; i++) {
         cstr_cat(&cstr, "#include \"", -1);
@@ -7031,8 +7029,6 @@ static void preprocess_start(TCCState *s1, int is_asm)
  memcpy(file->buffer, cstr.data, cstr.size);
     }
     cstr_free(&cstr);
-    if (is_asm)
-        tcc_define_symbol(s1, "__ASSEMBLER__", ((void*)0));
     parse_flags = is_asm ? 0x0008 : 0;
     tok_flags = 0x0001 | 0x0002;
 }
@@ -19636,21 +19632,6 @@ static int tcc_compile(TCCState *s1)
     ret = tcc_compile(s);
     tcc_close();
     return ret;
-}
- void tcc_define_symbol(TCCState *s1, const char *sym, const char *value)
-{
-    int len1, len2;
-    if (!value)
-        value = "1";
-    len1 = strlen(sym);
-    len2 = strlen(value);
-    tcc_open_bf(s1, "<define>", len1 + len2 + 1);
-    memcpy(file->buffer, sym, len1);
-    file->buffer[len1] = ' ';
-    memcpy(file->buffer + len1 + 1, value, len2);
-    next_nomacro();
-    parse_define();
-    tcc_close();
 }
 
 static void tcc_cleanup(void) {
