@@ -12564,108 +12564,18 @@ static int elf_output_file(TCCState *s1, const char *filename)
     sec_order = ((void*)0);
     interp = dynamic = dynstr = ((void*)0);
     textrel = 0;
-    if (file_type != 4) {
-        tcc_add_runtime(s1);
- resolve_common_syms(s1);
-        if (!s1->static_link) {
-            if (file_type == 2) {
-                char *ptr;
-                const char *elfint = getenv("LD_SO");
-                if (elfint == ((void*)0))
-                    elfint = "/lib/ld-linux.so.2";
-                interp = new_section(s1, ".interp", 1, (1 << 1));
-                interp->sh_addralign = 1;
-                ptr = section_ptr_add(interp, 1 + strlen(elfint));
-                strcpy(ptr, elfint);
-            }
-            s1->dynsym = new_symtab(s1, ".dynsym", 11, (1 << 1),
-                                    ".dynstr",
-                                    ".hash", (1 << 1));
-            dynstr = s1->dynsym->link;
-            dynamic = new_section(s1, ".dynamic", 6,
-                                  (1 << 1) | (1 << 0));
-            dynamic->link = dynstr;
-            dynamic->sh_entsize = sizeof(Elf32_Dyn);
-            build_got(s1);
-            if (file_type == 2) {
-                bind_exe_dynsyms(s1);
-                if (s1->nb_errors)
-                    goto the_end;
-                bind_libs_dynsyms(s1);
-            } else {
-                export_global_syms(s1);
-            }
-        }
-        build_got_entries(s1);
-    }
     strsec = new_section(s1, ".shstrtab", 3, 0);
     put_elf_str(strsec, "");
     textrel = alloc_sec_names(s1, file_type, strsec);
-    if (dynamic) {
-        for(i = 0; i < s1->nb_loaded_dlls; i++) {
-            DLLReference *dllref = s1->loaded_dlls[i];
-            if (dllref->level == 0)
-                put_dt(dynamic, 1, put_elf_str(dynstr, dllref->name));
-        }
-        if (s1->rpath)
-            put_dt(dynamic, s1->enable_new_dtags ? 29 : 15,
-                   put_elf_str(dynstr, s1->rpath));
-        if (file_type == 3) {
-            if (s1->soname)
-                put_dt(dynamic, 14, put_elf_str(dynstr, s1->soname));
-            if (textrel)
-                put_dt(dynamic, 22, 0);
-        }
-        if (s1->symbolic)
-            put_dt(dynamic, 16, 0);
-        dyninf.dynamic = dynamic;
-        dyninf.dynstr = dynstr;
-        dyninf.data_offset = dynamic->data_offset;
-        fill_dynamic(s1, &dyninf);
-        dynamic->sh_size = dynamic->data_offset;
-        dynstr->sh_size = dynstr->data_offset;
-    }
-    if (file_type == 4)
-        phnum = 0;
-    else if (file_type == 3)
-        phnum = 3;
-    else if (s1->static_link)
-        phnum = 2;
-    else
-        phnum = 5;
+    phnum = 0;
     phdr = tcc_mallocz(phnum * sizeof(Elf32_Phdr));
     shnum = s1->nb_sections;
     sec_order = tcc_malloc(sizeof(int) * shnum);
     sec_order[0] = 0;
     file_offset = layout_sections(s1, phdr, phnum, interp, strsec, &dyninf,
                                   sec_order);
-    if (file_type != 4) {
-        fill_unloadable_phdr(phdr, phnum, interp, dynamic);
-        if (dynamic) {
-            dynamic->data_offset = dyninf.data_offset;
-            fill_dynamic(s1, &dyninf);
-            write32le(s1->got->data, dynamic->sh_addr);
-            if (file_type == 2
-                || (0 && file_type == 3))
-                relocate_plt(s1);
-            for (sym = (Elf32_Sym *) s1->dynsym->data + 1; sym < (Elf32_Sym *) (s1->dynsym->data + s1->dynsym->data_offset); sym++) {
-                if (sym->st_shndx != 0 && sym->st_shndx < 0xff00) {
-                    sym->st_value += s1->sections[sym->st_shndx]->sh_addr;
-                }
-            }
-        }
-        ret = final_sections_reloc(s1);
-        if (ret)
-            goto the_end;
- tidy_section_headers(s1, sec_order);
-        if (file_type == 2 && s1->static_link)
-            fill_got(s1);
-        else if (s1->got)
-            fill_local_got_entries(s1);
-    }
     ret = tcc_write_elf_file(s1, filename, phnum, phdr, file_offset, sec_order);
     s1->nb_sections = shnum;
- the_end:
     tcc_free(sec_order);
     tcc_free(phdr);
     return ret;
