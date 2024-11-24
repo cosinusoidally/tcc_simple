@@ -1936,8 +1936,6 @@ typedef struct TCCState TCCState;
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_output_file(TCCState *s, const char *filename);
- int tcc_run(TCCState *s, int argc, char **argv);
- int tcc_relocate(TCCState *s1, void *ptr);
  void *tcc_get_symbol(TCCState *s, const char *name);
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
@@ -3547,7 +3545,6 @@ static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
 static void tcc_set_num_callers(int n);
-static void tcc_run_free(TCCState *s1);
 static int gnu_ext = 1;
 static int tcc_ext = 1;
 static struct TCCState *tcc_state;
@@ -14437,65 +14434,7 @@ static void rt_error(ucontext_t *uc, const char *fmt, ...);
 static void set_exception_handler(void);
 static void set_pages_executable(void *ptr, unsigned long length);
 static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff);
- int tcc_relocate(TCCState *s1, void *ptr)
-{
-    int size;
-    Elf32_Addr ptr_diff = 0;
-    if ((void*)1 != ptr)
-        return tcc_relocate_ex(s1, ptr, 0);
-    size = tcc_relocate_ex(s1, ((void*)0), 0);
-    if (size < 0)
-        return -1;
-    ptr = tcc_malloc(size);
-    tcc_relocate_ex(s1, ptr, ptr_diff);
-    dynarray_add(&s1->runtime_mem, &s1->nb_runtime_mem, ptr);
-    return 0;
-}
-static void tcc_run_free(TCCState *s1)
-{
-    int i;
-    for (i = 0; i < s1->nb_runtime_mem; ++i) {
-        tcc_free(s1->runtime_mem[i]);
-    }
-    tcc_free(s1->runtime_mem);
-}
- int tcc_run(TCCState *s1, int argc, char **argv)
-{
-    int (*prog_main)(int, char **);
-    s1->runtime_main = "main";
-    if ((s1->dflag & 16) && !find_elf_sym(s1->symtab, s1->runtime_main))
-        return 0;
-    if (tcc_relocate(s1, (void*)1) < 0)
-        return -1;
-    prog_main = tcc_get_symbol_err(s1, s1->runtime_main);
-    if (s1->do_debug) {
-        set_exception_handler();
-        rt_prog_main = prog_main;
-    }
-    if (s1->do_bounds_check) {
-        void (*bound_init)(void);
-        void (*bound_exit)(void);
-        void (*bound_new_region)(void *p, Elf32_Addr size);
-        int (*bound_delete_region)(void *p);
-        int i, ret;
-        rt_bound_error_msg = tcc_get_symbol_err(s1, "__bound_error_msg");
-        bound_init = tcc_get_symbol_err(s1, "__bound_init");
-        bound_exit = tcc_get_symbol_err(s1, "__bound_exit");
-        bound_new_region = tcc_get_symbol_err(s1, "__bound_new_region");
-        bound_delete_region = tcc_get_symbol_err(s1, "__bound_delete_region");
-        bound_init();
-        bound_new_region(argv, argc*sizeof(argv[0]));
-        for (i=0; i<argc; ++i)
-            bound_new_region(argv[i], strlen(argv[i]) + 1);
-        ret = (*prog_main)(argc, argv);
-        for (i=0; i<argc; ++i)
-            bound_delete_region(argv[i]);
-        bound_delete_region(argv);
-        bound_exit();
-        return ret;
-    }
-    return (*prog_main)(argc, argv);
-}
+
 static int tcc_relocate_ex(TCCState *s1, void *ptr, Elf32_Addr ptr_diff)
 {
     Section *s;
@@ -17678,7 +17617,6 @@ TCCState *tcc_new(void) {
     dynarray_reset(&s1->target_deps, &s1->nb_target_deps);
     dynarray_reset(&s1->pragma_libs, &s1->nb_pragma_libs);
     dynarray_reset(&s1->argv, &s1->argc);
-    tcc_run_free(s1);
     tcc_free(s1);
     if (0 == --nb_states)
         tcc_memcheck();
