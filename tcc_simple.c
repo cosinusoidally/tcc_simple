@@ -8922,18 +8922,6 @@ static void unary(void)
         next();
  break;
     }
-    case TOK___NAN__:
-        vpush64(9, 0x7ff8000000000000ULL);
-        next();
-        break;
-    case TOK___SNAN__:
-        vpush64(9, 0x7ff0000000000001ULL);
-        next();
-        break;
-    case TOK___INF__:
-        vpush64(9, 0x7ff0000000000000ULL);
-        next();
-        break;
     default:
     tok_identifier:
         t = tok;
