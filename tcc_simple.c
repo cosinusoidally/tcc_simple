@@ -19565,36 +19565,26 @@ static void tcc_open_bf(TCCState *s1, const char *filename, int initlen)
     file = bf;
     tok_flags = 0x0001 | 0x0002;
 }
-static void tcc_close(void)
-{
+
+static void tcc_close(void) {
     BufferedFile *bf = file;
     if (bf->fd > 0) {
         close(bf->fd);
         total_lines += bf->line_num;
     }
-    if (bf->true_filename != bf->filename)
-        tcc_free(bf->true_filename);
     file = bf->prev;
     tcc_free(bf);
 }
-static int tcc_open(TCCState *s1, const char *filename)
-{
+
+static int tcc_open(TCCState *s1, const char *filename) {
     int fd;
-    if (strcmp(filename, "-") == 0)
-        fd = 0, filename = "<stdin>";
-    else
-        fd = open(filename, 00 | 0);
-    if ((s1->verbose == 2 && fd >= 0) || s1->verbose == 3)
-        printf("%s %*s%s\n", fd < 0 ? "nf":"->",
-               (int)(s1->include_stack_ptr - s1->include_stack), "", filename);
-    if (fd < 0)
-        return -1;
+    fd = open(filename, 00 | 0);
     tcc_open_bf(s1, filename, 0);
     file->fd = fd;
     return fd;
 }
-static int tcc_compile(TCCState *s1)
-{
+
+static int tcc_compile(TCCState *s1) {
     Sym *define_start;
     int filetype, is_asm;
     define_start = define_stack;
