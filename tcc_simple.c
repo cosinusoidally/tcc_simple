@@ -12676,33 +12676,13 @@ static int elf_output_file(TCCState *s1, const char *filename)
         ret = elf_output_file(s, filename);
     return ret;
 }
-static void *load_data(int fd, unsigned long file_offset, unsigned long size)
-{
-    void *data;
-    data = tcc_malloc(size);
-    lseek(fd, file_offset, 0);
-    read(fd, data, size);
-    return data;
+
+static void *load_data(int fd, unsigned long file_offset, unsigned long size) {
+exit(1);
 }
-typedef struct SectionMergeInfo {
-    Section *s;
-    unsigned long offset;
-    uint8_t new_section;
-    uint8_t link_once;
-} SectionMergeInfo;
-static int tcc_object_type(int fd, Elf32_Ehdr *h)
-{
-    int size = read(fd, h, sizeof *h);
-    if (size == sizeof *h && 0 == memcmp(h, "\177ELF", 4)) {
-        if (h->e_type == 1)
-            return 1;
-        if (h->e_type == 3)
-            return 2;
-    } else if (size >= 8) {
-        if (0 == memcmp(h, "!<arch>\012", 8))
-            return 3;
-    }
-    return 0;
+
+static int tcc_object_type(int fd, Elf32_Ehdr *h) {
+exit(1);
 }
 
 static int tcc_load_object_file(TCCState *s1,
