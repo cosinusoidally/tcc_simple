@@ -6204,7 +6204,6 @@ maybe_newline:
         if ((tok_flags & 0x0001) &&
             (parse_flags & 0x0001)) {
             file->buf_ptr = p;
-            preprocess(tok_flags & 0x0002);
             p = file->buf_ptr;
             goto maybe_newline;
         } else {
