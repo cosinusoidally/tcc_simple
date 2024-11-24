@@ -3415,7 +3415,6 @@ static Section *cur_text_section;
 static Section *last_text_section;
 static Section *bounds_section;
 static Section *lbounds_section;
-static void tccelf_bounds_new(TCCState *s);
 static Section *symtab_section;
 static Section *stab_section, *stabstr_section;
 static void tccelf_new(TCCState *s);
@@ -6489,20 +6488,6 @@ static void put_extern_sym2(Sym *sym, int sh_num,
     char buf[32];
     if (!sym->c) {
         name = get_tok_str(sym->v, ((void*)0));
-        if (tcc_state->do_bounds_check) {
-            switch(sym->v) {
-            case TOK_memcpy:
-            case TOK_memmove:
-            case TOK_memset:
-            case TOK_strlen:
-            case TOK_strcpy:
-            case TOK_alloca:
-                strcpy(buf, "__bound_");
-                strcat(buf, name);
-                name = buf;
-                break;
-            }
-        }
         t = sym->type.t;
         if ((t & 0x000f) == 6) {
             sym_type = 2;
@@ -8817,8 +8802,6 @@ static void indir(void)
     if (!(vtop->type.t & 0x0040) && !(vtop->type.t & 0x0400)
         && (vtop->type.t & 0x000f) != 6) {
         vtop->r |= lvalue_type(vtop->type.t);
-        if (tcc_state->do_bounds_check)
-            vtop->r |= 0x0800;
     }
 }
 static void gfunc_param_typed(Sym *func, Sym *arg)
@@ -9325,8 +9308,6 @@ static void unary(void)
             vtop->type.t |= qualifiers;
             if (!(vtop->type.t & 0x0040)) {
                 vtop->r |= lvalue_type(vtop->type.t);
-                if (tcc_state->do_bounds_check && (vtop->r & 0x003f) != 0x0032)
-                    vtop->r |= 0x0800;
             }
             next();
         } else if (tok == '[') {
@@ -10575,7 +10556,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Sym *flexible_array;
     Sym *sym = ((void*)0);
     int saved_nocode_wanted = nocode_wanted;
-    int bcheck = tcc_state->do_bounds_check && !(nocode_wanted > 0);
     if (type->t & 0x00002000)
         nocode_wanted |= (nocode_wanted > 0) ? 0x40000000 : 0x80000000;
     flexible_array = ((void*)0);
@@ -10628,18 +10608,8 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         size = 0, align = 1;
     if ((r & 0x003f) == 0x0032) {
         sec = ((void*)0);
-        if (bcheck && (type->t & 0x0040)) {
-            loc--;
-        }
         loc = (loc - size) & -align;
         addr = loc;
-        if (bcheck && (type->t & 0x0040)) {
-            Elf32_Addr *bounds_ptr;
-            loc--;
-            bounds_ptr = section_ptr_add(lbounds_section, 2 * sizeof(Elf32_Addr));
-            bounds_ptr[0] = addr;
-            bounds_ptr[1] = size;
-        }
         if (v) {
             sym = sym_push(v, type, r, addr);
             sym->a = ad->a;
@@ -10664,8 +10634,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         }
         if (sec) {
      addr = section_add(sec, size, align);
-            if (bcheck)
-                section_add(sec, 1, 1);
         } else {
             addr = align;
      sec = common_section;
@@ -10681,13 +10649,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             sym = get_sym_ref(type, sec, addr, size);
      vpushsym(type, sym);
      vtop->r |= r;
-        }
-        if (bcheck) {
-            Elf32_Addr *bounds_ptr;
-            greloca(bounds_section, sym, bounds_section->data_offset, 1, 0);
-            bounds_ptr = section_ptr_add(bounds_section, 2 * sizeof(Elf32_Addr));
-            bounds_ptr[0] = 0;
-            bounds_ptr[1] = size;
         }
     }
     if (type->t & 0x0400) {
@@ -10947,13 +10908,6 @@ static void tccelf_new(TCCState *s)
                                       ".dynstrtab",
                                       ".dynhashtab", 0x80000000);
     get_sym_attr(s, 0, 1);
-}
-static void tccelf_bounds_new(TCCState *s)
-{
-    bounds_section = new_section(s, ".bounds",
-                                 1, (1 << 1));
-    lbounds_section = new_section(s, ".lbounds",
-                                  1, (1 << 1));
 }
 
 static void free_section(Section *s)
@@ -12362,38 +12316,10 @@ static void gfunc_prolog(CType *func_type)
         func_ret_sub = addr - 8;
     else if (func_vc)
         func_ret_sub = 4;
-    if (tcc_state->do_bounds_check) {
-        func_bound_offset = lbounds_section->data_offset;
-        func_bound_ind = ind;
-        oad(0xb8, 0);
-        oad(0xb8, 0);
-    }
 }
 static void gfunc_epilog(void)
 {
     Elf32_Addr v, saved_ind;
-    if (tcc_state->do_bounds_check
-     && func_bound_offset != lbounds_section->data_offset) {
-        Elf32_Addr saved_ind;
-        Elf32_Addr *bounds_ptr;
-        Sym *sym_data;
-        bounds_ptr = section_ptr_add(lbounds_section, sizeof(Elf32_Addr));
-        *bounds_ptr = 0;
-        saved_ind = ind;
-        ind = func_bound_ind;
-        sym_data = get_sym_ref(&char_pointer_type, lbounds_section,
-                               func_bound_offset, lbounds_section->data_offset);
-        greloc(cur_text_section, sym_data,
-               ind + 1, 1);
-        oad(0xb8, 0);
-        gen_static_call(TOK___bound_local_new);
-        ind = saved_ind;
-        o(0x5250);
-        greloc(cur_text_section, sym_data, ind + 1, 1);
-        oad(0xb8, 0);
-        gen_static_call(TOK___bound_local_delete);
-        o(0x585a);
-    }
     v = (-loc + 3) & -4;
     o(0xc9);
     if (func_ret_sub == 0) {
