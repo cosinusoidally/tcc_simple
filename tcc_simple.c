@@ -3325,7 +3325,6 @@ static void preprocess_start(TCCState *s1, int is_asm);
 static void preprocess_end(TCCState *s1);
 static void tccpp_new(TCCState *s);
 static void tccpp_delete(TCCState *s);
-static int tcc_preprocess(TCCState *s1);
 static void skip(int c);
 static __attribute__((noreturn)) void expect(const char *msg);
 static inline int is_space(int ch) {
@@ -5952,40 +5951,7 @@ static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
     tok_str_add(&str, 0);
     return str.str;
 }
-static char const ab_month_name[12][4] =
-{
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-};
-static int paste_tokens(int t1, CValue *v1, int t2, CValue *v2)
-{
-    CString cstr;
-    int n, ret = 1;
-    cstr_new(&cstr);
-    if (t1 != 0xcb)
-        cstr_cat(&cstr, get_tok_str(t1, v1), -1);
-    n = cstr.size;
-    if (t2 != 0xcb)
-        cstr_cat(&cstr, get_tok_str(t2, v2), -1);
-    cstr_ccat(&cstr, '\0');
-    tcc_open_bf(tcc_state, ":paste:", cstr.size);
-    memcpy(file->buffer, cstr.data, cstr.size);
-    tok_flags = 0;
-    for (;;) {
-        next_nomacro1();
-        if (0 == *file->buf_ptr)
-            break;
-        if (is_space(tok))
-            continue;
-        tcc_warning("pasting \"%.*s\" and \"%s\" does not give a valid"
-            " preprocessing token", n, cstr.data, (char*)cstr.data + n);
-        ret = 0;
-        break;
-    }
-    tcc_close();
-    cstr_free(&cstr);
-    return ret;
-}
+
 static inline int *macro_twosharps(const int *ptr0)
 {
     int t;
@@ -6016,12 +5982,8 @@ static inline int *macro_twosharps(const int *ptr0)
             if (t1 && t1 != 0xcd) {
                 TOK_GET(&t1, &ptr, &cv1);
                 if (t != 0xcb || t1 != 0xcb) {
-                    if (paste_tokens(t, &cval, t1, &cv1)) {
-                        t = tok, cval = tokc;
-                    } else {
-                        tok_str_add2(&macro_str1, t, &cval);
-                        t = t1, cval = cv1;
-                    }
+                    tok_str_add2(&macro_str1, t, &cval);
+                    t = t1, cval = cv1;
                 }
             }
         }
@@ -6116,13 +6078,6 @@ static int macro_subst_tok(
         struct tm *tm;
         time(&ti);
         tm = localtime(&ti);
-        if (tok == TOK___DATE__) {
-            snprintf(buf, sizeof(buf), "%s %2d %d",
-                     ab_month_name[tm->tm_mon], tm->tm_mday, tm->tm_year + 1900);
-        } else {
-            snprintf(buf, sizeof(buf), "%02d:%02d:%02d",
-                     tm->tm_hour, tm->tm_min, tm->tm_sec);
-        }
         cstrval = buf;
     add_cstr:
         t1 = 0xb9;
@@ -6499,53 +6454,6 @@ static int pp_check_he0xE(int t, const char *p)
     if (t == 0xbe && toup(strchr(p, 0)[-1]) == 'E')
         return 'E';
     return t;
-}
-static int tcc_preprocess(TCCState *s1)
-{
-    BufferedFile **iptr;
-    int token_seen, spcs, level;
-    const char *p;
-    char white[400];
-    parse_flags = 0x0001
-                | (parse_flags & 0x0008)
-                | 0x0004
-                | 0x0010
-                | 0x0020
-                ;
-    if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_P10)
-        parse_flags |= 0x0002, s1->Pflag = 1;
-    token_seen = 10, spcs = 0;
-    pp_line(s1, file, 0);
-    for (;;) {
-        iptr = s1->include_stack_ptr;
-        next();
-        if (tok == (-1))
-            break;
-        level = s1->include_stack_ptr - iptr;
-        if (level) {
-            if (level > 0)
-                pp_line(s1, *iptr, 0);
-            pp_line(s1, file, level);
-        }
-        if (is_space(tok)) {
-            if (spcs < sizeof white - 1)
-                white[spcs++] = tok;
-            continue;
-        } else if (tok == 10) {
-            spcs = 0;
-            if (token_seen == 10)
-                continue;
-            ++file->line_ref;
-        } else if (token_seen == 10) {
-            pp_line(s1, file, 0);
-        } else if (spcs == 0 && pp_need_space(token_seen, tok)) {
-            white[spcs++] = ' ';
-        }
-        white[spcs] = 0, fputs(white, s1->ppfp), spcs = 0;
-        fputs(p = get_tok_str(tok, &tokc), s1->ppfp);
-        token_seen = pp_check_he0xE(tok, p);
-    }
-    return 0;
 }
 static int rsym, anon_sym, ind, loc;
 static Sym *sym_free_first;
