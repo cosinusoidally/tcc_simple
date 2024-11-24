@@ -20607,34 +20607,6 @@ unsupported_option:
            (unsigned)total_lines*1000/total_time,
            (double)total_bytes/1000/total_time);
 }
-typedef struct {
-    char ar_name[16];
-    char ar_date[12];
-    char ar_uid[6];
-    char ar_gid[6];
-    char ar_mode[8];
-    char ar_size[10];
-    char ar_fmag[2];
-} ArHdr;
-static unsigned long le2belong(unsigned long ul) {
-    return ((ul & 0xFF0000)>>8)+((ul & 0xFF000000)>>24) +
-        ((ul & 0xFF)<<24)+((ul & 0xFF00)<<8);
-}
-static int contains_any(const char *s, const char *list) {
-  const char *l;
-  for (; *s; s++) {
-      for (l = list; *l; l++) {
-          if (*s == *l)
-              return 1;
-      }
-  }
-  return 0;
-}
-static int ar_usage(int ret) {
-    fprintf(stderr, "usage: tcc -ar [rcsv] lib file...\n");
-    fprintf(stderr, "create library ([abdioptxN] not supported).\n");
-    return ret;
-}
 
 int main(int argc0, char **argv0) {
     TCCState *s;
