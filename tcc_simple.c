@@ -14671,55 +14671,6 @@ enum {
     OPT_DISP8,
     OPT_EA = 0x80
 };
-typedef struct ASMInstr {
-    uint16_t sym;
-    uint16_t opcode;
-    uint16_t instr_type;
-    uint8_t nb_ops;
-    uint8_t op_type[3];
-} ASMInstr;
-typedef struct Operand {
-    uint32_t type;
-    int8_t reg;
-    int8_t reg2;
-    uint8_t shift;
-    ExprValue e;
-} Operand;
-static const uint8_t reg_to_size[9] = {
-    0, 0, 1, 0, 2, 0, 0, 0, 3
-};
-static const uint8_t test_bits[30] = {
- 0x00,
- 0x01,
- 0x02,
- 0x02,
- 0x02,
- 0x03,
- 0x03,
- 0x03,
- 0x04,
- 0x04,
- 0x05,
- 0x05,
- 0x06,
- 0x06,
- 0x07,
- 0x07,
- 0x08,
- 0x09,
- 0x0a,
- 0x0a,
- 0x0b,
- 0x0b,
- 0x0c,
- 0x0c,
- 0x0d,
- 0x0d,
- 0x0e,
- 0x0e,
- 0x0f,
- 0x0f,
-};
 
 static void asm_expr(TCCState *s1, ExprValue *pe) {
 exit(1);
