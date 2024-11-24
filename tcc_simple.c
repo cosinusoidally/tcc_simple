@@ -10404,109 +10404,12 @@ static void init_putz(Section *sec, unsigned long c, int size)
         gfunc_call(3);
     }
 }
+
 static int decl_designator(CType *type, Section *sec, unsigned long c,
-                           Sym **cur_field, int size_only, int al)
-{
-    Sym *s, *f;
-    int index, index_last, align, l, nb_elems, elem_size;
-    unsigned long corig = c;
-    elem_size = 0;
-    nb_elems = 1;
-    if (gnu_ext && (l = is_label()) != 0)
-        goto struct_field;
-    while (nb_elems == 1 && (tok == '[' || tok == '.')) {
-        if (tok == '[') {
-            if (!(type->t & 0x0040))
-                expect("array type");
-            next();
-            index = index_last = expr_const();
-            if (tok == 0xc8 && gnu_ext) {
-                next();
-                index_last = expr_const();
-            }
-            skip(']');
-            s = type->ref;
-     if (index < 0 || (s->c >= 0 && index_last >= s->c) ||
-  index_last < index)
-         tcc_error("invalid index");
-            if (cur_field)
-  (*cur_field)->c = index_last;
-            type = pointed_type(type);
-            elem_size = type_size(type, &align);
-            c += index * elem_size;
-            nb_elems = index_last - index + 1;
-        } else {
-            next();
-            l = tok;
-        struct_field:
-            next();
-            if ((type->t & 0x000f) != 7)
-                expect("struct/union type");
-     f = find_field(type, l);
-            if (!f)
-                expect("field");
-            if (cur_field)
-                *cur_field = f;
-     type = &f->type;
-            c += f->c;
-        }
-        cur_field = ((void*)0);
-    }
-    if (!cur_field) {
-        if (tok == '=') {
-            next();
-        } else if (!gnu_ext) {
-     expect("=");
-        }
-    } else {
-        if (type->t & 0x0040) {
-     index = (*cur_field)->c;
-     if (type->ref->c >= 0 && index >= type->ref->c)
-         tcc_error("index too large");
-            type = pointed_type(type);
-            c += index * type_size(type, &align);
-        } else {
-            f = *cur_field;
-     while (f && (f->v & 0x10000000) && (f->type.t & 0x0080))
-         *cur_field = f = f->next;
-            if (!f)
-                tcc_error("too many field init");
-     type = &f->type;
-            c += f->c;
-        }
-    }
-    if (!size_only && c - corig > al)
- init_putz(sec, corig + al, c - corig - al);
-    decl_initializer(type, sec, c, 0, size_only);
-    if (!size_only && nb_elems > 1) {
-        unsigned long c_end;
-        uint8_t *src, *dst;
-        int i;
-        if (!sec) {
-     vset(type, 0x0032|0x0100, c);
-     for (i = 1; i < nb_elems; i++) {
-  vset(type, 0x0032|0x0100, c + elem_size * i);
-  vswap();
-  vstore();
-     }
-     vpop();
-        } else if (!(nocode_wanted > 0)) {
-     c_end = c + nb_elems * elem_size;
-     if (c_end > sec->data_allocated)
-         section_realloc(sec, c_end);
-     src = sec->data + c;
-     dst = src;
-     for(i = 1; i < nb_elems; i++) {
-  dst += elem_size;
-  memcpy(dst, src, elem_size);
-     }
- }
-    }
-    c += nb_elems * type_size(type, &align);
-    if (c - corig > al)
-      al = c - corig;
-    return al;
+                           Sym **cur_field, int size_only, int al) {
+exit(1);
 }
+
 static void init_putv(CType *type, Section *sec, unsigned long c)
 {
     int bt;
