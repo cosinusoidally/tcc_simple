@@ -21014,12 +21014,9 @@ redo:
         struct filespec *f = s->files[s->nb_files - n];
         s->filetype = f->type;
         s->alacarte_link = f->alacarte;
-        if (1 == s->verbose)
-            printf("-> %s\n", f->name);
         if (!first_file)
             first_file = f->name;
-        if (tcc_add_file(s, f->name) < 0)
-            ret = 1;
+        tcc_add_file(s, f->name);
         s->filetype = 0;
         s->alacarte_link = 1;
         if (--n == 0 || ret
