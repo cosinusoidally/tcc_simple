@@ -7259,59 +7259,20 @@ static void gen_opic(int op)
     }
 }
 
-static inline int is_null_pointer(SValue *p)
-{
-    if ((p->r & (0x003f | 0x0100 | 0x0200)) != 0x0030)
-        return 0;
-    return ((p->type.t & 0x000f) == 3 && (uint32_t)p->c.i == 0) ||
-        ((p->type.t & 0x000f) == 4 && p->c.i == 0) ||
-        ((p->type.t & 0x000f) == 5 &&
-         (4 == 4 ? (uint32_t)p->c.i == 0 : p->c.i == 0));
+static inline int is_null_pointer(SValue *p) {
+return 0;
 }
+
 static inline int is_integer_btype(int bt)
 {
     return (bt == 1 || bt == 2 ||
             bt == 3 || bt == 4);
 }
-static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op)
-{
-    CType *type1, *type2, tmp_type1, tmp_type2;
-    int bt1, bt2;
-    if (is_null_pointer(p1) || is_null_pointer(p2))
-        return;
-    type1 = &p1->type;
-    type2 = &p2->type;
-    bt1 = type1->t & 0x000f;
-    bt2 = type2->t & 0x000f;
-    if ((is_integer_btype(bt1) || is_integer_btype(bt2)) && op != '-') {
-        if (op != 0xa1 && op != 0xa0 )
-            tcc_warning("comparison between pointer and integer");
-        return;
-    }
-    if (bt1 == 5) {
-        type1 = pointed_type(type1);
-    } else if (bt1 != 6)
-        goto invalid_operands;
-    if (bt2 == 5) {
-        type2 = pointed_type(type2);
-    } else if (bt2 != 6) {
-    invalid_operands:
-        tcc_error("invalid operands to binary %s", get_tok_str(op, ((void*)0)));
-    }
-    if ((type1->t & 0x000f) == 0 ||
-        (type2->t & 0x000f) == 0)
-        return;
-    tmp_type1 = *type1;
-    tmp_type2 = *type2;
-    tmp_type1.t &= ~(0x0020 | 0x0010 | 0x0100 | 0x0200);
-    tmp_type2.t &= ~(0x0020 | 0x0010 | 0x0100 | 0x0200);
-    if (!is_compatible_types(&tmp_type1, &tmp_type2)) {
-        if (op == '-')
-            goto invalid_operands;
-        else
-            tcc_warning("comparison of distinct pointer types lacks a cast");
-    }
+
+static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op) {
+exit(1);
 }
+
 static void gen_op(int op)
 {
     int u, t1, t2, bt1, bt2, t;
@@ -7727,37 +7688,6 @@ static void gen_assign_cast(CType *dt)
     if (dt->t & 0x0100)
         tcc_warning("assignment of read-only location");
     switch(dbt) {
-    case 5:
-        if (is_null_pointer(vtop))
-            goto type_ok;
-        if (is_integer_btype(sbt)) {
-            tcc_warning("assignment makes pointer from integer without a cast");
-            goto type_ok;
-        }
-        type1 = pointed_type(dt);
-        if (sbt == 6) {
-            if ((type1->t & 0x000f) != 0 &&
-                !is_compatible_types(pointed_type(dt), st))
-                tcc_warning("assignment from incompatible pointer type");
-            goto type_ok;
-        }
-        if (sbt != 5)
-            goto error;
-        type2 = pointed_type(st);
-        if ((type1->t & 0x000f) == 0 ||
-            (type2->t & 0x000f) == 0) {
-        } else {
-            if (!is_compatible_unqualified_types(type1, type2)) {
-  if ((type1->t & (0x000f|0x0800)) != (type2->t & (0x000f|0x0800))
-                    || ((type1->t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (2 << 20)) || ((type2->t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (2 << 20))
-                    )
-      tcc_warning("assignment from incompatible pointer type");
-     }
-        }
-        if ((!(type1->t & 0x0100) && (type2->t & 0x0100)) ||
-            (!(type1->t & 0x0200) && (type2->t & 0x0200)))
-            tcc_warning("assignment discards qualifiers from pointer target type");
-        break;
     case 1:
     case 2:
     case 3:
