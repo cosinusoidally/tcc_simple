@@ -3255,7 +3255,6 @@ static int gnu_ext;
 static int tcc_ext;
 static struct TCCState *tcc_state;
 static char *pstrcpy(char *buf, int buf_size, const char *s);
-static char *pstrcat(char *buf, int buf_size, const char *s);
 static char *pstrncpy(char *out, const char *in, size_t num);
  char *tcc_basename(const char *name);
  char *tcc_fileextension (const char *name);
@@ -3454,8 +3453,6 @@ enum gotplt_entry {
     AUTO_GOTPLT_ENTRY,
     ALWAYS_GOTPLT_ENTRY
 };
-static unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr);
-static void relocate_plt(TCCState *s1);
 static const int reg_classes[5];
 static void gsym_addr(int t, int a);
 static void gsym(int t);
@@ -12646,55 +12643,6 @@ static void gen_vla_alloc(CType *type, int align) {
 exit(1);
 }
 
-static unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr)
-{
-    Section *plt = s1->plt;
-    uint8_t *p;
-    int modrm;
-    unsigned plt_offset, relofs;
-    if (s1->output_type == 3)
-        modrm = 0xa3;
-    else
-        modrm = 0x25;
-    if (plt->data_offset == 0) {
-        p = section_ptr_add(plt, 16);
-        p[0] = 0xff;
-        p[1] = modrm + 0x10;
-        write32le(p + 2, 4);
-        p[6] = 0xff;
-        p[7] = modrm;
-        write32le(p + 8, 4 * 2);
-    }
-    plt_offset = plt->data_offset;
-    relofs = s1->got->reloc ? s1->got->reloc->data_offset : 0;
-    p = section_ptr_add(plt, 16);
-    p[0] = 0xff;
-    p[1] = modrm;
-    write32le(p + 2, got_offset);
-    p[6] = 0x68;
-    write32le(p + 7, relofs);
-    p[11] = 0xe9;
-    write32le(p + 12, -(plt->data_offset));
-    return plt_offset;
-}
-static void relocate_plt(TCCState *s1)
-{
-    uint8_t *p, *p_end;
-    if (!s1->plt)
-      return;
-    p = s1->plt->data;
-    p_end = p + s1->plt->data_offset;
-    if (p < p_end) {
-        add32le(p + 2, s1->got->sh_addr);
-        add32le(p + 8, s1->got->sh_addr);
-        p += 16;
-        while (p < p_end) {
-            add32le(p + 2, s1->got->sh_addr);
-            p += 16;
-        }
-    }
-}
-
 static char *pstrcpy(char *buf, int buf_size, const char *s) {
     char *q, *q_end;
     int c;
@@ -12711,14 +12659,7 @@ static char *pstrcpy(char *buf, int buf_size, const char *s) {
     }
     return buf;
 }
-static char *pstrcat(char *buf, int buf_size, const char *s)
-{
-    int len;
-    len = strlen(buf);
-    if (len < buf_size)
-        pstrcpy(buf + len, buf_size - len, s);
-    return buf;
-}
+
 static char *pstrncpy(char *out, const char *in, size_t num)
 {
     memcpy(out, in, num);
