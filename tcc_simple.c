@@ -5809,11 +5809,6 @@ static void next_nomacro(void)
         next_nomacro_spc();
     } while (tok < 256 && (isidnum_table[tok - (-1)] & 1));
 }
-static void macro_subst(
-    TokenString *tok_str,
-    Sym **nested_list,
-    const int *macro_str
-    );
 
 static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args) {
 exit(1);
@@ -5927,60 +5922,6 @@ static int macro_subst_tok(
 exit(1);
 }
 
-static void macro_subst(
-    TokenString *tok_str,
-    Sym **nested_list,
-    const int *macro_str
-    )
-{
-    Sym *s;
-    int t, spc, nosubst;
-    CValue cval;
-    spc = nosubst = 0;
-    while (1) {
-        TOK_GET(&t, &macro_str, &cval);
-        if (t <= 0)
-            break;
-        if (t >= 256 && 0 == nosubst) {
-            s = define_find(t);
-            if (s == ((void*)0))
-                goto no_subst;
-            if (sym_find2(*nested_list, t)) {
-                tok_str_add2(tok_str, 0xcc, ((void*)0));
-                goto no_subst;
-            }
-            {
-                TokenString str;
-                str.str = (int*)macro_str;
-                begin_macro(&str, 2);
-                tok = t;
-                macro_subst_tok(tok_str, nested_list, s);
-                if (str.alloc == 3) {
-                    break;
-                }
-                macro_str = macro_ptr;
-                end_macro ();
-            }
-            if (tok_str->len)
-                spc = is_space(t = tok_str->str[tok_str->lastlen]);
-        } else {
-            if (t == '\\' && !(parse_flags & 0x0020))
-                tcc_error("stray '\\' in program");
-no_subst:
-            if (!check_space(t, &spc))
-                tok_str_add2(tok_str, t, &cval);
-            if (nosubst) {
-                if (nosubst > 1 && (spc || (++nosubst == 3 && t == '(')))
-                    continue;
-                nosubst = 0;
-            }
-            if (t == 0xcc)
-                nosubst = 1;
-        }
-        if (t == TOK_DEFINED && pp_expr)
-            nosubst = 2;
-    }
-}
 static void next(void)
 {
  redo:
