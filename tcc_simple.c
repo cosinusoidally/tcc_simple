@@ -3299,7 +3299,6 @@ static void tcc_open_bf(TCCState *s1, const char *filename, int initlen);
 static int tcc_open(TCCState *s1, const char *filename);
 static void tcc_close(void);
 static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags);
-static int tcc_add_crt(TCCState *s, const char *filename);
 static int tcc_add_dll(TCCState *s, const char *filename, int flags);
  int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 static struct BufferedFile *file;
@@ -13657,8 +13656,6 @@ static void tcc_add_runtime(TCCState *s1)
     tcc_add_bcheck(s1);
     if (!s1->nostdlib) {
         tcc_add_support(s1, "libtcc1.a");
-        if (s1->output_type != 1)
-            tcc_add_crt(s1, "crtn.o");
     }
 }
 static void tcc_add_linker_symbols(TCCState *s1)
@@ -14945,18 +14942,8 @@ static int ld_next(TCCState *s1, char *name, int name_size)
     }
     return c;
 }
-static int ld_add_file(TCCState *s1, const char filename[])
-{
-    if (filename[0] == '/') {
-        if (""[0] == '\0'
-            && tcc_add_file_internal(s1, filename, 0x40) == 0)
-            return 0;
-        filename = tcc_basename(filename);
-    }
-    return tcc_add_dll(s1, filename, 0);
-}
-static inline int new_undef_syms(void)
-{
+
+static inline int new_undef_syms(void) {
     int ret = 0;
     ret = new_undef_sym;
     new_undef_sym = 0;
@@ -15006,7 +14993,6 @@ static int ld_add_file_list(TCCState *s1, const char *cmd, int as_needed)
                 goto lib_parse_error;
         } else {
             if (!as_needed) {
-                ret = ld_add_file(s1, filename);
                 if (ret)
                     goto lib_parse_error;
                 if (group) {
@@ -15024,8 +15010,6 @@ static int ld_add_file_list(TCCState *s1, const char *cmd, int as_needed)
     if (group && !as_needed) {
         while (new_undef_syms()) {
             int i;
-            for (i = 0; i < nblibs; i ++)
-                ld_add_file(s1, libs[i]);
         }
     }
 lib_parse_error:
@@ -19797,9 +19781,6 @@ static void tcc_cleanup(void)
     tcc_split_path(s, &s->crt_paths, &s->nb_crt_paths, "" "/usr/" "lib");
     if ((output_type == 2 || output_type == 3) &&
         !s->nostdlib) {
-        if (output_type != 3)
-            tcc_add_crt(s, "crt1.o");
-        tcc_add_crt(s, "crti.o");
     }
     return 0;
 }
@@ -19903,13 +19884,6 @@ static int tcc_add_dll(TCCState *s, const char *filename, int flags)
 {
     return tcc_add_library_internal(s, "%s/%s", filename, flags,
         s->library_paths, s->nb_library_paths);
-}
-static int tcc_add_crt(TCCState *s, const char *filename)
-{
-    if (-1 == tcc_add_library_internal(s, "%s/%s",
-        filename, 0, s->crt_paths, s->nb_crt_paths))
-        tcc_error_noabort("file '%s' not found", filename);
-    return 0;
 }
 
 void tcc_set_lib_path(TCCState *s, const char *path) {
