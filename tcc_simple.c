@@ -3510,8 +3510,6 @@ static void gen_le16(int c);
 static void gen_le32(int c);
 static void gen_addr32(int r, Sym *sym, int c);
 static void gen_addrpc32(int r, Sym *sym, int c);
-static void gen_bounded_ptr_add(void);
-static void gen_bounded_ptr_deref(void);
 static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
@@ -12620,60 +12618,22 @@ static void gen_opf(int op) {
 exit(1);
 }
 
-static void gen_cvt_itof(int t)
-{
-    save_reg(TREG_ST0);
-    gv(0x0001);
-    if ((vtop->type.t & 0x000f) == 4) {
-        o(0x50 + vtop->r2);
-        o(0x50 + (vtop->r & 0x003f));
-        o(0x242cdf);
-        o(0x08c483);
-    } else if ((vtop->type.t & (0x000f | 0x0010)) ==
-               (3 | 0x0010)) {
-        o(0x6a);
-        g(0x00);
-        o(0x50 + (vtop->r & 0x003f));
-        o(0x242cdf);
-        o(0x08c483);
-    } else {
-        o(0x50 + (vtop->r & 0x003f));
-        o(0x2404db);
-        o(0x04c483);
-    }
-    vtop->r = TREG_ST0;
+static void gen_cvt_itof(int t) {
+exit(1);
 }
-static void gen_cvt_ftoi(int t)
-{
-    int bt = vtop->type.t & 0x000f;
-    if (bt == 8)
-        vpush_global_sym(&func_old_type, TOK___fixsfdi);
-    else if (bt == 10)
-        vpush_global_sym(&func_old_type, TOK___fixxfdi);
-    else
-        vpush_global_sym(&func_old_type, TOK___fixdfdi);
-    vswap();
-    gfunc_call(1);
-    vpushi(0);
-    vtop->r = TREG_EAX;
-    vtop->r2 = TREG_EDX;
+
+static void gen_cvt_ftoi(int t) {
+exit(1);
 }
-static void gen_cvt_ftof(int t)
-{
-    gv(0x0002);
+
+static void gen_cvt_ftof(int t) {
+exit(1);
 }
+
 static void ggoto(void)
 {
     gcall_or_jmp(1);
     vtop--;
-}
-
-static void gen_bounded_ptr_add(void) {
-exit(1);
-}
-
-static void gen_bounded_ptr_deref(void) {
-exit(1);
 }
 
 static void gen_vla_sp_save(int addr) {
