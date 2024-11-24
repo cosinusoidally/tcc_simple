@@ -8850,277 +8850,64 @@ static void unary(void) {
         }
     }
 }
-static void expr_prod(void)
-{
+
+static void expr_prod(void) {
     int t;
     unary();
-    while (tok == '*' || tok == '/' || tok == '%') {
-        t = tok;
-        next();
-        unary();
-        gen_op(t);
-    }
 }
-static void expr_sum(void)
-{
+
+static void expr_sum(void) {
     int t;
     expr_prod();
-    while (tok == '+' || tok == '-') {
-        t = tok;
-        next();
-        expr_prod();
-        gen_op(t);
-    }
 }
-static void expr_shift(void)
-{
+
+static void expr_shift(void) {
     int t;
     expr_sum();
-    while (tok == 0x01 || tok == 0x02) {
-        t = tok;
-        next();
-        expr_sum();
-        gen_op(t);
-    }
 }
-static void expr_cmp(void)
-{
+
+static void expr_cmp(void) {
     int t;
     expr_shift();
-    while ((tok >= 0x96 && tok <= 0x9f) ||
-           tok == 0x92 || tok == 0x93) {
-        t = tok;
-        next();
-        expr_shift();
-        gen_op(t);
-    }
 }
-static void expr_cmpeq(void)
-{
+
+static void expr_cmpeq(void) {
     int t;
     expr_cmp();
-    while (tok == 0x94 || tok == 0x95) {
-        t = tok;
-        next();
-        expr_cmp();
-        gen_op(t);
-    }
 }
-static void expr_and(void)
-{
+
+static void expr_and(void) {
     expr_cmpeq();
-    while (tok == '&') {
-        next();
-        expr_cmpeq();
-        gen_op('&');
-    }
 }
-static void expr_xor(void)
-{
+
+static void expr_xor(void) {
     expr_and();
-    while (tok == '^') {
-        next();
-        expr_and();
-        gen_op('^');
-    }
 }
-static void expr_or(void)
-{
+
+static void expr_or(void) {
     expr_xor();
-    while (tok == '|') {
-        next();
-        expr_xor();
-        gen_op('|');
-    }
 }
 
 static void expr_land(void) {
     expr_or();
 }
 
-static void expr_lor(void)
-{
+static void expr_lor(void) {
     expr_land();
-    if (tok == 0xa1) {
- int t = 0;
- for(;;) {
-     if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-                gen_cast_s(11);
-  if (!vtop->c.i) {
-      vpop();
-  } else {
-      nocode_wanted++;
-      while (tok == 0xa1) {
-   next();
-   expr_land();
-   vpop();
-      }
-      nocode_wanted--;
-      if (t)
-        gsym(t);
-      gen_cast_s(3);
-      break;
-  }
-     } else {
-  if (!t)
-    save_regs(1);
-  t = gvtst(0, t);
-     }
-     if (tok != 0xa1) {
-  if (t)
-    vseti(0x0034, t);
-  else
-    vpushi(0);
-  break;
-     }
-     next();
-     expr_land();
- }
-    }
 }
-static int condition_3way(void)
-{
-    int c = -1;
-    if ((vtop->r & (0x003f | 0x0100)) == 0x0030 &&
- (!(vtop->r & 0x0200) || !vtop->sym->a.weak)) {
- vdup();
-        gen_cast_s(11);
- c = vtop->c.i;
- vpop();
-    }
-    return c;
+
+static int condition_3way(void) {
+    return -1;
 }
-static void expr_cond(void)
-{
+
+static void expr_cond(void) {
     int tt, u, r1, r2, rc, t1, t2, bt1, bt2, islv, c, g;
     SValue sv;
     CType type, type1, type2;
     expr_lor();
-    if (tok == '?') {
-        next();
- c = condition_3way();
-        g = (tok == ':' && gnu_ext);
-        if (c < 0) {
-            if (is_float(vtop->type.t)) {
-                rc = 0x0002;
-            } else
-                rc = 0x0001;
-            gv(rc);
-            save_regs(1);
-            if (g)
-                gv_dup();
-            tt = gvtst(1, 0);
-        } else {
-            if (!g)
-                vpop();
-            tt = 0;
-        }
-        if (1) {
-            if (c == 0)
-                nocode_wanted++;
-            if (!g)
-                gexpr();
-            type1 = vtop->type;
-            sv = *vtop;
-            vtop--;
-            skip(':');
-            u = 0;
-            if (c < 0)
-                u = gjmp(0);
-            gsym(tt);
-            if (c == 0)
-                nocode_wanted--;
-            if (c == 1)
-                nocode_wanted++;
-            expr_cond();
-            if (c == 1)
-                nocode_wanted--;
-            type2 = vtop->type;
-            t1 = type1.t;
-            bt1 = t1 & 0x000f;
-            t2 = type2.t;
-            bt2 = t2 & 0x000f;
-            type.ref = ((void*)0);
-            if (is_float(bt1) || is_float(bt2)) {
-                if (bt1 == 10 || bt2 == 10) {
-                    type.t = 10;
-                } else if (bt1 == 9 || bt2 == 9) {
-                    type.t = 9;
-                } else {
-                    type.t = 8;
-                }
-            } else if (bt1 == 4 || bt2 == 4) {
-                type.t = 4 | 0x0800;
-                if (bt1 == 4)
-                    type.t &= t1;
-                if (bt2 == 4)
-                    type.t &= t2;
-                if ((t1 & (0x000f | 0x0010 | 0x0080)) == (4 | 0x0010) ||
-                    (t2 & (0x000f | 0x0010 | 0x0080)) == (4 | 0x0010))
-                    type.t |= 0x0010;
-            } else if (bt1 == 5 || bt2 == 5) {
-  if (is_null_pointer (vtop))
-    type = type1;
-  else if (is_null_pointer (&sv))
-    type = type2;
-  else
-    type = type1;
-            } else if (bt1 == 6 || bt2 == 6) {
-                type = bt1 == 6 ? type1 : type2;
-            } else if (bt1 == 7 || bt2 == 7) {
-                type = bt1 == 7 ? type1 : type2;
-            } else if (bt1 == 0 || bt2 == 0) {
-                type.t = 0;
-            } else {
-                type.t = 3 | (0x0800 & (t1 | t2));
-                if ((t1 & (0x000f | 0x0010 | 0x0080)) == (3 | 0x0010) ||
-                    (t2 & (0x000f | 0x0010 | 0x0080)) == (3 | 0x0010))
-                    type.t |= 0x0010;
-            }
-            islv = (vtop->r & 0x0100) && (sv.r & 0x0100) && 7 == (type.t & 0x000f);
-            islv &= c < 0;
-            if (c != 1) {
-                gen_cast(&type);
-                if (islv) {
-                    mk_pointer(&vtop->type);
-                    gaddrof();
-                } else if (7 == (vtop->type.t & 0x000f))
-                    gaddrof();
-            }
-            rc = 0x0001;
-            if (is_float(type.t)) {
-                rc = 0x0002;
-            } else if ((type.t & 0x000f) == 4) {
-                rc = 0x0004;
-            }
-            tt = r2 = 0;
-            if (c < 0) {
-                r2 = gv(rc);
-                tt = gjmp(0);
-            }
-            gsym(u);
-            if (c != 0) {
-                *vtop = sv;
-                gen_cast(&type);
-                if (islv) {
-                    mk_pointer(&vtop->type);
-                    gaddrof();
-                } else if (7 == (vtop->type.t & 0x000f))
-                    gaddrof();
-            }
-            if (c < 0) {
-                r1 = gv(rc);
-                move_reg(r2, r1, type.t);
-                vtop->r = r2;
-                gsym(tt);
-                if (islv)
-                    indir();
-            }
-        }
-    }
 }
-static void expr_eq(void)
-{
+
+static void expr_eq(void) {
     int t;
     expr_cond();
     if (tok == '=' ||
@@ -9132,24 +8919,19 @@ static void expr_eq(void)
         next();
         if (t == '=') {
             expr_eq();
-        } else {
-            vdup();
-            expr_eq();
-            gen_op(t & 0x7f);
         }
         vstore();
     }
 }
-static void gexpr(void)
-{
+
+static void gexpr(void) {
     while (1) {
         expr_eq();
         if (tok != ',')
             break;
-        vpop();
-        next();
     }
 }
+
 static void expr_const1(void)
 {
     const_wanted++;
