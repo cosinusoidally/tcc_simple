@@ -12397,40 +12397,15 @@ static void bind_exe_dynsyms(TCCState *s1)
         }
     }
 }
-static void bind_libs_dynsyms(TCCState *s1)
-{
-    const char *name;
-    int sym_index;
-    Elf32_Sym *sym, *esym;
-    for (esym = (Elf32_Sym *) s1->dynsymtab_section->data + 1; esym < (Elf32_Sym *) (s1->dynsymtab_section->data + s1->dynsymtab_section->data_offset); esym++) {
-        name = (char *) s1->dynsymtab_section->link->data + esym->st_name;
-        sym_index = find_elf_sym(symtab_section, name);
-        sym = &((Elf32_Sym *)symtab_section->data)[sym_index];
-        if (sym_index && sym->st_shndx != 0
-            && (((unsigned char) (sym->st_info)) >> 4) != 0) {
-            set_elf_sym(s1->dynsym, sym->st_value, sym->st_size,
-                sym->st_info, 0, sym->st_shndx, name);
-        } else if (esym->st_shndx == 0) {
-            if ((((unsigned char) (esym->st_info)) >> 4) != 2)
-                tcc_warning("undefined dynamic symbol '%s'", name);
-        }
-    }
+
+static void bind_libs_dynsyms(TCCState *s1) {
+exit(1);
 }
-static void export_global_syms(TCCState *s1)
-{
-    int dynindex, index;
-    const char *name;
-    Elf32_Sym *sym;
-    for (sym = (Elf32_Sym *) symtab_section->data + 1; sym < (Elf32_Sym *) (symtab_section->data + symtab_section->data_offset); sym++) {
-        if ((((unsigned char) (sym->st_info)) >> 4) != 0) {
-     name = (char *) symtab_section->link->data + sym->st_name;
-     dynindex = put_elf_sym(s1->dynsym, sym->st_value, sym->st_size,
-       sym->st_info, 0, sym->st_shndx, name);
-     index = sym - (Elf32_Sym *) symtab_section->data;
-            get_sym_attr(s1, index, 1)->dyn_index = dynindex;
-        }
-    }
+
+static void export_global_syms(TCCState *s1) {
+exit(1);
 }
+
 static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
 {
     int i;
@@ -12593,77 +12568,20 @@ static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
     }
     return file_offset;
 }
+
 static void fill_unloadable_phdr(Elf32_Phdr *phdr, int phnum, Section *interp,
-                                 Section *dynamic)
-{
-    Elf32_Phdr *ph;
-    if (interp) {
-        ph = &phdr[0];
-        ph->p_type = 6;
-        ph->p_offset = sizeof(Elf32_Ehdr);
-        ph->p_filesz = ph->p_memsz = phnum * sizeof(Elf32_Phdr);
-        ph->p_vaddr = interp->sh_addr - ph->p_filesz;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_flags = (1 << 2) | (1 << 0);
-        ph->p_align = 4;
-        ph++;
-        ph->p_type = 3;
-        ph->p_offset = interp->sh_offset;
-        ph->p_vaddr = interp->sh_addr;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_filesz = interp->sh_size;
-        ph->p_memsz = interp->sh_size;
-        ph->p_flags = (1 << 2);
-        ph->p_align = interp->sh_addralign;
-    }
-    if (dynamic) {
-        ph = &phdr[phnum - 1];
-        ph->p_type = 2;
-        ph->p_offset = dynamic->sh_offset;
-        ph->p_vaddr = dynamic->sh_addr;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_filesz = dynamic->sh_size;
-        ph->p_memsz = dynamic->sh_size;
-        ph->p_flags = (1 << 2) | (1 << 1);
-        ph->p_align = dynamic->sh_addralign;
-    }
+                                 Section *dynamic) {
+exit(1);
 }
-static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf)
-{
-    Section *dynamic = dyninf->dynamic;
-    put_dt(dynamic, 4, s1->dynsym->hash->sh_addr);
-    put_dt(dynamic, 5, dyninf->dynstr->sh_addr);
-    put_dt(dynamic, 6, s1->dynsym->sh_addr);
-    put_dt(dynamic, 10, dyninf->dynstr->data_offset);
-    put_dt(dynamic, 11, sizeof(Elf32_Sym));
-    put_dt(dynamic, 17, dyninf->rel_addr);
-    put_dt(dynamic, 18, dyninf->rel_size);
-    put_dt(dynamic, 19, sizeof(Elf32_Rel));
-    if (s1->do_debug)
-        put_dt(dynamic, 21, 0);
-    put_dt(dynamic, 0, 0);
+
+static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf) {
+exit(1);
 }
-static int final_sections_reloc(TCCState *s1)
-{
-    int i;
-    Section *s;
-    relocate_syms(s1, s1->symtab, 0);
-    if (s1->nb_errors != 0)
-        return -1;
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->reloc && s != s1->got && (s->sh_flags & (1 << 1)))
-            relocate_section(s1, s);
-    }
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if ((s->sh_flags & (1 << 1)) &&
-            s->sh_type == 9) {
-            relocate_rel(s1, s);
-        }
-    }
-    return 0;
+
+static int final_sections_reloc(TCCState *s1) {
+exit(1);
 }
+
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
                            int file_offset, int *sec_order)
 {
