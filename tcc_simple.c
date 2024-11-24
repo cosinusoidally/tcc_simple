@@ -16619,76 +16619,13 @@ again:
     if (pc)
         add32le(cur_text_section->data + pc - 4, pc - ind);
 }
-static inline int constraint_priority(const char *str)
-{
-    int priority, c, pr;
-    priority = 0;
-    for(;;) {
-        c = *str;
-        if (c == '\0')
-            break;
-        str++;
-        switch(c) {
-        case 'A':
-            pr = 0;
-            break;
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'S':
-        case 'D':
-            pr = 1;
-            break;
-        case 'q':
-            pr = 2;
-            break;
-        case 'r':
- case 'R':
- case 'p':
-            pr = 3;
-            break;
-        case 'N':
-        case 'M':
-        case 'I':
- case 'e':
-        case 'i':
-        case 'm':
-        case 'g':
-            pr = 4;
-            break;
-        default:
-            tcc_error("unknown constraint '%c'", c);
-            pr = 0;
-        }
-        if (pr > priority)
-            priority = pr;
-    }
-    return priority;
+
+static inline int constraint_priority(const char *str) {
+exit(1);
 }
-static const char *skip_constraint_modifiers(const char *p)
-{
-    while (*p == '=' || *p == '&' || *p == '+' || *p == '%')
-        p++;
-    return p;
-}
-static int asm_parse_regvar (int t)
-{
-    const char *s;
-    Operand op;
-    if (t < 256)
-        return -1;
-    s = table_ident[t - 256]->str;
-    if (s[0] != '%')
-        return -1;
-    t = tok_alloc(s+1, strlen(s)-1)->tok;
-    unget_tok(t);
-    unget_tok('%');
-    parse_operand(tcc_state, &op);
-    if (op.type & ((1 << OPT_REG8) | (1 << OPT_REG16) | (1 << OPT_REG32) | 0))
-        return op.reg;
-    else
-        return -1;
+
+static int asm_parse_regvar (int t) {
+exit(1);
 }
 
 static void subst_asm_operand(CString *add_str,
@@ -16699,84 +16636,10 @@ exit(1);
 static void asm_gen_code(ASMOperand *operands, int nb_operands,
                          int nb_outputs, int is_output,
                          uint8_t *clobber_regs,
-                         int out_reg)
-{
-    uint8_t regs_allocated[8];
-    ASMOperand *op;
-    int i, reg;
-    static uint8_t reg_saved[] = { 3, 6, 7 };
-    memcpy(regs_allocated, clobber_regs, sizeof(regs_allocated));
-    for(i = 0; i < nb_operands;i++) {
-        op = &operands[i];
-        if (op->reg >= 0)
-            regs_allocated[op->reg] = 1;
-    }
-    if (!is_output) {
-        for(i = 0; i < sizeof(reg_saved)/sizeof(reg_saved[0]); i++) {
-            reg = reg_saved[i];
-            if (regs_allocated[reg]) {
-  if (reg >= 8)
-    g(0x41), reg-=8;
-                g(0x50 + reg);
-            }
-        }
-        for(i = 0; i < nb_operands; i++) {
-            op = &operands[i];
-            if (op->reg >= 0) {
-                if ((op->vt->r & 0x003f) == 0x0031 &&
-                    op->is_memory) {
-                    SValue sv;
-                    sv = *op->vt;
-                    sv.r = (sv.r & ~0x003f) | 0x0032 | 0x0100;
-                    sv.type.t = 5;
-                    load(op->reg, &sv);
-                } else if (i >= nb_outputs || op->is_rw) {
-                    load(op->reg, op->vt);
-                    if (op->is_llong) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.c.i += 4;
-                        load(TREG_EDX, &sv);
-                    }
-                }
-            }
-        }
-    } else {
-        for(i = 0 ; i < nb_outputs; i++) {
-            op = &operands[i];
-            if (op->reg >= 0) {
-                if ((op->vt->r & 0x003f) == 0x0031) {
-                    if (!op->is_memory) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.r = (sv.r & ~0x003f) | 0x0032;
-   sv.type.t = 5;
-                        load(out_reg, &sv);
-   sv = *op->vt;
-                        sv.r = (sv.r & ~0x003f) | out_reg;
-                        store(op->reg, &sv);
-                    }
-                } else {
-                    store(op->reg, op->vt);
-                    if (op->is_llong) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.c.i += 4;
-                        store(TREG_EDX, &sv);
-                    }
-                }
-            }
-        }
-        for(i = sizeof(reg_saved)/sizeof(reg_saved[0]) - 1; i >= 0; i--) {
-            reg = reg_saved[i];
-            if (regs_allocated[reg]) {
-  if (reg >= 8)
-    g(0x41), reg-=8;
-                g(0x58 + reg);
-            }
-        }
-    }
+                         int out_reg) {
+exit(1);
 }
+
 static void asm_clobber(uint8_t *clobber_regs, const char *str)
 {
     int reg;
