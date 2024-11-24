@@ -20988,14 +20988,7 @@ static void set_environment(TCCState *s)
     }
 }
 
-static unsigned getclock_ms(void)
-{
-    struct timeval tv;
-    gettimeofday(&tv, ((void*)0));
-    return tv.tv_sec*1000 + (tv.tv_usec+500)/1000;
-}
-int main(int argc0, char **argv0)
-{
+int main(int argc0, char **argv0) {
     TCCState *s;
     int ret, opt, n = 0, t = 0;
     unsigned start_time = 0;
