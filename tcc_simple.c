@@ -3313,8 +3313,6 @@ static void tok_str_free(TokenString *s);
 static void tok_str_free_str(int *str);
 static void tok_str_add(TokenString *s, int t);
 static void tok_str_add_tok(TokenString *s);
-static inline void define_push(int v, int macro_type, int *str, Sym *first_arg);
-static void define_undef(Sym *s);
 static inline Sym *define_find(int v);
 static void free_defines(Sym *b);
 static Sym *label_find(int v);
@@ -4980,39 +4978,7 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     }
     *pp = p;
 }
-static int macro_is_equal(const int *a, const int *b)
-{
-    CValue cv;
-    int t;
-    if (!a || !b)
-        return 1;
-    while (*a && *b) {
-        cstr_reset(&macro_equal_buf);
-        TOK_GET(&t, &a, &cv);
-        cstr_cat(&macro_equal_buf, get_tok_str(t, &cv), 0);
-        TOK_GET(&t, &b, &cv);
-        if (strcmp(macro_equal_buf.data, get_tok_str(t, &cv)))
-            return 0;
-    }
-    return !(*a || *b);
-}
-static inline void define_push(int v, int macro_type, int *str, Sym *first_arg)
-{
-    Sym *s, *o;
-    o = define_find(v);
-    s = sym_push2(&define_stack, v, macro_type, 0);
-    s->d = str;
-    s->next = first_arg;
-    table_ident[v - 256]->sym_define = s;
-    if (o && !macro_is_equal(o->d, s->d))
- tcc_warning("%s redefined", get_tok_str(v, ((void*)0)));
-}
-static void define_undef(Sym *s)
-{
-    int v = s->v;
-    if (v >= 256 && v < tok_ident)
-        table_ident[v - 256]->sym_define = ((void*)0);
-}
+
 static inline Sym *define_find(int v)
 {
     v -= 256;
@@ -5026,7 +4992,6 @@ static void free_defines(Sym *b)
         Sym *top = define_stack;
         define_stack = top->prev;
         tok_str_free_str(top->d);
-        define_undef(top);
         sym_free(top);
     }
     while (b) {
@@ -6501,7 +6466,6 @@ static void define_print(TCCState *s1, int v)
 {
     FILE *fp;
     Sym *s;
-    s = define_find(v);
     if (((void*)0) == s || ((void*)0) == s->d)
         return;
     fp = s1->ppfp;
@@ -6520,37 +6484,7 @@ static void define_print(TCCState *s1, int v)
     }
     tok_print("", s->d);
 }
-static void pp_debug_defines(TCCState *s1)
-{
-    int v, t;
-    const char *vs;
-    FILE *fp;
-    t = pp_debug_tok;
-    if (t == 0)
-        return;
-    file->line_num--;
-    pp_line(s1, file, 0);
-    file->line_ref = ++file->line_num;
-    fp = s1->ppfp;
-    v = pp_debug_symv;
-    vs = get_tok_str(v, ((void*)0));
-    if (t == TOK_DEFINE) {
-        define_print(s1, v);
-    } else if (t == TOK_UNDEF) {
-        fprintf(fp, "#undef %s\n", vs);
-    } else if (t == TOK_push_macro) {
-        fprintf(fp, "#pragma push_macro(\"%s\")\n", vs);
-    } else if (t == TOK_pop_macro) {
-        fprintf(fp, "#pragma pop_macro(\"%s\")\n", vs);
-    }
-    pp_debug_tok = 0;
-}
-static void pp_debug_builtins(TCCState *s1)
-{
-    int v;
-    for (v = 256; v < tok_ident; ++v)
-        define_print(s1, v);
-}
+
 static int pp_need_space(int a, int b)
 {
     return 'E' == a ? '+' == b || '-' == b
@@ -6580,10 +6514,6 @@ static int tcc_preprocess(TCCState *s1)
                 ;
     if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_P10)
         parse_flags |= 0x0002, s1->Pflag = 1;
-    if (s1->dflag & 1) {
-        pp_debug_builtins(s1);
-        s1->dflag &= ~1;
-    }
     token_seen = 10, spcs = 0;
     pp_line(s1, file, 0);
     for (;;) {
@@ -6596,11 +6526,6 @@ static int tcc_preprocess(TCCState *s1)
             if (level > 0)
                 pp_line(s1, *iptr, 0);
             pp_line(s1, file, level);
-        }
-        if (s1->dflag & 7) {
-            pp_debug_defines(s1);
-            if (s1->dflag & 4)
-                continue;
         }
         if (is_space(tok)) {
             if (spcs < sizeof white - 1)
