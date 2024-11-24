@@ -19434,32 +19434,8 @@ static void dynarray_reset(void *pp, int *n)
     tcc_free(*(void**)pp);
     *(void**)pp = ((void*)0);
 }
-static void tcc_split_path(TCCState *s, void *p_ary, int *p_nb_ary, const char *in)
-{
-    const char *p;
-    do {
-        int c;
-        CString str;
-        cstr_new(&str);
-        for (p = in; c = *p, c != '\0' && c != ":"[0]; ++p) {
-            if (c == '{' && p[1] && p[2] == '}') {
-                c = p[1], p += 2;
-                if (c == 'B')
-                    cstr_cat(&str, s->tcc_lib_path, -1);
-            } else {
-                cstr_ccat(&str, c);
-            }
-        }
-        if (str.size) {
-            cstr_ccat(&str, '\0');
-            dynarray_add(p_ary, p_nb_ary, tcc_strdup(str.data));
-        }
-        cstr_free(&str);
-        in = p+1;
-    } while (*p);
-}
-static void strcat_vprintf(char *buf, int buf_size, const char *fmt, va_list ap)
-{
+
+static void strcat_vprintf(char *buf, int buf_size, const char *fmt, va_list ap) {
     int len;
     len = strlen(buf);
     vsnprintf(buf + len, buf_size - len, fmt, ap);
