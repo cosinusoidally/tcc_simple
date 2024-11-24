@@ -3539,7 +3539,6 @@ static void gen_addr32(int r, Sym *sym, int c);
 static void gen_addrpc32(int r, Sym *sym, int c);
 static void gen_bounded_ptr_add(void);
 static void gen_bounded_ptr_deref(void);
-static int find_constraint(ASMOperand *operands, int nb_operands, const char *name, const char **pp);
 static Sym* get_asm_sym(int name, Sym *csym);
 static void asm_expr(TCCState *s1, ExprValue *pe);
 static int asm_int_expr(TCCState *s1);
@@ -17737,7 +17736,6 @@ static int asm_get_local_label_name(TCCState *s1, unsigned int n)
     ts = tok_alloc(buf, strlen(buf));
     return ts->tok;
 }
-static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global);
 static Sym* asm_new_label(TCCState *s1, int label, int is_local);
 static Sym* asm_new_label1(TCCState *s1, int label, int is_local, int sh_num, int value);
 static Sym *asm_label_find(int v)
@@ -18098,92 +18096,6 @@ static void pop_section(TCCState *s1)
     use_section1(s1, prev);
 }
 
-static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global) {
-    int opcode;
-    int saved_parse_flags = parse_flags;
-    parse_flags = 0x0008 | 0x0040;
-    if (do_preprocess)
-        parse_flags |= 0x0001;
-    for(;;) {
-        next();
-        if (tok == (-1))
-            break;
-        if (global && s1->do_debug)
-            tcc_debug_line(s1);
-        parse_flags |= 0x0004;
-    redo:
-        if (tok == '#') {
-            while (tok != 10)
-                next();
-        } else if (tok == 0xbe) {
-            const char *p;
-            int n;
-            p = tokc.str.data;
-            n = strtoul(p, (char **)&p, 10);
-            if (*p != '\0')
-                expect("':'");
-            asm_new_label(s1, asm_get_local_label_name(s1, n), 1);
-            next();
-            skip(':');
-            goto redo;
-        } else if (tok >= 256) {
-            opcode = tok;
-            next();
-            if (tok == ':') {
-                asm_new_label(s1, opcode, 0);
-                next();
-                goto redo;
-            } else if (tok == '=') {
-  set_symbol(s1, opcode);
-                goto redo;
-            } else {
-                asm_opcode(s1, opcode);
-            }
-        }
-        if (tok != ';' && tok != 10)
-            expect("end of line");
-        parse_flags &= ~0x0004;
-    }
-    parse_flags = saved_parse_flags;
-    return 0;
-}
-
-static int find_constraint(ASMOperand *operands, int nb_operands,
-                           const char *name, const char **pp)
-{
-    int index;
-    TokenSym *ts;
-    const char *p;
-    if (isnum(*name)) {
-        index = 0;
-        while (isnum(*name)) {
-            index = (index * 10) + (*name) - '0';
-            name++;
-        }
-        if ((unsigned)index >= nb_operands)
-            index = -1;
-    } else if (*name == '[') {
-        name++;
-        p = strchr(name, ']');
-        if (p) {
-            ts = tok_alloc(name, p - name);
-            for(index = 0; index < nb_operands; index++) {
-                if (operands[index].id == ts->tok)
-                    goto found;
-            }
-            index = -1;
-        found:
-            name = p + 1;
-        } else {
-            index = -1;
-        }
-    } else {
-        index = -1;
-    }
-    if (pp)
-        *pp = name;
-    return index;
-}
 static void subst_asm_operands(ASMOperand *operands, int nb_operands,
                                CString *out_str, CString *in_str)
 {
@@ -18206,7 +18118,6 @@ static void subst_asm_operands(ASMOperand *operands, int nb_operands,
   *str == 'q' ||
   *str == 'P')
                 modifier = *str++;
-            index = find_constraint(operands, nb_operands, str, &str);
             if (index < 0)
                 tcc_error("invalid operand reference after %%");
             op = &operands[index];
