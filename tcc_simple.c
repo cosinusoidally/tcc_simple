@@ -20250,17 +20250,8 @@ static const FlagDef options_m[] = {
     { ((size_t)&((TCCState *)0)->ms_bitfields), 0, "ms-bitfields" },
     { 0, 0, ((void*)0) }
 };
-static void parse_option_D(TCCState *s1, const char *optarg)
-{
-    char *sym = tcc_strdup(optarg);
-    char *value = strchr(sym, '=');
-    if (value)
-        *value++ = '\0';
-    tcc_define_symbol(s1, sym, value);
-    tcc_free(sym);
-}
-static void args_parser_add_file(TCCState *s, const char* filename, int filetype)
-{
+
+static void args_parser_add_file(TCCState *s, const char* filename, int filetype) {
     struct filespec *f = tcc_malloc(sizeof *f + strlen(filename));
     f->type = filetype;
     f->alacarte = s->alacarte_link;
