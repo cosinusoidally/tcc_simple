@@ -12710,63 +12710,8 @@ static int tcc_load_object_file(TCCState *s1,
 exit(1);
 }
 
-typedef struct ArchiveHeader {
-    char ar_name[16];
-    char ar_date[12];
-    char ar_uid[6];
-    char ar_gid[6];
-    char ar_mode[8];
-    char ar_size[10];
-    char ar_fmag[2];
-} ArchiveHeader;
-static int get_be32(const uint8_t *b)
-{
-    return b[3] | (b[2] << 8) | (b[1] << 16) | (b[0] << 24);
-}
-static long get_be64(const uint8_t *b)
-{
-  long long ret = get_be32(b);
-  ret = (ret << 32) | (unsigned)get_be32(b+4);
-  return (long)ret;
-}
-static int tcc_load_alacarte(TCCState *s1, int fd, int size, int entrysize)
-{
-    long i, bound, nsyms, sym_index, off, ret;
-    uint8_t *data;
-    const char *ar_names, *p;
-    const uint8_t *ar_index;
-    Elf32_Sym *sym;
-    data = tcc_malloc(size);
-    if (read(fd, data, size) != size)
-        goto fail;
-    nsyms = entrysize == 4 ? get_be32(data) : get_be64(data);
-    ar_index = data + entrysize;
-    ar_names = (char *) ar_index + nsyms * entrysize;
-    do {
-        bound = 0;
-        for(p = ar_names, i = 0; i < nsyms; i++, p += strlen(p)+1) {
-            sym_index = find_elf_sym(symtab_section, p);
-            if(sym_index) {
-                sym = &((Elf32_Sym *)symtab_section->data)[sym_index];
-                if(sym->st_shndx == 0) {
-                    off = (entrysize == 4
-      ? get_be32(ar_index + i * 4)
-      : get_be64(ar_index + i * 8))
-     + sizeof(ArchiveHeader);
-                    ++bound;
-                    if(tcc_load_object_file(s1, fd, off) < 0) {
-                    fail:
-                        ret = -1;
-                        goto the_end;
-                    }
-                }
-            }
-        }
-    } while(bound);
-    ret = 0;
- the_end:
-    tcc_free(data);
-    return ret;
+static int tcc_load_alacarte(TCCState *s1, int fd, int size, int entrysize) {
+exit(1);
 }
 
 static int tcc_load_archive(TCCState *s1, int fd) {
