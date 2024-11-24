@@ -8371,121 +8371,7 @@ static int is_compatible_unqualified_types(CType *type1, CType *type2)
 {
     return compare_types(type1,type2,1);
 }
-static void type_to_str(char *buf, int buf_size,
-                 CType *type, const char *varstr)
-{
-    int bt, v, t;
-    Sym *s, *sa;
-    char buf1[256];
-    const char *tstr;
-    t = type->t;
-    bt = t & 0x000f;
-    buf[0] = '\0';
-    if (t & 0x00001000)
-        pstrcat(buf, buf_size, "extern ");
-    if (t & 0x00002000)
-        pstrcat(buf, buf_size, "static ");
-    if (t & 0x00004000)
-        pstrcat(buf, buf_size, "typedef ");
-    if (t & 0x00008000)
-        pstrcat(buf, buf_size, "inline ");
-    if (t & 0x0200)
-        pstrcat(buf, buf_size, "volatile ");
-    if (t & 0x0100)
-        pstrcat(buf, buf_size, "const ");
-    if (((t & 0x0020) && bt == 1)
-        || ((t & 0x0010)
-            && (bt == 2 || bt == 3 || bt == 4)
-            && !((t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (2 << 20))
-            ))
-        pstrcat(buf, buf_size, (t & 0x0010) ? "unsigned " : "signed ");
-    buf_size -= strlen(buf);
-    buf += strlen(buf);
-    switch(bt) {
-    case 0:
-        tstr = "void";
-        goto add_tstr;
-    case 11:
-        tstr = "_Bool";
-        goto add_tstr;
-    case 1:
-        tstr = "char";
-        goto add_tstr;
-    case 2:
-        tstr = "short";
-        goto add_tstr;
-    case 3:
-        tstr = "int";
-        goto maybe_long;
-    case 4:
-        tstr = "long long";
-    maybe_long:
-        if (t & 0x0800)
-            tstr = "long";
-        if (!((t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (2 << 20)))
-            goto add_tstr;
-        tstr = "enum ";
-        goto tstruct;
-    case 8:
-        tstr = "float";
-        goto add_tstr;
-    case 9:
-        tstr = "double";
-        goto add_tstr;
-    case 10:
-        tstr = "long double";
-    add_tstr:
-        pstrcat(buf, buf_size, tstr);
-        break;
-    case 7:
-        tstr = "struct ";
-        if (((t & ((((1 << (6+6)) - 1) << 20 | 0x0080)|0x000f)) == (1 << 20 | 7)))
-            tstr = "union ";
-    tstruct:
-        pstrcat(buf, buf_size, tstr);
-        v = type->ref->v & ~0x40000000;
-        if (v >= 0x10000000)
-            pstrcat(buf, buf_size, "<anonymous>");
-        else
-            pstrcat(buf, buf_size, get_tok_str(v, ((void*)0)));
-        break;
-    case 6:
-        s = type->ref;
-        type_to_str(buf, buf_size, &s->type, varstr);
-        pstrcat(buf, buf_size, "(");
-        sa = s->next;
-        while (sa != ((void*)0)) {
-            type_to_str(buf1, sizeof(buf1), &sa->type, ((void*)0));
-            pstrcat(buf, buf_size, buf1);
-            sa = sa->next;
-            if (sa)
-                pstrcat(buf, buf_size, ", ");
-        }
-        pstrcat(buf, buf_size, ")");
-        goto no_var;
-    case 5:
-        s = type->ref;
-        if (t & 0x0040) {
-            snprintf(buf1, sizeof(buf1), "%s[%d]", varstr ? varstr : "", s->c);
-            type_to_str(buf, buf_size, &s->type, buf1);
-            goto no_var;
-        }
-        pstrcpy(buf1, sizeof(buf1), "*");
-        if (t & 0x0100)
-            pstrcat(buf1, buf_size, "const ");
-        if (t & 0x0200)
-            pstrcat(buf1, buf_size, "volatile ");
-        if (varstr)
-            pstrcat(buf1, sizeof(buf1), varstr);
-        type_to_str(buf, buf_size, &s->type, buf1);
-        goto no_var;
-    }
-    if (varstr) {
-        pstrcat(buf, buf_size, " ");
-        pstrcat(buf, buf_size, varstr);
-    }
- no_var: ;
-}
+
 static void gen_assign_cast(CType *dt)
 {
     CType *st, *type1, *type2;
@@ -8548,8 +8434,6 @@ static void gen_assign_cast(CType *dt)
     case_VT_STRUCT:
         if (!is_compatible_unqualified_types(dt, st)) {
         error:
-            type_to_str(buf1, sizeof(buf1), st, ((void*)0));
-            type_to_str(buf2, sizeof(buf2), dt, ((void*)0));
             tcc_error("cannot cast '%s' to '%s'", buf1, buf2);
         }
         break;
@@ -9551,7 +9435,6 @@ static void unary(void)
  }
  if (!str) {
      char buf[60];
-     type_to_str(buf, sizeof buf, &controlling_type, ((void*)0));
      tcc_error("type '%s' does not match any association", buf);
  }
  begin_macro(str, 1);
