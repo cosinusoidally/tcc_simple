@@ -21019,9 +21019,9 @@ redo:
         tcc_add_file(s, f->name);
         s->filetype = 0;
         s->alacarte_link = 1;
-        if (--n == 0 || ret
-            || (s->output_type == 4 && !s->option_r))
+        if (--n == 0 || ret) {
             break;
+        }
     }
     if (s->output_type == 5) {
         ;
