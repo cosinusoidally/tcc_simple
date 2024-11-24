@@ -12275,110 +12275,8 @@ static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
     if (s1->output_format == 0)
         file_offset = sizeof(Elf32_Ehdr) + phnum * sizeof(Elf32_Phdr);
     s_align = 0x1000;
-    if (s1->section_align)
-        s_align = s1->section_align;
-    if (phnum > 0) {
-        if (s1->has_text_addr) {
-            int a_offset, p_offset;
-            addr = s1->text_addr;
-            a_offset = (int) (addr & (s_align - 1));
-            p_offset = file_offset & (s_align - 1);
-            if (a_offset < p_offset)
-                a_offset += s_align;
-            file_offset += (a_offset - p_offset);
-        } else {
-            if (file_type == 3)
-                addr = 0;
-            else
-                addr = 0x08048000;
-            addr += (file_offset & (s_align - 1));
-        }
-        ph = &phdr[0];
-        if (interp)
-            ph += 2;
-        dyninf->rel_addr = dyninf->rel_size = 0;
-        for(j = 0; j < 2; j++) {
-            ph->p_type = 1;
-            if (j == 0)
-                ph->p_flags = (1 << 2) | (1 << 0);
-            else
-                ph->p_flags = (1 << 2) | (1 << 1);
-            ph->p_align = s_align;
-            for(k = 0; k < 5; k++) {
-                for(i = 1; i < s1->nb_sections; i++) {
-                    s = s1->sections[i];
-                    if (j == 0) {
-                        if ((s->sh_flags & ((1 << 1) | (1 << 0))) !=
-                            (1 << 1))
-                            continue;
-                    } else {
-                        if ((s->sh_flags & ((1 << 1) | (1 << 0))) !=
-                            ((1 << 1) | (1 << 0)))
-                            continue;
-                    }
-                    if (s == interp) {
-                        if (k != 0)
-                            continue;
-                    } else if (s->sh_type == 11 ||
-                               s->sh_type == 3 ||
-                               s->sh_type == 5) {
-                        if (k != 1)
-                            continue;
-                    } else if (s->sh_type == 9) {
-                        if (k != 2)
-                            continue;
-                    } else if (s->sh_type == 8) {
-                        if (k != 4)
-                            continue;
-                    } else {
-                        if (k != 3)
-                            continue;
-                    }
-                    sec_order[sh_order_index++] = i;
-                    tmp = addr;
-                    addr = (addr + s->sh_addralign - 1) &
-                        ~(s->sh_addralign - 1);
-                    file_offset += (int) ( addr - tmp );
-                    s->sh_offset = file_offset;
-                    s->sh_addr = addr;
-                    if (ph->p_offset == 0) {
-                        ph->p_offset = file_offset;
-                        ph->p_vaddr = addr;
-                        ph->p_paddr = ph->p_vaddr;
-                    }
-                    if (s->sh_type == 9) {
-                        if (dyninf->rel_size == 0)
-                            dyninf->rel_addr = addr;
-                        dyninf->rel_size += s->sh_size;
-                    }
-                    addr += s->sh_size;
-                    if (s->sh_type != 8)
-                        file_offset += s->sh_size;
-                }
-            }
-     if (j == 0) {
-  ph->p_offset &= ~(ph->p_align - 1);
-  ph->p_vaddr &= ~(ph->p_align - 1);
-  ph->p_paddr &= ~(ph->p_align - 1);
-     }
-            ph->p_filesz = file_offset - ph->p_offset;
-            ph->p_memsz = addr - ph->p_vaddr;
-            ph++;
-            if (j == 0) {
-                if (s1->output_format == 0) {
-                    if ((addr & (s_align - 1)) != 0)
-                        addr += s_align;
-                } else {
-                    addr = (addr + s_align - 1) & ~(s_align - 1);
-                    file_offset = (file_offset + s_align - 1) & ~(s_align - 1);
-                }
-            }
-        }
-    }
     for(i = 1; i < s1->nb_sections; i++) {
         s = s1->sections[i];
-        if (phnum > 0 && (s->sh_flags & (1 << 1)))
-            continue;
         sec_order[sh_order_index++] = i;
         file_offset = (file_offset + s->sh_addralign - 1) &
             ~(s->sh_addralign - 1);
@@ -12387,19 +12285,6 @@ static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
             file_offset += s->sh_size;
     }
     return file_offset;
-}
-
-static void fill_unloadable_phdr(Elf32_Phdr *phdr, int phnum, Section *interp,
-                                 Section *dynamic) {
-exit(1);
-}
-
-static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf) {
-exit(1);
-}
-
-static int final_sections_reloc(TCCState *s1) {
-exit(1);
 }
 
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
