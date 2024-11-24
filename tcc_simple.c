@@ -9493,20 +9493,7 @@ static int expr_const(void)
         tcc_error("constant exceeds 32 bit");
     return c;
 }
-static int is_label(void)
-{
-    int last_tok;
-    if (tok < TOK_DEFINE)
-        return 0;
-    last_tok = tok;
-    next();
-    if (tok == ':') {
-        return last_tok;
-    } else {
-        unget_tok(last_tok);
-        return 0;
-    }
-}
+
 static void gfunc_return(CType *func_type)
 {
     if ((func_type->t & 0x000f) == 7) {
@@ -9629,9 +9616,6 @@ static void block(int *bsym, int *csym, int is_expr)
         llabel = local_label_stack;
         ++local_scope;
         while (tok != '}') {
-     if ((a = is_label()))
-  unget_tok(a);
-     else
          decl(0x0032);
             if (tok != '}') {
                 if (is_expr)
@@ -9669,41 +9653,16 @@ static void block(int *bsym, int *csym, int is_expr)
         skip(';');
  nocode_wanted |= 0x20000000;
     } else {
-        b = is_label();
-        if (b) {
-     next();
-            s = label_find(b);
-            if (s) {
-                if (s->r == 0)
-                    tcc_error("duplicate label '%s'", get_tok_str(s->v, ((void*)0)));
-                gsym(s->jnext);
-                s->r = 0;
+        if (tok != ';') {
+            if (is_expr) {
+                vpop();
+                gexpr();
             } else {
-                s = label_push(&global_label_stack, b, 0);
+                gexpr();
+                vpop();
             }
-            s->jnext = ind;
-            vla_sp_restore();
-        block_after_label:
-     nocode_wanted &= ~0x20000000;
-            if (tok == '}') {
-                tcc_warning("deprecated use of label at end of compound statement");
-            } else {
-                if (is_expr)
-                    vpop();
-                block(bsym, csym, is_expr);
-            }
-        } else {
-            if (tok != ';') {
-                if (is_expr) {
-                    vpop();
-                    gexpr();
-                } else {
-                    gexpr();
-                    vpop();
-                }
-            }
-            skip(';');
         }
+        skip(';');
     }
 }
 static void skip_or_save_block(TokenString **str)
