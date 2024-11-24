@@ -12637,21 +12637,17 @@ static void ggoto(void)
 }
 
 static void gen_vla_sp_save(int addr) {
-    o(0x89);
-    gen_modrm(TREG_ESP, 0x0032, ((void*)0), addr);
+exit(1);
 }
+
 static void gen_vla_sp_restore(int addr) {
-    o(0x8b);
-    gen_modrm(TREG_ESP, 0x0032, ((void*)0), addr);
+exit(1);
 }
+
 static void gen_vla_alloc(CType *type, int align) {
-    int r;
-    r = gv(0x0001);
-    o(0x2b);
-    o(0xe0 | r);
-    o(0xf0e483);
-    vpop();
+exit(1);
 }
+
 int code_reloc (int reloc_type)
 {
     switch (reloc_type) {
