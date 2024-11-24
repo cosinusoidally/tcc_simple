@@ -19673,8 +19673,8 @@ static void tcc_cleanup(void)
     dynarray_reset(&sym_pools, &nb_sym_pools);
     sym_free_first = ((void*)0);
 }
- TCCState *tcc_new(void)
-{
+
+TCCState *tcc_new(void) {
     TCCState *s;
     tcc_cleanup();
     s = tcc_mallocz(sizeof(TCCState));
@@ -19692,33 +19692,6 @@ static void tcc_cleanup(void)
     define_push(TOK___DATE__, 0, ((void*)0), ((void*)0));
     define_push(TOK___TIME__, 0, ((void*)0), ((void*)0));
     define_push(TOK___COUNTER__, 0, ((void*)0), ((void*)0));
-    {
-        char buffer[32]; int a,b,c;
-        sscanf("0.9.27", "%d.%d.%d", &a, &b, &c);
-        sprintf(buffer, "%d", a*10000 + b*100 + c);
-        tcc_define_symbol(s, "__TINYC__", buffer);
-    }
-    tcc_define_symbol(s, "__STDC__", ((void*)0));
-    tcc_define_symbol(s, "__STDC_VERSION__", "199901L");
-    tcc_define_symbol(s, "__STDC_HOSTED__", ((void*)0));
-    tcc_define_symbol(s, "__i386__", ((void*)0));
-    tcc_define_symbol(s, "__i386", ((void*)0));
-    tcc_define_symbol(s, "i386", ((void*)0));
-    tcc_define_symbol(s, "__unix__", ((void*)0));
-    tcc_define_symbol(s, "__unix", ((void*)0));
-    tcc_define_symbol(s, "unix", ((void*)0));
-    tcc_define_symbol(s, "__linux__", ((void*)0));
-    tcc_define_symbol(s, "__linux", ((void*)0));
-    tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned int");
-    tcc_define_symbol(s, "__PTRDIFF_TYPE__", "int");
-    tcc_define_symbol(s, "__ILP32__", ((void*)0));
-    tcc_define_symbol(s, "__WCHAR_TYPE__", "int");
-    tcc_define_symbol(s, "__WINT_TYPE__", "unsigned int");
-    tcc_define_symbol(s, "__REDIRECT(name, proto, alias)",
-        "name proto __asm__ (#alias)");
-    tcc_define_symbol(s, "__REDIRECT_NTH(name, proto, alias)",
-        "name proto __asm__ (#alias) __THROW");
-    tcc_define_symbol(s, "__builtin_extract_return_addr(x)", "x");
     return s;
 }
  void tcc_delete(TCCState *s1)
