@@ -12184,206 +12184,38 @@ static void tcc_add_bcheck(TCCState *s1)
             init_section->data_offset - 4, 2, sym_index);
     }
 }
-static void tcc_add_runtime(TCCState *s1)
-{
-    tcc_add_bcheck(s1);
-    if (!s1->nostdlib) {
-        tcc_add_support(s1, "libtcc1.a");
-    }
+
+static void tcc_add_runtime(TCCState *s1) {
+exit(1);
 }
-static void tcc_add_linker_symbols(TCCState *s1)
-{
-    char buf[1024];
-    int i;
-    Section *s;
-    set_elf_sym(symtab_section,
-                text_section->data_offset, 0,
-                (((1) << 4) + ((0) & 0xf)), 0,
-                text_section->sh_num, "_etext");
-    set_elf_sym(symtab_section,
-                data_section->data_offset, 0,
-                (((1) << 4) + ((0) & 0xf)), 0,
-                data_section->sh_num, "_edata");
-    set_elf_sym(symtab_section,
-                bss_section->data_offset, 0,
-                (((1) << 4) + ((0) & 0xf)), 0,
-                bss_section->sh_num, "_end");
-    add_init_array_defines(s1, ".preinit_array");
-    add_init_array_defines(s1, ".init_array");
-    add_init_array_defines(s1, ".fini_array");
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->sh_type == 1 &&
-            (s->sh_flags & (1 << 1))) {
-            const char *p;
-            int ch;
-            p = s->name;
-            for(;;) {
-                ch = *p;
-                if (!ch)
-                    break;
-                if (!isid(ch) && !isnum(ch))
-                    goto next_sec;
-                p++;
-            }
-            snprintf(buf, sizeof(buf), "__start_%s", s->name);
-            set_elf_sym(symtab_section,
-                        0, 0,
-                        (((1) << 4) + ((0) & 0xf)), 0,
-                        s->sh_num, buf);
-            snprintf(buf, sizeof(buf), "__stop_%s", s->name);
-            set_elf_sym(symtab_section,
-                        s->data_offset, 0,
-                        (((1) << 4) + ((0) & 0xf)), 0,
-                        s->sh_num, buf);
-        }
-    next_sec: ;
-    }
+
+static void tcc_add_linker_symbols(TCCState *s1) {
+exit(1);
 }
-static void resolve_common_syms(TCCState *s1)
-{
-    Elf32_Sym *sym;
-    for (sym = (Elf32_Sym *) symtab_section->data + 1; sym < (Elf32_Sym *) (symtab_section->data + symtab_section->data_offset); sym++) {
-        if (sym->st_shndx == 0xfff2) {
-     sym->st_value = section_add(bss_section, sym->st_size,
-     sym->st_value);
-            sym->st_shndx = bss_section->sh_num;
-        }
-    }
-    tcc_add_linker_symbols(s1);
+
+static void resolve_common_syms(TCCState *s1) {
+exit(1);
 }
+
 static void tcc_output_binary(TCCState *s1, FILE *f,
-                              const int *sec_order)
-{
-    Section *s;
-    int i, offset, size;
-    offset = 0;
-    for(i=1;i<s1->nb_sections;i++) {
-        s = s1->sections[sec_order[i]];
-        if (s->sh_type != 8 &&
-            (s->sh_flags & (1 << 1))) {
-            while (offset < s->sh_offset) {
-                fputc(0, f);
-                offset++;
-            }
-            size = s->sh_size;
-            fwrite(s->data, 1, size, f);
-            offset += size;
-        }
-    }
+                              const int *sec_order) {
+exit(1);
 }
-static void fill_got_entry(TCCState *s1, Elf32_Rel *rel)
-{
-    int sym_index = ((rel->r_info) >> 8);
-    Elf32_Sym *sym = &((Elf32_Sym *) symtab_section->data)[sym_index];
-    struct sym_attr *attr = get_sym_attr(s1, sym_index, 0);
-    unsigned offset = attr->got_offset;
-    if (0 == offset)
-        return;
-    section_reserve(s1->got, offset + 4);
-    write32le(s1->got->data + offset, sym->st_value);
+
+static void fill_got_entry(TCCState *s1, Elf32_Rel *rel) {
+exit(1);
 }
-static void fill_got(TCCState *s1)
-{
-    Section *s;
-    Elf32_Rel *rel;
-    int i;
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->sh_type != 9)
-            continue;
-        if (s->link != symtab_section)
-            continue;
-        for (rel = (Elf32_Rel *) s->data + 0; rel < (Elf32_Rel *) (s->data + s->data_offset); rel++) {
-            switch (((rel->r_info) & 0xff)) {
-                case 3:
-                case 9:
-  case 41:
-  case 42:
-                case 4:
-                    fill_got_entry(s1, rel);
-                    break;
-            }
-        }
-    }
+
+static void fill_got(TCCState *s1) {
+exit(1);
 }
-static void fill_local_got_entries(TCCState *s1)
-{
-    Elf32_Rel *rel;
-    for (rel = (Elf32_Rel *) s1->got->reloc->data + 0; rel < (Elf32_Rel *) (s1->got->reloc->data + s1->got->reloc->data_offset); rel++) {
- if (((rel->r_info) & 0xff) == 8) {
-     int sym_index = ((rel->r_info) >> 8);
-     Elf32_Sym *sym = &((Elf32_Sym *) symtab_section->data)[sym_index];
-     struct sym_attr *attr = get_sym_attr(s1, sym_index, 0);
-     unsigned offset = attr->got_offset;
-     if (offset != rel->r_offset - s1->got->sh_addr)
-       tcc_error_noabort("huh");
-     rel->r_info = (((0) << 8) + ((8) & 0xff));
-     write32le(s1->got->data + offset, sym->st_value);
- }
-    }
+
+static void fill_local_got_entries(TCCState *s1) {
+exit(1);
 }
-static void bind_exe_dynsyms(TCCState *s1)
-{
-    const char *name;
-    int sym_index, index;
-    Elf32_Sym *sym, *esym;
-    int type;
-    for (sym = (Elf32_Sym *) symtab_section->data + 1; sym < (Elf32_Sym *) (symtab_section->data + symtab_section->data_offset); sym++) {
-        if (sym->st_shndx == 0) {
-            name = (char *) symtab_section->link->data + sym->st_name;
-            sym_index = find_elf_sym(s1->dynsymtab_section, name);
-            if (sym_index) {
-                esym = &((Elf32_Sym *)s1->dynsymtab_section->data)[sym_index];
-                type = ((esym->st_info) & 0xf);
-                if ((type == 2) || (type == 10)) {
-                    int dynindex
-        = put_elf_sym(s1->dynsym, 0, esym->st_size,
-        (((1) << 4) + ((2) & 0xf)), 0, 0,
-        name);
-      int index = sym - (Elf32_Sym *) symtab_section->data;
-      get_sym_attr(s1, index, 1)->dyn_index = dynindex;
-                } else if (type == 1) {
-                    unsigned long offset;
-                    Elf32_Sym *dynsym;
-                    offset = bss_section->data_offset;
-                    offset = (offset + 16 - 1) & -16;
-                    set_elf_sym (s1->symtab, offset, esym->st_size,
-                                 esym->st_info, 0, bss_section->sh_num, name);
-                    index = put_elf_sym(s1->dynsym, offset, esym->st_size,
-                                        esym->st_info, 0, bss_section->sh_num,
-                                        name);
-                    if ((((unsigned char) (esym->st_info)) >> 4) == 2) {
-                        for (dynsym = (Elf32_Sym *) s1->dynsymtab_section->data + 1; dynsym < (Elf32_Sym *) (s1->dynsymtab_section->data + s1->dynsymtab_section->data_offset); dynsym++) {
-                            if ((dynsym->st_value == esym->st_value)
-                                && ((((unsigned char) (dynsym->st_info)) >> 4) == 1)) {
-                                char *dynname = (char *) s1->dynsymtab_section->link->data
-                                                + dynsym->st_name;
-                                put_elf_sym(s1->dynsym, offset, dynsym->st_size,
-                                            dynsym->st_info, 0,
-                                            bss_section->sh_num, dynname);
-                                break;
-                            }
-                        }
-                    }
-                    put_elf_reloc(s1->dynsym, bss_section,
-                                  offset, 5, index);
-                    offset += esym->st_size;
-                    bss_section->data_offset = offset;
-                }
-            } else {
-                if ((((unsigned char) (sym->st_info)) >> 4) == 2 ||
-                    !strcmp(name, "_fp_hw")) {
-                } else {
-                    tcc_error_noabort("undefined symbol '%s'", name);
-                }
-            }
-        } else if (s1->rdynamic && (((unsigned char) (sym->st_info)) >> 4) != 0) {
-            name = (char *) symtab_section->link->data + sym->st_name;
-            set_elf_sym(s1->dynsym, sym->st_value, sym->st_size, sym->st_info,
-                        0, sym->st_shndx, name);
-        }
-    }
+
+static void bind_exe_dynsyms(TCCState *s1) {
+exit(1);
 }
 
 static void bind_libs_dynsyms(TCCState *s1) {
