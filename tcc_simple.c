@@ -1936,7 +1936,6 @@ typedef struct TCCState TCCState;
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
  int tcc_add_file(TCCState *s, const char *filename);
- int tcc_compile_string(TCCState *s, const char *buf);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_output_file(TCCState *s, const char *filename);
  int tcc_run(TCCState *s, int argc, char **argv);
@@ -19606,13 +19605,7 @@ static int tcc_compile(TCCState *s1)
         s1->nb_errors = 0;
         s1->error_set_jmp_enabled = 1;
         preprocess_start(s1, is_asm);
-        if (s1->output_type == 5) {
-            tcc_preprocess(s1);
-        } else if (is_asm) {
-            tcc_assemble(s1, filetype == 3);
-        } else {
-            tccgen_compile(s1);
-        }
+        tccgen_compile(s1);
     }
     s1->error_set_jmp_enabled = 0;
     preprocess_end(s1);
@@ -19622,16 +19615,6 @@ static int tcc_compile(TCCState *s1)
     sym_pop(&local_stack, ((void*)0), 0);
     tccelf_end_file(s1);
     return s1->nb_errors != 0 ? -1 : 0;
-}
- int tcc_compile_string(TCCState *s, const char *str)
-{
-    int len, ret;
-    len = strlen(str);
-    tcc_open_bf(s, "<string>", len);
-    memcpy(file->buffer, str, len);
-    ret = tcc_compile(s);
-    tcc_close();
-    return ret;
 }
 
 static void tcc_cleanup(void) {
