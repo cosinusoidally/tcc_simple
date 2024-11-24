@@ -20362,32 +20362,7 @@ reparse:
         case TCC_OPTION_c:
             x = 4;
         set_output_type:
-            if (s->output_type)
-                tcc_warning("-%s: overriding compiler action already specified", popt->name);
             s->output_type = x;
-            break;
-        case TCC_OPTION_d:
-            if (*optarg == 'D')
-                s->dflag = 3;
-            else if (*optarg == 'M')
-                s->dflag = 7;
-            else if (*optarg == 't')
-                s->dflag = 16;
-            else if (isnum(*optarg))
-                g_debug = atoi(optarg);
-            else
-                goto unsupported_option;
-            break;
-        case TCC_OPTION_static:
-            s->static_link = 1;
-            break;
-        case TCC_OPTION_std:
-            break;
-        case TCC_OPTION_shared:
-            x = 3;
-            goto set_output_type;
-        case TCC_OPTION_soname:
-            s->soname = tcc_strdup(optarg);
             break;
         case TCC_OPTION_o:
             if (s->outfile) {
