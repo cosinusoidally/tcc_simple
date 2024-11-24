@@ -20987,21 +20987,7 @@ static void set_environment(TCCState *s)
         tcc_add_library_path(s, path);
     }
 }
-static char *default_outputfile(TCCState *s, const char *first_file)
-{
-    char buf[1024];
-    char *ext;
-    const char *name = "a";
-    if (first_file && strcmp(first_file, "-"))
-        name = tcc_basename(first_file);
-    snprintf(buf, sizeof(buf), "%s", name);
-    ext = tcc_fileextension(buf);
-    if (s->output_type == 4 && !s->option_r && *ext)
-        strcpy(ext, ".o");
-    else
-        strcpy(buf, "a.out");
-    return tcc_strdup(buf);
-}
+
 static unsigned getclock_ms(void)
 {
     struct timeval tv;
@@ -21097,8 +21083,9 @@ redo:
         if (s->output_type == 1) {
             ret = tcc_run(s, argc, argv);
         } else {
-            if (!s->outfile)
-                s->outfile = default_outputfile(s, first_file);
+            if (!s->outfile) {
+                puts("No output file, error"); exit(1);
+            }
             if (tcc_output_file(s, s->outfile))
                 ret = 1;
             else if (s->gen_deps)
