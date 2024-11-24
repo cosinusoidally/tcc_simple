@@ -3465,8 +3465,6 @@ enum gotplt_entry {
 static int code_reloc (int reloc_type);
 static int gotplt_entry_type (int reloc_type);
 static unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr);
-static void relocate_init(Section *sr);
-static void relocate(TCCState *s1, Elf32_Rel *rel, int type, unsigned char *ptr, Elf32_Addr addr, Elf32_Addr val);
 static void relocate_plt(TCCState *s1);
 static const int reg_classes[5];
 static void gsym_addr(int t, int a);
@@ -3522,8 +3520,6 @@ static void gen_addr32(int r, Sym *sym, int c);
 static void gen_addrpc32(int r, Sym *sym, int c);
 static void gen_bounded_ptr_add(void);
 static void gen_bounded_ptr_deref(void);
-static void asm_expr(TCCState *s1, ExprValue *pe);
-static int asm_int_expr(TCCState *s1);
 static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
@@ -12507,130 +12503,8 @@ static int rt_num_callers = 6;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
 
-static Elf32_Addr rt_printline(Elf32_Addr wanted_pc, const char *msg)
-{
-    char func_name[128], last_func_name[128];
-    Elf32_Addr func_addr, last_pc, pc;
-    const char *incl_files[32];
-    int incl_index, len, last_line_num, i;
-    const char *str, *p;
-    Stab_Sym *stab_sym = ((void*)0), *stab_sym_end, *sym;
-    int stab_len = 0;
-    char *stab_str = ((void*)0);
-    if (stab_section) {
-        stab_len = stab_section->data_offset;
-        stab_sym = (Stab_Sym *)stab_section->data;
-        stab_str = (char *) stabstr_section->data;
-    }
-    func_name[0] = '\0';
-    func_addr = 0;
-    incl_index = 0;
-    last_func_name[0] = '\0';
-    last_pc = (Elf32_Addr)-1;
-    last_line_num = 1;
-    if (!stab_sym)
-        goto no_stabs;
-    stab_sym_end = (Stab_Sym*)((char*)stab_sym + stab_len);
-    for (sym = stab_sym + 1; sym < stab_sym_end; ++sym) {
-        switch(sym->n_type) {
-        case N_FUN:
-            if (sym->n_strx == 0) {
-                pc = sym->n_value + func_addr;
-                if (wanted_pc >= last_pc && wanted_pc < pc)
-                    goto found;
-                func_name[0] = '\0';
-                func_addr = 0;
-            } else {
-                str = stab_str + sym->n_strx;
-                p = strchr(str, ':');
-                if (!p) {
-                    pstrcpy(func_name, sizeof(func_name), str);
-                } else {
-                    len = p - str;
-                    if (len > sizeof(func_name) - 1)
-                        len = sizeof(func_name) - 1;
-                    memcpy(func_name, str, len);
-                    func_name[len] = '\0';
-                }
-                func_addr = sym->n_value;
-            }
-            break;
-        case N_SLINE:
-            pc = sym->n_value + func_addr;
-            if (wanted_pc >= last_pc && wanted_pc < pc)
-                goto found;
-            last_pc = pc;
-            last_line_num = sym->n_desc;
-            strcpy(last_func_name, func_name);
-            break;
-        case N_BINCL:
-            str = stab_str + sym->n_strx;
-        add_incl:
-            if (incl_index < 32) {
-                incl_files[incl_index++] = str;
-            }
-            break;
-        case N_EINCL:
-            if (incl_index > 1)
-                incl_index--;
-            break;
-        case N_SO:
-            if (sym->n_strx == 0) {
-                incl_index = 0;
-            } else {
-                str = stab_str + sym->n_strx;
-                len = strlen(str);
-                if (len > 0 && str[len - 1] != '/')
-                    goto add_incl;
-            }
-            break;
-        }
-    }
-no_stabs:
-    incl_index = 0;
-    if (symtab_section)
-    {
-        Elf32_Sym *sym, *sym_end;
-        int type;
-        sym_end = (Elf32_Sym *)(symtab_section->data + symtab_section->data_offset);
-        for(sym = (Elf32_Sym *)symtab_section->data + 1;
-            sym < sym_end;
-            sym++) {
-            type = ((sym->st_info) & 0xf);
-            if (type == 2 || type == 10) {
-                if (wanted_pc >= sym->st_value &&
-                    wanted_pc < sym->st_value + sym->st_size) {
-                    pstrcpy(last_func_name, sizeof(last_func_name),
-                            (char *) symtab_section->link->data + sym->st_name);
-                    func_addr = sym->st_value;
-                    goto found;
-                }
-            }
-        }
-    }
-    fprintf(stderr, "%s %p ???\n", msg, (void*)wanted_pc);
-    fflush(stderr);
-    return 0;
- found:
-    i = incl_index;
-    if (i > 0)
-        fprintf(stderr, "%s:%d: ", incl_files[--i], last_line_num);
-    fprintf(stderr, "%s %p", msg, (void*)wanted_pc);
-    if (last_func_name[0] != '\0')
-        fprintf(stderr, " %s()", last_func_name);
-    if (--i >= 0) {
-        fprintf(stderr, " (included from ");
-        for (;;) {
-            fprintf(stderr, "%s", incl_files[i]);
-            if (--i < 0)
-                break;
-            fprintf(stderr, ", ");
-        }
-        fprintf(stderr, ")");
-    }
-    fprintf(stderr, "\n");
-    fflush(stderr);
-    return func_addr;
+static Elf32_Addr rt_printline(Elf32_Addr wanted_pc, const char *msg) {
+exit(1);
 }
 
 static const int reg_classes[5] = {
@@ -13563,23 +13437,6 @@ static void relocate_plt(TCCState *s1)
             p += 16;
         }
     }
-}
-static Elf32_Rel *qrel;
-void relocate_init(Section *sr)
-{
-    qrel = (Elf32_Rel *) sr->data;
-}
-
-void relocate(TCCState *s1, Elf32_Rel *rel, int type, unsigned char *ptr, Elf32_Addr addr, Elf32_Addr val) {
-exit(1);
-}
-
-static void asm_expr(TCCState *s1, ExprValue *pe) {
-exit(1);
-}
-
-static int asm_int_expr(TCCState *s1) {
-exit(1);
 }
 
 static char *pstrcpy(char *buf, int buf_size, const char *s) {
