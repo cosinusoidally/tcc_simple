@@ -12412,11 +12412,6 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     file_type = s1->output_type;
     shnum = s1->nb_sections;
     memset(&ehdr, 0, sizeof(ehdr));
-    if (phnum > 0) {
-        ehdr.e_phentsize = sizeof(Elf32_Phdr);
-        ehdr.e_phnum = phnum;
-        ehdr.e_phoff = sizeof(Elf32_Ehdr);
-    }
     file_offset = (file_offset + 3) & -4;
     ehdr.e_ident[0] = 0x7f;
     ehdr.e_ident[1] = 'E';
@@ -12425,20 +12420,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     ehdr.e_ident[4] = 1;
     ehdr.e_ident[5] = 1;
     ehdr.e_ident[6] = 1;
-    switch(file_type) {
-    default:
-    case 2:
-        ehdr.e_type = 2;
-        ehdr.e_entry = get_elf_sym_addr(s1, "_start", 1);
-        break;
-    case 3:
-        ehdr.e_type = 3;
-        ehdr.e_entry = text_section->sh_addr;
-        break;
-    case 4:
-        ehdr.e_type = 1;
-        break;
-    }
+    ehdr.e_type = 1;
     ehdr.e_machine = 3;
     ehdr.e_version = 1;
     ehdr.e_shoff = file_offset;
