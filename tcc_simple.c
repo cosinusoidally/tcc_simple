@@ -1933,8 +1933,6 @@ struct TCCState;
 typedef struct TCCState TCCState;
  TCCState *tcc_new(void);
  void tcc_delete(TCCState *s);
- void tcc_set_error_func(TCCState *s, void *error_opaque,
-    void (*error_func)(void *opaque, const char *msg));
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_output_file(TCCState *s, const char *filename);
@@ -19511,22 +19509,16 @@ static void error1(TCCState *s1, int is_warning, const char *fmt, va_list ap)
     if (!is_warning || s1->warn_error)
         s1->nb_errors++;
 }
- void tcc_set_error_func(TCCState *s, void *error_opaque,
-                        void (*error_func)(void *opaque, const char *msg))
-{
-    s->error_opaque = error_opaque;
-    s->error_func = error_func;
-}
- void tcc_error_noabort(const char *fmt, ...)
-{
+
+void tcc_error_noabort(const char *fmt, ...) {
     TCCState *s1 = tcc_state;
     va_list ap;
     ap = ((char *)&(fmt)) + ((sizeof(fmt)+3)&~3);
     error1(s1, 0, fmt, ap);
     ;
 }
- void tcc_error(const char *fmt, ...)
-{
+
+void tcc_error(const char *fmt, ...) {
     TCCState *s1 = tcc_state;
     va_list ap;
     ap = ((char *)&(fmt)) + ((sizeof(fmt)+3)&~3);
@@ -19538,8 +19530,8 @@ static void error1(TCCState *s1, int is_warning, const char *fmt, va_list ap)
         exit(1);
     }
 }
- void tcc_warning(const char *fmt, ...)
-{
+
+void tcc_warning(const char *fmt, ...) {
     TCCState *s1 = tcc_state;
     va_list ap;
     if (s1->warn_none)
@@ -19548,8 +19540,8 @@ static void error1(TCCState *s1, int is_warning, const char *fmt, va_list ap)
     error1(s1, 1, fmt, ap);
     ;
 }
-static void tcc_open_bf(TCCState *s1, const char *filename, int initlen)
-{
+
+static void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     BufferedFile *bf;
     int buflen = initlen ? initlen : 8192;
     bf = tcc_mallocz(sizeof(BufferedFile) + buflen);
