@@ -3454,8 +3454,6 @@ enum gotplt_entry {
     AUTO_GOTPLT_ENTRY,
     ALWAYS_GOTPLT_ENTRY
 };
-static int code_reloc (int reloc_type);
-static int gotplt_entry_type (int reloc_type);
 static unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr);
 static void relocate_plt(TCCState *s1);
 static const int reg_classes[5];
@@ -12648,53 +12646,6 @@ static void gen_vla_alloc(CType *type, int align) {
 exit(1);
 }
 
-int code_reloc (int reloc_type)
-{
-    switch (reloc_type) {
- case 8:
- case 20:
-        case 1:
- case 10:
- case 9:
- case 3:
- case 43:
- case 6:
- case 5:
-            return 0;
- case 21:
- case 2:
- case 4:
- case 7:
-            return 1;
-    }
-    tcc_error ("Unknown relocation type: %d", reloc_type);
-    return -1;
-}
-int gotplt_entry_type (int reloc_type)
-{
-    switch (reloc_type) {
- case 8:
- case 20:
- case 6:
- case 7:
- case 5:
-            return NO_GOTPLT_ENTRY;
-        case 1:
-            return AUTO_GOTPLT_ENTRY;
- case 21:
- case 2:
-            return AUTO_GOTPLT_ENTRY;
- case 10:
- case 9:
-            return BUILD_GOT_ONLY;
- case 3:
- case 43:
- case 4:
-            return ALWAYS_GOTPLT_ENTRY;
-    }
-    tcc_error ("Unknown relocation type: %d", reloc_type);
-    return -1;
-}
 static unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr)
 {
     Section *plt = s1->plt;
