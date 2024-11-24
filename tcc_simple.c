@@ -20320,8 +20320,8 @@ static void args_parser_listfile(TCCState *s,
     dynarray_reset(&s->argv, &s->argc);
     *pargc = s->argc = argc, *pargv = s->argv = argv;
 }
- int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
-{
+
+int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     const TCCOption *popt;
     const char *optarg, *r;
     const char *run = ((void*)0);
@@ -20335,7 +20335,6 @@ static void args_parser_listfile(TCCState *s,
     while (optind < argc) {
         r = argv[optind];
         optind++;
-reparse:
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@')
                 args_parser_add_file(s, r, s->filetype);
