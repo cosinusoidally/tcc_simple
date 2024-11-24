@@ -16692,86 +16692,10 @@ static int asm_parse_regvar (int t)
 }
 
 static void subst_asm_operand(CString *add_str,
-                              SValue *sv, int modifier)
-{
-    int r, reg, size, val;
-    char buf[64];
-    r = sv->r;
-    if ((r & 0x003f) == 0x0030) {
-        if (!(r & 0x0100) && modifier != 'c' && modifier != 'n' &&
-     modifier != 'P')
-            cstr_ccat(add_str, '$');
-        if (r & 0x0200) {
-     const char *name = get_tok_str(sv->sym->v, ((void*)0));
-     if (sv->sym->v >= 0x10000000) {
-  get_asm_sym(tok_alloc(name, strlen(name))->tok, sv->sym);
-     }
-            cstr_cat(add_str, name, -1);
-            if ((uint32_t)sv->c.i == 0)
-                goto no_offset;
-     cstr_ccat(add_str, '+');
-        }
-        val = sv->c.i;
-        if (modifier == 'n')
-            val = -val;
-        snprintf(buf, sizeof(buf), "%d", (int)sv->c.i);
-        cstr_cat(add_str, buf, -1);
-    no_offset:;
-    } else if ((r & 0x003f) == 0x0032) {
-        snprintf(buf, sizeof(buf), "%d(%%ebp)", (int)sv->c.i);
-        cstr_cat(add_str, buf, -1);
-    } else if (r & 0x0100) {
-        reg = r & 0x003f;
-        if (reg >= 0x0030)
-            tcc_error("internal compiler error");
-        snprintf(buf, sizeof(buf), "(%%%s)",
-                 get_tok_str(TOK_ASM_eax + reg, ((void*)0))
-   );
-        cstr_cat(add_str, buf, -1);
-    } else {
-        reg = r & 0x003f;
-        if (reg >= 0x0030)
-            tcc_error("internal compiler error");
-        if ((sv->type.t & 0x000f) == 1 ||
-     (sv->type.t & 0x000f) == 11)
-            size = 1;
-        else if ((sv->type.t & 0x000f) == 2)
-            size = 2;
-        else
-            size = 4;
-        if (size == 1 && reg >= 4)
-            size = 4;
-        if (modifier == 'b') {
-            if (reg >= 4)
-                tcc_error("cannot use byte register");
-            size = 1;
-        } else if (modifier == 'h') {
-            if (reg >= 4)
-                tcc_error("cannot use byte register");
-            size = -1;
-        } else if (modifier == 'w') {
-            size = 2;
-        } else if (modifier == 'k') {
-            size = 4;
-        }
-        switch(size) {
-        case -1:
-            reg = TOK_ASM_ah + reg;
-            break;
-        case 1:
-            reg = TOK_ASM_al + reg;
-            break;
-        case 2:
-            reg = TOK_ASM_ax + reg;
-            break;
-        default:
-            reg = TOK_ASM_eax + reg;
-            break;
-        }
-        snprintf(buf, sizeof(buf), "%%%s", get_tok_str(reg, ((void*)0)));
-        cstr_cat(add_str, buf, -1);
-    }
+                              SValue *sv, int modifier) {
+exit(1);
 }
+
 static void asm_gen_code(ASMOperand *operands, int nb_operands,
                          int nb_outputs, int is_output,
                          uint8_t *clobber_regs,
@@ -16903,143 +16827,13 @@ static Sym* get_asm_sym(int name, Sym *csym)
     }
     return sym;
 }
-static Sym* asm_section_sym(TCCState *s1, Section *sec)
-{
-    char buf[100];
-    int label = tok_alloc(buf,
-        snprintf(buf, sizeof buf, "L.%s", sec->name)
-        )->tok;
-    Sym *sym = asm_label_find(label);
+
+static void asm_expr_unary(TCCState *s1, ExprValue *pe) {
+exit(1);
 }
-static void asm_expr_unary(TCCState *s1, ExprValue *pe)
-{
-    Sym *sym;
-    int op, label;
-    uint64_t n;
-    const char *p;
-    switch(tok) {
-    case 0xbe:
-        p = tokc.str.data;
-        n = strtoull(p, (char **)&p, 0);
-        if (*p == 'b' || *p == 'f') {
-            label = asm_get_local_label_name(s1, n);
-            sym = asm_label_find(label);
-            if (*p == 'b') {
-                if (sym && (!sym->c || elfsym(sym)->st_shndx == 0))
-                    sym = sym->prev_tok;
-                if (!sym)
-                    tcc_error("local label '%d' not found backward", n);
-            } else {
-                if (!sym || (sym->c && elfsym(sym)->st_shndx != 0)) {
-      sym = asm_label_push(label);
-                }
-            }
-     pe->v = 0;
-     pe->sym = sym;
-     pe->pcrel = 0;
-        } else if (*p == '\0') {
-            pe->v = n;
-            pe->sym = ((void*)0);
-     pe->pcrel = 0;
-        } else {
-            tcc_error("invalid number syntax");
-        }
-        next();
-        break;
-    case '+':
-        next();
-        asm_expr_unary(s1, pe);
-        break;
-    case '-':
-    case '~':
-        op = tok;
-        next();
-        asm_expr_unary(s1, pe);
-        if (pe->sym)
-            tcc_error("invalid operation with label");
-        if (op == '-')
-            pe->v = -pe->v;
-        else
-            pe->v = ~pe->v;
-        break;
-    case 0xb3:
-    case 0xb4:
- pe->v = tokc.i;
- pe->sym = ((void*)0);
- pe->pcrel = 0;
- next();
- break;
-    case '(':
-        next();
-        asm_expr(s1, pe);
-        skip(')');
-        break;
-    case '.':
-        pe->v = ind;
-        pe->sym = asm_section_sym(s1, cur_text_section);
-        pe->pcrel = 0;
-        next();
-        break;
-    default:
-        if (tok >= 256) {
-     Elf32_Sym *esym;
-     sym = get_asm_sym(tok, ((void*)0));
-     esym = elfsym(sym);
-            if (esym && esym->st_shndx == 0xfff1) {
-                pe->v = esym->st_value;
-                pe->sym = ((void*)0);
-  pe->pcrel = 0;
-            } else {
-                pe->v = 0;
-                pe->sym = sym;
-  pe->pcrel = 0;
-            }
-            next();
-        } else {
-            tcc_error("bad expression syntax [%s]", get_tok_str(tok, &tokc));
-        }
-        break;
-    }
-}
-static void asm_expr_prod(TCCState *s1, ExprValue *pe)
-{
-    int op;
-    ExprValue e2;
-    asm_expr_unary(s1, pe);
-    for(;;) {
-        op = tok;
-        if (op != '*' && op != '/' && op != '%' &&
-            op != 0x01 && op != 0x02)
-            break;
-        next();
-        asm_expr_unary(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
-        case '*':
-            pe->v *= e2.v;
-            break;
-        case '/':
-            if (e2.v == 0) {
-            div_error:
-                tcc_error("division by zero");
-            }
-            pe->v /= e2.v;
-            break;
-        case '%':
-            if (e2.v == 0)
-                goto div_error;
-            pe->v %= e2.v;
-            break;
-        case 0x01:
-            pe->v <<= e2.v;
-            break;
-        default:
-        case 0x02:
-            pe->v >>= e2.v;
-            break;
-        }
-    }
+
+static void asm_expr_prod(TCCState *s1, ExprValue *pe) {
+exit(1);
 }
 
 static void asm_expr_logic(TCCState *s1, ExprValue *pe) {
