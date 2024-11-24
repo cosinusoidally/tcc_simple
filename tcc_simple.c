@@ -12233,25 +12233,14 @@ static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
     int textrel = 0;
     for(i = 1; i < s1->nb_sections; i++) {
         s = s1->sections[i];
-        if (file_type == 3 &&
-            s->sh_type == 9 &&
-            !(s->sh_flags & (1 << 1)) &&
-            (s1->sections[s->sh_info]->sh_flags & (1 << 1)) &&
-            prepare_dynamic_rel(s1, s)) {
-                if (s1->sections[s->sh_info]->sh_flags & (1 << 2))
-                    textrel = 1;
-        } else if (s1->do_debug ||
-            file_type == 4 ||
-            (s->sh_flags & (1 << 1)) ||
-     i == (s1->nb_sections - 1)) {
-            s->sh_size = s->data_offset;
-        }
- if (s->sh_size || (s->sh_flags & (1 << 1)))
+        s->sh_size = s->data_offset;
+        if (s->sh_size || (s->sh_flags & (1 << 1)))
             s->sh_name = put_elf_str(strsec, s->name);
     }
     strsec->sh_size = strsec->data_offset;
     return textrel;
 }
+
 struct dyn_inf {
     Section *dynamic;
     Section *dynstr;
@@ -12259,10 +12248,10 @@ struct dyn_inf {
     Elf32_Addr rel_addr;
     Elf32_Addr rel_size;
 };
+
 static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
                            Section *interp, Section* strsec,
-                           struct dyn_inf *dyninf, int *sec_order)
-{
+                           struct dyn_inf *dyninf, int *sec_order) {
     int i, j, k, file_type, sh_order_index, file_offset;
     unsigned long s_align;
     long long tmp;
