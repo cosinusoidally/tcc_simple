@@ -7127,112 +7127,27 @@ static void gaddrof(void)
     if ((vtop->r & 0x003f) == 0x0031)
         vtop->r = (vtop->r & ~(0x003f | (0x1000 | 0x2000 | 0x4000))) | 0x0032 | 0x0100;
 }
-static void gbound(void)
-{
-    int lval_type;
-    CType type1;
-    vtop->r &= ~0x0800;
-    if (vtop->r & 0x0100) {
-        if (!(vtop->r & 0x8000)) {
-            lval_type = vtop->r & ((0x1000 | 0x2000 | 0x4000) | 0x0100);
-            type1 = vtop->type;
-            vtop->type.t = 5;
-            gaddrof();
-            vpushi(0);
-            gen_bounded_ptr_add();
-            vtop->r |= lval_type;
-            vtop->type = type1;
-        }
-        gen_bounded_ptr_deref();
-    }
+
+static void gbound(void) {
+exit(1);
 }
-static void incr_bf_adr(int o)
-{
-    vtop->type = char_pointer_type;
-    gaddrof();
-    vpushi(o);
-    gen_op('+');
-    vtop->type.t = (vtop->type.t & ~(0x000f|0x0020))
-        | (1|0x0010);
-    vtop->r = (vtop->r & ~(0x1000 | 0x2000 | 0x4000))
-        | (0x1000|0x4000|0x0100);
+
+static void incr_bf_adr(int o) {
+exit(1);
 }
-static void load_packed_bf(CType *type, int bit_pos, int bit_size)
-{
-    int n, o, bits;
-    save_reg_upstack(vtop->r, 1);
-    vpush64(type->t & 0x000f, 0);
-    bits = 0, o = bit_pos >> 3, bit_pos &= 7;
-    do {
-        vswap();
-        incr_bf_adr(o);
-        vdup();
-        n = 8 - bit_pos;
-        if (n > bit_size)
-            n = bit_size;
-        if (bit_pos)
-            vpushi(bit_pos), gen_op(0xc9), bit_pos = 0;
-        if (n < 8)
-            vpushi((1 << n) - 1), gen_op('&');
-        gen_cast(type);
-        if (bits)
-            vpushi(bits), gen_op(0x01);
-        vrotb(3);
-        gen_op('|');
-        bits += n, bit_size -= n, o = 1;
-    } while (bit_size);
-    vswap(), vpop();
-    if (!(type->t & 0x0010)) {
-        n = ((type->t & 0x000f) == 4 ? 64 : 32) - bits;
-        vpushi(n), gen_op(0x01);
-        vpushi(n), gen_op(0x02);
-    }
+
+static void load_packed_bf(CType *type, int bit_pos, int bit_size) {
+exit(1);
 }
-static void store_packed_bf(int bit_pos, int bit_size)
-{
-    int bits, n, o, m, c;
-    c = (vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030;
-    vswap();
-    save_reg_upstack(vtop->r, 1);
-    bits = 0, o = bit_pos >> 3, bit_pos &= 7;
-    do {
-        incr_bf_adr(o);
-        vswap();
-        c ? vdup() : gv_dup();
-        vrott(3);
-        if (bits)
-            vpushi(bits), gen_op(0xc9);
-        if (bit_pos)
-            vpushi(bit_pos), gen_op(0x01);
-        n = 8 - bit_pos;
-        if (n > bit_size)
-            n = bit_size;
-        if (n < 8) {
-            m = ((1 << n) - 1) << bit_pos;
-            vpushi(m), gen_op('&');
-            vpushv(vtop-1);
-            vpushi(m & 0x80 ? ~m & 0x7f : ~m);
-            gen_op('&');
-            gen_op('|');
-        }
-        vdup(), vtop[-1] = vtop[-2];
-        vstore(), vpop();
-        bits += n, bit_size -= n, bit_pos = 0, o = 1;
-    } while (bit_size);
-    vpop(), vpop();
+
+static void store_packed_bf(int bit_pos, int bit_size) {
+exit(1);
 }
-static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
-{
-    int t;
-    if (0 == sv->type.ref)
-        return 0;
-    t = sv->type.ref->auxtype;
-    if (t != -1 && t != 7) {
-        sv->type.t = (sv->type.t & ~0x000f) | t;
-        sv->r = (sv->r & ~(0x1000 | 0x2000 | 0x4000)) | lvalue_type(sv->type.t);
-    }
-    return t;
+
+static int adjust_bf(SValue *sv, int bit_pos, int bit_size) {
+exit(1);
 }
+
 static int gv(int rc)
 {
     int r, bit_pos, bit_size, size, align, rc2;
@@ -13097,49 +13012,15 @@ static void ggoto(void)
     gcall_or_jmp(1);
     vtop--;
 }
-static void gen_bounded_ptr_add(void)
-{
-    gv2(0x0004, 0x0020);
-    vtop -= 2;
-    save_regs(0);
-    gen_static_call(TOK___bound_ptr_add);
-    vtop++;
-    vtop->r = TREG_EAX | 0x8000;
-    vtop->c.i = (cur_text_section->reloc->data_offset - sizeof(Elf32_Rel));
+
+static void gen_bounded_ptr_add(void) {
+exit(1);
 }
-static void gen_bounded_ptr_deref(void)
-{
-    Elf32_Addr func;
-    int size, align;
-    Elf32_Rel *rel;
-    Sym *sym;
-    size = 0;
-    if (!is_float(vtop->type.t)) {
-        if (vtop->r & 0x1000)
-            size = 1;
-        else if (vtop->r & 0x2000)
-            size = 2;
-    }
-    if (!size)
-        size = type_size(&vtop->type, &align);
-    switch(size) {
-    case 1: func = TOK___bound_ptr_indir1; break;
-    case 2: func = TOK___bound_ptr_indir2; break;
-    case 4: func = TOK___bound_ptr_indir4; break;
-    case 8: func = TOK___bound_ptr_indir8; break;
-    case 12: func = TOK___bound_ptr_indir12; break;
-    case 16: func = TOK___bound_ptr_indir16; break;
-    default:
-        tcc_error("unhandled size when dereferencing bounded pointer");
-        func = 0;
-        break;
-    }
-    rel = (Elf32_Rel *)(cur_text_section->reloc->data + vtop->c.i);
-    sym = external_global_sym(func, &func_old_type, 0);
-    if (!sym->c)
-        put_extern_sym(sym, ((void*)0), 0, 0);
-    rel->r_info = (((sym->c) << 8) + ((((rel->r_info) & 0xff)) & 0xff));
+
+static void gen_bounded_ptr_deref(void) {
+exit(1);
 }
+
 static void gen_vla_sp_save(int addr) {
     o(0x89);
     gen_modrm(TREG_ESP, 0x0032, ((void*)0), addr);
