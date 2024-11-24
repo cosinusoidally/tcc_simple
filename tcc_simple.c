@@ -1933,7 +1933,6 @@ struct TCCState;
 typedef struct TCCState TCCState;
  TCCState *tcc_new(void);
  void tcc_delete(TCCState *s);
- void tcc_set_lib_path(TCCState *s, const char *path);
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
  void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
@@ -19679,8 +19678,6 @@ static void tcc_cleanup(void)
     TCCState *s;
     tcc_cleanup();
     s = tcc_mallocz(sizeof(TCCState));
-    if (!s)
-        return ((void*)0);
     tcc_state = s;
     ++nb_states;
     s->alacarte_link = 1;
@@ -19688,7 +19685,6 @@ static void tcc_cleanup(void)
     s->warn_implicit_function_declaration = 1;
     s->ms_extensions = 1;
     s->seg_size = 32;
-    tcc_set_lib_path(s, "/usr/local/lib/tcc");
     tccelf_new(s);
     tccpp_new(s);
     define_push(TOK___LINE__, 0, ((void*)0), ((void*)0));
@@ -19781,11 +19777,6 @@ int tcc_add_file(TCCState *s, const char *filename) {
         s->filetype = filetype;
     }
     return tcc_add_file_internal(s, filename, flags);
-}
-
-void tcc_set_lib_path(TCCState *s, const char *path) {
-    tcc_free(s->tcc_lib_path);
-    s->tcc_lib_path = tcc_strdup(path);
 }
 
 static int strstart(const char *val, const char **str) {
