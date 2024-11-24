@@ -5855,6 +5855,7 @@ static void macro_subst(
     Sym **nested_list,
     const int *macro_str
     );
+
 static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
 {
     int t, t0, t1, spc;
@@ -8769,165 +8770,11 @@ static int exact_log2p1(int i)
     ret++;
   return ret;
 }
-static void parse_attribute(AttributeDef *ad)
-{
-    int t, n;
-    CString astr;
-redo:
-    if (tok != TOK_ATTRIBUTE1 && tok != TOK_ATTRIBUTE2)
-        return;
-    next();
-    skip('(');
-    skip('(');
-    while (tok != ')') {
-        if (tok < 256)
-            expect("attribute name");
-        t = tok;
-        next();
-        switch(t) {
-        case TOK_SECTION1:
-        case TOK_SECTION2:
-            skip('(');
-     parse_mult_str(&astr, "section name");
-            ad->section = find_section(tcc_state, (char *)astr.data);
-            skip(')');
-     cstr_free(&astr);
-            break;
-        case TOK_ALIAS1:
-        case TOK_ALIAS2:
-            skip('(');
-     parse_mult_str(&astr, "alias(\"target\")");
-            ad->alias_target =
-              tok_alloc((char*)astr.data, astr.size-1)->tok;
-            skip(')');
-     cstr_free(&astr);
-            break;
- case TOK_VISIBILITY1:
- case TOK_VISIBILITY2:
-            skip('(');
-     parse_mult_str(&astr,
-      "visibility(\"default|hidden|internal|protected\")");
-     if (!strcmp (astr.data, "default"))
-         ad->a.visibility = 0;
-     else if (!strcmp (astr.data, "hidden"))
-         ad->a.visibility = 2;
-     else if (!strcmp (astr.data, "internal"))
-         ad->a.visibility = 1;
-     else if (!strcmp (astr.data, "protected"))
-         ad->a.visibility = 3;
-     else
-                expect("visibility(\"default|hidden|internal|protected\")");
-            skip(')');
-     cstr_free(&astr);
-            break;
-        case TOK_ALIGNED1:
-        case TOK_ALIGNED2:
-            if (tok == '(') {
-                next();
-                n = expr_const();
-                if (n <= 0 || (n & (n - 1)) != 0)
-                    tcc_error("alignment must be a positive power of two");
-                skip(')');
-            } else {
-                n = 8;
-            }
-            ad->a.aligned = exact_log2p1(n);
-     if (n != 1 << (ad->a.aligned - 1))
-       tcc_error("alignment of %d is larger than implemented", n);
-            break;
-        case TOK_PACKED1:
-        case TOK_PACKED2:
-            ad->a.packed = 1;
-            break;
-        case TOK_WEAK1:
-        case TOK_WEAK2:
-            ad->a.weak = 1;
-            break;
-        case TOK_UNUSED1:
-        case TOK_UNUSED2:
-            break;
-        case TOK_NORETURN1:
-        case TOK_NORETURN2:
-            break;
-        case TOK_CDECL1:
-        case TOK_CDECL2:
-        case TOK_CDECL3:
-            ad->f.func_call = 0;
-            break;
-        case TOK_STDCALL1:
-        case TOK_STDCALL2:
-        case TOK_STDCALL3:
-            ad->f.func_call = 1;
-            break;
-        case TOK_REGPARM1:
-        case TOK_REGPARM2:
-            skip('(');
-            n = expr_const();
-            if (n > 3)
-                n = 3;
-            else if (n < 0)
-                n = 0;
-            if (n > 0)
-                ad->f.func_call = 2 + n - 1;
-            skip(')');
-            break;
-        case TOK_FASTCALL1:
-        case TOK_FASTCALL2:
-        case TOK_FASTCALL3:
-            ad->f.func_call = 5;
-            break;
-        case TOK_MODE:
-            skip('(');
-            switch(tok) {
-                case TOK_MODE_DI:
-                    ad->attr_mode = 4 + 1;
-                    break;
-                case TOK_MODE_QI:
-                    ad->attr_mode = 1 + 1;
-                    break;
-                case TOK_MODE_HI:
-                    ad->attr_mode = 2 + 1;
-                    break;
-                case TOK_MODE_SI:
-                case TOK_MODE_word:
-                    ad->attr_mode = 3 + 1;
-                    break;
-                default:
-                    tcc_warning("__mode__(%s) not supported\n", get_tok_str(tok, ((void*)0)));
-                    break;
-            }
-            next();
-            skip(')');
-            break;
-        case TOK_DLLEXPORT:
-            ad->a.dllexport = 1;
-            break;
-        case TOK_DLLIMPORT:
-            ad->a.dllimport = 1;
-            break;
-        default:
-            if (tcc_state->warn_unsupported)
-                tcc_warning("'%s' attribute ignored", get_tok_str(t, ((void*)0)));
-            if (tok == '(') {
-                int parenthesis = 0;
-                do {
-                    if (tok == '(')
-                        parenthesis++;
-                    else if (tok == ')')
-                        parenthesis--;
-                    next();
-                } while (parenthesis && tok != -1);
-            }
-            break;
-        }
-        if (tok != ',')
-            break;
-        next();
-    }
-    skip(')');
-    skip(')');
-    goto redo;
+
+static void parse_attribute(AttributeDef *ad) {
+    return;
 }
+
 static Sym * find_field (CType *type, int v)
 {
     Sym *s = type->ref;
@@ -11887,12 +11734,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
                 sym = type.ref;
                 if (sym->f.func_type == 2 && l == 0x0030)
                     decl0(0x0033, 0, sym);
-            }
-            if (gnu_ext && (tok == TOK_ASM1 || tok == TOK_ASM2 || tok == TOK_ASM3)) {
-                ad.asm_label = asm_label_instr();
-                parse_attribute(&ad);
-                if (tok == '{')
-                    expect(";");
             }
             if (tok == '{') {
                 if (l != 0x0030)
