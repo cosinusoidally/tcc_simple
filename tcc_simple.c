@@ -3460,8 +3460,6 @@ static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 static void squeeze_multi_relocs(Section *sec, size_t oldrelocoffset);
 static Elf32_Addr get_elf_sym_addr(TCCState *s, const char *name, int err);
 static void *tcc_get_symbol_err(TCCState *s, const char *name);
-static int tcc_load_dll(TCCState *s1, int fd, const char *filename, int level);
-static int tcc_load_ldscript(TCCState *s1);
 static uint8_t *parse_comment(uint8_t *p);
 static void minp(void);
 static inline void inp(void);
@@ -12536,63 +12534,11 @@ static struct sym_attr * put_got_entry(TCCState *s1, int dyn_reloc_type,
     }
     return attr;
 }
-static void build_got_entries(TCCState *s1)
-{
-    Section *s;
-    Elf32_Rel *rel;
-    Elf32_Sym *sym;
-    int i, type, gotplt_entry, reloc_type, sym_index;
-    struct sym_attr *attr;
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->sh_type != 9)
-            continue;
-        if (s->link != symtab_section)
-            continue;
-        for (rel = (Elf32_Rel *) s->data + 0; rel < (Elf32_Rel *) (s->data + s->data_offset); rel++) {
-            type = ((rel->r_info) & 0xff);
-            gotplt_entry = gotplt_entry_type(type);
-            sym_index = ((rel->r_info) >> 8);
-            sym = &((Elf32_Sym *)symtab_section->data)[sym_index];
-            if (gotplt_entry == NO_GOTPLT_ENTRY) {
-                continue;
-            }
-            if (gotplt_entry == AUTO_GOTPLT_ENTRY) {
-                if (sym->st_shndx == 0) {
-                    Elf32_Sym *esym;
-      int dynindex;
-                    if (s1->output_type == 3 && ! 0)
-                        continue;
-      if (s1->dynsym) {
-   dynindex = get_sym_attr(s1, sym_index, 0)->dyn_index;
-   esym = (Elf32_Sym *)s1->dynsym->data + dynindex;
-   if (dynindex
-       && (((esym->st_info) & 0xf) == 2
-    || (((esym->st_info) & 0xf) == 0
-        && ((sym->st_info) & 0xf) == 2)))
-       goto jmp_slot;
-      }
-                } else if (!(sym->st_shndx == 0xfff1
-   && 4 == 8
-   ))
-                    continue;
-            }
-            if (code_reloc(type)) {
-            jmp_slot:
-                reloc_type = 7;
-            } else
-                reloc_type = 6;
-            if (!s1->got)
-                build_got(s1);
-            if (gotplt_entry == BUILD_GOT_ONLY)
-                continue;
-            attr = put_got_entry(s1, reloc_type, sym->st_size, sym->st_info,
-                                 sym_index);
-            if (reloc_type == 7)
-                rel->r_info = (((attr->plt_sym) << 8) + ((type) & 0xff));
-        }
-    }
+
+static void build_got_entries(TCCState *s1) {
+exit(1);
 }
+
 static void put_dt(Section *dynamic, int dt, Elf32_Addr val)
 {
     Elf32_Dyn *dyn;
@@ -13423,221 +13369,12 @@ static int tcc_object_type(int fd, Elf32_Ehdr *h)
     }
     return 0;
 }
+
 static int tcc_load_object_file(TCCState *s1,
-                                int fd, unsigned long file_offset)
-{
-    Elf32_Ehdr ehdr;
-    Elf32_Shdr *shdr, *sh;
-    int size, i, j, offset, offseti, nb_syms, sym_index, ret, seencompressed;
-    unsigned char *strsec, *strtab;
-    int *old_to_new_syms;
-    char *sh_name, *name;
-    SectionMergeInfo *sm_table, *sm;
-    Elf32_Sym *sym, *symtab;
-    Elf32_Rel *rel;
-    Section *s;
-    int stab_index;
-    int stabstr_index;
-    stab_index = stabstr_index = 0;
-    lseek(fd, file_offset, 0);
-    if (tcc_object_type(fd, &ehdr) != 1)
-        goto fail1;
-    if (ehdr.e_ident[5] != 1 ||
-        ehdr.e_machine != 3) {
-    fail1:
-        tcc_error_noabort("invalid object file");
-        return -1;
-    }
-    shdr = load_data(fd, file_offset + ehdr.e_shoff,
-                     sizeof(Elf32_Shdr) * ehdr.e_shnum);
-    sm_table = tcc_mallocz(sizeof(SectionMergeInfo) * ehdr.e_shnum);
-    sh = &shdr[ehdr.e_shstrndx];
-    strsec = load_data(fd, file_offset + sh->sh_offset, sh->sh_size);
-    old_to_new_syms = ((void*)0);
-    symtab = ((void*)0);
-    strtab = ((void*)0);
-    nb_syms = 0;
-    seencompressed = 0;
-    for(i = 1; i < ehdr.e_shnum; i++) {
-        sh = &shdr[i];
-        if (sh->sh_type == 2) {
-            if (symtab) {
-                tcc_error_noabort("object must contain only one symtab");
-            fail:
-                ret = -1;
-                goto the_end;
-            }
-            nb_syms = sh->sh_size / sizeof(Elf32_Sym);
-            symtab = load_data(fd, file_offset + sh->sh_offset, sh->sh_size);
-            sm_table[i].s = symtab_section;
-            sh = &shdr[sh->sh_link];
-            strtab = load_data(fd, file_offset + sh->sh_offset, sh->sh_size);
-        }
- if (sh->sh_flags & (1 << 11))
-     seencompressed = 1;
-    }
-    for(i = 1; i < ehdr.e_shnum; i++) {
-        if (i == ehdr.e_shstrndx)
-            continue;
-        sh = &shdr[i];
-        sh_name = (char *) strsec + sh->sh_name;
-        if (sh->sh_type != 1 &&
-            sh->sh_type != 9 &&
-            sh->sh_type != 8 &&
-            sh->sh_type != 16 &&
-            sh->sh_type != 14 &&
-            sh->sh_type != 15 &&
-            strcmp(sh_name, ".stabstr")
-            )
-            continue;
- if (seencompressed
-     && (!strncmp(sh_name, ".debug_", sizeof(".debug_")-1)
-  || (sh->sh_type == 9
-      && !strncmp((char*)strsec + shdr[sh->sh_info].sh_name,
-           ".debug_", sizeof(".debug_")-1))))
-   continue;
-        if (sh->sh_addralign < 1)
-            sh->sh_addralign = 1;
-        for(j = 1; j < s1->nb_sections;j++) {
-            s = s1->sections[j];
-            if (!strcmp(s->name, sh_name)) {
-                if (!strncmp(sh_name, ".gnu.linkonce",
-                             sizeof(".gnu.linkonce") - 1)) {
-                    sm_table[i].link_once = 1;
-                    goto next;
-                } else {
-                    goto found;
-                }
-            }
-        }
-        s = new_section(s1, sh_name, sh->sh_type, sh->sh_flags & ~(1 << 9));
-        s->sh_addralign = sh->sh_addralign;
-        s->sh_entsize = sh->sh_entsize;
-        sm_table[i].new_section = 1;
-    found:
-        if (sh->sh_type != s->sh_type) {
-            tcc_error_noabort("invalid section type");
-            goto fail;
-        }
-        offset = s->data_offset;
-        if (0 == strcmp(sh_name, ".stab")) {
-            stab_index = i;
-            goto no_align;
-        }
-        if (0 == strcmp(sh_name, ".stabstr")) {
-            stabstr_index = i;
-            goto no_align;
-        }
-        size = sh->sh_addralign - 1;
-        offset = (offset + size) & ~size;
-        if (sh->sh_addralign > s->sh_addralign)
-            s->sh_addralign = sh->sh_addralign;
-        s->data_offset = offset;
-    no_align:
-        sm_table[i].offset = offset;
-        sm_table[i].s = s;
-        size = sh->sh_size;
-        if (sh->sh_type != 8) {
-            unsigned char *ptr;
-            lseek(fd, file_offset + sh->sh_offset, 0);
-            ptr = section_ptr_add(s, size);
-            read(fd, ptr, size);
-        } else {
-            s->data_offset += size;
-        }
-    next: ;
-    }
-    if (stab_index && stabstr_index) {
-        Stab_Sym *a, *b;
-        unsigned o;
-        s = sm_table[stab_index].s;
-        a = (Stab_Sym *)(s->data + sm_table[stab_index].offset);
-        b = (Stab_Sym *)(s->data + s->data_offset);
-        o = sm_table[stabstr_index].offset;
-        while (a < b)
-            a->n_strx += o, a++;
-    }
-    for(i = 1; i < ehdr.e_shnum; i++) {
-        s = sm_table[i].s;
-        if (!s || !sm_table[i].new_section)
-            continue;
-        sh = &shdr[i];
-        if (sh->sh_link > 0)
-            s->link = sm_table[sh->sh_link].s;
-        if (sh->sh_type == 9) {
-            s->sh_info = sm_table[sh->sh_info].s->sh_num;
-            s1->sections[s->sh_info]->reloc = s;
-        }
-    }
-    sm = sm_table;
-    old_to_new_syms = tcc_mallocz(nb_syms * sizeof(int));
-    sym = symtab + 1;
-    for(i = 1; i < nb_syms; i++, sym++) {
-        if (sym->st_shndx != 0 &&
-            sym->st_shndx < 0xff00) {
-            sm = &sm_table[sym->st_shndx];
-            if (sm->link_once) {
-                if ((((unsigned char) (sym->st_info)) >> 4) != 0) {
-                    name = (char *) strtab + sym->st_name;
-                    sym_index = find_elf_sym(symtab_section, name);
-                    if (sym_index)
-                        old_to_new_syms[i] = sym_index;
-                }
-                continue;
-            }
-            if (!sm->s)
-                continue;
-            sym->st_shndx = sm->s->sh_num;
-            sym->st_value += sm->offset;
-        }
-        name = (char *) strtab + sym->st_name;
-        sym_index = set_elf_sym(symtab_section, sym->st_value, sym->st_size,
-                                sym->st_info, sym->st_other,
-                                sym->st_shndx, name);
-        old_to_new_syms[i] = sym_index;
-    }
-    for(i = 1; i < ehdr.e_shnum; i++) {
-        s = sm_table[i].s;
-        if (!s)
-            continue;
-        sh = &shdr[i];
-        offset = sm_table[i].offset;
-        switch(s->sh_type) {
-        case 9:
-            offseti = sm_table[sh->sh_info].offset;
-            for (rel = (Elf32_Rel *) s->data + (offset / sizeof(*rel)); rel < (Elf32_Rel *) (s->data + s->data_offset); rel++) {
-                int type;
-                unsigned sym_index;
-                type = ((rel->r_info) & 0xff);
-                sym_index = ((rel->r_info) >> 8);
-                if (sym_index >= nb_syms)
-                    goto invalid_reloc;
-                sym_index = old_to_new_syms[sym_index];
-                if (!sym_index && !sm->link_once
-                   ) {
-                invalid_reloc:
-                    tcc_error_noabort("Invalid relocation entry [%2d] '%s' @ %.8x",
-                        i, strsec + sh->sh_name, rel->r_offset);
-                    goto fail;
-                }
-                rel->r_info = (((sym_index) << 8) + ((type) & 0xff));
-                rel->r_offset += offseti;
-            }
-            break;
-        default:
-            break;
-        }
-    }
-    ret = 0;
- the_end:
-    tcc_free(symtab);
-    tcc_free(strtab);
-    tcc_free(old_to_new_syms);
-    tcc_free(sm_table);
-    tcc_free(strsec);
-    tcc_free(shdr);
-    return ret;
+                                int fd, unsigned long file_offset) {
+exit(1);
 }
+
 typedef struct ArchiveHeader {
     char ar_name[16];
     char ar_date[12];
@@ -13696,137 +13433,11 @@ static int tcc_load_alacarte(TCCState *s1, int fd, int size, int entrysize)
     tcc_free(data);
     return ret;
 }
-static int tcc_load_archive(TCCState *s1, int fd)
-{
-    ArchiveHeader hdr;
-    char ar_size[11];
-    char ar_name[17];
-    char magic[8];
-    int size, len, i;
-    unsigned long file_offset;
-    read(fd, magic, sizeof(magic));
-    for(;;) {
-        len = read(fd, &hdr, sizeof(hdr));
-        if (len == 0)
-            break;
-        if (len != sizeof(hdr)) {
-            tcc_error_noabort("invalid archive");
-            return -1;
-        }
-        memcpy(ar_size, hdr.ar_size, sizeof(hdr.ar_size));
-        ar_size[sizeof(hdr.ar_size)] = '\0';
-        size = strtol(ar_size, ((void*)0), 0);
-        memcpy(ar_name, hdr.ar_name, sizeof(hdr.ar_name));
-        for(i = sizeof(hdr.ar_name) - 1; i >= 0; i--) {
-            if (ar_name[i] != ' ')
-                break;
-        }
-        ar_name[i + 1] = '\0';
-        file_offset = lseek(fd, 0, 1);
-        size = (size + 1) & ~1;
-        if (!strcmp(ar_name, "/")) {
-            if(s1->alacarte_link)
-                return tcc_load_alacarte(s1, fd, size, 4);
- } else if (!strcmp(ar_name, "/SYM64/")) {
-            if(s1->alacarte_link)
-                return tcc_load_alacarte(s1, fd, size, 8);
-        } else {
-            Elf32_Ehdr ehdr;
-            if (tcc_object_type(fd, &ehdr) == 1) {
-                if (tcc_load_object_file(s1, fd, file_offset) < 0)
-                    return -1;
-            }
-        }
-        lseek(fd, file_offset + size, 0);
-    }
-    return 0;
+
+static int tcc_load_archive(TCCState *s1, int fd) {
+exit(1);
 }
-static int tcc_load_dll(TCCState *s1, int fd, const char *filename, int level)
-{
-    Elf32_Ehdr ehdr;
-    Elf32_Shdr *shdr, *sh, *sh1;
-    int i, j, nb_syms, nb_dts, sym_bind, ret;
-    Elf32_Sym *sym, *dynsym;
-    Elf32_Dyn *dt, *dynamic;
-    unsigned char *dynstr;
-    const char *name, *soname;
-    DLLReference *dllref;
-    read(fd, &ehdr, sizeof(ehdr));
-    if (ehdr.e_ident[5] != 1 ||
-        ehdr.e_machine != 3) {
-        tcc_error_noabort("bad architecture");
-        return -1;
-    }
-    shdr = load_data(fd, ehdr.e_shoff, sizeof(Elf32_Shdr) * ehdr.e_shnum);
-    nb_syms = 0;
-    nb_dts = 0;
-    dynamic = ((void*)0);
-    dynsym = ((void*)0);
-    dynstr = ((void*)0);
-    for(i = 0, sh = shdr; i < ehdr.e_shnum; i++, sh++) {
-        switch(sh->sh_type) {
-        case 6:
-            nb_dts = sh->sh_size / sizeof(Elf32_Dyn);
-            dynamic = load_data(fd, sh->sh_offset, sh->sh_size);
-            break;
-        case 11:
-            nb_syms = sh->sh_size / sizeof(Elf32_Sym);
-            dynsym = load_data(fd, sh->sh_offset, sh->sh_size);
-            sh1 = &shdr[sh->sh_link];
-            dynstr = load_data(fd, sh1->sh_offset, sh1->sh_size);
-            break;
-        default:
-            break;
-        }
-    }
-    soname = tcc_basename(filename);
-    for(i = 0, dt = dynamic; i < nb_dts; i++, dt++) {
-        if (dt->d_tag == 14) {
-            soname = (char *) dynstr + dt->d_un.d_val;
-        }
-    }
-    for(i = 0; i < s1->nb_loaded_dlls; i++) {
-        dllref = s1->loaded_dlls[i];
-        if (!strcmp(soname, dllref->name)) {
-            if (level < dllref->level)
-                dllref->level = level;
-            ret = 0;
-            goto the_end;
-        }
-    }
-    dllref = tcc_mallocz(sizeof(DLLReference) + strlen(soname));
-    dllref->level = level;
-    strcpy(dllref->name, soname);
-    dynarray_add(&s1->loaded_dlls, &s1->nb_loaded_dlls, dllref);
-    for(i = 1, sym = dynsym + 1; i < nb_syms; i++, sym++) {
-        sym_bind = (((unsigned char) (sym->st_info)) >> 4);
-        if (sym_bind == 0)
-            continue;
-        name = (char *) dynstr + sym->st_name;
-        set_elf_sym(s1->dynsymtab_section, sym->st_value, sym->st_size,
-                    sym->st_info, sym->st_other, sym->st_shndx, name);
-    }
-    for(i = 0, dt = dynamic; i < nb_dts; i++, dt++) {
-        switch(dt->d_tag) {
-        case 1:
-            name = (char *) dynstr + dt->d_un.d_val;
-            for(j = 0; j < s1->nb_loaded_dlls; j++) {
-                dllref = s1->loaded_dlls[j];
-                if (!strcmp(name, dllref->name))
-                    goto already_loaded;
-            }
-        already_loaded:
-            break;
-        }
-    }
-    ret = 0;
- the_end:
-    tcc_free(dynstr);
-    tcc_free(dynsym);
-    tcc_free(dynamic);
-    tcc_free(shdr);
-    return ret;
-}
+
 static int ld_next(TCCState *s1, char *name, int name_size)
 {
     int c;
@@ -14013,43 +13624,7 @@ lib_parse_error:
     dynarray_reset(&libs, &nblibs);
     return ret;
 }
-static int tcc_load_ldscript(TCCState *s1)
-{
-    char cmd[64];
-    char filename[1024];
-    int t, ret;
-    ch = handle_eob();
-    for(;;) {
-        t = ld_next(s1, cmd, sizeof(cmd));
-        if (t == (-1))
-            return 0;
-        else if (t != 256)
-            return -1;
-        if (!strcmp(cmd, "INPUT") ||
-            !strcmp(cmd, "GROUP")) {
-            ret = ld_add_file_list(s1, cmd, 0);
-            if (ret)
-                return ret;
-        } else if (!strcmp(cmd, "OUTPUT_FORMAT") ||
-                   !strcmp(cmd, "TARGET")) {
-            t = ld_next(s1, cmd, sizeof(cmd));
-            if (t != '(')
-                expect("(");
-            for(;;) {
-                t = ld_next(s1, filename, sizeof(filename));
-                if (t == (-1)) {
-                    tcc_error_noabort("unexpected end of file");
-                    return -1;
-                } else if (t == ')') {
-                    break;
-                }
-            }
-        } else {
-            return -1;
-        }
-    }
-    return 0;
-}
+
 extern void *mmap (void *__addr, size_t __len, int __prot,
      int __flags, int __fd, __off_t __offset) ;
 extern void *mmap64 (void *__addr, size_t __len, int __prot,
