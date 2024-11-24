@@ -7583,56 +7583,7 @@ static void gen_opic(int op)
         }
     }
 }
-static void gen_opif(int op)
-{
-    int c1, c2;
-    SValue *v1, *v2;
-    long double f1, f2;
-    v1 = vtop - 1;
-    v2 = vtop;
-    c1 = (v1->r & (0x003f | 0x0100 | 0x0200)) == 0x0030;
-    c2 = (v2->r & (0x003f | 0x0100 | 0x0200)) == 0x0030;
-    if (c1 && c2) {
-        if (v1->type.t == 8) {
-            f1 = v1->c.f;
-            f2 = v2->c.f;
-        } else if (v1->type.t == 9) {
-            f1 = v1->c.d;
-            f2 = v2->c.d;
-        } else {
-            f1 = v1->c.ld;
-            f2 = v2->c.ld;
-        }
-        if (!ieee_finite(f1) || !ieee_finite(f2))
-            goto general_case;
-        switch(op) {
-        case '+': f1 += f2; break;
-        case '-': f1 -= f2; break;
-        case '*': f1 *= f2; break;
-        case '/':
-            if (f2 == 0.0) {
-                if (const_wanted)
-                    tcc_error("division by zero in constant");
-                goto general_case;
-            }
-            f1 /= f2;
-            break;
-        default:
-            goto general_case;
-        }
-        if (v1->type.t == 8) {
-            v1->c.f = f1;
-        } else if (v1->type.t == 9) {
-            v1->c.d = f1;
-        } else {
-            v1->c.ld = f1;
-        }
-        vtop--;
-    } else {
-    general_case:
-        gen_opf(op);
-    }
-}
+
 static int pointed_size(CType *type)
 {
     int align;
@@ -7822,10 +7773,7 @@ redo:
         if (op == 0xc9 || op == 0x02 || op == 0x01)
             type1.t = 3;
         gen_cast(&type1);
-        if (is_float(t))
-            gen_opif(op);
-        else
-            gen_opic(op);
+        gen_opic(op);
         if (op >= 0x92 && op <= 0x9f) {
             vtop->type.t = 3;
         } else {
