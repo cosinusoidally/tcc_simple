@@ -3299,7 +3299,6 @@ static void tcc_open_bf(TCCState *s1, const char *filename, int initlen);
 static int tcc_open(TCCState *s1, const char *filename);
 static void tcc_close(void);
 static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags);
-static int tcc_add_dll(TCCState *s, const char *filename, int flags);
  int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 static struct BufferedFile *file;
 static int ch, tok;
@@ -14813,11 +14812,6 @@ static int tcc_load_dll(TCCState *s1, int fd, const char *filename, int level)
                 if (!strcmp(name, dllref->name))
                     goto already_loaded;
             }
-            if (tcc_add_dll(s1, name, 0x20) < 0) {
-                tcc_error_noabort("referenced dll '%s' not found", name);
-                ret = -1;
-                goto the_end;
-            }
         already_loaded:
             break;
         }
@@ -19879,11 +19873,6 @@ static int tcc_add_library_internal(TCCState *s, const char *fmt,
             return 0;
     }
     return -1;
-}
-static int tcc_add_dll(TCCState *s, const char *filename, int flags)
-{
-    return tcc_add_library_internal(s, "%s/%s", filename, flags,
-        s->library_paths, s->nb_library_paths);
 }
 
 void tcc_set_lib_path(TCCState *s, const char *path) {
