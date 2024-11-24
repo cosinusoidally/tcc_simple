@@ -19788,54 +19788,18 @@ static void tcc_cleanup(void)
     tcc_split_path(s, &s->sysinclude_paths, &s->nb_sysinclude_paths, pathname);
     return 0;
 }
-static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
-{
+
+static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags) {
     int ret;
     ret = tcc_open(s1, filename);
-    if (ret < 0) {
-        if (flags & 0x10)
-            tcc_error_noabort("file '%s' not found", filename);
-        return ret;
-    }
     dynarray_add(&s1->target_deps, &s1->nb_target_deps,
             tcc_strdup(filename));
-    if (flags & 0x40) {
-        Elf32_Ehdr ehdr;
-        int fd, obj_type;
-        fd = file->fd;
-        obj_type = tcc_object_type(fd, &ehdr);
-        lseek(fd, 0, 0);
-        switch (obj_type) {
-        case 1:
-            ret = tcc_load_object_file(s1, fd, 0);
-            break;
-        case 2:
-            if (s1->output_type == 1) {
-                ret = 0;
-                if (((void*)0) == dlopen(filename, 0x00100 | 0x00001))
-                    ret = -1;
-            } else {
-                ret = tcc_load_dll(s1, fd, filename,
-                                   (flags & 0x20) != 0);
-            }
-            break;
-        case 3:
-            ret = tcc_load_archive(s1, fd);
-            break;
-        default:
-            ret = tcc_load_ldscript(s1);
-            if (ret < 0)
-                tcc_error_noabort("unrecognized file type");
-            break;
-        }
-    } else {
-        ret = tcc_compile(s1);
-    }
+    ret = tcc_compile(s1);
     tcc_close();
     return ret;
 }
- int tcc_add_file(TCCState *s, const char *filename)
-{
+
+int tcc_add_file(TCCState *s, const char *filename) {
     int filetype = s->filetype;
     int flags = 0x10;
     if (filetype == 0) {
@@ -19848,8 +19812,8 @@ static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
     }
     return tcc_add_file_internal(s, filename, flags);
 }
-int tcc_add_library_path(TCCState *s, const char *pathname)
-{
+
+int tcc_add_library_path(TCCState *s, const char *pathname) {
     tcc_split_path(s, &s->library_paths, &s->nb_library_paths, pathname);
     return 0;
 }
