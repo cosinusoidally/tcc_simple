@@ -21006,46 +21006,7 @@ redo:
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
-    if ((n | t) == 0) {
-        if (opt == 1)
-            return printf(help), 1;
-        if (opt == 2)
-            return printf(help2), 1;
-        if (opt == 32 || opt == 64)
-            tcc_tool_cross(s, argv, opt);
-        if (s->verbose)
-            printf(version);
-        if (opt == 5)
-            return tcc_tool_ar(s, argc, argv);
-        if (opt == 3)
-            return 0;
-        if (opt == 4) {
-            set_environment(s);
-            tcc_set_output_type(s, 1);
-            print_search_dirs(s);
-            return 0;
-        }
-        n = s->nb_files;
-        if (n == 0)
-            tcc_error("no input files\n");
-        if (s->output_type == 5) {
-            if (s->outfile) {
-                ppfp = fopen(s->outfile, "w");
-                if (!ppfp)
-                    tcc_error("could not write '%s'", s->outfile);
-            }
-        } else if (s->output_type == 4 && !s->option_r) {
-            if (s->nb_libraries)
-                tcc_error("cannot specify libraries with -c");
-            if (n > 1 && s->outfile)
-                tcc_error("cannot specify output file with -c many files");
-        } else {
-            if (s->option_pthread)
-                tcc_set_options(s, "-lpthread");
-        }
-        if (s->do_bench)
-            start_time = getclock_ms();
-    }
+    n = s->nb_files;
     set_environment(s);
     if (s->output_type == 0)
         s->output_type = 2;
