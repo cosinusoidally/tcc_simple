@@ -15451,7 +15451,6 @@ extern __sighandler_t sigset (int __sig, __sighandler_t __disp) ;
 extern int pthread_sigmask (int __how,
        __const __sigset_t *__restrict __newmask,
        __sigset_t *__restrict __oldmask);
-extern int pthread_kill (pthread_t __thread, int __signo) ;
 extern int __libc_current_sigrtmin (void) ;
 extern int __libc_current_sigrtmax (void) ;
 static int rt_num_callers = 6;
