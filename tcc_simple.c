@@ -20367,27 +20367,12 @@ reparse:
         case TCC_OPTION_o:
             s->outfile = tcc_strdup(optarg);
             break;
-        default:
-            break;
         }
-    }
-    if (last_o > 0)
-        tcc_define_symbol(s, "__OPTIMIZE__", ((void*)0));
-    if (linker_arg.size) {
-        r = linker_arg.data;
-        goto arg_err;
     }
     *pargc = argc - arg_start;
     *pargv = argv + arg_start;
-    if (tool)
-        return tool;
     if (optind != noaction)
         return 0;
-    if (s->verbose == 2)
-        return 4;
-    if (s->verbose)
-        return 3;
-    return 1;
 }
 
 int main(int argc0, char **argv0) {
