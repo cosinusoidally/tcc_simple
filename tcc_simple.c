@@ -14428,9 +14428,6 @@ extern int __libc_current_sigrtmax (void) ;
 static int rt_num_callers = 6;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
-static int rt_get_caller_pc(Elf32_Addr *paddr, ucontext_t *uc, int level);
-static void rt_error(ucontext_t *uc, const char *fmt, ...);
-static void set_exception_handler(void);
 
 static Elf32_Addr rt_printline(Elf32_Addr wanted_pc, const char *msg)
 {
@@ -14557,88 +14554,7 @@ no_stabs:
     fflush(stderr);
     return func_addr;
 }
-static void rt_error(ucontext_t *uc, const char *fmt, ...)
-{
-    va_list ap;
-    Elf32_Addr pc;
-    int i;
-    fprintf(stderr, "Runtime error: ");
-    ap = ((char *)&(fmt)) + ((sizeof(fmt)+3)&~3);
-    vfprintf(stderr, fmt, ap);
-    ;
-    fprintf(stderr, "\n");
-    for(i=0;i<rt_num_callers;i++) {
-        if (rt_get_caller_pc(&pc, uc, i) < 0)
-            break;
-        pc = rt_printline(pc, i ? "by" : "at");
-        if (pc == (Elf32_Addr)rt_prog_main && pc)
-            break;
-    }
-}
-static void sig_error(int signum, siginfo_t *siginf, void *puc)
-{
-    ucontext_t *uc = puc;
-    switch(signum) {
-    case 8:
-        switch(siginf->si_code) {
-        case FPE_INTDIV:
-        case FPE_FLTDIV:
-            rt_error(uc, "division by zero");
-            break;
-        default:
-            rt_error(uc, "floating point exception");
-            break;
-        }
-        break;
-    case 7:
-    case 11:
-        if (rt_bound_error_msg && *rt_bound_error_msg)
-            rt_error(uc, *rt_bound_error_msg);
-        else
-            rt_error(uc, "dereferencing invalid pointer");
-        break;
-    case 4:
-        rt_error(uc, "illegal instruction");
-        break;
-    case 6:
-        rt_error(uc, "abort() called");
-        break;
-    default:
-        rt_error(uc, "caught signal %d", signum);
-        break;
-    }
-    exit(255);
-}
-static void set_exception_handler(void)
-{
-    struct sigaction sigact;
-    sigact.sa_flags = 4 | 0x80000000;
-    sigact.__sigaction_handler.sa_sigaction = sig_error;
-    sigemptyset(&sigact.sa_mask);
-    sigaction(8, &sigact, ((void*)0));
-    sigaction(4, &sigact, ((void*)0));
-    sigaction(11, &sigact, ((void*)0));
-    sigaction(7, &sigact, ((void*)0));
-    sigaction(6, &sigact, ((void*)0));
-}
-static int rt_get_caller_pc(Elf32_Addr *paddr, ucontext_t *uc, int level)
-{
-    Elf32_Addr fp;
-    int i;
-    if (level == 0) {
-        *paddr = uc->uc_mcontext.gregs[REG_EIP];
-        return 0;
-    } else {
-        fp = uc->uc_mcontext.gregs[REG_EBP];
-        for(i=1;i<level;i++) {
-            if (fp <= 0x1000 || fp >= 0xc0000000)
-                return -1;
-            fp = ((Elf32_Addr *)fp)[0];
-        }
-        *paddr = ((Elf32_Addr *)fp)[1];
-        return 0;
-    }
-}
+
 static const int reg_classes[5] = {
               0x0001 | 0x0004,
               0x0001 | 0x0010,
