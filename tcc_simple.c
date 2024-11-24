@@ -8933,46 +8933,11 @@ static void expr_or(void)
         gen_op('|');
     }
 }
-static void expr_land(void)
-{
+
+static void expr_land(void) {
     expr_or();
-    if (tok == 0xa0) {
- int t = 0;
- for(;;) {
-     if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-                gen_cast_s(11);
-  if (vtop->c.i) {
-      vpop();
-  } else {
-      nocode_wanted++;
-      while (tok == 0xa0) {
-   next();
-   expr_or();
-   vpop();
-      }
-      nocode_wanted--;
-      if (t)
-        gsym(t);
-      gen_cast_s(3);
-      break;
-  }
-     } else {
-  if (!t)
-    save_regs(1);
-  t = gvtst(1, t);
-     }
-     if (tok != 0xa0) {
-  if (t)
-    vseti(0x0035, t);
-  else
-    vpushi(1);
-  break;
-     }
-     next();
-     expr_or();
- }
-    }
 }
+
 static void expr_lor(void)
 {
     expr_land();
