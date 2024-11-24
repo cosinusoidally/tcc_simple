@@ -3539,13 +3539,10 @@ static void gen_addr32(int r, Sym *sym, int c);
 static void gen_addrpc32(int r, Sym *sym, int c);
 static void gen_bounded_ptr_add(void);
 static void gen_bounded_ptr_deref(void);
-static void asm_instr(void);
-static void asm_global_instr(void);
 static int find_constraint(ASMOperand *operands, int nb_operands, const char *name, const char **pp);
 static Sym* get_asm_sym(int name, Sym *csym);
 static void asm_expr(TCCState *s1, ExprValue *pe);
 static int asm_int_expr(TCCState *s1);
-static int tcc_assemble(TCCState *s1, int do_preprocess);
 static void gen_expr32(ExprValue *pe);
 static void asm_opcode(TCCState *s1, int opcode);
 static int asm_parse_regvar(int t);
@@ -11601,8 +11598,6 @@ static void block(int *bsym, int *csym, int is_expr)
             expect("label identifier");
         }
         skip(';');
-    } else if (tok == TOK_ASM1 || tok == TOK_ASM2 || tok == TOK_ASM3) {
-        asm_instr();
     } else {
         b = is_label();
         if (b) {
@@ -12312,10 +12307,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
             }
             if (l != 0x0030)
                 break;
-            if (tok == TOK_ASM1 || tok == TOK_ASM2 || tok == TOK_ASM3) {
-                asm_global_instr();
-                continue;
-            }
             if (tok >= TOK_DEFINE) {
                 btype.t = 3;
             } else {
@@ -18754,18 +18745,7 @@ static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
     parse_flags = saved_parse_flags;
     return 0;
 }
-static int tcc_assemble(TCCState *s1, int do_preprocess)
-{
-    int ret;
-    tcc_debug_start(s1);
-    cur_text_section = text_section;
-    ind = cur_text_section->data_offset;
-    nocode_wanted = 0;
-    ret = tcc_assemble_internal(s1, do_preprocess, 1);
-    cur_text_section->data_offset = ind;
-    tcc_debug_end(s1);
-    return ret;
-}
+
 static void tcc_assemble_inline(TCCState *s1, char *str, int len, int global)
 {
     const int *saved_macro_ptr = macro_ptr;
@@ -18904,93 +18884,8 @@ static void parse_asm_operands(ASMOperand *operands, int *nb_operands_ptr,
         *nb_operands_ptr = nb_operands;
     }
 }
-static void asm_instr(void)
-{
-    CString astr, astr1;
-    ASMOperand operands[30];
-    int nb_outputs, nb_operands, i, must_subst, out_reg;
-    uint8_t clobber_regs[8];
-    next();
-    if (tok == TOK_VOLATILE1 || tok == TOK_VOLATILE2 || tok == TOK_VOLATILE3) {
-        next();
-    }
-    parse_asm_str(&astr);
-    nb_operands = 0;
-    nb_outputs = 0;
-    must_subst = 0;
-    memset(clobber_regs, 0, sizeof(clobber_regs));
-    if (tok == ':') {
-        next();
-        must_subst = 1;
-        parse_asm_operands(operands, &nb_operands, 1);
-        nb_outputs = nb_operands;
-        if (tok == ':') {
-            next();
-            if (tok != ')') {
-                parse_asm_operands(operands, &nb_operands, 0);
-                if (tok == ':') {
-                    next();
-                    for(;;) {
-                        if (tok != 0xb9)
-                            expect("string constant");
-                        asm_clobber(clobber_regs, tokc.str.data);
-                        next();
-                        if (tok == ',') {
-                            next();
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    skip(')');
-    if (tok != ';')
-        expect("';'");
-    save_regs(0);
-    asm_compute_constraints(operands, nb_operands, nb_outputs,
-                            clobber_regs, &out_reg);
-    if (must_subst) {
-        subst_asm_operands(operands, nb_operands, &astr1, &astr);
-        cstr_free(&astr);
-    } else {
-        astr1 = astr;
-    }
-    asm_gen_code(operands, nb_operands, nb_outputs, 0,
-                 clobber_regs, out_reg);
-    tcc_assemble_inline(tcc_state, astr1.data, astr1.size - 1, 0);
-    next();
-    asm_gen_code(operands, nb_operands, nb_outputs, 1,
-                 clobber_regs, out_reg);
-    for(i=0;i<nb_operands;i++) {
-        ASMOperand *op;
-        op = &operands[i];
-        tcc_free(op->constraint);
-        vpop();
-    }
-    cstr_free(&astr1);
-}
-static void asm_global_instr(void)
-{
-    CString astr;
-    int saved_nocode_wanted = nocode_wanted;
-    nocode_wanted = 0;
-    next();
-    parse_asm_str(&astr);
-    skip(')');
-    if (tok != ';')
-        expect("';'");
-    cur_text_section = text_section;
-    ind = cur_text_section->data_offset;
-    tcc_assemble_inline(tcc_state, astr.data, astr.size - 1, 1);
-    cur_text_section->data_offset = ind;
-    next();
-    cstr_free(&astr);
-    nocode_wanted = saved_nocode_wanted;
-}
-static char *pstrcpy(char *buf, int buf_size, const char *s)
-{
+
+static char *pstrcpy(char *buf, int buf_size, const char *s) {
     char *q, *q_end;
     int c;
     if (buf_size > 0) {
