@@ -7382,16 +7382,6 @@ static void gen_opic(int op)
     }
 }
 
-static int pointed_size(CType *type)
-{
-    int align;
-    return type_size(pointed_type(type), &align);
-}
-static void vla_runtime_pointed_size(CType *type)
-{
-    int align;
-    vla_runtime_type_size(pointed_type(type), &align);
-}
 static inline int is_null_pointer(SValue *p)
 {
     if ((p->r & (0x003f | 0x0100 | 0x0200)) != 0x0030)
@@ -7478,11 +7468,6 @@ redo:
             if (op != '-')
                 tcc_error("cannot use pointers here");
             check_comparison_pointer_types(vtop - 1, vtop, op);
-            if (vtop[-1].type.t & 0x0400) {
-                vla_runtime_pointed_size(&vtop[-1].type);
-            } else {
-                vpushi(pointed_size(&vtop[-1].type));
-            }
             vrott(3);
             gen_opic(op);
             vtop->type.t = ptrdiff_type.t;
@@ -7499,14 +7484,6 @@ redo:
                 gen_cast_s(3);
             type1 = vtop[-1].type;
             type1.t &= ~0x0040;
-            if (vtop[-1].type.t & 0x0400)
-                vla_runtime_pointed_size(&vtop[-1].type);
-            else {
-                u = pointed_size(&vtop[-1].type);
-                if (u < 0)
-                    tcc_error("unknown array element size");
-                vpushi(u);
-            }
             gen_op('*');
             {
                 gen_opic(op);
@@ -10339,10 +10316,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         if (size < 0)
             tcc_error("unknown type size");
     }
-    if (flexible_array &&
- flexible_array->type.ref->c > 0)
-        size += flexible_array->type.ref->c
-         * pointed_size(&flexible_array->type);
     if (ad->a.aligned) {
  int speca = 1 << (ad->a.aligned - 1);
         if (speca > align)
