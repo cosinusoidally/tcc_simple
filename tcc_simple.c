@@ -21008,37 +21008,25 @@ redo:
     opt = tcc_parse_args(s, &argc, &argv, 1);
     n = s->nb_files;
     set_environment(s);
-    if (s->output_type == 0)
-        s->output_type = 2;
     tcc_set_output_type(s, s->output_type);
     s->ppfp = ppfp;
-    if ((s->output_type == 1
-      || s->output_type == 5) && (s->dflag & 16))
-        s->dflag |= t ? 32 : 0, s->run_test = ++t, n = s->nb_files;
     for (first_file = ((void*)0), ret = 0;;) {
         struct filespec *f = s->files[s->nb_files - n];
         s->filetype = f->type;
         s->alacarte_link = f->alacarte;
-        if (f->type == 4) {
-            if (tcc_add_library_err(s, f->name) < 0)
-                ret = 1;
-        } else {
-            if (1 == s->verbose)
-                printf("-> %s\n", f->name);
-            if (!first_file)
-                first_file = f->name;
-            if (tcc_add_file(s, f->name) < 0)
-                ret = 1;
-        }
+        if (1 == s->verbose)
+            printf("-> %s\n", f->name);
+        if (!first_file)
+            first_file = f->name;
+        if (tcc_add_file(s, f->name) < 0)
+            ret = 1;
         s->filetype = 0;
         s->alacarte_link = 1;
         if (--n == 0 || ret
             || (s->output_type == 4 && !s->option_r))
             break;
     }
-    if (s->run_test) {
-        t = 0;
-    } else if (s->output_type == 5) {
+    if (s->output_type == 5) {
         ;
     } else if (0 == ret) {
         if (s->output_type == 1) {
@@ -21053,14 +21041,6 @@ redo:
                 gen_makedeps(s, s->outfile, s->deps_outfile);
         }
     }
-    if (s->do_bench && (n | t | ret) == 0)
-        tcc_print_stats(s, getclock_ms() - start_time);
     tcc_delete(s);
-    if (ret == 0 && n)
-        goto redo;
-    if (t)
-        goto redo;
-    if (ppfp && ppfp != stdout)
-        fclose(ppfp);
     return ret;
 }
