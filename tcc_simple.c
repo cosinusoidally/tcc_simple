@@ -19666,8 +19666,6 @@ static int tcc_compile(TCCState *s1)
 static void tcc_cleanup(void) {
     if (((void*)0) == tcc_state)
         return;
-    while (file)
-        tcc_close();
     tccpp_delete(tcc_state);
     tcc_state = ((void*)0);
     dynarray_reset(&sym_pools, &nb_sym_pools);
