@@ -8771,10 +8771,6 @@ static int exact_log2p1(int i)
   return ret;
 }
 
-static void parse_attribute(AttributeDef *ad) {
-    return;
-}
-
 static Sym * find_field (CType *type, int v)
 {
     Sym *s = type->ref;
@@ -8990,7 +8986,6 @@ static void struct_decl(CType *type, int u)
     CType type1, btype;
     memset(&ad, 0, sizeof ad);
     next();
-    parse_attribute(&ad);
     if (tok != '{') {
         v = tok;
         next();
@@ -9123,7 +9118,6 @@ do_decl:
                         if (v && bit_size == 0)
                             tcc_error("zero width for bit-field '%s'",
                                   get_tok_str(v, ((void*)0)));
-   parse_attribute(&ad1);
                     }
                     size = type_size(&type1, &align);
                     if (bit_size >= 0) {
@@ -9170,7 +9164,6 @@ do_decl:
                 skip(';');
             }
             skip('}');
-     parse_attribute(&ad);
      struct_layout(type, &ad);
         }
     }
@@ -9334,14 +9327,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
         case TOK_INLINE3:
             t |= 0x00008000;
             next();
-            break;
-        case TOK_ATTRIBUTE1:
-        case TOK_ATTRIBUTE2:
-            parse_attribute(ad);
-            if (ad->attr_mode) {
-                u = ad->attr_mode -1;
-                t = (t & ~(0x000f|0x0800)) | u;
-            }
             break;
         case TOK_TYPEOF1:
         case TOK_TYPEOF2:
@@ -9551,10 +9536,6 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
         case TOK_RESTRICT2:
         case TOK_RESTRICT3:
             goto redo;
- case TOK_ATTRIBUTE1:
- case TOK_ATTRIBUTE2:
-     parse_attribute(ad);
-     break;
         }
         mk_pointer(type);
         type->t |= qualifiers;
@@ -9563,7 +9544,6 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
     }
     if (tok == '(') {
  if (!post_type(type, ad, 0, td)) {
-     parse_attribute(ad);
      post = type_decl(type, ad, v, td);
      skip(')');
  }
@@ -9576,7 +9556,6 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
  *v = 0;
     }
     post_type(post, ad, storage, 0);
-    parse_attribute(ad);
     type->t |= storage;
     return ret;
 }
