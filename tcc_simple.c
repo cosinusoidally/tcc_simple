@@ -19862,18 +19862,6 @@ static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
     tcc_split_path(s, &s->library_paths, &s->nb_library_paths, pathname);
     return 0;
 }
-static int tcc_add_library_internal(TCCState *s, const char *fmt,
-    const char *filename, int flags, char **paths, int nb_paths)
-{
-    char buf[1024];
-    int i;
-    for(i = 0; i < nb_paths; i++) {
-        snprintf(buf, sizeof(buf), fmt, paths[i], filename);
-        if (tcc_add_file_internal(s, buf, flags | 0x40) == 0)
-            return 0;
-    }
-    return -1;
-}
 
 void tcc_set_lib_path(TCCState *s, const char *path) {
     tcc_free(s->tcc_lib_path);
