@@ -6139,7 +6139,6 @@ static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
 static void vla_runtime_type_size(CType *type, int *a);
 static void vla_sp_restore(void);
-static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
 static void vpush64(int ty, unsigned long long v);
@@ -7694,29 +7693,19 @@ static int type_size(CType *type, int *a)
         return 1;
     }
 }
-static void vla_runtime_type_size(CType *type, int *a)
-{
-    if (type->t & 0x0400) {
-        type_size(&type->ref->type, a);
-        vset(&int_type, 0x0032|0x0100, type->ref->c);
-    } else {
-        vpushi(type_size(type, a));
-    }
+
+static void vla_runtime_type_size(CType *type, int *a) {
+exit(1);
 }
+
 static void vla_sp_restore(void) {
-    if (vlas_in_scope) {
-        gen_vla_sp_restore(vla_sp_loc);
-    }
+    return;
 }
-static void vla_sp_restore_root(void) {
-    if (vlas_in_scope) {
-        gen_vla_sp_restore(vla_sp_root_loc);
-    }
-}
-static inline CType *pointed_type(CType *type)
-{
+
+static inline CType *pointed_type(CType *type) {
     return &type->ref->type;
 }
+
 static void mk_pointer(CType *type)
 {
     Sym *s;
@@ -7724,59 +7713,11 @@ static void mk_pointer(CType *type)
     type->t = 5 | (type->t & (0x00001000 | 0x00002000 | 0x00004000 | 0x00008000));
     type->ref = s;
 }
-static int is_compatible_func(CType *type1, CType *type2)
-{
-    Sym *s1, *s2;
-    s1 = type1->ref;
-    s2 = type2->ref;
-    if (!is_compatible_types(&s1->type, &s2->type))
-        return 0;
-    if (s1->f.func_call != s2->f.func_call)
-        return 0;
-    if (s1->f.func_type == 2 || s2->f.func_type == 2)
-        return 1;
-    if (s1->f.func_type != s2->f.func_type)
-        return 0;
-    while (s1 != ((void*)0)) {
-        if (s2 == ((void*)0))
-            return 0;
-        if (!is_compatible_unqualified_types(&s1->type, &s2->type))
-            return 0;
-        s1 = s1->next;
-        s2 = s2->next;
-    }
-    if (s2)
-        return 0;
+
+static int compare_types(CType *type1, CType *type2, int unqualified) {
     return 1;
 }
-static int compare_types(CType *type1, CType *type2, int unqualified)
-{
-    int bt1, t1, t2;
-    t1 = type1->t & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)));
-    t2 = type2->t & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)));
-    if (unqualified) {
-        t1 &= ~(0x0100 | 0x0200);
-        t2 &= ~(0x0100 | 0x0200);
-    }
-    if ((t1 & 0x000f) != 1) {
-        t1 &= ~0x0020;
-        t2 &= ~0x0020;
-    }
-    if (t1 != t2)
-        return 0;
-    bt1 = t1 & 0x000f;
-    if (bt1 == 5) {
-        type1 = pointed_type(type1);
-        type2 = pointed_type(type2);
-        return is_compatible_types(type1, type2);
-    } else if (bt1 == 7) {
-        return (type1->ref == type2->ref);
-    } else if (bt1 == 6) {
-        return is_compatible_func(type1, type2);
-    } else {
-        return 1;
-    }
-}
+
 static int is_compatible_types(CType *type1, CType *type2)
 {
     return compare_types(type1,type2,0);
