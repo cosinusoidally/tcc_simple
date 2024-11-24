@@ -1936,8 +1936,6 @@ typedef struct TCCState TCCState;
  void tcc_set_lib_path(TCCState *s, const char *path);
  void tcc_set_error_func(TCCState *s, void *error_opaque,
     void (*error_func)(void *opaque, const char *msg));
- int tcc_add_include_path(TCCState *s, const char *pathname);
- int tcc_add_sysinclude_path(TCCState *s, const char *pathname);
  void tcc_define_symbol(TCCState *s, const char *sym, const char *value);
  void tcc_undefine_symbol(TCCState *s, const char *sym);
  int tcc_add_file(TCCState *s, const char *filename);
@@ -19761,9 +19759,6 @@ static void tcc_cleanup(void)
         s->output_format = 0;
     if (s->char_is_unsigned)
         tcc_define_symbol(s, "__CHAR_UNSIGNED__", ((void*)0));
-    if (!s->nostdinc) {
-        tcc_add_sysinclude_path(s, "{B}/include" ":" "" "/usr/local/include" ":" "" "/usr/include");
-    }
     if (s->do_bounds_check) {
         tccelf_bounds_new(s);
         tcc_define_symbol(s, "__BOUNDS_CHECKING_ON", ((void*)0));
@@ -19776,16 +19771,6 @@ static void tcc_cleanup(void)
     if ((output_type == 2 || output_type == 3) &&
         !s->nostdlib) {
     }
-    return 0;
-}
- int tcc_add_include_path(TCCState *s, const char *pathname)
-{
-    tcc_split_path(s, &s->include_paths, &s->nb_include_paths, pathname);
-    return 0;
-}
- int tcc_add_sysinclude_path(TCCState *s, const char *pathname)
-{
-    tcc_split_path(s, &s->sysinclude_paths, &s->nb_sysinclude_paths, pathname);
     return 0;
 }
 
