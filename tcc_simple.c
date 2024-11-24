@@ -6826,47 +6826,8 @@ static int adjust_bf(SValue *sv, int bit_pos, int bit_size) {
 exit(1);
 }
 
-static int gv(int rc)
-{
+static int gv(int rc) {
     int r, bit_pos, bit_size, size, align, rc2;
-    if (vtop->type.t & 0x0080) {
-        CType type;
-        bit_pos = (((vtop->type.t) >> 20) & 0x3f);
-        bit_size = (((vtop->type.t) >> (20 + 6)) & 0x3f);
-        vtop->type.t &= ~(((1 << (6+6)) - 1) << 20 | 0x0080);
-        type.ref = ((void*)0);
-        type.t = vtop->type.t & 0x0010;
-        if ((vtop->type.t & 0x000f) == 11)
-            type.t |= 0x0010;
-        r = adjust_bf(vtop, bit_pos, bit_size);
-        if ((vtop->type.t & 0x000f) == 4)
-            type.t |= 4;
-        else
-            type.t |= 3;
-        if (r == 7) {
-            load_packed_bf(&type, bit_pos, bit_size);
-        } else {
-            int bits = (type.t & 0x000f) == 4 ? 64 : 32;
-            gen_cast(&type);
-            vpushi(bits - (bit_pos + bit_size));
-            gen_op(0x01);
-            vpushi(bits - bit_size);
-            gen_op(0x02);
-        }
-        r = gv(rc);
-    } else {
-        if (is_float(vtop->type.t) &&
-            (vtop->r & (0x003f | 0x0100)) == 0x0030) {
-            unsigned long offset;
-            size = type_size(&vtop->type, &align);
-            if ((nocode_wanted > 0))
-                size = 0, align = 1;
-            offset = section_add(data_section, size, align);
-            vpush_ref(&vtop->type, data_section, offset, size);
-     vswap();
-     init_putv(&vtop->type, data_section, offset);
-     vtop->r |= 0x0100;
-        }
         if (vtop->r & 0x0800)
             gbound();
         r = vtop->r & 0x003f;
@@ -6933,7 +6894,6 @@ static int gv(int rc)
             }
         }
         vtop->r = r;
-    }
     return r;
 }
 static void gv2(int rc1, int rc2)
@@ -6994,46 +6954,11 @@ static void lbuild(int t)
     vtop[-1].type.t = t;
     vpop();
 }
-static void gv_dup(void)
-{
-    int rc, t, r, r1;
-    SValue sv;
-    t = vtop->type.t;
-    if ((t & 0x000f) == 4) {
-        if (t & 0x0080) {
-            gv(0x0001);
-            t = vtop->type.t;
-        }
-        lexpand();
-        gv_dup();
-        vswap();
-        vrotb(3);
-        gv_dup();
-        vrotb(4);
-        lbuild(t);
-        vrotb(3);
-        vrotb(3);
-        vswap();
-        lbuild(t);
-        vswap();
-    } else
-    {
-        rc = 0x0001;
-        sv.type.t = 3;
-        if (is_float(t)) {
-            rc = 0x0002;
-            sv.type.t = t;
-        }
-        r = gv(rc);
-        r1 = get_reg(rc);
-        sv.r = r;
-        sv.c.i = 0;
-        load(r1, &sv);
-        vdup();
-        if (r != r1)
-            vtop->r = r1;
-    }
+
+static void gv_dup(void) {
+exit(1);
 }
+
 static int gvtst(int inv, int t)
 {
     int v = vtop->r & 0x003f;
