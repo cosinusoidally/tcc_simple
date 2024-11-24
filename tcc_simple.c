@@ -3277,7 +3277,6 @@ static void cstr_free(CString *cstr);
 static void cstr_reset(CString *cstr);
 static inline void sym_free(Sym *sym);
 static Sym *sym_push2(Sym **ps, int v, int t, int c);
-static Sym *sym_find2(Sym *s, int v);
 static Sym *sym_push(int v, CType *type, int r, int c);
 static void sym_pop(Sym **ptop, Sym *b, int keep);
 static inline Sym *struct_find(int v);
@@ -6350,19 +6349,8 @@ static Sym *sym_push2(Sym **ps, int v, int t, int c)
     *ps = s;
     return s;
 }
-static Sym *sym_find2(Sym *s, int v)
-{
-    while (s) {
-        if (s->v == v)
-            return s;
-        else if (s->v == -1)
-            return ((void*)0);
-        s = s->prev;
-    }
-    return ((void*)0);
-}
-static inline Sym *struct_find(int v)
-{
+
+static inline Sym *struct_find(int v) {
     v -= 256;
     if ((unsigned)v >= (unsigned)(tok_ident - 256))
         return ((void*)0);
@@ -6489,12 +6477,6 @@ static void vpushi(int v)
     cval.i = v;
     vsetc(&int_type, 0x0030, &cval);
 }
-static void vpushs(Elf32_Addr v)
-{
-  CValue cval;
-  cval.i = v;
-  vsetc(&size_type, 0x0030, &cval);
-}
 static void vpush64(int ty, unsigned long long v)
 {
     CValue cval;
@@ -6504,10 +6486,11 @@ static void vpush64(int ty, unsigned long long v)
     cval.i = v;
     vsetc(&ctype, 0x0030, &cval);
 }
-static inline void vpushll(long long v)
-{
-    vpush64(4, v);
+
+static inline void vpushll(long long v) {
+exit(1);
 }
+
 static void vset(CType *type, int r, int v)
 {
     CValue cval;
@@ -8522,30 +8505,6 @@ static void unary(void) {
      gen_op('+');
  }
         break;
-    case TOK_SIZEOF:
-    case TOK_ALIGNOF1:
-    case TOK_ALIGNOF2:
-        t = tok;
-        next();
-        in_sizeof++;
-        expr_type(&type, unary);
-        s = vtop[1].sym;
-        size = type_size(&type, &align);
-        if (s && s->a.aligned)
-            align = 1 << (s->a.aligned - 1);
-        if (t == TOK_SIZEOF) {
-            if (!(type.t & 0x0400)) {
-                if (size < 0)
-                    tcc_error("sizeof applied to an incomplete type");
-                vpushs(size);
-            } else {
-                vla_runtime_type_size(&type, &align);
-            }
-        } else {
-            vpushs(align);
-        }
-        vtop->type.t |= 0x0010;
-        break;
     case TOK_builtin_expect:
  parse_builtin_params(0, "ee");
  vpop();
@@ -9169,14 +9128,6 @@ exit(1);
 
 static void init_putz(Section *sec, unsigned long c, int size)
 {
-    if (sec) {
-    } else {
-        vpush_global_sym(&func_old_type, TOK_memset);
-        vseti(0x0032, c);
-        vpushi(0);
-        vpushs(size);
-        gfunc_call(3);
-    }
 }
 
 static int decl_designator(CType *type, Section *sec, unsigned long c,
