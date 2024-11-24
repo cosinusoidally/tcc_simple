@@ -21023,20 +21023,16 @@ redo:
             break;
         }
     }
-    if (s->output_type == 5) {
-        ;
-    } else if (0 == ret) {
-        if (s->output_type == 1) {
-            ret = tcc_run(s, argc, argv);
-        } else {
-            if (!s->outfile) {
-                puts("No output file, error"); exit(1);
-            }
-            if (tcc_output_file(s, s->outfile))
-                ret = 1;
-            else if (s->gen_deps)
-                gen_makedeps(s, s->outfile, s->deps_outfile);
+    if (s->output_type == 1) {
+        ret = tcc_run(s, argc, argv);
+    } else {
+        if (!s->outfile) {
+            puts("No output file, error"); exit(1);
         }
+        if (tcc_output_file(s, s->outfile))
+            ret = 1;
+        else if (s->gen_deps)
+            gen_makedeps(s, s->outfile, s->deps_outfile);
     }
     tcc_delete(s);
     return ret;
