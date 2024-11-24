@@ -20227,29 +20227,6 @@ static const TCCOption tcc_options[] = {
     { "ar", TCC_OPTION_ar, 0},
     { ((void*)0), 0, 0 },
 };
-static const FlagDef options_W[] = {
-    { 0, 0, "all" },
-    { ((size_t)&((TCCState *)0)->warn_unsupported), 0, "unsupported" },
-    { ((size_t)&((TCCState *)0)->warn_write_strings), 0, "write-strings" },
-    { ((size_t)&((TCCState *)0)->warn_error), 0, "error" },
-    { ((size_t)&((TCCState *)0)->warn_gcc_compat), 0, "gcc-compat" },
-    { ((size_t)&((TCCState *)0)->warn_implicit_function_declaration), 0x0001,
-      "implicit-function-declaration" },
-    { 0, 0, ((void*)0) }
-};
-static const FlagDef options_f[] = {
-    { ((size_t)&((TCCState *)0)->char_is_unsigned), 0, "unsigned-char" },
-    { ((size_t)&((TCCState *)0)->char_is_unsigned), 0x0002, "signed-char" },
-    { ((size_t)&((TCCState *)0)->nocommon), 0x0002, "common" },
-    { ((size_t)&((TCCState *)0)->leading_underscore), 0, "leading-underscore" },
-    { ((size_t)&((TCCState *)0)->ms_extensions), 0, "ms-extensions" },
-    { ((size_t)&((TCCState *)0)->dollars_in_identifiers), 0, "dollars-in-identifiers" },
-    { 0, 0, ((void*)0) }
-};
-static const FlagDef options_m[] = {
-    { ((size_t)&((TCCState *)0)->ms_bitfields), 0, "ms-bitfields" },
-    { 0, 0, ((void*)0) }
-};
 
 static void args_parser_add_file(TCCState *s, const char* filename, int filetype) {
     struct filespec *f = tcc_malloc(sizeof *f + strlen(filename));
