@@ -20955,22 +20955,6 @@ static const char version[] =
         " Linux"
     ")\n"
     ;
-static void print_dirs(const char *msg, char **paths, int nb_paths)
-{
-    int i;
-    printf("%s:\n%s", msg, nb_paths ? "" : "  -\n");
-    for(i = 0; i < nb_paths; i++)
-        printf("  %s\n", paths[i]);
-}
-static void print_search_dirs(TCCState *s)
-{
-    printf("install: %s\n", s->tcc_lib_path);
-    print_dirs("include", s->sysinclude_paths, s->nb_sysinclude_paths);
-    print_dirs("libraries", s->library_paths, s->nb_library_paths);
-    printf("libtcc1:\n  %s/""libtcc1.a""\n", s->tcc_lib_path);
-    print_dirs("crt", s->crt_paths, s->nb_crt_paths);
-    printf("elfinterp:\n  %s\n", "/lib/ld-linux.so.2");
-}
 
 int main(int argc0, char **argv0) {
     TCCState *s;
