@@ -3306,7 +3306,6 @@ static int tcc_add_crt(TCCState *s, const char *filename);
 static int tcc_add_dll(TCCState *s, const char *filename, int flags);
 static void tcc_add_pragma_libs(TCCState *s1);
  int tcc_add_library_err(TCCState *s, const char *f);
- void tcc_print_stats(TCCState *s, unsigned total_time);
  int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 static struct BufferedFile *file;
 static int ch, tok;
@@ -20593,19 +20592,6 @@ unsupported_option:
     args_parser_make_argv(r, &argc, &argv);
     tcc_parse_args(s, &argc, &argv, 0);
     dynarray_reset(&argv, &argc);
-}
- void tcc_print_stats(TCCState *s, unsigned total_time)
-{
-    if (total_time < 1)
-        total_time = 1;
-    if (total_bytes < 1)
-        total_bytes = 1;
-    fprintf(stderr, "* %d idents, %d lines, %d bytes\n"
-                    "* %0.3f s, %u lines/s, %0.1f MB/s\n",
-           tok_ident - 256, total_lines, total_bytes,
-           (double)total_time/1000,
-           (unsigned)total_lines*1000/total_time,
-           (double)total_bytes/1000/total_time);
 }
 
 int main(int argc0, char **argv0) {
