@@ -3366,7 +3366,6 @@ static void tcc_debug_funcstart(TCCState *s1, Sym *sym);
 static void tcc_debug_funcend(TCCState *s1, int size);
 static void tcc_debug_line(TCCState *s1);
 static int tccgen_compile(TCCState *s1);
-static void free_inline_functions(TCCState *s);
 static void check_vstack(void);
 static inline int is_float(int t);
 static int ieee_finite(double d);
@@ -6457,7 +6456,6 @@ static int tccgen_compile(TCCState *s1)
     parse_flags = 0x0001 | 0x0002 | 0x0040;
     next();
     decl(0x0030);
-    gen_inline_functions(s1);
     check_vstack();
     tcc_debug_end(s1);
     return 0;
@@ -10762,43 +10760,7 @@ static void gen_function(Sym *sym)
     nocode_wanted = 0x80000000;
     check_vstack();
 }
-static void gen_inline_functions(TCCState *s)
-{
-    Sym *sym;
-    int inline_generated, i, ln;
-    struct InlineFunc *fn;
-    ln = file->line_num;
-    do {
-        inline_generated = 0;
-        for (i = 0; i < s->nb_inline_fns; ++i) {
-            fn = s->inline_fns[i];
-            sym = fn->sym;
-            if (sym && sym->c) {
-                fn->sym = ((void*)0);
-                if (file)
-                    pstrcpy(file->filename, sizeof file->filename, fn->filename);
-                sym->type.t &= ~0x00008000;
-                begin_macro(fn->func_str, 1);
-                next();
-                cur_text_section = text_section;
-                gen_function(sym);
-                end_macro();
-                inline_generated = 1;
-            }
-        }
-    } while (inline_generated);
-    file->line_num = ln;
-}
-static void free_inline_functions(TCCState *s)
-{
-    int i;
-    for (i = 0; i < s->nb_inline_fns; ++i) {
-        struct InlineFunc *fn = s->inline_fns[i];
-        if (fn->sym)
-            tok_str_free(fn->func_str);
-    }
-    dynarray_reset(&s->inline_fns, &s->nb_inline_fns);
-}
+
 static int decl0(int l, int is_for_loop_init, Sym *func_sym)
 {
     int v, has_init, r;
@@ -13182,7 +13144,6 @@ static int tcc_compile(TCCState *s1) {
     }
     s1->error_set_jmp_enabled = 0;
     preprocess_end(s1);
-    free_inline_functions(s1);
     free_defines(define_start);
     sym_pop(&global_stack, ((void*)0), 0);
     sym_pop(&local_stack, ((void*)0), 0);
