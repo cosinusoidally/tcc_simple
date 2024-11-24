@@ -19967,36 +19967,8 @@ static int no_flag(const char **pp)
     *pp = p + 1;
     return 1;
 }
-static int set_flag(TCCState *s, const FlagDef *flags, const char *name)
-{
-    int value, ret;
-    const FlagDef *p;
-    const char *r;
-    value = 1;
-    r = name;
-    if (no_flag(&r))
-        value = 0;
-    for (ret = -1, p = flags; p->name; ++p) {
-        if (ret) {
-            if (strcmp(r, p->name))
-                continue;
-        } else {
-            if (0 == (p->flags & 0x0001))
-                continue;
-        }
-        if (p->offset) {
-            *(int*)((char *)s + p->offset) =
-                p->flags & 0x0002 ? !value : value;
-            if (ret)
-                return 0;
-        } else {
-            ret = 0;
-        }
-    }
-    return ret;
-}
-static int strstart(const char *val, const char **str)
-{
+
+static int strstart(const char *val, const char **str) {
     const char *p, *q;
     p = *str;
     q = val;
@@ -20009,113 +19981,7 @@ static int strstart(const char *val, const char **str)
     *str = p;
     return 1;
 }
-static int link_option(const char *str, const char *val, const char **ptr)
-{
-    const char *p, *q;
-    int ret;
-    if (*str++ != '-')
-        return 0;
-    if (*str == '-')
-        str++;
-    p = str;
-    q = val;
-    ret = 1;
-    if (q[0] == '?') {
-        ++q;
-        if (no_flag(&p))
-            ret = -1;
-    }
-    while (*q != '\0' && *q != '=') {
-        if (*p != *q)
-            return 0;
-        p++;
-        q++;
-    }
-    if (*q == '=') {
-        if (*p == 0)
-            *ptr = p;
-        if (*p != ',' && *p != '=')
-            return 0;
-        p++;
-    } else if (*p) {
-        return 0;
-    }
-    *ptr = p;
-    return ret;
-}
-static const char *skip_linker_arg(const char **str)
-{
-    const char *s1 = *str;
-    const char *s2 = strchr(s1, ',');
-    *str = s2 ? s2++ : (s2 = s1 + strlen(s1));
-    return s2;
-}
-static void copy_linker_arg(char **pp, const char *s, int sep)
-{
-    const char *q = s;
-    char *p = *pp;
-    int l = 0;
-    if (p && sep)
-        p[l = strlen(p)] = sep, ++l;
-    skip_linker_arg(&q);
-    pstrncpy(l + (*pp = tcc_realloc(p, q - s + l + 1)), s, q - s);
-}
-static int tcc_set_linker(TCCState *s, const char *option)
-{
-    while (*option) {
-        const char *p = ((void*)0);
-        char *end = ((void*)0);
-        int ignoring = 0;
-        int ret;
-        if (link_option(option, "Bsymbolic", &p)) {
-            s->symbolic = 1;
-        } else if (link_option(option, "nostdlib", &p)) {
-            s->nostdlib = 1;
-        } else if (link_option(option, "fini=", &p)) {
-            copy_linker_arg(&s->fini_symbol, p, 0);
-            ignoring = 1;
-        } else if (link_option(option, "image-base=", &p)
-                || link_option(option, "Ttext=", &p)) {
-            s->text_addr = strtoull(p, &end, 16);
-            s->has_text_addr = 1;
-        } else if (link_option(option, "init=", &p)) {
-            copy_linker_arg(&s->init_symbol, p, 0);
-            ignoring = 1;
-        } else if (link_option(option, "oformat=", &p)) {
-            if (strstart("elf32-", &p)) {
-                s->output_format = 0;
-            } else if (!strcmp(p, "binary")) {
-                s->output_format = 1;
-            } else
-                goto err;
-        } else if (link_option(option, "as-needed", &p)) {
-            ignoring = 1;
-        } else if (link_option(option, "O", &p)) {
-            ignoring = 1;
-        } else if (link_option(option, "export-all-symbols", &p)) {
-            s->rdynamic = 1;
-        } else if (link_option(option, "rpath=", &p)) {
-            copy_linker_arg(&s->rpath, p, ':');
-        } else if (link_option(option, "enable-new-dtags", &p)) {
-            s->enable_new_dtags = 1;
-        } else if (link_option(option, "section-alignment=", &p)) {
-            s->section_align = strtoul(p, &end, 16);
-        } else if (link_option(option, "soname=", &p)) {
-            copy_linker_arg(&s->soname, p, 0);
-        } else if (ret = link_option(option, "?whole-archive", &p), ret) {
-            s->alacarte_link = ret < 0;
-        } else if (p) {
-            return 0;
-        } else {
-    err:
-            tcc_error("unsupported linker option '%s'", option);
-        }
-        if (ignoring && s->warn_unsupported)
-            tcc_warning("unsupported linker option '%s'", option);
-        option = skip_linker_arg(&p);
-    }
-    return 1;
-}
+
 typedef struct TCCOption {
     const char *name;
     uint16_t index;
