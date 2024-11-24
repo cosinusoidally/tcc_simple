@@ -12487,70 +12487,22 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
         fwrite(sh, 1, sizeof(Elf32_Shdr), f);
     }
 }
+
 static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
                               Elf32_Phdr *phdr, int file_offset, int *sec_order)
 {
     int fd, mode, file_type;
     FILE *f;
     file_type = s1->output_type;
-    if (file_type == 4)
-        mode = 0666;
-    else
-        mode = 0777;
+    mode = 0666;
     unlink(filename);
     f = fopen(filename, "wb");
-    if (s1->verbose)
-        printf("<- %s\n", filename);
-    if (s1->output_format == 0)
-        tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
-    else
-        tcc_output_binary(s1, f, sec_order);
+    tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
     fclose(f);
     return 0;
 }
-static void tidy_section_headers(TCCState *s1, int *sec_order)
-{
-    int i, nnew, l, *backmap;
-    Section **snew, *s;
-    Elf32_Sym *sym;
-    snew = tcc_malloc(s1->nb_sections * sizeof(snew[0]));
-    backmap = tcc_malloc(s1->nb_sections * sizeof(backmap[0]));
-    for (i = 0, nnew = 0, l = s1->nb_sections; i < s1->nb_sections; i++) {
- s = s1->sections[sec_order[i]];
- if (!i || s->sh_name) {
-     backmap[sec_order[i]] = nnew;
-     snew[nnew] = s;
-     ++nnew;
- } else {
-     backmap[sec_order[i]] = 0;
-     snew[--l] = s;
- }
-    }
-    for (i = 0; i < nnew; i++) {
- s = snew[i];
- if (s) {
-     s->sh_num = i;
-            if (s->sh_type == 9)
-  s->sh_info = backmap[s->sh_info];
- }
-    }
-    for (sym = (Elf32_Sym *) symtab_section->data + 1; sym < (Elf32_Sym *) (symtab_section->data + symtab_section->data_offset); sym++)
- if (sym->st_shndx != 0 && sym->st_shndx < 0xff00)
-     sym->st_shndx = backmap[sym->st_shndx];
-    if( !s1->static_link ) {
-        for (sym = (Elf32_Sym *) s1->dynsym->data + 1; sym < (Elf32_Sym *) (s1->dynsym->data + s1->dynsym->data_offset); sym++)
-     if (sym->st_shndx != 0 && sym->st_shndx < 0xff00)
-         sym->st_shndx = backmap[sym->st_shndx];
-    }
-    for (i = 0; i < s1->nb_sections; i++)
- sec_order[i] = i;
-    tcc_free(s1->sections);
-    s1->sections = snew;
-    s1->nb_sections = nnew;
-    tcc_free(backmap);
-}
-static int elf_output_file(TCCState *s1, const char *filename)
-{
+
+static int elf_output_file(TCCState *s1, const char *filename) {
     int i, ret, phnum, shnum, file_type, file_offset, *sec_order;
     struct dyn_inf dyninf = {0};
     Elf32_Phdr *phdr;
