@@ -19662,8 +19662,8 @@ static int tcc_compile(TCCState *s1)
     if (s)
         define_undef(s);
 }
-static void tcc_cleanup(void)
-{
+
+static void tcc_cleanup(void) {
     if (((void*)0) == tcc_state)
         return;
     while (file)
@@ -19687,11 +19687,6 @@ TCCState *tcc_new(void) {
     s->seg_size = 32;
     tccelf_new(s);
     tccpp_new(s);
-    define_push(TOK___LINE__, 0, ((void*)0), ((void*)0));
-    define_push(TOK___FILE__, 0, ((void*)0), ((void*)0));
-    define_push(TOK___DATE__, 0, ((void*)0), ((void*)0));
-    define_push(TOK___TIME__, 0, ((void*)0), ((void*)0));
-    define_push(TOK___COUNTER__, 0, ((void*)0), ((void*)0));
     return s;
 }
  void tcc_delete(TCCState *s1)
