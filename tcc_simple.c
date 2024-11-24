@@ -4573,40 +4573,11 @@ static void minp(void)
     if (ch == '\\')
         handle_stray();
 }
-static uint8_t *parse_line_comment(uint8_t *p)
-{
-    int c;
-    p++;
-    for(;;) {
-        c = *p;
-    redo:
-        if (c == '\n' || c == (-1)) {
-            break;
-        } else if (c == '\\') {
-            file->buf_ptr = p;
-            c = handle_eob();
-            p = file->buf_ptr;
-            if (c == '\\') {
-                { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                if (c == '\n') {
-                    file->line_num++;
-                    { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                } else if (c == '\r') {
-                    { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                    if (c == '\n') {
-                        file->line_num++;
-                        { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                    }
-                }
-            } else {
-                goto redo;
-            }
-        } else {
-            p++;
-        }
-    }
-    return p;
+
+static uint8_t *parse_line_comment(uint8_t *p) {
+exit(1);
 }
+
 static uint8_t *parse_comment(uint8_t *p)
 {
     int c;
