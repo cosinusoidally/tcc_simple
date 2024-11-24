@@ -1944,7 +1944,6 @@ typedef struct TCCState TCCState;
  int tcc_compile_string(TCCState *s, const char *buf);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_add_library_path(TCCState *s, const char *pathname);
- int tcc_add_library(TCCState *s, const char *libraryname);
  int tcc_output_file(TCCState *s, const char *filename);
  int tcc_run(TCCState *s, int argc, char **argv);
  int tcc_relocate(TCCState *s1, void *ptr);
@@ -3302,7 +3301,6 @@ static void tcc_close(void);
 static int tcc_add_file_internal(TCCState *s1, const char *filename, int flags);
 static int tcc_add_crt(TCCState *s, const char *filename);
 static int tcc_add_dll(TCCState *s, const char *filename, int flags);
- int tcc_add_library_err(TCCState *s, const char *f);
  int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 static struct BufferedFile *file;
 static int ch, tok;
@@ -13658,7 +13656,6 @@ static void tcc_add_runtime(TCCState *s1)
 {
     tcc_add_bcheck(s1);
     if (!s1->nostdlib) {
-        tcc_add_library_err(s1, "c");
         tcc_add_support(s1, "libtcc1.a");
         if (s1->output_type != 1)
             tcc_add_crt(s1, "crtn.o");
@@ -19913,25 +19910,6 @@ static int tcc_add_crt(TCCState *s, const char *filename)
         filename, 0, s->crt_paths, s->nb_crt_paths))
         tcc_error_noabort("file '%s' not found", filename);
     return 0;
-}
- int tcc_add_library(TCCState *s, const char *libraryname)
-{
-    const char *libs[] = { "%s/lib%s.so", "%s/lib%s.a", ((void*)0) };
-    const char **pp = s->static_link ? libs + 1 : libs;
-    while (*pp) {
-        if (0 == tcc_add_library_internal(s, *pp,
-            libraryname, 0, s->library_paths, s->nb_library_paths))
-            return 0;
-        ++pp;
-    }
-    return -1;
-}
- int tcc_add_library_err(TCCState *s, const char *libname)
-{
-    int ret = tcc_add_library(s, libname);
-    if (ret < 0)
-        tcc_error_noabort("library '%s' not found", libname);
-    return ret;
 }
 
 void tcc_set_lib_path(TCCState *s, const char *path) {
