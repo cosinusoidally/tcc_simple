@@ -1941,7 +1941,6 @@ typedef struct TCCState TCCState;
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_compile_string(TCCState *s, const char *buf);
  int tcc_set_output_type(TCCState *s, int output_type);
- int tcc_add_library_path(TCCState *s, const char *pathname);
  int tcc_output_file(TCCState *s, const char *filename);
  int tcc_run(TCCState *s, int argc, char **argv);
  int tcc_relocate(TCCState *s1, void *ptr);
@@ -19752,25 +19751,11 @@ static void tcc_cleanup(void)
     if (0 == --nb_states)
         tcc_memcheck();
 }
- int tcc_set_output_type(TCCState *s, int output_type)
-{
+
+int tcc_set_output_type(TCCState *s, int output_type) {
     s->output_type = output_type;
     if (output_type == 4)
         s->output_format = 0;
-    if (s->char_is_unsigned)
-        tcc_define_symbol(s, "__CHAR_UNSIGNED__", ((void*)0));
-    if (s->do_bounds_check) {
-        tccelf_bounds_new(s);
-        tcc_define_symbol(s, "__BOUNDS_CHECKING_ON", ((void*)0));
-    }
-    if (s->do_debug) {
-        tccelf_stab_new(s);
-    }
-    tcc_add_library_path(s, "" "/usr/" "lib" ":" "" "/" "lib" ":" "" "/usr/local/" "lib");
-    tcc_split_path(s, &s->crt_paths, &s->nb_crt_paths, "" "/usr/" "lib");
-    if ((output_type == 2 || output_type == 3) &&
-        !s->nostdlib) {
-    }
     return 0;
 }
 
@@ -19796,11 +19781,6 @@ int tcc_add_file(TCCState *s, const char *filename) {
         s->filetype = filetype;
     }
     return tcc_add_file_internal(s, filename, flags);
-}
-
-int tcc_add_library_path(TCCState *s, const char *pathname) {
-    tcc_split_path(s, &s->library_paths, &s->nb_library_paths, pathname);
-    return 0;
 }
 
 void tcc_set_lib_path(TCCState *s, const char *path) {
