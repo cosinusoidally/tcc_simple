@@ -5919,146 +5919,14 @@ static int next_argstream(Sym **nested_list, TokenString *ws_str)
         return tok;
     }
 }
+
 static int macro_subst_tok(
     TokenString *tok_str,
     Sym **nested_list,
-    Sym *s)
-{
-    Sym *args, *sa, *sa1;
-    int parlevel, t, t1, spc;
-    TokenString str;
-    char *cstrval;
-    CValue cval;
-    CString cstr;
-    char buf[32];
-    if (tok == TOK___LINE__ || tok == TOK___COUNTER__) {
-        t = tok == TOK___LINE__ ? file->line_num : pp_counter++;
-        snprintf(buf, sizeof(buf), "%d", t);
-        cstrval = buf;
-        t1 = 0xbe;
-        goto add_cstr1;
-    } else if (tok == TOK___FILE__) {
-        cstrval = file->filename;
-        goto add_cstr;
-    } else if (tok == TOK___DATE__ || tok == TOK___TIME__) {
-        time_t ti;
-        struct tm *tm;
-        time(&ti);
-        tm = localtime(&ti);
-        cstrval = buf;
-    add_cstr:
-        t1 = 0xb9;
-    add_cstr1:
-        cstr_new(&cstr);
-        cstr_cat(&cstr, cstrval, 0);
-        cval.str.size = cstr.size;
-        cval.str.data = cstr.data;
-        tok_str_add2(tok_str, t1, &cval);
-        cstr_free(&cstr);
-    } else if (s->d) {
-        int saved_parse_flags = parse_flags;
- int *joined_str = ((void*)0);
-        int *mstr = s->d;
-        if (s->type.t == 1) {
-            TokenString ws_str;
-            tok_str_new(&ws_str);
-            spc = 0;
-            parse_flags |= 0x0010 | 0x0004
-                | 0x0020;
-            t = next_argstream(nested_list, &ws_str);
-            if (t != '(') {
-                parse_flags = saved_parse_flags;
-                tok_str_add(tok_str, tok);
-                if (parse_flags & 0x0010) {
-                    int i;
-                    for (i = 0; i < ws_str.len; i++)
-                        tok_str_add(tok_str, ws_str.str[i]);
-                }
-                tok_str_free_str(ws_str.str);
-                return 0;
-            } else {
-                tok_str_free_str(ws_str.str);
-            }
-     do {
-  next_nomacro();
-     } while (tok == 0xcb);
-            args = ((void*)0);
-            sa = s->next;
-            for(;;) {
-                do {
-                    next_argstream(nested_list, ((void*)0));
-                } while (is_space(tok) || 10 == tok);
-    empty_arg:
-                if (!args && !sa && tok == ')')
-                    break;
-                if (!sa)
-                    tcc_error("macro '%s' used with too many args",
-                          get_tok_str(s->v, 0));
-                tok_str_new(&str);
-                parlevel = spc = 0;
-                while ((parlevel > 0 ||
-                        (tok != ')' &&
-                         (tok != ',' || sa->type.t)))) {
-                    if (tok == (-1) || tok == 0)
-                        break;
-                    if (tok == '(')
-                        parlevel++;
-                    else if (tok == ')')
-                        parlevel--;
-                    if (tok == 10)
-                        tok = ' ';
-                    if (!check_space(tok, &spc))
-                        tok_str_add2(&str, tok, &tokc);
-                    next_argstream(nested_list, ((void*)0));
-                }
-                if (parlevel)
-                    expect(")");
-                str.len -= spc;
-                tok_str_add(&str, -1);
-                tok_str_add(&str, 0);
-                sa1 = sym_push2(&args, sa->v & ~0x20000000, sa->type.t, 0);
-                sa1->d = str.str;
-                sa = sa->next;
-                if (tok == ')') {
-                    if (sa && sa->type.t && gnu_ext)
-                        goto empty_arg;
-                    break;
-                }
-                if (tok != ',')
-                    expect(",");
-            }
-            if (sa) {
-                tcc_error("macro '%s' used with too few args",
-                      get_tok_str(s->v, 0));
-            }
-            parse_flags = saved_parse_flags;
-            mstr = macro_arg_subst(nested_list, mstr, args);
-            sa = args;
-            while (sa) {
-                sa1 = sa->prev;
-                tok_str_free_str(sa->d);
-                if (sa->next) {
-                    tok_str_free_str(sa->next->d);
-                    sym_free(sa->next);
-                }
-                sym_free(sa);
-                sa = sa1;
-            }
-        }
-        sym_push2(nested_list, s->v, 0, 0);
-        parse_flags = saved_parse_flags;
-        joined_str = macro_twosharps(mstr);
-        macro_subst(tok_str, nested_list, joined_str ? joined_str : mstr);
-        sa1 = *nested_list;
-        *nested_list = sa1->prev;
-        sym_free(sa1);
- if (joined_str)
-     tok_str_free_str(joined_str);
-        if (mstr != s->d)
-            tok_str_free_str(mstr);
-    }
-    return 0;
+    Sym *s) {
+exit(1);
 }
+
 static void macro_subst(
     TokenString *tok_str,
     Sym **nested_list,
@@ -6125,17 +5993,6 @@ static void next(void)
             goto redo;
         } else if (tok == 0) {
             end_macro();
-            goto redo;
-        }
-    } else if (tok >= 256 && (parse_flags & 0x0001)) {
-        Sym *s;
-        s = define_find(tok);
-        if (s) {
-            Sym *nested_list = ((void*)0);
-            tokstr_buf.len = 0;
-            macro_subst_tok(&tokstr_buf, &nested_list, s);
-            tok_str_add(&tokstr_buf, 0);
-            begin_macro(&tokstr_buf, 2);
             goto redo;
         }
     }
