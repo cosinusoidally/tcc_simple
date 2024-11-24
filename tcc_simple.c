@@ -3440,16 +3440,11 @@ static int put_elf_str(Section *s, const char *sym);
 static int put_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int info, int other, int shndx, const char *name);
 static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int info, int other, int shndx, const char *name);
 static int find_elf_sym(Section *s, const char *name);
-static void put_elf_reloc(Section *symtab, Section *s, unsigned long offset, int type, int symbol);
 static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset, int type, int symbol, Elf32_Addr addend);
-static void put_stabs(const char *str, int type, int other, int desc, unsigned long value);
-static void put_stabs_r(const char *str, int type, int other, int desc, unsigned long value, Section *sec, int sym_index);
-static void put_stabn(int type, int other, int desc, int value);
 static int tcc_object_type(int fd, Elf32_Ehdr *h);
 static int tcc_load_object_file(TCCState *s1, int fd, unsigned long file_offset);
 static int tcc_load_archive(TCCState *s1, int fd);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
-static void squeeze_multi_relocs(Section *sec, size_t oldrelocoffset);
 static Elf32_Addr get_elf_sym_addr(TCCState *s, const char *name, int err);
 static void *tcc_get_symbol_err(TCCState *s, const char *name);
 static uint8_t *parse_comment(uint8_t *p);
@@ -11117,8 +11112,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
  if (sec && sec->reloc)
    oldreloc_offset = sec->reloc->data_offset;
         decl_initializer(type, sec, addr, 1, 0);
- if (sec && sec->reloc)
-   squeeze_multi_relocs(sec, oldreloc_offset);
         if (flexible_array)
             flexible_array->type.ref->c = -1;
     }
@@ -11401,15 +11394,11 @@ static void tccelf_bounds_new(TCCState *s)
     lbounds_section = new_section(s, ".lbounds",
                                   1, (1 << 1));
 }
-static void tccelf_stab_new(TCCState *s)
-{
-    stab_section = new_section(s, ".stab", 1, 0);
-    stab_section->sh_entsize = sizeof(Stab_Sym);
-    stabstr_section = new_section(s, ".stabstr", 3, 0);
-    put_elf_str(stabstr_section, "");
-    stab_section->link = stabstr_section;
-    put_stabs("", 0, 0, 0, 0);
+
+static void tccelf_stab_new(TCCState *s) {
+exit(1);
 }
+
 static void free_section(Section *s)
 {
     tcc_free(s->data);
@@ -11796,65 +11785,6 @@ static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     rel->r_info = (((symbol) << 8) + ((type) & 0xff));
     if (addend)
         tcc_error("non-zero addend on REL architecture");
-}
-static void put_elf_reloc(Section *symtab, Section *s, unsigned long offset,
-                           int type, int symbol)
-{
-    put_elf_reloca(symtab, s, offset, type, symbol, 0);
-}
-static void squeeze_multi_relocs(Section *s, size_t oldrelocoffset)
-{
-    Section *sr = s->reloc;
-    Elf32_Rel *r, *dest;
-    ssize_t a;
-    Elf32_Addr addr;
-    if (oldrelocoffset + sizeof(*r) >= sr->data_offset)
-      return;
-    for (a = oldrelocoffset + sizeof(*r); a < sr->data_offset; a += sizeof(*r)) {
- ssize_t i = a - sizeof(*r);
- addr = ((Elf32_Rel*)(sr->data + a))->r_offset;
- for (; i >= (ssize_t)oldrelocoffset &&
-        ((Elf32_Rel*)(sr->data + i))->r_offset > addr; i -= sizeof(*r)) {
-     Elf32_Rel tmp = *(Elf32_Rel*)(sr->data + a);
-     *(Elf32_Rel*)(sr->data + a) = *(Elf32_Rel*)(sr->data + i);
-     *(Elf32_Rel*)(sr->data + i) = tmp;
- }
-    }
-    r = (Elf32_Rel*)(sr->data + oldrelocoffset);
-    dest = r;
-    for (; r < (Elf32_Rel*)(sr->data + sr->data_offset); r++) {
- if (dest->r_offset != r->r_offset)
-   dest++;
- *dest = *r;
-    }
-    sr->data_offset = (unsigned char*)dest - sr->data + sizeof(*r);
-}
-static void put_stabs(const char *str, int type, int other, int desc,
-                      unsigned long value)
-{
-    Stab_Sym *sym;
-    sym = section_ptr_add(stab_section, sizeof(Stab_Sym));
-    if (str) {
-        sym->n_strx = put_elf_str(stabstr_section, str);
-    } else {
-        sym->n_strx = 0;
-    }
-    sym->n_type = type;
-    sym->n_other = other;
-    sym->n_desc = desc;
-    sym->n_value = value;
-}
-static void put_stabs_r(const char *str, int type, int other, int desc,
-                        unsigned long value, Section *sec, int sym_index)
-{
-    put_stabs(str, type, other, desc, value);
-    put_elf_reloc(symtab_section, stab_section,
-                  stab_section->data_offset - sizeof(unsigned int),
-                  1, sym_index);
-}
-
-static void put_stabn(int type, int other, int desc, int value) {
-exit(1);
 }
 
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc)
