@@ -20348,13 +20348,9 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
             optarg = r1;
             if (popt->flags & 0x0001) {
                 if (*r1 == '\0' && !(popt->flags & 0x0002)) {
-                    if (optind >= argc)
-                arg_err:
-                        tcc_error("argument to '%s' is missing", r);
                     optarg = argv[optind++];
                 }
-            } else if (*r1 != '\0')
-                continue;
+            }
             break;
         }
         switch(popt->index) {
