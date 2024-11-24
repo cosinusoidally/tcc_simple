@@ -3446,14 +3446,12 @@ static void put_stabs(const char *str, int type, int other, int desc, unsigned l
 static void put_stabs_r(const char *str, int type, int other, int desc, unsigned long value, Section *sec, int sym_index);
 static void put_stabn(int type, int other, int desc, int value);
 static void put_stabd(int type, int other, int desc);
-static void resolve_common_syms(TCCState *s1);
 static void relocate_syms(TCCState *s1, Section *symtab, int do_resolve);
 static void relocate_section(TCCState *s1, Section *s);
 static int tcc_object_type(int fd, Elf32_Ehdr *h);
 static int tcc_load_object_file(TCCState *s1, int fd, unsigned long file_offset);
 static int tcc_load_archive(TCCState *s1, int fd);
 static void tcc_add_bcheck(TCCState *s1);
-static void tcc_add_runtime(TCCState *s1);
 static void build_got_entries(TCCState *s1);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 static void squeeze_multi_relocs(Section *sec, size_t oldrelocoffset);
@@ -12183,47 +12181,6 @@ static void tcc_add_bcheck(TCCState *s1)
         put_elf_reloc(symtab_section, init_section,
             init_section->data_offset - 4, 2, sym_index);
     }
-}
-
-static void tcc_add_runtime(TCCState *s1) {
-exit(1);
-}
-
-static void tcc_add_linker_symbols(TCCState *s1) {
-exit(1);
-}
-
-static void resolve_common_syms(TCCState *s1) {
-exit(1);
-}
-
-static void tcc_output_binary(TCCState *s1, FILE *f,
-                              const int *sec_order) {
-exit(1);
-}
-
-static void fill_got_entry(TCCState *s1, Elf32_Rel *rel) {
-exit(1);
-}
-
-static void fill_got(TCCState *s1) {
-exit(1);
-}
-
-static void fill_local_got_entries(TCCState *s1) {
-exit(1);
-}
-
-static void bind_exe_dynsyms(TCCState *s1) {
-exit(1);
-}
-
-static void bind_libs_dynsyms(TCCState *s1) {
-exit(1);
-}
-
-static void export_global_syms(TCCState *s1) {
-exit(1);
 }
 
 static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
