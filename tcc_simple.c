@@ -3445,9 +3445,6 @@ static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset, in
 static void put_stabs(const char *str, int type, int other, int desc, unsigned long value);
 static void put_stabs_r(const char *str, int type, int other, int desc, unsigned long value, Section *sec, int sym_index);
 static void put_stabn(int type, int other, int desc, int value);
-static void put_stabd(int type, int other, int desc);
-static void relocate_syms(TCCState *s1, Section *symtab, int do_resolve);
-static void relocate_section(TCCState *s1, Section *s);
 static int tcc_object_type(int fd, Elf32_Ehdr *h);
 static int tcc_load_object_file(TCCState *s1, int fd, unsigned long file_offset);
 static int tcc_load_archive(TCCState *s1, int fd);
@@ -6518,62 +6515,29 @@ static void check_vstack(void)
     if (pvtop != vtop)
         tcc_error("internal compiler error: vstack leak (%d)", vtop - pvtop);
 }
-static void tcc_debug_start(TCCState *s1)
-{
-    if (s1->do_debug) {
-        char buf[512];
-        section_sym = put_elf_sym(symtab_section, 0, 0,
-                                  (((0) << 4) + ((3) & 0xf)), 0,
-                                  text_section->sh_num, ((void*)0));
-        getcwd(buf, sizeof(buf));
-        pstrcat(buf, sizeof(buf), "/");
-        put_stabs_r(buf, N_SO, 0, 0,
-                    text_section->data_offset, text_section, section_sym);
-        put_stabs_r(file->filename, N_SO, 0, 0,
-                    text_section->data_offset, text_section, section_sym);
-        last_ind = 0;
-        last_line_num = 0;
-    }
+
+static void tcc_debug_start(TCCState *s1) {
     put_elf_sym(symtab_section, 0, 0,
                 (((0) << 4) + ((4) & 0xf)), 0,
                 0xfff1, file->filename);
 }
-static void tcc_debug_end(TCCState *s1)
-{
-    if (!s1->do_debug)
-        return;
-    put_stabs_r(((void*)0), N_SO, 0, 0,
-        text_section->data_offset, text_section, section_sym);
+
+static void tcc_debug_end(TCCState *s1) {
+    return;
 }
-static void tcc_debug_line(TCCState *s1)
-{
-    if (!s1->do_debug)
-        return;
-    if ((last_line_num != file->line_num || last_ind != ind)) {
-        put_stabn(N_SLINE, 0, file->line_num, ind - func_ind);
-        last_ind = ind;
-        last_line_num = file->line_num;
-    }
+
+static void tcc_debug_line(TCCState *s1) {
+    return;
 }
-static void tcc_debug_funcstart(TCCState *s1, Sym *sym)
-{
-    char buf[512];
-    if (!s1->do_debug)
-        return;
-    snprintf(buf, sizeof(buf), "%s:%c1",
-             funcname, sym->type.t & 0x00002000 ? 'f' : 'F');
-    put_stabs_r(buf, N_FUN, 0, file->line_num, 0,
-                cur_text_section, sym->c);
-    put_stabn(N_SLINE, 0, file->line_num, 0);
-    last_ind = 0;
-    last_line_num = 0;
+
+static void tcc_debug_funcstart(TCCState *s1, Sym *sym) {
+    return;
 }
-static void tcc_debug_funcend(TCCState *s1, int size)
-{
-    if (!s1->do_debug)
-        return;
-    put_stabn(N_FUN, 0, 0, size);
+
+static void tcc_debug_funcend(TCCState *s1, int size) {
+    return;
 }
+
 static int tccgen_compile(TCCState *s1)
 {
     cur_text_section = ((void*)0);
@@ -11892,14 +11856,11 @@ static void put_stabs_r(const char *str, int type, int other, int desc,
                   stab_section->data_offset - sizeof(unsigned int),
                   1, sym_index);
 }
-static void put_stabn(int type, int other, int desc, int value)
-{
-    put_stabs(((void*)0), type, other, desc, value);
+
+static void put_stabn(int type, int other, int desc, int value) {
+exit(1);
 }
-static void put_stabd(int type, int other, int desc)
-{
-    put_stabs(((void*)0), type, other, desc, 0);
-}
+
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc)
 {
     int n;
@@ -11963,65 +11924,6 @@ static void sort_syms(TCCState *s1, Section *s)
         }
     }
     tcc_free(old_to_new_syms);
-}
-static void relocate_syms(TCCState *s1, Section *symtab, int do_resolve)
-{
-    Elf32_Sym *sym;
-    int sym_bind, sh_num;
-    const char *name;
-    for (sym = (Elf32_Sym *) symtab->data + 1; sym < (Elf32_Sym *) (symtab->data + symtab->data_offset); sym++) {
-        sh_num = sym->st_shndx;
-        if (sh_num == 0) {
-            name = (char *) s1->symtab->link->data + sym->st_name;
-            if (do_resolve) {
-                void *addr = dlsym(((void *) 0), name);
-                if (addr) {
-                    sym->st_value = (Elf32_Addr) addr;
-                    goto found;
-                }
-            } else if (s1->dynsym && find_elf_sym(s1->dynsym, name))
-                goto found;
-            if (!strcmp(name, "_fp_hw"))
-                goto found;
-            sym_bind = (((unsigned char) (sym->st_info)) >> 4);
-            if (sym_bind == 2)
-                sym->st_value = 0;
-            else
-                tcc_error_noabort("undefined symbol '%s'", name);
-        } else if (sh_num < 0xff00) {
-            sym->st_value += s1->sections[sym->st_shndx]->sh_addr;
-        }
-    found: ;
-    }
-}
-static void relocate_section(TCCState *s1, Section *s)
-{
-    Section *sr = s->reloc;
-    Elf32_Rel *rel;
-    Elf32_Sym *sym;
-    int type, sym_index;
-    unsigned char *ptr;
-    Elf32_Addr tgt, addr;
-    relocate_init(sr);
-    for (rel = (Elf32_Rel *) sr->data + 0; rel < (Elf32_Rel *) (sr->data + sr->data_offset); rel++) {
-        ptr = s->data + rel->r_offset;
-        sym_index = ((rel->r_info) >> 8);
-        sym = &((Elf32_Sym *)symtab_section->data)[sym_index];
-        type = ((rel->r_info) & 0xff);
-        tgt = sym->st_value;
-        addr = s->sh_addr + rel->r_offset;
-        relocate(s1, rel, type, ptr, addr, tgt);
-    }
-    if (sr->sh_flags & (1 << 1))
-        sr->link = s1->dynsym;
-}
-static void relocate_rel(TCCState *s1, Section *sr)
-{
-    Section *s;
-    Elf32_Rel *rel;
-    s = s1->sections[sr->sh_info];
-    for (rel = (Elf32_Rel *) sr->data + 0; rel < (Elf32_Rel *) (sr->data + sr->data_offset); rel++)
-        rel->r_offset += s->sh_addr;
 }
 
 static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
