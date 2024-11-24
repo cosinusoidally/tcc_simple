@@ -12615,107 +12615,11 @@ static void gen_opi(int op)
         goto gen_op8;
     }
 }
-static void gen_opf(int op)
-{
-    int a, ft, fc, swapped, r;
-    if ((vtop[-1].r & (0x003f | 0x0100)) == 0x0030) {
-        vswap();
-        gv(0x0002);
-        vswap();
-    }
-    if ((vtop[0].r & (0x003f | 0x0100)) == 0x0030)
-        gv(0x0002);
-    if ((vtop[-1].r & 0x0100) &&
-        (vtop[0].r & 0x0100)) {
-        vswap();
-        gv(0x0002);
-        vswap();
-    }
-    swapped = 0;
-    if (vtop[-1].r & 0x0100) {
-        vswap();
-        swapped = 1;
-    }
-    if (op >= 0x92 && op <= 0x9f) {
-        load(TREG_ST0, vtop);
-        save_reg(TREG_EAX);
-        if (op == 0x9d || op == 0x9f)
-            swapped = !swapped;
-        else if (op == 0x94 || op == 0x95)
-            swapped = 0;
-        if (swapped)
-            o(0xc9d9);
-        if (op == 0x94 || op == 0x95)
-            o(0xe9da);
-        else
-            o(0xd9de);
-        o(0xe0df);
-        if (op == 0x94) {
-            o(0x45e480);
-            o(0x40fC80);
-        } else if (op == 0x95) {
-            o(0x45e480);
-            o(0x40f480);
-            op = 0x95;
-        } else if (op == 0x9d || op == 0x9e) {
-            o(0x05c4f6);
-            op = 0x94;
-        } else {
-            o(0x45c4f6);
-            op = 0x94;
-        }
-        vtop--;
-        vtop->r = 0x0033;
-        vtop->c.i = op;
-    } else {
-        if ((vtop->type.t & 0x000f) == 10) {
-            load(TREG_ST0, vtop);
-            swapped = !swapped;
-        }
-        switch(op) {
-        default:
-        case '+':
-            a = 0;
-            break;
-        case '-':
-            a = 4;
-            if (swapped)
-                a++;
-            break;
-        case '*':
-            a = 1;
-            break;
-        case '/':
-            a = 6;
-            if (swapped)
-                a++;
-            break;
-        }
-        ft = vtop->type.t;
-        fc = vtop->c.i;
-        if ((ft & 0x000f) == 10) {
-            o(0xde);
-            o(0xc1 + (a << 3));
-        } else {
-            r = vtop->r;
-            if ((r & 0x003f) == 0x0031) {
-                SValue v1;
-                r = get_reg(0x0001);
-                v1.type.t = 3;
-                v1.r = 0x0032 | 0x0100;
-                v1.c.i = fc;
-                load(r, &v1);
-                fc = 0;
-            }
-            if ((ft & 0x000f) == 9)
-                o(0xdc);
-            else
-                o(0xd8);
-            gen_modrm(a, r, vtop->sym, fc);
-        }
-        vtop--;
-    }
+
+static void gen_opf(int op) {
+exit(1);
 }
+
 static void gen_cvt_itof(int t)
 {
     save_reg(TREG_ST0);
