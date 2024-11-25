@@ -5452,97 +5452,31 @@ static void tccpp_new(TCCState *s)
         p = r;
     }
 }
-static void tccpp_delete(TCCState *s)
-{
-    int i, n;
-    free_defines(((void*)0));
-    n = tok_ident - 256;
-    for(i = 0; i < n; i++)
-        tal_free_impl(toksym_alloc, table_ident[i]);
-    tcc_free(table_ident);
-    table_ident = ((void*)0);
-    cstr_free(&tokcstr);
-    cstr_free(&cstr_buf);
-    cstr_free(&macro_equal_buf);
-    tok_str_free_str(tokstr_buf.str);
-    tal_delete(toksym_alloc);
-    toksym_alloc = ((void*)0);
-    tal_delete(tokstr_alloc);
-    tokstr_alloc = ((void*)0);
-    tal_delete(cstr_alloc);
-    cstr_alloc = ((void*)0);
-}
-static void tok_print(const char *msg, const int *str)
-{
-    FILE *fp;
-    int t, s = 0;
-    CValue cval;
-    fp = tcc_state->ppfp;
-    fprintf(fp, "%s", msg);
-    while (str) {
- TOK_GET(&t, &str, &cval);
- if (!t)
-     break;
- fprintf(fp, " %s" + s, get_tok_str(t, &cval)), s = 1;
-    }
-    fprintf(fp, "\n");
-}
-static void pp_line(TCCState *s1, BufferedFile *f, int level)
-{
-    int d = f->line_num - f->line_ref;
-    if (s1->dflag & 4)
- return;
-    if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_NONE) {
-        ;
-    } else if (level == 0 && f->line_ref && d < 8) {
- while (d > 0)
-     fputs("\n", s1->ppfp), --d;
-    } else if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_STD) {
- fprintf(s1->ppfp, "#line %d \"%s\"\n", f->line_num, f->filename);
-    } else {
- fprintf(s1->ppfp, "# %d \"%s\"%s\n", f->line_num, f->filename,
-     level > 0 ? " 1" : level < 0 ? " 2" : "");
-    }
-    f->line_ref = f->line_num;
-}
-static void define_print(TCCState *s1, int v)
-{
-    FILE *fp;
-    Sym *s;
-    if (((void*)0) == s || ((void*)0) == s->d)
-        return;
-    fp = s1->ppfp;
-    fprintf(fp, "#define %s", get_tok_str(v, ((void*)0)));
-    if (s->type.t == 1) {
-        Sym *a = s->next;
-        fprintf(fp,"(");
-        if (a)
-            for (;;) {
-                fprintf(fp,"%s", get_tok_str(a->v & ~0x20000000, ((void*)0)));
-                if (!(a = a->next))
-                    break;
-                fprintf(fp,",");
-            }
-        fprintf(fp,")");
-    }
-    tok_print("", s->d);
+
+static void tccpp_delete(TCCState *s) {
+exit(1);
 }
 
-static int pp_need_space(int a, int b)
-{
-    return 'E' == a ? '+' == b || '-' == b
-        : '+' == a ? 0xa4 == b || '+' == b
-        : '-' == a ? 0xa2 == b || '-' == b
-        : a >= 256 ? b >= 256
- : a == 0xbe ? b >= 256
-        : 0;
+static void tok_print(const char *msg, const int *str) {
+exit(1);
 }
-static int pp_check_he0xE(int t, const char *p)
-{
-    if (t == 0xbe && toup(strchr(p, 0)[-1]) == 'E')
-        return 'E';
-    return t;
+
+static void pp_line(TCCState *s1, BufferedFile *f, int level) {
+exit(1);
 }
+
+static void define_print(TCCState *s1, int v) {
+exit(1);
+}
+
+static int pp_need_space(int a, int b) {
+exit(1);
+}
+
+static int pp_check_he0xE(int t, const char *p) {
+exit(1);
+}
+
 static int rsym, anon_sym, ind, loc;
 static Sym *sym_free_first;
 static void **sym_pools;
