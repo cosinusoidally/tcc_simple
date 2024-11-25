@@ -2929,7 +2929,6 @@ static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int inf
 static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset, int type, int symbol, Elf32_Addr addend);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 static uint8_t *parse_comment(uint8_t *p);
-static inline void inp(void);
 static int handle_eob(void);
 enum gotplt_entry {
     NO_GOTPLT_ENTRY,
@@ -3299,16 +3298,6 @@ static int handle_eob(void)
         return (-1);
     }
 }
-static inline void inp(void)
-{
-    ch = *(++(file->buf_ptr));
-    if (ch == '\\')
-        ch = handle_eob();
-}
-
-static int handle_stray_noerror(void) {
-exit(1);
-}
 
 static int handle_stray1(uint8_t *p) {
     int c;
@@ -3320,12 +3309,7 @@ static int handle_stray1(uint8_t *p) {
     }
 }
 
-static uint8_t *parse_line_comment(uint8_t *p) {
-exit(1);
-}
-
-static uint8_t *parse_comment(uint8_t *p)
-{
+static uint8_t *parse_comment(uint8_t *p) {
     int c;
     p++;
     for(;;) {
