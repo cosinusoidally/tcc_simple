@@ -6437,52 +6437,11 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         s->next = first;
         type->t = 6;
         type->ref = s;
-    } else if (tok == '[') {
- int saved_nocode_wanted = nocode_wanted;
-        next();
-        if (tok == TOK_RESTRICT1)
-            next();
-        n = -1;
-        t1 = 0;
-        if (tok != ']') {
-            if (!local_stack || (storage & 0x00002000))
-                vpushi(expr_const());
-            else {
-  nocode_wanted = 0;
-  gexpr();
-     }
-            if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-                n = vtop->c.i;
-                if (n < 0)
-                    tcc_error("invalid array size");
-            }
-        }
-        skip(']');
-        post_type(type, ad, storage, 0);
-        if (type->t == 6)
-            tcc_error("declaration of an array of functions");
-        t1 |= type->t & 0x0400;
-        if (t1 & 0x0400) {
-            loc -= type_size(&int_type, &align);
-            loc &= -align;
-            n = loc;
-            vla_runtime_type_size(type, &align);
-            gen_op('*');
-            vset(&int_type, 0x0032|0x0100, n);
-            vswap();
-            vstore();
-        }
-        if (n != -1)
-            vpop();
- nocode_wanted = saved_nocode_wanted;
-        s = sym_push(0x20000000, type, 0, n);
-        type->t = (t1 ? 0x0400 : 0x0040) | 5;
-        type->ref = s;
     }
     return 1;
 }
-static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
-{
+
+static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td) {
     CType *post, *ret;
     int qualifiers, storage;
     storage = type->t & (0x00001000 | 0x00002000 | 0x00004000 | 0x00008000);
