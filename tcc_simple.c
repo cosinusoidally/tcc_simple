@@ -2963,7 +2963,6 @@ static Section *lbounds_section;
 static Section *symtab_section;
 static Section *stab_section, *stabstr_section;
 static void tccelf_new(TCCState *s);
-static void tccelf_delete(TCCState *s);
 static void tccelf_begin_file(TCCState *s1);
 static void tccelf_end_file(TCCState *s1);
 static Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags);
@@ -2979,11 +2978,7 @@ static void greloca(Section *s, Sym *sym, unsigned long offset, int type, Elf32_
 static int put_elf_str(Section *s, const char *sym);
 static int put_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int info, int other, int shndx, const char *name);
 static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int info, int other, int shndx, const char *name);
-static int find_elf_sym(Section *s, const char *name);
 static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset, int type, int symbol, Elf32_Addr addend);
-static int tcc_object_type(int fd, Elf32_Ehdr *h);
-static int tcc_load_object_file(TCCState *s1, int fd, unsigned long file_offset);
-static int tcc_load_archive(TCCState *s1, int fd);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 static uint8_t *parse_comment(uint8_t *p);
 static void minp(void);
@@ -8108,27 +8103,7 @@ static void tccelf_new(TCCState *s)
     get_sym_attr(s, 0, 1);
 }
 
-static void free_section(Section *s)
-{
-    tcc_free(s->data);
-}
-static void tccelf_delete(TCCState *s1)
-{
-    int i;
-    for(i = 1; i < s1->nb_sections; i++) {
-        free_section(s1->sections[i]);
-    }
-    dynarray_reset(&s1->sections, &s1->nb_sections);
-    for(i = 0; i < s1->nb_priv_sections; i++) {
-        free_section(s1->priv_sections[i]);
-    }
-    dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
-    dynarray_reset(&s1->loaded_dlls, &s1->nb_loaded_dlls);
-    tcc_free(s1->sym_attrs);
-    symtab_section = ((void*)0);
-}
-static void tccelf_begin_file(TCCState *s1)
-{
+static void tccelf_begin_file(TCCState *s1) {
     Section *s; int i;
     for (i = 1; i < s1->nb_sections; i++) {
         s = s1->sections[i];
@@ -8351,27 +8326,6 @@ static int put_elf_sym(Section *s, Elf32_Addr value, unsigned long size,
         }
     }
     return sym_index;
-}
-static int find_elf_sym(Section *s, const char *name)
-{
-    Elf32_Sym *sym;
-    Section *hs;
-    int nbuckets, sym_index, h;
-    const char *name1;
-    hs = s->hash;
-    if (!hs)
-        return 0;
-    nbuckets = ((int *)hs->data)[0];
-    h = elf_hash((unsigned char *) name) % nbuckets;
-    sym_index = ((int *)hs->data)[2 + h];
-    while (sym_index != 0) {
-        sym = &((Elf32_Sym *)s->data)[sym_index];
-        name1 = (char *) s->link->data + sym->st_name;
-        if (!strcmp(name, name1))
-            return sym_index;
-        sym_index = ((int *)hs->data)[2 + nbuckets + sym_index];
-    }
-    return 0;
 }
 
 static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size,
@@ -8642,39 +8596,6 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     int ret;
         ret = elf_output_file(s, filename);
     return ret;
-}
-
-static void *load_data(int fd, unsigned long file_offset, unsigned long size) {
-exit(1);
-}
-
-static int tcc_object_type(int fd, Elf32_Ehdr *h) {
-exit(1);
-}
-
-static int tcc_load_object_file(TCCState *s1,
-                                int fd, unsigned long file_offset) {
-exit(1);
-}
-
-static int tcc_load_alacarte(TCCState *s1, int fd, int size, int entrysize) {
-exit(1);
-}
-
-static int tcc_load_archive(TCCState *s1, int fd) {
-exit(1);
-}
-
-static int ld_next(TCCState *s1, char *name, int name_size) {
-exit(1);
-}
-
-static inline int new_undef_syms(void) {
-exit(1);
-}
-
-static int ld_add_file_list(TCCState *s1, const char *cmd, int as_needed) {
-exit(1);
 }
 
 extern void *mmap (void *__addr, size_t __len, int __prot,
@@ -9857,7 +9778,6 @@ TCCState *tcc_new(void) {
  void tcc_delete(TCCState *s1)
 {
     tcc_cleanup();
-    tccelf_delete(s1);
     dynarray_reset(&s1->library_paths, &s1->nb_library_paths);
     dynarray_reset(&s1->crt_paths, &s1->nb_crt_paths);
     dynarray_reset(&s1->cached_includes, &s1->nb_cached_includes);
