@@ -5817,33 +5817,10 @@ static int gv(int rc) {
             )
         {
             r = get_reg(rc);
-            if ((vtop->type.t & 0x000f) == 4) {
-                int addr_type = 3, load_size = 4, load_type = 3;
-                unsigned long long ll;
-                int r2, original_type;
-                original_type = vtop->type.t;
-                if ((vtop->r & (0x003f | 0x0100)) == 0x0030) {
-                    ll = vtop->c.i;
-                    vtop->c.i = ll;
-                    load(r, vtop);
-                    vtop->r = r;
-                    vpushi(ll >> 32);
-                }
-                r2 = get_reg(rc2);
-                load(r2, vtop);
-                vpop();
-                vtop->r2 = r2;
-                vtop->type.t = original_type;
-            } else if ((vtop->r & 0x0100) && !is_float(vtop->type.t)) {
+            if ((vtop->r & 0x0100)) {
                 int t1, t;
                 t = vtop->type.t;
                 t1 = t;
-                if (vtop->r & 0x1000)
-                    t = 1;
-                else if (vtop->r & 0x2000)
-                    t = 2;
-                if (vtop->r & 0x4000)
-                    t |= 0x0010;
                 vtop->type.t = t;
                 load(r, vtop);
                 vtop->type.t = t1;
@@ -5853,14 +5830,6 @@ static int gv(int rc) {
         }
         vtop->r = r;
     return r;
-}
-
-static int rc_fret(int t) {
-    return 0x0008;
-}
-
-static int reg_fret(int t) {
-    return TREG_ST0;
 }
 
 static int gvtst(int inv, int t)
@@ -7134,13 +7103,9 @@ static void unary(void) {
                 ret.type = s->type;
             }
             if (ret_nregs) {
-                if (is_float(ret.type.t)) {
-                    ret.r = reg_fret(ret.type.t);
-                } else {
-                    if ((ret.type.t & 0x000f) == 4)
-                        ret.r2 = TREG_EDX;
-                    ret.r = TREG_EAX;
-                }
+                if ((ret.type.t & 0x000f) == 4)
+                    ret.r2 = TREG_EDX;
+                ret.r = TREG_EAX;
                 ret.c.i = 0;
             }
             if (tok != ')') {
