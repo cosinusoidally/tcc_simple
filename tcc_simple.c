@@ -1932,7 +1932,6 @@ extern long double strtold (const char *__nptr, char **__endptr);
 struct TCCState;
 typedef struct TCCState TCCState;
  TCCState *tcc_new(void);
- void tcc_delete(TCCState *s);
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_output_file(TCCState *s, const char *filename);
@@ -7553,18 +7552,8 @@ static int tcc_compile(TCCState *s1) {
     return s1->nb_errors != 0 ? -1 : 0;
 }
 
-static void tcc_cleanup(void) {
-    if (((void*)0) == tcc_state)
-        return;
-    tccpp_delete(tcc_state);
-    tcc_state = ((void*)0);
-    dynarray_reset(&sym_pools, &nb_sym_pools);
-    sym_free_first = ((void*)0);
-}
-
 TCCState *tcc_new(void) {
     TCCState *s;
-    tcc_cleanup();
     s = tcc_mallocz(sizeof(TCCState));
     tcc_state = s;
     ++nb_states;
@@ -7576,30 +7565,6 @@ TCCState *tcc_new(void) {
     tccelf_new(s);
     tccpp_new(s);
     return s;
-}
- void tcc_delete(TCCState *s1)
-{
-    tcc_cleanup();
-    dynarray_reset(&s1->library_paths, &s1->nb_library_paths);
-    dynarray_reset(&s1->crt_paths, &s1->nb_crt_paths);
-    dynarray_reset(&s1->cached_includes, &s1->nb_cached_includes);
-    dynarray_reset(&s1->include_paths, &s1->nb_include_paths);
-    dynarray_reset(&s1->sysinclude_paths, &s1->nb_sysinclude_paths);
-    dynarray_reset(&s1->cmd_include_files, &s1->nb_cmd_include_files);
-    tcc_free(s1->tcc_lib_path);
-    tcc_free(s1->soname);
-    tcc_free(s1->rpath);
-    tcc_free(s1->init_symbol);
-    tcc_free(s1->fini_symbol);
-    tcc_free(s1->outfile);
-    tcc_free(s1->deps_outfile);
-    dynarray_reset(&s1->files, &s1->nb_files);
-    dynarray_reset(&s1->target_deps, &s1->nb_target_deps);
-    dynarray_reset(&s1->pragma_libs, &s1->nb_pragma_libs);
-    dynarray_reset(&s1->argv, &s1->argc);
-    tcc_free(s1);
-    if (0 == --nb_states)
-        tcc_memcheck();
 }
 
 int tcc_set_output_type(TCCState *s, int output_type) {
@@ -7751,6 +7716,5 @@ int main(int argc0, char **argv0) {
         }
     }
     tcc_output_file(s, s->outfile);
-    tcc_delete(s);
     return ret;
 }
