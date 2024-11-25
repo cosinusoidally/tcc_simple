@@ -2941,14 +2941,7 @@ static int gjmp(int t);
 static void gjmp_addr(int a);
 static int gtst(int inv, int t);
 static void gen_opi(int op);
-static void gen_opf(int op);
-static void gen_cvt_ftoi(int t);
-static void ggoto(void);
 static void o(unsigned int c);
-static void gen_cvt_itof(int t);
-static void gen_vla_sp_save(int addr);
-static void gen_vla_sp_restore(int addr);
-static void gen_vla_alloc(CType *type, int align);
 static inline uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;
 }
@@ -6753,36 +6746,6 @@ static void gen_opi(int op) {
         vtop->r = 0x0033;
         vtop->c.i = op;
     }
-}
-
-static void gen_opf(int op) {
-exit(1);
-}
-
-static void gen_cvt_itof(int t) {
-exit(1);
-}
-
-static void gen_cvt_ftoi(int t) {
-exit(1);
-}
-
-static void ggoto(void)
-{
-    gcall_or_jmp(1);
-    vtop--;
-}
-
-static void gen_vla_sp_save(int addr) {
-exit(1);
-}
-
-static void gen_vla_sp_restore(int addr) {
-exit(1);
-}
-
-static void gen_vla_alloc(CType *type, int align) {
-exit(1);
 }
 
 static char *pstrcpy(char *buf, int buf_size, const char *s) {
