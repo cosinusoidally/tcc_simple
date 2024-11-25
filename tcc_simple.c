@@ -4142,18 +4142,16 @@ static void save_regs(int n) {
     for(p = (__vstack + 1), p1 = vtop - n; p <= p1; p++)
         save_reg(p->r);
 }
-static void save_reg(int r)
-{
+
+static void save_reg(int r) {
     save_reg_upstack(r, 0);
 }
-static void save_reg_upstack(int r, int n)
-{
+
+static void save_reg_upstack(int r, int n) {
     int l, saved, size, align;
     SValue *p, *p1, sv;
     CType *type;
     if ((r &= 0x003f) >= 0x0030)
-        return;
-    if (nocode_wanted)
         return;
     saved = 0;
     l = 0;
@@ -4172,21 +4170,10 @@ static void save_reg_upstack(int r, int n)
                 sv.r = 0x0032 | 0x0100;
                 sv.c.i = loc;
                 store(r, &sv);
-                if (r == TREG_ST0) {
-                    o(0xd8dd);
-                }
-                if ((type->t & 0x000f) == 4) {
-                    sv.c.i += 4;
-                    store(p->r2, &sv);
-                }
                 l = loc;
                 saved = 1;
             }
-            if (p->r & 0x0100) {
-                p->r = (p->r & ~(0x003f | 0x8000)) | 0x0031;
-            } else {
-                p->r = lvalue_type(p->type.t) | 0x0032;
-            }
+            p->r = lvalue_type(p->type.t) | 0x0032;
             p->r2 = 0x0030;
             p->c.i = l;
         }
@@ -4245,16 +4232,13 @@ static int gvtst(int inv, int t)
         gen_op(0x95);
     }
     if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-        if ((vtop->c.i != 0) != inv)
-            t = gjmp(t);
         vtop--;
         return t;
     }
     return gtst(inv, t);
 }
 
-static void gen_opic(int op)
-{
+static void gen_opic(int op) {
     SValue *v1 = vtop - 1;
     SValue *v2 = vtop;
     int t1 = v1->type.t & 0x000f;
@@ -4271,10 +4255,8 @@ static void gen_opic(int op)
         l2 = ((uint32_t)l2 |
               (v2->type.t & 0x0010 ? 0 : -(l2 & 0x80000000)));
     if (c1 && c2) {
-        switch(op) {
-        case 0x95: l1 = l1 != l2; break;
-        default:
-            goto general_case;
+        if(op== 0x95) {
+            l1 = l1 != l2;
         }
  if (t1 != 4 && (4 != 8 || t1 != 5))
      l1 = ((uint32_t)l1 |
@@ -4282,7 +4264,6 @@ static void gen_opic(int op)
         v1->c.i = l1;
         vtop--;
     } else {
-    general_case:
            gen_opi(op);
     }
 }
