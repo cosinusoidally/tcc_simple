@@ -4023,33 +4023,23 @@ static void parse_number(const char *p)
         if (lcount <= (4 == 4)) {
             if (n >= 0x80000000U)
                     lcount = (4 == 4) + 1;
-            }
-            if (n >= 0x8000000000000000ULL)
+        }
+        if (n >= 0x8000000000000000ULL)
                 ov = 1, ucount = 1;
         } else {
             if (lcount <= (4 == 4)) {
-                if (n >= 0x100000000ULL)
-                    lcount = (4 == 4) + 1;
-                else if (n >= 0x80000000U)
+                if (n >= 0x80000000U)
                     ucount = 1;
             }
             if (n >= 0x8000000000000000ULL)
                 ucount = 1;
         }
-        if (ov)
-            tcc_warning("integer constant overflow");
         tok = 0xb5;
- if (lcount) {
-            tok = 0xce;
-            if (lcount == 2)
-                tok = 0xb7;
- }
  if (ucount)
      ++tok;
         tokc.i = n;
-    if (ch)
-        tcc_error("invalid number\n");
 }
+
 static inline void next_nomacro1(void)
 {
     int t, c, is_long, len;
