@@ -6728,30 +6728,13 @@ static void gjmp_addr(int a) {
 
 static int gtst(int inv, int t) {
     int v = vtop->r & 0x003f;
-    if (nocode_wanted) {
-        ;
-    } else if (v == 0x0033) {
-        g(0x0f);
-        t = oad((vtop->c.i - 16) ^ inv,t);
-    } else if (v == 0x0034 || v == 0x0035) {
-        if ((v & 1) == inv) {
-            uint32_t n1, n = vtop->c.i;
-            if (n) {
-                while ((n1 = read32le(cur_text_section->data + n)))
-                    n = n1;
-                write32le(cur_text_section->data + n, t);
-                t = vtop->c.i;
-            }
-        } else {
-            t = gjmp(t);
-            gsym(vtop->c.i);
-        }
-    }
+    g(0x0f);
+    t = oad((vtop->c.i - 16) ^ inv,t);
     vtop--;
     return t;
 }
-static void gen_opi(int op)
-{
+
+static void gen_opi(int op) {
     int r, fr, opc, c;
     switch(op) {
     case '+':
