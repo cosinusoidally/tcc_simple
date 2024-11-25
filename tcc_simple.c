@@ -2928,7 +2928,6 @@ static void vpush_global_sym(CType *type, int v);
 static void vrote(SValue *e, int n);
 static void vrott(int n);
 static void vrotb(int n);
-static void vpushv(SValue *v);
 static void save_reg(int r);
 static void save_reg_upstack(int r, int n);
 static int get_reg(int rc);
@@ -5321,7 +5320,6 @@ static void vla_runtime_type_size(CType *type, int *a);
 static void vla_sp_restore(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
-static void vpush64(int ty, unsigned long long v);
 static void vpush(CType *type);
 static int gvtst(int inv, int t);
 static void gen_inline_functions(TCCState *s);
@@ -5640,15 +5638,6 @@ static void vpushi(int v)
     cval.i = v;
     vsetc(&int_type, 0x0030, &cval);
 }
-static void vpush64(int ty, unsigned long long v)
-{
-    CValue cval;
-    CType ctype;
-    ctype.t = ty;
-    ctype.ref = ((void*)0);
-    cval.i = v;
-    vsetc(&ctype, 0x0030, &cval);
-}
 
 static inline void vpushll(long long v) {
 exit(1);
@@ -5660,24 +5649,7 @@ static void vset(CType *type, int r, int v)
     cval.i = v;
     vsetc(type, r, &cval);
 }
-static void vseti(int r, int v)
-{
-    CType type;
-    type.t = 3;
-    type.ref = ((void*)0);
-    vset(&type, r, v);
-}
-static void vpushv(SValue *v)
-{
-    if (vtop >= (__vstack + 1) + (256 - 1))
-        tcc_error("memory full (vstack)");
-    vtop++;
-    *vtop = *v;
-}
-static void vdup(void)
-{
-    vpushv(vtop);
-}
+
 static void vrotb(int n)
 {
     int i;
@@ -5914,11 +5886,6 @@ static int gv(int rc) {
                     load(r, vtop);
                     vtop->r = r;
                     vpushi(ll >> 32);
-                } else {
-                    load(r, vtop);
-                    vdup();
-                    vtop[-1].r = r;
-                    vtop->r = vtop[-1].r2;
                 }
                 r2 = get_reg(rc2);
                 load(r2, vtop);
@@ -6444,15 +6411,9 @@ static void vstore(void)
         vtop->r |= delayed_cast;
     }
 }
-static void inc(int post, int c)
-{
-    test_lvalue();
-    vdup();
-    vpushi(c - 0xa3);
-    gen_op('+');
-    vstore();
-    if (post)
-        vpop();
+
+static void inc(int post, int c) {
+exit(1);
 }
 
 static Sym * find_field (CType *type, int v) {
@@ -7022,10 +6983,6 @@ static void unary(void) {
             vtop->c.i = !vtop->c.i;
         } else if ((vtop->r & 0x003f) == 0x0033)
             vtop->c.i ^= 1;
-        else {
-            save_regs(1);
-            vseti(0x0034, gvtst(1, 0));
-        }
         break;
     case '~':
         next();
@@ -7259,15 +7216,6 @@ static void unary(void) {
                 variadic = (s->f.func_type == 3);
                 ret_nregs = gfunc_sret(&s->type, variadic, &ret.type,
                                        &ret_align, &regsize);
-                if (!ret_nregs) {
-                    size = type_size(&s->type, &align);
-                    loc = (loc - size) & -align;
-                    ret.type = s->type;
-                    ret.r = 0x0032 | 0x0100;
-                    vseti(0x0032, loc);
-                    ret.c = vtop->c;
-                    nb_args++;
-                }
             } else {
                 ret_nregs = 1;
                 ret.type = s->type;
