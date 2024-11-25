@@ -5152,55 +5152,7 @@ static void next_nomacro(void)
     } while (tok < 256 && (isidnum_table[tok - (-1)] & 1));
 }
 
-static inline int *macro_twosharps(const int *ptr0)
-{
-    int t;
-    CValue cval;
-    TokenString macro_str1;
-    int start_of_nosubsts = -1;
-    const int *ptr;
-    for (ptr = ptr0;;) {
-        TOK_GET(&t, &ptr, &cval);
-        if (t == 0xcd)
-            break;
-        if (t == 0)
-            return ((void*)0);
-    }
-    tok_str_new(&macro_str1);
-    for (ptr = ptr0;;) {
-        TOK_GET(&t, &ptr, &cval);
-        if (t == 0)
-            break;
-        if (t == 0xcd)
-            continue;
-        while (*ptr == 0xcd) {
-            int t1; CValue cv1;
-            if (start_of_nosubsts >= 0)
-                macro_str1.len = start_of_nosubsts;
-            while ((t1 = *++ptr) == 0xcc)
-                ;
-            if (t1 && t1 != 0xcd) {
-                TOK_GET(&t1, &ptr, &cv1);
-                if (t != 0xcb || t1 != 0xcb) {
-                    tok_str_add2(&macro_str1, t, &cval);
-                    t = t1, cval = cv1;
-                }
-            }
-        }
-        if (t == 0xcc) {
-            if (start_of_nosubsts < 0)
-                start_of_nosubsts = macro_str1.len;
-        } else {
-            start_of_nosubsts = -1;
-        }
-        tok_str_add2(&macro_str1, t, &cval);
-    }
-    tok_str_add(&macro_str1, 0);
-    return macro_str1.str;
-}
-
-static void next(void)
-{
+static void next(void) {
  redo:
     if (parse_flags & 0x0010)
         next_nomacro_spc();
@@ -5222,6 +5174,7 @@ static void next(void)
             parse_string((char *)tokc.str.data, tokc.str.size - 1);
     }
 }
+
 static inline void unget_tok(int last_tok)
 {
     TokenString *str = tok_str_alloc();
