@@ -5452,9 +5452,26 @@ static void tccpp_new(TCCState *s)
         p = r;
     }
 }
-
-static void tccpp_delete(TCCState *s) {
+static void tccpp_delete(TCCState *s)
+{
 exit(1);
+    int i, n;
+    free_defines(((void*)0));
+    n = tok_ident - 256;
+    for(i = 0; i < n; i++)
+        tal_free_impl(toksym_alloc, table_ident[i]);
+    tcc_free(table_ident);
+    table_ident = ((void*)0);
+    cstr_free(&tokcstr);
+    cstr_free(&cstr_buf);
+    cstr_free(&macro_equal_buf);
+    tok_str_free_str(tokstr_buf.str);
+    tal_delete(toksym_alloc);
+    toksym_alloc = ((void*)0);
+    tal_delete(tokstr_alloc);
+    tokstr_alloc = ((void*)0);
+    tal_delete(cstr_alloc);
+    cstr_alloc = ((void*)0);
 }
 
 static void tok_print(const char *msg, const int *str) {
