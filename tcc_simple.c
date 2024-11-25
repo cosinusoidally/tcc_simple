@@ -3931,37 +3931,34 @@ static const char *get_tok_str(int v, CValue *cv) {
     int i, len;
     cstr_reset(&cstr_buf);
     p = cstr_buf.data;
-    switch(v) {
-    default:
-        if (v < 256) {
-            const unsigned char *q = tok_two_chars;
-            while (*q) {
-                if (q[2] == v) {
-                    *p++ = q[0];
-                    *p++ = q[1];
-                    *p = '\0';
-                    return cstr_buf.data;
-                }
-                q += 3;
+    if (v < 256) {
+        const unsigned char *q = tok_two_chars;
+        while (*q) {
+            if (q[2] == v) {
+                *p++ = q[0];
+                *p++ = q[1];
+                *p = '\0';
+                return cstr_buf.data;
             }
-        if (v >= 127) {
-            sprintf(cstr_buf.data, "<%02x>", v);
-            return cstr_buf.data;
+            q += 3;
         }
-        addv:
-            *p++ = v;
-            *p = '\0';
-        } else if (v < tok_ident) {
-            return table_ident[v - 256]->str;
-        } else if (v >= 0x10000000) {
-            sprintf(p, "L.%u", v - 0x10000000);
-        } else {
-            return ((void*)0);
-        }
-        break;
+    if (v >= 127) {
+        sprintf(cstr_buf.data, "<%02x>", v);
+        return cstr_buf.data;
+    }
+    addv:
+        *p++ = v;
+        *p = '\0';
+    } else if (v < tok_ident) {
+         return table_ident[v - 256]->str;
+    } else if (v >= 0x10000000) {
+        sprintf(p, "L.%u", v - 0x10000000);
+    } else {
+        return ((void*)0);
     }
     return cstr_buf.data;
 }
+
 static int handle_eob(void)
 {
     BufferedFile *bf = file;
