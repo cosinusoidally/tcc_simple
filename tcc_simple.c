@@ -3000,7 +3000,6 @@ static void gtst_addr(int inv, int a);
 static void gen_opi(int op);
 static void gen_opf(int op);
 static void gen_cvt_ftoi(int t);
-static void gen_cvt_ftof(int t);
 static void ggoto(void);
 static void o(unsigned int c);
 static void gen_cvt_itof(int t);
@@ -3914,25 +3913,8 @@ static void parse_string(const char *s, int len)
             tok = 0xba;
     }
 }
-static void bn_lshift(unsigned int *bn, int shift, int or_val)
-{
-    int i;
-    unsigned int v;
-    for(i=0;i<2;i++) {
-        v = bn[i];
-        bn[i] = (v << shift) | or_val;
-        or_val = v >> (32 - shift);
-    }
-}
-static void bn_zero(unsigned int *bn)
-{
-    int i;
-    for(i=0;i<2;i++) {
-        bn[i] = 0;
-    }
-}
-static void parse_number(const char *p)
-{
+
+static void parse_number(const char *p) {
     int b, t, shift, frac_bits, s, exp_val, ch;
     char *q;
     unsigned int bn[2];
@@ -4192,8 +4174,8 @@ static inline void unget_tok(int last_tok)
     begin_macro(str, 1);
     tok = last_tok;
 }
-static void preprocess_start(TCCState *s1, int is_asm)
-{
+
+static void preprocess_start(TCCState *s1, int is_asm) {
     CString cstr;
     int i;
     s1->include_stack_ptr = s1->include_stack;
@@ -4213,24 +4195,12 @@ static void preprocess_start(TCCState *s1, int is_asm)
     cstr_cat(&cstr, file->filename, -1);
     cstr_cat(&cstr, "\"", 0);
     cstr_reset(&cstr);
-    for (i = 0; i < s1->nb_cmd_include_files; i++) {
-        cstr_cat(&cstr, "#include \"", -1);
-        cstr_cat(&cstr, s1->cmd_include_files[i], -1);
-        cstr_cat(&cstr, "\"\n", -1);
-    }
-    if (cstr.size) {
-        *s1->include_stack_ptr++ = file;
- tcc_open_bf(s1, "<command line>", cstr.size);
- memcpy(file->buffer, cstr.data, cstr.size);
-    }
     cstr_free(&cstr);
     parse_flags = is_asm ? 0x0008 : 0;
     tok_flags = 0x0001 | 0x0002;
 }
-static void preprocess_end(TCCState *s1)
-{
-    while (macro_stack)
-        end_macro();
+
+static void preprocess_end(TCCState *s1) {
     macro_ptr = ((void*)0);
 }
 static void tccpp_new(TCCState *s)
@@ -4268,26 +4238,9 @@ static void tccpp_new(TCCState *s)
         p = r;
     }
 }
-static void tccpp_delete(TCCState *s)
-{
+
+static void tccpp_delete(TCCState *s) {
 exit(1);
-    int i, n;
-    free_defines(((void*)0));
-    n = tok_ident - 256;
-    for(i = 0; i < n; i++)
-        tal_free_impl(toksym_alloc, table_ident[i]);
-    tcc_free(table_ident);
-    table_ident = ((void*)0);
-    cstr_free(&tokcstr);
-    cstr_free(&cstr_buf);
-    cstr_free(&macro_equal_buf);
-    tok_str_free_str(tokstr_buf.str);
-    tal_delete(toksym_alloc);
-    toksym_alloc = ((void*)0);
-    tal_delete(tokstr_alloc);
-    tokstr_alloc = ((void*)0);
-    tal_delete(cstr_alloc);
-    cstr_alloc = ((void*)0);
 }
 
 static int rsym, anon_sym, ind, loc;
@@ -4905,15 +4858,6 @@ static void gen_op(int op) {
     vtop->type.t = 3;
 }
 
-static void gen_cvt_itof1(int t)
-{
-    gen_cvt_itof(t);
-}
-static void gen_cvt_ftoi1(int t)
-{
-    int st;
-    gen_cvt_ftoi(t);
-}
 static void force_charshort_cast(int t)
 {
     int bits, dbt;
@@ -5015,24 +4959,10 @@ static void gen_cast(CType *type)
             vtop->r = 0x0030;
             vtop->c.i = 1;
         } else {
-            if (sf && df) {
-                gen_cvt_ftof(dbt);
-            } else if (df) {
-                gen_cvt_itof1(dbt);
-            } else if (sf) {
+            if (sf) {
                 if (dbt == 11) {
                      vpushi(0);
                      gen_op(0x95);
-                } else {
-                    if (dbt != (3 | 0x0010) &&
-                        dbt != (4 | 0x0010) &&
-                        dbt != 4)
-                        dbt = 3;
-                    gen_cvt_ftoi1(dbt);
-                    if (dbt == 3 && (type->t & (0x000f | 0x0010)) != dbt) {
-                        vtop->type.t = dbt;
-                        gen_cast(type);
-                    }
                 }
             } else if ((dbt & 0x000f) == 4) {
                 if ((sbt & 0x000f) != 4) {
@@ -7709,10 +7639,6 @@ exit(1);
 }
 
 static void gen_cvt_ftoi(int t) {
-exit(1);
-}
-
-static void gen_cvt_ftof(int t) {
 exit(1);
 }
 
