@@ -2937,7 +2937,6 @@ static int get_reg(int rc);
 static void save_regs(int n);
 static void gaddrof(void);
 static int gv(int rc);
-static void gv2(int rc1, int rc2);
 static void vpop(void);
 static void gen_op(int op);
 static int type_size(CType *type, int *a);
@@ -4289,17 +4288,11 @@ static TokenString *tok_str_alloc(void)
     tok_str_new(str);
     return str;
 }
-static int *tok_str_dup(TokenString *s)
-{
-    int *str;
-    str = tal_realloc_impl(&tokstr_alloc, 0, s->len * sizeof(int));
-    memcpy(str, s->str, s->len * sizeof(int));
-    return str;
-}
-static void tok_str_free_str(int *str)
-{
+
+static void tok_str_free_str(int *str) {
     tal_free_impl(tokstr_alloc, str);
 }
+
 static void tok_str_free(TokenString *str)
 {
     tok_str_free_str(str->str);
@@ -6059,10 +6052,6 @@ static int gv(int rc) {
         }
         vtop->r = r;
     return r;
-}
-
-static void gv2(int rc1, int rc2) {
-exit(1);
 }
 
 static int rc_fret(int t) {
@@ -9764,12 +9753,6 @@ static void gen_opi(int op)
                 o(0x81);
                 oad(0xc0 | (opc << 3) | r, c);
             }
-        } else {
-            gv2(0x0001, 0x0001);
-            r = vtop[-1].r;
-            fr = vtop[0].r;
-            o((opc << 3) | 0x01);
-            o(0xc0 + r + fr * 8);
         }
         vtop--;
         if (op >= 0x92 && op <= 0x9f) {
@@ -9796,14 +9779,6 @@ static void gen_opi(int op)
     case '|':
         opc = 1;
         goto gen_op8;
-    case '*':
-        gv2(0x0001, 0x0001);
-        r = vtop[-1].r;
-        fr = vtop[0].r;
-        vtop--;
-        o(0xaf0f);
-        o(0xc0 + fr + r * 8);
-        break;
     case 0x01:
         opc = 4;
         goto gen_shift;
@@ -9822,45 +9797,8 @@ static void gen_opi(int op)
             o(0xc1);
             o(opc | r);
             g(c);
-        } else {
-            gv2(0x0001, 0x0010);
-            r = vtop[-1].r;
-            o(0xd3);
-            o(opc | r);
         }
         vtop--;
-        break;
-    case '/':
-    case 0xb0:
-    case 0xb2:
-    case '%':
-    case 0xb1:
-    case 0xc2:
-        gv2(0x0004, 0x0010);
-        r = vtop[-1].r;
-        fr = vtop[0].r;
-        vtop--;
-        save_reg(TREG_EDX);
-        save_reg_upstack(TREG_EAX, 1);
-        if (op == 0xc2) {
-            o(0xf7);
-            o(0xe0 + fr);
-            vtop->r2 = TREG_EDX;
-            r = TREG_EAX;
-        } else {
-            if (op == 0xb0 || op == 0xb1) {
-                o(0xf7d231);
-                o(0xf0 + fr);
-            } else {
-                o(0xf799);
-                o(0xf8 + fr);
-            }
-            if (op == '%' || op == 0xb1)
-                r = TREG_EDX;
-            else
-                r = TREG_EAX;
-        }
-        vtop->r = r;
         break;
     default:
         opc = 7;
