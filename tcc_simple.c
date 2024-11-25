@@ -4321,44 +4321,19 @@ static void gen_cast(CType *type) {
     }
     vtop->type = *type;
 }
-static int type_size(CType *type, int *a)
-{
+
+static int type_size(CType *type, int *a) {
     Sym *s;
     int bt;
     bt = type->t & 0x000f;
-    if (bt == 7) {
+    if (bt == 5) {
+        int ts;
         s = type->ref;
-        *a = s->r;
-        return s->c;
-    } else if (bt == 5) {
-        if (type->t & 0x0040) {
-            int ts;
-            s = type->ref;
-            ts = type_size(&s->type, a);
-            if (ts < 0 && s->c < 0)
-                ts = -ts;
-            return ts * s->c;
-        } else {
-            *a = 4;
-            return 4;
-        }
-    } else if (((type->t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (2 << 20)) && type->ref->c == -1) {
-        return -1;
-    } else if (bt == 10) {
-        *a = 4;
-        return 12;
-    } else if (bt == 9 || bt == 4) {
-        *a = 4;
-        return 8;
+        ts = type_size(&s->type, a);
+        return ts * s->c;
     } else if (bt == 3 || bt == 8) {
         *a = 4;
         return 4;
-    } else if (bt == 2) {
-        *a = 2;
-        return 2;
-    } else if (bt == 13 || bt == 14) {
-        *a = 8;
-        return 16;
     } else {
         *a = 1;
         return 1;
