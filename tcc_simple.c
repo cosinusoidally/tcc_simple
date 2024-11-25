@@ -5890,30 +5890,8 @@ static int get_reg(int rc) {
     }
 }
 
-static void gbound(void) {
-exit(1);
-}
-
-static void incr_bf_adr(int o) {
-exit(1);
-}
-
-static void load_packed_bf(CType *type, int bit_pos, int bit_size) {
-exit(1);
-}
-
-static void store_packed_bf(int bit_pos, int bit_size) {
-exit(1);
-}
-
-static int adjust_bf(SValue *sv, int bit_pos, int bit_size) {
-exit(1);
-}
-
 static int gv(int rc) {
     int r, bit_pos, bit_size, size, align, rc2;
-        if (vtop->r & 0x0800)
-            gbound();
         r = vtop->r & 0x003f;
         rc2 = (rc & 0x0002) ? 0x0002 : 0x0001;
         if (rc == 0x0004)
@@ -6443,50 +6421,9 @@ static void vstore(void)
         if (!(ft & 0x0080))
             gen_assign_cast(&vtop[-1].type);
     }
-    if (ft & 0x0080) {
-        vdup(), vtop[-1] = vtop[-2];
-        bit_pos = (((ft) >> 20) & 0x3f);
-        bit_size = (((ft) >> (20 + 6)) & 0x3f);
-        vtop[-1].type.t = ft & ~(((1 << (6+6)) - 1) << 20 | 0x0080);
-        if ((ft & 0x000f) == 11) {
-            gen_cast(&vtop[-1].type);
-            vtop[-1].type.t = (vtop[-1].type.t & ~0x000f) | (1 | 0x0010);
-        }
-        r = adjust_bf(vtop - 1, bit_pos, bit_size);
-        if (r == 7) {
-            gen_cast_s((ft & 0x000f) == 4 ? 4 : 3);
-            store_packed_bf(bit_pos, bit_size);
-        } else {
-            unsigned long long mask = (1ULL << bit_size) - 1;
-            if ((ft & 0x000f) != 11) {
-                if ((vtop[-1].type.t & 0x000f) == 4)
-                    vpushll(mask);
-                else
-                    vpushi((unsigned)mask);
-                gen_op('&');
-            }
-            vpushi(bit_pos);
-            gen_op(0x01);
-            vswap();
-            vdup();
-            vrott(3);
-            if ((vtop->type.t & 0x000f) == 4)
-                vpushll(~(mask << bit_pos));
-            else
-                vpushi(~((unsigned)mask << bit_pos));
-            gen_op('&');
-            gen_op('|');
-            vstore();
-            vpop();
-        }
-    } else if (dbt == 0) {
+    if (dbt == 0) {
         --vtop;
     } else {
-            if (vtop[-1].r & 0x0800) {
-                vswap();
-                gbound();
-                vswap();
-            }
             rc = 0x0001;
             if (is_float(ft)) {
                 rc = 0x0002;
