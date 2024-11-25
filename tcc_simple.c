@@ -2933,7 +2933,6 @@ static void save_reg(int r);
 static void save_reg_upstack(int r, int n);
 static int get_reg(int rc);
 static void save_regs(int n);
-static void gaddrof(void);
 static int gv(int rc);
 static void vpop(void);
 static void gen_op(int op);
@@ -5874,14 +5873,12 @@ static void save_reg_upstack(int r, int n)
         }
     }
 }
-static int get_reg(int rc)
-{
+
+static int get_reg(int rc) {
     int r;
     SValue *p;
     for(r=0;r<5;r++) {
         if (reg_classes[r] & rc) {
-            if (nocode_wanted)
-                return r;
             for(p=(__vstack + 1);p<=vtop;p++) {
                 if ((p->r & 0x003f) == r ||
                     (p->r2 & 0x003f) == r)
@@ -5891,36 +5888,6 @@ static int get_reg(int rc)
         }
     notfound: ;
     }
-    for(p=(__vstack + 1);p<=vtop;p++) {
-        r = p->r2 & 0x003f;
-        if (r < 0x0030 && (reg_classes[r] & rc))
-            goto save_found;
-        r = p->r & 0x003f;
-        if (r < 0x0030 && (reg_classes[r] & rc)) {
-        save_found:
-            save_reg(r);
-            return r;
-        }
-    }
-    return -1;
-}
-static void move_reg(int r, int s, int t)
-{
-    SValue sv;
-    if (r != s) {
-        save_reg(r);
-        sv.type.t = t;
-        sv.type.ref = ((void*)0);
-        sv.r = s;
-        sv.c.i = 0;
-        load(r, &sv);
-    }
-}
-static void gaddrof(void)
-{
-    vtop->r &= ~0x0100;
-    if ((vtop->r & 0x003f) == 0x0031)
-        vtop->r = (vtop->r & ~(0x003f | (0x1000 | 0x2000 | 0x4000))) | 0x0032 | 0x0100;
 }
 
 static void gbound(void) {
@@ -5969,19 +5936,6 @@ static int gv(int rc) {
                     load(r, vtop);
                     vtop->r = r;
                     vpushi(ll >> 32);
-                } else
-                if (vtop->r & 0x0100) {
-                    save_reg_upstack(vtop->r, 1);
-                    vtop->type.t = load_type;
-                    load(r, vtop);
-                    vdup();
-                    vtop[-1].r = r;
-                    vtop->type.t = addr_type;
-                    gaddrof();
-                    vpushi(load_size);
-                    gen_op('+');
-                    vtop->r |= 0x0100;
-                    vtop->type.t = load_type;
                 } else {
                     load(r, vtop);
                     vdup();
@@ -6087,16 +6041,6 @@ redo:
     if (bt1 == 7 || bt2 == 7) {
         tcc_error("operation on a struct");
     } else if (bt1 == 6 || bt2 == 6) {
- if (bt2 == 6) {
-     mk_pointer(&vtop->type);
-     gaddrof();
- }
- if (bt1 == 6) {
-     vswap();
-     mk_pointer(&vtop->type);
-     gaddrof();
-     vswap();
- }
  goto redo;
     } else if (bt1 == 5 || bt2 == 5) {
         if (op != '-' && op != '+')
@@ -6499,19 +6443,7 @@ static void vstore(void)
         if (!(ft & 0x0080))
             gen_assign_cast(&vtop[-1].type);
     }
-    if (sbt == 7) {
-            size = type_size(&vtop->type, &align);
-            vswap();
-            vtop->type.t = 5;
-            gaddrof();
-            vpush_global_sym(&func_old_type, TOK_memmove);
-            vswap();
-            vpushv(vtop - 2);
-            vtop->type.t = 5;
-            gaddrof();
-            vpushi(size);
-            gfunc_call(3);
-    } else if (ft & 0x0080) {
+    if (ft & 0x0080) {
         vdup(), vtop[-1] = vtop[-2];
         bit_pos = (((ft) >> 20) & 0x3f);
         bit_size = (((ft) >> (20 + 6)) & 0x3f);
@@ -6569,22 +6501,7 @@ static void vstore(void)
                 load(t, &sv);
                 vtop[-1].r = t | 0x0100;
             }
-            if ((ft & 0x000f) == 4) {
-                int addr_type = 3, load_size = 4, load_type = 3;
-                vtop[-1].type.t = load_type;
-                store(r, vtop - 1);
-                vswap();
-                vtop->type.t = addr_type;
-                gaddrof();
-                vpushi(load_size);
-                gen_op('+');
-                vtop->r |= 0x0100;
-                vswap();
-                vtop[-1].type.t = load_type;
-                store(vtop->r2, vtop - 1);
-            } else {
-                store(r, vtop - 1);
-            }
+            store(r, vtop - 1);
         vswap();
         vtop--;
         vtop->r |= delayed_cast;
@@ -7159,15 +7076,6 @@ static void unary(void) {
         next();
         unary();
         indir();
-        break;
-    case '&':
-        next();
-        unary();
-        if ((vtop->type.t & 0x000f) != 6 &&
-            !(vtop->type.t & 0x0040))
-            test_lvalue();
-        mk_pointer(&vtop->type);
-        gaddrof();
         break;
     case '!':
         next();
