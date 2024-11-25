@@ -2934,9 +2934,7 @@ static void gen_op(int op);
 static int type_size(CType *type, int *a);
 static void mk_pointer(CType *type);
 static void vstore(void);
-static void inc(int post, int c);
 static int lvalue_type(int t);
-static void indir(void);
 static void unary(void);
 static void gexpr(void);
 static int expr_const(void);
@@ -6208,35 +6206,7 @@ static void vstore(void)
     }
 }
 
-static void inc(int post, int c) {
-exit(1);
-}
-
-static Sym * find_field (CType *type, int v) {
-exit(1);
-}
-
-static void sym_to_attr(AttributeDef *ad, Sym *s)
-{
-    if (s->a.aligned && 0 == ad->a.aligned)
-        ad->a.aligned = s->a.aligned;
-    if (s->f.func_call && 0 == ad->f.func_call)
-        ad->f.func_call = s->f.func_call;
-    if (s->f.func_type && 0 == ad->f.func_type)
-        ad->f.func_type = s->f.func_type;
-    if (s->a.packed)
-        ad->a.packed = 1;
-}
-static void parse_btype_qualify(CType *type, int qualifiers)
-{
-    while (type->t & 0x0040) {
-        type->ref = sym_push(0x20000000, &type->ref->type, 0, type->ref->c);
-        type = &type->ref->type;
-    }
-    type->t |= qualifiers;
-}
-static int parse_btype(CType *type, AttributeDef *ad)
-{
+static int parse_btype(CType *type, AttributeDef *ad) {
     int t, u, bt, st, type_found, typespec_found, g;
     Sym *s;
     CType type1;
@@ -6361,80 +6331,23 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td) {
     storage = type->t & (0x00001000 | 0x00002000 | 0x00004000 | 0x00008000);
     type->t &= ~(0x00001000 | 0x00002000 | 0x00004000 | 0x00008000);
     post = ret = type;
-    while (tok == '*') {
-        qualifiers = 0;
-    redo:
+    if (tok >= 256 && (td & 2)) {
+        *v = tok;
         next();
-        switch(tok) {
-        case TOK_CONST1:
-        case TOK_CONST2:
-        case TOK_CONST3:
-            qualifiers |= 0x0100;
-            goto redo;
-        case TOK_VOLATILE1:
-        case TOK_VOLATILE2:
-        case TOK_VOLATILE3:
-            qualifiers |= 0x0200;
-            goto redo;
-        case TOK_RESTRICT1:
-        case TOK_RESTRICT2:
-        case TOK_RESTRICT3:
-            goto redo;
-        }
-        mk_pointer(type);
-        type->t |= qualifiers;
- if (ret == type)
-     ret = pointed_type(type);
-    }
-    if (tok == '(') {
- if (!post_type(type, ad, 0, td)) {
-     post = type_decl(type, ad, v, td);
-     skip(')');
- }
-    } else if (tok >= 256 && (td & 2)) {
- *v = tok;
- next();
-    } else {
- if (!(td & 1))
-   expect("identifier");
- *v = 0;
     }
     post_type(post, ad, storage, 0);
     type->t |= storage;
     return ret;
 }
-static int lvalue_type(int t)
-{
+
+static int lvalue_type(int t) {
     int bt, r;
     r = 0x0100;
     bt = t & 0x000f;
-    if (bt == 1 || bt == 11)
-        r |= 0x1000;
-    else if (bt == 2)
-        r |= 0x2000;
-    else
-        return r;
-    if (t & 0x0010)
-        r |= 0x4000;
     return r;
 }
-static void indir(void)
-{
-    if ((vtop->type.t & 0x000f) != 5) {
-        if ((vtop->type.t & 0x000f) == 6)
-            return;
-        expect("pointer");
-    }
-    if (vtop->r & 0x0100)
-        gv(0x0001);
-    vtop->type = *pointed_type(&vtop->type);
-    if (!(vtop->type.t & 0x0040) && !(vtop->type.t & 0x0400)
-        && (vtop->type.t & 0x000f) != 6) {
-        vtop->r |= lvalue_type(vtop->type.t);
-    }
-}
-static void gfunc_param_typed(Sym *func, Sym *arg)
-{
+
+static void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
     CType type;
     func_type = func->f.func_type;
