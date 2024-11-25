@@ -2822,7 +2822,6 @@ static inline void unget_tok(int last_tok);
 static void preprocess_start(TCCState *s1, int is_asm);
 static void preprocess_end(TCCState *s1);
 static void tccpp_new(TCCState *s);
-static void tccpp_delete(TCCState *s);
 static void skip(int c);
 static __attribute__((noreturn)) void expect(const char *msg);
 
@@ -2867,9 +2866,7 @@ static void tcc_debug_end(TCCState *s1);
 static void tcc_debug_funcstart(TCCState *s1, Sym *sym);
 static void tcc_debug_funcend(TCCState *s1, int size);
 static int tccgen_compile(TCCState *s1);
-static void check_vstack(void);
 static inline int is_float(int t);
-static void test_lvalue(void);
 static void vpushi(int v);
 static Elf32_Sym *elfsym(Sym *);
 static void update_storage(Sym *sym);
@@ -3899,10 +3896,6 @@ static void tccpp_new(TCCState *s)
     }
 }
 
-static void tccpp_delete(TCCState *s) {
-exit(1);
-}
-
 static int rsym, anon_sym, ind, loc;
 static Sym *sym_free_first;
 static void **sym_pools;
@@ -3960,16 +3953,6 @@ static inline int is_float(int t)
     bt = t & 0x000f;
     return bt == 10 || bt == 9 || bt == 8 || bt == 14;
 }
-static void test_lvalue(void)
-{
-    if (!(vtop->r & 0x0100))
-        expect("lvalue");
-}
-static void check_vstack(void)
-{
-    if (pvtop != vtop)
-        tcc_error("internal compiler error: vstack leak (%d)", vtop - pvtop);
-}
 
 static void tcc_debug_start(TCCState *s1) {
     put_elf_sym(symtab_section, 0, 0,
@@ -4010,7 +3993,6 @@ static int tccgen_compile(TCCState *s1)
     parse_flags = 0x0001 | 0x0002 | 0x0040;
     next();
     decl(0x0030);
-    check_vstack();
     tcc_debug_end(s1);
     return 0;
 }
@@ -4978,7 +4960,6 @@ static void expr_eq(void) {
         (tok >= 0xa5 && tok <= 0xaf) ||
         tok == 0xde || tok == 0xfc ||
         tok == 0x81 || tok == 0x82) {
-        test_lvalue();
         t = tok;
         next();
         if (t == '=') {
@@ -5529,7 +5510,6 @@ static void gen_function(Sym *sym)
     func_var = 0;
     ind = 0;
     nocode_wanted = 0x80000000;
-    check_vstack();
 }
 
 static int decl0(int l, int is_for_loop_init, Sym *func_sym)
