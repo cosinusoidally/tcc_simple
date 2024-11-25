@@ -3014,9 +3014,6 @@ static int pp_debug_tok, pp_debug_symv;
 static int pp_once;
 static int pp_expr;
 static int pp_counter;
-static struct TinyAlloc *toksym_alloc;
-static struct TinyAlloc *tokstr_alloc;
-static struct TinyAlloc *cstr_alloc;
 static TokenString *macro_stack;
 static const char tcc_keywords[] =
      "int" "\0" "void" "\0" "char" "\0" "if" "\0" "else" "\0" "while" "\0"
@@ -3072,27 +3069,15 @@ static const char tcc_keywords[] =
  "." "short" "\0" "." "long" "\0" "." "int" "\0" "." "section" "\0"
 ;
 
-static void skip(int c)
-{
+static void skip(int c) {
     if (tok != c)
         tcc_error("'%c' expected (got \"%s\")", c, get_tok_str(tok, &tokc));
     next();
 }
-static void expect(const char *msg)
-{
+
+static void expect(const char *msg) {
     tcc_error("%s expected", msg);
 }
-typedef struct TinyAlloc {
-    unsigned limit;
-    unsigned size;
-    uint8_t *buffer;
-    uint8_t *p;
-    unsigned nb_allocs;
-    struct TinyAlloc *next, *top;
-} TinyAlloc;
-typedef struct tal_header_t {
-    unsigned size;
-} tal_header_t;
 
 static void cstr_realloc(CString *cstr, int new_size) {
     int size;
