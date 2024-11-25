@@ -4982,53 +4982,25 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
     Sym indexsym;
     CType *t1;
     have_elem = tok == '}' || tok == ',';
-    if (have_elem &&
- !(type->t & 0x0040) &&
- is_compatible_unqualified_types(type, &vtop->type)) {
-        init_putv(type, sec, c);
-    } else if (type->t & 0x0040) {
+    if (type->t & 0x0040) {
         s = type->ref;
         n = s->c;
         t1 = pointed_type(type);
         size1 = type_size(t1, &align1);
         no_oblock = 1;
-        if ((first && tok != 0xba && tok != 0xb9) ||
-            tok == '{') {
-            if (tok != '{')
-                tcc_error("character array initializer must be a literal,"
-                    " optionally enclosed in braces");
-            skip('{');
-            no_oblock = 0;
-        }
         if ((tok == 0xba &&
              (t1->t & 0x000f) == 3
             ) || (tok == 0xb9 && (t1->t & 0x000f) == 1)) {
      len = 0;
             while (tok == 0xb9 || tok == 0xba) {
                 int cstr_len, ch;
-                if (tok == 0xb9)
-                    cstr_len = tokc.str.size;
-                else
-                    cstr_len = tokc.str.size / sizeof(nwchar_t);
+                cstr_len = tokc.str.size;
                 cstr_len--;
                 nb = cstr_len;
-                if (n >= 0 && nb > (n - len))
-                    nb = n - len;
                 if (!size_only) {
-                    if (cstr_len > nb)
-                        tcc_warning("initializer-string for array is too long");
                     if (sec && tok == 0xb9 && size1 == 1) {
                         if (!(nocode_wanted > 0))
                             memcpy(sec->data + c + len, tokc.str.data, nb);
-                    } else {
-                        for(i=0;i<nb;i++) {
-                            if (tok == 0xb9)
-                                ch = ((unsigned char *)tokc.str.data)[i];
-                            else
-                                ch = ((nwchar_t *)tokc.str.data)[i];
-       vpushi(ch);
-                            init_putv(t1, sec, c + (len + i) * size1);
-                        }
                     }
                 }
                 len += nb;
