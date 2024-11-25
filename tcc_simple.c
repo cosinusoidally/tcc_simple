@@ -3440,44 +3440,25 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
 
 static void parse_string(const char *s, int len) {
     uint8_t buf[1000], *p = buf;
-    int is_long, sep;
-    if ((is_long = *s == 'L'))
-        ++s, --len;
+    int sep;
     sep = *s++;
     len -= 2;
-    if (len >= sizeof buf)
-        p = tcc_malloc(len + 1);
     memcpy(p, s, len);
     p[len] = 0;
     cstr_reset(&tokcstr);
-    parse_escape_string(&tokcstr, p, is_long);
-    if (p != buf)
-        tcc_free(p);
+    parse_escape_string(&tokcstr, p, 0);
     if (sep == '\'') {
         int char_size, i, n, c;
-        if (!is_long)
-            tok = 0xb3, char_size = 1;
-        else
-            tok = 0xb4, char_size = sizeof(nwchar_t);
+        tok = 0xb3, char_size = 1;
         n = tokcstr.size / char_size - 1;
-        if (n < 1)
-            tcc_error("empty character constant");
-        if (n > 1)
-            tcc_warning("multi-character character constant");
         for (c = i = 0; i < n; ++i) {
-            if (is_long)
-                c = ((nwchar_t *)tokcstr.data)[i];
-            else
-                c = (c << 8) | ((char *)tokcstr.data)[i];
+            c = (c << 8) | ((char *)tokcstr.data)[i];
         }
         tokc.i = c;
     } else {
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
-        if (!is_long)
-            tok = 0xb9;
-        else
-            tok = 0xba;
+        tok = 0xb9;
     }
 }
 
