@@ -4002,16 +4002,10 @@ static Sym *sym_push(int v, CType *type, int r, int c)
     s->r = r;
     if (!(v & 0x20000000) && (v & ~0x40000000) < 0x10000000) {
         ts = table_ident[(v & ~0x40000000) - 256];
-        if (v & 0x40000000)
-            ps = &ts->sym_struct;
-        else
-            ps = &ts->sym_identifier;
+        ps = &ts->sym_identifier;
         s->prev_tok = *ps;
         *ps = s;
         s->sym_scope = local_scope;
-        if (s->prev_tok && s->prev_tok->sym_scope == s->sym_scope)
-            tcc_error("redeclaration of '%s'",
-                get_tok_str(v & ~0x40000000, ((void*)0)));
     }
     return s;
 }
@@ -4028,8 +4022,8 @@ static Sym *global_identifier_push(int v, int t, int c)
     }
     return s;
 }
-static void sym_pop(Sym **ptop, Sym *b, int keep)
-{
+
+static void sym_pop(Sym **ptop, Sym *b, int keep) {
     Sym *s, *ss, **ps;
     TokenSym *ts;
     int v;
@@ -4039,10 +4033,7 @@ static void sym_pop(Sym **ptop, Sym *b, int keep)
         v = s->v;
         if (!(v & 0x20000000) && (v & ~0x40000000) < 0x10000000) {
             ts = table_ident[(v & ~0x40000000) - 256];
-            if (v & 0x40000000)
-                ps = &ts->sym_struct;
-            else
-                ps = &ts->sym_identifier;
+            ps = &ts->sym_identifier;
             *ps = s->prev_tok;
         }
  if (!keep)
@@ -4052,15 +4043,13 @@ static void sym_pop(Sym **ptop, Sym *b, int keep)
     if (!keep)
  *ptop = b;
 }
-static void vsetc(CType *type, int r, CValue *vc)
-{
+
+static void vsetc(CType *type, int r, CValue *vc) {
     int v;
     if (vtop >= (__vstack + 1) + (256 - 1))
         tcc_error("memory full (vstack)");
     if (vtop >= (__vstack + 1) && !nocode_wanted) {
         v = vtop->r & 0x003f;
-        if (v == 0x0033 || (v & ~1) == 0x0034)
-            gv(0x0001);
     }
     vtop++;
     vtop->type = *type;
@@ -4069,20 +4058,15 @@ static void vsetc(CType *type, int r, CValue *vc)
     vtop->c = *vc;
     vtop->sym = ((void*)0);
 }
-static void vswap(void)
-{
+
+static void vswap(void) {
     SValue tmp;
-    if (vtop >= (__vstack + 1) && !nocode_wanted) {
-        int v = vtop->r & 0x003f;
-        if (v == 0x0033 || (v & ~1) == 0x0034)
-            gv(0x0001);
-    }
     tmp = vtop[0];
     vtop[0] = vtop[-1];
     vtop[-1] = tmp;
 }
-static void vpop(void)
-{
+
+static void vpop(void) {
     int v;
     v = vtop->r & 0x003f;
     if (v == TREG_ST0) {
