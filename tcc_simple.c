@@ -4122,8 +4122,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has
 static void decl(int l);
 static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
-static void vla_runtime_type_size(CType *type, int *a);
-static void vla_sp_restore(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
 static void vpush(CType *type);
@@ -4753,14 +4751,6 @@ static int type_size(CType *type, int *a)
     }
 }
 
-static void vla_runtime_type_size(CType *type, int *a) {
-exit(1);
-}
-
-static void vla_sp_restore(void) {
-    return;
-}
-
 static inline CType *pointed_type(CType *type) {
     return &type->ref->type;
 }
@@ -5245,7 +5235,6 @@ static void block(int *bsym, int *csym, int is_expr)
  nocode_wanted &= ~0x20000000;
         next();
         d = ind;
-        vla_sp_restore();
         skip('(');
         gexpr();
         skip(')');
@@ -5276,10 +5265,6 @@ static void block(int *bsym, int *csym, int is_expr)
         }
         --local_scope;
  sym_pop(&local_stack, s, is_expr);
-        if (vlas_in_scope > saved_vlas_in_scope) {
-            vla_sp_loc = saved_vlas_in_scope ? block_vla_sp_loc : vla_sp_root_loc;
-            vla_sp_restore();
-        }
         vlas_in_scope = saved_vlas_in_scope;
         next();
     } else if (tok == TOK_RETURN) {
@@ -5679,21 +5664,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
      vtop->r |= r;
         }
     }
-    if (type->t & 0x0400) {
-        int a;
-        if ((nocode_wanted > 0))
-            goto no_alloc;
-        if (vlas_in_scope == 0) {
-            if (vla_sp_root_loc == -1)
-                vla_sp_root_loc = (loc -= 4);
-            gen_vla_sp_save(vla_sp_root_loc);
-        }
-        vla_runtime_type_size(type, &a);
-        gen_vla_alloc(type, a);
-        gen_vla_sp_save(addr);
-        vla_sp_loc = addr;
-        vlas_in_scope++;
-    } else if (has_init) {
+    if (has_init) {
  size_t oldreloc_offset = 0;
  if (sec && sec->reloc)
    oldreloc_offset = sec->reloc->data_offset;
