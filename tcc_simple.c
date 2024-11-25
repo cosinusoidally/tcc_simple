@@ -6737,9 +6737,6 @@ static int gtst(int inv, int t) {
 static void gen_opi(int op) {
     int r, fr, opc, c;
     switch(op) {
-    case '+':
-    case 0xc3:
-        opc = 0;
     gen_op8:
         if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
             vswap();
@@ -6747,18 +6744,9 @@ static void gen_opi(int op) {
             vswap();
             c = vtop->c.i;
             if (c == (char)c) {
-                if (c==1 && opc==0 && op != 0xc3) {
-                    o (0x40 | r);
-                } else if (c==1 && opc==5 && op != 0xc5) {
-                    o (0x48 | r);
-                } else {
-                    o(0x83);
-                    o(0xc0 | (opc << 3) | r);
-                    g(c);
-                }
-            } else {
-                o(0x81);
-                oad(0xc0 | (opc << 3) | r, c);
+                o(0x83);
+                o(0xc0 | (opc << 3) | r);
+                g(c);
             }
         }
         vtop--;
