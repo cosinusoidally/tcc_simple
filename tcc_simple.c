@@ -2976,7 +2976,6 @@ static inline void add64le(unsigned char *p, int64_t x) {
     write64le(p, read64le(p) + x);
 }
 static void g(int c);
-static void gen_le16(int c);
 static void gen_le32(int c);
 static void gen_addr32(int r, Sym *sym, int c);
 static int rt_num_callers;
@@ -6526,10 +6525,6 @@ static int rt_num_callers = 6;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
 
-static Elf32_Addr rt_printline(Elf32_Addr wanted_pc, const char *msg) {
-exit(1);
-}
-
 static const int reg_classes[5] = {
               0x0001 | 0x0004,
               0x0001 | 0x0010,
@@ -6537,15 +6532,12 @@ static const int reg_classes[5] = {
               (0x0001 | 0x0040) * 0,
               0x0002 | 0x0008,
 };
+
 static unsigned long func_sub_sp_offset;
 static int func_ret_sub;
-static Elf32_Addr func_bound_offset;
-static unsigned long func_bound_ind;
-static void g(int c)
-{
+
+static void g(int c) {
     int ind1;
-    if (nocode_wanted)
-        return;
     ind1 = ind + 1;
     if (ind1 > cur_text_section->data_allocated)
         section_realloc(cur_text_section, ind1);
@@ -6559,20 +6551,15 @@ static void o(unsigned int c)
         c = c >> 8;
     }
 }
-static void gen_le16(int v)
-{
-    g(v);
-    g(v >> 8);
-}
-static void gen_le32(int c)
-{
+
+static void gen_le32(int c) {
     g(c);
     g(c >> 8);
     g(c >> 16);
     g(c >> 24);
 }
-static void gsym_addr(int t, int a)
-{
+
+static void gsym_addr(int t, int a) {
     while (t) {
         unsigned char *ptr = cur_text_section->data + t;
         uint32_t n = read32le(ptr);
@@ -6580,8 +6567,8 @@ static void gsym_addr(int t, int a)
         t = n;
     }
 }
-static void gsym(int t)
-{
+
+static void gsym(int t) {
     gsym_addr(t, ind);
 }
 
@@ -6662,8 +6649,8 @@ static void store(int r, SValue *v) {
         o(0xc0 + fr + r * 8);
     }
 }
-static void gadd_sp(int val)
-{
+
+static void gadd_sp(int val) {
     if (val == (char)val) {
         o(0xc483);
         g(val);
@@ -6671,15 +6658,8 @@ static void gadd_sp(int val)
         oad(0xc481, val);
     }
 }
-static void gen_static_call(int v)
-{
-    Sym *sym;
-    sym = external_global_sym(v, &func_old_type, 0);
-    oad(0xe8, -4);
-    greloc(cur_text_section, sym, ind-4, 2);
-}
-static void gcall_or_jmp(int is_jmp)
-{
+
+static void gcall_or_jmp(int is_jmp) {
     int r;
     if ((vtop->r & (0x003f | 0x0100)) == 0x0030 && (vtop->r & 0x0200)) {
         greloc(cur_text_section, vtop->sym, ind + 1, 2);
