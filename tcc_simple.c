@@ -4689,10 +4689,6 @@ static Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigne
     put_extern_sym(sym, sec, offset, size);
     return sym;
 }
-static void vpush_ref(CType *type, Section *sec, unsigned long offset, unsigned long size)
-{
-    vpushsym(type, get_sym_ref(type, sec, offset, size));
-}
 
 static Sym *external_global_sym(int v, CType *type, int r) {
     Sym *s;
@@ -4705,41 +4701,16 @@ static Sym *external_global_sym(int v, CType *type, int r) {
     return s;
 }
 
-static void patch_type(Sym *sym, CType *type)
-{
+static void patch_type(Sym *sym, CType *type) {
     if (!(type->t & 0x00001000)) {
-        if (!(sym->type.t & 0x00001000))
-            tcc_error("redefinition of '%s'", get_tok_str(sym->v, ((void*)0)));
         sym->type.t &= ~0x00001000;
     }
-    if ((((sym)->type.t & (0x000f | (0 | 0x0010))) == (0 | 0x0010))) {
-        sym->type.t = type->t & (sym->type.t | ~0x00002000);
-        sym->type.ref = type->ref;
-    }
-    if (!is_compatible_types(&sym->type, type)) {
-        tcc_error("incompatible types for redefinition of '%s'",
-                  get_tok_str(sym->v, ((void*)0)));
-    } else if ((sym->type.t & 0x000f) == 6) {
+    if ((sym->type.t & 0x000f) == 6) {
         int static_proto = sym->type.t & 0x00002000;
-        if ((type->t & 0x00002000) && !static_proto && !(type->t & 0x00008000))
-            tcc_warning("static storage ignored for redefinition of '%s'",
-                get_tok_str(sym->v, ((void*)0)));
         if (0 == (type->t & 0x00001000)) {
             sym->type.t = (type->t & ~0x00002000) | static_proto;
-            if (type->t & 0x00008000)
-                sym->type.t = type->t;
             sym->type.ref = type->ref;
         }
-    } else {
-        if ((sym->type.t & 0x0040) && type->ref->c >= 0) {
-            if (sym->type.ref->c < 0)
-                sym->type.ref->c = type->ref->c;
-            else if (sym->type.ref->c != type->ref->c)
-                tcc_error("conflicting type for '%s'", get_tok_str(sym->v, ((void*)0)));
-        }
-        if ((type->t ^ sym->type.t) & 0x00002000)
-            tcc_warning("storage mismatch for redefinition of '%s'",
-                get_tok_str(sym->v, ((void*)0)));
     }
 }
 
