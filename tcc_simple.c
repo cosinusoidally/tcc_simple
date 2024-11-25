@@ -8536,87 +8536,20 @@ static void gexpr(void) {
     }
 }
 
-static void expr_const1(void)
-{
-    const_wanted++;
-    nocode_wanted++;
-    expr_cond();
-    nocode_wanted--;
-    const_wanted--;
-}
-static inline int64_t expr_const64(void)
-{
-    int64_t c;
-    expr_const1();
-    if ((vtop->r & (0x003f | 0x0100 | 0x0200)) != 0x0030)
-        expect("constant expression");
-    c = vtop->c.i;
-    vpop();
-    return c;
-}
-static int expr_const(void)
-{
-    int c;
-    int64_t wc = expr_const64();
-    c = wc;
-    if (c != wc && (unsigned)c != wc)
-        tcc_error("constant exceeds 32 bit");
-    return c;
+static void expr_const1(void) {
+exit(1);
 }
 
-static void gfunc_return(CType *func_type)
-{
-    if ((func_type->t & 0x000f) == 7) {
-        CType type, ret_type;
-        int ret_align, ret_nregs, regsize;
-        ret_nregs = gfunc_sret(func_type, func_var, &ret_type,
-                               &ret_align, &regsize);
-        if (0 == ret_nregs) {
-            type = *func_type;
-            mk_pointer(&type);
-            vset(&type, 0x0032 | 0x0100, func_vc);
-            indir();
-            vswap();
-            vstore();
-        } else {
-            int r, size, addr, align;
-            size = type_size(func_type,&align);
-            if ((vtop->r != (0x0032 | 0x0100) ||
-                 (vtop->c.i & (ret_align-1)))
-                && (align & (ret_align-1))) {
-                loc = (loc - size) & -ret_align;
-                addr = loc;
-                type = *func_type;
-                vset(&type, 0x0032 | 0x0100, addr);
-                vswap();
-                vstore();
-                vpop();
-                vset(&ret_type, 0x0032 | 0x0100, addr);
-            }
-            vtop->type = ret_type;
-            if (is_float(ret_type.t))
-                r = rc_fret(ret_type.t);
-            else
-                r = 0x0004;
-            if (ret_nregs == 1)
-                gv(r);
-            else {
-                for (;;) {
-                    vdup();
-                    gv(r);
-                    vpop();
-                    if (--ret_nregs == 0)
-                      break;
-                    r <<= 1;
-                    vtop->c.i += regsize;
-                }
-            }
-        }
-    } else if (is_float(func_type->t)) {
-        gv(rc_fret(func_type->t));
-    } else {
-        gv(0x0004);
-    }
+static inline int64_t expr_const64(void) {
+exit(1);
+}
+
+static int expr_const(void) {
+exit(1);
+}
+
+static void gfunc_return(CType *func_type) {
+    gv(0x0004);
     vtop--;
 }
 
