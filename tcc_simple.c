@@ -4281,7 +4281,6 @@ static inline CType *pointed_type(CType *type);
 static int is_compatible_types(CType *type1, CType *type2);
 static int parse_btype(CType *type, AttributeDef *ad);
 static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td);
-static void parse_expr_type(CType *type);
 static void init_putv(CType *type, Section *sec, unsigned long c);
 static void decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
@@ -5215,36 +5214,9 @@ static void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
     CType type;
     func_type = func->f.func_type;
-    if (func_type == 2 ||
-        (func_type == 3 && arg == ((void*)0))) {
-        if (vtop->type.t & 0x0080) {
-            type.t = vtop->type.t & (0x000f | 0x0010);
-     type.ref = vtop->type.ref;
-            gen_cast(&type);
-        }
-    } else if (arg == ((void*)0)) {
-        tcc_error("too many arguments to function");
-    } else {
-        type = arg->type;
-        type.t &= ~0x0100;
-        gen_assign_cast(&type);
-    }
-}
-
-static void expr_type(CType *type, void (*expr_fn)(void)) {
-exit(1);
-}
-
-static void parse_expr_type(CType *type) {
-exit(1);
-}
-
-static void parse_type(CType *type) {
-exit(1);
-}
-
-static void parse_builtin_params(int nc, const char *args) {
-exit(1);
+    type = arg->type;
+    type.t &= ~0x0100;
+    gen_assign_cast(&type);
 }
 
 static void unary(void) {
