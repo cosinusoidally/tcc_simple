@@ -3280,30 +3280,12 @@ static void cstr_free(CString *cstr)
     tal_free_impl(cstr_alloc, cstr->data);
     cstr_new(cstr);
 }
-static void cstr_reset(CString *cstr)
-{
+
+static void cstr_reset(CString *cstr) {
     cstr->size = 0;
 }
-static void add_char(CString *cstr, int c)
-{
-    if (c == '\'' || c == '\"' || c == '\\') {
-        cstr_ccat(cstr, '\\');
-    }
-    if (c >= 32 && c <= 126) {
-        cstr_ccat(cstr, c);
-    } else {
-        cstr_ccat(cstr, '\\');
-        if (c == '\n') {
-            cstr_ccat(cstr, 'n');
-        } else {
-            cstr_ccat(cstr, '0' + ((c >> 6) & 7));
-            cstr_ccat(cstr, '0' + ((c >> 3) & 7));
-            cstr_ccat(cstr, '0' + (c & 7));
-        }
-    }
-}
-static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
-{
+
+static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len) {
     TokenSym *ts, **ptable;
     int i;
     if (tok_ident >= 0x10000000)
@@ -3523,21 +3505,7 @@ static int set_idnum(int c, int val)
     isidnum_table[c - (-1)] = val;
     return prev;
 }
-static inline void skip_spaces(void)
-{
-    while (isidnum_table[ch - (-1)] & 1)
-        minp();
-}
-static inline int check_space(int t, int *spc)
-{
-    if (t < 256 && (isidnum_table[t - (-1)] & 1)) {
-        if (*spc)
-            return 1;
-        *spc = 1;
-    } else
-        *spc = 0;
-    return 0;
-}
+
 static uint8_t *parse_pp_string(uint8_t *p,
                                 int sep, CString *str)
 {
@@ -5508,23 +5476,6 @@ static void unary(void) {
     case TOK___FUNCTION__:
         if (!gnu_ext)
             goto tok_identifier;
-    case TOK___FUNC__:
-        {
-            void *ptr;
-            int len;
-            len = strlen(funcname) + 1;
-            type.t = 1;
-            mk_pointer(&type);
-            type.t |= 0x0040;
-            type.ref->c = len;
-            vpush_ref(&type, data_section, data_section->data_offset, len);
-            if (!(nocode_wanted > 0)) {
-                ptr = section_ptr_add(data_section, len);
-                memcpy(ptr, funcname, len);
-            }
-            next();
-        }
-        break;
     case 0xba:
         t = 3;
         goto str_init;
