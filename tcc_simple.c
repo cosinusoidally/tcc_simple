@@ -4813,9 +4813,6 @@ static void unary(void) {
     type.ref = ((void*)0);
  tok_next:
     switch(tok) {
-    case TOK_EXTENSION:
-        next();
-        goto tok_next;
     case 0xb4:
     case 0xb5:
     case 0xb3:
@@ -4828,40 +4825,9 @@ static void unary(void) {
     case 0xb6:
         t = 3 | 0x0010;
         goto push_tokc;
-    case 0xb7:
-        t = 4;
- goto push_tokc;
-    case 0xb8:
-        t = 4 | 0x0010;
- goto push_tokc;
-    case 0xbb:
-        t = 8;
- goto push_tokc;
-    case 0xbc:
-        t = 9;
- goto push_tokc;
-    case 0xbd:
-        t = 10;
- goto push_tokc;
-    case 0xce:
-        t = (4 == 8 ? 4 : 3) | 0x0800;
- goto push_tokc;
-    case 0xcf:
-        t = (4 == 8 ? 4 : 3) | 0x0800 | 0x0010;
- goto push_tokc;
-    case TOK___FUNCTION__:
-        if (!gnu_ext)
-            goto tok_identifier;
-    case 0xba:
-        t = 3;
-        goto str_init;
     case 0xb9:
         t = 1;
-        if (tcc_state->char_is_unsigned)
-            t = 1 | 0x0010;
     str_init:
-        if (tcc_state->warn_write_strings)
-            t |= 0x0100;
         type.t = t;
         mk_pointer(&type);
         type.t |= 0x0040;
@@ -4870,30 +4836,8 @@ static void unary(void) {
         break;
     case '(':
         next();
-        if (parse_btype(&type, &ad)) {
-            type_decl(&type, &ad, &n, 1);
-            skip(')');
-            if (tok == '{') {
-                if (global_expr)
-                    r = 0x0030;
-                else
-                    r = 0x0032;
-                if (!(type.t & 0x0040))
-                    r |= lvalue_type(type.t);
-                memset(&ad, 0, sizeof(AttributeDef));
-                decl_initializer_alloc(&type, &ad, r, 1, 0, 0);
-            } else {
-                if (sizeof_caller) {
-                    vpush(&type);
-                    return;
-                }
-                unary();
-                gen_cast(&type);
-            }
-        } else {
-            gexpr();
-            skip(')');
-        }
+        gexpr();
+        skip(')');
         break;
     default:
     tok_identifier:
