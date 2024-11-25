@@ -3236,48 +3236,13 @@ static uint8_t *parse_comment(uint8_t *p) {
             p++;
         } else if (c == '*') {
             p++;
-            for(;;) {
+            while(1) {
                 c = *p;
-                if (c == '*') {
-                    p++;
-                } else if (c == '/') {
+                if (c == '/') {
                     goto end_of_comment;
-                } else if (c == '\\') {
-                    file->buf_ptr = p;
-                    c = handle_eob();
-                    p = file->buf_ptr;
-                    if (c == (-1))
-                        tcc_error("unexpected end of file in comment");
-                    if (c == '\\') {
-                        while (c == '\\') {
-                            { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                            if (c == '\n') {
-                                file->line_num++;
-                                { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                            } else if (c == '\r') {
-                                { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                                if (c == '\n') {
-                                    file->line_num++;
-                                    { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                                }
-                            } else {
-                                goto after_star;
-                            }
-                        }
-                    }
                 } else {
                     break;
                 }
-            }
-        after_star: ;
-        } else {
-            file->buf_ptr = p;
-            c = handle_eob();
-            p = file->buf_ptr;
-            if (c == (-1)) {
-                tcc_error("unexpected end of file in comment");
-            } else if (c == '\\') {
-                p++;
             }
         }
     }
