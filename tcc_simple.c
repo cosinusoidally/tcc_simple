@@ -6667,129 +6667,33 @@ static void unary(void) {
             skip(')');
         }
         break;
-    case TOK_GENERIC:
-    {
- CType controlling_type;
- int has_default = 0;
- int has_match = 0;
- int learn = 0;
- TokenString *str = ((void*)0);
- next();
- skip('(');
- expr_type(&controlling_type, expr_eq);
- controlling_type.t &= ~(0x0100 | 0x0200 | 0x0040);
- for (;;) {
-     learn = 0;
-     skip(',');
-     if (tok == TOK_DEFAULT) {
-  if (has_default)
-      tcc_error("too many 'default'");
-  has_default = 1;
-  if (!has_match)
-      learn = 1;
-  next();
-     } else {
-         AttributeDef ad_tmp;
-  int itmp;
-         CType cur_type;
-  parse_btype(&cur_type, &ad_tmp);
-  type_decl(&cur_type, &ad_tmp, &itmp, 1);
-  if (compare_types(&controlling_type, &cur_type, 0)) {
-      if (has_match) {
-        tcc_error("type match twice");
-      }
-      has_match = 1;
-      learn = 1;
-  }
-     }
-     skip(':');
-     if (learn) {
-  if (str)
-      tok_str_free(str);
-  skip_or_save_block(&str);
-     } else {
-  skip_or_save_block(((void*)0));
-     }
-     if (tok == ')')
-  break;
- }
- if (!str) {
-     char buf[60];
-     tcc_error("type '%s' does not match any association", buf);
- }
- begin_macro(str, 1);
- next();
- expr_eq();
- if (tok != (-1))
-     expect(",");
- end_macro();
-        next();
- break;
-    }
     default:
     tok_identifier:
         t = tok;
         next();
-        if (t < TOK_DEFINE)
-            expect("identifier");
         s = sym_find(t);
-        if (!s || (((s)->type.t & (0x000f | (0 | 0x0010))) == (0 | 0x0010))) {
-            const char *name = get_tok_str(t, ((void*)0));
-            if (tok != '(')
-                tcc_error("'%s' undeclared", name);
-            if (tcc_state->warn_implicit_function_declaration
-            )
-                tcc_warning("implicit declaration of function '%s'", name);
-            s = external_global_sym(t, &func_old_type, 0);
-        }
         r = s->r;
-        if ((r & 0x003f) < 0x0030)
-            r = (r & ~0x003f) | 0x0032;
         vset(&s->type, r, s->c);
  vtop->sym = s;
         if (r & 0x0200) {
             vtop->c.i = 0;
-        } else if (r == 0x0030 && ((s->type.t & (((1 << (6+6)) - 1) << 20 | 0x0080)) == (3 << 20))) {
-            vtop->c.i = s->enum_val;
         }
         break;
     }
     while (1) {
-        if (tok == 0xa4 || tok == 0xa2) {
-            inc(1, tok);
-            next();
-        } else if (tok == '(') {
+        if (tok == '(') {
             SValue ret;
             Sym *sa;
             int nb_args, ret_nregs, ret_align, regsize, variadic;
-            if ((vtop->type.t & 0x000f) != 6) {
-                if ((vtop->type.t & (0x000f | 0x0040)) == 5) {
-                    vtop->type = *pointed_type(&vtop->type);
-                    if ((vtop->type.t & 0x000f) != 6)
-                        goto error_func;
-                } else {
-                error_func:
-                    expect("function pointer");
-                }
-            } else {
-                vtop->r &= ~0x0100;
-            }
+            vtop->r &= ~0x0100;
             s = vtop->type.ref;
             next();
             sa = s->next;
             nb_args = regsize = 0;
             ret.r2 = 0x0030;
-            if ((s->type.t & 0x000f) == 7) {
-                variadic = (s->f.func_type == 3);
-                ret_nregs = gfunc_sret(&s->type, variadic, &ret.type,
-                                       &ret_align, &regsize);
-            } else {
-                ret_nregs = 1;
-                ret.type = s->type;
-            }
+            ret_nregs = 1;
+            ret.type = s->type;
             if (ret_nregs) {
-                if ((ret.type.t & 0x000f) == 4)
-                    ret.r2 = TREG_EDX;
                 ret.r = TREG_EAX;
                 ret.c.i = 0;
             }
@@ -6805,32 +6709,11 @@ static void unary(void) {
                     skip(',');
                 }
             }
-            if (sa)
-                tcc_error("too few arguments to function");
             skip(')');
             gfunc_call(nb_args);
             for (r = ret.r + ret_nregs + !ret_nregs; r-- > ret.r;) {
                 vsetc(&ret.type, r, &ret.c);
                 vtop->r2 = ret.r2;
-            }
-            if (((s->type.t & 0x000f) == 7) && ret_nregs) {
-                int addr, offset;
-                size = type_size(&s->type, &align);
-  if (regsize > align)
-    align = regsize;
-                loc = (loc - size) & -align;
-                addr = loc;
-                offset = 0;
-                for (;;) {
-                    vset(&ret.type, 0x0032 | 0x0100, addr + offset);
-                    vswap();
-                    vstore();
-                    vtop--;
-                    if (--ret_nregs == 0)
-                        break;
-                    offset += regsize;
-                }
-                vset(&s->type, 0x0032 | 0x0100, addr);
             }
         } else {
             break;
