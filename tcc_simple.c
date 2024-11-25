@@ -2914,11 +2914,9 @@ static void tcc_debug_start(TCCState *s1);
 static void tcc_debug_end(TCCState *s1);
 static void tcc_debug_funcstart(TCCState *s1, Sym *sym);
 static void tcc_debug_funcend(TCCState *s1, int size);
-static void tcc_debug_line(TCCState *s1);
 static int tccgen_compile(TCCState *s1);
 static void check_vstack(void);
 static inline int is_float(int t);
-static int ieee_finite(double d);
 static void test_lvalue(void);
 static void vpushi(int v);
 static Elf32_Sym *elfsym(Sym *);
@@ -3079,7 +3077,6 @@ static int pp_debug_tok, pp_debug_symv;
 static int pp_once;
 static int pp_expr;
 static int pp_counter;
-static void tok_print(const char *msg, const int *str);
 static struct TinyAlloc *toksym_alloc;
 static struct TinyAlloc *tokstr_alloc;
 static struct TinyAlloc *cstr_alloc;
@@ -5274,26 +5271,6 @@ exit(1);
     cstr_alloc = ((void*)0);
 }
 
-static void tok_print(const char *msg, const int *str) {
-exit(1);
-}
-
-static void pp_line(TCCState *s1, BufferedFile *f, int level) {
-exit(1);
-}
-
-static void define_print(TCCState *s1, int v) {
-exit(1);
-}
-
-static int pp_need_space(int a, int b) {
-exit(1);
-}
-
-static int pp_check_he0xE(int t, const char *p) {
-exit(1);
-}
-
 static int rsym, anon_sym, ind, loc;
 static Sym *sym_free_first;
 static void **sym_pools;
@@ -5356,12 +5333,6 @@ static inline int is_float(int t)
     bt = t & 0x000f;
     return bt == 10 || bt == 9 || bt == 8 || bt == 14;
 }
-static int ieee_finite(double d)
-{
-    int p[4];
-    memcpy(p, &d, sizeof(double));
-    return ((unsigned)((p[1] | 0x800fffff) + 1)) >> 31;
-}
 static void test_lvalue(void)
 {
     if (!(vtop->r & 0x0100))
@@ -5380,10 +5351,6 @@ static void tcc_debug_start(TCCState *s1) {
 }
 
 static void tcc_debug_end(TCCState *s1) {
-    return;
-}
-
-static void tcc_debug_line(TCCState *s1) {
     return;
 }
 
@@ -5426,27 +5393,20 @@ static Elf32_Sym *elfsym(Sym *s)
     return ((void*)0);
   return &((Elf32_Sym *)symtab_section->data)[s->c];
 }
-static void update_storage(Sym *sym)
-{
+
+static void update_storage(Sym *sym) {
     Elf32_Sym *esym;
     int sym_bind, old_sym_bind;
     esym = elfsym(sym);
     if (!esym)
         return;
-    if (sym->a.visibility)
-        esym->st_other = (esym->st_other & ~((-1) & 0x03))
-            | sym->a.visibility;
     if (sym->type.t & 0x00002000)
         sym_bind = 0;
-    else if (sym->a.weak)
-        sym_bind = 2;
     else
         sym_bind = 1;
     old_sym_bind = (((unsigned char) (esym->st_info)) >> 4);
-    if (sym_bind != old_sym_bind) {
-        esym->st_info = (((sym_bind) << 4) + ((((esym->st_info) & 0xf)) & 0xf));
-    }
 }
+
 static void put_extern_sym2(Sym *sym, int sh_num,
                             Elf32_Addr value, unsigned long size,
                             int can_add_underscore)
@@ -7624,8 +7584,6 @@ static void block(int *bsym, int *csym, int is_expr)
 {
     int a, b, c, d, cond;
     Sym *s;
-    if (tcc_state->do_debug)
-        tcc_debug_line(tcc_state);
     if (is_expr) {
         vpushi(0);
         vtop->type.t = 0;
