@@ -6354,39 +6354,18 @@ static int parse_btype(CType *type, AttributeDef *ad)
             s = sym_find(tok);
             if (!s || !(s->type.t & 0x00004000))
                 goto the_end;
-            t &= ~(0x000f|0x0800);
-            u = t & ~(0x0100 | 0x0200), t ^= u;
-            type->t = (s->type.t & ~0x00004000) | u;
-            type->ref = s->type.ref;
-            if (t)
-                parse_btype_qualify(type, t);
-            t = type->t;
-            sym_to_attr(ad, s);
-            next();
-            typespec_found = 1;
-            st = bt = -2;
-            break;
         }
         type_found = 1;
     }
 the_end:
-    if (tcc_state->char_is_unsigned) {
-        if ((t & (0x0020|0x000f)) == 1)
-            t |= 0x0010;
-    }
     bt = t & (0x000f|0x0800);
-    if (bt == 0x0800)
-        t |= 4 == 8 ? 4 : 3;
     type->t = t;
     return type_found;
 }
-static inline void convert_parameter_type(CType *pt)
-{
+
+static inline void convert_parameter_type(CType *pt) {
     pt->t &= ~(0x0100 | 0x0200);
     pt->t &= ~0x0040;
-    if ((pt->t & 0x000f) == 6) {
-        mk_pointer(pt);
-    }
 }
 
 static int post_type(CType *type, AttributeDef *ad, int storage, int td)
