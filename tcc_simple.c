@@ -2940,7 +2940,6 @@ static void gfunc_epilog(void);
 static int gjmp(int t);
 static void gjmp_addr(int a);
 static int gtst(int inv, int t);
-static void gtst_addr(int inv, int a);
 static void gen_opi(int op);
 static void gen_opf(int op);
 static void gen_cvt_ftoi(int t);
@@ -6645,9 +6644,6 @@ static void gcall_or_jmp(int is_jmp) {
     }
 }
 
-static uint8_t fastcall_regs[3] = { TREG_EAX, TREG_EDX, TREG_ECX };
-static uint8_t fastcallw_regs[2] = { TREG_ECX, TREG_EDX };
-
 static void gfunc_call(int nb_args) {
     int size, align, r, args_size, i, func_call;
     Sym *func_sym;
@@ -6703,13 +6699,7 @@ static void gfunc_epilog(void) {
     Elf32_Addr v, saved_ind;
     v = (-loc + 3) & -4;
     o(0xc9);
-    if (func_ret_sub == 0) {
-        o(0xc3);
-    } else {
-        o(0xc2);
-        g(func_ret_sub);
-        g(func_ret_sub >> 8);
-    }
+    o(0xc3);
     saved_ind = ind;
     ind = func_sub_sp_offset - (9 + 0);
     {
@@ -6720,12 +6710,12 @@ static void gfunc_epilog(void) {
     o(0x53 * 0);
     ind = saved_ind;
 }
-static int gjmp(int t)
-{
+
+static int gjmp(int t) {
     return oad(0xe9,t);
 }
-static void gjmp_addr(int a)
-{
+
+static void gjmp_addr(int a) {
     int r;
     r = a - ind - 2;
     if (r == (char)r) {
@@ -6735,33 +6725,8 @@ static void gjmp_addr(int a)
         oad(0xe9, a - ind - 5);
     }
 }
-static void gtst_addr(int inv, int a)
-{
-    int v = vtop->r & 0x003f;
-    if (v == 0x0033) {
- inv ^= (vtop--)->c.i;
- a -= ind + 2;
- if (a == (char)a) {
-     g(inv - 32);
-     g(a);
- } else {
-     g(0x0f);
-     oad(inv - 16, a - 4);
- }
-    } else if ((v & ~1) == 0x0034) {
- if ((v & 1) != inv) {
-     gjmp_addr(a);
-     gsym(vtop->c.i);
- } else {
-     gsym(vtop->c.i);
-     o(0x05eb);
-     gjmp_addr(a);
- }
- vtop--;
-    }
-}
-static int gtst(int inv, int t)
-{
+
+static int gtst(int inv, int t) {
     int v = vtop->r & 0x003f;
     if (nocode_wanted) {
         ;
