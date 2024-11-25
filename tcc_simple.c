@@ -6722,48 +6722,43 @@ static void unary(void) {
 }
 
 static void expr_prod(void) {
-    int t;
     unary();
 }
 
 static void expr_sum(void) {
-    int t;
-    expr_prod();
+    unary();
 }
 
 static void expr_shift(void) {
-    int t;
-    expr_sum();
+    unary();
 }
 
 static void expr_cmp(void) {
-    int t;
-    expr_shift();
+    unary();
 }
 
 static void expr_cmpeq(void) {
-    int t;
-    expr_cmp();
+    unary();
 }
 
 static void expr_and(void) {
-    expr_cmpeq();
+    unary();
 }
 
 static void expr_xor(void) {
-    expr_and();
+    unary();
 }
 
 static void expr_or(void) {
-    expr_xor();
+    unary();
 }
 
 static void expr_land(void) {
-    expr_or();
+    unary();
 }
 
 static void expr_lor(void) {
-    expr_land();
+    unary();
 }
 
 static int condition_3way(void) {
@@ -6771,15 +6766,12 @@ static int condition_3way(void) {
 }
 
 static void expr_cond(void) {
-    int tt, u, r1, r2, rc, t1, t2, bt1, bt2, islv, c, g;
-    SValue sv;
-    CType type, type1, type2;
-    expr_lor();
+    unary();
 }
 
 static void expr_eq(void) {
     int t;
-    expr_cond();
+    unary();
     if (tok == '=' ||
         (tok >= 0xa5 && tok <= 0xaf) ||
         tok == 0xde || tok == 0xfc ||
