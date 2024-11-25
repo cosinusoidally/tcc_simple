@@ -2924,10 +2924,6 @@ static void update_storage(Sym *sym);
 static Sym *external_global_sym(int v, CType *type, int r);
 static void vset(CType *type, int r, int v);
 static void vswap(void);
-static void vpush_global_sym(CType *type, int v);
-static void vrote(SValue *e, int n);
-static void vrott(int n);
-static void vrotb(int n);
 static void save_reg(int r);
 static void save_reg_upstack(int r, int n);
 static int get_reg(int rc);
@@ -5645,28 +5641,6 @@ static void vset(CType *type, int r, int v)
     vsetc(type, r, &cval);
 }
 
-static void vrotb(int n)
-{
-    int i;
-    SValue tmp;
-    tmp = vtop[-n + 1];
-    for(i=-n+1;i!=0;i++)
-        vtop[i] = vtop[i+1];
-    vtop[0] = tmp;
-}
-static void vrote(SValue *e, int n)
-{
-    int i;
-    SValue tmp;
-    tmp = *e;
-    for(i = 0;i < n - 1; i++)
-        e[-i] = e[-i - 1];
-    e[-n + 1] = tmp;
-}
-static void vrott(int n)
-{
-    vrote(vtop, n);
-}
 static inline void vpushsym(CType *type, Sym *sym)
 {
     CValue cval;
@@ -5689,21 +5663,18 @@ static void vpush_ref(CType *type, Section *sec, unsigned long offset, unsigned 
 {
     vpushsym(type, get_sym_ref(type, sec, offset, size));
 }
-static Sym *external_global_sym(int v, CType *type, int r)
-{
+
+static Sym *external_global_sym(int v, CType *type, int r) {
     Sym *s;
     s = sym_find(v);
     if (!s) {
         s = global_identifier_push(v, type->t | 0x00001000, 0);
         s->type.ref = type->ref;
         s->r = r | 0x0030 | 0x0200;
-    } else if ((((s)->type.t & (0x000f | (0 | 0x0010))) == (0 | 0x0010))) {
-        s->type.t = type->t | (s->type.t & 0x00001000);
-        s->type.ref = type->ref;
-        update_storage(s);
     }
     return s;
 }
+
 static void patch_type(Sym *sym, CType *type)
 {
     if (!(type->t & 0x00001000)) {
@@ -5741,28 +5712,15 @@ static void patch_type(Sym *sym, CType *type)
                 get_tok_str(sym->v, ((void*)0)));
     }
 }
-static void patch_storage(Sym *sym, AttributeDef *ad, CType *type)
-{
+
+static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
     if (type)
         patch_type(sym, type);
     sym->a.weak |= ad->a.weak;
-    if (ad->a.visibility) {
-        int vis = sym->a.visibility;
-        int vis2 = ad->a.visibility;
-        if (vis == 0)
-            vis = vis2;
-        else if (vis2 != 0)
-            vis = (vis < vis2) ? vis : vis2;
-        sym->a.visibility = vis;
-    }
-    if (ad->a.aligned)
-        sym->a.aligned = ad->a.aligned;
-    if (ad->asm_label)
-        sym->asm_label = ad->asm_label;
     update_storage(sym);
 }
-static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
-{
+
+static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
     Sym *s;
     s = sym_find(v);
     if (!s) {
@@ -5770,22 +5728,11 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
         s->type.t |= 0x00001000;
         s->a = ad->a;
         s->sym_scope = 0;
-    } else {
-        if (s->type.ref == func_old_type.ref) {
-            s->type.ref = type->ref;
-            s->r = r | 0x0030 | 0x0200;
-            s->type.t |= 0x00001000;
-        }
-        patch_storage(s, ad, type);
     }
     return s;
 }
-static void vpush_global_sym(CType *type, int v)
-{
-    vpushsym(type, external_global_sym(v, type, 0));
-}
-static void save_regs(int n)
-{
+
+static void save_regs(int n) {
     SValue *p, *p1;
     for(p = (__vstack + 1), p1 = vtop - n; p <= p1; p++)
         save_reg(p->r);
@@ -6066,41 +6013,12 @@ redo:
 }
 static void gen_cvt_itof1(int t)
 {
-    if ((vtop->type.t & (0x000f | 0x0010)) ==
-        (4 | 0x0010)) {
-        if (t == 8)
-            vpush_global_sym(&func_old_type, TOK___floatundisf);
-        else if (t == 10)
-            vpush_global_sym(&func_old_type, TOK___floatundixf);
-        else
-            vpush_global_sym(&func_old_type, TOK___floatundidf);
-        vrott(2);
-        gfunc_call(1);
-        vpushi(0);
-        vtop->r = reg_fret(t);
-    } else {
-        gen_cvt_itof(t);
-    }
+    gen_cvt_itof(t);
 }
 static void gen_cvt_ftoi1(int t)
 {
     int st;
-    if (t == (4 | 0x0010)) {
-        st = vtop->type.t & 0x000f;
-        if (st == 8)
-            vpush_global_sym(&func_old_type, TOK___fixunssfdi);
-        else if (st == 10)
-            vpush_global_sym(&func_old_type, TOK___fixunsxfdi);
-        else
-            vpush_global_sym(&func_old_type, TOK___fixunsdfdi);
-        vrott(2);
-        gfunc_call(1);
-        vpushi(0);
-        vtop->r = TREG_EAX;
-        vtop->r2 = TREG_EDX;
-    } else {
-        gen_cvt_ftoi(t);
-    }
+    gen_cvt_ftoi(t);
 }
 static void force_charshort_cast(int t)
 {
