@@ -6959,46 +6959,7 @@ static void gen_opic(int op)
               (v2->type.t & 0x0010 ? 0 : -(l2 & 0x80000000)));
     if (c1 && c2) {
         switch(op) {
-        case '+': l1 += l2; break;
-        case '-': l1 -= l2; break;
-        case '&': l1 &= l2; break;
-        case '^': l1 ^= l2; break;
-        case '|': l1 |= l2; break;
-        case '*': l1 *= l2; break;
-        case 0xb2:
-        case '/':
-        case '%':
-        case 0xb0:
-        case 0xb1:
-            if (l2 == 0) {
-                if (const_wanted)
-                    tcc_error("division by zero in constant");
-                goto general_case;
-            }
-            switch(op) {
-            default: l1 = gen_opic_sdiv(l1, l2); break;
-            case '%': l1 = l1 - l2 * gen_opic_sdiv(l1, l2); break;
-            case 0xb0: l1 = l1 / l2; break;
-            case 0xb1: l1 = l1 % l2; break;
-            }
-            break;
-        case 0x01: l1 <<= (l2 & shm); break;
-        case 0xc9: l1 >>= (l2 & shm); break;
-        case 0x02:
-            l1 = (l1 >> 63) ? ~(~l1 >> (l2 & shm)) : l1 >> (l2 & shm);
-            break;
-        case 0x92: l1 = l1 < l2; break;
-        case 0x93: l1 = l1 >= l2; break;
-        case 0x94: l1 = l1 == l2; break;
         case 0x95: l1 = l1 != l2; break;
-        case 0x96: l1 = l1 <= l2; break;
-        case 0x97: l1 = l1 > l2; break;
-        case 0x9c: l1 = gen_opic_lt(l1, l2); break;
-        case 0x9d: l1 = !gen_opic_lt(l1, l2); break;
-        case 0x9e: l1 = !gen_opic_lt(l2, l1); break;
-        case 0x9f: l1 = gen_opic_lt(l2, l1); break;
-        case 0xa0: l1 = l1 && l2; break;
-        case 0xa1: l1 = l1 || l2; break;
         default:
             goto general_case;
         }
@@ -7008,69 +6969,8 @@ static void gen_opic(int op)
         v1->c.i = l1;
         vtop--;
     } else {
-        if (c1 && (op == '+' || op == '&' || op == '^' ||
-                   op == '|' || op == '*')) {
-            vswap();
-            c2 = c1;
-            l2 = l1;
-        }
-        if (!const_wanted &&
-            c1 && ((l1 == 0 &&
-                    (op == 0x01 || op == 0xc9 || op == 0x02)) ||
-                   (l1 == -1 && op == 0x02))) {
-            vtop--;
-        } else if (!const_wanted &&
-                   c2 && ((l2 == 0 && (op == '&' || op == '*')) ||
-                          (op == '|' &&
-                            (l2 == -1 || (l2 == 0xFFFFFFFF && t2 != 4))) ||
-                          (l2 == 1 && (op == '%' || op == 0xb1)))) {
-            if (l2 == 1)
-                vtop->c.i = 0;
-            vswap();
-            vtop--;
-        } else if (c2 && (((op == '*' || op == '/' || op == 0xb0 ||
-                          op == 0xb2) &&
-                           l2 == 1) ||
-                          ((op == '+' || op == '-' || op == '|' || op == '^' ||
-                            op == 0x01 || op == 0xc9 || op == 0x02) &&
-                           l2 == 0) ||
-                          (op == '&' &&
-                            (l2 == -1 || (l2 == 0xFFFFFFFF && t2 != 4))))) {
-            vtop--;
-        } else if (c2 && (op == '*' || op == 0xb2 || op == 0xb0)) {
-            if (l2 > 0 && (l2 & (l2 - 1)) == 0) {
-                int n = -1;
-                while (l2) {
-                    l2 >>= 1;
-                    n++;
-                }
-                vtop->c.i = n;
-                if (op == '*')
-                    op = 0x01;
-                else if (op == 0xb2)
-                    op = 0x02;
-                else
-                    op = 0xc9;
-            }
-            goto general_case;
-        } else if (c2 && (op == '+' || op == '-') &&
-                   (((vtop[-1].r & (0x003f | 0x0100 | 0x0200)) == (0x0030 | 0x0200))
-                    || (vtop[-1].r & (0x003f | 0x0100)) == 0x0032)) {
-            if (op == '-')
-                l2 = -l2;
-     l2 += vtop[-1].c.i;
-     if ((int)l2 != l2)
-         goto general_case;
-            vtop--;
-            vtop->c.i = l2;
-        } else {
-        general_case:
-                if (t1 == 4 || t2 == 4 ||
-                    (4 == 8 && (t1 == 5 || t2 == 5)))
-                    gen_opl(op);
-                else
-                    gen_opi(op);
-        }
+    general_case:
+           gen_opi(op);
     }
 }
 
