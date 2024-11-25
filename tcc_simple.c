@@ -3368,17 +3368,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
             len += nb_words;
         }
         break;
-    case 0xbc:
-    case 0xb7:
-    case 0xb8:
-        str[len++] = cv->tab[0];
-        str[len++] = cv->tab[1];
-        break;
-    case 0xbd:
-        str[len++] = cv->tab[0];
-        str[len++] = cv->tab[1];
-        str[len++] = cv->tab[2];
-        break;
     default:
         break;
     }
@@ -3394,8 +3383,8 @@ static void tok_str_add_tok(TokenString *s)
     }
     tok_str_add2(s, tok, &tokc);
 }
-static inline void TOK_GET(int *t, const int **pp, CValue *cv)
-{
+
+static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
     const int *p = *pp;
     int n, *tab;
     tab = cv->tab;
@@ -3407,13 +3396,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     case 0xc0:
         cv->i = *p++;
         break;
-    case 0xcf:
-    case 0xb6:
-        cv->i = (unsigned)*p++;
-        break;
-    case 0xbb:
- tab[0] = *p++;
- break;
     case 0xb9:
     case 0xba:
     case 0xbe:
@@ -3421,18 +3403,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
         cv->str.size = *p++;
         cv->str.data = p;
         p += (cv->str.size + sizeof(int) - 1) / sizeof(int);
-        break;
-    case 0xbc:
-    case 0xb7:
-    case 0xb8:
-        n = 2;
-        goto copy;
-    case 0xbd:
-        n = 3;
-    copy:
-        do
-            *tab++ = *p++;
-        while (--n);
         break;
     default:
         break;
