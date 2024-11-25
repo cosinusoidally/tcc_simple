@@ -5029,26 +5029,15 @@ static void gen_op(int op) {
     t2 = vtop[0].type.t;
     bt1 = t1 & 0x000f;
     bt2 = t2 & 0x000f;
-    if (bt1 == 7 || bt2 == 7) {
-        tcc_error("operation on a struct");
-    } else {
-        t = 3 | (0x0800 & (t1 | t2));
-    std_op:
-        vswap();
-        type1.t = t;
-        type1.ref = ((void*)0);
-        gen_cast(&type1);
-        vswap();
-        gen_cast(&type1);
-        gen_opic(op);
-        if (op >= 0x92 && op <= 0x9f) {
-            vtop->type.t = 3;
-        } else {
-            vtop->type.t = t;
-        }
-    }
-    if (vtop->r & 0x0100)
-        gv(is_float(vtop->type.t & 0x000f) ? 0x0002 : 0x0001);
+    t = 3 | (0x0800 & (t1 | t2));
+    vswap();
+    type1.t = t;
+    type1.ref = ((void*)0);
+    gen_cast(&type1);
+    vswap();
+    gen_cast(&type1);
+    gen_opic(op);
+    vtop->type.t = 3;
 }
 
 static void gen_cvt_itof1(int t)
