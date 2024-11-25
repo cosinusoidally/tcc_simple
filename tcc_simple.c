@@ -3422,68 +3422,17 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             p++;
             c = *p;
             switch(c) {
-            case 'x':
-            case 'u':
-            case 'U':
-                p++;
-                n = 0;
-                for(;;) {
-                    c = *p;
-                    if (c >= 'a' && c <= 'f')
-                        c = c - 'a' + 10;
-                    else if (c >= 'A' && c <= 'F')
-                        c = c - 'A' + 10;
-                    else if (isnum(c))
-                        c = c - '0';
-                    else
-                        break;
-                    n = n * 16 + c;
-                    p++;
-                }
-                c = n;
-                goto add_char_nonext;
-            case 'a':
-                c = '\a';
-                break;
-            case 'b':
-                c = '\b';
-                break;
-            case 'f':
-                c = '\f';
-                break;
             case 'n':
                 c = '\n';
-                break;
-            case 'r':
-                c = '\r';
-                break;
-            case 't':
-                c = '\t';
-                break;
-            case 'v':
-                c = '\v';
-                break;
-            case 'e':
-                if (!gnu_ext)
-                    goto invalid_escape;
-                c = 27;
                 break;
             case '\'':
             case '\"':
             case '\\':
             case '?':
                 break;
-            default:
-            invalid_escape:
-                if (c >= '!' && c <= '~')
-                    tcc_warning("unknown escape sequence: \'\\%c\'", c);
-                else
-                    tcc_warning("unknown escape sequence: \'\\x%x\'", c);
-                break;
             }
         }
         p++;
-    add_char_nonext:
         cstr_ccat(outstr, c);
     }
     cstr_ccat(outstr, '\0');
