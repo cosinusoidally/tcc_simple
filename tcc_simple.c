@@ -2825,7 +2825,6 @@ static void dynarray_add(void *ptab, int *nb_ptr, void *data);
 static void dynarray_reset(void *pp, int *n);
 static inline void cstr_ccat(CString *cstr, int ch);
 static void cstr_cat(CString *cstr, const char *str, int len);
-static void cstr_wccat(CString *cstr, int ch);
 static void cstr_new(CString *cstr);
 static void cstr_free(CString *cstr);
 static void cstr_reset(CString *cstr);
@@ -2975,7 +2974,6 @@ static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size, int inf
 static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset, int type, int symbol, Elf32_Addr addend);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 static uint8_t *parse_comment(uint8_t *p);
-static void minp(void);
 static inline void inp(void);
 static int handle_eob(void);
 enum gotplt_entry {
@@ -3151,20 +3149,8 @@ static TinyAlloc *tal_new(TinyAlloc **pal, unsigned limit, unsigned size)
     if (pal) *pal = al;
     return al;
 }
-static void tal_delete(TinyAlloc *al)
-{
-    TinyAlloc *next;
-tail_call:
-    if (!al)
-        return;
-    next = al->next;
-    tcc_free(al->buffer);
-    tcc_free(al);
-    al = next;
-    goto tail_call;
-}
-static void tal_free_impl(TinyAlloc *al, void *p )
-{
+
+static void tal_free_impl(TinyAlloc *al, void *p ) {
     if (!p)
         return;
 tail_call:
@@ -3261,21 +3247,12 @@ static void cstr_cat(CString *cstr, const char *str, int len)
     memmove(((unsigned char *)cstr->data) + cstr->size, str, len);
     cstr->size = size;
 }
-static void cstr_wccat(CString *cstr, int ch)
-{
-    int size;
-    size = cstr->size + sizeof(nwchar_t);
-    if (size > cstr->size_allocated)
-        cstr_realloc(cstr, size);
-    *(nwchar_t *)(((unsigned char *)cstr->data) + size - sizeof(nwchar_t)) = ch;
-    cstr->size = size;
-}
-static void cstr_new(CString *cstr)
-{
+
+static void cstr_new(CString *cstr) {
     memset(cstr, 0, sizeof(CString));
 }
-static void cstr_free(CString *cstr)
-{
+
+static void cstr_free(CString *cstr) {
     tal_free_impl(cstr_alloc, cstr->data);
     cstr_new(cstr);
 }
@@ -3373,56 +3350,19 @@ static inline void inp(void)
     if (ch == '\\')
         ch = handle_eob();
 }
-static int handle_stray_noerror(void)
-{
-    while (ch == '\\') {
-        inp();
-        if (ch == '\n') {
-            file->line_num++;
-            inp();
-        } else if (ch == '\r') {
-            inp();
-            if (ch != '\n')
-                goto fail;
-            file->line_num++;
-            inp();
-        } else {
-        fail:
-            return 1;
-        }
-    }
-    return 0;
+
+static int handle_stray_noerror(void) {
+exit(1);
 }
-static void handle_stray(void)
-{
-    if (handle_stray_noerror())
-        tcc_error("stray '\\' in program");
-}
-static int handle_stray1(uint8_t *p)
-{
+
+static int handle_stray1(uint8_t *p) {
     int c;
     file->buf_ptr = p;
     if (p >= file->buf_end) {
         c = handle_eob();
         if (c != '\\')
             return c;
-        p = file->buf_ptr;
     }
-    ch = *p;
-    if (handle_stray_noerror()) {
-        if (!(parse_flags & 0x0020))
-            tcc_error("stray '\\' in program");
-        *--file->buf_ptr = '\\';
-    }
-    p = file->buf_ptr;
-    c = *p;
-    return c;
-}
-static void minp(void)
-{
-    inp();
-    if (ch == '\\')
-        handle_stray();
 }
 
 static uint8_t *parse_line_comment(uint8_t *p) {
