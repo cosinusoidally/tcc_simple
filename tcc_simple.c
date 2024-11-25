@@ -4143,8 +4143,6 @@ maybe_newline:
         is_long = 0;
     str_const:
         cstr_reset(&tokcstr);
-        if (is_long)
-            cstr_ccat(&tokcstr, 'L');
         cstr_ccat(&tokcstr, c);
         p = parse_pp_string(p, c, &tokcstr);
         cstr_ccat(&tokcstr, c);
@@ -4173,7 +4171,6 @@ maybe_newline:
     case '?':
     case '~':
     case '@':
-    parse_simple:
         tok = c;
         p++;
         break;
@@ -4209,10 +4206,7 @@ static void next_nomacro(void)
 
 static void next(void) {
  redo:
-    if (parse_flags & 0x0010)
-        next_nomacro_spc();
-    else
-        next_nomacro();
+    next_nomacro();
     if (macro_ptr) {
         if (tok == 0xcc || tok == 0xcb) {
             goto redo;
