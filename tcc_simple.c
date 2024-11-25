@@ -3250,16 +3250,15 @@ static uint8_t *parse_comment(uint8_t *p) {
     p++;
     return p;
 }
-static int set_idnum(int c, int val)
-{
+
+static int set_idnum(int c, int val) {
     int prev = isidnum_table[c - (-1)];
     isidnum_table[c - (-1)] = val;
     return prev;
 }
 
 static uint8_t *parse_pp_string(uint8_t *p,
-                                int sep, CString *str)
-{
+                                int sep, CString *str) {
     int c;
     p++;
     for(;;) {
@@ -3284,8 +3283,6 @@ static uint8_t *parse_pp_string(uint8_t *p,
                         expect("'\n' after '\r'");
                     file->line_num++;
                     p++;
-                } else if (c == (-1)) {
-                    goto unterminated_string;
                 } else {
                     if (str) {
                         cstr_ccat(str, '\\');
@@ -3293,18 +3290,6 @@ static uint8_t *parse_pp_string(uint8_t *p,
                     }
                     p++;
                 }
-            }
-        } else if (c == '\n') {
-            file->line_num++;
-            goto add_char;
-        } else if (c == '\r') {
-            { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-            if (c != '\n') {
-                if (str)
-                    cstr_ccat(str, '\r');
-            } else {
-                file->line_num++;
-                goto add_char;
             }
         } else {
         add_char:
