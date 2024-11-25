@@ -3925,74 +3925,13 @@ static TokenSym *tok_alloc(const char *str, int len)
     }
     return tok_alloc_new(pts, str, len);
 }
-static const char *get_tok_str(int v, CValue *cv)
-{
+
+static const char *get_tok_str(int v, CValue *cv) {
     char *p;
     int i, len;
     cstr_reset(&cstr_buf);
     p = cstr_buf.data;
     switch(v) {
-    case 0xb5:
-    case 0xb6:
-    case 0xce:
-    case 0xcf:
-    case 0xb7:
-    case 0xb8:
-        sprintf(p, "%llu", (unsigned long long)cv->i);
-        break;
-    case 0xb4:
-        cstr_ccat(&cstr_buf, 'L');
-    case 0xb3:
-        cstr_ccat(&cstr_buf, '\'');
-        add_char(&cstr_buf, cv->i);
-        cstr_ccat(&cstr_buf, '\'');
-        cstr_ccat(&cstr_buf, '\0');
-        break;
-    case 0xbe:
-    case 0xbf:
-        return (char*)cv->str.data;
-    case 0xba:
-        cstr_ccat(&cstr_buf, 'L');
-    case 0xb9:
-        cstr_ccat(&cstr_buf, '\"');
-        if (v == 0xb9) {
-            len = cv->str.size - 1;
-            for(i=0;i<len;i++)
-                add_char(&cstr_buf, ((unsigned char *)cv->str.data)[i]);
-        } else {
-            len = (cv->str.size / sizeof(nwchar_t)) - 1;
-            for(i=0;i<len;i++)
-                add_char(&cstr_buf, ((nwchar_t *)cv->str.data)[i]);
-        }
-        cstr_ccat(&cstr_buf, '\"');
-        cstr_ccat(&cstr_buf, '\0');
-        break;
-    case 0xbb:
-        cstr_cat(&cstr_buf, "<float>", 0);
-        break;
-    case 0xbc:
- cstr_cat(&cstr_buf, "<double>", 0);
- break;
-    case 0xbd:
- cstr_cat(&cstr_buf, "<long double>", 0);
- break;
-    case 0xc0:
- cstr_cat(&cstr_buf, "<linenumber>", 0);
- break;
-    case 0x9c:
-        v = '<';
-        goto addv;
-    case 0x9f:
-        v = '>';
-        goto addv;
-    case 0xc8:
-        return strcpy(p, "...");
-    case 0x81:
-        return strcpy(p, "<<=");
-    case 0x82:
-        return strcpy(p, ">>=");
-    case (-1):
-        return strcpy(p, "<eof>");
     default:
         if (v < 256) {
             const unsigned char *q = tok_two_chars;
