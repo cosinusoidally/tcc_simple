@@ -1936,7 +1936,6 @@ typedef struct TCCState TCCState;
  int tcc_add_file(TCCState *s, const char *filename);
  int tcc_set_output_type(TCCState *s, int output_type);
  int tcc_output_file(TCCState *s, const char *filename);
- void *tcc_get_symbol(TCCState *s, const char *name);
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
 typedef unsigned int uint32_t;
@@ -3436,8 +3435,6 @@ static int tcc_object_type(int fd, Elf32_Ehdr *h);
 static int tcc_load_object_file(TCCState *s1, int fd, unsigned long file_offset);
 static int tcc_load_archive(TCCState *s1, int fd);
 static struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
-static Elf32_Addr get_elf_sym_addr(TCCState *s, const char *name, int err);
-static void *tcc_get_symbol_err(TCCState *s, const char *name);
 static uint8_t *parse_comment(uint8_t *p);
 static void minp(void);
 static inline void inp(void);
@@ -9478,27 +9475,7 @@ static int find_elf_sym(Section *s, const char *name)
     }
     return 0;
 }
-static Elf32_Addr get_elf_sym_addr(TCCState *s, const char *name, int err)
-{
-    int sym_index;
-    Elf32_Sym *sym;
-    sym_index = find_elf_sym(s->symtab, name);
-    sym = &((Elf32_Sym *)s->symtab->data)[sym_index];
-    if (!sym_index || sym->st_shndx == 0) {
-        if (err)
-            tcc_error("%s not defined", name);
-        return 0;
-    }
-    return sym->st_value;
-}
- void *tcc_get_symbol(TCCState *s, const char *name)
-{
-    return (void*)(uintptr_t)get_elf_sym_addr(s, name, 0);
-}
-static void* tcc_get_symbol_err(TCCState *s, const char *name)
-{
-    return (void*)(uintptr_t)get_elf_sym_addr(s, name, 1);
-}
+
 static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size,
                        int info, int other, int shndx, const char *name)
 {
