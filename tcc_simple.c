@@ -4020,24 +4020,16 @@ static void parse_number(const char *p)
     lcount = ucount = 0;
     p1 = p;
     if (ucount == 0 && b == 10) {
+    } else {
         if (lcount <= (4 == 4)) {
             if (n >= 0x80000000U)
-                    lcount = (4 == 4) + 1;
-        }
-        if (n >= 0x8000000000000000ULL)
-                ov = 1, ucount = 1;
-        } else {
-            if (lcount <= (4 == 4)) {
-                if (n >= 0x80000000U)
-                    ucount = 1;
-            }
-            if (n >= 0x8000000000000000ULL)
                 ucount = 1;
         }
-        tok = 0xb5;
- if (ucount)
+    }
+    tok = 0xb5;
+    if (ucount)
      ++tok;
-        tokc.i = n;
+    tokc.i = n;
 }
 
 static inline void next_nomacro1(void)
