@@ -6755,46 +6755,6 @@ static void gen_opi(int op) {
             vtop->c.i = op;
         }
         break;
-    case '-':
-    case 0xc5:
-        opc = 5;
-        goto gen_op8;
-    case 0xc4:
-        opc = 2;
-        goto gen_op8;
-    case 0xc6:
-        opc = 3;
-        goto gen_op8;
-    case '&':
-        opc = 4;
-        goto gen_op8;
-    case '^':
-        opc = 6;
-        goto gen_op8;
-    case '|':
-        opc = 1;
-        goto gen_op8;
-    case 0x01:
-        opc = 4;
-        goto gen_shift;
-    case 0xc9:
-        opc = 5;
-        goto gen_shift;
-    case 0x02:
-        opc = 7;
-    gen_shift:
-        opc = 0xc0 | (opc << 3);
-        if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-            vswap();
-            r = gv(0x0001);
-            vswap();
-            c = vtop->c.i & 0x1f;
-            o(0xc1);
-            o(opc | r);
-            g(c);
-        }
-        vtop--;
-        break;
     default:
         opc = 7;
         goto gen_op8;
