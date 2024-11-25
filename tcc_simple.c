@@ -2763,7 +2763,6 @@ static int gnu_ext;
 static int tcc_ext;
 static struct TCCState *tcc_state;
 static char *pstrcpy(char *buf, int buf_size, const char *s);
-static char *pstrncpy(char *out, const char *in, size_t num);
  char *tcc_basename(const char *name);
  char *tcc_fileextension (const char *name);
  void tcc_free(void *ptr);
@@ -6765,21 +6764,14 @@ static char *pstrcpy(char *buf, int buf_size, const char *s) {
     return buf;
 }
 
-static char *pstrncpy(char *out, const char *in, size_t num)
-{
-    memcpy(out, in, num);
-    out[num] = '\0';
-    return out;
-}
- char *tcc_basename(const char *name)
-{
+char *tcc_basename(const char *name) {
     char *p = strchr(name, 0);
     while (p > name && !(p[-1] == '/'))
         --p;
     return p;
 }
- char *tcc_fileextension (const char *name)
-{
+
+char *tcc_fileextension (const char *name) {
     char *b = tcc_basename(name);
     char *e = strrchr(b, '.');
     return e ? e : strchr(b, 0);
