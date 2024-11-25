@@ -2938,8 +2938,6 @@ static void inc(int post, int c);
 static int lvalue_type(int t);
 static void indir(void);
 static void unary(void);
-static void expr_prod(void);
-static void expr_sum(void);
 static void gexpr(void);
 static int expr_const(void);
 static Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size);
@@ -6721,52 +6719,8 @@ static void unary(void) {
     }
 }
 
-static void expr_prod(void) {
-    unary();
-}
-
-static void expr_sum(void) {
-    unary();
-}
-
-static void expr_shift(void) {
-    unary();
-}
-
-static void expr_cmp(void) {
-    unary();
-}
-
-static void expr_cmpeq(void) {
-    unary();
-}
-
-static void expr_and(void) {
-    unary();
-}
-
-static void expr_xor(void) {
-    unary();
-}
-
-static void expr_or(void) {
-    unary();
-}
-
-static void expr_land(void) {
-    unary();
-}
-
-static void expr_lor(void) {
-    unary();
-}
-
 static int condition_3way(void) {
     return -1;
-}
-
-static void expr_cond(void) {
-    unary();
 }
 
 static void expr_eq(void) {
