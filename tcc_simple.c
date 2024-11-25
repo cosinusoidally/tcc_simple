@@ -3311,8 +3311,6 @@ static void tok_str_add(TokenString *s, int t);
 static void tok_str_add_tok(TokenString *s);
 static inline Sym *define_find(int v);
 static void free_defines(Sym *b);
-static Sym *label_find(int v);
-static Sym *label_push(Sym **ptop, int v, int flags);
 static void preprocess(int is_bof);
 static void next_nomacro(void);
 static void next(void);
@@ -4913,44 +4911,9 @@ static inline Sym *define_find(int v)
         return ((void*)0);
     return table_ident[v]->sym_define;
 }
-static void free_defines(Sym *b)
-{
-    while (define_stack != b) {
-        Sym *top = define_stack;
-        define_stack = top->prev;
-        tok_str_free_str(top->d);
-        sym_free(top);
-    }
-    while (b) {
-        int v = b->v;
-        if (v >= 256 && v < tok_ident) {
-            Sym **d = &table_ident[v - 256]->sym_define;
-            if (!*d)
-                *d = b;
-        }
-        b = b->prev;
-    }
-}
-static Sym *label_find(int v)
-{
-    v -= 256;
-    if ((unsigned)v >= (unsigned)(tok_ident - 256))
-        return ((void*)0);
-    return table_ident[v]->sym_label;
-}
-static Sym *label_push(Sym **ptop, int v, int flags)
-{
-    Sym *s, **ps;
-    s = sym_push2(ptop, v, 0, 0);
-    s->r = flags;
-    ps = &table_ident[v - 256]->sym_label;
-    if (ptop == &global_label_stack) {
-        while (*ps != ((void*)0))
-            ps = &(*ps)->prev_tok;
-    }
-    s->prev_tok = *ps;
-    *ps = s;
-    return s;
+
+static void free_defines(Sym *b) {
+return;
 }
 
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long) {
@@ -5828,67 +5791,6 @@ static inline int *macro_twosharps(const int *ptr0)
     }
     tok_str_add(&macro_str1, 0);
     return macro_str1.str;
-}
-static int next_argstream(Sym **nested_list, TokenString *ws_str)
-{
-    int t;
-    const int *p;
-    Sym *sa;
-    for (;;) {
-        if (macro_ptr) {
-            p = macro_ptr, t = *p;
-            if (ws_str) {
-                while (is_space(t) || 10 == t || 0xcb == t)
-                    tok_str_add(ws_str, t), t = *++p;
-            }
-            if (t == 0) {
-                end_macro();
-                sa = *nested_list;
-                while (sa && sa->v == 0)
-                    sa = sa->prev;
-                if (sa)
-                    sa->v = 0;
-                continue;
-            }
-        } else {
-            ch = handle_eob();
-            if (ws_str) {
-                while (is_space(ch) || ch == '\n' || ch == '/') {
-                    if (ch == '/') {
-                        int c;
-                        uint8_t *p = file->buf_ptr;
-                        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-                        if (c == '*') {
-                            p = parse_comment(p);
-                            file->buf_ptr = p - 1;
-                        } else if (c == '/') {
-                            p = parse_line_comment(p);
-                            file->buf_ptr = p - 1;
-                        } else
-                            break;
-                        ch = ' ';
-                    }
-                    if (ch == '\n')
-                        file->line_num++;
-                    if (!(ch == '\f' || ch == '\v' || ch == '\r'))
-                        tok_str_add(ws_str, ch);
-                    minp();
-                }
-            }
-            t = ch;
-        }
-        if (ws_str)
-            return t;
-        next_nomacro_spc();
-        return tok;
-    }
-}
-
-static int macro_subst_tok(
-    TokenString *tok_str,
-    Sym **nested_list,
-    Sym *s) {
-exit(1);
 }
 
 static void next(void)
@@ -8249,27 +8151,6 @@ static void unary(void) {
      vpushi(0);
  vswap();
  gen_op('-');
-        break;
-    case 0xa0:
-        if (!gnu_ext)
-            goto tok_identifier;
-        next();
-        if (tok < TOK_DEFINE)
-            expect("label identifier");
-        s = label_find(tok);
-        if (!s) {
-            s = label_push(&global_label_stack, tok, 1);
-        } else {
-            if (s->r == 2)
-                s->r = 1;
-        }
-        if (!s->type.t) {
-            s->type.t = 0;
-            mk_pointer(&s->type);
-            s->type.t |= 0x00002000;
-        }
-        vpushsym(&s->type, s);
-        next();
         break;
     case TOK_GENERIC:
     {
