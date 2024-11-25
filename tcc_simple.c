@@ -10497,69 +10497,15 @@ static void gfunc_call(int nb_args)
     Sym *func_sym;
     args_size = 0;
     for(i = 0;i < nb_args; i++) {
-        if ((vtop->type.t & 0x000f) == 7) {
-            size = type_size(&vtop->type, &align);
-            size = (size + 3) & ~3;
-            oad(0xec81, size);
-            r = get_reg(0x0001);
-            o(0x89);
-            o(0xe0 + r);
-            vset(&vtop->type, r | 0x0100, 0);
-            vswap();
-            vstore();
-            args_size += size;
-        } else if (is_float(vtop->type.t)) {
-            gv(0x0002);
-            if ((vtop->type.t & 0x000f) == 8)
-                size = 4;
-            else if ((vtop->type.t & 0x000f) == 9)
-                size = 8;
-            else
-                size = 12;
-            oad(0xec81, size);
-            if (size == 12)
-                o(0x7cdb);
-            else
-                o(0x5cd9 + size - 4);
-            g(0x24);
-            g(0x00);
-            args_size += size;
-        } else {
-            r = gv(0x0001);
-            if ((vtop->type.t & 0x000f) == 4) {
-                size = 8;
-                o(0x50 + vtop->r2);
-            } else {
-                size = 4;
-            }
-            o(0x50 + r);
-            args_size += size;
-        }
+        r = gv(0x0001);
+        size = 4;
+        o(0x50 + r);
+        args_size += size;
         vtop--;
     }
     save_regs(0);
     func_sym = vtop->type.ref;
     func_call = func_sym->f.func_call;
-    if ((func_call >= 2 && func_call <= 4) ||
-        func_call == 5) {
-        int fastcall_nb_regs;
-        uint8_t *fastcall_regs_ptr;
-        if (func_call == 5) {
-            fastcall_regs_ptr = fastcallw_regs;
-            fastcall_nb_regs = 2;
-        } else {
-            fastcall_regs_ptr = fastcall_regs;
-            fastcall_nb_regs = func_call - 2 + 1;
-        }
-        for(i = 0;i < fastcall_nb_regs; i++) {
-            if (args_size <= 0)
-                break;
-            o(0x58 + fastcall_regs_ptr[i]);
-            args_size -= 4;
-        }
-    }
-    else if ((vtop->type.ref->type.t & 0x000f) == 7)
-        args_size -= 4;
     gcall_or_jmp(0);
     if (args_size && func_call != 1 && func_call != 5)
         gadd_sp(args_size);
