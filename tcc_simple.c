@@ -3697,13 +3697,9 @@ static void next_nomacro(void) {
 static void next(void) {
  redo:
     next_nomacro();
-    if (macro_ptr) {
-        if (tok == 0xcc || tok == 0xcb) {
-            goto redo;
-        } else if (tok == 0) {
-            end_macro();
-            goto redo;
-        }
+    if (macro_ptr && (tok == 0)) {
+        end_macro();
+        goto redo;
     }
     if (tok == 0xbe) {
         if (parse_flags & 0x0002)
