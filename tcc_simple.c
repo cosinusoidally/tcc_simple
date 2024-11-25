@@ -3814,7 +3814,6 @@ static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
-static void vpush(CType *type);
 static int gvtst(int inv, int t);
 static void gen_inline_functions(TCCState *s);
 static void skip_or_save_block(TokenString **str);
@@ -4045,12 +4044,6 @@ static void sym_pop(Sym **ptop, Sym *b, int keep) {
 }
 
 static void vsetc(CType *type, int r, CValue *vc) {
-    int v;
-    if (vtop >= (__vstack + 1) + (256 - 1))
-        tcc_error("memory full (vstack)");
-    if (vtop >= (__vstack + 1) && !nocode_wanted) {
-        v = vtop->r & 0x003f;
-    }
     vtop++;
     vtop->type = *type;
     vtop->r = r;
@@ -4067,33 +4060,16 @@ static void vswap(void) {
 }
 
 static void vpop(void) {
-    int v;
-    v = vtop->r & 0x003f;
-    if (v == TREG_ST0) {
-        o(0xd8dd);
-    } else
-    if (v == 0x0034 || v == 0x0035) {
-        gsym(vtop->c.i);
-    }
     vtop--;
 }
-static void vpush(CType *type)
-{
-    vset(type, 0x0030, 0);
-}
-static void vpushi(int v)
-{
+
+static void vpushi(int v) {
     CValue cval;
     cval.i = v;
     vsetc(&int_type, 0x0030, &cval);
 }
 
-static inline void vpushll(long long v) {
-exit(1);
-}
-
-static void vset(CType *type, int r, int v)
-{
+static void vset(CType *type, int r, int v) {
     CValue cval;
     cval.i = v;
     vsetc(type, r, &cval);
