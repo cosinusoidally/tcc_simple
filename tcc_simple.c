@@ -6736,28 +6736,22 @@ static int gtst(int inv, int t) {
 
 static void gen_opi(int op) {
     int r, fr, opc, c;
-    switch(op) {
-    gen_op8:
-        if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
-            vswap();
-            r = gv(0x0001);
-            vswap();
-            c = vtop->c.i;
-            if (c == (char)c) {
-                o(0x83);
-                o(0xc0 | (opc << 3) | r);
-                g(c);
-            }
+    opc = 7;
+    if ((vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030) {
+        vswap();
+        r = gv(0x0001);
+        vswap();
+        c = vtop->c.i;
+        if (c == (char)c) {
+            o(0x83);
+            o(0xc0 | (opc << 3) | r);
+            g(c);
         }
-        vtop--;
-        if (op >= 0x92 && op <= 0x9f) {
-            vtop->r = 0x0033;
-            vtop->c.i = op;
-        }
-        break;
-    default:
-        opc = 7;
-        goto gen_op8;
+    }
+    vtop--;
+    if (op >= 0x92 && op <= 0x9f) {
+        vtop->r = 0x0033;
+        vtop->c.i = op;
     }
 }
 
