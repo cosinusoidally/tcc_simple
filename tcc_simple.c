@@ -6334,23 +6334,10 @@ static int parse_btype(CType *type, AttributeDef *ad)
     type->ref = ((void*)0);
     while(1) {
         switch(tok) {
-        case TOK_EXTENSION:
-            next();
-            continue;
-        case TOK_CHAR:
-            u = 1;
         basic_type:
             next();
         basic_type1:
-            if (u == 2 || u == 0x0800) {
-                if (st != -1 || (bt != -1 && bt != 3))
-                    tmbt: tcc_error("too many basic types");
-                st = u;
-            } else {
-                if (bt != -1 || (st != -1 && u != 3))
-                    goto tmbt;
-                bt = u;
-            }
+            bt = u;
             if (u != 3)
                 t = (t & ~(0x000f|0x0800)) | u;
             typespec_found = 1;
@@ -6358,111 +6345,9 @@ static int parse_btype(CType *type, AttributeDef *ad)
         case TOK_VOID:
             u = 0;
             goto basic_type;
-        case TOK_SHORT:
-            u = 2;
-            goto basic_type;
         case TOK_INT:
             u = 3;
             goto basic_type;
-        case TOK_LONG:
-            if ((t & 0x000f) == 9) {
-                t = (t & ~(0x000f|0x0800)) | 10;
-            } else if ((t & (0x000f|0x0800)) == 0x0800) {
-                t = (t & ~(0x000f|0x0800)) | 4;
-            } else {
-                u = 0x0800;
-                goto basic_type;
-            }
-            next();
-            break;
-        case TOK_BOOL:
-            u = 11;
-            goto basic_type;
-        case TOK_FLOAT:
-            u = 8;
-            goto basic_type;
-        case TOK_DOUBLE:
-            if ((t & (0x000f|0x0800)) == 0x0800) {
-                t = (t & ~(0x000f|0x0800)) | 10;
-            } else {
-                u = 9;
-                goto basic_type;
-            }
-            next();
-            break;
-        basic_type2:
-            u = type1.t;
-            type->ref = type1.ref;
-            goto basic_type1;
-        case TOK_CONST1:
-        case TOK_CONST2:
-        case TOK_CONST3:
-            type->t = t;
-            parse_btype_qualify(type, 0x0100);
-            t = type->t;
-            next();
-            break;
-        case TOK_VOLATILE1:
-        case TOK_VOLATILE2:
-        case TOK_VOLATILE3:
-            type->t = t;
-            parse_btype_qualify(type, 0x0200);
-            t = type->t;
-            next();
-            break;
-        case TOK_SIGNED1:
-        case TOK_SIGNED2:
-        case TOK_SIGNED3:
-            if ((t & (0x0020|0x0010)) == (0x0020|0x0010))
-                tcc_error("signed and unsigned modifier");
-            t |= 0x0020;
-            next();
-            typespec_found = 1;
-            break;
-        case TOK_REGISTER:
-        case TOK_AUTO:
-        case TOK_RESTRICT1:
-        case TOK_RESTRICT2:
-        case TOK_RESTRICT3:
-            next();
-            break;
-        case TOK_UNSIGNED:
-            if ((t & (0x0020|0x0010)) == 0x0020)
-                tcc_error("signed and unsigned modifier");
-            t |= 0x0020 | 0x0010;
-            next();
-            typespec_found = 1;
-            break;
-        case TOK_EXTERN:
-            g = 0x00001000;
-            goto storage;
-        case TOK_STATIC:
-            g = 0x00002000;
-            goto storage;
-        case TOK_TYPEDEF:
-            g = 0x00004000;
-            goto storage;
-       storage:
-            if (t & (0x00001000|0x00002000|0x00004000) & ~g)
-                tcc_error("multiple storage classes");
-            t |= g;
-            next();
-            break;
-        case TOK_INLINE1:
-        case TOK_INLINE2:
-        case TOK_INLINE3:
-            t |= 0x00008000;
-            next();
-            break;
-        case TOK_TYPEOF1:
-        case TOK_TYPEOF2:
-        case TOK_TYPEOF3:
-            next();
-            parse_expr_type(&type1);
-            type1.t &= ~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)&~0x00004000);
-     if (type1.ref)
-                sym_to_attr(ad, type1.ref);
-            goto basic_type2;
         default:
             if (typespec_found)
                 goto the_end;
