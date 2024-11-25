@@ -5057,22 +5057,6 @@ maybe_newline:
         }
         tok = ts->tok;
         break;
-    case 'L':
-        t = p[1];
-        if (t != '\\' && t != '\'' && t != '\"') {
-            goto parse_ident_fast;
-        } else {
-            { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-            if (c == '\'' || c == '\"') {
-                is_long = 1;
-                goto str_const;
-            } else {
-                cstr_reset(&tokcstr);
-                cstr_ccat(&tokcstr, 'L');
-                goto parse_ident_slow;
-            }
-        }
-        break;
     case '0': case '1': case '2': case '3':
     case '4': case '5': case '6': case '7':
     case '8': case '9':
@@ -5099,28 +5083,6 @@ maybe_newline:
         tokc.str.data = tokcstr.data;
         tok = 0xbe;
         break;
-    case '.':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (isnum(c)) {
-            t = '.';
-            goto parse_num;
-        } else if ((isidnum_table['.' - (-1)] & 2)
-                   && (isidnum_table[c - (-1)] & (2|4))) {
-            *--p = c = '.';
-            goto parse_ident_fast;
-        } else if (c == '.') {
-            { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-            if (c == '.') {
-                p++;
-                tok = 0xc8;
-            } else {
-                *--p = '.';
-                tok = '.';
-            }
-        } else {
-            tok = '.';
-        }
-        break;
     case '\'':
     case '\"':
         is_long = 0;
@@ -5136,113 +5098,14 @@ maybe_newline:
         tokc.str.data = tokcstr.data;
         tok = 0xbf;
         break;
-    case '<':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '=') {
-            p++;
-            tok = 0x9e;
-        } else if (c == '<') {
-            { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-            if (c == '=') {
-                p++;
-                tok = 0x81;
-            } else {
-                tok = 0x01;
-            }
-        } else {
-            tok = 0x9c;
-        }
-        break;
-    case '>':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '=') {
-            p++;
-            tok = 0x9d;
-        } else if (c == '>') {
-            { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-            if (c == '=') {
-                p++;
-                tok = 0x82;
-            } else {
-                tok = 0x02;
-            }
-        } else {
-            tok = 0x9f;
-        }
-        break;
-    case '&':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '&') {
-            p++;
-            tok = 0xa0;
-        } else if (c == '=') {
-            p++;
-            tok = 0xa6;
-        } else {
-            tok = '&';
-        }
-        break;
-    case '|':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '|') {
-            p++;
-            tok = 0xa1;
-        } else if (c == '=') {
-            p++;
-            tok = 0xfc;
-        } else {
-            tok = '|';
-        }
-        break;
-    case '+':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '+') {
-            p++;
-            tok = 0xa4;
-        } else if (c == '=') {
-            p++;
-            tok = 0xab;
-        } else {
-            tok = '+';
-        }
-        break;
-    case '-':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if (c == '-') {
-            p++;
-            tok = 0xa2;
-        } else if (c == '=') {
-            p++;
-            tok = 0xad;
-        } else if (c == '>') {
-            p++;
-            tok = 0xc7;
-        } else {
-            tok = '-';
-        }
-        break;
-    case '!': { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }}; if (c == '=') { p++; tok = 0x95; } else { tok = '!'; } break;
     case '=': { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }}; if (c == '=') { p++; tok = 0x94; } else { tok = '='; } break;
-    case '*': { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }}; if (c == '=') { p++; tok = 0xaa; } else { tok = '*'; } break;
-    case '%': { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }}; if (c == '=') { p++; tok = 0xa5; } else { tok = '%'; } break;
-    case '^': { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }}; if (c == '=') { p++; tok = 0xde; } else { tok = '^'; } break;
     case '/':
         { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
         if (c == '*') {
             p = parse_comment(p);
             tok = ' ';
             goto keep_tok_flags;
-        } else if (c == '/') {
-            p = parse_line_comment(p);
-            tok = ' ';
-            goto keep_tok_flags;
-        } else if (c == '=') {
-            p++;
-            tok = 0xaf;
-        } else {
-            tok = '/';
         }
-        break;
     case '(':
     case ')':
     case '[':
@@ -5260,11 +5123,6 @@ maybe_newline:
         p++;
         break;
     default:
-        if (c >= 0x80 && c <= 0xFF)
-     goto parse_ident_fast;
-        if (parse_flags & 0x0008)
-            goto parse_simple;
-        tcc_error("unrecognized character \\x%02x", c);
         break;
     }
     tok_flags = 0;
@@ -5292,10 +5150,6 @@ static void next_nomacro(void)
     do {
         next_nomacro_spc();
     } while (tok < 256 && (isidnum_table[tok - (-1)] & 1));
-}
-
-static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args) {
-exit(1);
 }
 
 static inline int *macro_twosharps(const int *ptr0)
