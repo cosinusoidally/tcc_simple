@@ -3269,27 +3269,13 @@ static uint8_t *parse_pp_string(uint8_t *p,
             file->buf_ptr = p;
             c = handle_eob();
             p = file->buf_ptr;
-            if (c == (-1)) {
-            unterminated_string:
-                tcc_error("missing terminating %c character", sep);
-            } else if (c == '\\') {
+            if (c == '\\') {
                 { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                if (c == '\n') {
-                    file->line_num++;
-                    p++;
-                } else if (c == '\r') {
-                    { p++; c = *p; if (c == '\\') { file->buf_ptr = p; c = handle_eob(); p = file->buf_ptr; }};
-                    if (c != '\n')
-                        expect("'\n' after '\r'");
-                    file->line_num++;
-                    p++;
-                } else {
-                    if (str) {
-                        cstr_ccat(str, '\\');
-                        cstr_ccat(str, c);
-                    }
-                    p++;
+                if (str) {
+                    cstr_ccat(str, '\\');
+                    cstr_ccat(str, c);
                 }
+                p++;
             }
         } else {
         add_char:
