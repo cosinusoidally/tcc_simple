@@ -4277,7 +4277,6 @@ static struct switch_t {
     int def_sym;
 } *cur_switch;
 static void gen_cast(CType *type);
-static void gen_cast_s(int t);
 static inline CType *pointed_type(CType *type);
 static int is_compatible_types(CType *type1, CType *type2);
 static int parse_btype(CType *type, AttributeDef *ad);
@@ -4858,48 +4857,8 @@ static void gen_op(int op) {
     vtop->type.t = 3;
 }
 
-static void force_charshort_cast(int t)
-{
-    int bits, dbt;
-    if ((nocode_wanted & 0xC0000000))
- return;
-    dbt = t & 0x000f;
-    if (dbt == 1)
-        bits = 8;
-    else
-        bits = 16;
-    if (t & 0x0010) {
-        vpushi((1 << bits) - 1);
-        gen_op('&');
-    } else {
-        if ((vtop->type.t & 0x000f) == 4)
-            bits = 64 - bits;
-        else
-            bits = 32 - bits;
-        vpushi(bits);
-        gen_op(0x01);
-        vtop->type.t &= ~0x0010;
-        vpushi(bits);
-        gen_op(0x02);
-    }
-}
-static void gen_cast_s(int t)
-{
-    CType type;
-    type.t = t;
-    type.ref = ((void*)0);
-    gen_cast(&type);
-}
-static void gen_cast(CType *type)
-{
+static void gen_cast(CType *type) {
     int sbt, dbt, sf, df, c, p;
-    if (vtop->r & 0x0400) {
-        vtop->r &= ~0x0400;
-        force_charshort_cast(vtop->type.t);
-    }
-    if (vtop->type.t & 0x0080) {
-        gv(0x0001);
-    }
     dbt = type->t & (0x000f | 0x0010);
     sbt = vtop->type.t & (0x000f | 0x0010);
     if (sbt != dbt) {
@@ -4908,52 +4867,26 @@ static void gen_cast(CType *type)
         c = (vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030;
         p = (vtop->r & (0x003f | 0x0100 | 0x0200)) == (0x0030 | 0x0200);
         if (c) {
-            if (sbt == 8)
-                vtop->c.ld = vtop->c.f;
-            else if (sbt == 9)
-                vtop->c.ld = vtop->c.d;
-            if (df) {
-                if ((sbt & 0x000f) == 4) {
-                    if ((sbt & 0x0010) || !(vtop->c.i >> 63))
-                        vtop->c.ld = vtop->c.i;
-                    else
-                        vtop->c.ld = -(long double)-vtop->c.i;
-                } else if(!sf) {
-                    if ((sbt & 0x0010) || !(vtop->c.i >> 31))
-                        vtop->c.ld = (uint32_t)vtop->c.i;
-                    else
-                        vtop->c.ld = -(long double)-(uint32_t)vtop->c.i;
-                }
-                if (dbt == 8)
-                    vtop->c.f = (float)vtop->c.ld;
-                else if (dbt == 9)
-                    vtop->c.d = (double)vtop->c.ld;
-            } else if (sf && dbt == (4|0x0010)) {
+            if(sf)
                 vtop->c.i = vtop->c.ld;
-            } else if (sf && dbt == 11) {
-                vtop->c.i = (vtop->c.ld != 0);
-            } else {
-                if(sf)
-                    vtop->c.i = vtop->c.ld;
-                else if (sbt == (4|0x0010))
-                    ;
-                else if (sbt & 0x0010)
-                    vtop->c.i = (uint32_t)vtop->c.i;
-                else if (sbt != 4)
-                    vtop->c.i = ((uint32_t)vtop->c.i |
-                                  -(vtop->c.i & 0x80000000));
-                if (dbt == (4|0x0010))
-                    ;
-                else if (dbt == 11)
-                    vtop->c.i = (vtop->c.i != 0);
-                else if (dbt != 4) {
-                    uint32_t m = ((dbt & 0x000f) == 1 ? 0xff :
-                                  (dbt & 0x000f) == 2 ? 0xffff :
-                                  0xffffffff);
-                    vtop->c.i &= m;
-                    if (!(dbt & 0x0010))
-                        vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
-                }
+            else if (sbt == (4|0x0010))
+                ;
+            else if (sbt & 0x0010)
+                vtop->c.i = (uint32_t)vtop->c.i;
+            else if (sbt != 4)
+                vtop->c.i = ((uint32_t)vtop->c.i |
+                              -(vtop->c.i & 0x80000000));
+            if (dbt == (4|0x0010))
+                ;
+            else if (dbt == 11)
+                vtop->c.i = (vtop->c.i != 0);
+            else if (dbt != 4) {
+                uint32_t m = ((dbt & 0x000f) == 1 ? 0xff :
+                              (dbt & 0x000f) == 2 ? 0xffff :
+                              0xffffffff);
+                vtop->c.i &= m;
+                if (!(dbt & 0x0010))
+                    vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
             }
         } else if (p && dbt == 11) {
             vtop->r = 0x0030;
@@ -4977,13 +4910,6 @@ static void gen_cast(CType *type)
             } else if (dbt == 11) {
                 vpushi(0);
                 gen_op(0x95);
-            } else if ((dbt & 0x000f) == 1 ||
-                       (dbt & 0x000f) == 2) {
-                if (sbt == 5) {
-                    vtop->type.t = 3;
-                    tcc_warning("nonportable conversion from pointer to char/short");
-                }
-                force_charshort_cast(dbt);
             }
         }
     } else if ((dbt & 0x000f) == 5 && !(vtop->r & 0x0100)) {
@@ -5056,17 +4982,12 @@ static void mk_pointer(CType *type)
     type->ref = s;
 }
 
-static int compare_types(CType *type1, CType *type2, int unqualified) {
+static int is_compatible_types(CType *type1, CType *type2) {
     return 1;
 }
 
-static int is_compatible_types(CType *type1, CType *type2)
-{
-    return compare_types(type1,type2,0);
-}
-static int is_compatible_unqualified_types(CType *type1, CType *type2)
-{
-    return compare_types(type1,type2,1);
+static int is_compatible_unqualified_types(CType *type1, CType *type2) {
+    return 1;
 }
 
 static void gen_assign_cast(CType *dt)
@@ -5296,9 +5217,7 @@ static void gfunc_param_typed(Sym *func, Sym *arg) {
     func_type = func->f.func_type;
     if (func_type == 2 ||
         (func_type == 3 && arg == ((void*)0))) {
-        if ((vtop->type.t & 0x000f) == 8) {
-            gen_cast_s(9);
-        } else if (vtop->type.t & 0x0080) {
+        if (vtop->type.t & 0x0080) {
             type.t = vtop->type.t & (0x000f | 0x0010);
      type.ref = vtop->type.ref;
             gen_cast(&type);
