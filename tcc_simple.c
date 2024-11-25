@@ -3987,20 +3987,12 @@ static void parse_number(const char *p)
         }
     }
     while (1) {
-        if (ch >= 'a' && ch <= 'f')
-            t = ch - 'a' + 10;
-        else if (ch >= 'A' && ch <= 'F')
+        if (ch >= 'A' && ch <= 'F')
             t = ch - 'A' + 10;
         else if (isnum(ch))
             t = ch - '0';
         else
             break;
-        if (t >= b)
-            break;
-        if (q >= token_buf + 1024) {
-        num_too_long:
-            tcc_error("number too long");
-        }
         *q++ = ch;
         ch = *p++;
     }
@@ -4018,42 +4010,18 @@ static void parse_number(const char *p)
         t = *q++;
         if (t == '\0')
             break;
-        else if (t >= 'a')
-            t = t - 'a' + 10;
         else if (t >= 'A')
             t = t - 'A' + 10;
         else
             t = t - '0';
-        if (t >= b)
-            tcc_error("invalid digit");
         n1 = n;
         n = n * b + t;
-        if (n1 >= 0x1000000000000000ULL && n / b != n1)
-            ov = 1;
     }
     lcount = ucount = 0;
     p1 = p;
-    for(;;) {
-        t = toup(ch);
-        if (t == 'L') {
-            if (lcount >= 2)
-                tcc_error("three 'l's in integer constant");
-                if (lcount && *(p - 1) != ch)
-                    tcc_error("incorrect integer suffix: %s", p1);
-                lcount++;
-                ch = *p++;
-            } else if (t == 'U') {
-                if (ucount >= 1)
-                    tcc_error("two 'u's in integer constant");
-                ucount++;
-                ch = *p++;
-            } else {
-                break;
-            }
-        }
-        if (ucount == 0 && b == 10) {
-            if (lcount <= (4 == 4)) {
-                if (n >= 0x80000000U)
+    if (ucount == 0 && b == 10) {
+        if (lcount <= (4 == 4)) {
+            if (n >= 0x80000000U)
                     lcount = (4 == 4) + 1;
             }
             if (n >= 0x8000000000000000ULL)
