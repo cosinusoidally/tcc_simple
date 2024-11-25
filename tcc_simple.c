@@ -4046,44 +4046,18 @@ static inline void next_nomacro1(void)
     case '\t':
         tok = c;
         p++;
-        if (parse_flags & 0x0010)
-            goto keep_tok_flags;
         while (isidnum_table[*p - (-1)] & 1)
             ++p;
-        goto redo_no_start;
-    case '\f':
-    case '\v':
-    case '\r':
-        p++;
         goto redo_no_start;
     case '\\':
         c = handle_stray1(p);
         p = file->buf_ptr;
-        if (c == '\\')
-            goto parse_simple;
         if (c != (-1))
             goto redo_no_start;
         {
             TCCState *s1 = tcc_state;
-            if ((parse_flags & 0x0004)
-                && !(tok_flags & 0x0008)) {
-                tok_flags |= 0x0008;
-                tok = 10;
-                goto keep_tok_flags;
-            } else if (!(parse_flags & 0x0001)) {
+            if (s1->include_stack_ptr == s1->include_stack) {
                 tok = (-1);
-            } else if (s1->ifdef_stack_ptr != file->ifdef_stack_ptr) {
-                tcc_error("missing #endif");
-            } else if (s1->include_stack_ptr == s1->include_stack) {
-                tok = (-1);
-            } else {
-                tok_flags &= ~0x0008;
-                tcc_close();
-                s1->include_stack_ptr--;
-                p = file->buf_ptr;
-                if (p == file->buffer)
-                    tok_flags = 0x0002|0x0001;
-                goto redo_no_start;
             }
         }
         break;
