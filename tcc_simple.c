@@ -3122,7 +3122,6 @@ static const char tcc_keywords[] =
  "." "short" "\0" "." "long" "\0" "." "int" "\0" "." "section" "\0"
 ;
 
-static void next_nomacro_spc(void);
 static void skip(int c)
 {
     if (tok != c)
@@ -3655,18 +3654,15 @@ static void begin_macro(TokenString *str, int alloc)
     macro_ptr = str->str;
     macro_stack = str;
 }
-static void end_macro(void)
-{
+
+static void end_macro(void) {
     TokenString *str = macro_stack;
     macro_stack = str->prev;
     macro_ptr = str->prev_ptr;
     file->line_num = str->save_line_num;
-    if (str->alloc == 2) {
-        str->alloc = 3;
-    } else {
-        tok_str_free(str);
-    }
+    tok_str_free(str);
 }
+
 static void tok_str_add2(TokenString *s, int t, CValue *cv)
 {
     int len, *str;
@@ -4181,26 +4177,22 @@ maybe_newline:
 keep_tok_flags:
     file->buf_ptr = p;
 }
-static void next_nomacro_spc(void)
-{
-    if (macro_ptr) {
-    redo:
-        tok = *macro_ptr;
-        if (tok) {
-            TOK_GET(&tok, &macro_ptr, &tokc);
-            if (tok == 0xc0) {
-                file->line_num = tokc.i;
-                goto redo;
-            }
-        }
-    } else {
-        next_nomacro1();
-    }
-}
-static void next_nomacro(void)
-{
+
+static void next_nomacro(void) {
     do {
-        next_nomacro_spc();
+        if (macro_ptr) {
+        redo:
+            tok = *macro_ptr;
+            if (tok) {
+                TOK_GET(&tok, &macro_ptr, &tokc);
+                if (tok == 0xc0) {
+                    file->line_num = tokc.i;
+                    goto redo;
+                }
+            }
+        } else {
+            next_nomacro1();
+        }
     } while (tok < 256 && (isidnum_table[tok - (-1)] & 1));
 }
 
