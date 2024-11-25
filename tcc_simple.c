@@ -3095,6 +3095,7 @@ typedef struct tal_header_t {
 } tal_header_t;
 static TinyAlloc *tal_new(TinyAlloc **pal, unsigned limit, unsigned size)
 {
+puts("error tal_new");exit(1);
     TinyAlloc *al = tcc_mallocz(sizeof(TinyAlloc));
     al->p = al->buffer = tcc_malloc(size);
     al->limit = limit;
@@ -3104,6 +3105,7 @@ static TinyAlloc *tal_new(TinyAlloc **pal, unsigned limit, unsigned size)
 }
 
 static void tal_free_impl(TinyAlloc *al, void *p ) {
+    return tcc_free(p);
     if (!p)
         return;
 tail_call:
@@ -3118,8 +3120,8 @@ tail_call:
     else
         tcc_free(p);
 }
-static void *tal_realloc_impl(TinyAlloc **pal, void *p, unsigned size )
-{
+static void *tal_realloc_impl(TinyAlloc **pal, void *p, unsigned size ) {
+return realloc(p,size);
     tal_header_t *header;
     void *ret;
     int is_own;
@@ -4050,9 +4052,6 @@ static void tccpp_new(TCCState *s)
             : 0);
     for(i = 128; i<256; i++)
         set_idnum(i, 2);
-    tal_new(&toksym_alloc, 256, (768 * 1024));
-    tal_new(&tokstr_alloc, 128, (768 * 1024));
-    tal_new(&cstr_alloc, 1024, (256 * 1024));
     memset(hash_ident, 0, 16384 * sizeof(TokenSym *));
     cstr_new(&cstr_buf);
     cstr_realloc(&cstr_buf, 1024);
