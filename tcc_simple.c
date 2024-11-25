@@ -3094,10 +3094,6 @@ typedef struct tal_header_t {
     unsigned size;
 } tal_header_t;
 
-static void tal_free_impl(TinyAlloc *al, void *p ) {
-    return tcc_free(p);
-}
-
 static void cstr_realloc(CString *cstr, int new_size) {
     int size;
     size = cstr->size_allocated;
@@ -3134,7 +3130,7 @@ static void cstr_new(CString *cstr) {
 }
 
 static void cstr_free(CString *cstr) {
-    tal_free_impl(cstr_alloc, cstr->data);
+    tcc_free(cstr->data);
     cstr_new(cstr);
 }
 
@@ -3385,13 +3381,13 @@ static TokenString *tok_str_alloc(void)
 }
 
 static void tok_str_free_str(int *str) {
-    tal_free_impl(tokstr_alloc, str);
+    tcc_free(str);
 }
 
 static void tok_str_free(TokenString *str)
 {
     tok_str_free_str(str->str);
-    tal_free_impl(tokstr_alloc, str);
+    tcc_free(str);
 }
 static int *tok_str_realloc(TokenString *s, int new_size)
 {
