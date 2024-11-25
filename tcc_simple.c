@@ -4378,8 +4378,7 @@ static void update_storage(Sym *sym) {
 
 static void put_extern_sym2(Sym *sym, int sh_num,
                             Elf32_Addr value, unsigned long size,
-                            int can_add_underscore)
-{
+                            int can_add_underscore) {
     int sym_type, sym_bind, info, other, t;
     Elf32_Sym *esym;
     const char *name;
@@ -4390,8 +4389,6 @@ static void put_extern_sym2(Sym *sym, int sh_num,
         t = sym->type.t;
         if ((t & 0x000f) == 6) {
             sym_type = 2;
-        } else if ((t & 0x000f) == 0) {
-            sym_type = 0;
         } else {
             sym_type = 1;
         }
@@ -4400,13 +4397,6 @@ static void put_extern_sym2(Sym *sym, int sh_num,
         else
             sym_bind = 1;
         other = 0;
-        if (tcc_state->leading_underscore && can_add_underscore) {
-            buf1[0] = '_';
-            pstrcpy(buf1 + 1, sizeof(buf1) - 1, name);
-            name = buf1;
-        }
-        if (sym->asm_label)
-            name = get_tok_str(sym->asm_label, ((void*)0));
         info = (((sym_bind) << 4) + ((sym_type) & 0xf));
         sym->c = put_elf_sym(symtab_section, value, size, info, other, sh_num, name);
     } else {
@@ -4417,18 +4407,16 @@ static void put_extern_sym2(Sym *sym, int sh_num,
     }
     update_storage(sym);
 }
+
 static void put_extern_sym(Sym *sym, Section *section,
-                           Elf32_Addr value, unsigned long size)
-{
+                           Elf32_Addr value, unsigned long size) {
     int sh_num = section ? section->sh_num : 0;
     put_extern_sym2(sym, sh_num, value, size, 1);
 }
+
 static void greloca(Section *s, Sym *sym, unsigned long offset, int type,
-                     Elf32_Addr addend)
-{
+                     Elf32_Addr addend) {
     int c = 0;
-    if (nocode_wanted && s == cur_text_section)
-        return;
     if (sym) {
         if (0 == sym->c)
             put_extern_sym(sym, ((void*)0), 0, 0);
@@ -4866,9 +4854,7 @@ static void gen_cast(CType *type) {
         c = (vtop->r & (0x003f | 0x0100 | 0x0200)) == 0x0030;
         p = (vtop->r & (0x003f | 0x0100 | 0x0200)) == (0x0030 | 0x0200);
         if (c) {
-            if(sf)
-                vtop->c.i = vtop->c.ld;
-            else if (sbt == (4|0x0010))
+            if (sbt == (4|0x0010))
                 ;
             else if (sbt & 0x0010)
                 vtop->c.i = (uint32_t)vtop->c.i;
@@ -4877,8 +4863,6 @@ static void gen_cast(CType *type) {
                               -(vtop->c.i & 0x80000000));
             if (dbt == (4|0x0010))
                 ;
-            else if (dbt == 11)
-                vtop->c.i = (vtop->c.i != 0);
             else if (dbt != 4) {
                 uint32_t m = ((dbt & 0x000f) == 1 ? 0xff :
                               (dbt & 0x000f) == 2 ? 0xffff :
@@ -4887,33 +4871,7 @@ static void gen_cast(CType *type) {
                 if (!(dbt & 0x0010))
                     vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
             }
-        } else if (p && dbt == 11) {
-            vtop->r = 0x0030;
-            vtop->c.i = 1;
-        } else {
-            if (sf) {
-                if (dbt == 11) {
-                     vpushi(0);
-                     gen_op(0x95);
-                }
-            } else if ((dbt & 0x000f) == 4) {
-                if ((sbt & 0x000f) != 4) {
-                    gv(0x0001);
-                    if (sbt == (3 | 0x0010)) {
-                        vpushi(0);
-                        gv(0x0001);
-                    }
-                    vtop[-1].r2 = vtop->r;
-                    vpop();
-                }
-            } else if (dbt == 11) {
-                vpushi(0);
-                gen_op(0x95);
-            }
         }
-    } else if ((dbt & 0x000f) == 5 && !(vtop->r & 0x0100)) {
-        vtop->r = (vtop->r & ~(0x1000 | 0x2000 | 0x4000))
-                  | (lvalue_type(type->ref->type.t) & (0x1000 | 0x2000 | 0x4000));
     }
     vtop->type = *type;
 }
