@@ -2979,7 +2979,6 @@ static void g(int c);
 static void gen_le16(int c);
 static void gen_le32(int c);
 static void gen_addr32(int r, Sym *sym, int c);
-static void gen_addrpc32(int r, Sym *sym, int c);
 static int rt_num_callers;
 static const char **rt_bound_error_msg;
 static void *rt_prog_main;
@@ -6585,30 +6584,22 @@ static void gsym(int t)
 {
     gsym_addr(t, ind);
 }
-static int oad(int c, int s)
-{
+
+static int oad(int c, int s) {
     int t;
-    if (nocode_wanted)
-        return s;
     o(c);
     t = ind;
     gen_le32(s);
     return t;
 }
-static void gen_addr32(int r, Sym *sym, int c)
-{
+
+static void gen_addr32(int r, Sym *sym, int c) {
     if (r & 0x0200)
         greloc(cur_text_section, sym, ind, 1);
     gen_le32(c);
 }
-static void gen_addrpc32(int r, Sym *sym, int c)
-{
-    if (r & 0x0200)
-        greloc(cur_text_section, sym, ind, 2);
-    gen_le32(c - 4);
-}
-static void gen_modrm(int op_reg, int r, Sym *sym, int c)
-{
+
+static void gen_modrm(int op_reg, int r, Sym *sym, int c) {
     op_reg = op_reg << 3;
     if ((r & 0x003f) == 0x0030) {
         o(0x05 | op_reg);
@@ -6617,15 +6608,11 @@ static void gen_modrm(int op_reg, int r, Sym *sym, int c)
         if (c == (char)c) {
             o(0x45 | op_reg);
             g(c);
-        } else {
-            oad(0x85 | op_reg, c);
         }
-    } else {
-        g(0x00 | op_reg | (r & 0x003f));
     }
 }
-static void load(int r, SValue *sv)
-{
+
+static void load(int r, SValue *sv) {
     int v, t, ft, fc, fr;
     SValue v1;
     fr = sv->r;
@@ -6634,67 +6621,15 @@ static void load(int r, SValue *sv)
     ft &= ~(0x0200 | 0x0100);
     v = fr & 0x003f;
     if (fr & 0x0100) {
-        if (v == 0x0031) {
-            v1.type.t = 3;
-            v1.r = 0x0032 | 0x0100;
-            v1.c.i = fc;
-            fr = r;
-            if (!(reg_classes[fr] & 0x0001))
-                fr = get_reg(0x0001);
-            load(fr, &v1);
-        }
-        if ((ft & 0x000f) == 8) {
-            o(0xd9);
-            r = 0;
-        } else if ((ft & 0x000f) == 9) {
-            o(0xdd);
-            r = 0;
-        } else if ((ft & 0x000f) == 10) {
-            o(0xdb);
-            r = 5;
-        } else if ((ft & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)))) == 1 || (ft & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)))) == 11) {
-            o(0xbe0f);
-        } else if ((ft & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)))) == (1 | 0x0010)) {
-            o(0xb60f);
-        } else if ((ft & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)))) == 2) {
-            o(0xbf0f);
-        } else if ((ft & (~((0x00001000 | 0x00002000 | 0x00004000 | 0x00008000)|(((1 << (6+6)) - 1) << 20 | 0x0080)))) == (2 | 0x0010)) {
-            o(0xb70f);
-        } else {
-            o(0x8b);
-        }
+        o(0x8b);
         gen_modrm(r, fr, sv->sym, fc);
     } else {
-        if (v == 0x0030) {
-            o(0xb8 + r);
-            gen_addr32(fr, sv->sym, fc);
-        } else if (v == 0x0032) {
-            if (fc) {
-                o(0x8d);
-                gen_modrm(r, 0x0032, sv->sym, fc);
-            } else {
-                o(0x89);
-                o(0xe8 + r);
-            }
-        } else if (v == 0x0033) {
-            oad(0xb8 + r, 0);
-            o(0x0f);
-            o(fc);
-            o(0xc0 + r);
-        } else if (v == 0x0034 || v == 0x0035) {
-            t = v & 1;
-            oad(0xb8 + r, t);
-            o(0x05eb);
-            gsym(fc);
-            oad(0xb8 + r, t ^ 1);
-        } else if (v != r) {
-            o(0x89);
-            o(0xc0 + r + v * 8);
-        }
+        o(0xb8 + r);
+        gen_addr32(fr, sv->sym, fc);
     }
 }
-static void store(int r, SValue *v)
-{
+
+static void store(int r, SValue *v) {
     int fr, bt, ft, fc;
     ft = v->type.t;
     fc = v->c.i;
