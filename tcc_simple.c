@@ -9477,70 +9477,19 @@ static int find_elf_sym(Section *s, const char *name)
 }
 
 static int set_elf_sym(Section *s, Elf32_Addr value, unsigned long size,
-                       int info, int other, int shndx, const char *name)
-{
+                       int info, int other, int shndx, const char *name) {
     Elf32_Sym *esym;
     int sym_bind, sym_index, sym_type, esym_bind;
     unsigned char sym_vis, esym_vis, new_vis;
     sym_bind = (((unsigned char) (info)) >> 4);
     sym_type = ((info) & 0xf);
     sym_vis = ((other) & 0x03);
-    if (sym_bind != 0) {
-        sym_index = find_elf_sym(s, name);
-        if (!sym_index)
-            goto do_def;
-        esym = &((Elf32_Sym *)s->data)[sym_index];
-        if (esym->st_value == value && esym->st_size == size && esym->st_info == info
-            && esym->st_other == other && esym->st_shndx == shndx)
-            return sym_index;
-        if (esym->st_shndx != 0) {
-            esym_bind = (((unsigned char) (esym->st_info)) >> 4);
-            esym_vis = ((esym->st_other) & 0x03);
-            if (esym_vis == 0) {
-                new_vis = sym_vis;
-            } else if (sym_vis == 0) {
-                new_vis = esym_vis;
-            } else {
-                new_vis = (esym_vis < sym_vis) ? esym_vis : sym_vis;
-            }
-            esym->st_other = (esym->st_other & ~((-1) & 0x03))
-                             | new_vis;
-            other = esym->st_other;
-            if (shndx == 0) {
-            } else if (sym_bind == 1 && esym_bind == 2) {
-                goto do_patch;
-            } else if (sym_bind == 2 && esym_bind == 1) {
-            } else if (sym_bind == 2 && esym_bind == 2) {
-            } else if (sym_vis == 2 || sym_vis == 1) {
-            } else if ((esym->st_shndx == 0xfff2
-                            || esym->st_shndx == bss_section->sh_num)
-                        && (shndx < 0xff00
-                            && shndx != bss_section->sh_num)) {
-                goto do_patch;
-            } else if (shndx == 0xfff2 || shndx == bss_section->sh_num) {
-            } else if (s->sh_flags & 0x40000000) {
-     } else if (esym->st_other & 0x04) {
-  goto do_patch;
-            } else {
-                tcc_error_noabort("'%s' defined twice", name);
-            }
-        } else {
-        do_patch:
-            esym->st_info = (((sym_bind) << 4) + ((sym_type) & 0xf));
-            esym->st_shndx = shndx;
-            new_undef_sym = 1;
-            esym->st_value = value;
-            esym->st_size = size;
-            esym->st_other = other;
-        }
-    } else {
-    do_def:
-        sym_index = put_elf_sym(s, value, size,
+    sym_index = put_elf_sym(s, value, size,
                                 (((sym_bind) << 4) + ((sym_type) & 0xf)), other,
                                 shndx, name);
-    }
     return sym_index;
 }
+
 static void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
                             int type, int symbol, Elf32_Addr addend)
 {
