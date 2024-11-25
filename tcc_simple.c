@@ -5025,86 +5025,20 @@ return 0;
 static void gen_op(int op) {
     int u, t1, t2, bt1, bt2, t;
     CType type1;
-redo:
     t1 = vtop[-1].type.t;
     t2 = vtop[0].type.t;
     bt1 = t1 & 0x000f;
     bt2 = t2 & 0x000f;
     if (bt1 == 7 || bt2 == 7) {
         tcc_error("operation on a struct");
-    } else if (bt1 == 6 || bt2 == 6) {
- goto redo;
-    } else if (bt1 == 5 || bt2 == 5) {
-        if (op != '-' && op != '+')
-            tcc_error("cannot use pointers here");
-        if (bt2 == 5) {
-            vswap();
-            t = t1, t1 = t2, t2 = t;
-        }
-        if ((vtop[0].type.t & 0x000f) == 4)
-            gen_cast_s(3);
-        type1 = vtop[-1].type;
-        type1.t &= ~0x0040;
-        gen_op('*');
-        gen_opic(op);
-        vtop->type = type1;
-    } else if (is_float(bt1) || is_float(bt2)) {
-        if (bt1 == 10 || bt2 == 10) {
-            t = 10;
-        } else if (bt1 == 9 || bt2 == 9) {
-            t = 9;
-        } else {
-            t = 8;
-        }
-        if (op != '+' && op != '-' && op != '*' && op != '/' &&
-            (op < 0x92 || op > 0x9f))
-            tcc_error("invalid operands for binary operation");
-        goto std_op;
-    } else if (op == 0xc9 || op == 0x02 || op == 0x01) {
-        t = bt1 == 4 ? 4 : 3;
-        if ((t1 & (0x000f | 0x0010 | 0x0080)) == (t | 0x0010))
-          t |= 0x0010;
-        t |= (0x0800 & t1);
-        goto std_op;
-    } else if (bt1 == 4 || bt2 == 4) {
-        t = 4 | 0x0800;
-        if (bt1 == 4)
-            t &= t1;
-        if (bt2 == 4)
-            t &= t2;
-        if ((t1 & (0x000f | 0x0010 | 0x0080)) == (4 | 0x0010) ||
-            (t2 & (0x000f | 0x0010 | 0x0080)) == (4 | 0x0010))
-            t |= 0x0010;
-        goto std_op;
     } else {
         t = 3 | (0x0800 & (t1 | t2));
-        if ((t1 & (0x000f | 0x0010 | 0x0080)) == (3 | 0x0010) ||
-            (t2 & (0x000f | 0x0010 | 0x0080)) == (3 | 0x0010))
-            t |= 0x0010;
     std_op:
-        if (t & 0x0010) {
-            if (op == 0x02)
-                op = 0xc9;
-            else if (op == '/')
-                op = 0xb0;
-            else if (op == '%')
-                op = 0xb1;
-            else if (op == 0x9c)
-                op = 0x92;
-            else if (op == 0x9f)
-                op = 0x97;
-            else if (op == 0x9e)
-                op = 0x96;
-            else if (op == 0x9d)
-                op = 0x93;
-        }
         vswap();
         type1.t = t;
         type1.ref = ((void*)0);
         gen_cast(&type1);
         vswap();
-        if (op == 0xc9 || op == 0x02 || op == 0x01)
-            type1.t = 3;
         gen_cast(&type1);
         gen_opic(op);
         if (op >= 0x92 && op <= 0x9f) {
@@ -5116,6 +5050,7 @@ redo:
     if (vtop->r & 0x0100)
         gv(is_float(vtop->type.t & 0x000f) ? 0x0002 : 0x0001);
 }
+
 static void gen_cvt_itof1(int t)
 {
     gen_cvt_itof(t);
