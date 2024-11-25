@@ -3979,17 +3979,11 @@ static void parse_number(const char *p)
     ch = *p++;
     *q++ = t;
     b = 10;
-    if (t == '.') {
-        goto float_frac_parse;
-    } else if (t == '0') {
+    if (t == '0') {
         if (ch == 'x' || ch == 'X') {
             q--;
             ch = *p++;
             b = 16;
-        } else if (tcc_ext && (ch == 'b' || ch == 'B')) {
-            q--;
-            ch = *p++;
-            b = 2;
         }
     }
     while (1) {
@@ -4010,168 +4004,40 @@ static void parse_number(const char *p)
         *q++ = ch;
         ch = *p++;
     }
-    if (ch == '.' ||
-        ((ch == 'e' || ch == 'E') && b == 10) ||
-        ((ch == 'p' || ch == 'P') && (b == 16 || b == 2))) {
-        if (b != 10) {
-            *q = '\0';
-            if (b == 16)
-                shift = 4;
-            else
-                shift = 1;
-            bn_zero(bn);
-            q = token_buf;
-            while (1) {
-                t = *q++;
-                if (t == '\0') {
-                    break;
-                } else if (t >= 'a') {
-                    t = t - 'a' + 10;
-                } else if (t >= 'A') {
-                    t = t - 'A' + 10;
-                } else {
-                    t = t - '0';
-                }
-                bn_lshift(bn, shift, t);
-            }
-            frac_bits = 0;
-            if (ch == '.') {
-                ch = *p++;
-                while (1) {
-                    t = ch;
-                    if (t >= 'a' && t <= 'f') {
-                        t = t - 'a' + 10;
-                    } else if (t >= 'A' && t <= 'F') {
-                        t = t - 'A' + 10;
-                    } else if (t >= '0' && t <= '9') {
-                        t = t - '0';
-                    } else {
-                        break;
-                    }
-                    if (t >= b)
-                        tcc_error("invalid digit");
-                    bn_lshift(bn, shift, t);
-                    frac_bits += shift;
-                    ch = *p++;
-                }
-            }
-            if (ch != 'p' && ch != 'P')
-                expect("exponent");
-            ch = *p++;
-            s = 1;
-            exp_val = 0;
-            if (ch == '+') {
-                ch = *p++;
-            } else if (ch == '-') {
-                s = -1;
-                ch = *p++;
-            }
-            if (ch < '0' || ch > '9')
-                expect("exponent digits");
-            while (ch >= '0' && ch <= '9') {
-                exp_val = exp_val * 10 + ch - '0';
-                ch = *p++;
-            }
-            exp_val = exp_val * s;
-            d = (double)bn[1] * 4294967296.0 + (double)bn[0];
-            d = ldexp(d, exp_val - frac_bits);
-            t = toup(ch);
-            if (t == 'F') {
-                ch = *p++;
-                tok = 0xbb;
-                tokc.f = (float)d;
-            } else if (t == 'L') {
-                ch = *p++;
-                tok = 0xbd;
-                tokc.ld = (long double)d;
-            } else {
-                tok = 0xbc;
-                tokc.d = d;
-            }
-        } else {
-            if (ch == '.') {
-                if (q >= token_buf + 1024)
-                    goto num_too_long;
-                *q++ = ch;
-                ch = *p++;
-            float_frac_parse:
-                while (ch >= '0' && ch <= '9') {
-                    if (q >= token_buf + 1024)
-                        goto num_too_long;
-                    *q++ = ch;
-                    ch = *p++;
-                }
-            }
-            if (ch == 'e' || ch == 'E') {
-                if (q >= token_buf + 1024)
-                    goto num_too_long;
-                *q++ = ch;
-                ch = *p++;
-                if (ch == '-' || ch == '+') {
-                    if (q >= token_buf + 1024)
-                        goto num_too_long;
-                    *q++ = ch;
-                    ch = *p++;
-                }
-                if (ch < '0' || ch > '9')
-                    expect("exponent digits");
-                while (ch >= '0' && ch <= '9') {
-                    if (q >= token_buf + 1024)
-                        goto num_too_long;
-                    *q++ = ch;
-                    ch = *p++;
-                }
-            }
-            *q = '\0';
-            t = toup(ch);
-            if (t == 'F') {
-                ch = *p++;
-                tok = 0xbb;
-                tokc.f = strtof(token_buf, ((void*)0));
-            } else if (t == 'L') {
-                ch = *p++;
-                tok = 0xbd;
-                tokc.ld = strtold(token_buf, ((void*)0));
-            } else {
-                tok = 0xbc;
-                tokc.d = strtod(token_buf, ((void*)0));
-            }
-        }
-    } else {
-        unsigned long long n, n1;
-        int lcount, ucount, ov = 0;
-        const char *p1;
-        *q = '\0';
-        q = token_buf;
-        if (b == 10 && *q == '0') {
-            b = 8;
-            q++;
-        }
-        n = 0;
-        while(1) {
-            t = *q++;
-            if (t == '\0')
-                break;
-            else if (t >= 'a')
-                t = t - 'a' + 10;
-            else if (t >= 'A')
-                t = t - 'A' + 10;
-            else
-                t = t - '0';
-            if (t >= b)
-                tcc_error("invalid digit");
-            n1 = n;
-            n = n * b + t;
-            if (n1 >= 0x1000000000000000ULL && n / b != n1)
-                ov = 1;
-        }
-        lcount = ucount = 0;
-        p1 = p;
-        for(;;) {
-            t = toup(ch);
-            if (t == 'L') {
-                if (lcount >= 2)
-                    tcc_error("three 'l's in integer constant");
+    unsigned long long n, n1;
+    int lcount, ucount, ov = 0;
+    const char *p1;
+    *q = '\0';
+    q = token_buf;
+    if (b == 10 && *q == '0') {
+        b = 8;
+        q++;
+    }
+    n = 0;
+    while(1) {
+        t = *q++;
+        if (t == '\0')
+            break;
+        else if (t >= 'a')
+            t = t - 'a' + 10;
+        else if (t >= 'A')
+            t = t - 'A' + 10;
+        else
+            t = t - '0';
+        if (t >= b)
+            tcc_error("invalid digit");
+        n1 = n;
+        n = n * b + t;
+        if (n1 >= 0x1000000000000000ULL && n / b != n1)
+            ov = 1;
+    }
+    lcount = ucount = 0;
+    p1 = p;
+    for(;;) {
+        t = toup(ch);
+        if (t == 'L') {
+            if (lcount >= 2)
+                tcc_error("three 'l's in integer constant");
                 if (lcount && *(p - 1) != ch)
                     tcc_error("incorrect integer suffix: %s", p1);
                 lcount++;
@@ -4213,7 +4079,6 @@ static void parse_number(const char *p)
  if (ucount)
      ++tok;
         tokc.i = n;
-    }
     if (ch)
         tcc_error("invalid number\n");
 }
