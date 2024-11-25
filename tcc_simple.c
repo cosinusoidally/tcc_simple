@@ -7859,39 +7859,8 @@ static void block(int *bsym, int *csym, int is_expr)
         skip(';');
     }
 }
-static void skip_or_save_block(TokenString **str)
-{
-    int braces = tok == '{';
-    int level = 0;
-    if (str)
-      *str = tok_str_alloc();
-    while ((level > 0 || (tok != '}' && tok != ',' && tok != ';' && tok != ')'))) {
- int t;
- if (tok == (-1)) {
-      if (str || level > 0)
-        tcc_error("unexpected end of file");
-      else
-        break;
- }
- if (str)
-   tok_str_add_tok(*str);
- t = tok;
- next();
- if (t == '{' || t == '(') {
-     level++;
- } else if (t == '}' || t == ')') {
-     level--;
-     if (level == 0 && braces && t == '}')
-       break;
- }
-    }
-    if (str) {
- tok_str_add(*str, -1);
- tok_str_add(*str, 0);
-    }
-}
 
-static void parse_init_elem(int expr_type) {
+static void skip_or_save_block(TokenString **str) {
 exit(1);
 }
 
@@ -8041,12 +8010,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
     Sym indexsym;
     CType *t1;
     have_elem = tok == '}' || tok == ',';
-    if (!have_elem && tok != '{' &&
- tok != 0xba && tok != 0xb9 &&
- !size_only) {
- parse_init_elem(!sec ? 2 : 1);
- have_elem = 1;
-    }
     if (have_elem &&
  !(type->t & 0x0040) &&
  is_compatible_unqualified_types(type, &vtop->type)) {
@@ -8156,11 +8119,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
     } else if (size_only) {
         skip_or_save_block(((void*)0));
     } else {
- if (!have_elem) {
-     if (tok != 0xb9 && tok != 0xba)
-       expect("string constant");
-     parse_init_elem(!sec ? 2 : 1);
- }
         init_putv(type, sec, c);
     }
 }
