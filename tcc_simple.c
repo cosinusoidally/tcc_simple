@@ -3098,10 +3098,6 @@ static void tal_free_impl(TinyAlloc *al, void *p ) {
     return tcc_free(p);
 }
 
-static void *tal_realloc_impl(TinyAlloc **pal, void *p, unsigned size ) {
-    return tcc_realloc(p,size);
-}
-
 static void cstr_realloc(CString *cstr, int new_size) {
     int size;
     size = cstr->size_allocated;
@@ -3109,7 +3105,7 @@ static void cstr_realloc(CString *cstr, int new_size) {
         size = 8;
     while (size < new_size)
         size = size * 2;
-    cstr->data = tal_realloc_impl(&cstr_alloc, cstr->data, size);
+    cstr->data = tcc_realloc(cstr->data, size);
     cstr->size_allocated = size;
 }
 static inline void cstr_ccat(CString *cstr, int ch)
@@ -3156,7 +3152,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len) {
         ptable = tcc_realloc(table_ident, (i + 512) * sizeof(TokenSym *));
         table_ident = ptable;
     }
-    ts = tal_realloc_impl(&toksym_alloc, 0, sizeof(TokenSym) + len);
+    ts = tcc_realloc(0, sizeof(TokenSym) + len);
     table_ident[i] = ts;
     ts->tok = tok_ident++;
     ts->sym_define = ((void*)0);
@@ -3383,7 +3379,7 @@ static inline void tok_str_new(TokenString *s) {
 }
 static TokenString *tok_str_alloc(void)
 {
-    TokenString *str = tal_realloc_impl(&tokstr_alloc, 0, sizeof *str);
+    TokenString *str = tcc_realloc(0, sizeof *str);
     tok_str_new(str);
     return str;
 }
@@ -3406,7 +3402,7 @@ static int *tok_str_realloc(TokenString *s, int new_size)
     while (size < new_size)
         size = size * 2;
     if (size > s->allocated_len) {
-        str = tal_realloc_impl(&tokstr_alloc, s->str, size * sizeof(int));
+        str = tcc_realloc(s->str, size * sizeof(int));
         s->allocated_len = size;
         s->str = str;
     }
