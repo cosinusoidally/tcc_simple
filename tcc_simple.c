@@ -2822,7 +2822,6 @@ static void preprocess_start(TCCState *s1, int is_asm);
 static void preprocess_end(TCCState *s1);
 static void tccpp_new(TCCState *s);
 static void skip(int c);
-static __attribute__((noreturn)) void expect(const char *msg);
 
 static inline int is_space(int ch) {
     return ch == ' ' || ch == '\t' || ch == '\v' || ch == '\f' || ch == '\r';
@@ -3052,13 +3051,7 @@ static const char tcc_keywords[] =
 ;
 
 static void skip(int c) {
-    if (tok != c)
-        tcc_error("'%c' expected (got \"%s\")", c, get_tok_str(tok, &tokc));
     next();
-}
-
-static void expect(const char *msg) {
-    tcc_error("%s expected", msg);
 }
 
 static void cstr_realloc(CString *cstr, int new_size) {
@@ -3108,8 +3101,6 @@ static void cstr_reset(CString *cstr) {
 static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len) {
     TokenSym *ts, **ptable;
     int i;
-    if (tok_ident >= 0x10000000)
-        tcc_error("memory full (symbols)");
     i = tok_ident - 256;
     if ((i % 512) == 0) {
         ptable = tcc_realloc(table_ident, (i + 512) * sizeof(TokenSym *));
@@ -3171,10 +3162,6 @@ static int handle_eob(void)
         if (bf->fd >= 0) {
             len = 8192;
             len = read(bf->fd, bf->buffer, len);
-            if (len < 0)
-                len = 0;
-        } else {
-            len = 0;
         }
         total_bytes += len;
         bf->buf_ptr = bf->buffer;
@@ -4615,8 +4602,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
                     arg_size += (type_size(&pt, &align) + 4 - 1) / 4;
                 } else {
                     n = tok;
-                    if (n < TOK_DEFINE)
-                        expect("identifier");
                     pt.t = 0;
                     next();
                 }
@@ -5359,8 +5344,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
             if (tok >= TOK_DEFINE) {
                 btype.t = 3;
             } else {
-                if (tok != (-1))
-                    expect("declaration");
                 break;
             }
         }
@@ -5394,12 +5377,8 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
             if (tok == '{') {
                 if (l != 0x0030)
                     tcc_error("cannot use local functions");
-                if ((type.t & 0x000f) != 6)
-                    expect("function definition");
                 sym = type.ref;
                 while ((sym = sym->next) != ((void*)0)) {
-                    if (!(sym->v & ~0x20000000))
-                        expect("identifier");
       if (sym->type.t == 0)
           sym->type = int_type;
   }
