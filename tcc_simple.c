@@ -6623,30 +6623,9 @@ static void store(int r, SValue *v) {
     fr = v->r & 0x003f;
     ft &= ~(0x0200 | 0x0100);
     bt = ft & 0x000f;
-    if (bt == 8) {
-        o(0xd9);
-        r = 2;
-    } else if (bt == 9) {
-        o(0xdd);
-        r = 2;
-    } else if (bt == 10) {
-        o(0xc0d9);
-        o(0xdb);
-        r = 7;
-    } else {
-        if (bt == 2)
-            o(0x66);
-        if (bt == 1 || bt == 11)
-            o(0x88);
-        else
-            o(0x89);
-    }
-    if (fr == 0x0030 ||
-        fr == 0x0032 ||
-        (v->r & 0x0100)) {
+    o(0x89);
+    if ((fr == 0x0030) || (v->r & 0x0100)) {
         gen_modrm(r, v->r, v->sym, fc);
-    } else if (fr != r) {
-        o(0xc0 + fr + r * 8);
     }
 }
 
