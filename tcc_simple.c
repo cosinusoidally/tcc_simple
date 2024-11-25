@@ -4068,33 +4068,6 @@ static inline void next_nomacro1(void)
 maybe_newline:
         if (0 == (parse_flags & 0x0004))
             goto redo_no_start;
-        tok = 10;
-        goto keep_tok_flags;
-    case '#':
-        { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        if ((tok_flags & 0x0001) &&
-            (parse_flags & 0x0001)) {
-            file->buf_ptr = p;
-            p = file->buf_ptr;
-            goto maybe_newline;
-        } else {
-            if (c == '#') {
-                p++;
-                tok = 0xca;
-            } else {
-                if (parse_flags & 0x0008) {
-                    p = parse_line_comment(p - 1);
-                    goto redo_no_start;
-                } else {
-                    tok = '#';
-                }
-            }
-        }
-        break;
-    case '$':
-        if (!(isidnum_table[c - (-1)] & 2)
-         || (parse_flags & 0x0008))
-            goto parse_simple;
     case 'a': case 'b': case 'c': case 'd':
     case 'e': case 'f': case 'g': case 'h':
     case 'i': case 'j': case 'k': case 'l':
@@ -4110,7 +4083,6 @@ maybe_newline:
     case 'U': case 'V': case 'W': case 'X':
     case 'Y': case 'Z':
     case '_':
-    parse_ident_fast:
         p1 = p;
         h = 1;
         h = ((h) + ((h) << 5) + ((h) >> 27) + (c));
@@ -4136,7 +4108,6 @@ maybe_newline:
             cstr_cat(&tokcstr, (char *) p1, len);
             p--;
             { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
-        parse_ident_slow:
             while (isidnum_table[c - (-1)] & (2|4))
             {
                 cstr_ccat(&tokcstr, c);
@@ -4156,14 +4127,9 @@ maybe_newline:
         for(;;) {
             cstr_ccat(&tokcstr, t);
             if (!((isidnum_table[c - (-1)] & (2|4))
-                  || c == '.'
-                  || ((c == '+' || c == '-')
-                      && (((t == 'e' || t == 'E')
-                            && !(parse_flags & 0x0008
-                                && ((char*)tokcstr.data)[0] == '0'
-                                && toup(((char*)tokcstr.data)[1]) == 'X'))
-                          || t == 'p' || t == 'P'))))
+                  || c == '.' || ((c == '+' || c == '-')))) {
                 break;
+            }
             t = c;
             { p++; c = *p; if (c == '\\') { c = handle_stray1(p); p = file->buf_ptr; }};
         }
