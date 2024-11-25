@@ -2786,7 +2786,6 @@ static inline void sym_free(Sym *sym);
 static Sym *sym_push2(Sym **ps, int v, int t, int c);
 static Sym *sym_push(int v, CType *type, int r, int c);
 static void sym_pop(Sym **ptop, Sym *b, int keep);
-static inline Sym *struct_find(int v);
 static inline Sym *sym_find(int v);
 static Sym *global_identifier_push(int v, int t, int c);
 static void tcc_open_bf(TCCState *s1, const char *filename, int initlen);
@@ -2816,8 +2815,6 @@ static void tok_str_free(TokenString *s);
 static void tok_str_free_str(int *str);
 static void tok_str_add(TokenString *s, int t);
 static void tok_str_add_tok(TokenString *s);
-static inline Sym *define_find(int v);
-static void free_defines(Sym *b);
 static void preprocess(int is_bof);
 static void next_nomacro(void);
 static void next(void);
@@ -3456,18 +3453,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
         break;
     }
     *pp = p;
-}
-
-static inline Sym *define_find(int v)
-{
-    v -= 256;
-    if ((unsigned)v >= (unsigned)(tok_ident - 256))
-        return ((void*)0);
-    return table_ident[v]->sym_define;
-}
-
-static void free_defines(Sym *b) {
-return;
 }
 
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long) {
@@ -4144,12 +4129,6 @@ static Sym *sym_push2(Sym **ps, int v, int t, int c)
     return s;
 }
 
-static inline Sym *struct_find(int v) {
-    v -= 256;
-    if ((unsigned)v >= (unsigned)(tok_ident - 256))
-        return ((void*)0);
-    return table_ident[v]->sym_struct;
-}
 static inline Sym *sym_find(int v)
 {
     v -= 256;
@@ -7387,7 +7366,6 @@ static int tcc_compile(TCCState *s1) {
     }
     s1->error_set_jmp_enabled = 0;
     preprocess_end(s1);
-    free_defines(define_start);
     sym_pop(&global_stack, ((void*)0), 0);
     sym_pop(&local_stack, ((void*)0), 0);
     tccelf_end_file(s1);
