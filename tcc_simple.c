@@ -3099,7 +3099,7 @@ static void tal_free_impl(TinyAlloc *al, void *p ) {
 }
 
 static void *tal_realloc_impl(TinyAlloc **pal, void *p, unsigned size ) {
-    return realloc(p,size);
+    return tcc_realloc(p,size);
 }
 
 static void cstr_realloc(CString *cstr, int new_size) {
