@@ -5357,7 +5357,6 @@ static void vpush(CType *type);
 static int gvtst(int inv, int t);
 static void gen_inline_functions(TCCState *s);
 static void skip_or_save_block(TokenString **str);
-static void gv_dup(void);
 static inline int is_float(int t)
 {
     int bt;
@@ -6061,67 +6060,17 @@ static int gv(int rc) {
         vtop->r = r;
     return r;
 }
-static void gv2(int rc1, int rc2)
-{
-    int v;
-    v = vtop[0].r & 0x003f;
-    if (v != 0x0033 && (v & ~1) != 0x0034 && rc1 <= rc2) {
-        vswap();
-        gv(rc1);
-        vswap();
-        gv(rc2);
-        if ((vtop[-1].r & 0x003f) >= 0x0030) {
-            vswap();
-            gv(rc1);
-            vswap();
-        }
-    } else {
-        gv(rc2);
-        vswap();
-        gv(rc1);
-        vswap();
-        if ((vtop[0].r & 0x003f) >= 0x0030) {
-            gv(rc2);
-        }
-    }
-}
-static int rc_fret(int t)
-{
-    return 0x0008;
-}
-static int reg_fret(int t)
-{
-    return TREG_ST0;
-}
-static void lexpand(void)
-{
-    int u, v;
-    u = vtop->type.t & (0x0020 | 0x0010);
-    v = vtop->r & (0x003f | 0x0100);
-    if (v == 0x0030) {
-        vdup();
-        vtop[0].c.i >>= 32;
-    } else if (v == (0x0100|0x0030) || v == (0x0100|0x0032)) {
-        vdup();
-        vtop[0].c.i += 4;
-    } else {
-        gv(0x0001);
-        vdup();
-        vtop[0].r = vtop[-1].r2;
-        vtop[0].r2 = vtop[-1].r2 = 0x0030;
-    }
-    vtop[0].type.t = vtop[-1].type.t = 3 | u;
-}
-static void lbuild(int t)
-{
-    gv2(0x0001, 0x0001);
-    vtop[-1].r2 = vtop[0].r;
-    vtop[-1].type.t = t;
-    vpop();
+
+static void gv2(int rc1, int rc2) {
+exit(1);
 }
 
-static void gv_dup(void) {
-exit(1);
+static int rc_fret(int t) {
+    return 0x0008;
+}
+
+static int reg_fret(int t) {
+    return TREG_ST0;
 }
 
 static int gvtst(int inv, int t)
@@ -6138,18 +6087,6 @@ static int gvtst(int inv, int t)
         return t;
     }
     return gtst(inv, t);
-}
-
-static void gen_opl(int op) {
-exit(1);
-}
-
-static uint64_t gen_opic_sdiv(uint64_t a, uint64_t b) {
-exit(1);
-}
-
-static int gen_opic_lt(uint64_t a, uint64_t b) {
-exit(1);
 }
 
 static void gen_opic(int op)
@@ -6190,18 +6127,7 @@ static inline int is_null_pointer(SValue *p) {
 return 0;
 }
 
-static inline int is_integer_btype(int bt)
-{
-    return (bt == 1 || bt == 2 ||
-            bt == 3 || bt == 4);
-}
-
-static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op) {
-exit(1);
-}
-
-static void gen_op(int op)
-{
+static void gen_op(int op) {
     int u, t1, t2, bt1, bt2, t;
     CType type1;
 redo:
@@ -6224,37 +6150,19 @@ redo:
  }
  goto redo;
     } else if (bt1 == 5 || bt2 == 5) {
-        if (op >= 0x92 && op <= 0xa1) {
-            check_comparison_pointer_types(vtop - 1, vtop, op);
-            t = 3 | 0x0010;
-            goto std_op;
-        }
-        if (bt1 == 5 && bt2 == 5) {
-            if (op != '-')
-                tcc_error("cannot use pointers here");
-            check_comparison_pointer_types(vtop - 1, vtop, op);
-            vrott(3);
-            gen_opic(op);
-            vtop->type.t = ptrdiff_type.t;
+        if (op != '-' && op != '+')
+            tcc_error("cannot use pointers here");
+        if (bt2 == 5) {
             vswap();
-            gen_op(0xb2);
-        } else {
-            if (op != '-' && op != '+')
-                tcc_error("cannot use pointers here");
-            if (bt2 == 5) {
-                vswap();
-                t = t1, t1 = t2, t2 = t;
-            }
-            if ((vtop[0].type.t & 0x000f) == 4)
-                gen_cast_s(3);
-            type1 = vtop[-1].type;
-            type1.t &= ~0x0040;
-            gen_op('*');
-            {
-                gen_opic(op);
-            }
-            vtop->type = type1;
+            t = t1, t1 = t2, t2 = t;
         }
+        if ((vtop[0].type.t & 0x000f) == 4)
+            gen_cast_s(3);
+        type1 = vtop[-1].type;
+        type1.t &= ~0x0040;
+        gen_op('*');
+        gen_opic(op);
+        vtop->type = type1;
     } else if (is_float(bt1) || is_float(bt2)) {
         if (bt1 == 10 || bt2 == 10) {
             t = 10;
@@ -6487,13 +6395,6 @@ static void gen_cast(CType *type)
                     if (sbt == (3 | 0x0010)) {
                         vpushi(0);
                         gv(0x0001);
-                    } else {
-                        if (sbt == 5) {
-                            gen_cast_s(3);
-                        }
-                        gv_dup();
-                        vpushi(31);
-                        gen_op(0x02);
                     }
                     vtop[-1].r2 = vtop->r;
                     vpop();
@@ -6508,11 +6409,6 @@ static void gen_cast(CType *type)
                     tcc_warning("nonportable conversion from pointer to char/short");
                 }
                 force_charshort_cast(dbt);
-            } else if ((dbt & 0x000f) == 3) {
-                if ((sbt & 0x000f) == 4) {
-                    lexpand();
-                    vpop();
-                }
             }
         }
     } else if ((dbt & 0x000f) == 5 && !(vtop->r & 0x0100)) {
@@ -6749,11 +6645,6 @@ static void inc(int post, int c)
 {
     test_lvalue();
     vdup();
-    if (post) {
-        gv_dup();
-        vrotb(3);
-        vrotb(3);
-    }
     vpushi(c - 0xa3);
     gen_op('+');
     vstore();
@@ -7054,10 +6945,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
                 n = vtop->c.i;
                 if (n < 0)
                     tcc_error("invalid array size");
-            } else {
-                if (!is_integer_btype(vtop->type.t & 0x000f))
-                    tcc_error("size of variable length array should be an integer");
-                t1 = 0x0400;
             }
         }
         skip(']');
