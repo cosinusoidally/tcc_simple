@@ -1695,8 +1695,6 @@ static void pragma_parse(TCCState *s1)
         if (t == TOK_lib) {
             dynarray_add(&s1->pragma_libs, &s1->nb_pragma_libs, p);
         } else {
-            if (t == TOK_option)
-                tcc_set_options(s1, p);
             tcc_free(p);
         }
 
