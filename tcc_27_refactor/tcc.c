@@ -50,28 +50,8 @@ redo:
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
 
-    if ((n | t) == 0) {
-        n = s->nb_files;
-        if (s->output_type == TCC_OUTPUT_PREPROCESS) {
-            if (s->outfile) {
-                ppfp = fopen(s->outfile, "w");
-                if (!ppfp)
-                    tcc_error("could not write '%s'", s->outfile);
-            }
-        } else if (s->output_type == TCC_OUTPUT_OBJ && !s->option_r) {
-            if (s->nb_libraries)
-                tcc_error("cannot specify libraries with -c");
-            if (n > 1 && s->outfile)
-                tcc_error("cannot specify output file with -c many files");
-        } else {
-            if (s->option_pthread)
-                tcc_set_options(s, "-lpthread");
-        }
+    n = s->nb_files;
 
-    }
-
-    if (s->output_type == 0)
-        s->output_type = TCC_OUTPUT_EXE;
     tcc_set_output_type(s, s->output_type);
     s->ppfp = ppfp;
 
