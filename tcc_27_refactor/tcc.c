@@ -36,31 +36,6 @@ static const char version[] =
     ")\n"
     ;
 
-static char *default_outputfile(TCCState *s, const char *first_file)
-{
-    char buf[1024];
-    char *ext;
-    const char *name = "a";
-
-    if (first_file && strcmp(first_file, "-"))
-        name = tcc_basename(first_file);
-    snprintf(buf, sizeof(buf), "%s", name);
-    ext = tcc_fileextension(buf);
-#ifdef TCC_TARGET_PE
-    if (s->output_type == TCC_OUTPUT_DLL)
-        strcpy(ext, ".dll");
-    else
-    if (s->output_type == TCC_OUTPUT_EXE)
-        strcpy(ext, ".exe");
-    else
-#endif
-    if (s->output_type == TCC_OUTPUT_OBJ && !s->option_r && *ext)
-        strcpy(ext, ".o");
-    else
-        strcpy(buf, "a.out");
-    return tcc_strdup(buf);
-}
-
 static unsigned getclock_ms(void)
 {
 #ifdef _WIN32
@@ -162,8 +137,6 @@ redo:
     } else if (s->output_type == TCC_OUTPUT_PREPROCESS) {
         ;
     } else if (0 == ret) {
-        if (!s->outfile)
-            s->outfile = default_outputfile(s, first_file);
         if (tcc_output_file(s, s->outfile))
             ret = 1;
     }
