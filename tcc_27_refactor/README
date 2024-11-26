@@ -1,0 +1,2 @@
+The idea here is to heavily refactor and tidy up tcc-0.9.27. Resulting compiler
+will be i388 Linux only.
