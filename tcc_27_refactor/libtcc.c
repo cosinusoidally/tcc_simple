@@ -417,18 +417,6 @@ static int tcc_compile(TCCState *s1)
     return s1->nb_errors != 0 ? -1 : 0;
 }
 
-LIBTCCAPI int tcc_compile_string(TCCState *s, const char *str)
-{
-    int len, ret;
-
-    len = strlen(str);
-    tcc_open_bf(s, "<string>", len);
-    memcpy(file->buffer, str, len);
-    ret = tcc_compile(s);
-    tcc_close();
-    return ret;
-}
-
 /* define a preprocessor symbol. A value can also be provided with the '=' operator */
 LIBTCCAPI void tcc_define_symbol(TCCState *s1, const char *sym, const char *value)
 {
