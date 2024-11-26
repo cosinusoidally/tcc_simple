@@ -343,39 +343,9 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
     ElfSym *esym;
     const char *name;
     char buf1[256];
-#ifdef CONFIG_TCC_BCHECK
-    char buf[32];
-#endif
 
     if (!sym->c) {
         name = get_tok_str(sym->v, NULL);
-#ifdef CONFIG_TCC_BCHECK
-        if (tcc_state->do_bounds_check) {
-            /* XXX: avoid doing that for statics ? */
-            /* if bound checking is activated, we change some function
-               names by adding the "__bound" prefix */
-            switch(sym->v) {
-#ifdef TCC_TARGET_PE
-            /* XXX: we rely only on malloc hooks */
-            case TOK_malloc:
-            case TOK_free:
-            case TOK_realloc:
-            case TOK_memalign:
-            case TOK_calloc:
-#endif
-            case TOK_memcpy:
-            case TOK_memmove:
-            case TOK_memset:
-            case TOK_strlen:
-            case TOK_strcpy:
-            case TOK_alloca:
-                strcpy(buf, "__bound_");
-                strcat(buf, name);
-                name = buf;
-                break;
-            }
-        }
-#endif
         t = sym->type.t;
         if ((t & VT_BTYPE) == VT_FUNC) {
             sym_type = STT_FUNC;
@@ -389,17 +359,6 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         else
             sym_bind = STB_GLOBAL;
         other = 0;
-#ifdef TCC_TARGET_PE
-        if (sym_type == STT_FUNC && sym->type.ref) {
-            Sym *ref = sym->type.ref;
-            if (ref->f.func_call == FUNC_STDCALL && can_add_underscore) {
-                sprintf(buf1, "_%s@%d", name, ref->f.func_args * PTR_SIZE);
-                name = buf1;
-                other |= ST_PE_STDCALL;
-                can_add_underscore = 0;
-            }
-        }
-#endif
         if (tcc_state->leading_underscore && can_add_underscore) {
             buf1[0] = '_';
             pstrcpy(buf1 + 1, sizeof(buf1) - 1, name);
@@ -444,12 +403,10 @@ ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
     put_elf_reloca(symtab_section, s, offset, type, c, addend);
 }
 
-#if PTR_SIZE == 4
 ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type)
 {
     greloca(s, sym, offset, type, 0);
 }
-#endif
 
 /* ------------------------------------------------------------------------- */
 /* symbol allocator */
@@ -1124,34 +1081,6 @@ ST_FUNC void gaddrof(void)
 
 
 }
-
-#ifdef CONFIG_TCC_BCHECK
-/* generate lvalue bound code */
-static void gbound(void)
-{
-    int lval_type;
-    CType type1;
-
-    vtop->r &= ~VT_MUSTBOUND;
-    /* if lvalue, then use checking code before dereferencing */
-    if (vtop->r & VT_LVAL) {
-        /* if not VT_BOUNDED value, then make one */
-        if (!(vtop->r & VT_BOUNDED)) {
-            lval_type = vtop->r & (VT_LVAL_TYPE | VT_LVAL);
-            /* must save type because we must set it to int to get pointer */
-            type1 = vtop->type;
-            vtop->type.t = VT_PTR;
-            gaddrof();
-            vpushi(0);
-            gen_bounded_ptr_add();
-            vtop->r |= lval_type;
-            vtop->type = type1;
-        }
-        /* then check for dereferencing */
-        gen_bounded_ptr_deref();
-    }
-}
-#endif
 
 static void incr_bf_adr(int o)
 {
