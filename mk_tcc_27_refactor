@@ -25,6 +25,17 @@ gcc -O0 -m32 -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ../tcc_27_ref
 
 gcc -m32 tcc_27_refactor.o libtcc1_refactor.o -o tcc_27_refactor -ldl
 
+# rebuild tcc_27_refactor a 2nd time with itself
+
+./tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27_refactor/include -I ../tcc_27_refactor/ -c ../tcc_27_refactor/tcc.c -U__linux__ -DONE_SOURCE -o tcc_27_refactor2.o
+./tcc_27_refactor -c ../tcc_27_refactor/lib/libtcc1.c -o libtcc1_refactor2.o
+rm tcc_27_refactor
+gcc -m32 tcc_27_refactor2.o libtcc1_refactor2.o -o tcc_27_refactor -ldl
+
+# check each build matches
+diff -u -s tcc_27_refactor.o tcc_27_refactor2.o
+diff -u -s libtcc1_refactor.o libtcc1_refactor2.o
+
 # for now hack in -U__linux__ to make hashes match
 ./tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
 
