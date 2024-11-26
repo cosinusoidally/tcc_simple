@@ -144,9 +144,6 @@ extern long double strtold (const char *__nptr, char **__endptr);
 # else
 #  define TCC_TARGET_I386
 # endif
-# ifdef _WIN32
-#  define TCC_TARGET_PE 1
-# endif
 #endif
 
 /* only native compiler supports -run */
