@@ -20,5 +20,8 @@ gcc -O0 -m32 -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ../tcc_27_ref
 
 ./tcc_27_refactor -c ./lib/libtcc1.c -o libtcc1.o
 
+./tcc_27_refactor -c libc_boot4.c -o libc_boot4.o
+./tcc_27_refactor -c libc_static.c -o libc_static.o
+
 cd ..
 sha256sum -c sums_tcc_27
