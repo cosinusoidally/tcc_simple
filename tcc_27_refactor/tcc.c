@@ -36,17 +36,6 @@ static const char version[] =
     ")\n"
     ;
 
-static unsigned getclock_ms(void)
-{
-#ifdef _WIN32
-    return GetTickCount();
-#else
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec*1000 + (tv.tv_usec+500)/1000;
-#endif
-}
-
 int main(int argc0, char **argv0)
 {
     TCCState *s;
@@ -96,8 +85,6 @@ redo:
                 tcc_set_options(s, "-lpthread");
         }
 
-        if (s->do_bench)
-            start_time = getclock_ms();
     }
 
     if (s->output_type == 0)
@@ -141,8 +128,6 @@ redo:
             ret = 1;
     }
 
-    if (s->do_bench && (n | t | ret) == 0)
-        tcc_print_stats(s, getclock_ms() - start_time);
     tcc_delete(s);
     if (ret == 0 && n)
         goto redo; /* compile more files with -c */
