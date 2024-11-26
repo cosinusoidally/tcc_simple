@@ -22,7 +22,6 @@
 #if ONE_SOURCE
 # include "libtcc.c"
 #endif
-#include "tcctools.c"
 
 static const char help[] =
     "Tiny C Compiler "TCC_VERSION" - Copyright (C) 2001-2006 Fabrice Bellard\n"
@@ -262,16 +261,8 @@ redo:
             return printf(help), 1;
         if (opt == OPT_HELP2)
             return printf(help2), 1;
-        if (opt == OPT_M32 || opt == OPT_M64)
-            tcc_tool_cross(s, argv, opt); /* never returns */
         if (s->verbose)
             printf(version);
-        if (opt == OPT_AR)
-            return tcc_tool_ar(s, argc, argv);
-#ifdef TCC_TARGET_PE
-        if (opt == OPT_IMPDEF)
-            return tcc_tool_impdef(s, argc, argv);
-#endif
         if (opt == OPT_V)
             return 0;
         if (opt == OPT_PRINT_DIRS) {
@@ -348,8 +339,6 @@ redo:
             s->outfile = default_outputfile(s, first_file);
         if (tcc_output_file(s, s->outfile))
             ret = 1;
-        else if (s->gen_deps)
-            gen_makedeps(s, s->outfile, s->deps_outfile);
     }
 
     if (s->do_bench && (n | t | ret) == 0)
