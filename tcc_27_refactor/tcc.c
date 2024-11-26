@@ -60,20 +60,15 @@ redo:
         struct filespec *f = s->files[s->nb_files - n];
         s->filetype = f->type;
         s->alacarte_link = f->alacarte;
-        if (f->type == AFF_TYPE_LIB) {
-            if (tcc_add_library_err(s, f->name) < 0)
-                ret = 1;
-        } else {
-            if (!first_file)
-                first_file = f->name;
-            if (tcc_add_file(s, f->name) < 0)
-                ret = 1;
+        if (!first_file) {
+            first_file = f->name;
         }
+        tcc_add_file(s, f->name);
         s->filetype = 0;
         s->alacarte_link = 1;
-        if (--n == 0 || ret
-            || (s->output_type == TCC_OUTPUT_OBJ && !s->option_r))
+        if (--n == 0) {
             break;
+        }
     }
 
     if (s->run_test) {
