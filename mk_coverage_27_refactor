@@ -1,0 +1,8 @@
+./mk_clean
+
+cd artifacts
+
+gcc -g -m32 -O0 --coverage tcc_simple.c -o artifacts/coverage.exe
+./coverage.exe -c M2_simple_asm.c -o coverage.o
+gcovr . --html-details -o ./example.html
+~/ffnew/firefox/firefox ./example.html
