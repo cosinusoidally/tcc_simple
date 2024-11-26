@@ -36,40 +36,14 @@ static int nb_states;
 
 /********************************************************/
 
-#if ONE_SOURCE
 #include "tccpp.c"
 #include "tccgen.c"
 #include "tccelf.c"
-#ifdef TCC_TARGET_I386
+
 #include "i386-gen.c"
 #include "i386-asm.c"
-#endif
-#ifdef TCC_TARGET_ARM
-#include "arm-gen.c"
-#include "arm-link.c"
-#include "arm-asm.c"
-#endif
-#ifdef TCC_TARGET_ARM64
-#include "arm64-gen.c"
-#include "arm64-link.c"
-#endif
-#ifdef TCC_TARGET_C67
-#include "c67-gen.c"
-#include "c67-link.c"
-#include "tcccoff.c"
-#endif
-#ifdef TCC_TARGET_X86_64
-#include "x86_64-gen.c"
-#include "x86_64-link.c"
-#include "i386-asm.c"
-#endif
-#ifdef CONFIG_TCC_ASM
+
 #include "tccasm.c"
-#endif
-#ifdef TCC_TARGET_PE
-#include "tccpe.c"
-#endif
-#endif /* ONE_SOURCE */
 
 /********************************************************/
 #ifndef CONFIG_TCC_ASM
