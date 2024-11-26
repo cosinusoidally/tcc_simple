@@ -51,24 +51,7 @@ redo:
     opt = tcc_parse_args(s, &argc, &argv, 1);
 
     if ((n | t) == 0) {
-        if (opt == OPT_HELP)
-            return printf(help), 1;
-        if (opt == OPT_HELP2)
-            return printf(help2), 1;
-        if (s->verbose)
-            printf(version);
-        if (opt == OPT_V)
-            return 0;
-        if (opt == OPT_PRINT_DIRS) {
-            /* initialize search dirs */
-            tcc_set_output_type(s, TCC_OUTPUT_MEMORY);
-            return 0;
-        }
-
         n = s->nb_files;
-        if (n == 0)
-            tcc_error("no input files\n");
-
         if (s->output_type == TCC_OUTPUT_PREPROCESS) {
             if (s->outfile) {
                 ppfp = fopen(s->outfile, "w");
