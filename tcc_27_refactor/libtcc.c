@@ -46,62 +46,6 @@ static int nb_states;
 #include "tccasm.c"
 
 /********************************************************/
-#ifndef CONFIG_TCC_ASM
-ST_FUNC void asm_instr(void)
-{
-    tcc_error("inline asm() not supported");
-}
-ST_FUNC void asm_global_instr(void)
-{
-    tcc_error("inline asm() not supported");
-}
-#endif
-
-/********************************************************/
-#ifdef _WIN32
-ST_FUNC char *normalize_slashes(char *path)
-{
-    char *p;
-    for (p = path; *p; ++p)
-        if (*p == '\\')
-            *p = '/';
-    return path;
-}
-
-static HMODULE tcc_module;
-
-/* on win32, we suppose the lib and includes are at the location of 'tcc.exe' */
-static void tcc_set_lib_path_w32(TCCState *s)
-{
-    char path[1024], *p;
-    GetModuleFileNameA(tcc_module, path, sizeof path);
-    p = tcc_basename(normalize_slashes(strlwr(path)));
-    if (p > path)
-        --p;
-    *p = 0;
-    tcc_set_lib_path(s, path);
-}
-
-#ifdef TCC_TARGET_PE
-static void tcc_add_systemdir(TCCState *s)
-{
-    char buf[1000];
-    GetSystemDirectory(buf, sizeof buf);
-    tcc_add_library_path(s, normalize_slashes(buf));
-}
-#endif
-
-#ifdef LIBTCC_AS_DLL
-BOOL WINAPI DllMain (HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
-{
-    if (DLL_PROCESS_ATTACH == dwReason)
-        tcc_module = hDll;
-    return TRUE;
-}
-#endif
-#endif
-
-/********************************************************/
 /* copy a string and truncate it. */
 ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
 {
