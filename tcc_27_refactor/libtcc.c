@@ -537,65 +537,14 @@ LIBTCCAPI TCCState *tcc_new(void)
     tcc_define_symbol(s, "__STDC_HOSTED__", NULL);
 
     /* target defines */
-#if defined(TCC_TARGET_I386)
     tcc_define_symbol(s, "__i386__", NULL);
     tcc_define_symbol(s, "__i386", NULL);
     tcc_define_symbol(s, "i386", NULL);
-#elif defined(TCC_TARGET_X86_64)
-    tcc_define_symbol(s, "__x86_64__", NULL);
-#elif defined(TCC_TARGET_ARM)
-    tcc_define_symbol(s, "__ARM_ARCH_4__", NULL);
-    tcc_define_symbol(s, "__arm_elf__", NULL);
-    tcc_define_symbol(s, "__arm_elf", NULL);
-    tcc_define_symbol(s, "arm_elf", NULL);
-    tcc_define_symbol(s, "__arm__", NULL);
-    tcc_define_symbol(s, "__arm", NULL);
-    tcc_define_symbol(s, "arm", NULL);
-    tcc_define_symbol(s, "__APCS_32__", NULL);
-    tcc_define_symbol(s, "__ARMEL__", NULL);
-#if defined(TCC_ARM_EABI)
-    tcc_define_symbol(s, "__ARM_EABI__", NULL);
-#endif
-#if defined(TCC_ARM_HARDFLOAT)
-    s->float_abi = ARM_HARD_FLOAT;
-    tcc_define_symbol(s, "__ARM_PCS_VFP", NULL);
-#else
-    s->float_abi = ARM_SOFTFP_FLOAT;
-#endif
-#elif defined(TCC_TARGET_ARM64)
-    tcc_define_symbol(s, "__aarch64__", NULL);
-#elif defined TCC_TARGET_C67
-    tcc_define_symbol(s, "__C67__", NULL);
-#endif
-
-#ifdef TCC_TARGET_PE
-    tcc_define_symbol(s, "_WIN32", NULL);
-# ifdef TCC_TARGET_X86_64
-    tcc_define_symbol(s, "_WIN64", NULL);
-# endif
-#else
     tcc_define_symbol(s, "__unix__", NULL);
     tcc_define_symbol(s, "__unix", NULL);
     tcc_define_symbol(s, "unix", NULL);
-# if defined(__linux__)
     tcc_define_symbol(s, "__linux__", NULL);
     tcc_define_symbol(s, "__linux", NULL);
-# endif
-# if defined(__FreeBSD__)
-    tcc_define_symbol(s, "__FreeBSD__", "__FreeBSD__");
-    /* No 'Thread Storage Local' on FreeBSD with tcc */
-    tcc_define_symbol(s, "__NO_TLS", NULL);
-# endif
-# if defined(__FreeBSD_kernel__)
-    tcc_define_symbol(s, "__FreeBSD_kernel__", NULL);
-# endif
-# if defined(__NetBSD__)
-    tcc_define_symbol(s, "__NetBSD__", "__NetBSD__");
-# endif
-# if defined(__OpenBSD__)
-    tcc_define_symbol(s, "__OpenBSD__", "__OpenBSD__");
-# endif
-#endif
 
     /* TinyCC & gcc defines */
 #if PTR_SIZE == 4
