@@ -45,7 +45,6 @@ int main(int argc0, char **argv0)
     int argc; char **argv;
     FILE *ppfp = stdout;
 
-redo:
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
@@ -71,21 +70,8 @@ redo:
         }
     }
 
-    if (s->run_test) {
-        t = 0;
-    } else if (s->output_type == TCC_OUTPUT_PREPROCESS) {
-        ;
-    } else if (0 == ret) {
-        if (tcc_output_file(s, s->outfile))
-            ret = 1;
-    }
+    tcc_output_file(s, s->outfile);
 
     tcc_delete(s);
-    if (ret == 0 && n)
-        goto redo; /* compile more files with -c */
-    if (t)
-        goto redo; /* run more tests with -dt -run */
-    if (ppfp && ppfp != stdout)
-        fclose(ppfp);
     return ret;
 }
