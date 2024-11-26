@@ -6825,9 +6825,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Sym *flexible_array;
     Sym *sym = NULL;
     int saved_nocode_wanted = nocode_wanted;
-#ifdef CONFIG_TCC_BCHECK
-    int bcheck = tcc_state->do_bounds_check && !NODATA_WANTED;
-#endif
 
     if (type->t & VT_STATIC)
         nocode_wanted |= NODATA_WANTED ? 0x40000000 : 0x80000000;
@@ -6901,27 +6898,8 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
     if ((r & VT_VALMASK) == VT_LOCAL) {
         sec = NULL;
-#ifdef CONFIG_TCC_BCHECK
-        if (bcheck && (type->t & VT_ARRAY)) {
-            loc--;
-        }
-#endif
         loc = (loc - size) & -align;
         addr = loc;
-#ifdef CONFIG_TCC_BCHECK
-        /* handles bounds */
-        /* XXX: currently, since we do only one pass, we cannot track
-           '&' operators, so we add only arrays */
-        if (bcheck && (type->t & VT_ARRAY)) {
-            addr_t *bounds_ptr;
-            /* add padding between regions */
-            loc--;
-            /* then add local bound info */
-            bounds_ptr = section_ptr_add(lbounds_section, 2 * sizeof(addr_t));
-            bounds_ptr[0] = addr;
-            bounds_ptr[1] = size;
-        }
-#endif
         if (v) {
             /* local variable */
 #ifdef CONFIG_TCC_ASM
@@ -6960,11 +6938,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
         if (sec) {
 	    addr = section_add(sec, size, align);
-#ifdef CONFIG_TCC_BCHECK
-            /* add padding if bound check */
-            if (bcheck)
-                section_add(sec, 1, 1);
-#endif
         } else {
             addr = align; /* SHN_COMMON is special, symbol value is align */
 	    sec = common_section;
@@ -6987,19 +6960,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 	    vtop->r |= r;
         }
 
-#ifdef CONFIG_TCC_BCHECK
-        /* handles bounds now because the symbol must be defined
-           before for the relocation */
-        if (bcheck) {
-            addr_t *bounds_ptr;
-
-            greloca(bounds_section, sym, bounds_section->data_offset, R_DATA_PTR, 0);
-            /* then add global bound info */
-            bounds_ptr = section_ptr_add(bounds_section, 2 * sizeof(addr_t));
-            bounds_ptr[0] = 0; /* relocated */
-            bounds_ptr[1] = size;
-        }
-#endif
     }
 
     if (type->t & VT_VLA) {
