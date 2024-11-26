@@ -32,11 +32,6 @@ ST_DATA Section *cur_text_section; /* current section where function code is gen
 #ifdef CONFIG_TCC_ASM
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
 #endif
-#ifdef CONFIG_TCC_BCHECK
-/* bound check related sections */
-ST_DATA Section *bounds_section; /* contains global data bound description */
-ST_DATA Section *lbounds_section; /* contains local data bound description */
-#endif
 /* symbol sections */
 ST_DATA Section *symtab_section;
 /* debug sections */
@@ -76,17 +71,6 @@ ST_FUNC void tccelf_new(TCCState *s)
                                       ".dynhashtab", SHF_PRIVATE);
     get_sym_attr(s, 0, 1);
 }
-
-#ifdef CONFIG_TCC_BCHECK
-ST_FUNC void tccelf_bounds_new(TCCState *s)
-{
-    /* create bounds sections */
-    bounds_section = new_section(s, ".bounds",
-                                 SHT_PROGBITS, SHF_ALLOC);
-    lbounds_section = new_section(s, ".lbounds",
-                                  SHT_PROGBITS, SHF_ALLOC);
-}
-#endif
 
 ST_FUNC void tccelf_stab_new(TCCState *s)
 {
@@ -1149,41 +1133,9 @@ static int tcc_add_support(TCCState *s1, const char *filename)
     return tcc_add_file(s1, buf);
 }
 
-ST_FUNC void tcc_add_bcheck(TCCState *s1)
-{
-#ifdef CONFIG_TCC_BCHECK
-    addr_t *ptr;
-    int sym_index;
-
-    if (0 == s1->do_bounds_check)
-        return;
-    /* XXX: add an object file to do that */
-    ptr = section_ptr_add(bounds_section, sizeof(*ptr));
-    *ptr = 0;
-    set_elf_sym(symtab_section, 0, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                bounds_section->sh_num, "__bounds_start");
-    /* pull bcheck.o from libtcc1.a */
-    sym_index = set_elf_sym(symtab_section, 0, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                SHN_UNDEF, "__bound_init");
-    if (s1->output_type != TCC_OUTPUT_MEMORY) {
-        /* add 'call __bound_init()' in .init section */
-        Section *init_section = find_section(s1, ".init");
-        unsigned char *pinit = section_ptr_add(init_section, 5);
-        pinit[0] = 0xe8;
-        write32le(pinit + 1, -4);
-        put_elf_reloc(symtab_section, init_section,
-            init_section->data_offset - 4, R_386_PC32, sym_index);
-            /* R_386_PC32 = R_X86_64_PC32 = 2 */
-    }
-#endif
-}
-
 /* add tcc runtime libraries */
 ST_FUNC void tcc_add_runtime(TCCState *s1)
 {
-    tcc_add_bcheck(s1);
     tcc_add_pragma_libs(s1);
     /* add libc */
     if (!s1->nostdlib) {
