@@ -498,21 +498,9 @@ LIBTCCAPI TCCState *tcc_new(void)
     s->warn_implicit_function_declaration = 1;
     s->ms_extensions = 1;
 
-#ifdef CHAR_IS_UNSIGNED
-    s->char_is_unsigned = 1;
-#endif
-#ifdef TCC_TARGET_I386
     s->seg_size = 32;
-#endif
-    /* enable this if you want symbols with leading underscore on windows: */
-#if 0 /* def TCC_TARGET_PE */
-    s->leading_underscore = 1;
-#endif
-#ifdef _WIN32
-    tcc_set_lib_path_w32(s);
-#else
+
     tcc_set_lib_path(s, CONFIG_TCCDIR);
-#endif
     tccelf_new(s);
     tccpp_new(s);
 
