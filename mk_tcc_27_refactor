@@ -2,17 +2,6 @@
 
 cd artifacts
 
-# we have to symlink since tcc will include the file name in the object code
-# file which then causes hashes not to match
-ln -s ../tcc_27/libc_boot4.c libc_boot4.c
-ln -s ../tcc_27/libc_static.c libc_static.c
-ln -s ../tcc_27/tcc.c tcc.c
-mkdir lib
-cd lib
-ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
-cd ..
-
-
 set -xe
 
 # build tcc_27_refactor with gcc
@@ -36,6 +25,20 @@ gcc -m32 tcc_27_refactor2.o libtcc1_refactor2.o -o tcc_27_refactor -ldl
 diff -u -s tcc_27_refactor.o tcc_27_refactor2.o
 diff -u -s libtcc1_refactor.o libtcc1_refactor2.o
 
+# build some test files
+
+# we have to symlink since tcc will include the file name in the object code
+# file which then causes hashes not to match
+ln -s ../tcc_27/libc_boot4.c libc_boot4.c
+ln -s ../tcc_27/libc_static.c libc_static.c
+ln -s ../tcc_27/tcc.c tcc.c
+mkdir lib
+cd lib
+ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
+cd ..
+
+# do the test file builds
+
 # for now hack in -U__linux__ to make hashes match
 ./tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
 
@@ -45,4 +48,6 @@ diff -u -s libtcc1_refactor.o libtcc1_refactor2.o
 ./tcc_27_refactor -c libc_static.c -o libc_static.o
 
 cd ..
+
+# check the hashes of the test files
 sha256sum -c sums_tcc_27
