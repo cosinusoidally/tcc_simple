@@ -373,9 +373,6 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename)
     if (fd < 0)
         return -1;
     tcc_open_bf(s1, filename, 0);
-#ifdef _WIN32
-    normalize_slashes(file->filename);
-#endif
     file->fd = fd;
     return fd;
 }
@@ -535,57 +532,20 @@ LIBTCCAPI TCCState *tcc_new(void)
     tcc_define_symbol(s, "__linux", NULL);
 
     /* TinyCC & gcc defines */
-#if PTR_SIZE == 4
     /* 32bit systems. */
     tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned int");
     tcc_define_symbol(s, "__PTRDIFF_TYPE__", "int");
     tcc_define_symbol(s, "__ILP32__", NULL);
-#elif LONG_SIZE == 4
-    /* 64bit Windows. */
-    tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned long long");
-    tcc_define_symbol(s, "__PTRDIFF_TYPE__", "long long");
-    tcc_define_symbol(s, "__LLP64__", NULL);
-#else
-    /* Other 64bit systems. */
-    tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned long");
-    tcc_define_symbol(s, "__PTRDIFF_TYPE__", "long");
-    tcc_define_symbol(s, "__LP64__", NULL);
-#endif
 
-#ifdef TCC_TARGET_PE
-    tcc_define_symbol(s, "__WCHAR_TYPE__", "unsigned short");
-    tcc_define_symbol(s, "__WINT_TYPE__", "unsigned short");
-#else
     tcc_define_symbol(s, "__WCHAR_TYPE__", "int");
-    /* wint_t is unsigned int by default, but (signed) int on BSDs
-       and unsigned short on windows.  Other OSes might have still
-       other conventions, sigh.  */
-# if defined(__FreeBSD__) || defined (__FreeBSD_kernel__) \
-  || defined(__NetBSD__) || defined(__OpenBSD__)
-    tcc_define_symbol(s, "__WINT_TYPE__", "int");
-#  ifdef __FreeBSD__
-    /* define __GNUC__ to have some useful stuff from sys/cdefs.h
-       that are unconditionally used in FreeBSDs other system headers :/ */
-    tcc_define_symbol(s, "__GNUC__", "2");
-    tcc_define_symbol(s, "__GNUC_MINOR__", "7");
-    tcc_define_symbol(s, "__builtin_alloca", "alloca");
-#  endif
-# else
     tcc_define_symbol(s, "__WINT_TYPE__", "unsigned int");
     /* glibc defines */
     tcc_define_symbol(s, "__REDIRECT(name, proto, alias)",
         "name proto __asm__ (#alias)");
     tcc_define_symbol(s, "__REDIRECT_NTH(name, proto, alias)",
         "name proto __asm__ (#alias) __THROW");
-# endif
-# if defined(TCC_MUSL)
-    tcc_define_symbol(s, "__DEFINED_va_list", "");
-    tcc_define_symbol(s, "__DEFINED___isoc_va_list", "");
-    tcc_define_symbol(s, "__isoc_va_list", "void *");
-# endif /* TCC_MUSL */
     /* Some GCC builtins that are simple to express as macros.  */
     tcc_define_symbol(s, "__builtin_extract_return_addr(x)", "x");
-#endif /* ndef TCC_TARGET_PE */
     return s;
 }
 
