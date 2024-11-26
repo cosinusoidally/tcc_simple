@@ -130,34 +130,10 @@ extern long double strtold (const char *__nptr, char **__endptr);
 /* #define TCC_TARGET_C67    *//* TMS320C67xx code generator */
 
 /* default target is I386 */
-#if !defined(TCC_TARGET_I386) && !defined(TCC_TARGET_ARM) && \
-    !defined(TCC_TARGET_ARM64) && !defined(TCC_TARGET_C67) && \
-    !defined(TCC_TARGET_X86_64)
-# if defined __x86_64__ || defined _AMD64_
-#  define TCC_TARGET_X86_64
-# elif defined __arm__
-#  define TCC_TARGET_ARM
-#  define TCC_ARM_EABI
-#  define TCC_ARM_HARDFLOAT
-# elif defined __aarch64__
-#  define TCC_TARGET_ARM64
-# else
 #  define TCC_TARGET_I386
-# endif
-#endif
 
 /* only native compiler supports -run */
-#if defined _WIN32 == defined TCC_TARGET_PE
-# if (defined __i386__ || defined _X86_) && defined TCC_TARGET_I386
 #  define TCC_IS_NATIVE
-# elif (defined __x86_64__ || defined _AMD64_) && defined TCC_TARGET_X86_64
-#  define TCC_IS_NATIVE
-# elif defined __arm__ && defined TCC_TARGET_ARM
-#  define TCC_IS_NATIVE
-# elif defined __aarch64__ && defined TCC_TARGET_ARM64
-#  define TCC_IS_NATIVE
-# endif
-#endif
 
 #if defined TCC_IS_NATIVE && !defined CONFIG_TCCBOOT
 # define CONFIG_TCC_BACKTRACE
