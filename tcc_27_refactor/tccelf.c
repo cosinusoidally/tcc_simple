@@ -831,7 +831,6 @@ ST_FUNC void relocate_section(TCCState *s1, Section *s)
     unsigned char *ptr;
     addr_t tgt, addr;
 
-    relocate_init(sr);
 
     for_each_elem(sr, 0, rel, ElfW_Rel) {
         ptr = s->data + rel->r_offset;
@@ -843,7 +842,6 @@ ST_FUNC void relocate_section(TCCState *s1, Section *s)
         tgt += rel->r_addend;
 #endif
         addr = s->sh_addr + rel->r_offset;
-        relocate(s1, rel, type, ptr, addr, tgt);
     }
     /* if the relocation is allocated, we change its symbol table */
     if (sr->sh_flags & SHF_ALLOC)
@@ -996,7 +994,6 @@ static struct sym_attr * put_got_entry(TCCState *s1, int dyn_reloc_type,
     	    s1->plt->sh_entsize = 4;
         }
 
-        attr->plt_offset = create_plt_entry(s1, got_offset, attr);
 
         /* create a symbol 'sym@plt' for the PLT jump vector */
         len = strlen(name);
@@ -1032,7 +1029,6 @@ ST_FUNC void build_got_entries(TCCState *s1)
             continue;
         for_each_elem(s, 0, rel, ElfW_Rel) {
             type = ELFW(R_TYPE)(rel->r_info);
-            gotplt_entry = gotplt_entry_type(type);
             sym_index = ELFW(R_SYM)(rel->r_info);
             sym = &((ElfW(Sym) *)symtab_section->data)[sym_index];
 
@@ -1086,7 +1082,7 @@ ST_FUNC void build_got_entries(TCCState *s1)
                 continue;
             }
 #endif
-            if (code_reloc(type)) {
+            if (0) {
             jmp_slot:
                 reloc_type = R_JMP_SLOT;
             } else
@@ -2198,9 +2194,6 @@ static int elf_output_file(TCCState *s1, const char *filename)
 
             /* put in GOT the dynamic section address and relocate PLT */
             write32le(s1->got->data, dynamic->sh_addr);
-            if (file_type == TCC_OUTPUT_EXE
-                || (RELOCATE_DLLPLT && file_type == TCC_OUTPUT_DLL))
-                relocate_plt(s1);
 
             /* relocate symbols in .dynsym now that final addresses are known */
             for_each_elem(s1->dynsym, 1, sym, ElfW(Sym)) {
