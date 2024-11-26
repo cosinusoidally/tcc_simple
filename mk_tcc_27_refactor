@@ -1,3 +1,7 @@
 ./mk_clean
 
+cd artifacts
+gcc -O0 -m32 -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ../tcc_27_refactor/tcc.c -DONE_SOURCE -o tcc_27_refactor
+
+cd ..
 sha256sum -c sums_tcc_27
