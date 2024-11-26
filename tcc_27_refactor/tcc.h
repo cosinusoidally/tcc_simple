@@ -312,9 +312,7 @@ extern long double strtold (const char *__nptr, char **__endptr);
 /* include the target specific definitions */
 
 #define TARGET_DEFS_ONLY
-#ifdef TCC_TARGET_I386
 # include "i386-gen.c"
-#endif
 #undef TARGET_DEFS_ONLY
 
 #define EM_TCC_TARGET EM_386
