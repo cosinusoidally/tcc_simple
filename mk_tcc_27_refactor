@@ -1,0 +1,3 @@
+./mk_clean
+
+sha256sum -c sums_tcc_27
