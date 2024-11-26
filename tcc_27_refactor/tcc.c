@@ -55,10 +55,6 @@ redo:
     tcc_set_output_type(s, s->output_type);
     s->ppfp = ppfp;
 
-    if ((s->output_type == TCC_OUTPUT_MEMORY
-      || s->output_type == TCC_OUTPUT_PREPROCESS) && (s->dflag & 16))
-        s->dflag |= t ? 32 : 0, s->run_test = ++t, n = s->nb_files;
-
     /* compile or add each files or library */
     for (first_file = NULL, ret = 0;;) {
         struct filespec *f = s->files[s->nb_files - n];
@@ -68,8 +64,6 @@ redo:
             if (tcc_add_library_err(s, f->name) < 0)
                 ret = 1;
         } else {
-            if (1 == s->verbose)
-                printf("-> %s\n", f->name);
             if (!first_file)
                 first_file = f->name;
             if (tcc_add_file(s, f->name) < 0)
