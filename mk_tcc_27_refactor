@@ -49,5 +49,8 @@ cd ..
 
 cd ..
 
+# show total lines
+wc tcc_27_refactor/*c tcc_27_refactor/*h |sort -h
+
 # check the hashes of the test files
 sha256sum -c sums_tcc_27

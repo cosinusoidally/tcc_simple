@@ -19,9 +19,7 @@
  */
 
 #include "tcc.h"
-#if ONE_SOURCE
-# include "libtcc.c"
-#endif
+#include "libtcc.c"
 
 static const char help[] =
     "Tiny C Compiler "TCC_VERSION" - Copyright (C) 2001-2006 Fabrice Bellard\n"
