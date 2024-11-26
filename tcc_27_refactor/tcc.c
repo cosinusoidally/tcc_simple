@@ -165,27 +165,6 @@ static const char version[] =
     ")\n"
     ;
 
-static void print_dirs(const char *msg, char **paths, int nb_paths)
-{
-    int i;
-    printf("%s:\n%s", msg, nb_paths ? "" : "  -\n");
-    for(i = 0; i < nb_paths; i++)
-        printf("  %s\n", paths[i]);
-}
-
-static void print_search_dirs(TCCState *s)
-{
-    printf("install: %s\n", s->tcc_lib_path);
-    /* print_dirs("programs", NULL, 0); */
-    print_dirs("include", s->sysinclude_paths, s->nb_sysinclude_paths);
-    print_dirs("libraries", s->library_paths, s->nb_library_paths);
-    printf("libtcc1:\n  %s/"TCC_LIBTCC1"\n", s->tcc_lib_path);
-#ifndef TCC_TARGET_PE
-    print_dirs("crt", s->crt_paths, s->nb_crt_paths);
-    printf("elfinterp:\n  %s\n",  DEFAULT_ELFINTERP(s));
-#endif
-}
-
 static void set_environment(TCCState *s)
 {
     char * path;
@@ -267,7 +246,6 @@ redo:
             /* initialize search dirs */
             set_environment(s);
             tcc_set_output_type(s, TCC_OUTPUT_MEMORY);
-            print_search_dirs(s);
             return 0;
         }
 
