@@ -4,13 +4,21 @@ cd artifacts
 
 # we have to symlink since tcc will include the file name in the object code
 # file which then causes hashes not to match
+ln -s ../tcc_27/libc_boot4.c libc_boot4.c
+ln -s ../tcc_27/libc_static.c libc_static.c
 ln -s ../tcc_27/tcc.c tcc.c
+mkdir lib
+cd lib
+ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
+cd ..
 
 # build tcc_27_refactor with gcc
 gcc -O0 -m32 -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ../tcc_27_refactor/tcc.c -DONE_SOURCE -o tcc_27_refactor
 
 # for now hack in -U__linux__ to make hashes match
-../artifacts/tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
+./tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
+
+./tcc_27_refactor -c ./lib/libtcc1.c -o libtcc1.o
 
 cd ..
 sha256sum -c sums_tcc_27
