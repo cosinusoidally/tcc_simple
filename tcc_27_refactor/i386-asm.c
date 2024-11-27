@@ -546,9 +546,6 @@ static inline int constraint_priority(const char *str)
             break;
         str++;
         switch(c) {
-        case 'A':
-            pr = 0;
-            break;
         case 'a':
         case 'b':
         case 'c':
@@ -556,9 +553,6 @@ static inline int constraint_priority(const char *str)
         case 'S':
         case 'D':
             pr = 1;
-            break;
-        case 'q':
-            pr = 2;
             break;
         case 'r':
 	case 'R':
@@ -574,9 +568,6 @@ static inline int constraint_priority(const char *str)
         case 'g':
             pr = 4;
             break;
-        default:
-            tcc_error("unknown constraint '%c'", c);
-            pr = 0;
         }
         if (pr > priority)
             priority = pr;
@@ -589,28 +580,6 @@ static const char *skip_constraint_modifiers(const char *p)
     while (*p == '=' || *p == '&' || *p == '+' || *p == '%')
         p++;
     return p;
-}
-
-/* If T (a token) is of the form "%reg" returns the register
-   number and type, otherwise return -1.  */
-ST_FUNC int asm_parse_regvar (int t)
-{
-    const char *s;
-    Operand op;
-    if (t < TOK_IDENT)
-        return -1;
-    s = table_ident[t - TOK_IDENT]->str;
-    if (s[0] != '%')
-        return -1;
-    t = tok_alloc(s+1, strlen(s)-1)->tok;
-    unget_tok(t);
-    unget_tok('%');
-    parse_operand(tcc_state, &op);
-    /* Accept only integer regs for now.  */
-    if (op.type & OP_REG)
-        return op.reg;
-    else
-        return -1;
 }
 
 #define REG_OUT_MASK 0x01

@@ -5978,14 +5978,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         loc = (loc - size) & -align;
         addr = loc;
         if (v) {
-            /* local variable */
-#ifdef CONFIG_TCC_ASM
-	    if (ad->asm_label) {
-		int reg = asm_parse_regvar(ad->asm_label);
-		if (reg >= 0)
-		    r = (r & ~VT_VALMASK) | reg;
-	    }
-#endif
             sym = sym_push(v, type, r, addr);
             sym->a = ad->a;
         } else {
