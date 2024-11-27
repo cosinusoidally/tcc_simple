@@ -402,36 +402,6 @@ ST_FUNC int find_elf_sym(Section *s, const char *name)
     return 0;
 }
 
-/* return elf symbol value, signal error if 'err' is nonzero */
-ST_FUNC addr_t get_elf_sym_addr(TCCState *s, const char *name, int err)
-{
-    int sym_index;
-    ElfW(Sym) *sym;
-
-    sym_index = find_elf_sym(s->symtab, name);
-    sym = &((ElfW(Sym) *)s->symtab->data)[sym_index];
-    if (!sym_index || sym->st_shndx == SHN_UNDEF) {
-        if (err)
-            tcc_error("%s not defined", name);
-        return 0;
-    }
-    return sym->st_value;
-}
-
-/* return elf symbol value */
-LIBTCCAPI void *tcc_get_symbol(TCCState *s, const char *name)
-{
-    return (void*)(uintptr_t)get_elf_sym_addr(s, name, 0);
-}
-
-#if defined TCC_IS_NATIVE || defined TCC_TARGET_PE
-/* return elf symbol value or error */
-ST_FUNC void* tcc_get_symbol_err(TCCState *s, const char *name)
-{
-    return (void*)(uintptr_t)get_elf_sym_addr(s, name, 1);
-}
-#endif
-
 /* add an elf symbol : check if it is already defined and patch
    it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
 ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
@@ -1782,10 +1752,6 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 #endif
     switch(file_type) {
     default:
-    case TCC_OUTPUT_EXE:
-        ehdr.e_type = ET_EXEC;
-        ehdr.e_entry = get_elf_sym_addr(s1, "_start", 1);
-        break;
     case TCC_OUTPUT_DLL:
         ehdr.e_type = ET_DYN;
         ehdr.e_entry = text_section->sh_addr; /* XXX: is it correct ? */
