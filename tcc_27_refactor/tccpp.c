@@ -169,27 +169,6 @@ ST_FUNC void cstr_reset(CString *cstr)
     cstr->size = 0;
 }
 
-/* XXX: unicode ? */
-static void add_char(CString *cstr, int c)
-{
-    if (c == '\'' || c == '\"' || c == '\\') {
-        /* XXX: could be more precise if char or string */
-        cstr_ccat(cstr, '\\');
-    }
-    if (c >= 32 && c <= 126) {
-        cstr_ccat(cstr, c);
-    } else {
-        cstr_ccat(cstr, '\\');
-        if (c == '\n') {
-            cstr_ccat(cstr, 'n');
-        } else {
-            cstr_ccat(cstr, '0' + ((c >> 6) & 7));
-            cstr_ccat(cstr, '0' + ((c >> 3) & 7));
-            cstr_ccat(cstr, '0' + (c & 7));
-        }
-    }
-}
-
 /* ------------------------------------------------------------------------- */
 /* allocate a new token */
 static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
@@ -286,11 +265,7 @@ ST_FUNC int handle_eob(void)
     /* only tries to read if really end of buffer */
     if (bf->buf_ptr >= bf->buf_end) {
         if (bf->fd >= 0) {
-#if defined(PARSE_DEBUG)
-            len = 1;
-#else
             len = IO_BUF_SIZE;
-#endif
             len = read(bf->fd, bf->buffer, len);
             if (len < 0)
                 len = 0;
@@ -2197,9 +2172,6 @@ maybe_newline:
     tok_flags = 0;
 keep_tok_flags:
     file->buf_ptr = p;
-#if defined(PARSE_DEBUG)
-    printf("token = %d %s\n", tok, get_tok_str(tok, &tokc));
-#endif
 }
 
 /* return next token without macro substitution. Can read input from
