@@ -1386,88 +1386,6 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
     return file_offset;
 }
 
-static void fill_unloadable_phdr(ElfW(Phdr) *phdr, int phnum, Section *interp,
-                                 Section *dynamic)
-{
-    ElfW(Phdr) *ph;
-
-    /* if interpreter, then add corresponding program header */
-    if (interp) {
-        ph = &phdr[0];
-
-        ph->p_type = PT_PHDR;
-        ph->p_offset = sizeof(ElfW(Ehdr));
-        ph->p_filesz = ph->p_memsz = phnum * sizeof(ElfW(Phdr));
-        ph->p_vaddr = interp->sh_addr - ph->p_filesz;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_flags = PF_R | PF_X;
-        ph->p_align = 4; /* interp->sh_addralign; */
-        ph++;
-
-        ph->p_type = PT_INTERP;
-        ph->p_offset = interp->sh_offset;
-        ph->p_vaddr = interp->sh_addr;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_filesz = interp->sh_size;
-        ph->p_memsz = interp->sh_size;
-        ph->p_flags = PF_R;
-        ph->p_align = interp->sh_addralign;
-    }
-
-    /* if dynamic section, then add corresponding program header */
-    if (dynamic) {
-        ph = &phdr[phnum - 1];
-
-        ph->p_type = PT_DYNAMIC;
-        ph->p_offset = dynamic->sh_offset;
-        ph->p_vaddr = dynamic->sh_addr;
-        ph->p_paddr = ph->p_vaddr;
-        ph->p_filesz = dynamic->sh_size;
-        ph->p_memsz = dynamic->sh_size;
-        ph->p_flags = PF_R | PF_W;
-        ph->p_align = dynamic->sh_addralign;
-    }
-}
-
-/* Relocate remaining sections and symbols (that is those not related to
-   dynamic linking) */
-static int final_sections_reloc(TCCState *s1)
-{
-    int i;
-    Section *s;
-
-    relocate_syms(s1, s1->symtab, 0);
-
-    if (s1->nb_errors != 0)
-        return -1;
-
-    /* relocate sections */
-    /* XXX: ignore sections with allocated relocations ? */
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-#if defined(TCC_TARGET_I386) || defined(TCC_MUSL)
-        if (s->reloc && s != s1->got && (s->sh_flags & SHF_ALLOC)) //gr
-        /* On X86 gdb 7.3 works in any case but gdb 6.6 will crash if SHF_ALLOC
-        checking is removed */
-#else
-        if (s->reloc && s != s1->got)
-        /* On X86_64 gdb 7.3 will crash if SHF_ALLOC checking is present */
-#endif
-            relocate_section(s1, s);
-    }
-
-    /* relocate relocation entries if the relocation tables are
-       allocated in the executable */
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if ((s->sh_flags & SHF_ALLOC) &&
-            s->sh_type == SHT_RELX) {
-            relocate_rel(s1, s);
-        }
-    }
-    return 0;
-}
-
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
@@ -1483,12 +1401,6 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 
     memset(&ehdr, 0, sizeof(ehdr));
 
-    if (phnum > 0) {
-        ehdr.e_phentsize = sizeof(ElfW(Phdr));
-        ehdr.e_phnum = phnum;
-        ehdr.e_phoff = sizeof(ElfW(Ehdr));
-    }
-
     /* align to 4 */
     file_offset = (file_offset + 3) & -4;
 
@@ -1500,30 +1412,8 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     ehdr.e_ident[4] = ELFCLASSW;
     ehdr.e_ident[5] = ELFDATA2LSB;
     ehdr.e_ident[6] = EV_CURRENT;
-#if !defined(TCC_TARGET_PE) && (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))
-    /* FIXME: should set only for freebsd _target_, but we exclude only PE target */
-    ehdr.e_ident[EI_OSABI] = ELFOSABI_FREEBSD;
-#endif
-#ifdef TCC_TARGET_ARM
-#ifdef TCC_ARM_EABI
-    ehdr.e_ident[EI_OSABI] = 0;
-    ehdr.e_flags = EF_ARM_EABI_VER4;
-    if (file_type == TCC_OUTPUT_EXE || file_type == TCC_OUTPUT_DLL)
-        ehdr.e_flags |= EF_ARM_HASENTRY;
-    if (s1->float_abi == ARM_HARD_FLOAT)
-        ehdr.e_flags |= EF_ARM_VFP_FLOAT;
-    else
-        ehdr.e_flags |= EF_ARM_SOFT_FLOAT;
-#else
-    ehdr.e_ident[EI_OSABI] = ELFOSABI_ARM;
-#endif
-#endif
+
     switch(file_type) {
-    default:
-    case TCC_OUTPUT_DLL:
-        ehdr.e_type = ET_DYN;
-        ehdr.e_entry = text_section->sh_addr; /* XXX: is it correct ? */
-        break;
     case TCC_OUTPUT_OBJ:
         ehdr.e_type = ET_REL;
         break;
