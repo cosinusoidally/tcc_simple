@@ -212,11 +212,6 @@ static const uint16_t op0_codes[] = {
 # include "i386-asm.h"
 };
 
-static inline int get_reg_shift(TCCState *s1)
-{
-exit(1);
-}
-
 static int asm_parse_reg(unsigned int *type)
 {
     int reg = 0;
@@ -340,10 +335,6 @@ static void parse_operand(TCCState *s1, Operand *op)
                 next();
                 if (tok != ',') {
                     op->reg2 = asm_parse_reg(&type);
-                }
-                if (tok == ',') {
-                    next();
-                    op->shift = get_reg_shift(s1);
                 }
             }
 	    if (type & OP_REG32)
