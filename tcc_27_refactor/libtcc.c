@@ -393,9 +393,7 @@ static int tcc_compile(TCCState *s1)
         s1->error_set_jmp_enabled = 1;
 
         preprocess_start(s1, is_asm);
-        if (s1->output_type == TCC_OUTPUT_PREPROCESS) {
-            tcc_preprocess(s1);
-        } else if (is_asm) {
+        if (is_asm) {
 #ifdef CONFIG_TCC_ASM
             tcc_assemble(s1, filetype == AFF_TYPE_ASMPP);
 #else
@@ -485,7 +483,6 @@ LIBTCCAPI TCCState *tcc_new(void)
 
     s->seg_size = 32;
 
-    tcc_set_lib_path(s, CONFIG_TCCDIR);
     tccelf_new(s);
     tccpp_new(s);
 
@@ -579,15 +576,6 @@ LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type)
     if (output_type == TCC_OUTPUT_OBJ)
         s->output_format = TCC_OUTPUT_FORMAT_ELF;
 
-    if (s->char_is_unsigned)
-        tcc_define_symbol(s, "__CHAR_UNSIGNED__", NULL);
-
-    if (!s->nostdinc) {
-        /* default include paths */
-        /* -isystem paths have already been handled */
-        tcc_add_sysinclude_path(s, CONFIG_TCC_SYSINCLUDEPATHS);
-    }
-
     return 0;
 }
 
@@ -647,26 +635,6 @@ LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
         s->filetype = filetype;
     }
     return tcc_add_file_internal(s, filename, flags);
-}
-
-LIBTCCAPI int tcc_add_symbol(TCCState *s, const char *name, const void *val)
-{
-#ifdef TCC_TARGET_PE
-    /* On x86_64 'val' might not be reachable with a 32bit offset.
-       So it is handled here as if it were in a DLL. */
-    pe_putimport(s, 0, name, (uintptr_t)val);
-#else
-    set_elf_sym(symtab_section, (uintptr_t)val, 0,
-        ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-        SHN_ABS, name);
-#endif
-    return 0;
-}
-
-LIBTCCAPI void tcc_set_lib_path(TCCState *s, const char *path)
-{
-    tcc_free(s->tcc_lib_path);
-    s->tcc_lib_path = tcc_strdup(path);
 }
 
 #define WD_ALL    0x0001 /* warning is activated when using -Wall */
@@ -743,169 +711,13 @@ static int strstart(const char *val, const char **str)
  */
 static int link_option(const char *str, const char *val, const char **ptr)
 {
-    const char *p, *q;
-    int ret;
-
-    /* there should be 1 or 2 dashes */
-    if (*str++ != '-')
-        return 0;
-    if (*str == '-')
-        str++;
-
-    /* then str & val should match (potentially up to '=') */
-    p = str;
-    q = val;
-
-    ret = 1;
-    if (q[0] == '?') {
-        ++q;
-        if (no_flag(&p))
-            ret = -1;
-    }
-
-    while (*q != '\0' && *q != '=') {
-        if (*p != *q)
-            return 0;
-        p++;
-        q++;
-    }
-
-    /* '=' near eos means ',' or '=' is ok */
-    if (*q == '=') {
-        if (*p == 0)
-            *ptr = p;
-        if (*p != ',' && *p != '=')
-            return 0;
-        p++;
-    } else if (*p) {
-        return 0;
-    }
-    *ptr = p;
-    return ret;
-}
-
-static const char *skip_linker_arg(const char **str)
-{
-    const char *s1 = *str;
-    const char *s2 = strchr(s1, ',');
-    *str = s2 ? s2++ : (s2 = s1 + strlen(s1));
-    return s2;
-}
-
-static void copy_linker_arg(char **pp, const char *s, int sep)
-{
-    const char *q = s;
-    char *p = *pp;
-    int l = 0;
-    if (p && sep)
-        p[l = strlen(p)] = sep, ++l;
-    skip_linker_arg(&q);
-    pstrncpy(l + (*pp = tcc_realloc(p, q - s + l + 1)), s, q - s);
+exit(1);
 }
 
 /* set linker options */
 static int tcc_set_linker(TCCState *s, const char *option)
 {
-    while (*option) {
-
-        const char *p = NULL;
-        char *end = NULL;
-        int ignoring = 0;
-        int ret;
-
-        if (link_option(option, "Bsymbolic", &p)) {
-            s->symbolic = 1;
-        } else if (link_option(option, "nostdlib", &p)) {
-            s->nostdlib = 1;
-        } else if (link_option(option, "fini=", &p)) {
-            copy_linker_arg(&s->fini_symbol, p, 0);
-            ignoring = 1;
-        } else if (link_option(option, "image-base=", &p)
-                || link_option(option, "Ttext=", &p)) {
-            s->text_addr = strtoull(p, &end, 16);
-            s->has_text_addr = 1;
-        } else if (link_option(option, "init=", &p)) {
-            copy_linker_arg(&s->init_symbol, p, 0);
-            ignoring = 1;
-        } else if (link_option(option, "oformat=", &p)) {
-#if defined(TCC_TARGET_PE)
-            if (strstart("pe-", &p)) {
-#elif PTR_SIZE == 8
-            if (strstart("elf64-", &p)) {
-#else
-            if (strstart("elf32-", &p)) {
-#endif
-                s->output_format = TCC_OUTPUT_FORMAT_ELF;
-            } else if (!strcmp(p, "binary")) {
-                s->output_format = TCC_OUTPUT_FORMAT_BINARY;
-#ifdef TCC_TARGET_COFF
-            } else if (!strcmp(p, "coff")) {
-                s->output_format = TCC_OUTPUT_FORMAT_COFF;
-#endif
-            } else
-                goto err;
-
-        } else if (link_option(option, "as-needed", &p)) {
-            ignoring = 1;
-        } else if (link_option(option, "O", &p)) {
-            ignoring = 1;
-        } else if (link_option(option, "export-all-symbols", &p)) {
-            s->rdynamic = 1;
-        } else if (link_option(option, "rpath=", &p)) {
-            copy_linker_arg(&s->rpath, p, ':');
-        } else if (link_option(option, "enable-new-dtags", &p)) {
-            s->enable_new_dtags = 1;
-        } else if (link_option(option, "section-alignment=", &p)) {
-            s->section_align = strtoul(p, &end, 16);
-        } else if (link_option(option, "soname=", &p)) {
-            copy_linker_arg(&s->soname, p, 0);
-#ifdef TCC_TARGET_PE
-        } else if (link_option(option, "large-address-aware", &p)) {
-            s->pe_characteristics |= 0x20;
-        } else if (link_option(option, "file-alignment=", &p)) {
-            s->pe_file_align = strtoul(p, &end, 16);
-        } else if (link_option(option, "stack=", &p)) {
-            s->pe_stack_size = strtoul(p, &end, 10);
-        } else if (link_option(option, "subsystem=", &p)) {
-#if defined(TCC_TARGET_I386) || defined(TCC_TARGET_X86_64)
-            if (!strcmp(p, "native")) {
-                s->pe_subsystem = 1;
-            } else if (!strcmp(p, "console")) {
-                s->pe_subsystem = 3;
-            } else if (!strcmp(p, "gui") || !strcmp(p, "windows")) {
-                s->pe_subsystem = 2;
-            } else if (!strcmp(p, "posix")) {
-                s->pe_subsystem = 7;
-            } else if (!strcmp(p, "efiapp")) {
-                s->pe_subsystem = 10;
-            } else if (!strcmp(p, "efiboot")) {
-                s->pe_subsystem = 11;
-            } else if (!strcmp(p, "efiruntime")) {
-                s->pe_subsystem = 12;
-            } else if (!strcmp(p, "efirom")) {
-                s->pe_subsystem = 13;
-#elif defined(TCC_TARGET_ARM)
-            if (!strcmp(p, "wince")) {
-                s->pe_subsystem = 9;
-#endif
-            } else
-                goto err;
-#endif
-        } else if (ret = link_option(option, "?whole-archive", &p), ret) {
-            s->alacarte_link = ret < 0;
-        } else if (p) {
-            return 0;
-        } else {
-    err:
-            tcc_error("unsupported linker option '%s'", option);
-        }
-
-        if (ignoring && s->warn_unsupported)
-            tcc_warning("unsupported linker option '%s'", option);
-
-        option = skip_linker_arg(&p);
-    }
-    return 1;
+exit(1);
 }
 
 typedef struct TCCOption {
