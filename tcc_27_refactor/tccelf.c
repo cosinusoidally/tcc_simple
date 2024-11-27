@@ -1433,35 +1433,7 @@ static void fill_unloadable_phdr(ElfW(Phdr) *phdr, int phnum, Section *interp,
    sections */
 static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf)
 {
-    Section *dynamic = dyninf->dynamic;
-
-    /* put dynamic section entries */
-    put_dt(dynamic, DT_HASH, s1->dynsym->hash->sh_addr);
-    put_dt(dynamic, DT_STRTAB, dyninf->dynstr->sh_addr);
-    put_dt(dynamic, DT_SYMTAB, s1->dynsym->sh_addr);
-    put_dt(dynamic, DT_STRSZ, dyninf->dynstr->data_offset);
-    put_dt(dynamic, DT_SYMENT, sizeof(ElfW(Sym)));
-#if PTR_SIZE == 8
-    put_dt(dynamic, DT_RELA, dyninf->rel_addr);
-    put_dt(dynamic, DT_RELASZ, dyninf->rel_size);
-    put_dt(dynamic, DT_RELAENT, sizeof(ElfW_Rel));
-#else
-#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
-    put_dt(dynamic, DT_PLTGOT, s1->got->sh_addr);
-    put_dt(dynamic, DT_PLTRELSZ, dyninf->rel_size);
-    put_dt(dynamic, DT_JMPREL, dyninf->rel_addr);
-    put_dt(dynamic, DT_PLTREL, DT_REL);
-    put_dt(dynamic, DT_REL, dyninf->bss_addr);
-    put_dt(dynamic, DT_RELSZ, dyninf->bss_size);
-#else
-    put_dt(dynamic, DT_REL, dyninf->rel_addr);
-    put_dt(dynamic, DT_RELSZ, dyninf->rel_size);
-    put_dt(dynamic, DT_RELENT, sizeof(ElfW_Rel));
-#endif
-#endif
-    if (s1->do_debug)
-        put_dt(dynamic, DT_DEBUG, 0);
-    put_dt(dynamic, DT_NULL, 0);
+exit(1);
 }
 
 /* Relocate remaining sections and symbols (that is those not related to
@@ -1832,40 +1804,6 @@ static int elf_output_file(TCCState *s1, const char *filename)
     file_offset = layout_sections(s1, phdr, phnum, interp, strsec, &dyninf,
                                   sec_order);
 
-    /* Fill remaining program header and finalize relocation related to dynamic
-       linking. */
-    if (file_type != TCC_OUTPUT_OBJ) {
-        fill_unloadable_phdr(phdr, phnum, interp, dynamic);
-        if (dynamic) {
-            dynamic->data_offset = dyninf.data_offset;
-            fill_dynamic(s1, &dyninf);
-
-            /* put in GOT the dynamic section address and relocate PLT */
-            write32le(s1->got->data, dynamic->sh_addr);
-
-            /* relocate symbols in .dynsym now that final addresses are known */
-            for_each_elem(s1->dynsym, 1, sym, ElfW(Sym)) {
-                if (sym->st_shndx != SHN_UNDEF && sym->st_shndx < SHN_LORESERVE) {
-                    /* do symbol relocation */
-                    sym->st_value += s1->sections[sym->st_shndx]->sh_addr;
-                }
-            }
-        }
-
-        /* if building executable or DLL, then relocate each section
-           except the GOT which is already relocated */
-        ret = final_sections_reloc(s1);
-        if (ret)
-            goto the_end;
-	tidy_section_headers(s1, sec_order);
-
-        /* Perform relocation to GOT or PLT entries */
-        if (file_type == TCC_OUTPUT_EXE && s1->static_link)
-            fill_got(s1);
-        else if (s1->got)
-            fill_local_got_entries(s1);
-    }
-
     /* Create the ELF file with name 'filename' */
     ret = tcc_write_elf_file(s1, filename, phnum, phdr, file_offset, sec_order);
     s1->nb_sections = shnum;
@@ -1878,12 +1816,7 @@ static int elf_output_file(TCCState *s1, const char *filename)
 LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename)
 {
     int ret;
-#ifdef TCC_TARGET_PE
-    if (s->output_type != TCC_OUTPUT_OBJ) {
-        ret = pe_output_file(s, filename);
-    } else
-#endif
-        ret = elf_output_file(s, filename);
+    ret = elf_output_file(s, filename);
     return ret;
 }
 
