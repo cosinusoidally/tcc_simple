@@ -302,15 +302,6 @@ static int handle_stray_noerror(void)
         if (ch == '\n') {
             file->line_num++;
             inp();
-        } else if (ch == '\r') {
-            inp();
-            if (ch != '\n')
-                goto fail;
-            file->line_num++;
-            inp();
-        } else {
-        fail:
-            return 1;
         }
     }
     return 0;
