@@ -657,43 +657,6 @@ LIBTCCAPI int tcc_add_library_path(TCCState *s, const char *pathname)
     return 0;
 }
 
-static int tcc_add_library_internal(TCCState *s, const char *fmt,
-    const char *filename, int flags, char **paths, int nb_paths)
-{
-exit(1);
-}
-
-/* find and load a dll. Return non zero if not found */
-/* XXX: add '-rpath' option support ? */
-ST_FUNC int tcc_add_dll(TCCState *s, const char *filename, int flags)
-{
-exit(1);
-}
-
-ST_FUNC int tcc_add_crt(TCCState *s, const char *filename)
-{
-exit(1);
-}
-
-/* the library name is the same as the argument of the '-l' option */
-LIBTCCAPI int tcc_add_library(TCCState *s, const char *libraryname)
-{
-exit(1);
-}
-
-PUB_FUNC int tcc_add_library_err(TCCState *s, const char *libname)
-{
-exit(1);
-}
-
-/* handle #pragma comment(lib,) */
-ST_FUNC void tcc_add_pragma_libs(TCCState *s1)
-{
-    int i;
-    for (i = 0; i < s1->nb_pragma_libs; i++)
-        tcc_add_library_err(s1, s1->pragma_libs[i]);
-}
-
 LIBTCCAPI int tcc_add_symbol(TCCState *s, const char *name, const void *val)
 {
 #ifdef TCC_TARGET_PE
