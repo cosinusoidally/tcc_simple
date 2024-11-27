@@ -901,49 +901,13 @@ exit(1);
 /* single-byte store mode for packed or otherwise unaligned bitfields */
 static void store_packed_bf(int bit_pos, int bit_size)
 {
-    int bits, n, o, m, c;
-
-    c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
-    vswap(); // X B
-    save_reg_upstack(vtop->r, 1);
-    bits = 0, o = bit_pos >> 3, bit_pos &= 7;
-    do {
-        incr_bf_adr(o); // X B
-        vswap(); //B X
-        c ? vdup() : gv_dup(); // B V X
-        vrott(3); // X B V
-        if (bits)
-            vpushi(bits), gen_op(TOK_SHR);
-        if (bit_pos)
-            vpushi(bit_pos), gen_op(TOK_SHL);
-        n = 8 - bit_pos;
-        if (n > bit_size)
-            n = bit_size;
-        if (n < 8) {
-            m = ((1 << n) - 1) << bit_pos;
-            vpushi(m), gen_op('&'); // X B V1
-            vpushv(vtop-1); // X B V1 B
-            vpushi(m & 0x80 ? ~m & 0x7f : ~m);
-            gen_op('&'); // X B V1 B1
-            gen_op('|'); // X B V2
-        }
-        vdup(), vtop[-1] = vtop[-2]; // X B B V2
-        vstore(), vpop(); // X B
-        bits += n, bit_size -= n, bit_pos = 0, o = 1;
-    } while (bit_size);
-    vpop(), vpop();
+exit(1);
 }
 
 static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
 {
     int t;
-    if (0 == sv->type.ref)
-        return 0;
     t = sv->type.ref->auxtype;
-    if (t != -1 && t != VT_STRUCT) {
-        sv->type.t = (sv->type.t & ~VT_BTYPE) | t;
-        sv->r = (sv->r & ~VT_LVAL_TYPE) | lvalue_type(sv->type.t);
-    }
     return t;
 }
 
@@ -1161,7 +1125,6 @@ static void lexpand(void)
     vtop[0].type.t = vtop[-1].type.t = VT_INT | u;
 }
 
-#if PTR_SIZE == 4
 /* build a long long from two ints */
 static void lbuild(int t)
 {
@@ -1170,7 +1133,6 @@ static void lbuild(int t)
     vtop[-1].type.t = t;
     vpop();
 }
-#endif
 
 /* convert stack entry to register and duplicate its value in another
    register */
@@ -1180,7 +1142,6 @@ static void gv_dup(void)
     SValue sv;
 
     t = vtop->type.t;
-#if PTR_SIZE == 4
     if ((t & VT_BTYPE) == VT_LLONG) {
         if (t & VT_BITFIELD) {
             gv(RC_INT);
@@ -1200,20 +1161,10 @@ static void gv_dup(void)
         lbuild(t);
         vswap();
     } else
-#endif
     {
         /* duplicate value */
         rc = RC_INT;
         sv.type.t = VT_INT;
-        if (is_float(t)) {
-            rc = RC_FLOAT;
-#ifdef TCC_TARGET_X86_64
-            if ((t & VT_BTYPE) == VT_LDOUBLE) {
-                rc = RC_ST0;
-            }
-#endif
-            sv.type.t = t;
-        }
         r = gv(rc);
         r1 = get_reg(rc);
         sv.r = r;
