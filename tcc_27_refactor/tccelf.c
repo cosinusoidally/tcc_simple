@@ -1472,41 +1472,17 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     }
 }
 
-/* Write an elf, coff or "binary" file */
+/* Write an elf file */
 static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
                               ElfW(Phdr) *phdr, int file_offset, int *sec_order)
 {
     int fd, mode, file_type;
     FILE *f;
 
-    file_type = s1->output_type;
-    if (file_type == TCC_OUTPUT_OBJ)
-        mode = 0666;
-    else
-        mode = 0777;
     unlink(filename);
-/* LJW HACK remove use of fdopen
-    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, mode);
-    if (fd < 0) {
-        tcc_error_noabort("could not write '%s'", filename);
-        return -1;
-    }
-    f = fdopen(fd, "wb");
-*/
+
     f = fopen(filename, "wb");
-
-    if (s1->verbose)
-        printf("<- %s\n", filename);
-
-#ifdef TCC_TARGET_COFF
-    if (s1->output_format == TCC_OUTPUT_FORMAT_COFF)
-        tcc_output_coff(s1, f);
-    else
-#endif
-    if (s1->output_format == TCC_OUTPUT_FORMAT_ELF)
-        tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
-    else
-        tcc_output_binary(s1, f, sec_order);
+    tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
     fclose(f);
 
     return 0;
