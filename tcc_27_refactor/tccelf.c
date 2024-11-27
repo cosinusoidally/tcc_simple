@@ -1488,52 +1488,6 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
     return 0;
 }
 
-/* Sort section headers by assigned sh_addr, remove sections
-   that we aren't going to output.  */
-static void tidy_section_headers(TCCState *s1, int *sec_order)
-{
-    int i, nnew, l, *backmap;
-    Section **snew, *s;
-    ElfW(Sym) *sym;
-
-    snew = tcc_malloc(s1->nb_sections * sizeof(snew[0]));
-    backmap = tcc_malloc(s1->nb_sections * sizeof(backmap[0]));
-    for (i = 0, nnew = 0, l = s1->nb_sections; i < s1->nb_sections; i++) {
-	s = s1->sections[sec_order[i]];
-	if (!i || s->sh_name) {
-	    backmap[sec_order[i]] = nnew;
-	    snew[nnew] = s;
-	    ++nnew;
-	} else {
-	    backmap[sec_order[i]] = 0;
-	    snew[--l] = s;
-	}
-    }
-    for (i = 0; i < nnew; i++) {
-	s = snew[i];
-	if (s) {
-	    s->sh_num = i;
-            if (s->sh_type == SHT_RELX)
-		s->sh_info = backmap[s->sh_info];
-	}
-    }
-
-    for_each_elem(symtab_section, 1, sym, ElfW(Sym))
-	if (sym->st_shndx != SHN_UNDEF && sym->st_shndx < SHN_LORESERVE)
-	    sym->st_shndx = backmap[sym->st_shndx];
-    if( !s1->static_link ) {
-        for_each_elem(s1->dynsym, 1, sym, ElfW(Sym))
-	    if (sym->st_shndx != SHN_UNDEF && sym->st_shndx < SHN_LORESERVE)
-	        sym->st_shndx = backmap[sym->st_shndx];
-    }
-    for (i = 0; i < s1->nb_sections; i++)
-	sec_order[i] = i;
-    tcc_free(s1->sections);
-    s1->sections = snew;
-    s1->nb_sections = nnew;
-    tcc_free(backmap);
-}
-
 /* Output an elf, coff or binary file */
 /* XXX: suppress unneeded sections */
 static int elf_output_file(TCCState *s1, const char *filename)
