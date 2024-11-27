@@ -825,34 +825,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
             len += nb_words;
         }
         break;
-    case TOK_CDOUBLE:
-    case TOK_CLLONG:
-    case TOK_CULLONG:
-#if LONG_SIZE == 8
-    case TOK_CLONG:
-    case TOK_CULONG:
-#endif
-#if LDOUBLE_SIZE == 8
-    case TOK_CLDOUBLE:
-#endif
-        str[len++] = cv->tab[0];
-        str[len++] = cv->tab[1];
-        break;
-#if LDOUBLE_SIZE == 12
-    case TOK_CLDOUBLE:
-        str[len++] = cv->tab[0];
-        str[len++] = cv->tab[1];
-        str[len++] = cv->tab[2];
-#elif LDOUBLE_SIZE == 16
-    case TOK_CLDOUBLE:
-        str[len++] = cv->tab[0];
-        str[len++] = cv->tab[1];
-        str[len++] = cv->tab[2];
-        str[len++] = cv->tab[3];
-#elif LDOUBLE_SIZE != 8
-#error add long double size support
-#endif
-        break;
     default:
         break;
     }
@@ -882,24 +854,13 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
 
     tab = cv->tab;
     switch(*t = *p++) {
-#if LONG_SIZE == 4
     case TOK_CLONG:
-#endif
     case TOK_CINT:
     case TOK_CCHAR:
     case TOK_LCHAR:
     case TOK_LINENUM:
         cv->i = *p++;
         break;
-#if LONG_SIZE == 4
-    case TOK_CULONG:
-#endif
-    case TOK_CUINT:
-        cv->i = (unsigned)*p++;
-        break;
-    case TOK_CFLOAT:
-	tab[0] = *p++;
-	break;
     case TOK_STR:
     case TOK_LSTR:
     case TOK_PPNUM:
@@ -907,30 +868,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
         cv->str.size = *p++;
         cv->str.data = p;
         p += (cv->str.size + sizeof(int) - 1) / sizeof(int);
-        break;
-    case TOK_CDOUBLE:
-    case TOK_CLLONG:
-    case TOK_CULLONG:
-#if LONG_SIZE == 8
-    case TOK_CLONG:
-    case TOK_CULONG:
-#endif
-        n = 2;
-        goto copy;
-    case TOK_CLDOUBLE:
-#if LDOUBLE_SIZE == 16
-        n = 4;
-#elif LDOUBLE_SIZE == 12
-        n = 3;
-#elif LDOUBLE_SIZE == 8
-        n = 2;
-#else
-# error add long double size support
-#endif
-    copy:
-        do
-            *tab++ = *p++;
-        while (--n);
         break;
     default:
         break;
