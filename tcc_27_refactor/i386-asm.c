@@ -42,15 +42,8 @@
 
 #define OPC_0F        0x100 /* Is secondary map (0x0f prefix) */
 #define OPC_48        0x200 /* Always has REX prefix */
-#ifdef TCC_TARGET_X86_64
-# define OPC_WLQ     0x1000  /* accepts w, l, q or no suffix */
-# define OPC_BWLQ    (OPC_B | OPC_WLQ) /* accepts b, w, l, q or no suffix */
-# define OPC_WLX     OPC_WLQ
-# define OPC_BWLX    OPC_BWLQ
-#else
 # define OPC_WLX     OPC_WL
 # define OPC_BWLX    OPC_BWL
-#endif
 
 #define OPC_GROUP_SHIFT 13
 
@@ -70,17 +63,10 @@ enum {
     OPT_DB,     /* warning: value is hardcoded from TOK_ASM_xxx */
     OPT_SEG,
     OPT_ST,
-#ifdef TCC_TARGET_X86_64
-    OPT_REG8_LOW, /* %spl,%bpl,%sil,%dil, encoded like ah,ch,dh,bh, but
-		     with REX prefix, not used in insn templates */
-#endif
     OPT_IM8,
     OPT_IM8S,
     OPT_IM16,
     OPT_IM32,
-#ifdef TCC_TARGET_X86_64
-    OPT_IM64,
-#endif
     OPT_EAX,    /* %al, %ax, %eax or %rax register */
     OPT_ST0,    /* %st(0) register */
     OPT_CL,     /* %cl register */
@@ -120,30 +106,17 @@ enum {
 #define OP_DX     (1 << OPT_DX)
 #define OP_ADDR   (1 << OPT_ADDR)
 #define OP_INDIR  (1 << OPT_INDIR)
-#ifdef TCC_TARGET_X86_64
-# define OP_REG64 (1 << OPT_REG64)
-# define OP_REG8_LOW (1 << OPT_REG8_LOW)
-# define OP_IM64  (1 << OPT_IM64)
-# define OP_EA32  (OP_EA << 1)
-#else
 # define OP_REG64 0
 # define OP_REG8_LOW 0
 # define OP_IM64  0
 # define OP_EA32  0
-#endif
 
 #define OP_EA     0x40000000
 #define OP_REG    (OP_REG8 | OP_REG16 | OP_REG32 | OP_REG64)
 
-#ifdef TCC_TARGET_X86_64
-# define TREG_XAX   TREG_RAX
-# define TREG_XCX   TREG_RCX
-# define TREG_XDX   TREG_RDX
-#else
 # define TREG_XAX   TREG_EAX
 # define TREG_XCX   TREG_ECX
 # define TREG_XDX   TREG_EDX
-#endif
 
 typedef struct ASMInstr {
     uint16_t sym;
@@ -166,9 +139,6 @@ static const uint8_t reg_to_size[9] = {
     [OP_REG8] = 0,
     [OP_REG16] = 1,
     [OP_REG32] = 2,
-#ifdef TCC_TARGET_X86_64
-    [OP_REG64] = 3,
-#endif
 */
     0, 0, 1, 0, 2, 0, 0, 0, 3
 };
@@ -228,11 +198,9 @@ static const ASMInstr asm_instrs[] = {
 #define DEF_ASM_OP1(name, opcode, group, instr_type, op0) { TOK_ASM_ ## name, O(opcode), T(opcode, instr_type, group), 1, { op0 }},
 #define DEF_ASM_OP2(name, opcode, group, instr_type, op0, op1) { TOK_ASM_ ## name, O(opcode), T(opcode, instr_type, group), 2, { op0, op1 }},
 #define DEF_ASM_OP3(name, opcode, group, instr_type, op0, op1, op2) { TOK_ASM_ ## name, O(opcode), T(opcode, instr_type, group), 3, { op0, op1, op2 }},
-#ifdef TCC_TARGET_X86_64
-# include "x86_64-asm.h"
-#else
+
 # include "i386-asm.h"
-#endif
+
     /* last operation */
     { 0, },
 };
