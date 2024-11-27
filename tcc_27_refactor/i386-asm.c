@@ -515,27 +515,14 @@ again:
             /* if multiple sizes are given it means we must look
                at the op size */
             if ((v | OP_IM8 | OP_IM64) == (OP_IM8 | OP_IM16 | OP_IM32 | OP_IM64)) {
-                if (s == 0)
-                    v = OP_IM8;
-                else if (s == 1)
-                    v = OP_IM16;
-                else if (s == 2 || (v & OP_IM64) == 0)
+                if (s == 2 || (v & OP_IM64) == 0)
                     v = OP_IM32;
                 else
                     v = OP_IM64;
             }
 
-            if ((v & (OP_IM8 | OP_IM8S | OP_IM16)) && ops[i].e.sym)
-                tcc_error("cannot relocate");
-
             if (v & (OP_IM8 | OP_IM8S)) {
                 g(ops[i].e.v);
-            } else if (v & OP_IM16) {
-                gen_le16(ops[i].e.v);
-#ifdef TCC_TARGET_X86_64
-            } else if (v & OP_IM64) {
-                gen_expr64(&ops[i].e);
-#endif
 	    } else if (pa->op_type[i] == OPT_DISP || pa->op_type[i] == OPT_DISP8) {
                 gen_disp32(&ops[i].e);
             } else {
@@ -543,10 +530,6 @@ again:
             }
         }
     }
-
-    /* after immediate operands, adjust pc-relative address */
-    if (pc)
-        add32le(cur_text_section->data + pc - 4, pc - ind);
 }
 
 /* return the constraint priority (we allocate first the lowest
