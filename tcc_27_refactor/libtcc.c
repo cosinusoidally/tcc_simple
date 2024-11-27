@@ -1077,67 +1077,6 @@ static void args_parser_add_file(TCCState *s, const char* filename, int filetype
     dynarray_add(&s->files, &s->nb_files, f);
 }
 
-static int args_parser_make_argv(const char *r, int *argc, char ***argv)
-{
-    int ret = 0, q, c;
-    CString str;
-    for(;;) {
-        while (c = (unsigned char)*r, c && c <= ' ')
-	    ++r;
-        if (c == 0)
-            break;
-        q = 0;
-        cstr_new(&str);
-        while (c = (unsigned char)*r, c) {
-            ++r;
-            if (c == '\\' && (*r == '"' || *r == '\\')) {
-                c = *r++;
-            } else if (c == '"') {
-                q = !q;
-                continue;
-            } else if (q == 0 && c <= ' ') {
-                break;
-            }
-            cstr_ccat(&str, c);
-        }
-        cstr_ccat(&str, 0);
-        //printf("<%s>\n", str.data), fflush(stdout);
-        dynarray_add(argv, argc, tcc_strdup(str.data));
-        cstr_free(&str);
-        ++ret;
-    }
-    return ret;
-}
-
-/* read list file */
-static void args_parser_listfile(TCCState *s,
-    const char *filename, int optind, int *pargc, char ***pargv)
-{
-    int fd, i;
-    size_t len;
-    char *p;
-    int argc = 0;
-    char **argv = NULL;
-
-    fd = open(filename, O_RDONLY | O_BINARY);
-    if (fd < 0)
-        tcc_error("listfile '%s' not found", filename);
-
-    len = lseek(fd, 0, SEEK_END);
-    p = tcc_malloc(len + 1), p[len] = 0;
-    lseek(fd, 0, SEEK_SET), read(fd, p, len), close(fd);
-
-    for (i = 0; i < *pargc; ++i)
-        if (i == optind)
-            args_parser_make_argv(p, &argc, &argv);
-        else
-            dynarray_add(&argv, &argc, tcc_strdup((*pargv)[i]));
-
-    tcc_free(p);
-    dynarray_reset(&s->argv, &s->argc);
-    *pargc = s->argc = argc, *pargv = s->argv = argv;
-}
-
 PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 {
     const TCCOption *popt;
@@ -1154,16 +1093,7 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 
     while (optind < argc) {
         r = argv[optind];
-        if (r[0] == '@' && r[1] != '\0') {
-            args_parser_listfile(s, r + 1, optind, &argc, &argv);
-	    continue;
-        }
         optind++;
-        if (tool) {
-            if (r[0] == '-' && r[1] == 'v' && r[2] == 0)
-                ++s->verbose;
-            continue;
-        }
 reparse:
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@') /* allow "tcc file(s) -run @ args ..." */
