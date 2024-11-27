@@ -53,9 +53,6 @@ enum {
     OPT_REG8=0, /* warning: value is hardcoded from TOK_ASM_xxx */
     OPT_REG16,  /* warning: value is hardcoded from TOK_ASM_xxx */
     OPT_REG32,  /* warning: value is hardcoded from TOK_ASM_xxx */
-#ifdef TCC_TARGET_X86_64
-    OPT_REG64,  /* warning: value is hardcoded from TOK_ASM_xxx */
-#endif
     OPT_MMX,    /* warning: value is hardcoded from TOK_ASM_xxx */
     OPT_SSE,    /* warning: value is hardcoded from TOK_ASM_xxx */
     OPT_CR,     /* warning: value is hardcoded from TOK_ASM_xxx */
@@ -212,103 +209,21 @@ static const uint16_t op0_codes[] = {
 #define DEF_ASM_OP1(name, opcode, group, instr_type, op0)
 #define DEF_ASM_OP2(name, opcode, group, instr_type, op0, op1)
 #define DEF_ASM_OP3(name, opcode, group, instr_type, op0, op1, op2)
-#ifdef TCC_TARGET_X86_64
-# include "x86_64-asm.h"
-#else
 # include "i386-asm.h"
-#endif
 };
 
 static inline int get_reg_shift(TCCState *s1)
 {
-    int shift, v;
-    v = asm_int_expr(s1);
-    switch(v) {
-    case 1:
-        shift = 0;
-        break;
-    case 2:
-        shift = 1;
-        break;
-    case 4:
-        shift = 2;
-        break;
-    case 8:
-        shift = 3;
-        break;
-    default:
-        expect("1, 2, 4 or 8 constant");
-        shift = 0;
-        break;
-    }
-    return shift;
+exit(1);
 }
-
-#ifdef TCC_TARGET_X86_64
-static int asm_parse_numeric_reg(int t, unsigned int *type)
-{
-    int reg = -1;
-    if (t >= TOK_IDENT && t < tok_ident) {
-	const char *s = table_ident[t - TOK_IDENT]->str;
-	char c;
-	*type = OP_REG64;
-	if (*s == 'c') {
-	    s++;
-	    *type = OP_CR;
-	}
-	if (*s++ != 'r')
-	  return -1;
-	/* Don't allow leading '0'.  */
-	if ((c = *s++) >= '1' && c <= '9')
-	  reg = c - '0';
-	else
-	  return -1;
-	if ((c = *s) >= '0' && c <= '5')
-	  s++, reg = reg * 10 + c - '0';
-	if (reg > 15)
-	  return -1;
-	if ((c = *s) == 0)
-	  ;
-	else if (*type != OP_REG64)
-	  return -1;
-	else if (c == 'b' && !s[1])
-	  *type = OP_REG8;
-	else if (c == 'w' && !s[1])
-	  *type = OP_REG16;
-	else if (c == 'd' && !s[1])
-	  *type = OP_REG32;
-	else
-	  return -1;
-    }
-    return reg;
-}
-#endif
 
 static int asm_parse_reg(unsigned int *type)
 {
     int reg = 0;
     *type = 0;
-    if (tok != '%')
-        goto error_32;
     next();
-    if (tok >= TOK_ASM_eax && tok <= TOK_ASM_edi) {
-        reg = tok - TOK_ASM_eax;
-	*type = OP_REG32;
-#ifdef TCC_TARGET_X86_64
-    } else if (tok >= TOK_ASM_rax && tok <= TOK_ASM_rdi) {
-        reg = tok - TOK_ASM_rax;
-	*type = OP_REG64;
-    } else if (tok == TOK_ASM_rip) {
-        reg = -2; /* Probably should use different escape code. */
-	*type = OP_REG64;
-    } else if ((reg = asm_parse_numeric_reg(tok, type)) >= 0
-	       && (*type == OP_REG32 || *type == OP_REG64)) {
-	;
-#endif
-    } else {
-    error_32:
-        expect("register");
-    }
+    reg = tok - TOK_ASM_eax;
+    *type = OP_REG32;
     next();
     return reg;
 }
@@ -320,10 +235,6 @@ static void parse_operand(TCCState *s1, Operand *op)
     const char *p;
 
     indir = 0;
-    if (tok == '*') {
-        next();
-        indir = OP_INDIR;
-    }
 
     if (tok == '%') {
         next();
