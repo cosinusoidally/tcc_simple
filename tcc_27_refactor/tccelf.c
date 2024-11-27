@@ -72,17 +72,6 @@ ST_FUNC void tccelf_new(TCCState *s)
     get_sym_attr(s, 0, 1);
 }
 
-ST_FUNC void tccelf_stab_new(TCCState *s)
-{
-    stab_section = new_section(s, ".stab", SHT_PROGBITS, 0);
-    stab_section->sh_entsize = sizeof(Stab_Sym);
-    stabstr_section = new_section(s, ".stabstr", SHT_STRTAB, 0);
-    put_elf_str(stabstr_section, "");
-    stab_section->link = stabstr_section;
-    /* put first entry */
-    put_stabs("", 0, 0, 0, 0);
-}
-
 static void free_section(Section *s)
 {
     tcc_free(s->data);

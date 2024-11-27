@@ -588,37 +588,8 @@ LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type)
         tcc_add_sysinclude_path(s, CONFIG_TCC_SYSINCLUDEPATHS);
     }
 
-#ifdef CONFIG_TCC_BCHECK
-    if (s->do_bounds_check) {
-        /* if bound checking, then add corresponding sections */
-        tccelf_bounds_new(s);
-        /* define symbol */
-        tcc_define_symbol(s, "__BOUNDS_CHECKING_ON", NULL);
-    }
-#endif
-    if (s->do_debug) {
-        /* add debug sections */
-        tccelf_stab_new(s);
-    }
-
     tcc_add_library_path(s, CONFIG_TCC_LIBPATHS);
 
-#ifdef TCC_TARGET_PE
-# ifdef _WIN32
-    if (!s->nostdlib && output_type != TCC_OUTPUT_OBJ)
-        tcc_add_systemdir(s);
-# endif
-#else
-    /* paths for crt objects */
-    tcc_split_path(s, &s->crt_paths, &s->nb_crt_paths, CONFIG_TCC_CRTPREFIX);
-    /* add libc crt1/crti objects */
-    if ((output_type == TCC_OUTPUT_EXE || output_type == TCC_OUTPUT_DLL) &&
-        !s->nostdlib) {
-        if (output_type != TCC_OUTPUT_DLL)
-            tcc_add_crt(s, "crt1.o");
-        tcc_add_crt(s, "crti.o");
-    }
-#endif
     return 0;
 }
 
