@@ -685,12 +685,6 @@ static void patch_storage(Sym *sym, AttributeDef *ad, CType *type)
     if (type)
         patch_type(sym, type);
 
-#ifdef TCC_TARGET_PE
-    if (sym->a.dllimport != ad->a.dllimport)
-        tcc_error("incompatible dll linkage for redefinition of '%s'",
-            get_tok_str(sym->v, NULL));
-    sym->a.dllexport |= ad->a.dllexport;
-#endif
     sym->a.weak |= ad->a.weak;
     if (ad->a.visibility) {
         int vis = sym->a.visibility;
@@ -818,31 +812,6 @@ ST_FUNC void save_reg_upstack(int r, int n)
         }
     }
 }
-
-#ifdef TCC_TARGET_ARM
-/* find a register of class 'rc2' with at most one reference on stack.
- * If none, call get_reg(rc) */
-ST_FUNC int get_reg_ex(int rc, int rc2)
-{
-    int r;
-    SValue *p;
-    
-    for(r=0;r<NB_REGS;r++) {
-        if (reg_classes[r] & rc2) {
-            int n;
-            n=0;
-            for(p = vstack; p <= vtop; p++) {
-                if ((p->r & VT_VALMASK) == r ||
-                    (p->r2 & VT_VALMASK) == r)
-                    n++;
-            }
-            if (n <= 1)
-                return r;
-        }
-    }
-    return get_reg(rc);
-}
-#endif
 
 /* find a free register of class 'rc'. If none, save one register */
 ST_FUNC int get_reg(int rc)
@@ -1035,21 +1004,11 @@ ST_FUNC int gv(int rc)
 	    init_putv(&vtop->type, data_section, offset);
 	    vtop->r |= VT_LVAL;
         }
-#ifdef CONFIG_TCC_BCHECK
-        if (vtop->r & VT_MUSTBOUND) 
-            gbound();
-#endif
 
         r = vtop->r & VT_VALMASK;
         rc2 = (rc & RC_FLOAT) ? RC_FLOAT : RC_INT;
-#ifndef TCC_TARGET_ARM64
         if (rc == RC_IRET)
             rc2 = RC_LRET;
-#ifdef TCC_TARGET_X86_64
-        else if (rc == RC_FRET)
-            rc2 = RC_QRET;
-#endif
-#endif
         /* need to reload if:
            - constant
            - lvalue (need to dereference pointer)
@@ -1057,28 +1016,17 @@ ST_FUNC int gv(int rc)
         if (r >= VT_CONST
          || (vtop->r & VT_LVAL)
          || !(reg_classes[r] & rc)
-#if PTR_SIZE == 8
-         || ((vtop->type.t & VT_BTYPE) == VT_QLONG && !(reg_classes[vtop->r2] & rc2))
-         || ((vtop->type.t & VT_BTYPE) == VT_QFLOAT && !(reg_classes[vtop->r2] & rc2))
-#else
          || ((vtop->type.t & VT_BTYPE) == VT_LLONG && !(reg_classes[vtop->r2] & rc2))
-#endif
             )
         {
             r = get_reg(rc);
-#if PTR_SIZE == 8
-            if (((vtop->type.t & VT_BTYPE) == VT_QLONG) || ((vtop->type.t & VT_BTYPE) == VT_QFLOAT)) {
-                int addr_type = VT_LLONG, load_size = 8, load_type = ((vtop->type.t & VT_BTYPE) == VT_QLONG) ? VT_LLONG : VT_DOUBLE;
-#else
             if ((vtop->type.t & VT_BTYPE) == VT_LLONG) {
                 int addr_type = VT_INT, load_size = 4, load_type = VT_INT;
                 unsigned long long ll;
-#endif
                 int r2, original_type;
                 original_type = vtop->type.t;
                 /* two register type load : expand to two words
                    temporarily */
-#if PTR_SIZE == 4
                 if ((vtop->r & (VT_VALMASK | VT_LVAL)) == VT_CONST) {
                     /* load constant */
                     ll = vtop->c.i;
@@ -1087,18 +1035,13 @@ ST_FUNC int gv(int rc)
                     vtop->r = r; /* save register value */
                     vpushi(ll >> 32); /* second word */
                 } else
-#endif
                 if (vtop->r & VT_LVAL) {
                     /* We do not want to modifier the long long
                        pointer here, so the safest (and less
                        efficient) is to save all the other registers
                        in the stack. XXX: totally inefficient. */
-               #if 0
-                    save_regs(1);
-               #else
                     /* lvalue_save: save only if used further down the stack */
                     save_reg_upstack(vtop->r, 1);
-               #endif
                     /* load from memory */
                     vtop->type.t = load_type;
                     load(r, vtop);
@@ -1149,11 +1092,6 @@ ST_FUNC int gv(int rc)
             }
         }
         vtop->r = r;
-#ifdef TCC_TARGET_C67
-        /* uses register pairs for doubles */
-        if ((vtop->type.t & VT_BTYPE) == VT_DOUBLE) 
-            vtop->r2 = r+1;
-#endif
     }
     return r;
 }
@@ -1190,31 +1128,18 @@ ST_FUNC void gv2(int rc1, int rc2)
     }
 }
 
-#ifndef TCC_TARGET_ARM64
 /* wrapper around RC_FRET to return a register by type */
 static int rc_fret(int t)
 {
-#ifdef TCC_TARGET_X86_64
-    if (t == VT_LDOUBLE) {
-        return RC_ST0;
-    }
-#endif
     return RC_FRET;
 }
-#endif
 
 /* wrapper around REG_FRET to return a register by type */
 static int reg_fret(int t)
 {
-#ifdef TCC_TARGET_X86_64
-    if (t == VT_LDOUBLE) {
-        return TREG_ST0;
-    }
-#endif
     return REG_FRET;
 }
 
-#if PTR_SIZE == 4
 /* expand 64bit on stack in two ints */
 static void lexpand(void)
 {
@@ -1235,35 +1160,6 @@ static void lexpand(void)
     }
     vtop[0].type.t = vtop[-1].type.t = VT_INT | u;
 }
-#endif
-
-#ifdef TCC_TARGET_ARM
-/* expand long long on stack */
-ST_FUNC void lexpand_nr(void)
-{
-    int u,v;
-
-    u = vtop->type.t & (VT_DEFSIGN | VT_UNSIGNED);
-    vdup();
-    vtop->r2 = VT_CONST;
-    vtop->type.t = VT_INT | u;
-    v=vtop[-1].r & (VT_VALMASK | VT_LVAL);
-    if (v == VT_CONST) {
-      vtop[-1].c.i = vtop->c.i;
-      vtop->c.i = vtop->c.i >> 32;
-      vtop->r = VT_CONST;
-    } else if (v == (VT_LVAL|VT_CONST) || v == (VT_LVAL|VT_LOCAL)) {
-      vtop->c.i += 4;
-      vtop->r = vtop[-1].r;
-    } else if (v > VT_CONST) {
-      vtop--;
-      lexpand();
-    } else
-      vtop->r = vtop[-1].r2;
-    vtop[-1].r2 = VT_CONST;
-    vtop[-1].type.t = VT_INT | u;
-}
-#endif
 
 #if PTR_SIZE == 4
 /* build a long long from two ints */
