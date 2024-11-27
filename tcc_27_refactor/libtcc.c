@@ -585,12 +585,6 @@ LIBTCCAPI int tcc_add_include_path(TCCState *s, const char *pathname)
     return 0;
 }
 
-LIBTCCAPI int tcc_add_sysinclude_path(TCCState *s, const char *pathname)
-{
-    tcc_split_path(s, &s->sysinclude_paths, &s->nb_sysinclude_paths, pathname);
-    return 0;
-}
-
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
 {
     int ret;
@@ -616,24 +610,8 @@ LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
 {
     int filetype = s->filetype;
     int flags = AFF_PRINT_ERROR;
-    if (filetype == 0) {
-        /* use a file extension to detect a filetype */
-        const char *ext = tcc_fileextension(filename);
-        if (ext[0]) {
-            ext++;
-            if (!strcmp(ext, "S"))
-                filetype = AFF_TYPE_ASMPP;
-            else if (!strcmp(ext, "s"))
-                filetype = AFF_TYPE_ASM;
-            else if (!PATHCMP(ext, "c") || !PATHCMP(ext, "i"))
-                filetype = AFF_TYPE_C;
-            else
-                flags |= AFF_TYPE_BIN;
-        } else {
-            filetype = AFF_TYPE_C;
-        }
-        s->filetype = filetype;
-    }
+    filetype = AFF_TYPE_C;
+    s->filetype = filetype;
     return tcc_add_file_internal(s, filename, flags);
 }
 
