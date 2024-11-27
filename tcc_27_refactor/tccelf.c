@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "tcc.h"
-
 /* Define this to get some debug output during relocation processing.  */
 #undef DEBUG_RELOC
 
