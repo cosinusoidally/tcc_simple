@@ -640,52 +640,6 @@ LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
 #define WD_ALL    0x0001 /* warning is activated when using -Wall */
 #define FD_INVERT 0x0002 /* invert value before storing */
 
-typedef struct FlagDef {
-    uint16_t offset;
-    uint16_t flags;
-    const char *name;
-} FlagDef;
-
-static int no_flag(const char **pp)
-{
-    const char *p = *pp;
-    if (*p != 'n' || *++p != 'o' || *++p != '-')
-        return 0;
-    *pp = p + 1;
-    return 1;
-}
-
-ST_FUNC int set_flag(TCCState *s, const FlagDef *flags, const char *name)
-{
-    int value, ret;
-    const FlagDef *p;
-    const char *r;
-
-    value = 1;
-    r = name;
-    if (no_flag(&r))
-        value = 0;
-
-    for (ret = -1, p = flags; p->name; ++p) {
-        if (ret) {
-            if (strcmp(r, p->name))
-                continue;
-        } else {
-            if (0 == (p->flags & WD_ALL))
-                continue;
-        }
-        if (p->offset) {
-            *(int*)((char *)s + p->offset) =
-                p->flags & FD_INVERT ? !value : value;
-            if (ret)
-                return 0;
-        } else {
-            ret = 0;
-        }
-    }
-    return ret;
-}
-
 static int strstart(const char *val, const char **str)
 {
     const char *p, *q;
@@ -699,25 +653,6 @@ static int strstart(const char *val, const char **str)
     }
     *str = p;
     return 1;
-}
-
-/* Like strstart, but automatically takes into account that ld options can
- *
- * - start with double or single dash (e.g. '--soname' or '-soname')
- * - arguments can be given as separate or after '=' (e.g. '-Wl,-soname,x.so'
- *   or '-Wl,-soname=x.so')
- *
- * you provide `val` always in 'option[=]' form (no leading -)
- */
-static int link_option(const char *str, const char *val, const char **ptr)
-{
-exit(1);
-}
-
-/* set linker options */
-static int tcc_set_linker(TCCState *s, const char *option)
-{
-exit(1);
 }
 
 typedef struct TCCOption {
@@ -784,90 +719,14 @@ enum {
 #define TCC_OPTION_NOSEP   0x0002 /* cannot have space before option and arg */
 
 static const TCCOption tcc_options[] = {
-    { "h", TCC_OPTION_HELP, 0 },
-    { "-help", TCC_OPTION_HELP, 0 },
-    { "?", TCC_OPTION_HELP, 0 },
-    { "hh", TCC_OPTION_HELP2, 0 },
-    { "v", TCC_OPTION_v, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
     { "I", TCC_OPTION_I, TCC_OPTION_HAS_ARG },
     { "D", TCC_OPTION_D, TCC_OPTION_HAS_ARG },
     { "U", TCC_OPTION_U, TCC_OPTION_HAS_ARG },
-    { "P", TCC_OPTION_P, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "L", TCC_OPTION_L, TCC_OPTION_HAS_ARG },
-    { "B", TCC_OPTION_B, TCC_OPTION_HAS_ARG },
-    { "l", TCC_OPTION_l, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "bench", TCC_OPTION_bench, 0 },
-    { "g", TCC_OPTION_g, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
     { "c", TCC_OPTION_c, 0 },
-    { "dumpversion", TCC_OPTION_dumpversion, 0},
-    { "d", TCC_OPTION_d, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "static", TCC_OPTION_static, 0 },
-    { "std", TCC_OPTION_std, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "shared", TCC_OPTION_shared, 0 },
-    { "soname", TCC_OPTION_soname, TCC_OPTION_HAS_ARG },
     { "o", TCC_OPTION_o, TCC_OPTION_HAS_ARG },
-    { "-param", TCC_OPTION_param, TCC_OPTION_HAS_ARG },
-    { "pedantic", TCC_OPTION_pedantic, 0},
-    { "pthread", TCC_OPTION_pthread, 0},
-    { "run", TCC_OPTION_run, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "rdynamic", TCC_OPTION_rdynamic, 0 },
-    { "r", TCC_OPTION_r, 0 },
-    { "s", TCC_OPTION_s, 0 },
-    { "traditional", TCC_OPTION_traditional, 0 },
-    { "Wl,", TCC_OPTION_Wl, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "Wp,", TCC_OPTION_Wp, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "W", TCC_OPTION_W, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "O", TCC_OPTION_O, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-#ifdef TCC_TARGET_ARM
-    { "mfloat-abi", TCC_OPTION_mfloat_abi, TCC_OPTION_HAS_ARG },
-#endif
-    { "m", TCC_OPTION_m, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "f", TCC_OPTION_f, TCC_OPTION_HAS_ARG | TCC_OPTION_NOSEP },
-    { "isystem", TCC_OPTION_isystem, TCC_OPTION_HAS_ARG },
-    { "include", TCC_OPTION_include, TCC_OPTION_HAS_ARG },
     { "nostdinc", TCC_OPTION_nostdinc, 1 },
     { "nostdlib", TCC_OPTION_nostdlib, 0 },
-    { "print-search-dirs", TCC_OPTION_print_search_dirs, 0 },
-    { "w", TCC_OPTION_w, 0 },
-    { "pipe", TCC_OPTION_pipe, 0},
-    { "E", TCC_OPTION_E, 0},
-    { "MD", TCC_OPTION_MD, 0},
-    { "MF", TCC_OPTION_MF, TCC_OPTION_HAS_ARG },
-    { "x", TCC_OPTION_x, TCC_OPTION_HAS_ARG },
-    { "ar", TCC_OPTION_ar, 0},
-#ifdef TCC_TARGET_PE
-    { "impdef", TCC_OPTION_impdef, 0},
-#endif
     { NULL, 0, 0 },
-};
-
-static const FlagDef options_W[] = {
-    { 0, 0, "all" },
-    { offsetof(TCCState, warn_unsupported), 0, "unsupported" },
-    { offsetof(TCCState, warn_write_strings), 0, "write-strings" },
-    { offsetof(TCCState, warn_error), 0, "error" },
-    { offsetof(TCCState, warn_gcc_compat), 0, "gcc-compat" },
-    { offsetof(TCCState, warn_implicit_function_declaration), WD_ALL,
-      "implicit-function-declaration" },
-    { 0, 0, NULL }
-};
-
-static const FlagDef options_f[] = {
-    { offsetof(TCCState, char_is_unsigned), 0, "unsigned-char" },
-    { offsetof(TCCState, char_is_unsigned), FD_INVERT, "signed-char" },
-    { offsetof(TCCState, nocommon), FD_INVERT, "common" },
-    { offsetof(TCCState, leading_underscore), 0, "leading-underscore" },
-    { offsetof(TCCState, ms_extensions), 0, "ms-extensions" },
-    { offsetof(TCCState, dollars_in_identifiers), 0, "dollars-in-identifiers" },
-    { 0, 0, NULL }
-};
-
-static const FlagDef options_m[] = {
-    { offsetof(TCCState, ms_bitfields), 0, "ms-bitfields" },
-#ifdef TCC_TARGET_X86_64
-    { offsetof(TCCState, nosse), FD_INVERT, "sse" },
-#endif
-    { 0, 0, NULL }
 };
 
 static void parse_option_D(TCCState *s1, const char *optarg)
