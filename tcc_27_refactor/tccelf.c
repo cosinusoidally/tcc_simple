@@ -1429,13 +1429,6 @@ static void fill_unloadable_phdr(ElfW(Phdr) *phdr, int phnum, Section *interp,
     }
 }
 
-/* Fill the dynamic section with tags describing the address and size of
-   sections */
-static void fill_dynamic(TCCState *s1, struct dyn_inf *dyninf)
-{
-exit(1);
-}
-
 /* Relocate remaining sections and symbols (that is those not related to
    dynamic linking) */
 static int final_sections_reloc(TCCState *s1)
@@ -1746,39 +1739,6 @@ static int elf_output_file(TCCState *s1, const char *filename)
 
     /* Allocate strings for section names */
     textrel = alloc_sec_names(s1, file_type, strsec);
-
-    if (dynamic) {
-        /* add a list of needed dlls */
-        for(i = 0; i < s1->nb_loaded_dlls; i++) {
-            DLLReference *dllref = s1->loaded_dlls[i];
-            if (dllref->level == 0)
-                put_dt(dynamic, DT_NEEDED, put_elf_str(dynstr, dllref->name));
-        }
-
-        if (s1->rpath)
-            put_dt(dynamic, s1->enable_new_dtags ? DT_RUNPATH : DT_RPATH,
-                   put_elf_str(dynstr, s1->rpath));
-
-        if (file_type == TCC_OUTPUT_DLL) {
-            if (s1->soname)
-                put_dt(dynamic, DT_SONAME, put_elf_str(dynstr, s1->soname));
-            /* XXX: currently, since we do not handle PIC code, we
-               must relocate the readonly segments */
-            if (textrel)
-                put_dt(dynamic, DT_TEXTREL, 0);
-        }
-
-        if (s1->symbolic)
-            put_dt(dynamic, DT_SYMBOLIC, 0);
-
-        dyninf.dynamic = dynamic;
-        dyninf.dynstr = dynstr;
-        /* remember offset and reserve space for 2nd call below */
-        dyninf.data_offset = dynamic->data_offset;
-        fill_dynamic(s1, &dyninf);
-        dynamic->sh_size = dynamic->data_offset;
-        dynstr->sh_size = dynstr->data_offset;
-    }
 
     /* compute number of program headers */
     if (file_type == TCC_OUTPUT_OBJ)
