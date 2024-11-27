@@ -1158,136 +1158,19 @@ static void fill_local_got_entries(TCCState *s1)
     }
 }
 
-/* Bind symbols of executable: resolve undefined symbols from exported symbols
-   in shared libraries and export non local defined symbols to shared libraries
-   if -rdynamic switch was given on command line */
 static void bind_exe_dynsyms(TCCState *s1)
 {
-    const char *name;
-    int sym_index, index;
-    ElfW(Sym) *sym, *esym;
-    int type;
-
-    /* Resolve undefined symbols from dynamic symbols. When there is a match:
-       - if STT_FUNC or STT_GNU_IFUNC symbol -> add it in PLT
-       - if STT_OBJECT symbol -> add it in .bss section with suitable reloc */
-    for_each_elem(symtab_section, 1, sym, ElfW(Sym)) {
-        if (sym->st_shndx == SHN_UNDEF) {
-            name = (char *) symtab_section->link->data + sym->st_name;
-            sym_index = find_elf_sym(s1->dynsymtab_section, name);
-            if (sym_index) {
-                esym = &((ElfW(Sym) *)s1->dynsymtab_section->data)[sym_index];
-                type = ELFW(ST_TYPE)(esym->st_info);
-                if ((type == STT_FUNC) || (type == STT_GNU_IFUNC)) {
-                    /* Indirect functions shall have STT_FUNC type in executable
-                     * dynsym section. Indeed, a dlsym call following a lazy
-                     * resolution would pick the symbol value from the
-                     * executable dynsym entry which would contain the address
-                     * of the function wanted by the caller of dlsym instead of
-                     * the address of the function that would return that
-                     * address */
-                    int dynindex
-		      = put_elf_sym(s1->dynsym, 0, esym->st_size,
-				    ELFW(ST_INFO)(STB_GLOBAL,STT_FUNC), 0, 0,
-				    name);
-		    int index = sym - (ElfW(Sym) *) symtab_section->data;
-		    get_sym_attr(s1, index, 1)->dyn_index = dynindex;
-                } else if (type == STT_OBJECT) {
-                    unsigned long offset;
-                    ElfW(Sym) *dynsym;
-                    offset = bss_section->data_offset;
-                    /* XXX: which alignment ? */
-                    offset = (offset + 16 - 1) & -16;
-                    set_elf_sym (s1->symtab, offset, esym->st_size,
-                                 esym->st_info, 0, bss_section->sh_num, name);
-                    index = put_elf_sym(s1->dynsym, offset, esym->st_size,
-                                        esym->st_info, 0, bss_section->sh_num,
-                                        name);
-
-                    /* Ensure R_COPY works for weak symbol aliases */
-                    if (ELFW(ST_BIND)(esym->st_info) == STB_WEAK) {
-                        for_each_elem(s1->dynsymtab_section, 1, dynsym, ElfW(Sym)) {
-                            if ((dynsym->st_value == esym->st_value)
-                                && (ELFW(ST_BIND)(dynsym->st_info) == STB_GLOBAL)) {
-                                char *dynname = (char *) s1->dynsymtab_section->link->data
-                                                + dynsym->st_name;
-                                put_elf_sym(s1->dynsym, offset, dynsym->st_size,
-                                            dynsym->st_info, 0,
-                                            bss_section->sh_num, dynname);
-                                break;
-                            }
-                        }
-                    }
-
-                    put_elf_reloc(s1->dynsym, bss_section,
-                                  offset, R_COPY, index);
-                    offset += esym->st_size;
-                    bss_section->data_offset = offset;
-                }
-            } else {
-                /* STB_WEAK undefined symbols are accepted */
-                /* XXX: _fp_hw seems to be part of the ABI, so we ignore it */
-                if (ELFW(ST_BIND)(sym->st_info) == STB_WEAK ||
-                    !strcmp(name, "_fp_hw")) {
-                } else {
-                    tcc_error_noabort("undefined symbol '%s'", name);
-                }
-            }
-        } else if (s1->rdynamic && ELFW(ST_BIND)(sym->st_info) != STB_LOCAL) {
-            /* if -rdynamic option, then export all non local symbols */
-            name = (char *) symtab_section->link->data + sym->st_name;
-            set_elf_sym(s1->dynsym, sym->st_value, sym->st_size, sym->st_info,
-                        0, sym->st_shndx, name);
-        }
-    }
+exit(1);
 }
 
-/* Bind symbols of libraries: export all non local symbols of executable that
-   are referenced by shared libraries. The reason is that the dynamic loader
-   search symbol first in executable and then in libraries. Therefore a
-   reference to a symbol already defined by a library can still be resolved by
-   a symbol in the executable. */
 static void bind_libs_dynsyms(TCCState *s1)
 {
-    const char *name;
-    int sym_index;
-    ElfW(Sym) *sym, *esym;
-
-    for_each_elem(s1->dynsymtab_section, 1, esym, ElfW(Sym)) {
-        name = (char *) s1->dynsymtab_section->link->data + esym->st_name;
-        sym_index = find_elf_sym(symtab_section, name);
-        sym = &((ElfW(Sym) *)symtab_section->data)[sym_index];
-        if (sym_index && sym->st_shndx != SHN_UNDEF
-            && ELFW(ST_BIND)(sym->st_info) != STB_LOCAL) {
-            set_elf_sym(s1->dynsym, sym->st_value, sym->st_size,
-                sym->st_info, 0, sym->st_shndx, name);
-        } else if (esym->st_shndx == SHN_UNDEF) {
-            /* weak symbols can stay undefined */
-            if (ELFW(ST_BIND)(esym->st_info) != STB_WEAK)
-                tcc_warning("undefined dynamic symbol '%s'", name);
-        }
-    }
+exit(1);
 }
 
-/* Export all non local symbols. This is used by shared libraries so that the
-   non local symbols they define can resolve a reference in another shared
-   library or in the executable. Correspondingly, it allows undefined local
-   symbols to be resolved by other shared libraries or by the executable. */
 static void export_global_syms(TCCState *s1)
 {
-    int dynindex, index;
-    const char *name;
-    ElfW(Sym) *sym;
-
-    for_each_elem(symtab_section, 1, sym, ElfW(Sym)) {
-        if (ELFW(ST_BIND)(sym->st_info) != STB_LOCAL) {
-	    name = (char *) symtab_section->link->data + sym->st_name;
-	    dynindex = put_elf_sym(s1->dynsym, sym->st_value, sym->st_size,
-				   sym->st_info, 0, sym->st_shndx, name);
-	    index = sym - (ElfW(Sym) *) symtab_section->data;
-            get_sym_attr(s1, index, 1)->dyn_index = dynindex;
-        }
-    }
+exit(1);
 }
 
 /* Allocate strings for section names and decide if an unallocated section
@@ -1302,22 +1185,7 @@ static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
     /* Allocate strings for section names */
     for(i = 1; i < s1->nb_sections; i++) {
         s = s1->sections[i];
-        /* when generating a DLL, we include relocations but we may
-           patch them */
-        if (file_type == TCC_OUTPUT_DLL &&
-            s->sh_type == SHT_RELX &&
-            !(s->sh_flags & SHF_ALLOC) &&
-            (s1->sections[s->sh_info]->sh_flags & SHF_ALLOC) &&
-            prepare_dynamic_rel(s1, s)) {
-                if (s1->sections[s->sh_info]->sh_flags & SHF_EXECINSTR)
-                    textrel = 1;
-        } else if (s1->do_debug ||
-            file_type == TCC_OUTPUT_OBJ ||
-            (s->sh_flags & SHF_ALLOC) ||
-	    i == (s1->nb_sections - 1)) {
-            /* we output all sections if debug or object file */
-            s->sh_size = s->data_offset;
-        }
+        s->sh_size = s->data_offset;
 	if (s->sh_size || (s->sh_flags & SHF_ALLOC))
             s->sh_name = put_elf_str(strsec, s->name);
     }
