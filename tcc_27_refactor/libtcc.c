@@ -1123,10 +1123,6 @@ reparse:
         }
 
         switch(popt->index) {
-        case TCC_OPTION_HELP:
-            return OPT_HELP;
-        case TCC_OPTION_HELP2:
-            return OPT_HELP2;
         case TCC_OPTION_I:
             tcc_add_include_path(s, optarg);
             break;
@@ -1136,67 +1132,12 @@ reparse:
         case TCC_OPTION_U:
             tcc_undefine_symbol(s, optarg);
             break;
-        case TCC_OPTION_B:
-            /* set tcc utilities path (mainly for tcc development) */
-            tcc_set_lib_path(s, optarg);
-            break;
-        case TCC_OPTION_l:
-            args_parser_add_file(s, optarg, AFF_TYPE_LIB);
-            s->nb_libraries++;
-            break;
-        case TCC_OPTION_pthread:
-            parse_option_D(s, "_REENTRANT");
-            s->option_pthread = 1;
-            break;
-        case TCC_OPTION_bench:
-            s->do_bench = 1;
-            break;
-#ifdef CONFIG_TCC_BCHECK
-        case TCC_OPTION_b:
-            s->do_bounds_check = 1;
-            s->do_debug = 1;
-            break;
-#endif
-        case TCC_OPTION_g:
-            s->do_debug = 1;
-            break;
         case TCC_OPTION_c:
             x = TCC_OUTPUT_OBJ;
         set_output_type:
-            if (s->output_type)
-                tcc_warning("-%s: overriding compiler action already specified", popt->name);
             s->output_type = x;
             break;
-        case TCC_OPTION_d:
-            if (*optarg == 'D')
-                s->dflag = 3;
-            else if (*optarg == 'M')
-                s->dflag = 7;
-            else if (*optarg == 't')
-                s->dflag = 16;
-            else if (isnum(*optarg))
-                g_debug = atoi(optarg);
-            else
-                goto unsupported_option;
-            break;
-        case TCC_OPTION_static:
-            s->static_link = 1;
-            break;
-        case TCC_OPTION_std:
-    	    /* silently ignore, a current purpose:
-    	       allow to use a tcc as a reference compiler for "make test" */
-            break;
-        case TCC_OPTION_shared:
-            x = TCC_OUTPUT_DLL;
-            goto set_output_type;
-        case TCC_OPTION_soname:
-            s->soname = tcc_strdup(optarg);
-            break;
         case TCC_OPTION_o:
-            if (s->outfile) {
-                tcc_warning("multiple -o option");
-                tcc_free(s->outfile);
-            }
             s->outfile = tcc_strdup(optarg);
             break;
         case TCC_OPTION_r:
