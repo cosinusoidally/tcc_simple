@@ -239,42 +239,6 @@ static void parse_operand(TCCState *s1, Operand *op)
             op->reg = reg & 7;
             if ((op->type & OP_REG) && op->reg == TREG_XAX)
                 op->type |= OP_EAX;
-            else if (op->type == OP_REG8 && op->reg == TREG_XCX)
-                op->type |= OP_CL;
-            else if (op->type == OP_REG16 && op->reg == TREG_XDX)
-                op->type |= OP_DX;
-        } else if (tok >= TOK_ASM_dr0 && tok <= TOK_ASM_dr7) {
-            op->type = OP_DB;
-            op->reg = tok - TOK_ASM_dr0;
-        } else if (tok >= TOK_ASM_es && tok <= TOK_ASM_gs) {
-            op->type = OP_SEG;
-            op->reg = tok - TOK_ASM_es;
-        } else if (tok == TOK_ASM_st) {
-            op->type = OP_ST;
-            op->reg = 0;
-            next();
-            if (tok == '(') {
-                next();
-                if (tok != TOK_PPNUM)
-                    goto reg_error;
-                p = tokc.str.data;
-                reg = p[0] - '0';
-                if ((unsigned)reg >= 8 || p[1] != '\0')
-                    goto reg_error;
-                op->reg = reg;
-                next();
-                skip(')');
-            }
-            if (op->reg == 0)
-                op->type |= OP_ST0;
-            goto no_skip;
-#ifdef TCC_TARGET_X86_64
-	} else if (tok >= TOK_ASM_spl && tok <= TOK_ASM_dil) {
-	    op->type = OP_REG8 | OP_REG8_LOW;
-	    op->reg = 4 + tok - TOK_ASM_spl;
-        } else if ((op->reg = asm_parse_numeric_reg(tok, &op->type)) >= 0) {
-	    ;
-#endif
         } else {
         reg_error:
             tcc_error("unknown register %%%s", get_tok_str(tok, &tokc));
@@ -294,10 +258,6 @@ static void parse_operand(TCCState *s1, Operand *op)
                 op->type |= OP_IM8S;
             if (op->e.v == (uint16_t)op->e.v)
                 op->type |= OP_IM16;
-#ifdef TCC_TARGET_X86_64
-            if (op->e.v != (int32_t)op->e.v && op->e.v != (uint32_t)op->e.v)
-                op->type = OP_IM64;
-#endif
         }
     } else {
         /* address(reg,reg2,shift) with all variants */
@@ -314,14 +274,6 @@ static void parse_operand(TCCState *s1, Operand *op)
                 unget_tok('(');
                 op->e.v = 0;
                 op->e.sym = NULL;
-            } else {
-                /* bracketed offset expression */
-                asm_expr(s1, &e);
-                if (tok != ')')
-                    expect(")");
-                next();
-                op->e.v = e.v;
-                op->e.sym = e.sym;
             }
 	    op->e.pcrel = 0;
         }
@@ -330,12 +282,6 @@ static void parse_operand(TCCState *s1, Operand *op)
             next();
             if (tok != ',') {
                 op->reg = asm_parse_reg(&type);
-            }
-            if (tok == ',') {
-                next();
-                if (tok != ',') {
-                    op->reg2 = asm_parse_reg(&type);
-                }
             }
 	    if (type & OP_REG32)
 	        op->type |= OP_EA32;
@@ -350,12 +296,7 @@ static void parse_operand(TCCState *s1, Operand *op)
 /* XXX: unify with C code output ? */
 ST_FUNC void gen_expr32(ExprValue *pe)
 {
-    if (pe->pcrel)
-        /* If PC-relative, always set VT_SYM, even without symbol,
-	   so as to force a relocation to be emitted.  */
-	gen_addrpc32(VT_SYM, pe->sym, pe->v);
-    else
-	gen_addr32(pe->sym ? VT_SYM : 0, pe->sym, pe->v);
+    gen_addr32(pe->sym ? VT_SYM : 0, pe->sym, pe->v);
 }
 
 #ifdef TCC_TARGET_X86_64
