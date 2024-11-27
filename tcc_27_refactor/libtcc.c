@@ -374,23 +374,14 @@ static int tcc_compile(TCCState *s1)
 
     define_start = define_stack;
     filetype = s1->filetype;
-    is_asm = filetype == AFF_TYPE_ASM || filetype == AFF_TYPE_ASMPP;
     tccelf_begin_file(s1);
 
     if (setjmp(s1->error_jmp_buf) == 0) {
         s1->nb_errors = 0;
         s1->error_set_jmp_enabled = 1;
 
-        preprocess_start(s1, is_asm);
-        if (is_asm) {
-#ifdef CONFIG_TCC_ASM
-            tcc_assemble(s1, filetype == AFF_TYPE_ASMPP);
-#else
-            tcc_error_noabort("asm not supported");
-#endif
-        } else {
-            tccgen_compile(s1);
-        }
+        preprocess_start(s1, 0);
+        tccgen_compile(s1);
     }
     s1->error_set_jmp_enabled = 0;
 
