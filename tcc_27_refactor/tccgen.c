@@ -90,7 +90,6 @@ static void vla_sp_restore(void);
 static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
-static void vpush64(int ty, unsigned long long v);
 static void vpush(CType *type);
 static int gvtst(int inv, int t);
 static void gen_inline_functions(TCCState *s);
@@ -185,37 +184,11 @@ ST_FUNC void update_storage(Sym *sym)
     if (!esym)
         return;
 
-    if (sym->a.visibility)
-        esym->st_other = (esym->st_other & ~ELFW(ST_VISIBILITY)(-1))
-            | sym->a.visibility;
-
     if (sym->type.t & VT_STATIC)
         sym_bind = STB_LOCAL;
-    else if (sym->a.weak)
-        sym_bind = STB_WEAK;
     else
         sym_bind = STB_GLOBAL;
     old_sym_bind = ELFW(ST_BIND)(esym->st_info);
-    if (sym_bind != old_sym_bind) {
-        esym->st_info = ELFW(ST_INFO)(sym_bind, ELFW(ST_TYPE)(esym->st_info));
-    }
-
-#ifdef TCC_TARGET_PE
-    if (sym->a.dllimport)
-        esym->st_other |= ST_PE_IMPORT;
-    if (sym->a.dllexport)
-        esym->st_other |= ST_PE_EXPORT;
-#endif
-
-#if 0
-    printf("storage %s: bind=%c vis=%d exp=%d imp=%d\n",
-        get_tok_str(sym->v, NULL),
-        sym_bind == STB_WEAK ? 'w' : sym_bind == STB_LOCAL ? 'l' : 'g',
-        sym->a.visibility,
-        sym->a.dllexport,
-        sym->a.dllimport
-        );
-#endif
 }
 
 /* ------------------------------------------------------------------------- */
@@ -236,8 +209,6 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         t = sym->type.t;
         if ((t & VT_BTYPE) == VT_FUNC) {
             sym_type = STT_FUNC;
-        } else if ((t & VT_BTYPE) == VT_VOID) {
-            sym_type = STT_NOTYPE;
         } else {
             sym_type = STT_OBJECT;
         }
@@ -246,11 +217,6 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         else
             sym_bind = STB_GLOBAL;
         other = 0;
-        if (tcc_state->leading_underscore && can_add_underscore) {
-            buf1[0] = '_';
-            pstrcpy(buf1 + 1, sizeof(buf1) - 1, name);
-            name = buf1;
-        }
         if (sym->asm_label)
             name = get_tok_str(sym->asm_label, NULL);
         info = ELFW(ST_INFO)(sym_bind, sym_type);
@@ -414,9 +380,6 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c)
         s->prev_tok = *ps;
         *ps = s;
         s->sym_scope = local_scope;
-        if (s->prev_tok && s->prev_tok->sym_scope == s->sym_scope)
-            tcc_error("redeclaration of '%s'",
-                get_tok_str(v & ~SYM_STRUCT, NULL));
     }
     return s;
 }
@@ -475,8 +438,6 @@ static void vsetc(CType *type, int r, CValue *vc)
 {
     int v;
 
-    if (vtop >= vstack + (VSTACK_SIZE - 1))
-        tcc_error("memory full (vstack)");
     /* cannot let cpu flags if other instruction are generated. Also
        avoid leaving VT_JMP anywhere except on the top of the stack
        because it would complicate the code generator.
@@ -523,12 +484,10 @@ ST_FUNC void vpop(void)
 {
     int v;
     v = vtop->r & VT_VALMASK;
-#if defined(TCC_TARGET_I386) || defined(TCC_TARGET_X86_64)
     /* for x86, we need to pop the FP stack */
     if (v == TREG_ST0) {
         o(0xd8dd); /* fstp %st(0) */
     } else
-#endif
     if (v == VT_JMP || v == VT_JMPI) {
         /* need to put correct jump if && or || without test */
         gsym(vtop->c.i);
@@ -556,23 +515,6 @@ static void vpushs(addr_t v)
   CValue cval;
   cval.i = v;
   vsetc(&size_type, VT_CONST, &cval);
-}
-
-/* push arbitrary 64bit constant */
-ST_FUNC void vpush64(int ty, unsigned long long v)
-{
-    CValue cval;
-    CType ctype;
-    ctype.t = ty;
-    ctype.ref = NULL;
-    cval.i = v;
-    vsetc(&ctype, VT_CONST, &cval);
-}
-
-/* push long long constant */
-static inline void vpushll(long long v)
-{
-    vpush64(VT_LLONG, v);
 }
 
 ST_FUNC void vset(CType *type, int r, int v)
@@ -984,34 +926,7 @@ static void incr_bf_adr(int o)
 /* single-byte load mode for packed or otherwise unaligned bitfields */
 static void load_packed_bf(CType *type, int bit_pos, int bit_size)
 {
-    int n, o, bits;
-    save_reg_upstack(vtop->r, 1);
-    vpush64(type->t & VT_BTYPE, 0); // B X
-    bits = 0, o = bit_pos >> 3, bit_pos &= 7;
-    do {
-        vswap(); // X B
-        incr_bf_adr(o);
-        vdup(); // X B B
-        n = 8 - bit_pos;
-        if (n > bit_size)
-            n = bit_size;
-        if (bit_pos)
-            vpushi(bit_pos), gen_op(TOK_SHR), bit_pos = 0; // X B Y
-        if (n < 8)
-            vpushi((1 << n) - 1), gen_op('&');
-        gen_cast(type);
-        if (bits)
-            vpushi(bits), gen_op(TOK_SHL);
-        vrotb(3); // B Y X
-        gen_op('|'); // B X
-        bits += n, bit_size -= n, o = 1;
-    } while (bit_size);
-    vswap(), vpop();
-    if (!(type->t & VT_UNSIGNED)) {
-        n = ((type->t & VT_BTYPE) == VT_LLONG ? 64 : 32) - bits;
-        vpushi(n), gen_op(TOK_SHL);
-        vpushi(n), gen_op(TOK_SAR);
-    }
+exit(1);
 }
 
 /* single-byte store mode for packed or otherwise unaligned bitfields */
@@ -2043,12 +1958,8 @@ redo:
                 u = pointed_size(&vtop[-1].type);
                 if (u < 0)
                     tcc_error("unknown array element size");
-#if PTR_SIZE == 8
-                vpushll(u);
-#else
                 /* XXX: cast to int ? (long long case) */
                 vpushi(u);
-#endif
             }
             gen_op('*');
 #if 0
@@ -2960,10 +2871,7 @@ ST_FUNC void vstore(void)
             unsigned long long mask = (1ULL << bit_size) - 1;
             if ((ft & VT_BTYPE) != VT_BOOL) {
                 /* mask source */
-                if ((vtop[-1].type.t & VT_BTYPE) == VT_LLONG)
-                    vpushll(mask);
-                else
-                    vpushi((unsigned)mask);
+                vpushi((unsigned)mask);
                 gen_op('&');
             }
             /* shift source */
@@ -2973,11 +2881,7 @@ ST_FUNC void vstore(void)
             /* duplicate destination */
             vdup();
             vrott(3);
-            /* load destination, mask and or with source */
-            if ((vtop->type.t & VT_BTYPE) == VT_LLONG)
-                vpushll(~(mask << bit_pos));
-            else
-                vpushi(~((unsigned)mask << bit_pos));
+            vpushi(~((unsigned)mask << bit_pos));
             gen_op('&');
             gen_op('|');
             /* store result */
@@ -4857,19 +4761,6 @@ ST_FUNC void unary(void)
         next();
 	break;
     }
-    // special qnan , snan and infinity values
-    case TOK___NAN__:
-        vpush64(VT_DOUBLE, 0x7ff8000000000000ULL);
-        next();
-        break;
-    case TOK___SNAN__:
-        vpush64(VT_DOUBLE, 0x7ff0000000000001ULL);
-        next();
-        break;
-    case TOK___INF__:
-        vpush64(VT_DOUBLE, 0x7ff0000000000000ULL);
-        next();
-        break;
 
     default:
     tok_identifier:
@@ -5631,17 +5522,11 @@ static void gcase(struct case_t **base, int len, int *bsym)
         /* binary search */
         p = base[len/2];
         vdup();
-	if (ll)
-	    vpushll(p->v2);
-	else
-	    vpushi(p->v2);
+        vpushi(p->v2);
         gen_op(TOK_LE);
         e = gtst(1, 0);
         vdup();
-	if (ll)
-	    vpushll(p->v1);
-	else
-	    vpushi(p->v1);
+        vpushi(p->v1);
         gen_op(TOK_GE);
         gtst_addr(0, p->sym); /* v1 <= x <= v2 */
         /* x < v1 */
@@ -5659,10 +5544,7 @@ static void gcase(struct case_t **base, int len, int *bsym)
     while (len--) {
         p = *base++;
         vdup();
-	if (ll)
-	    vpushll(p->v2);
-	else
-	    vpushi(p->v2);
+        vpushi(p->v2);
         if (p->v1 == p->v2) {
             gen_op(TOK_EQ);
             gtst_addr(0, p->sym);
@@ -5670,10 +5552,7 @@ static void gcase(struct case_t **base, int len, int *bsym)
             gen_op(TOK_LE);
             e = gtst(1, 0);
             vdup();
-	    if (ll)
-	        vpushll(p->v1);
-	    else
-	        vpushi(p->v1);
+	    vpushi(p->v1);
             gen_op(TOK_GE);
             gtst_addr(0, p->sym);
             gsym(e);
