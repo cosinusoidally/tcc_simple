@@ -588,8 +588,6 @@ LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type)
         tcc_add_sysinclude_path(s, CONFIG_TCC_SYSINCLUDEPATHS);
     }
 
-    tcc_add_library_path(s, CONFIG_TCC_LIBPATHS);
-
     return 0;
 }
 
@@ -649,12 +647,6 @@ LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
         s->filetype = filetype;
     }
     return tcc_add_file_internal(s, filename, flags);
-}
-
-LIBTCCAPI int tcc_add_library_path(TCCState *s, const char *pathname)
-{
-    tcc_split_path(s, &s->library_paths, &s->nb_library_paths, pathname);
-    return 0;
 }
 
 LIBTCCAPI int tcc_add_symbol(TCCState *s, const char *name, const void *val)
@@ -1213,9 +1205,6 @@ reparse:
             break;
         case TCC_OPTION_U:
             tcc_undefine_symbol(s, optarg);
-            break;
-        case TCC_OPTION_L:
-            tcc_add_library_path(s, optarg);
             break;
         case TCC_OPTION_B:
             /* set tcc utilities path (mainly for tcc development) */
