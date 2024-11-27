@@ -621,30 +621,7 @@ ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
     dynarray_add(&s1->target_deps, &s1->nb_target_deps,
             tcc_strdup(filename));
 
-    if (flags & AFF_TYPE_BIN) {
-        ElfW(Ehdr) ehdr;
-        int fd, obj_type;
-
-        fd = file->fd;
-        obj_type = tcc_object_type(fd, &ehdr);
-        lseek(fd, 0, SEEK_SET);
-
-        switch (obj_type) {
-        case AFF_BINTYPE_DYN:
-            if (s1->output_type == TCC_OUTPUT_MEMORY) {
-                ret = 0;
-                if (NULL == dlopen(filename, RTLD_GLOBAL | RTLD_LAZY))
-                    ret = -1;
-            }
-            break;
-        default:
-            if (ret < 0)
-                tcc_error_noabort("unrecognized file type");
-            break;
-        }
-    } else {
-        ret = tcc_compile(s1);
-    }
+    ret = tcc_compile(s1);
     tcc_close();
     return ret;
 }
