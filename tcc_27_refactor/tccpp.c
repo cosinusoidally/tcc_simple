@@ -151,17 +151,6 @@ ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
     cstr->size = size;
 }
 
-/* add a wide char */
-ST_FUNC void cstr_wccat(CString *cstr, int ch)
-{
-    int size;
-    size = cstr->size + sizeof(nwchar_t);
-    if (size > cstr->size_allocated)
-        cstr_realloc(cstr, size);
-    *(nwchar_t *)(((unsigned char *)cstr->data) + size - sizeof(nwchar_t)) = ch;
-    cstr->size = size;
-}
-
 ST_FUNC void cstr_new(CString *cstr)
 {
     memset(cstr, 0, sizeof(CString));
@@ -1951,28 +1940,10 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
         }
         p++;
     add_char_nonext:
-        if (!is_long)
-            cstr_ccat(outstr, c);
-        else {
-#ifdef TCC_TARGET_PE
-            /* store as UTF-16 */
-            if (c < 0x10000) {
-                cstr_wccat(outstr, c);
-            } else {
-                c -= 0x10000;
-                cstr_wccat(outstr, (c >> 10) + 0xD800);
-                cstr_wccat(outstr, (c & 0x3FF) + 0xDC00);
-            }
-#else
-            cstr_wccat(outstr, c);
-#endif
-        }
+        cstr_ccat(outstr, c);
     }
     /* add a trailing '\0' */
-    if (!is_long)
-        cstr_ccat(outstr, '\0');
-    else
-        cstr_wccat(outstr, '\0');
+    cstr_ccat(outstr, '\0');
 }
 
 static void parse_string(const char *s, int len)
