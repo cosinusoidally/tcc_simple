@@ -233,16 +233,11 @@ static void parse_operand(TCCState *s1, Operand *op)
 
     if (tok == '%') {
         next();
-        if (tok >= TOK_ASM_al && tok <= TOK_ASM_db7) {
-            reg = tok - TOK_ASM_al;
-            op->type = 1 << (reg >> 3); /* WARNING: do not change constant order */
-            op->reg = reg & 7;
-            if ((op->type & OP_REG) && op->reg == TREG_XAX)
-                op->type |= OP_EAX;
-        } else {
-        reg_error:
-            tcc_error("unknown register %%%s", get_tok_str(tok, &tokc));
-        }
+        reg = tok - TOK_ASM_al;
+        op->type = 1 << (reg >> 3); /* WARNING: do not change constant order */
+        op->reg = reg & 7;
+        if ((op->type & OP_REG) && op->reg == TREG_XAX)
+            op->type |= OP_EAX;
         next();
     no_skip: ;
     } else if (tok == '$') {
@@ -316,33 +311,18 @@ static inline int asm_modrm(int reg, Operand *op)
     } else {
         sib_reg1 = op->reg;
         /* fist compute displacement encoding */
-        if (sib_reg1 == -1) {
-            sib_reg1 = 5;
-            mod = 0x00;
-        } else if (op->e.v == 0 && !op->e.sym && op->reg != 5) {
+        if (op->e.v == 0 && !op->e.sym && op->reg != 5) {
             mod = 0x00;
         } else if (op->e.v == (int8_t)op->e.v && !op->e.sym) {
             mod = 0x40;
-        } else {
-            mod = 0x80;
         }
         /* compute if sib byte needed */
         reg1 = op->reg;
-        if (op->reg2 != -1)
-            reg1 = 4;
         g(mod + (reg << 3) + reg1);
-        if (reg1 == 4) {
-            /* add sib byte */
-            reg2 = op->reg2;
-            if (reg2 == -1)
-                reg2 = 4; /* indicate no index */
-            g((op->shift << 6) + (reg2 << 3) + sib_reg1);
-        }
+
         /* add offset */
         if (mod == 0x40) {
             g(op->e.v);
-        } else if (mod == 0x80 || op->reg == -1) {
-	    gen_expr32(&op->e);
         }
     }
     return 0;
