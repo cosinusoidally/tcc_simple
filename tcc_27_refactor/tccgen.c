@@ -1221,10 +1221,6 @@ static void gen_opl(int op)
     case TOK_UMOD:
         func = TOK___umoddi3;
     gen_mod_func:
-#ifdef TCC_ARM_EABI
-        reg_iret = TREG_R2;
-        reg_lret = TREG_R3;
-#endif
     gen_func:
         /* call generic long long function */
         vpush_global_sym(&func_old_type, func);
@@ -1809,38 +1805,7 @@ redo:
                 vpushi(u);
             }
             gen_op('*');
-#if 0
-/* #ifdef CONFIG_TCC_BCHECK
-    The main reason to removing this code:
-	#include <stdio.h>
-	int main ()
-	{
-	    int v[10];
-	    int i = 10;
-	    int j = 9;
-	    fprintf(stderr, "v+i-j  = %p\n", v+i-j);
-	    fprintf(stderr, "v+(i-j)  = %p\n", v+(i-j));
-	}
-    When this code is on. then the output looks like 
-	v+i-j = 0xfffffffe
-	v+(i-j) = 0xbff84000
-    */
-            /* if evaluating constant expression, no code should be
-               generated, so no bound check */
-            if (tcc_state->do_bounds_check && !const_wanted) {
-                /* if bounded pointers, we generate a special code to
-                   test bounds */
-                if (op == '-') {
-                    vpushi(0);
-                    vswap();
-                    gen_op('-');
-                }
-                gen_bounded_ptr_add();
-            } else
-#endif
-            {
-                gen_opic(op);
-            }
+            gen_opic(op);
             /* put again type if gen_opic() swaped operands */
             vtop->type = type1;
         }
