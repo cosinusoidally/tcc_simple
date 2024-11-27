@@ -11,6 +11,7 @@ gcc -O0 -m32 --coverage -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ..
 ln -s ../tcc_27/libc_boot4.c libc_boot4.c
 ln -s ../tcc_27/libc_static.c libc_static.c
 ln -s ../tcc_27/tcc.c tcc.c
+ln -s ../M2_simple_asm.c M2_simple_asm.c
 mkdir lib
 cd lib
 ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
@@ -23,6 +24,7 @@ cd ..
 ./coverage.exe -c ./lib/libtcc1.c -o libtcc1.o
 ./coverage.exe -c libc_boot4.c -o libc_boot4.o
 ./coverage.exe -c libc_static.c -o libc_static.o
+./coverage.exe -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
 
 # for some reason we need to be in the directory above to run gcovr?
 cd ..
