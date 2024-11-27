@@ -418,75 +418,10 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
     if (sym_bind != STB_LOCAL) {
         /* we search global or weak symbols */
         sym_index = find_elf_sym(s, name);
-        if (!sym_index)
-            goto do_def;
-        esym = &((ElfW(Sym) *)s->data)[sym_index];
-        if (esym->st_value == value && esym->st_size == size && esym->st_info == info
-            && esym->st_other == other && esym->st_shndx == shndx)
-            return sym_index;
-        if (esym->st_shndx != SHN_UNDEF) {
-            esym_bind = ELFW(ST_BIND)(esym->st_info);
-            /* propagate the most constraining visibility */
-            /* STV_DEFAULT(0)<STV_PROTECTED(3)<STV_HIDDEN(2)<STV_INTERNAL(1) */
-            esym_vis = ELFW(ST_VISIBILITY)(esym->st_other);
-            if (esym_vis == STV_DEFAULT) {
-                new_vis = sym_vis;
-            } else if (sym_vis == STV_DEFAULT) {
-                new_vis = esym_vis;
-            } else {
-                new_vis = (esym_vis < sym_vis) ? esym_vis : sym_vis;
-            }
-            esym->st_other = (esym->st_other & ~ELFW(ST_VISIBILITY)(-1))
-                             | new_vis;
-            other = esym->st_other; /* in case we have to patch esym */
-            if (shndx == SHN_UNDEF) {
-                /* ignore adding of undefined symbol if the
-                   corresponding symbol is already defined */
-            } else if (sym_bind == STB_GLOBAL && esym_bind == STB_WEAK) {
-                /* global overrides weak, so patch */
-                goto do_patch;
-            } else if (sym_bind == STB_WEAK && esym_bind == STB_GLOBAL) {
-                /* weak is ignored if already global */
-            } else if (sym_bind == STB_WEAK && esym_bind == STB_WEAK) {
-                /* keep first-found weak definition, ignore subsequents */
-            } else if (sym_vis == STV_HIDDEN || sym_vis == STV_INTERNAL) {
-                /* ignore hidden symbols after */
-            } else if ((esym->st_shndx == SHN_COMMON
-                            || esym->st_shndx == bss_section->sh_num)
-                        && (shndx < SHN_LORESERVE
-                            && shndx != bss_section->sh_num)) {
-                /* data symbol gets precedence over common/bss */
-                goto do_patch;
-            } else if (shndx == SHN_COMMON || shndx == bss_section->sh_num) {
-                /* data symbol keeps precedence over common/bss */
-            } else if (s->sh_flags & SHF_DYNSYM) {
-                /* we accept that two DLL define the same symbol */
-	    } else if (esym->st_other & ST_ASM_SET) {
-		/* If the existing symbol came from an asm .set
-		   we can override.  */
-		goto do_patch;
-            } else {
-#if 0
-                printf("new_bind=%x new_shndx=%x new_vis=%x old_bind=%x old_shndx=%x old_vis=%x\n",
-                       sym_bind, shndx, new_vis, esym_bind, esym->st_shndx, esym_vis);
-#endif
-                tcc_error_noabort("'%s' defined twice", name);
-            }
-        } else {
-        do_patch:
-            esym->st_info = ELFW(ST_INFO)(sym_bind, sym_type);
-            esym->st_shndx = shndx;
-            new_undef_sym = 1;
-            esym->st_value = value;
-            esym->st_size = size;
-            esym->st_other = other;
-        }
-    } else {
-    do_def:
-        sym_index = put_elf_sym(s, value, size,
+    }
+    sym_index = put_elf_sym(s, value, size,
                                 ELFW(ST_INFO)(sym_bind, sym_type), other,
                                 shndx, name);
-    }
     return sym_index;
 }
 
