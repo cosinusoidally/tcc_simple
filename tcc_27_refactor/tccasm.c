@@ -909,9 +909,6 @@ static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
         next();
         if (tok == TOK_EOF)
             break;
-        /* generate line number info */
-        if (global && s1->do_debug)
-            tcc_debug_line(s1);
         parse_flags |= PARSE_FLAG_LINEFEED; /* XXX: suppress that hack */
     redo:
         if (tok == '#') {
@@ -969,7 +966,6 @@ ST_FUNC int tcc_assemble(TCCState *s1, int do_preprocess)
     nocode_wanted = 0;
     ret = tcc_assemble_internal(s1, do_preprocess, 1);
     cur_text_section->data_offset = ind;
-    tcc_debug_end(s1);
     return ret;
 }
 

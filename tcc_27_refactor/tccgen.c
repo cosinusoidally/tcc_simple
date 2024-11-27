@@ -133,21 +133,6 @@ ST_FUNC void check_vstack(void)
 }
 
 /* ------------------------------------------------------------------------- */
-/* vstack debugging aid */
-
-#if 0
-void pv (const char *lbl, int a, int b)
-{
-    int i;
-    for (i = a; i < a + b; ++i) {
-        SValue *p = &vtop[-i];
-        printf("%s vtop[-%d] : type.t:%04x  r:%04x  r2:%04x  c.i:%d\n",
-            lbl, i, p->type.t, p->r, p->r2, (int)p->c.i);
-    }
-}
-#endif
-
-/* ------------------------------------------------------------------------- */
 /* start of translation unit info */
 ST_FUNC void tcc_debug_start(TCCState *s1)
 {
@@ -156,30 +141,6 @@ ST_FUNC void tcc_debug_start(TCCState *s1)
     put_elf_sym(symtab_section, 0, 0,
                 ELFW(ST_INFO)(STB_LOCAL, STT_FILE), 0,
                 SHN_ABS, file->filename);
-}
-
-/* put end of translation unit info */
-ST_FUNC void tcc_debug_end(TCCState *s1)
-{
-return;
-}
-
-/* generate line number info */
-ST_FUNC void tcc_debug_line(TCCState *s1)
-{
-return;
-}
-
-/* put function symbol */
-ST_FUNC void tcc_debug_funcstart(TCCState *s1, Sym *sym)
-{
-return;
-}
-
-/* put function size */
-ST_FUNC void tcc_debug_funcend(TCCState *s1, int size)
-{
-return;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -226,8 +187,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     decl(VT_CONST);
     gen_inline_functions(s1);
     check_vstack();
-    /* end of translation unit info */
-    tcc_debug_end(s1);
     return 0;
 }
 
@@ -5750,10 +5709,6 @@ static void block(int *bsym, int *csym, int is_expr)
     int a, b, c, d, cond;
     Sym *s;
 
-    /* generate line number info */
-    if (tcc_state->do_debug)
-        tcc_debug_line(tcc_state);
-
     if (is_expr) {
         /* default return value is (void) */
         vpushi(0);
@@ -6894,8 +6849,6 @@ static void gen_function(Sym *sym)
     /* Initialize VLA state */
     vla_sp_loc = -1;
     vla_sp_root_loc = -1;
-    /* put debug symbol */
-    tcc_debug_funcstart(tcc_state, sym);
     /* push a dummy symbol to enable local sym storage */
     sym_push2(&local_stack, SYM_FIELD, 0, 0);
     local_scope = 1; /* for function parameters */
@@ -6914,7 +6867,6 @@ static void gen_function(Sym *sym)
     /* end of function */
     /* patch symbol size */
     elfsym(sym)->st_size = ind - func_ind;
-    tcc_debug_funcend(tcc_state, ind - func_ind);
     /* It's better to crash than to generate wrong code */
     cur_text_section = NULL;
     funcname = ""; /* for safety */
