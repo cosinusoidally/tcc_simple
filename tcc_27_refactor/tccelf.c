@@ -727,180 +727,34 @@ exit(1);
 /* put dynamic tag */
 static void put_dt(Section *dynamic, int dt, addr_t val)
 {
-    ElfW(Dyn) *dyn;
-    dyn = section_ptr_add(dynamic, sizeof(ElfW(Dyn)));
-    dyn->d_tag = dt;
-    dyn->d_un.d_val = val;
+exit(1);
 }
 
 static int tcc_add_support(TCCState *s1, const char *filename)
 {
-    char buf[1024];
-    snprintf(buf, sizeof(buf), "%s/%s", s1->tcc_lib_path, filename);
-    return tcc_add_file(s1, buf);
+exit(1);
 }
 
 /* add tcc runtime libraries */
 ST_FUNC void tcc_add_runtime(TCCState *s1)
 {
-    tcc_add_pragma_libs(s1);
-    /* add libc */
-    if (!s1->nostdlib) {
-        tcc_add_library_err(s1, "c");
-#ifdef TCC_LIBGCC
-        if (!s1->static_link) {
-            if (TCC_LIBGCC[0] == '/')
-                tcc_add_file(s1, TCC_LIBGCC);
-            else
-                tcc_add_dll(s1, TCC_LIBGCC, 0);
-        }
-#endif
-        tcc_add_support(s1, TCC_LIBTCC1);
-        /* add crt end if not memory output */
-        if (s1->output_type != TCC_OUTPUT_MEMORY)
-            tcc_add_crt(s1, "crtn.o");
-    }
+exit(1);
 }
 
-/* add various standard linker symbols (must be done after the
-   sections are filled (for example after allocating common
-   symbols)) */
 static void tcc_add_linker_symbols(TCCState *s1)
 {
-    char buf[1024];
-    int i;
-    Section *s;
-
-    set_elf_sym(symtab_section,
-                text_section->data_offset, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                text_section->sh_num, "_etext");
-    set_elf_sym(symtab_section,
-                data_section->data_offset, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                data_section->sh_num, "_edata");
-    set_elf_sym(symtab_section,
-                bss_section->data_offset, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                bss_section->sh_num, "_end");
-
-    /* add start and stop symbols for sections whose name can be
-       expressed in C */
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->sh_type == SHT_PROGBITS &&
-            (s->sh_flags & SHF_ALLOC)) {
-            const char *p;
-            int ch;
-
-            /* check if section name can be expressed in C */
-            p = s->name;
-            for(;;) {
-                ch = *p;
-                if (!ch)
-                    break;
-                if (!isid(ch) && !isnum(ch))
-                    goto next_sec;
-                p++;
-            }
-            snprintf(buf, sizeof(buf), "__start_%s", s->name);
-            set_elf_sym(symtab_section,
-                        0, 0,
-                        ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                        s->sh_num, buf);
-            snprintf(buf, sizeof(buf), "__stop_%s", s->name);
-            set_elf_sym(symtab_section,
-                        s->data_offset, 0,
-                        ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                        s->sh_num, buf);
-        }
-    next_sec: ;
-    }
-}
-
-ST_FUNC void resolve_common_syms(TCCState *s1)
-{
-    ElfW(Sym) *sym;
-
-    /* Allocate common symbols in BSS.  */
-    for_each_elem(symtab_section, 1, sym, ElfW(Sym)) {
-        if (sym->st_shndx == SHN_COMMON) {
-            /* symbol alignment is in st_value for SHN_COMMONs */
-	    sym->st_value = section_add(bss_section, sym->st_size,
-					sym->st_value);
-            sym->st_shndx = bss_section->sh_num;
-        }
-    }
-
-    /* Now assign linker provided symbols their value.  */
-    tcc_add_linker_symbols(s1);
-}
-
-static void tcc_output_binary(TCCState *s1, FILE *f,
-                              const int *sec_order)
-{
-    Section *s;
-    int i, offset, size;
-
-    offset = 0;
-    for(i=1;i<s1->nb_sections;i++) {
-        s = s1->sections[sec_order[i]];
-        if (s->sh_type != SHT_NOBITS &&
-            (s->sh_flags & SHF_ALLOC)) {
-            while (offset < s->sh_offset) {
-                fputc(0, f);
-                offset++;
-            }
-            size = s->sh_size;
-            fwrite(s->data, 1, size, f);
-            offset += size;
-        }
-    }
+exit(1);
 }
 
 ST_FUNC void fill_got_entry(TCCState *s1, ElfW_Rel *rel)
 {
-    int sym_index = ELFW(R_SYM) (rel->r_info);
-    ElfW(Sym) *sym = &((ElfW(Sym) *) symtab_section->data)[sym_index];
-    struct sym_attr *attr = get_sym_attr(s1, sym_index, 0);
-    unsigned offset = attr->got_offset;
-
-    if (0 == offset)
-        return;
-    section_reserve(s1->got, offset + PTR_SIZE);
-#ifdef TCC_TARGET_X86_64
-    write64le(s1->got->data + offset, sym->st_value);
-#else
-    write32le(s1->got->data + offset, sym->st_value);
-#endif
+exit(1);
 }
 
 /* Perform relocation to GOT or PLT entries */
 ST_FUNC void fill_got(TCCState *s1)
 {
-    Section *s;
-    ElfW_Rel *rel;
-    int i;
-
-    for(i = 1; i < s1->nb_sections; i++) {
-        s = s1->sections[i];
-        if (s->sh_type != SHT_RELX)
-            continue;
-        /* no need to handle got relocations */
-        if (s->link != symtab_section)
-            continue;
-        for_each_elem(s, 0, rel, ElfW_Rel) {
-            switch (ELFW(R_TYPE) (rel->r_info)) {
-                case R_X86_64_GOT32:
-                case R_X86_64_GOTPCREL:
-		case R_X86_64_GOTPCRELX:
-		case R_X86_64_REX_GOTPCRELX:
-                case R_X86_64_PLT32:
-                    fill_got_entry(s1, rel);
-                    break;
-            }
-        }
-    }
+exit(1);
 }
 
 /* Allocate strings for section names and decide if an unallocated section
