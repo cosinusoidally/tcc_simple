@@ -523,46 +523,16 @@ static uint8_t *parse_pp_string(uint8_t *p,
             file->buf_ptr = p;
             c = handle_eob();
             p = file->buf_ptr;
-            if (c == CH_EOF) {
-            unterminated_string:
-                /* XXX: indicate line number of start of string */
-                tcc_error("missing terminating %c character", sep);
-            } else if (c == '\\') {
+            if (c == '\\') {
                 /* escape : just skip \[\r]\n */
                 PEEKC_EOB(c, p);
-                if (c == '\n') {
-                    file->line_num++;
-                    p++;
-                } else if (c == '\r') {
-                    PEEKC_EOB(c, p);
-                    if (c != '\n')
-                        expect("'\n' after '\r'");
-                    file->line_num++;
-                    p++;
-                } else if (c == CH_EOF) {
-                    goto unterminated_string;
-                } else {
-                    if (str) {
-                        cstr_ccat(str, '\\');
-                        cstr_ccat(str, c);
-                    }
-                    p++;
+                if (str) {
+                    cstr_ccat(str, '\\');
+                    cstr_ccat(str, c);
                 }
-            }
-        } else if (c == '\n') {
-            file->line_num++;
-            goto add_char;
-        } else if (c == '\r') {
-            PEEKC_EOB(c, p);
-            if (c != '\n') {
-                if (str)
-                    cstr_ccat(str, '\r');
-            } else {
-                file->line_num++;
-                goto add_char;
+                p++;
             }
         } else {
-        add_char:
             if (str)
                 cstr_ccat(str, c);
             p++;
@@ -839,26 +809,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
         break;
     }
     *pp = p;
-}
-
-static int macro_is_equal(const int *a, const int *b)
-{
-    CValue cv;
-    int t;
-
-    if (!a || !b)
-        return 1;
-
-    while (*a && *b) {
-        /* first time preallocate macro_equal_buf, next time only reset position to start */
-        cstr_reset(&macro_equal_buf);
-        TOK_GET(&t, &a, &cv);
-        cstr_cat(&macro_equal_buf, get_tok_str(t, &cv), 0);
-        TOK_GET(&t, &b, &cv);
-        if (strcmp(macro_equal_buf.data, get_tok_str(t, &cv)))
-            return 0;
-    }
-    return !(*a || *b);
 }
 
 /* defines handling */
