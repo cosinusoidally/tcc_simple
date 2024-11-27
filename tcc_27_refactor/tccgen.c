@@ -1893,24 +1893,16 @@ redo:
         gv(is_float(vtop->type.t & VT_BTYPE) ? RC_FLOAT : RC_INT);
 }
 
-#ifndef TCC_TARGET_ARM
 /* generic itof for unsigned long long case */
 static void gen_cvt_itof1(int t)
 {
-#ifdef TCC_TARGET_ARM64
-    gen_cvt_itof(t);
-#else
     if ((vtop->type.t & (VT_BTYPE | VT_UNSIGNED)) == 
         (VT_LLONG | VT_UNSIGNED)) {
 
         if (t == VT_FLOAT)
             vpush_global_sym(&func_old_type, TOK___floatundisf);
-#if LDOUBLE_SIZE != 8
-        else if (t == VT_LDOUBLE)
+        if (t == VT_LDOUBLE)
             vpush_global_sym(&func_old_type, TOK___floatundixf);
-#endif
-        else
-            vpush_global_sym(&func_old_type, TOK___floatundidf);
         vrott(2);
         gfunc_call(1);
         vpushi(0);
@@ -1918,29 +1910,17 @@ static void gen_cvt_itof1(int t)
     } else {
         gen_cvt_itof(t);
     }
-#endif
 }
-#endif
 
 /* generic ftoi for unsigned long long case */
 static void gen_cvt_ftoi1(int t)
 {
-#ifdef TCC_TARGET_ARM64
-    gen_cvt_ftoi(t);
-#else
     int st;
 
     if (t == (VT_LLONG | VT_UNSIGNED)) {
         /* not handled natively */
         st = vtop->type.t & VT_BTYPE;
-        if (st == VT_FLOAT)
-            vpush_global_sym(&func_old_type, TOK___fixunssfdi);
-#if LDOUBLE_SIZE != 8
-        else if (st == VT_LDOUBLE)
-            vpush_global_sym(&func_old_type, TOK___fixunsxfdi);
-#endif
-        else
-            vpush_global_sym(&func_old_type, TOK___fixunsdfdi);
+        vpush_global_sym(&func_old_type, TOK___fixunsxfdi);
         vrott(2);
         gfunc_call(1);
         vpushi(0);
@@ -1949,17 +1929,12 @@ static void gen_cvt_ftoi1(int t)
     } else {
         gen_cvt_ftoi(t);
     }
-#endif
 }
 
 /* force char or short cast */
 static void force_charshort_cast(int t)
 {
     int bits, dbt;
-
-    /* cannot cast static initializers */
-    if (STATIC_DATA_WANTED)
-	return;
 
     dbt = t & VT_BTYPE;
     /* XXX: add optimization if lvalue : just change type and offset */
