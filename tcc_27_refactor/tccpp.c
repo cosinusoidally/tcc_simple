@@ -2620,10 +2620,6 @@ static inline void next_nomacro1(void)
                     tok_flags &= ~TOK_FLAG_ENDIF;
                 }
 
-                /* add end of include file debug info */
-                if (tcc_state->do_debug) {
-                    put_stabd(N_EINCL, 0, 0);
-                }
                 /* pop include stack */
                 tcc_close();
                 s1->include_stack_ptr--;
