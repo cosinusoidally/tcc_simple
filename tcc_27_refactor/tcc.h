@@ -276,9 +276,56 @@ extern long double strtold (const char *__nptr, char **__endptr);
 /* -------------------------------------------- */
 /* include the target specific definitions */
 
-#define TARGET_DEFS_ONLY
-# include "i386-gen.c"
-#undef TARGET_DEFS_ONLY
+/* number of available registers */
+#define NB_REGS         5
+#define NB_ASM_REGS     8
+#define CONFIG_TCC_ASM
+
+/* a register can belong to several classes. The classes must be
+   sorted from more general to more precise (see gv2() code which does
+   assumptions on it). */
+#define RC_INT     0x0001 /* generic integer register */
+#define RC_FLOAT   0x0002 /* generic float register */
+#define RC_EAX     0x0004
+#define RC_ST0     0x0008
+#define RC_ECX     0x0010
+#define RC_EDX     0x0020
+#define RC_EBX     0x0040
+
+#define RC_IRET    RC_EAX /* function return: integer register */
+#define RC_LRET    RC_EDX /* function return: second integer register */
+#define RC_FRET    RC_ST0 /* function return: float register */
+
+/* pretty names for the registers */
+enum {
+    TREG_EAX = 0,
+    TREG_ECX,
+    TREG_EDX,
+    TREG_EBX,
+    TREG_ST0,
+    TREG_ESP = 4
+};
+
+/* return registers for function */
+#define REG_IRET TREG_EAX /* single word int return register */
+#define REG_LRET TREG_EDX /* second word return register (for long long) */
+#define REG_FRET TREG_ST0 /* float return register */
+
+/* defined if function parameters must be evaluated in reverse order */
+#define INVERT_FUNC_PARAMS
+
+/* defined if structures are passed as pointers. Otherwise structures
+   are directly pushed on stack. */
+/* #define FUNC_STRUCT_PARAM_AS_PTR */
+
+/* pointer size, in bytes */
+#define PTR_SIZE 4
+
+/* long double size and alignment, in bytes */
+#define LDOUBLE_SIZE  12
+#define LDOUBLE_ALIGN 4
+/* maximum alignment (for aligned attribute support) */
+#define MAX_ALIGN     8
 
 #define EM_TCC_TARGET EM_386
 
