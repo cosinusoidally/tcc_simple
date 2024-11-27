@@ -1689,24 +1689,14 @@ static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op)
     type2 = &p2->type;
     bt1 = type1->t & VT_BTYPE;
     bt2 = type2->t & VT_BTYPE;
-    /* accept comparison between pointer and integer with a warning */
-    if ((is_integer_btype(bt1) || is_integer_btype(bt2)) && op != '-') {
-        if (op != TOK_LOR && op != TOK_LAND )
-            tcc_warning("comparison between pointer and integer");
-        return;
-    }
 
     /* both must be pointers or implicit function pointers */
     if (bt1 == VT_PTR) {
         type1 = pointed_type(type1);
-    } else if (bt1 != VT_FUNC) 
-        goto invalid_operands;
+    }
 
     if (bt2 == VT_PTR) {
         type2 = pointed_type(type2);
-    } else if (bt2 != VT_FUNC) { 
-    invalid_operands:
-        tcc_error("invalid operands to binary %s", get_tok_str(op, NULL));
     }
     if ((type1->t & VT_BTYPE) == VT_VOID || 
         (type2->t & VT_BTYPE) == VT_VOID)
@@ -1715,13 +1705,6 @@ static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op)
     tmp_type2 = *type2;
     tmp_type1.t &= ~(VT_DEFSIGN | VT_UNSIGNED | VT_CONSTANT | VT_VOLATILE);
     tmp_type2.t &= ~(VT_DEFSIGN | VT_UNSIGNED | VT_CONSTANT | VT_VOLATILE);
-    if (!is_compatible_types(&tmp_type1, &tmp_type2)) {
-        /* gcc-like error if '-' is used */
-        if (op == '-')
-            goto invalid_operands;
-        else
-            tcc_warning("comparison of distinct pointer types lacks a cast");
-    }
 }
 
 /* generic gen_op: handles types problems */
@@ -1736,74 +1719,36 @@ redo:
     bt1 = t1 & VT_BTYPE;
     bt2 = t2 & VT_BTYPE;
         
-    if (bt1 == VT_STRUCT || bt2 == VT_STRUCT) {
-        tcc_error("operation on a struct");
-    } else if (bt1 == VT_FUNC || bt2 == VT_FUNC) {
-	if (bt2 == VT_FUNC) {
-	    mk_pointer(&vtop->type);
-	    gaddrof();
-	}
-	if (bt1 == VT_FUNC) {
-	    vswap();
-	    mk_pointer(&vtop->type);
-	    gaddrof();
-	    vswap();
-	}
-	goto redo;
-    } else if (bt1 == VT_PTR || bt2 == VT_PTR) {
+    if (bt1 == VT_PTR || bt2 == VT_PTR) {
         /* at least one operand is a pointer */
         /* relational op: must be both pointers */
         if (op >= TOK_ULT && op <= TOK_LOR) {
             check_comparison_pointer_types(vtop - 1, vtop, op);
             /* pointers are handled are unsigned */
-#if PTR_SIZE == 8
-            t = VT_LLONG | VT_UNSIGNED;
-#else
             t = VT_INT | VT_UNSIGNED;
-#endif
             goto std_op;
         }
         /* if both pointers, then it must be the '-' op */
         if (bt1 == VT_PTR && bt2 == VT_PTR) {
-            if (op != '-')
-                tcc_error("cannot use pointers here");
-            check_comparison_pointer_types(vtop - 1, vtop, op);
-            /* XXX: check that types are compatible */
-            if (vtop[-1].type.t & VT_VLA) {
-                vla_runtime_pointed_size(&vtop[-1].type);
-            } else {
-                vpushi(pointed_size(&vtop[-1].type));
-            }
+            vpushi(pointed_size(&vtop[-1].type));
             vrott(3);
             gen_opic(op);
             vtop->type.t = ptrdiff_type.t;
             vswap();
             gen_op(TOK_PDIV);
         } else {
-            /* exactly one pointer : must be '+' or '-'. */
-            if (op != '-' && op != '+')
-                tcc_error("cannot use pointers here");
             /* Put pointer as first operand */
             if (bt2 == VT_PTR) {
                 vswap();
                 t = t1, t1 = t2, t2 = t;
             }
-#if PTR_SIZE == 4
             if ((vtop[0].type.t & VT_BTYPE) == VT_LLONG)
                 /* XXX: truncate here because gen_opl can't handle ptr + long long */
-                gen_cast_s(VT_INT);
-#endif
+            gen_cast_s(VT_INT);
             type1 = vtop[-1].type;
             type1.t &= ~VT_ARRAY;
-            if (vtop[-1].type.t & VT_VLA)
-                vla_runtime_pointed_size(&vtop[-1].type);
-            else {
-                u = pointed_size(&vtop[-1].type);
-                if (u < 0)
-                    tcc_error("unknown array element size");
-                /* XXX: cast to int ? (long long case) */
-                vpushi(u);
-            }
+            u = pointed_size(&vtop[-1].type);
+            vpushi(u);
             gen_op('*');
             gen_opic(op);
             /* put again type if gen_opic() swaped operands */
