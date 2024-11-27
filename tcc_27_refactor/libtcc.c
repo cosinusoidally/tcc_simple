@@ -629,44 +629,15 @@ ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
         obj_type = tcc_object_type(fd, &ehdr);
         lseek(fd, 0, SEEK_SET);
 
-#ifdef TCC_TARGET_MACHO
-        if (0 == obj_type && 0 == strcmp(tcc_fileextension(filename), ".dylib"))
-            obj_type = AFF_BINTYPE_DYN;
-#endif
-
         switch (obj_type) {
-        case AFF_BINTYPE_REL:
-            ret = tcc_load_object_file(s1, fd, 0);
-            break;
-#ifndef TCC_TARGET_PE
         case AFF_BINTYPE_DYN:
             if (s1->output_type == TCC_OUTPUT_MEMORY) {
                 ret = 0;
-#ifdef TCC_IS_NATIVE
                 if (NULL == dlopen(filename, RTLD_GLOBAL | RTLD_LAZY))
                     ret = -1;
-#endif
-            } else {
-                ret = tcc_load_dll(s1, fd, filename,
-                                   (flags & AFF_REFERENCED_DLL) != 0);
             }
             break;
-#endif
-        case AFF_BINTYPE_AR:
-            ret = tcc_load_archive(s1, fd);
-            break;
-#ifdef TCC_TARGET_COFF
-        case AFF_BINTYPE_C67:
-            ret = tcc_load_coff(s1, fd);
-            break;
-#endif
         default:
-#ifdef TCC_TARGET_PE
-            ret = pe_load_file(s1, filename, fd);
-#else
-            /* as GNU ld, consider it is an ld script if not recognized */
-            ret = tcc_load_ldscript(s1);
-#endif
             if (ret < 0)
                 tcc_error_noabort("unrecognized file type");
             break;
