@@ -660,61 +660,30 @@ LIBTCCAPI int tcc_add_library_path(TCCState *s, const char *pathname)
 static int tcc_add_library_internal(TCCState *s, const char *fmt,
     const char *filename, int flags, char **paths, int nb_paths)
 {
-    char buf[1024];
-    int i;
-
-    for(i = 0; i < nb_paths; i++) {
-        snprintf(buf, sizeof(buf), fmt, paths[i], filename);
-        if (tcc_add_file_internal(s, buf, flags | AFF_TYPE_BIN) == 0)
-            return 0;
-    }
-    return -1;
+exit(1);
 }
 
 /* find and load a dll. Return non zero if not found */
 /* XXX: add '-rpath' option support ? */
 ST_FUNC int tcc_add_dll(TCCState *s, const char *filename, int flags)
 {
-    return tcc_add_library_internal(s, "%s/%s", filename, flags,
-        s->library_paths, s->nb_library_paths);
+exit(1);
 }
 
 ST_FUNC int tcc_add_crt(TCCState *s, const char *filename)
 {
-    if (-1 == tcc_add_library_internal(s, "%s/%s",
-        filename, 0, s->crt_paths, s->nb_crt_paths))
-        tcc_error_noabort("file '%s' not found", filename);
-    return 0;
+exit(1);
 }
 
 /* the library name is the same as the argument of the '-l' option */
 LIBTCCAPI int tcc_add_library(TCCState *s, const char *libraryname)
 {
-#if defined TCC_TARGET_PE
-    const char *libs[] = { "%s/%s.def", "%s/lib%s.def", "%s/%s.dll", "%s/lib%s.dll", "%s/lib%s.a", NULL };
-    const char **pp = s->static_link ? libs + 4 : libs;
-#elif defined TCC_TARGET_MACHO
-    const char *libs[] = { "%s/lib%s.dylib", "%s/lib%s.a", NULL };
-    const char **pp = s->static_link ? libs + 1 : libs;
-#else
-    const char *libs[] = { "%s/lib%s.so", "%s/lib%s.a", NULL };
-    const char **pp = s->static_link ? libs + 1 : libs;
-#endif
-    while (*pp) {
-        if (0 == tcc_add_library_internal(s, *pp,
-            libraryname, 0, s->library_paths, s->nb_library_paths))
-            return 0;
-        ++pp;
-    }
-    return -1;
+exit(1);
 }
 
 PUB_FUNC int tcc_add_library_err(TCCState *s, const char *libname)
 {
-    int ret = tcc_add_library(s, libname);
-    if (ret < 0)
-        tcc_error_noabort("library '%s' not found", libname);
-    return ret;
+exit(1);
 }
 
 /* handle #pragma comment(lib,) */
