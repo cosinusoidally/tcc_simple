@@ -91,17 +91,6 @@ ST_FUNC void tccelf_delete(TCCState *s1)
     dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
 
     /* free any loaded DLLs */
-#ifdef TCC_IS_NATIVE
-    for ( i = 0; i < s1->nb_loaded_dlls; i++) {
-        DLLReference *ref = s1->loaded_dlls[i];
-        if ( ref->handle )
-# ifdef _WIN32
-            FreeLibrary((HMODULE)ref->handle);
-# else
-            dlclose(ref->handle);
-# endif
-    }
-#endif
     /* free loaded dlls array */
     dynarray_reset(&s1->loaded_dlls, &s1->nb_loaded_dlls);
     tcc_free(s1->sym_attrs);
@@ -274,21 +263,6 @@ ST_FUNC void section_reserve(Section *sec, unsigned long size)
         section_realloc(sec, size);
     if (size > sec->data_offset)
         sec->data_offset = size;
-}
-
-/* return a reference to a section, and create it if it does not
-   exists */
-ST_FUNC Section *find_section(TCCState *s1, const char *name)
-{
-    Section *sec;
-    int i;
-    for(i = 1; i < s1->nb_sections; i++) {
-        sec = s1->sections[i];
-        if (!strcmp(name, sec->name))
-            return sec;
-    }
-    /* sections are created as PROGBITS */
-    return new_section(s1, name, SHT_PROGBITS, SHF_ALLOC);
 }
 
 /* ------------------------------------------------------------------------- */
@@ -1085,36 +1059,6 @@ static void put_dt(Section *dynamic, int dt, addr_t val)
     dyn->d_un.d_val = val;
 }
 
-#ifndef TCC_TARGET_PE
-static void add_init_array_defines(TCCState *s1, const char *section_name)
-{
-    Section *s;
-    long end_offset;
-    char sym_start[1024];
-    char sym_end[1024];
-
-    snprintf(sym_start, sizeof(sym_start), "__%s_start", section_name + 1);
-    snprintf(sym_end, sizeof(sym_end), "__%s_end", section_name + 1);
-
-    s = find_section(s1, section_name);
-    if (!s) {
-        end_offset = 0;
-        s = data_section;
-    } else {
-        end_offset = s->data_offset;
-    }
-
-    set_elf_sym(symtab_section,
-                0, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                s->sh_num, sym_start);
-    set_elf_sym(symtab_section,
-                end_offset, 0,
-                ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
-                s->sh_num, sym_end);
-}
-#endif
-
 static int tcc_add_support(TCCState *s1, const char *filename)
 {
     char buf[1024];
@@ -1165,12 +1109,6 @@ static void tcc_add_linker_symbols(TCCState *s1)
                 bss_section->data_offset, 0,
                 ELFW(ST_INFO)(STB_GLOBAL, STT_NOTYPE), 0,
                 bss_section->sh_num, "_end");
-#ifndef TCC_TARGET_PE
-    /* horrible new standard ldscript defines */
-    add_init_array_defines(s1, ".preinit_array");
-    add_init_array_defines(s1, ".init_array");
-    add_init_array_defines(s1, ".fini_array");
-#endif
 
     /* add start and stop symbols for sections whose name can be
        expressed in C */

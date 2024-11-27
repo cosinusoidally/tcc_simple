@@ -431,16 +431,12 @@ static void use_section1(TCCState *s1, Section *sec)
 
 static void use_section(TCCState *s1, const char *name)
 {
-    Section *sec;
-    sec = find_section(s1, name);
-    use_section1(s1, sec);
+puts("use_section");exit(1);
 }
 
 static void push_section(TCCState *s1, const char *name)
 {
-    Section *sec = find_section(s1, name);
-    sec->prev = cur_text_section;
-    use_section1(s1, sec);
+puts("push_section");exit(1);
 }
 
 static void pop_section(TCCState *s1)

@@ -3234,14 +3234,6 @@ redo:
         t = tok;
         next();
         switch(t) {
-        case TOK_SECTION1:
-        case TOK_SECTION2:
-            skip('(');
-	    parse_mult_str(&astr, "section name");
-            ad->section = find_section(tcc_state, (char *)astr.data);
-            skip(')');
-	    cstr_free(&astr);
-            break;
         case TOK_ALIAS1:
         case TOK_ALIAS2:
             skip('(');
