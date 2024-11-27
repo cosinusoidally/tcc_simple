@@ -484,37 +484,9 @@ again:
     }
     if (pa->instr_type & OPC_B)
         v += s >= 1;
-    if (nb_ops == 1 && pa->op_type[0] == OPT_DISP8) {
-	ElfSym *esym;
-        int jmp_disp;
-
-        /* see if we can really generate the jump with a byte offset */
-	esym = elfsym(ops[0].e.sym);
-        if (!esym || esym->st_shndx != cur_text_section->sh_num)
-            goto no_short_jump;
-        jmp_disp = ops[0].e.v + esym->st_value - ind - 2 - (v >= 0xff);
-        if (jmp_disp == (int8_t)jmp_disp) {
-            /* OK to generate jump */
-	    ops[0].e.sym = 0;
-            ops[0].e.v = jmp_disp;
-	    op_type[0] = OP_IM8S;
-        } else {
-        no_short_jump:
-	    /* long jump will be allowed. need to modify the
-	       opcode slightly */
-	    if (v == 0xeb) /* jmp */
-	        v = 0xe9;
-	    else if (v == 0x70) /* jcc */
-	        v += 0x0f10;
-	    else
-	        tcc_error("invalid displacement");
-        }
-    }
     if (OPCT_IS(pa->instr_type, OPC_TEST))
         v += test_bits[opcode - pa->sym];
     op1 = v >> 16;
-    if (op1)
-        g(op1);
     op1 = (v >> 8) & 0xff;
     if (op1)
         g(op1);
@@ -522,12 +494,8 @@ again:
 
     if (OPCT_IS(pa->instr_type, OPC_SHIFT)) {
         reg = (opcode - pa->sym) / NBWLX;
-        if (reg == 6)
-            reg = 7;
     } else if (OPCT_IS(pa->instr_type, OPC_ARITH)) {
         reg = (opcode - pa->sym) / NBWLX;
-    } else if (OPCT_IS(pa->instr_type, OPC_FARITH)) {
-        reg = (opcode - pa->sym) / 6;
     } else {
         reg = (pa->instr_type >> OPC_GROUP_SHIFT) & 7;
     }
@@ -541,18 +509,6 @@ again:
         pc = asm_modrm(reg, &ops[modrm_index]);
     }
 
-    /* emit constants */
-#ifndef TCC_TARGET_X86_64
-    if (!(pa->instr_type & OPC_0F)
-	&& (pa->opcode == 0x9a || pa->opcode == 0xea)) {
-        /* ljmp or lcall kludge */
-	gen_expr32(&ops[1].e);
-        if (ops[0].e.sym)
-            tcc_error("cannot relocate");
-        gen_le16(ops[0].e.v);
-        return;
-    }
-#endif
     for(i = 0;i < nb_ops; i++) {
         v = op_type[i];
         if (v & (OP_IM8 | OP_IM16 | OP_IM32 | OP_IM64 | OP_IM8S | OP_ADDR)) {
