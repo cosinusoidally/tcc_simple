@@ -3958,48 +3958,17 @@ static void expr_type(CType *type, void (*expr_fn)(void))
    type */
 static void parse_expr_type(CType *type)
 {
-    int n;
-    AttributeDef ad;
-
-    skip('(');
-    if (parse_btype(type, &ad)) {
-        type_decl(type, &ad, &n, TYPE_ABSTRACT);
-    } else {
-        expr_type(type, gexpr);
-    }
-    skip(')');
+exit(1);
 }
 
 static void parse_type(CType *type)
 {
-    AttributeDef ad;
-    int n;
-
-    if (!parse_btype(type, &ad)) {
-        expect("type");
-    }
-    type_decl(type, &ad, &n, TYPE_ABSTRACT);
+exit(1);
 }
 
 static void parse_builtin_params(int nc, const char *args)
 {
-    char c, sep = '(';
-    CType t;
-    if (nc)
-        nocode_wanted++;
-    next();
-    while ((c = *args++)) {
-	skip(sep);
-	sep = ',';
-	switch (c) {
-	    case 'e': expr_eq(); continue;
-	    case 't': parse_type(&t); vpush(&t); continue;
-	    default: tcc_error("internal error"); break;
-	}
-    }
-    skip(')');
-    if (nc)
-        nocode_wanted--;
+exit(1);
 }
 
 ST_FUNC void unary(void)
@@ -4016,14 +3985,7 @@ ST_FUNC void unary(void)
        better here */
  tok_next:
     switch(tok) {
-    case TOK_EXTENSION:
-        next();
-        goto tok_next;
     case TOK_LCHAR:
-#ifdef TCC_TARGET_PE
-        t = VT_SHORT|VT_UNSIGNED;
-        goto push_tokc;
-#endif
     case TOK_CINT:
     case TOK_CCHAR: 
 	t = VT_INT;
@@ -4035,62 +3997,18 @@ ST_FUNC void unary(void)
     case TOK_CUINT:
         t = VT_INT | VT_UNSIGNED;
         goto push_tokc;
-    case TOK_CLLONG:
-        t = VT_LLONG;
-	goto push_tokc;
     case TOK_CULLONG:
         t = VT_LLONG | VT_UNSIGNED;
-	goto push_tokc;
-    case TOK_CFLOAT:
-        t = VT_FLOAT;
 	goto push_tokc;
     case TOK_CDOUBLE:
         t = VT_DOUBLE;
 	goto push_tokc;
-    case TOK_CLDOUBLE:
-        t = VT_LDOUBLE;
-	goto push_tokc;
     case TOK_CLONG:
         t = (LONG_SIZE == 8 ? VT_LLONG : VT_INT) | VT_LONG;
 	goto push_tokc;
-    case TOK_CULONG:
-        t = (LONG_SIZE == 8 ? VT_LLONG : VT_INT) | VT_LONG | VT_UNSIGNED;
-	goto push_tokc;
-    case TOK___FUNCTION__:
-        if (!gnu_ext)
-            goto tok_identifier;
-        /* fall thru */
-    case TOK___FUNC__:
-        {
-            void *ptr;
-            int len;
-            /* special function name identifier */
-            len = strlen(funcname) + 1;
-            /* generate char[len] type */
-            type.t = VT_BYTE;
-            mk_pointer(&type);
-            type.t |= VT_ARRAY;
-            type.ref->c = len;
-            vpush_ref(&type, data_section, data_section->data_offset, len);
-            if (!NODATA_WANTED) {
-                ptr = section_ptr_add(data_section, len);
-                memcpy(ptr, funcname, len);
-            }
-            next();
-        }
-        break;
-    case TOK_LSTR:
-#ifdef TCC_TARGET_PE
-        t = VT_SHORT | VT_UNSIGNED;
-#else
-        t = VT_INT;
-#endif
-        goto str_init;
     case TOK_STR:
         /* string parsing */
         t = VT_BYTE;
-        if (tcc_state->char_is_unsigned)
-            t = VT_BYTE | VT_UNSIGNED;
     str_init:
         if (tcc_state->warn_write_strings)
             t |= VT_CONSTANT;
