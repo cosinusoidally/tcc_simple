@@ -1431,39 +1431,6 @@ include_done:
             goto the_end;
         }
         break;
-    case TOK_WARNING:
-        c = tok;
-        ch = file->buf_ptr[0];
-        skip_spaces();
-        q = buf;
-        while (ch != '\n' && ch != CH_EOF) {
-            if ((q - buf) < sizeof(buf) - 1)
-                *q++ = ch;
-            if (ch == '\\') {
-                if (handle_stray_noerror() == 0)
-                    --q;
-            } else
-                inp();
-        }
-        *q = '\0';
-        if (c == TOK_ERROR)
-            tcc_error("#error %s", buf);
-        else
-            tcc_warning("#warning %s", buf);
-        break;
-    case TOK_LINEFEED:
-        goto the_end;
-    default:
-        /* ignore gas line comment in an 'S' file. */
-        if (saved_parse_flags & PARSE_FLAG_ASM_FILE)
-            goto ignore;
-        if (tok == '!' && is_bof)
-            /* '!' is ignored at beginning to allow C scripts. */
-            goto ignore;
-        tcc_warning("Ignoring unknown preprocessing directive #%s", get_tok_str(tok, &tokc));
-    ignore:
-        file->buf_ptr = parse_line_comment(file->buf_ptr - 1);
-        goto the_end;
     }
     /* ignore other preprocess commands or #! for C scripts */
     while (tok != TOK_LINEFEED)
@@ -1505,26 +1472,6 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
                 }
                 c = n;
                 goto add_char_nonext;
-            case 'x':
-            case 'u':
-            case 'U':
-                p++;
-                n = 0;
-                for(;;) {
-                    c = *p;
-                    if (c >= 'a' && c <= 'f')
-                        c = c - 'a' + 10;
-                    else if (c >= 'A' && c <= 'F')
-                        c = c - 'A' + 10;
-                    else if (isnum(c))
-                        c = c - '0';
-                    else
-                        break;
-                    n = n * 16 + c;
-                    p++;
-                }
-                c = n;
-                goto add_char_nonext;
             case 'a':
                 c = '\a';
                 break;
@@ -1546,78 +1493,12 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             case 'v':
                 c = '\v';
                 break;
-            case 'e':
-                if (!gnu_ext)
-                    goto invalid_escape;
-                c = 27;
-                break;
             case '\'':
             case '\"':
             case '\\': 
             case '?':
                 break;
-            default:
-            invalid_escape:
-                if (c >= '!' && c <= '~')
-                    tcc_warning("unknown escape sequence: \'\\%c\'", c);
-                else
-                    tcc_warning("unknown escape sequence: \'\\x%x\'", c);
-                break;
             }
-        } else if (is_long && c >= 0x80) {
-            /* assume we are processing UTF-8 sequence */
-            /* reference: The Unicode Standard, Version 10.0, ch3.9 */
-
-            int cont; /* count of continuation bytes */
-            int skip; /* how many bytes should skip when error occurred */
-            int i;
-
-            /* decode leading byte */
-            if (c < 0xC2) {
-	            skip = 1; goto invalid_utf8_sequence;
-            } else if (c <= 0xDF) {
-	            cont = 1; n = c & 0x1f;
-            } else if (c <= 0xEF) {
-	            cont = 2; n = c & 0xf;
-            } else if (c <= 0xF4) {
-	            cont = 3; n = c & 0x7;
-            } else {
-	            skip = 1; goto invalid_utf8_sequence;
-            }
-
-            /* decode continuation bytes */
-            for (i = 1; i <= cont; i++) {
-                int l = 0x80, h = 0xBF;
-
-                /* adjust limit for second byte */
-                if (i == 1) {
-                    switch (c) {
-                    case 0xE0: l = 0xA0; break;
-                    case 0xED: h = 0x9F; break;
-                    case 0xF0: l = 0x90; break;
-                    case 0xF4: h = 0x8F; break;
-                    }
-                }
-
-                if (p[i] < l || p[i] > h) {
-                    skip = i; goto invalid_utf8_sequence;
-                }
-
-                n = (n << 6) | (p[i] & 0x3f);
-            }
-
-            /* advance pointer */
-            p += 1 + cont;
-            c = n;
-            goto add_char_nonext;
-
-            /* error handling */
-        invalid_utf8_sequence:
-            tcc_warning("ill-formed UTF-8 subsequence starting with: \'\\x%x\'", c);
-            c = 0xFFFD;
-            p += skip;
-            goto add_char_nonext;
-
         }
         p++;
     add_char_nonext:
