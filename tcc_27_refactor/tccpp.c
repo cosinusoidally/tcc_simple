@@ -2383,7 +2383,6 @@ static inline int *macro_twosharps(const int *ptr0)
 
     tok_str_new(&macro_str1);
 
-    //tok_print(" $$$", ptr0);
     for (ptr = ptr0;;) {
         TOK_GET(&t, &ptr, &cval);
         if (t == 0)
@@ -2419,7 +2418,6 @@ static inline int *macro_twosharps(const int *ptr0)
         tok_str_add2(&macro_str1, t, &cval);
     }
     tok_str_add(&macro_str1, 0);
-    //tok_print(" ###", macro_str1.str);
     return macro_str1.str;
 }
 
@@ -2918,113 +2916,33 @@ ST_FUNC void tccpp_delete(TCCState *s)
 
 static void tok_print(const char *msg, const int *str)
 {
-    FILE *fp;
-    int t, s = 0;
-    CValue cval;
-
-    fp = tcc_state->ppfp;
-    fprintf(fp, "%s", msg);
-    while (str) {
-	TOK_GET(&t, &str, &cval);
-	if (!t)
-	    break;
-	fprintf(fp, " %s" + s, get_tok_str(t, &cval)), s = 1;
-    }
-    fprintf(fp, "\n");
+exit(1);
 }
 
 static void pp_line(TCCState *s1, BufferedFile *f, int level)
 {
-    int d = f->line_num - f->line_ref;
-
-    if (s1->dflag & 4)
-	return;
-
-    if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_NONE) {
-        ;
-    } else if (level == 0 && f->line_ref && d < 8) {
-	while (d > 0)
-	    fputs("\n", s1->ppfp), --d;
-    } else if (s1->Pflag == LINE_MACRO_OUTPUT_FORMAT_STD) {
-	fprintf(s1->ppfp, "#line %d \"%s\"\n", f->line_num, f->filename);
-    } else {
-	fprintf(s1->ppfp, "# %d \"%s\"%s\n", f->line_num, f->filename,
-	    level > 0 ? " 1" : level < 0 ? " 2" : "");
-    }
-    f->line_ref = f->line_num;
+exit(1);
 }
 
 static void define_print(TCCState *s1, int v)
 {
-    FILE *fp;
-    Sym *s;
-
-    s = define_find(v);
-    if (NULL == s || NULL == s->d)
-        return;
-
-    fp = s1->ppfp;
-    fprintf(fp, "#define %s", get_tok_str(v, NULL));
-    if (s->type.t == MACRO_FUNC) {
-        Sym *a = s->next;
-        fprintf(fp,"(");
-        if (a)
-            for (;;) {
-                fprintf(fp,"%s", get_tok_str(a->v & ~SYM_FIELD, NULL));
-                if (!(a = a->next))
-                    break;
-                fprintf(fp,",");
-            }
-        fprintf(fp,")");
-    }
-    tok_print("", s->d);
+exit(1);
 }
 
 static void pp_debug_defines(TCCState *s1)
 {
-    int v, t;
-    const char *vs;
-    FILE *fp;
-
-    t = pp_debug_tok;
-    if (t == 0)
-        return;
-
-    file->line_num--;
-    pp_line(s1, file, 0);
-    file->line_ref = ++file->line_num;
-
-    fp = s1->ppfp;
-    v = pp_debug_symv;
-    vs = get_tok_str(v, NULL);
-    if (t == TOK_DEFINE) {
-        define_print(s1, v);
-    } else if (t == TOK_UNDEF) {
-        fprintf(fp, "#undef %s\n", vs);
-    } else if (t == TOK_push_macro) {
-        fprintf(fp, "#pragma push_macro(\"%s\")\n", vs);
-    } else if (t == TOK_pop_macro) {
-        fprintf(fp, "#pragma pop_macro(\"%s\")\n", vs);
-    }
-    pp_debug_tok = 0;
+exit(1);
 }
 
 static void pp_debug_builtins(TCCState *s1)
 {
-    int v;
-    for (v = TOK_IDENT; v < tok_ident; ++v)
-        define_print(s1, v);
+exit(1);
 }
 
 /* Add a space between tokens a and b to avoid unwanted textual pasting */
 static int pp_need_space(int a, int b)
 {
-    return 'E' == a ? '+' == b || '-' == b
-        : '+' == a ? TOK_INC == b || '+' == b
-        : '-' == a ? TOK_DEC == b || '-' == b
-        : a >= TOK_IDENT ? b >= TOK_IDENT
-	: a == TOK_PPNUM ? b >= TOK_IDENT
-        : 0;
+exit(1);
 }
 
 /* maybe hex like 0x1e */
