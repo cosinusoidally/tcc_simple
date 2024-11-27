@@ -831,10 +831,3 @@ LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename)
     ret = elf_output_file(s, filename);
     return ret;
 }
-
-typedef struct SectionMergeInfo {
-    Section *s;            /* corresponding existing section */
-    unsigned long offset;  /* offset of the new section in the existing section */
-    uint8_t new_section;       /* true if section 's' was added */
-    uint8_t link_once;         /* true if link once section */
-} SectionMergeInfo;
