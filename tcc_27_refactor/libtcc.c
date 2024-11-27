@@ -92,17 +92,6 @@ PUB_FUNC char *tcc_basename(const char *name)
     return p;
 }
 
-/* extract extension part of a file
- *
- * (if no extension, return pointer to end-of-string)
- */
-PUB_FUNC char *tcc_fileextension (const char *name)
-{
-    char *b = tcc_basename(name);
-    char *e = strrchr(b, '.');
-    return e ? e : strchr(b, 0);
-}
-
 /********************************************************/
 /* memory management */
 
