@@ -880,30 +880,6 @@ ST_FUNC void gaddrof(void)
 
 }
 
-static void incr_bf_adr(int o)
-{
-    vtop->type = char_pointer_type;
-    gaddrof();
-    vpushi(o);
-    gen_op('+');
-    vtop->type.t = (vtop->type.t & ~(VT_BTYPE|VT_DEFSIGN))
-        | (VT_BYTE|VT_UNSIGNED);
-    vtop->r = (vtop->r & ~VT_LVAL_TYPE)
-        | (VT_LVAL_BYTE|VT_LVAL_UNSIGNED|VT_LVAL);
-}
-
-/* single-byte load mode for packed or otherwise unaligned bitfields */
-static void load_packed_bf(CType *type, int bit_pos, int bit_size)
-{
-exit(1);
-}
-
-/* single-byte store mode for packed or otherwise unaligned bitfields */
-static void store_packed_bf(int bit_pos, int bit_size)
-{
-exit(1);
-}
-
 static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
 {
     int t;
@@ -939,19 +915,15 @@ ST_FUNC int gv(int rc)
         else
             type.t |= VT_INT;
 
-        if (r == VT_STRUCT) {
-            load_packed_bf(&type, bit_pos, bit_size);
-        } else {
-            int bits = (type.t & VT_BTYPE) == VT_LLONG ? 64 : 32;
-            /* cast to int to propagate signedness in following ops */
-            gen_cast(&type);
-            /* generate shifts */
-            vpushi(bits - (bit_pos + bit_size));
-            gen_op(TOK_SHL);
-            vpushi(bits - bit_size);
-            /* NOTE: transformed to SHR if unsigned */
-            gen_op(TOK_SAR);
-        }
+        int bits = (type.t & VT_BTYPE) == VT_LLONG ? 64 : 32;
+        /* cast to int to propagate signedness in following ops */
+        gen_cast(&type);
+        /* generate shifts */
+        vpushi(bits - (bit_pos + bit_size));
+        gen_op(TOK_SHL);
+        vpushi(bits - bit_size);
+        /* NOTE: transformed to SHR if unsigned */
+        gen_op(TOK_SAR);
         r = gv(rc);
     } else {
         if (is_float(vtop->type.t) && 
@@ -2596,31 +2568,26 @@ ST_FUNC void vstore(void)
         }
 
         r = adjust_bf(vtop - 1, bit_pos, bit_size);
-        if (r == VT_STRUCT) {
-            gen_cast_s((ft & VT_BTYPE) == VT_LLONG ? VT_LLONG : VT_INT);
-            store_packed_bf(bit_pos, bit_size);
-        } else {
-            unsigned long long mask = (1ULL << bit_size) - 1;
-            if ((ft & VT_BTYPE) != VT_BOOL) {
-                /* mask source */
-                vpushi((unsigned)mask);
-                gen_op('&');
-            }
-            /* shift source */
-            vpushi(bit_pos);
-            gen_op(TOK_SHL);
-            vswap();
-            /* duplicate destination */
-            vdup();
-            vrott(3);
-            vpushi(~((unsigned)mask << bit_pos));
+        unsigned long long mask = (1ULL << bit_size) - 1;
+        if ((ft & VT_BTYPE) != VT_BOOL) {
+            /* mask source */
+            vpushi((unsigned)mask);
             gen_op('&');
-            gen_op('|');
-            /* store result */
-            vstore();
-            /* ... and discard */
-            vpop();
         }
+        /* shift source */
+        vpushi(bit_pos);
+        gen_op(TOK_SHL);
+        vswap();
+        /* duplicate destination */
+        vdup();
+        vrott(3);
+        vpushi(~((unsigned)mask << bit_pos));
+        gen_op('&');
+        gen_op('|');
+        /* store result */
+        vstore();
+        /* ... and discard */
+        vpop();
     } else if (dbt == VT_VOID) {
         --vtop;
     } else {
