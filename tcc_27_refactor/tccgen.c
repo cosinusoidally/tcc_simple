@@ -133,17 +133,6 @@ ST_FUNC void check_vstack(void)
 }
 
 /* ------------------------------------------------------------------------- */
-/* start of translation unit info */
-ST_FUNC void tcc_debug_start(TCCState *s1)
-{
-    /* an elf symbol of type STT_FILE must be put so that STB_LOCAL
-       symbols can be safely used */
-    put_elf_sym(symtab_section, 0, 0,
-                ELFW(ST_INFO)(STB_LOCAL, STT_FILE), 0,
-                SHN_ABS, file->filename);
-}
-
-/* ------------------------------------------------------------------------- */
 ST_FUNC int tccgen_compile(TCCState *s1)
 {
     cur_text_section = NULL;
@@ -157,30 +146,18 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     int_type.t = VT_INT;
     char_pointer_type.t = VT_BYTE;
     mk_pointer(&char_pointer_type);
-#if PTR_SIZE == 4
     size_type.t = VT_INT | VT_UNSIGNED;
     ptrdiff_type.t = VT_INT;
-#elif LONG_SIZE == 4
-    size_type.t = VT_LLONG | VT_UNSIGNED;
-    ptrdiff_type.t = VT_LLONG;
-#else
-    size_type.t = VT_LONG | VT_LLONG | VT_UNSIGNED;
-    ptrdiff_type.t = VT_LONG | VT_LLONG;
-#endif
     func_old_type.t = VT_FUNC;
     func_old_type.ref = sym_push(SYM_FIELD, &int_type, 0, 0);
     func_old_type.ref->f.func_call = FUNC_CDECL;
     func_old_type.ref->f.func_type = FUNC_OLD;
 
-    tcc_debug_start(s1);
-
-#ifdef TCC_TARGET_ARM
-    arm_init(s1);
-#endif
-
-#ifdef INC_DEBUG
-    printf("%s: **** new file\n", file->filename);
-#endif
+    /* an elf symbol of type STT_FILE must be put so that STB_LOCAL
+       symbols can be safely used */
+    put_elf_sym(symtab_section, 0, 0,
+                ELFW(ST_INFO)(STB_LOCAL, STT_FILE), 0,
+                SHN_ABS, file->filename);
 
     parse_flags = PARSE_FLAG_PREPROCESS | PARSE_FLAG_TOK_NUM | PARSE_FLAG_TOK_STR;
     next();

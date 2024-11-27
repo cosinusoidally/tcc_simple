@@ -958,15 +958,7 @@ static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
 /* Assemble the current file */
 ST_FUNC int tcc_assemble(TCCState *s1, int do_preprocess)
 {
-    int ret;
-    tcc_debug_start(s1);
-    /* default section is text */
-    cur_text_section = text_section;
-    ind = cur_text_section->data_offset;
-    nocode_wanted = 0;
-    ret = tcc_assemble_internal(s1, do_preprocess, 1);
-    cur_text_section->data_offset = ind;
-    return ret;
+exit(1);
 }
 
 /********************************************************************/
