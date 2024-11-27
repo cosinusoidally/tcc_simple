@@ -559,11 +559,6 @@ ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
 
     /* open the file */
     ret = tcc_open(s1, filename);
-    if (ret < 0) {
-        if (flags & AFF_PRINT_ERROR)
-            tcc_error_noabort("file '%s' not found", filename);
-        return ret;
-    }
 
     /* update target deps */
     dynarray_add(&s1->target_deps, &s1->nb_target_deps,
