@@ -4010,8 +4010,6 @@ ST_FUNC void unary(void)
         /* string parsing */
         t = VT_BYTE;
     str_init:
-        if (tcc_state->warn_write_strings)
-            t |= VT_CONSTANT;
         type.t = t;
         mk_pointer(&type);
         type.t |= VT_ARRAY;
@@ -4024,40 +4022,12 @@ ST_FUNC void unary(void)
         if (parse_btype(&type, &ad)) {
             type_decl(&type, &ad, &n, TYPE_ABSTRACT);
             skip(')');
-            /* check ISOC99 compound literal */
-            if (tok == '{') {
-                    /* data is allocated locally by default */
-                if (global_expr)
-                    r = VT_CONST;
-                else
-                    r = VT_LOCAL;
-                /* all except arrays are lvalues */
-                if (!(type.t & VT_ARRAY))
-                    r |= lvalue_type(type.t);
-                memset(&ad, 0, sizeof(AttributeDef));
-                decl_initializer_alloc(&type, &ad, r, 1, 0, 0);
-            } else {
-                if (sizeof_caller) {
-                    vpush(&type);
-                    return;
-                }
-                unary();
-                gen_cast(&type);
+            if (sizeof_caller) {
+                vpush(&type);
+                return;
             }
-        } else if (tok == '{') {
-	    int saved_nocode_wanted = nocode_wanted;
-            if (const_wanted)
-                tcc_error("expected constant");
-            /* save all registers */
-            save_regs(0);
-            /* statement expression : we do not accept break/continue
-               inside as GCC does.  We do retain the nocode_wanted state,
-	       as statement expressions can't ever be entered from the
-	       outside, so any reactivation of code emission (from labels
-	       or loop heads) can be disabled again after the end of it. */
-            block(NULL, NULL, 1);
-	    nocode_wanted = saved_nocode_wanted;
-            skip(')');
+            unary();
+            gen_cast(&type);
         } else {
             gexpr();
             skip(')');
@@ -4100,19 +4070,6 @@ ST_FUNC void unary(void)
         unary();
         vpushi(-1);
         gen_op('^');
-        break;
-    case '+':
-        next();
-        unary();
-        if ((vtop->type.t & VT_BTYPE) == VT_PTR)
-            tcc_error("pointer not accepted for unary plus");
-        /* In order to force cast, we add zero, except for floating point
-	   where we really need an noop (otherwise -0.0 will be transformed
-	   into +0.0).  */
-	if (!is_float(vtop->type.t)) {
-	    vpushi(0);
-	    gen_op('+');
-	}
         break;
     case TOK_SIZEOF:
     case TOK_ALIGNOF1:
