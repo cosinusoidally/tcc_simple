@@ -607,58 +607,6 @@ static void sort_syms(TCCState *s1, Section *s)
     tcc_free(old_to_new_syms);
 }
 
-/* relocate a given section (CPU dependent) by applying the relocations
-   in the associated relocation section */
-ST_FUNC void relocate_section(TCCState *s1, Section *s)
-{
-    Section *sr = s->reloc;
-    ElfW_Rel *rel;
-    ElfW(Sym) *sym;
-    int type, sym_index;
-    unsigned char *ptr;
-    addr_t tgt, addr;
-
-
-    for_each_elem(sr, 0, rel, ElfW_Rel) {
-        ptr = s->data + rel->r_offset;
-        sym_index = ELFW(R_SYM)(rel->r_info);
-        sym = &((ElfW(Sym) *)symtab_section->data)[sym_index];
-        type = ELFW(R_TYPE)(rel->r_info);
-        tgt = sym->st_value;
-#if SHT_RELX == SHT_RELA
-        tgt += rel->r_addend;
-#endif
-        addr = s->sh_addr + rel->r_offset;
-    }
-    /* if the relocation is allocated, we change its symbol table */
-    if (sr->sh_flags & SHF_ALLOC)
-        sr->link = s1->dynsym;
-}
-
-/* relocate relocation table in 'sr' */
-static void relocate_rel(TCCState *s1, Section *sr)
-{
-    Section *s;
-    ElfW_Rel *rel;
-
-    s = s1->sections[sr->sh_info];
-    for_each_elem(sr, 0, rel, ElfW_Rel)
-        rel->r_offset += s->sh_addr;
-}
-
-static struct sym_attr * put_got_entry(TCCState *s1, int dyn_reloc_type,
-                                       unsigned long size,
-                                       int info, int sym_index)
-{
-exit(1);
-}
-
-/* build GOT and PLT entries */
-ST_FUNC void build_got_entries(TCCState *s1)
-{
-exit(1);
-}
-
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
@@ -686,10 +634,6 @@ struct dyn_inf {
     unsigned long data_offset;
     addr_t rel_addr;
     addr_t rel_size;
-#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
-    addr_t bss_addr;
-    addr_t bss_size;
-#endif
 };
 
 /* Assign sections to segments and decide how are sections laid out when loaded
