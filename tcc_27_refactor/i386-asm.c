@@ -328,108 +328,6 @@ static inline int asm_modrm(int reg, Operand *op)
     return 0;
 }
 
-#ifdef TCC_TARGET_X86_64
-#define REX_W 0x48
-#define REX_R 0x44
-#define REX_X 0x42
-#define REX_B 0x41
-
-static void asm_rex(int width64, Operand *ops, int nb_ops, int *op_type,
-		    int regi, int rmi)
-{
-  unsigned char rex = width64 ? 0x48 : 0;
-  int saw_high_8bit = 0;
-  int i;
-  if (rmi == -1) {
-      /* No mod/rm byte, but we might have a register op nevertheless
-         (we will add it to the opcode later).  */
-      for(i = 0; i < nb_ops; i++) {
-	  if (op_type[i] & (OP_REG | OP_ST)) {
-	      if (ops[i].reg >= 8) {
-		  rex |= REX_B;
-		  ops[i].reg -= 8;
-	      } else if (ops[i].type & OP_REG8_LOW)
-		  rex |= 0x40;
-	      else if (ops[i].type & OP_REG8 && ops[i].reg >= 4)
-		  /* An 8 bit reg >= 4 without REG8 is ah/ch/dh/bh */
-		  saw_high_8bit = ops[i].reg;
-	      break;
-	  }
-      }
-  } else {
-      if (regi != -1) {
-	  if (ops[regi].reg >= 8) {
-	      rex |= REX_R;
-	      ops[regi].reg -= 8;
-	  } else if (ops[regi].type & OP_REG8_LOW)
-	      rex |= 0x40;
-	  else if (ops[regi].type & OP_REG8 && ops[regi].reg >= 4)
-	      /* An 8 bit reg >= 4 without REG8 is ah/ch/dh/bh */
-	      saw_high_8bit = ops[regi].reg;
-      }
-      if (ops[rmi].type & (OP_REG | OP_MMX | OP_SSE | OP_CR | OP_EA)) {
-	  if (ops[rmi].reg >= 8) {
-	      rex |= REX_B;
-	      ops[rmi].reg -= 8;
-	  } else if (ops[rmi].type & OP_REG8_LOW)
-	      rex |= 0x40;
-	  else if (ops[rmi].type & OP_REG8 && ops[rmi].reg >= 4)
-	      /* An 8 bit reg >= 4 without REG8 is ah/ch/dh/bh */
-	      saw_high_8bit = ops[rmi].reg;
-      }
-      if (ops[rmi].type & OP_EA && ops[rmi].reg2 >= 8) {
-	  rex |= REX_X;
-	  ops[rmi].reg2 -= 8;
-      }
-  }
-  if (rex) {
-      if (saw_high_8bit)
-	  tcc_error("can't encode register %%%ch when REX prefix is required",
-		    "acdb"[saw_high_8bit-4]);
-      g(rex);
-  }
-}
-#endif
-
-static void maybe_print_stats (void)
-{
-  static int already = 1;
-  if (!already)
-    /* print stats about opcodes */
-    {
-        const struct ASMInstr *pa;
-        int freq[4];
-        int op_vals[500];
-        int nb_op_vals, i, j;
-
-	already = 1;
-        nb_op_vals = 0;
-        memset(freq, 0, sizeof(freq));
-        for(pa = asm_instrs; pa->sym != 0; pa++) {
-            freq[pa->nb_ops]++;
-            //for(i=0;i<pa->nb_ops;i++) {
-                for(j=0;j<nb_op_vals;j++) {
-                    //if (pa->op_type[i] == op_vals[j])
-                    if (pa->instr_type == op_vals[j])
-                        goto found;
-                }
-                //op_vals[nb_op_vals++] = pa->op_type[i];
-                op_vals[nb_op_vals++] = pa->instr_type;
-            found: ;
-            //}
-        }
-        for(i=0;i<nb_op_vals;i++) {
-            int v = op_vals[i];
-            //if ((v & (v - 1)) != 0)
-                printf("%3d: %08x\n", i, v);
-        }
-        printf("size=%d nb=%d f0=%d f1=%d f2=%d f3=%d\n",
-               (int)sizeof(asm_instrs),
-	       (int)sizeof(asm_instrs) / (int)sizeof(ASMInstr),
-               freq[0], freq[1], freq[2], freq[3]);
-    }
-}
-
 ST_FUNC void asm_opcode(TCCState *s1, int opcode)
 {
     const ASMInstr *pa;
@@ -440,15 +338,6 @@ ST_FUNC void asm_opcode(TCCState *s1, int opcode)
     int alltypes;   /* OR of all operand types */
     int autosize;
     int p66;
-#ifdef TCC_TARGET_X86_64
-    int rex64;
-#endif
-
-    maybe_print_stats();
-    /* force synthetic ';' after prefix instruction, so we can handle */
-    /* one-line things like "rep stosb" instead of only "rep\nstosb" */
-    if (opcode >= TOK_ASM_wait && opcode <= TOK_ASM_repnz)
-        unget_tok(';');
 
     /* get operands */
     pop = ops;
@@ -458,20 +347,7 @@ ST_FUNC void asm_opcode(TCCState *s1, int opcode)
     for(;;) {
         if (tok == ';' || tok == TOK_LINEFEED)
             break;
-        if (nb_ops >= MAX_OPERANDS) {
-            tcc_error("incorrect number of operands");
-        }
         parse_operand(s1, pop);
-        if (tok == ':') {
-           if (pop->type != OP_SEG || seg_prefix)
-               tcc_error("incorrect prefix");
-           seg_prefix = segment_prefixes[pop->reg];
-           next();
-           parse_operand(s1, pop);
-           if (!(pop->type & OP_EA)) {
-               tcc_error("segment prefix must be followed by memory reference");
-           }
-        }
         pop++;
         nb_ops++;
         if (tok != ',')
@@ -495,22 +371,11 @@ again:
             if (!(opcode >= pa->sym && opcode < pa->sym + 8*NBWLX))
                 continue;
             s = (opcode - pa->sym) % NBWLX;
-	    if ((pa->instr_type & OPC_BWLX) == OPC_WLX)
-	      {
-		/* We need to reject the xxxb opcodes that we accepted above.
-		   Note that pa->sym for WLX opcodes is the 'w' token,
-		   to get the 'b' token subtract one.  */
-		if (((opcode - pa->sym + 1) % NBWLX) == 0)
-		    continue;
-	        s++;
-	      }
         } else if (it == OPC_SHIFT) {
             if (!(opcode >= pa->sym && opcode < pa->sym + 7*NBWLX))
                 continue;
             s = (opcode - pa->sym) % NBWLX;
         } else if (it == OPC_TEST) {
-            if (!(opcode >= pa->sym && opcode < pa->sym + NB_TEST_OPCODES))
-                continue;
 	    /* cmovxx is a test opcode but accepts multiple sizes.
 	       The suffixes aren't encoded in the table, instead we
 	       simply force size autodetection always and deal with suffixed
@@ -518,13 +383,6 @@ again:
 	    if (pa->instr_type & OPC_WLX)
 	        s = NBWLX - 1;
         } else if (pa->instr_type & OPC_B) {
-#ifdef TCC_TARGET_X86_64
-	    /* Some instructions don't have the full size but only
-	       bwl form.  insb e.g. */
-	    if ((pa->instr_type & OPC_WLQ) != OPC_WLQ
-		&& !(opcode >= pa->sym && opcode < pa->sym + NBWLX-1))
-	        continue;
-#endif
             if (!(opcode >= pa->sym && opcode < pa->sym + NBWLX))
                 continue;
             s = opcode - pa->sym;
@@ -538,15 +396,7 @@ again:
         }
         if (pa->nb_ops != nb_ops)
             continue;
-#ifdef TCC_TARGET_X86_64
-	/* Special case for moves.  Selecting the IM64->REG64 form
-	   should only be done if we really have an >32bit imm64, and that
-	   is hardcoded.  Ignore it here.  */
-	if (pa->opcode == 0xb0 && ops[0].type != OP_IM64
-	    && (ops[1].type & OP_REG) == OP_REG64
-	    && !(pa->instr_type & OPC_0F))
-	    continue;
-#endif
+
         /* now decode and check each operand */
 	alltypes = 0;
         for(i = 0; i < nb_ops; i++) {
@@ -563,12 +413,6 @@ again:
             case OPT_REGW:
                 v = OP_REG16 | OP_REG32 | OP_REG64;
                 break;
-            case OPT_IMW:
-                v = OP_IM16 | OP_IM32;
-                break;
-	    case OPT_MMXSSE:
-		v = OP_MMX | OP_SSE;
-		break;
 	    case OPT_DISP:
 	    case OPT_DISP8:
 		v = OP_ADDR;
@@ -589,37 +433,15 @@ again:
     next: ;
     }
     if (pa->sym == 0) {
-        if (opcode >= TOK_ASM_first && opcode <= TOK_ASM_last) {
-            int b;
-            b = op0_codes[opcode - TOK_ASM_first];
-            if (b & 0xff00) 
-                g(b >> 8);
-            g(b);
-            return;
-        } else if (opcode <= TOK_ASM_alllast) {
-            tcc_error("bad operand with opcode '%s'",
-                  get_tok_str(opcode, NULL));
-        } else {
-	    /* Special case for cmovcc, we accept size suffixes but ignore
-	       them, but we don't want them to blow up our tables.  */
-	    TokenSym *ts = table_ident[opcode - TOK_IDENT];
-	    if (ts->len >= 6
-		&& strchr("wlq", ts->str[ts->len-1])
-		&& !memcmp(ts->str, "cmov", 4)) {
-		opcode = tok_alloc(ts->str, ts->len-1)->tok;
-		goto again;
-	    }
-            tcc_error("unknown opcode '%s'", ts->str);
-        }
+        int b;
+        b = op0_codes[opcode - TOK_ASM_first];
+        if (b & 0xff00) 
+            g(b >> 8);
+        g(b);
+        return;
     }
     /* if the size is unknown, then evaluate it (OPC_B or OPC_WL case) */
     autosize = NBWLX-1;
-#ifdef TCC_TARGET_X86_64
-    /* XXX the autosize should rather be zero, to not have to adjust this
-       all the time.  */
-    if ((pa->instr_type & OPC_BWLQ) == OPC_B)
-        autosize = NBWLX-2;
-#endif
     if (s == autosize) {
 	/* Check for register operands providing hints about the size.
 	   Start from the end, i.e. destination operands.  This matters
