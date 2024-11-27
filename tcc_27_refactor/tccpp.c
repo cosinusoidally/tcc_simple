@@ -2256,8 +2256,6 @@ static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
         if (t == '#') {
             /* stringize */
             TOK_GET(&t, &macro_str, &cval);
-            if (!t)
-                goto bad_stringy;
             s = sym_find2(args, t);
             if (s) {
                 cstr_new(&cstr);
@@ -2271,10 +2269,7 @@ static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
                      && 0 == check_space(t, &spc)) {
                         const char *s = get_tok_str(t, &cval);
                         while (*s) {
-                            if (t == TOK_PPSTR && *s != '\'')
-                                add_char(&cstr, *s);
-                            else
-                                cstr_ccat(&cstr, *s);
+                            cstr_ccat(&cstr, *s);
                             ++s;
                         }
                     }
@@ -2282,53 +2277,31 @@ static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
                 cstr.size -= spc;
                 cstr_ccat(&cstr, '\"');
                 cstr_ccat(&cstr, '\0');
-#ifdef PP_DEBUG
-                printf("\nstringize: <%s>\n", (char *)cstr.data);
-#endif
                 /* add string */
                 cval.str.size = cstr.size;
                 cval.str.data = cstr.data;
                 tok_str_add2(&str, TOK_PPSTR, &cval);
                 cstr_free(&cstr);
-            } else {
-        bad_stringy:
-                expect("macro parameter after '#'");
             }
         } else if (t >= TOK_IDENT) {
             s = sym_find2(args, t);
             if (s) {
                 int l0 = str.len;
                 st = s->d;
-                /* if '##' is present before or after, no arg substitution */
-                if (*macro_str == TOK_PPJOIN || t1 == TOK_PPJOIN) {
-                    /* special case for var arg macros : ## eats the ','
-                       if empty VA_ARGS variable. */
-                    if (t1 == TOK_PPJOIN && t0 == ',' && gnu_ext && s->type.t) {
-                        if (*st <= 0) {
-                            /* suppress ',' '##' */
-                            str.len -= 2;
-                        } else {
-                            /* suppress '##' and add variable */
-                            str.len--;
-                            goto add_var;
-                        }
-                    }
-                } else {
             add_var:
-		    if (!s->next) {
-			/* Expand arguments tokens and store them.  In most
-			   cases we could also re-expand each argument if
-			   used multiple times, but not if the argument
-			   contains the __COUNTER__ macro.  */
-			TokenString str2;
-			sym_push2(&s->next, s->v, s->type.t, 0);
-			tok_str_new(&str2);
-			macro_subst(&str2, nested_list, st);
-			tok_str_add(&str2, 0);
-			s->next->d = str2.str;
-		    }
-		    st = s->next->d;
+                if (!s->next) {
+                    /* Expand arguments tokens and store them.  In most
+                       cases we could also re-expand each argument if
+                       used multiple times, but not if the argument
+                       contains the __COUNTER__ macro.  */
+                    TokenString str2;
+                    sym_push2(&s->next, s->v, s->type.t, 0);
+                    tok_str_new(&str2);
+                    macro_subst(&str2, nested_list, st);
+                    tok_str_add(&str2, 0);
+                    s->next->d = str2.str;
                 }
+                st = s->next->d;
                 for(;;) {
                     int t2;
                     TOK_GET(&t2, &st, &cval);
