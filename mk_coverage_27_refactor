@@ -16,9 +16,17 @@ cd lib
 ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
 cd ..
 
-./coverage.exe -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o coverage.o
 
-# for some reason we need to be in the directory above?
+# I *think* multiple runs will aggregate the profiles, try for now
+
+./coverage.exe -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
+./coverage.exe -c ./lib/libtcc1.c -o libtcc1.o
+./coverage.exe -c libc_boot4.c -o libc_boot4.o
+./coverage.exe -c libc_static.c -o libc_static.o
+
+# for some reason we need to be in the directory above to run gcovr?
 cd ..
+# check the hashes of the test files
+sha256sum -c sums_tcc_27
 gcovr artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox ./artifacts/example.html
