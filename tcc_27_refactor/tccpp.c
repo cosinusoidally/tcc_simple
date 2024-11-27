@@ -261,103 +261,15 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
     p = cstr_buf.data;
 
     switch(v) {
-    case TOK_CINT:
-    case TOK_CUINT:
-    case TOK_CLONG:
-    case TOK_CULONG:
-    case TOK_CLLONG:
-    case TOK_CULLONG:
-        /* XXX: not quite exact, but only useful for testing  */
-#ifdef _WIN32
-        sprintf(p, "%u", (unsigned)cv->i);
-#else
-        sprintf(p, "%llu", (unsigned long long)cv->i);
-#endif
-        break;
-    case TOK_LCHAR:
-        cstr_ccat(&cstr_buf, 'L');
-    case TOK_CCHAR:
-        cstr_ccat(&cstr_buf, '\'');
-        add_char(&cstr_buf, cv->i);
-        cstr_ccat(&cstr_buf, '\'');
-        cstr_ccat(&cstr_buf, '\0');
-        break;
     case TOK_PPNUM:
     case TOK_PPSTR:
         return (char*)cv->str.data;
-    case TOK_LSTR:
-        cstr_ccat(&cstr_buf, 'L');
-    case TOK_STR:
-        cstr_ccat(&cstr_buf, '\"');
-        if (v == TOK_STR) {
-            len = cv->str.size - 1;
-            for(i=0;i<len;i++)
-                add_char(&cstr_buf, ((unsigned char *)cv->str.data)[i]);
-        } else {
-            len = (cv->str.size / sizeof(nwchar_t)) - 1;
-            for(i=0;i<len;i++)
-                add_char(&cstr_buf, ((nwchar_t *)cv->str.data)[i]);
-        }
-        cstr_ccat(&cstr_buf, '\"');
-        cstr_ccat(&cstr_buf, '\0');
-        break;
-
-    case TOK_CFLOAT:
-        cstr_cat(&cstr_buf, "<float>", 0);
-        break;
-    case TOK_CDOUBLE:
-	cstr_cat(&cstr_buf, "<double>", 0);
-	break;
-    case TOK_CLDOUBLE:
-	cstr_cat(&cstr_buf, "<long double>", 0);
-	break;
-    case TOK_LINENUM:
-	cstr_cat(&cstr_buf, "<linenumber>", 0);
-	break;
-
-    /* above tokens have value, the ones below don't */
-    case TOK_LT:
-        v = '<';
-        goto addv;
-    case TOK_GT:
-        v = '>';
-        goto addv;
-    case TOK_DOTS:
-        return strcpy(p, "...");
-    case TOK_A_SHL:
-        return strcpy(p, "<<=");
-    case TOK_A_SAR:
-        return strcpy(p, ">>=");
-    case TOK_EOF:
-        return strcpy(p, "<eof>");
     default:
-        if (v < TOK_IDENT) {
-            /* search in two bytes table */
-            const unsigned char *q = tok_two_chars;
-            while (*q) {
-                if (q[2] == v) {
-                    *p++ = q[0];
-                    *p++ = q[1];
-                    *p = '\0';
-                    return cstr_buf.data;
-                }
-                q += 3;
-            }
-        if (v >= 127) {
-            sprintf(cstr_buf.data, "<%02x>", v);
-            return cstr_buf.data;
-        }
-        addv:
-            *p++ = v;
-            *p = '\0';
-        } else if (v < tok_ident) {
+        if (v < tok_ident) {
             return table_ident[v - TOK_IDENT]->str;
         } else if (v >= SYM_FIRST_ANOM) {
             /* special name for anonymous symbol */
             sprintf(p, "L.%u", v - SYM_FIRST_ANOM);
-        } else {
-            /* should never happen */
-            return NULL;
         }
         break;
     }
