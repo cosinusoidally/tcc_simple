@@ -1389,23 +1389,15 @@ include_done:
         }
         c = (define_find(tok) != 0) ^ c;
     do_if:
-        if (s1->ifdef_stack_ptr >= s1->ifdef_stack + IFDEF_STACK_SIZE)
-            tcc_error("memory full (ifdef)");
         *s1->ifdef_stack_ptr++ = c;
         goto test_skip;
     case TOK_ELSE:
         if (s1->ifdef_stack_ptr == s1->ifdef_stack)
             tcc_error("#else without matching #if");
-        if (s1->ifdef_stack_ptr[-1] & 2)
-            tcc_error("#else after #else");
         c = (s1->ifdef_stack_ptr[-1] ^= 3);
         goto test_else;
     case TOK_ELIF:
-        if (s1->ifdef_stack_ptr == s1->ifdef_stack)
-            tcc_error("#elif without matching #if");
         c = s1->ifdef_stack_ptr[-1];
-        if (c > 1)
-            tcc_error("#elif after #else");
         /* last #if/#elif expression was true: we skip */
         if (c == 1) {
             c = 0;
@@ -1424,8 +1416,6 @@ include_done:
         }
         break;
     case TOK_ENDIF:
-        if (s1->ifdef_stack_ptr <= file->ifdef_stack_ptr)
-            tcc_error("#endif without matching #if");
         s1->ifdef_stack_ptr--;
         /* '#ifndef macro' was at the start of file. Now we check if
            an '#endif' is exactly at the end of file */
@@ -1441,35 +1431,6 @@ include_done:
             goto the_end;
         }
         break;
-    case TOK_PPNUM:
-        n = strtoul((char*)tokc.str.data, &q, 10);
-        goto _line_num;
-    case TOK_LINE:
-        next();
-        if (tok != TOK_CINT)
-    _line_err:
-            tcc_error("wrong #line format");
-        n = tokc.i;
-    _line_num:
-        next();
-        if (tok != TOK_LINEFEED) {
-            if (tok == TOK_STR) {
-                if (file->true_filename == file->filename)
-                    file->true_filename = tcc_strdup(file->filename);
-                pstrcpy(file->filename, sizeof(file->filename), (char *)tokc.str.data);
-            } else if (parse_flags & PARSE_FLAG_ASM_FILE)
-                break;
-            else
-                goto _line_err;
-            --n;
-        }
-        if (file->fd > 0)
-            total_lines += file->line_num - n;
-        file->line_num = n;
-        if (s1->do_debug)
-    	    put_stabs(file->filename, N_BINCL, 0, 0, 0);
-        break;
-    case TOK_ERROR:
     case TOK_WARNING:
         c = tok;
         ch = file->buf_ptr[0];
