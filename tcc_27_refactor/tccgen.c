@@ -179,9 +179,7 @@ return;
 /* put function size */
 ST_FUNC void tcc_debug_funcend(TCCState *s1, int size)
 {
-    if (!s1->do_debug)
-        return;
-    put_stabn(N_FUN, 0, 0, size);
+return;
 }
 
 /* ------------------------------------------------------------------------- */

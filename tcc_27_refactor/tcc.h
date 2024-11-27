@@ -247,7 +247,6 @@ extern long double strtold (const char *__nptr, char **__endptr);
 
 #include "libtcc.h"
 #include "elf.h"
-#include "stab.h"
 
 /* -------------------------------------------- */
 
