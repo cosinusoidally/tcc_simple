@@ -698,40 +698,6 @@ _default:
     file->buf_ptr = p;
 }
 
-#if 0
-/* return the number of additional 'ints' necessary to store the
-   token */
-static inline int tok_size(const int *p)
-{
-    switch(*p) {
-        /* 4 bytes */
-    case TOK_CINT:
-    case TOK_CUINT:
-    case TOK_CCHAR:
-    case TOK_LCHAR:
-    case TOK_CFLOAT:
-    case TOK_LINENUM:
-        return 1 + 1;
-    case TOK_STR:
-    case TOK_LSTR:
-    case TOK_PPNUM:
-    case TOK_PPSTR:
-        return 1 + ((sizeof(CString) + ((CString *)(p+1))->size + 3) >> 2);
-    case TOK_CLONG:
-    case TOK_CULONG:
-	return 1 + LONG_SIZE / 4;
-    case TOK_CDOUBLE:
-    case TOK_CLLONG:
-    case TOK_CULLONG:
-        return 1 + 2;
-    case TOK_CLDOUBLE:
-        return 1 + LDOUBLE_SIZE / 4;
-    default:
-        return 1 + 0;
-    }
-}
-#endif
-
 /* token string handling */
 ST_INLN void tok_str_new(TokenString *s)
 {
@@ -1345,46 +1311,12 @@ ST_FUNC void preprocess(int is_bof)
             while (ch != c && ch != '\n' && ch != CH_EOF) {
                 if ((q - buf) < sizeof(buf) - 1)
                     *q++ = ch;
-                if (ch == '\\') {
-                    if (handle_stray_noerror() == 0)
-                        --q;
-                } else
-                    inp();
+                inp();
             }
             *q = '\0';
             minp();
-#if 0
-            /* eat all spaces and comments after include */
-            /* XXX: slightly incorrect */
-            while (ch1 != '\n' && ch1 != CH_EOF)
-                inp();
-#endif
-        } else {
-	    int len;
-            /* computed #include : concatenate everything up to linefeed,
-	       the result must be one of the two accepted forms.
-	       Don't convert pp-tokens to tokens here.  */
-	    parse_flags = (PARSE_FLAG_PREPROCESS
-			   | PARSE_FLAG_LINEFEED
-			   | (parse_flags & PARSE_FLAG_ASM_FILE));
-            next();
-            buf[0] = '\0';
-	    while (tok != TOK_LINEFEED) {
-		pstrcat(buf, sizeof(buf), get_tok_str(tok, &tokc));
-		next();
-	    }
-	    len = strlen(buf);
-	    /* check syntax and remove '<>|""' */
-	    if ((len < 2 || ((buf[0] != '"' || buf[len-1] != '"') &&
-			     (buf[0] != '<' || buf[len-1] != '>'))))
-	        tcc_error("'#include' expects \"FILENAME\" or <FILENAME>");
-	    c = buf[len-1];
-	    memmove(buf, buf + 1, len - 2);
-	    buf[len - 2] = '\0';
         }
 
-        if (s1->include_stack_ptr >= s1->include_stack + INCLUDE_STACK_SIZE)
-            tcc_error("#include recursion too deep");
         /* store current file in stack, but increment stack later below */
         *s1->include_stack_ptr = file;
         i = tok == TOK_INCLUDE_NEXT ? file->include_next_index : 0;
@@ -1421,9 +1353,6 @@ ST_FUNC void preprocess(int is_bof)
             if (e && (define_find(e->ifndef_macro) || e->once == pp_once)) {
                 /* no need to parse the include because the 'ifndef macro'
                    is defined (or had #pragma once) */
-#ifdef INC_DEBUG
-                printf("%s: skipping cached %s\n", file->filename, buf1);
-#endif
                 goto include_done;
             }
 
@@ -1431,17 +1360,11 @@ ST_FUNC void preprocess(int is_bof)
                 continue;
 
             file->include_next_index = i + 1;
-#ifdef INC_DEBUG
-            printf("%s: including %s\n", file->prev->filename, file->filename);
-#endif
             /* update target deps */
             dynarray_add(&s1->target_deps, &s1->nb_target_deps,
                     tcc_strdup(buf1));
             /* push current file in stack */
             ++s1->include_stack_ptr;
-            /* add include file debug info */
-            if (s1->do_debug)
-                put_stabs(file->filename, N_BINCL, 0, 0, 0);
             tok_flags |= TOK_FLAG_BOF | TOK_FLAG_BOL;
             ch = file->buf_ptr[0];
             goto the_end;
@@ -1459,13 +1382,8 @@ include_done:
         c = 0;
     do_ifdef:
         next_nomacro();
-        if (tok < TOK_IDENT)
-            tcc_error("invalid argument for '#if%sdef'", c ? "n" : "");
         if (is_bof) {
             if (c) {
-#ifdef INC_DEBUG
-                printf("#ifndef %s\n", get_tok_str(tok, NULL));
-#endif
                 file->ifndef_macro = tok;
             }
         }
