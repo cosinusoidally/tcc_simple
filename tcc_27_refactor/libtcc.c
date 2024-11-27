@@ -352,13 +352,7 @@ ST_FUNC void tcc_close(void)
 ST_FUNC int tcc_open(TCCState *s1, const char *filename)
 {
     int fd;
-    if (strcmp(filename, "-") == 0)
-        fd = 0, filename = "<stdin>";
-    else
-        fd = open(filename, O_RDONLY | O_BINARY);
-    if ((s1->verbose == 2 && fd >= 0) || s1->verbose == 3)
-        printf("%s %*s%s\n", fd < 0 ? "nf":"->",
-               (int)(s1->include_stack_ptr - s1->include_stack), "", filename);
+    fd = open(filename, O_RDONLY | O_BINARY);
     if (fd < 0)
         return -1;
     tcc_open_bf(s1, filename, 0);
