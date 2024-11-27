@@ -299,31 +299,11 @@ ST_FUNC void gen_expr32(ExprValue *pe)
     gen_addr32(pe->sym ? VT_SYM : 0, pe->sym, pe->v);
 }
 
-#ifdef TCC_TARGET_X86_64
-ST_FUNC void gen_expr64(ExprValue *pe)
-{
-    gen_addr64(pe->sym ? VT_SYM : 0, pe->sym, pe->v);
-}
-#endif
-
 /* XXX: unify with C code output ? */
 static void gen_disp32(ExprValue *pe)
 {
     Sym *sym = pe->sym;
-    ElfSym *esym = elfsym(sym);
-    if (esym && esym->st_shndx == cur_text_section->sh_num) {
-        /* same section: we can output an absolute value. Note
-           that the TCC compiler behaves differently here because
-           it always outputs a relocation to ease (future) code
-           elimination in the linker */
-        gen_le32(pe->v + esym->st_value - ind - 4);
-    } else {
-        if (sym && sym->type.t == VT_VOID) {
-            sym->type.t = VT_FUNC;
-            sym->type.ref = NULL;
-        }
-        gen_addrpc32(VT_SYM, sym, pe->v);
-    }
+    gen_addrpc32(VT_SYM, sym, pe->v);
 }
 
 /* generate the modrm operand */
@@ -333,22 +313,6 @@ static inline int asm_modrm(int reg, Operand *op)
 
     if (op->type & (OP_REG | OP_MMX | OP_SSE)) {
         g(0xc0 + (reg << 3) + op->reg);
-    } else if (op->reg == -1 && op->reg2 == -1) {
-        /* displacement only */
-#ifdef TCC_TARGET_X86_64
-	g(0x04 + (reg << 3));
-	g(0x25);
-#else
-	g(0x05 + (reg << 3));
-#endif
-	gen_expr32(&op->e);
-#ifdef TCC_TARGET_X86_64
-    } else if (op->reg == -2) {
-        ExprValue *pe = &op->e;
-        g(0x05 + (reg << 3));
-        gen_addrpc32(pe->sym ? VT_SYM : 0, pe->sym, pe->v);
-        return ind;
-#endif
     } else {
         sib_reg1 = op->reg;
         /* fist compute displacement encoding */
