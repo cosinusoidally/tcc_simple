@@ -1507,52 +1507,6 @@ static int elf_output_file(TCCState *s1, const char *filename)
     interp = dynamic = dynstr = NULL; /* avoid warning */
     textrel = 0;
 
-    if (file_type != TCC_OUTPUT_OBJ) {
-        /* if linking, also link in runtime libraries (libc, libgcc, etc.) */
-        tcc_add_runtime(s1);
-	resolve_common_syms(s1);
-
-        if (!s1->static_link) {
-            if (file_type == TCC_OUTPUT_EXE) {
-                char *ptr;
-                /* allow override the dynamic loader */
-                const char *elfint = getenv("LD_SO");
-                if (elfint == NULL)
-                    elfint = DEFAULT_ELFINTERP(s1);
-                /* add interpreter section only if executable */
-                interp = new_section(s1, ".interp", SHT_PROGBITS, SHF_ALLOC);
-                interp->sh_addralign = 1;
-                ptr = section_ptr_add(interp, 1 + strlen(elfint));
-                strcpy(ptr, elfint);
-            }
-
-            /* add dynamic symbol table */
-            s1->dynsym = new_symtab(s1, ".dynsym", SHT_DYNSYM, SHF_ALLOC,
-                                    ".dynstr",
-                                    ".hash", SHF_ALLOC);
-            dynstr = s1->dynsym->link;
-
-            /* add dynamic section */
-            dynamic = new_section(s1, ".dynamic", SHT_DYNAMIC,
-                                  SHF_ALLOC | SHF_WRITE);
-            dynamic->link = dynstr;
-            dynamic->sh_entsize = sizeof(ElfW(Dyn));
-
-            build_got(s1);
-
-            if (file_type == TCC_OUTPUT_EXE) {
-                bind_exe_dynsyms(s1);
-                if (s1->nb_errors)
-                    goto the_end;
-                bind_libs_dynsyms(s1);
-            } else {
-                /* shared library case: simply export all global symbols */
-                export_global_syms(s1);
-            }
-        }
-        build_got_entries(s1);
-    }
-
     /* we add a section for symbols */
     strsec = new_section(s1, ".shstrtab", SHT_STRTAB, 0);
     put_elf_str(strsec, "");
@@ -1561,14 +1515,7 @@ static int elf_output_file(TCCState *s1, const char *filename)
     textrel = alloc_sec_names(s1, file_type, strsec);
 
     /* compute number of program headers */
-    if (file_type == TCC_OUTPUT_OBJ)
-        phnum = 0;
-    else if (file_type == TCC_OUTPUT_DLL)
-        phnum = 3;
-    else if (s1->static_link)
-        phnum = 2;
-    else
-        phnum = 5;
+    phnum = 0;
 
     /* allocate program segment headers */
     phdr = tcc_mallocz(phnum * sizeof(ElfW(Phdr)));
