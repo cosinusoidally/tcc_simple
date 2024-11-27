@@ -724,39 +724,6 @@ ST_FUNC void build_got_entries(TCCState *s1)
 exit(1);
 }
 
-/* put dynamic tag */
-static void put_dt(Section *dynamic, int dt, addr_t val)
-{
-exit(1);
-}
-
-static int tcc_add_support(TCCState *s1, const char *filename)
-{
-exit(1);
-}
-
-/* add tcc runtime libraries */
-ST_FUNC void tcc_add_runtime(TCCState *s1)
-{
-exit(1);
-}
-
-static void tcc_add_linker_symbols(TCCState *s1)
-{
-exit(1);
-}
-
-ST_FUNC void fill_got_entry(TCCState *s1, ElfW_Rel *rel)
-{
-exit(1);
-}
-
-/* Perform relocation to GOT or PLT entries */
-ST_FUNC void fill_got(TCCState *s1)
-{
-exit(1);
-}
-
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
