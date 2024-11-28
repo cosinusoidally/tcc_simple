@@ -197,33 +197,6 @@ static void tcc_split_path(TCCState *s, void *p_ary, int *p_nb_ary, const char *
     } while (*p);
 }
 
-/********************************************************/
-
-static void strcat_vprintf(char *buf, int buf_size, const char *fmt, va_list ap)
-{
-exit(1);
-}
-
-static void strcat_printf(char *buf, int buf_size, const char *fmt, ...)
-{
-exit(1);
-}
-
-static void error1(TCCState *s1, int is_warning, const char *fmt, va_list ap)
-{
-exit(1);
-}
-
-LIBTCCAPI void tcc_set_error_func(TCCState *s, void *error_opaque,
-                        void (*error_func)(void *opaque, const char *msg))
-{
-}
-
-/* error without aborting current compilation */
-PUB_FUNC void tcc_error_noabort(const char *fmt, ...)
-{
-}
-
 PUB_FUNC void tcc_error(const char *fmt, ...)
 {
 exit(1);
