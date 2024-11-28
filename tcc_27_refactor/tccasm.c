@@ -269,10 +269,6 @@ static void parse_asm_operands(ASMOperand *operands, int *nb_operands_ptr,
 	    cstr_free(&astr);
             skip('(');
             gexpr();
-            if (is_output) {
-                if (!(vtop->type.t & VT_ARRAY))
-                    test_lvalue();
-            }
             op->vt = vtop;
             skip(')');
             if (tok == ',') {

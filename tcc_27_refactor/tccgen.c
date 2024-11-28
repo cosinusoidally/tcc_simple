@@ -102,24 +102,6 @@ ST_INLN int is_float(int t)
     return bt == VT_LDOUBLE || bt == VT_DOUBLE || bt == VT_FLOAT || bt == VT_QFLOAT;
 }
 
-/* we use our own 'finite' function to avoid potential problems with
-   non standard math libs */
-/* XXX: endianness dependent */
-ST_FUNC int ieee_finite(double d)
-{
-    int p[4];
-    memcpy(p, &d, sizeof(double));
-    return ((unsigned)((p[1] | 0x800fffff) + 1)) >> 31;
-}
-
-ST_FUNC void test_lvalue(void)
-{
-}
-
-ST_FUNC void check_vstack(void)
-{
-}
-
 /* ------------------------------------------------------------------------- */
 ST_FUNC int tccgen_compile(TCCState *s1)
 {
@@ -151,7 +133,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     next();
     decl(VT_CONST);
     gen_inline_functions(s1);
-    check_vstack();
     return 0;
 }
 
@@ -2321,7 +2302,6 @@ ST_FUNC void vstore(void)
 /* post defines POST/PRE add. c is the token ++ or -- */
 ST_FUNC void inc(int post, int c)
 {
-    test_lvalue();
     vdup(); /* save lvalue */
     if (post) {
         gv_dup(); /* duplicate value */
@@ -3526,10 +3506,6 @@ ST_FUNC void unary(void)
            except for unary '&' and sizeof. Since we consider that
            functions are not lvalues, we only have to handle it
            there and in function calls. */
-        /* arrays can also be used although they are not lvalues */
-        if ((vtop->type.t & VT_BTYPE) != VT_FUNC &&
-            !(vtop->type.t & VT_ARRAY))
-            test_lvalue();
         mk_pointer(&vtop->type);
         gaddrof();
         break;
@@ -3871,7 +3847,6 @@ ST_FUNC void unary(void)
             if (tok == TOK_ARROW) 
                 indir();
             qualifiers = vtop->type.t & (VT_CONSTANT | VT_VOLATILE);
-            test_lvalue();
             gaddrof();
             /* expect pointer on structure */
             if ((vtop->type.t & VT_BTYPE) != VT_STRUCT)
@@ -4386,7 +4361,6 @@ static void expr_eq(void)
         (tok >= TOK_A_MOD && tok <= TOK_A_DIV) ||
         tok == TOK_A_XOR || tok == TOK_A_OR ||
         tok == TOK_A_SHL || tok == TOK_A_SAR) {
-        test_lvalue();
         t = tok;
         next();
         if (t == '=') {
@@ -5630,7 +5604,6 @@ static void gen_function(Sym *sym)
     func_var = 0; /* for safety */
     ind = 0; /* for safety */
     nocode_wanted = 0x80000000;
-    check_vstack();
 }
 
 static void gen_inline_functions(TCCState *s)
