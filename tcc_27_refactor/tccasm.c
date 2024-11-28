@@ -18,18 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifdef CONFIG_TCC_ASM
-
-ST_FUNC int asm_get_local_label_name(TCCState *s1, unsigned int n)
-{
-    char buf[64];
-    TokenSym *ts;
-
-    snprintf(buf, sizeof(buf), "L..%u", n);
-    ts = tok_alloc(buf, strlen(buf));
-    return ts->tok;
-}
-
 static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global);
 static Sym* asm_new_label(TCCState *s1, int label, int is_local);
 static Sym* asm_new_label1(TCCState *s1, int label, int is_local, int sh_num, int value);
@@ -97,27 +85,7 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
     case TOK_PPNUM:
         p = tokc.str.data;
         n = strtoull(p, (char **)&p, 0);
-        if (*p == 'b' || *p == 'f') {
-            /* backward or forward label */
-            label = asm_get_local_label_name(s1, n);
-            sym = asm_label_find(label);
-            if (*p == 'b') {
-                /* backward : find the last corresponding defined label */
-                if (sym && (!sym->c || elfsym(sym)->st_shndx == SHN_UNDEF))
-                    sym = sym->prev_tok;
-                if (!sym)
-                    tcc_error("local label '%d' not found backward", n);
-            } else {
-                /* forward */
-                if (!sym || (sym->c && elfsym(sym)->st_shndx != SHN_UNDEF)) {
-                    /* if the last label is defined, then define a new one */
-		    sym = asm_label_push(label);
-                }
-            }
-	    pe->v = 0;
-	    pe->sym = sym;
-	    pe->pcrel = 0;
-        } else if (*p == '\0') {
+        if (*p == '\0') {
             pe->v = n;
             pe->sym = NULL;
 	    pe->pcrel = 0;
@@ -917,18 +885,6 @@ static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
                 next();
         } else if (tok >= TOK_ASMDIR_FIRST && tok <= TOK_ASMDIR_LAST) {
             asm_parse_directive(s1, global);
-        } else if (tok == TOK_PPNUM) {
-            const char *p;
-            int n;
-            p = tokc.str.data;
-            n = strtoul(p, (char **)&p, 10);
-            if (*p != '\0')
-                expect("':'");
-            /* new local label */
-            asm_new_label(s1, asm_get_local_label_name(s1, n), 1);
-            next();
-            skip(':');
-            goto redo;
         } else if (tok >= TOK_IDENT) {
             /* instruction or label */
             opcode = tok;
@@ -1257,4 +1213,3 @@ ST_FUNC void asm_global_instr(void)
     cstr_free(&astr);
     nocode_wanted = saved_nocode_wanted;
 }
-#endif /* CONFIG_TCC_ASM */
