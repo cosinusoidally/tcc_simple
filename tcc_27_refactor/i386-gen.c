@@ -785,15 +785,5 @@ ST_FUNC void gen_cvt_ftof(int t)
     gv(RC_FLOAT);
 }
 
-/* Restore the SP from a location on the stack */
-ST_FUNC void gen_vla_sp_restore(int addr) {
-exit(1);
-}
-
-/* Subtract from the stack pointer, and push the resulting value onto the stack */
-ST_FUNC void gen_vla_alloc(CType *type, int align) {
-exit(1);
-}
-
 /* end of X86 code generator */
 /*************************************************************/

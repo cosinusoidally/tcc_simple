@@ -5632,7 +5632,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             goto no_alloc;
 
         vla_runtime_type_size(type, &a);
-        gen_vla_alloc(type, a);
         vla_sp_loc = addr;
         vlas_in_scope++;
 
