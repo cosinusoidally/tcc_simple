@@ -113,12 +113,6 @@ ST_FUNC int ieee_finite(double d)
     return ((unsigned)((p[1] | 0x800fffff) + 1)) >> 31;
 }
 
-/* compiling intel long double natively */
-#if (defined __i386__ || defined __x86_64__) \
-    && (defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64)
-# define TCC_IS_NATIVE_387
-#endif
-
 ST_FUNC void test_lvalue(void)
 {
     if (!(vtop->r & VT_LVAL))
@@ -2038,24 +2032,13 @@ ST_FUNC int type_size(CType *type, int *a)
    alignment at 'a' */
 ST_FUNC void vla_runtime_type_size(CType *type, int *a)
 {
-    if (type->t & VT_VLA) {
-        type_size(&type->ref->type, a);
-        vset(&int_type, VT_LOCAL|VT_LVAL, type->ref->c);
-    } else {
-        vpushi(type_size(type, a));
-    }
+exit(1);
 }
 
 static void vla_sp_restore(void) {
-    if (vlas_in_scope) {
-        gen_vla_sp_restore(vla_sp_loc);
-    }
 }
 
 static void vla_sp_restore_root(void) {
-    if (vlas_in_scope) {
-        gen_vla_sp_restore(vla_sp_root_loc);
-    }
 }
 
 /* return the pointed type of t */
@@ -2076,31 +2059,7 @@ ST_FUNC void mk_pointer(CType *type)
 /* compare function types. OLD functions match any new functions */
 static int is_compatible_func(CType *type1, CType *type2)
 {
-    Sym *s1, *s2;
-
-    s1 = type1->ref;
-    s2 = type2->ref;
-    if (!is_compatible_types(&s1->type, &s2->type))
-        return 0;
-    /* check func_call */
-    if (s1->f.func_call != s2->f.func_call)
-        return 0;
-    /* XXX: not complete */
-    if (s1->f.func_type == FUNC_OLD || s2->f.func_type == FUNC_OLD)
-        return 1;
-    if (s1->f.func_type != s2->f.func_type)
-        return 0;
-    while (s1 != NULL) {
-        if (s2 == NULL)
-            return 0;
-        if (!is_compatible_unqualified_types(&s1->type, &s2->type))
-            return 0;
-        s1 = s1->next;
-        s2 = s2->next;
-    }
-    if (s2)
-        return 0;
-    return 1;
+return 1;
 }
 
 /* return true if type1 and type2 are the same.  If unqualified is
@@ -2165,122 +2124,7 @@ static int is_compatible_unqualified_types(CType *type1, CType *type2)
 static void type_to_str(char *buf, int buf_size, 
                  CType *type, const char *varstr)
 {
-    int bt, v, t;
-    Sym *s, *sa;
-    char buf1[256];
-    const char *tstr;
-
-    t = type->t;
-    bt = t & VT_BTYPE;
-    buf[0] = '\0';
-
-    if (t & VT_EXTERN)
-        pstrcat(buf, buf_size, "extern ");
-    if (t & VT_STATIC)
-        pstrcat(buf, buf_size, "static ");
-    if (t & VT_TYPEDEF)
-        pstrcat(buf, buf_size, "typedef ");
-    if (t & VT_INLINE)
-        pstrcat(buf, buf_size, "inline ");
-    if (t & VT_VOLATILE)
-        pstrcat(buf, buf_size, "volatile ");
-    if (t & VT_CONSTANT)
-        pstrcat(buf, buf_size, "const ");
-
-    if (((t & VT_DEFSIGN) && bt == VT_BYTE)
-        || ((t & VT_UNSIGNED)
-            && (bt == VT_SHORT || bt == VT_INT || bt == VT_LLONG)
-            && !IS_ENUM(t)
-            ))
-        pstrcat(buf, buf_size, (t & VT_UNSIGNED) ? "unsigned " : "signed ");
-
-    buf_size -= strlen(buf);
-    buf += strlen(buf);
-
-    switch(bt) {
-    case VT_VOID:
-        tstr = "void";
-        goto add_tstr;
-    case VT_BOOL:
-        tstr = "_Bool";
-        goto add_tstr;
-    case VT_BYTE:
-        tstr = "char";
-        goto add_tstr;
-    case VT_SHORT:
-        tstr = "short";
-        goto add_tstr;
-    case VT_INT:
-        tstr = "int";
-        goto maybe_long;
-    case VT_LLONG:
-        tstr = "long long";
-    maybe_long:
-        if (t & VT_LONG)
-            tstr = "long";
-        if (!IS_ENUM(t))
-            goto add_tstr;
-        tstr = "enum ";
-        goto tstruct;
-    case VT_FLOAT:
-        tstr = "float";
-        goto add_tstr;
-    case VT_DOUBLE:
-        tstr = "double";
-        goto add_tstr;
-    case VT_LDOUBLE:
-        tstr = "long double";
-    add_tstr:
-        pstrcat(buf, buf_size, tstr);
-        break;
-    case VT_STRUCT:
-        tstr = "struct ";
-        if (IS_UNION(t))
-            tstr = "union ";
-    tstruct:
-        pstrcat(buf, buf_size, tstr);
-        v = type->ref->v & ~SYM_STRUCT;
-        if (v >= SYM_FIRST_ANOM)
-            pstrcat(buf, buf_size, "<anonymous>");
-        else
-            pstrcat(buf, buf_size, get_tok_str(v, NULL));
-        break;
-    case VT_FUNC:
-        s = type->ref;
-        type_to_str(buf, buf_size, &s->type, varstr);
-        pstrcat(buf, buf_size, "(");
-        sa = s->next;
-        while (sa != NULL) {
-            type_to_str(buf1, sizeof(buf1), &sa->type, NULL);
-            pstrcat(buf, buf_size, buf1);
-            sa = sa->next;
-            if (sa)
-                pstrcat(buf, buf_size, ", ");
-        }
-        pstrcat(buf, buf_size, ")");
-        goto no_var;
-    case VT_PTR:
-        s = type->ref;
-        if (t & VT_ARRAY) {
-            snprintf(buf1, sizeof(buf1), "%s[%d]", varstr ? varstr : "", s->c);
-            type_to_str(buf, buf_size, &s->type, buf1);
-            goto no_var;
-        }
-        pstrcpy(buf1, sizeof(buf1), "*");
-        if (t & VT_CONSTANT)
-            pstrcat(buf1, buf_size, "const ");
-        if (t & VT_VOLATILE)
-            pstrcat(buf1, buf_size, "volatile ");
-        if (varstr)
-            pstrcat(buf1, sizeof(buf1), varstr);
-        type_to_str(buf, buf_size, &s->type, buf1);
-        goto no_var;
-    }
-    if (varstr) {
-        pstrcat(buf, buf_size, " ");
-        pstrcat(buf, buf_size, varstr);
-    }
- no_var: ;
+exit(1);
 }
 
 /* verify type compatibility to store vtop in 'dt' type, and generate
