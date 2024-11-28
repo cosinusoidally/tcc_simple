@@ -1531,63 +1531,9 @@ static inline void add64le(unsigned char *p, int64_t x) {
     write64le(p, read64le(p) + x);
 }
 
-/* ------------ i386-gen.c ------------ */
-#if defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64
-ST_FUNC void g(int c);
-ST_FUNC void gen_le16(int c);
-ST_FUNC void gen_le32(int c);
-ST_FUNC void gen_addr32(int r, Sym *sym, int c);
-ST_FUNC void gen_addrpc32(int r, Sym *sym, int c);
-#endif
-
-#ifdef CONFIG_TCC_BCHECK
-ST_FUNC void gen_bounded_ptr_add(void);
-ST_FUNC void gen_bounded_ptr_deref(void);
-#endif
-
-/* ------------ x86_64-gen.c ------------ */
-#ifdef TCC_TARGET_X86_64
-ST_FUNC void gen_addr64(int r, Sym *sym, int64_t c);
-ST_FUNC void gen_opl(int op);
-#ifdef TCC_TARGET_PE
-ST_FUNC void gen_vla_result(int addr);
-#endif
-#endif
-
-/* ------------ arm-gen.c ------------ */
-#ifdef TCC_TARGET_ARM
-#if defined(TCC_ARM_EABI) && !defined(CONFIG_TCC_ELFINTERP)
-PUB_FUNC const char *default_elfinterp(struct TCCState *s);
-#endif
-ST_FUNC void arm_init(struct TCCState *s);
-ST_FUNC void gen_cvt_itof1(int t);
-#endif
-
-/* ------------ arm64-gen.c ------------ */
-#ifdef TCC_TARGET_ARM64
-ST_FUNC void gen_cvt_sxtw(void);
-ST_FUNC void gen_opl(int op);
-ST_FUNC void gfunc_return(CType *func_type);
-ST_FUNC void gen_va_start(void);
-ST_FUNC void gen_va_arg(CType *t);
-ST_FUNC void gen_clear_cache(void);
-#endif
-
-/* ------------ c67-gen.c ------------ */
-#ifdef TCC_TARGET_C67
-#endif
-
-/* ------------ tcccoff.c ------------ */
-
-#ifdef TCC_TARGET_COFF
-ST_FUNC int tcc_output_coff(TCCState *s1, FILE *f);
-ST_FUNC int tcc_load_coff(TCCState * s1, int fd);
-#endif
-
 /* ------------ tccasm.c ------------ */
 ST_FUNC void asm_instr(void);
 ST_FUNC void asm_global_instr(void);
-#ifdef CONFIG_TCC_ASM
 ST_FUNC int find_constraint(ASMOperand *operands, int nb_operands, const char *name, const char **pp);
 ST_FUNC Sym* get_asm_sym(int name, Sym *csym);
 ST_FUNC void asm_expr(TCCState *s1, ExprValue *pe);
@@ -1595,67 +1541,15 @@ ST_FUNC int asm_int_expr(TCCState *s1);
 ST_FUNC int tcc_assemble(TCCState *s1, int do_preprocess);
 /* ------------ i386-asm.c ------------ */
 ST_FUNC void gen_expr32(ExprValue *pe);
-#ifdef TCC_TARGET_X86_64
-ST_FUNC void gen_expr64(ExprValue *pe);
-#endif
 ST_FUNC void asm_opcode(TCCState *s1, int opcode);
 ST_FUNC int asm_parse_regvar(int t);
 ST_FUNC void asm_compute_constraints(ASMOperand *operands, int nb_operands, int nb_outputs, const uint8_t *clobber_regs, int *pout_reg);
 ST_FUNC void subst_asm_operand(CString *add_str, SValue *sv, int modifier);
 ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands, int nb_outputs, int is_output, uint8_t *clobber_regs, int out_reg);
 ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str);
-#endif
 
-/* ------------ tccpe.c -------------- */
-#ifdef TCC_TARGET_PE
-ST_FUNC int pe_load_file(struct TCCState *s1, const char *filename, int fd);
-ST_FUNC int pe_output_file(TCCState * s1, const char *filename);
-ST_FUNC int pe_putimport(TCCState *s1, int dllindex, const char *name, addr_t value);
-#if defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64
-ST_FUNC SValue *pe_getimport(SValue *sv, SValue *v2);
-#endif
-#ifdef TCC_TARGET_X86_64
-ST_FUNC void pe_add_unwind_data(unsigned start, unsigned end, unsigned stack);
-#endif
-PUB_FUNC int tcc_get_dllexports(const char *filename, char **pp);
-/* symbol properties stored in Elf32_Sym->st_other */
-# define ST_PE_EXPORT 0x10
-# define ST_PE_IMPORT 0x20
-# define ST_PE_STDCALL 0x40
-#endif
 #define ST_ASM_SET 0x04
 
-/* ------------ tccrun.c ----------------- */
-#ifdef TCC_IS_NATIVE
-#ifdef CONFIG_TCC_STATIC
-#define RTLD_LAZY       0x001
-#define RTLD_NOW        0x002
-#define RTLD_GLOBAL     0x100
-#define RTLD_DEFAULT    NULL
-/* dummy function for profiling */
-ST_FUNC void *dlopen(const char *filename, int flag);
-ST_FUNC void dlclose(void *p);
-ST_FUNC const char *dlerror(void);
-ST_FUNC void *dlsym(void *handle, const char *symbol);
-#endif
-#ifdef CONFIG_TCC_BACKTRACE
-ST_DATA int rt_num_callers;
-ST_DATA const char **rt_bound_error_msg;
-ST_DATA void *rt_prog_main;
-ST_FUNC void tcc_set_num_callers(int n);
-#endif
-ST_FUNC void tcc_run_free(TCCState *s1);
-#endif
-
-/* ------------ tcctools.c ----------------- */
-#if 0 /* included in tcc.c */
-ST_FUNC int tcc_tool_ar(TCCState *s, int argc, char **argv);
-#ifdef TCC_TARGET_PE
-ST_FUNC int tcc_tool_impdef(TCCState *s, int argc, char **argv);
-#endif
-ST_FUNC void tcc_tool_cross(TCCState *s, char **argv, int option);
-ST_FUNC void gen_makedeps(TCCState *s, const char *target, const char *filename);
-#endif
 
 /********************************************************/
 #undef ST_DATA
