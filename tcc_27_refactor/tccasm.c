@@ -275,25 +275,6 @@ ST_FUNC int find_constraint(ASMOperand *operands, int nb_operands,
             index = (index * 10) + (*name) - '0';
             name++;
         }
-        if ((unsigned)index >= nb_operands)
-            index = -1;
-    } else if (*name == '[') {
-        name++;
-        p = strchr(name, ']');
-        if (p) {
-            ts = tok_alloc(name, p - name);
-            for(index = 0; index < nb_operands; index++) {
-                if (operands[index].id == ts->tok)
-                    goto found;
-            }
-            index = -1;
-        found:
-            name = p + 1;
-        } else {
-            index = -1;
-        }
-    } else {
-        index = -1;
     }
     if (pp)
         *pp = name;
@@ -318,22 +299,11 @@ static void subst_asm_operands(ASMOperand *operands, int nb_operands,
                 goto add_char;
             }
             modifier = 0;
-            if (*str == 'c' || *str == 'n' ||
-                *str == 'b' || *str == 'w' || *str == 'h' || *str == 'k' ||
-		*str == 'q' ||
-		/* P in GCC would add "@PLT" to symbol refs in PIC mode,
-		   and make literal operands not be decorated with '$'.  */
-		*str == 'P')
-                modifier = *str++;
             index = find_constraint(operands, nb_operands, str, &str);
-            if (index < 0)
-                tcc_error("invalid operand reference after %%");
             op = &operands[index];
             sv = *op->vt;
             if (op->reg >= 0) {
                 sv.r = op->reg;
-                if ((op->vt->r & VT_VALMASK) == VT_LLOCAL && op->is_memory)
-                    sv.r |= VT_LVAL;
             }
             subst_asm_operand(out_str, &sv, modifier);
         } else {
