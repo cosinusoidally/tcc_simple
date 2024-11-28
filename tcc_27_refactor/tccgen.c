@@ -85,7 +85,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has
 static void decl(int l);
 static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
-static void vla_runtime_type_size(CType *type, int *a);
 static void vla_sp_restore(void);
 static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
@@ -1506,12 +1505,6 @@ static int pointed_size(CType *type)
     return type_size(pointed_type(type), &align);
 }
 
-static void vla_runtime_pointed_size(CType *type)
-{
-    int align;
-    vla_runtime_type_size(pointed_type(type), &align);
-}
-
 static inline int is_null_pointer(SValue *p)
 {
     if ((p->r & (VT_VALMASK | VT_LVAL | VT_SYM)) != VT_CONST)
@@ -2024,13 +2017,6 @@ ST_FUNC int type_size(CType *type, int *a)
         *a = 1;
         return 1;
     }
-}
-
-/* push type size as known at runtime time on top of value stack. Put
-   alignment at 'a' */
-ST_FUNC void vla_runtime_type_size(CType *type, int *a)
-{
-exit(1);
 }
 
 static void vla_sp_restore(void) {
@@ -3335,7 +3321,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
             loc &= -align;
             n = loc;
 
-            vla_runtime_type_size(type, &align);
             gen_op('*');
             vset(&int_type, VT_LOCAL|VT_LVAL, n);
             vswap();
@@ -3633,7 +3618,6 @@ ST_FUNC void unary(void)
                     tcc_error("sizeof applied to an incomplete type");
                 vpushs(size);
             } else {
-                vla_runtime_type_size(&type, &align);
             }
         } else {
             vpushs(align);
@@ -5631,7 +5615,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         if (NODATA_WANTED)
             goto no_alloc;
 
-        vla_runtime_type_size(type, &a);
         vla_sp_loc = addr;
         vlas_in_scope++;
 
