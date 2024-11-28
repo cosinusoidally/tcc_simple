@@ -28,11 +28,6 @@ static Sym *asm_label_find(int v)
     return sym;
 }
 
-static Sym *asm_label_push(int v)
-{
-exit(1);
-}
-
 /* Return a symbol we can use inside the assembler, having name NAME.
    Symbols from asm and C source share a namespace.  If we generate
    an asm symbol it's also a (file-global) C symbol, but it's
@@ -47,11 +42,6 @@ ST_FUNC Sym* get_asm_sym(int name, Sym *csym)
 {
     Sym *sym = asm_label_find(name);
     return sym;
-}
-
-static Sym* asm_section_sym(TCCState *s1, Section *sec)
-{
-exit(1);
 }
 
 /* We do not use the C expression parser to handle symbols. Maybe the
@@ -157,55 +147,6 @@ ST_FUNC void asm_expr(TCCState *s1, ExprValue *pe)
     asm_expr_cmp(s1, pe);
 }
 
-ST_FUNC int asm_int_expr(TCCState *s1)
-{
-exit(1);
-}
-
-static Sym* asm_new_label1(TCCState *s1, int label, int is_local,
-                           int sh_num, int value)
-{
-exit(1);
-}
-
-static Sym* asm_new_label(TCCState *s1, int label, int is_local)
-{
-exit(1);
-}
-
-/* Set the value of LABEL to that of some expression (possibly
-   involving other symbols).  LABEL can be overwritten later still.  */
-static Sym* set_symbol(TCCState *s1, int label)
-{
-exit(1);
-}
-
-static void use_section1(TCCState *s1, Section *sec)
-{
-exit(1);
-}
-
-static void use_section(TCCState *s1, const char *name)
-{
-puts("use_section");exit(1);
-}
-
-static void push_section(TCCState *s1, const char *name)
-{
-puts("push_section");exit(1);
-}
-
-static void pop_section(TCCState *s1)
-{
-exit(1);
-}
-
-static void asm_parse_directive(TCCState *s1, int global)
-{
-exit(1);
-}
-
-
 /* assemble a file */
 static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
 {
@@ -230,12 +171,6 @@ static int tcc_assemble_internal(TCCState *s1, int do_preprocess, int global)
 
     parse_flags = saved_parse_flags;
     return 0;
-}
-
-/* Assemble the current file */
-ST_FUNC int tcc_assemble(TCCState *s1, int do_preprocess)
-{
-exit(1);
 }
 
 /********************************************************************/
@@ -403,18 +338,12 @@ ST_FUNC void asm_instr(void)
 
     /* substitute the operands in the asm string. No substitution is
        done if no operands (GCC behaviour) */
-#ifdef ASM_DEBUG
-    printf("asm: \"%s\"\n", (char *)astr.data);
-#endif
     if (must_subst) {
         subst_asm_operands(operands, nb_operands, &astr1, &astr);
         cstr_free(&astr);
     } else {
         astr1 = astr;
     }
-#ifdef ASM_DEBUG
-    printf("subst_asm: \"%s\"\n", (char *)astr1.data);
-#endif
 
     /* generate loads */
     asm_gen_code(operands, nb_operands, nb_outputs, 0, 
