@@ -2235,24 +2235,6 @@ ST_FUNC void parse_mult_str (CString *astr, const char *msg)
     cstr_ccat(astr, '\0');
 }
 
-/* If I is >= 1 and a power of two, returns log2(i)+1.
-   If I is 0 returns 0.  */
-static int exact_log2p1(int i)
-{
-  int ret;
-  if (!i)
-    return 0;
-  for (ret = 1; i >= 1 << 8; ret += 8)
-    i >>= 8;
-  if (i >= 1 << 4)
-    ret += 4, i >>= 4;
-  if (i >= 1 << 2)
-    ret += 2, i >>= 2;
-  if (i >= 1 << 1)
-    ret++;
-  return ret;
-}
-
 static Sym * find_field (CType *type, int v)
 {
     Sym *s = type->ref;
