@@ -96,14 +96,11 @@ static void next_nomacro_spc(void);
 
 ST_FUNC void skip(int c)
 {
-    if (tok != c)
-        tcc_error("'%c' expected (got \"%s\")", c, get_tok_str(tok, &tokc));
     next();
 }
 
 ST_FUNC void expect(const char *msg)
 {
-    tcc_error("%s expected", msg);
 }
 
 #define tal_free(al, p) tcc_free(p)
@@ -173,9 +170,6 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 {
     TokenSym *ts, **ptable;
     int i;
-
-    if (tok_ident >= SYM_FIRST_ANOM) 
-        tcc_error("memory full (symbols)");
 
     /* expand token table if needed */
     i = tok_ident - TOK_IDENT;
@@ -307,8 +301,7 @@ static int handle_stray_noerror(void)
 
 static void handle_stray(void)
 {
-    if (handle_stray_noerror())
-        tcc_error("stray '\\' in program");
+    handle_stray_noerror();
 }
 
 /* skip the stray and handle the \\n case. Output an error if
@@ -326,8 +319,6 @@ static int handle_stray1(uint8_t *p)
     }
     ch = *p;
     if (handle_stray_noerror()) {
-        if (!(parse_flags & PARSE_FLAG_ACCEPT_STRAYS))
-            tcc_error("stray '\\' in program");
         *--file->buf_ptr = '\\';
     }
     p = file->buf_ptr;
