@@ -697,32 +697,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
             op->reg = reg;
             regs_allocated[reg] |= reg_mask;
             break;
-        case 'm':
-        case 'g':
-            /* nothing special to do because the operand is already in
-               memory, except if the pointer itself is stored in a
-               memory variable (VT_LLOCAL case) */
-            /* XXX: fix constant case */
-            /* if it is a reference to a memory zone, it must lie
-               in a register, so we reserve the register in the
-               input registers and a load will be generated
-               later */
-            if (j < nb_outputs || c == 'm') {
-                if ((op->vt->r & VT_VALMASK) == VT_LLOCAL) {
-                    /* any general register */
-                    for(reg = 0; reg < 8; reg++) {
-                        if (!(regs_allocated[reg] & REG_IN_MASK))
-                            goto reg_found1;
-                    }
-                    goto try_next;
-                reg_found1:
-                    /* now we can reload in the register */
-                    regs_allocated[reg] |= REG_IN_MASK;
-                    op->reg = reg;
-                    op->is_memory = 1;
-                }
-            }
-            break;
         default:
             break;
         }
@@ -733,39 +707,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
         }
     }
 
-    /* compute out_reg. It is used to store outputs registers to memory
-       locations references by pointers (VT_LLOCAL case) */
-    *pout_reg = -1;
-    for(i=0;i<nb_operands;i++) {
-        op = &operands[i];
-        if (op->reg >= 0 &&
-            (op->vt->r & VT_VALMASK) == VT_LLOCAL  &&
-            !op->is_memory) {
-            for(reg = 0; reg < 8; reg++) {
-                if (!(regs_allocated[reg] & REG_OUT_MASK))
-                    goto reg_found2;
-            }
-        reg_found2:
-            *pout_reg = reg;
-            break;
-        }
-    }
-
-    /* print sorted constraints */
-#ifdef ASM_DEBUG
-    for(i=0;i<nb_operands;i++) {
-        j = sorted_op[i];
-        op = &operands[j];
-        printf("%%%d [%s]: \"%s\" r=0x%04x reg=%d\n",
-               j,
-               op->id ? get_tok_str(op->id, NULL) : "",
-               op->constraint,
-               op->vt->r,
-               op->reg);
-    }
-    if (*pout_reg >= 0)
-        printf("out_reg=%d\n", *pout_reg);
-#endif
 }
 
 ST_FUNC void subst_asm_operand(CString *add_str,
