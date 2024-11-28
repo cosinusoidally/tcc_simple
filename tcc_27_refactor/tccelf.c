@@ -497,25 +497,6 @@ ST_FUNC void squeeze_multi_relocs(Section *s, size_t oldrelocoffset)
     sr->data_offset = (unsigned char*)dest - sr->data + sizeof(*r);
 }
 
-/* put stab debug information */
-
-ST_FUNC void put_stabs(const char *str, int type, int other, int desc,
-                      unsigned long value)
-{
-exit(1);
-}
-
-ST_FUNC void put_stabs_r(const char *str, int type, int other, int desc,
-                        unsigned long value, Section *sec, int sym_index)
-{
-exit(1);
-}
-
-ST_FUNC void put_stabn(int type, int other, int desc, int value)
-{
-exit(1);
-}
-
 ST_FUNC struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc)
 {
     int n;
