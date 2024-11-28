@@ -1617,8 +1617,6 @@ static void gen_cvt_itof1(int t)
     if ((vtop->type.t & (VT_BTYPE | VT_UNSIGNED)) == 
         (VT_LLONG | VT_UNSIGNED)) {
 
-        if (t == VT_FLOAT)
-            vpush_global_sym(&func_old_type, TOK___floatundisf);
         if (t == VT_LDOUBLE)
             vpush_global_sym(&func_old_type, TOK___floatundixf);
         vrott(2);
@@ -1714,43 +1712,23 @@ static void gen_cast(CType *type)
         if (c) {
             /* constant case: we can do it now */
             /* XXX: in ISOC, cannot do it if error in convert */
-            if (sbt == VT_FLOAT)
-                vtop->c.ld = vtop->c.f;
-            else if (sbt == VT_DOUBLE)
+            if (sbt == VT_DOUBLE)
                 vtop->c.ld = vtop->c.d;
 
             if (df) {
-                if ((sbt & VT_BTYPE) == VT_LLONG) {
-                    if ((sbt & VT_UNSIGNED) || !(vtop->c.i >> 63))
-                        vtop->c.ld = vtop->c.i;
-                    else
-                        vtop->c.ld = -(long double)-vtop->c.i;
-                } else if(!sf) {
-                    if ((sbt & VT_UNSIGNED) || !(vtop->c.i >> 31))
-                        vtop->c.ld = (uint32_t)vtop->c.i;
-                    else
-                        vtop->c.ld = -(long double)-(uint32_t)vtop->c.i;
+                if(!sf) {
+                    vtop->c.ld = (uint32_t)vtop->c.i;
                 }
 
                 if (dbt == VT_FLOAT)
                     vtop->c.f = (float)vtop->c.ld;
                 else if (dbt == VT_DOUBLE)
                     vtop->c.d = (double)vtop->c.ld;
-            } else if (sf && dbt == (VT_LLONG|VT_UNSIGNED)) {
-                vtop->c.i = vtop->c.ld;
-            } else if (sf && dbt == VT_BOOL) {
-                vtop->c.i = (vtop->c.ld != 0);
             } else {
-                if(sf)
-                    vtop->c.i = vtop->c.ld;
-                else if (sbt == (VT_LLONG|VT_UNSIGNED))
+                if (sbt == (VT_LLONG|VT_UNSIGNED))
                     ;
                 else if (sbt & VT_UNSIGNED)
                     vtop->c.i = (uint32_t)vtop->c.i;
-#if PTR_SIZE == 8
-                else if (sbt == VT_PTR)
-                    ;
-#endif
                 else if (sbt != VT_LLONG)
                     vtop->c.i = ((uint32_t)vtop->c.i |
                                   -(vtop->c.i & 0x80000000));
@@ -1759,10 +1737,6 @@ static void gen_cast(CType *type)
                     ;
                 else if (dbt == VT_BOOL)
                     vtop->c.i = (vtop->c.i != 0);
-#if PTR_SIZE == 8
-                else if (dbt == VT_PTR)
-                    ;
-#endif
                 else if (dbt != VT_LLONG) {
                     uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
                                   (dbt & VT_BTYPE) == VT_SHORT ? 0xffff :
@@ -1801,7 +1775,6 @@ static void gen_cast(CType *type)
                         gen_cast(type);
                     }
                 }
-#if PTR_SIZE == 4
             } else if ((dbt & VT_BTYPE) == VT_LLONG) {
                 if ((sbt & VT_BTYPE) != VT_LLONG) {
                     /* scalar to long long */
@@ -1825,29 +1798,6 @@ static void gen_cast(CType *type)
                     vtop[-1].r2 = vtop->r;
                     vpop();
                 }
-#else
-            } else if ((dbt & VT_BTYPE) == VT_LLONG ||
-                       (dbt & VT_BTYPE) == VT_PTR ||
-                       (dbt & VT_BTYPE) == VT_FUNC) {
-                if ((sbt & VT_BTYPE) != VT_LLONG &&
-                    (sbt & VT_BTYPE) != VT_PTR &&
-                    (sbt & VT_BTYPE) != VT_FUNC) {
-                    /* need to convert from 32bit to 64bit */
-                    gv(RC_INT);
-                    if (sbt != (VT_INT | VT_UNSIGNED)) {
-#if defined(TCC_TARGET_ARM64)
-                        gen_cvt_sxtw();
-#elif defined(TCC_TARGET_X86_64)
-                        int r = gv(RC_INT);
-                        /* x86_64 specific: movslq */
-                        o(0x6348);
-                        o(0xc0 + (REG_VALUE(r) << 3) + REG_VALUE(r));
-#else
-#error
-#endif
-                    }
-                }
-#endif
             } else if (dbt == VT_BOOL) {
                 /* scalar to bool */
                 vpushi(0);
