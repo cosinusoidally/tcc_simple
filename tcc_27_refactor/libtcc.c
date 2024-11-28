@@ -106,8 +106,6 @@ PUB_FUNC void *tcc_malloc(unsigned long size)
 {
     void *ptr;
     ptr = malloc(size);
-    if (!ptr && size)
-        tcc_error("memory full (malloc)");
     return ptr;
 }
 
@@ -123,8 +121,6 @@ PUB_FUNC void *tcc_realloc(void *ptr, unsigned long size)
 {
     void *ptr1;
     ptr1 = realloc(ptr, size);
-    if (!ptr1 && size)
-        tcc_error("memory full (realloc)");
     return ptr1;
 }
 
@@ -320,8 +316,6 @@ static void tcc_cleanup(void)
 {
     if (NULL == tcc_state)
         return;
-    while (file)
-        tcc_close();
     tccpp_delete(tcc_state);
     tcc_state = NULL;
     /* free sym_pools */
@@ -337,8 +331,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     tcc_cleanup();
 
     s = tcc_mallocz(sizeof(TCCState));
-    if (!s)
-        return NULL;
     tcc_state = s;
     ++nb_states;
 
@@ -578,9 +570,6 @@ reparse:
             optarg = r1;
             if (popt->flags & TCC_OPTION_HAS_ARG) {
                 if (*r1 == '\0' && !(popt->flags & TCC_OPTION_NOSEP)) {
-                    if (optind >= argc)
-                arg_err:
-                        tcc_error("argument to '%s' is missing", r);
                     optarg = argv[optind++];
                 }
             } else if (*r1 != '\0')
@@ -607,9 +596,6 @@ reparse:
             s->outfile = tcc_strdup(optarg);
             break;
         default:
-unsupported_option:
-            if (s->warn_unsupported)
-                tcc_warning("unsupported option '%s'", r);
             break;
         }
     }
