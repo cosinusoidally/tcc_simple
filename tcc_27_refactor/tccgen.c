@@ -5527,31 +5527,17 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 	    case VT_PTR:
 		{
 		    addr_t val = vtop->c.i;
-#if PTR_SIZE == 8
-		    if (vtop->r & VT_SYM)
-		      greloca(sec, vtop->sym, c, R_DATA_PTR, val);
-		    else
-		      *(addr_t *)ptr |= val;
-#else
 		    if (vtop->r & VT_SYM)
 		      greloc(sec, vtop->sym, c, R_DATA_PTR);
 		    *(addr_t *)ptr |= val;
-#endif
 		    break;
 		}
 	    default:
 		{
 		    int val = vtop->c.i;
-#if PTR_SIZE == 8
-		    if (vtop->r & VT_SYM)
-		      greloca(sec, vtop->sym, c, R_DATA_PTR, val);
-		    else
-		      *(int *)ptr |= val;
-#else
 		    if (vtop->r & VT_SYM)
 		      greloc(sec, vtop->sym, c, R_DATA_PTR);
 		    *(int *)ptr |= val;
-#endif
 		    break;
 		}
 	    }
@@ -5619,11 +5605,7 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
         /* only parse strings here if correct type (otherwise: handle
            them as ((w)char *) expressions */
         if ((tok == TOK_LSTR && 
-#ifdef TCC_TARGET_PE
-             (t1->t & VT_BTYPE) == VT_SHORT && (t1->t & VT_UNSIGNED)
-#else
              (t1->t & VT_BTYPE) == VT_INT
-#endif
             ) || (tok == TOK_STR && (t1->t & VT_BTYPE) == VT_BYTE)) {
 	    len = 0;
             while (tok == TOK_STR || tok == TOK_LSTR) {
