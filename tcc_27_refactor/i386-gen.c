@@ -347,30 +347,7 @@ ST_FUNC void gfunc_call(int nb_args)
     save_regs(0); /* save used temporary registers */
     func_sym = vtop->type.ref;
     func_call = func_sym->f.func_call;
-    /* fast call case */
-    if ((func_call >= FUNC_FASTCALL1 && func_call <= FUNC_FASTCALL3) ||
-        func_call == FUNC_FASTCALLW) {
-        int fastcall_nb_regs;
-        uint8_t *fastcall_regs_ptr;
-        if (func_call == FUNC_FASTCALLW) {
-            fastcall_regs_ptr = fastcallw_regs;
-            fastcall_nb_regs = 2;
-        } else {
-            fastcall_regs_ptr = fastcall_regs;
-            fastcall_nb_regs = func_call - FUNC_FASTCALL1 + 1;
-        }
-        for(i = 0;i < fastcall_nb_regs; i++) {
-            if (args_size <= 0)
-                break;
-            o(0x58 + fastcall_regs_ptr[i]); /* pop r */
-            /* XXX: incorrect for struct/floats */
-            args_size -= 4;
-        }
-    }
-#ifndef TCC_TARGET_PE
-    else if ((vtop->type.ref->type.t & VT_BTYPE) == VT_STRUCT)
-        args_size -= 4;
-#endif
+
     gcall_or_jmp(0);
 
     if (args_size && func_call != FUNC_STDCALL && func_call != FUNC_FASTCALLW)
@@ -378,11 +355,7 @@ ST_FUNC void gfunc_call(int nb_args)
     vtop--;
 }
 
-#ifdef TCC_TARGET_PE
-#define FUNC_PROLOG_SIZE (10 + USE_EBX)
-#else
 #define FUNC_PROLOG_SIZE (9 + USE_EBX)
-#endif
 
 /* generate function prolog of type 't' */
 ST_FUNC void gfunc_prolog(CType *func_type)
@@ -399,16 +372,9 @@ ST_FUNC void gfunc_prolog(CType *func_type)
     loc = 0;
     func_vc = 0;
 
-    if (func_call >= FUNC_FASTCALL1 && func_call <= FUNC_FASTCALL3) {
-        fastcall_nb_regs = func_call - FUNC_FASTCALL1 + 1;
-        fastcall_regs_ptr = fastcall_regs;
-    } else if (func_call == FUNC_FASTCALLW) {
-        fastcall_nb_regs = 2;
-        fastcall_regs_ptr = fastcallw_regs;
-    } else {
-        fastcall_nb_regs = 0;
-        fastcall_regs_ptr = NULL;
-    }
+    fastcall_nb_regs = 0;
+    fastcall_regs_ptr = NULL;
+
     param_index = 0;
 
     ind += FUNC_PROLOG_SIZE;
@@ -417,61 +383,18 @@ ST_FUNC void gfunc_prolog(CType *func_type)
        implicit pointer parameter */
     func_vt = sym->type;
     func_var = (sym->f.func_type == FUNC_ELLIPSIS);
-#ifdef TCC_TARGET_PE
-    size = type_size(&func_vt,&align);
-    if (((func_vt.t & VT_BTYPE) == VT_STRUCT)
-        && (size > 8 || (size & (size - 1)))) {
-#else
-    if ((func_vt.t & VT_BTYPE) == VT_STRUCT) {
-#endif
-        /* XXX: fastcall case ? */
-        func_vc = addr;
-        addr += 4;
-        param_index++;
-    }
     /* define parameters */
     while ((sym = sym->next) != NULL) {
         type = &sym->type;
         size = type_size(type, &align);
         size = (size + 3) & ~3;
-#ifdef FUNC_STRUCT_PARAM_AS_PTR
-        /* structs are passed as pointer */
-        if ((type->t & VT_BTYPE) == VT_STRUCT) {
-            size = 4;
-        }
-#endif
-        if (param_index < fastcall_nb_regs) {
-            /* save FASTCALL register */
-            loc -= 4;
-            o(0x89);     /* movl */
-            gen_modrm(fastcall_regs_ptr[param_index], VT_LOCAL, NULL, loc);
-            param_addr = loc;
-        } else {
-            param_addr = addr;
-            addr += size;
-        }
+        param_addr = addr;
+        addr += size;
         sym_push(sym->v & ~SYM_FIELD, type,
                  VT_LOCAL | lvalue_type(type->t), param_addr);
         param_index++;
     }
     func_ret_sub = 0;
-    /* pascal type call or fastcall ? */
-    if (func_call == FUNC_STDCALL || func_call == FUNC_FASTCALLW)
-        func_ret_sub = addr - 8;
-#ifndef TCC_TARGET_PE
-    else if (func_vc)
-        func_ret_sub = 4;
-#endif
-
-#ifdef CONFIG_TCC_BCHECK
-    /* leave some room for bound checking code */
-    if (tcc_state->do_bounds_check) {
-        func_bound_offset = lbounds_section->data_offset;
-        func_bound_ind = ind;
-        oad(0xb8, 0); /* lbound section pointer */
-        oad(0xb8, 0); /* call to function */
-    }
-#endif
 }
 
 /* generate function epilog */
@@ -479,44 +402,8 @@ ST_FUNC void gfunc_epilog(void)
 {
     addr_t v, saved_ind;
 
-#ifdef CONFIG_TCC_BCHECK
-    if (tcc_state->do_bounds_check
-     && func_bound_offset != lbounds_section->data_offset) {
-        addr_t saved_ind;
-        addr_t *bounds_ptr;
-        Sym *sym_data;
-
-        /* add end of table info */
-        bounds_ptr = section_ptr_add(lbounds_section, sizeof(addr_t));
-        *bounds_ptr = 0;
-
-        /* generate bound local allocation */
-        saved_ind = ind;
-        ind = func_bound_ind;
-        sym_data = get_sym_ref(&char_pointer_type, lbounds_section, 
-                               func_bound_offset, lbounds_section->data_offset);
-        greloc(cur_text_section, sym_data,
-               ind + 1, R_386_32);
-        oad(0xb8, 0); /* mov %eax, xxx */
-        gen_static_call(TOK___bound_local_new);
-        ind = saved_ind;
-
-        /* generate bound check local freeing */
-        o(0x5250); /* save returned value, if any */
-        greloc(cur_text_section, sym_data, ind + 1, R_386_32);
-        oad(0xb8, 0); /* mov %eax, xxx */
-        gen_static_call(TOK___bound_local_delete);
-        o(0x585a); /* restore returned value, if any */
-    }
-#endif
-
     /* align local size to word & save local variables */
     v = (-loc + 3) & -4;
-
-#if USE_EBX
-    o(0x8b);
-    gen_modrm(TREG_EBX, VT_LOCAL, NULL, -(v+4));
-#endif
 
     o(0xc9); /* leave */
     if (func_ret_sub == 0) {
@@ -528,20 +415,9 @@ ST_FUNC void gfunc_epilog(void)
     }
     saved_ind = ind;
     ind = func_sub_sp_offset - FUNC_PROLOG_SIZE;
-#ifdef TCC_TARGET_PE
-    if (v >= 4096) {
-        oad(0xb8, v); /* mov stacksize, %eax */
-        gen_static_call(TOK___chkstk); /* call __chkstk, (does the stackframe too) */
-    } else
-#endif
-    {
-        o(0xe58955);  /* push %ebp, mov %esp, %ebp */
-        o(0xec81);  /* sub esp, stacksize */
-        gen_le32(v);
-#ifdef TCC_TARGET_PE
-        o(0x90);  /* adjust to FUNC_PROLOG_SIZE */
-#endif
-    }
+    o(0xe58955);  /* push %ebp, mov %esp, %ebp */
+    o(0xec81);  /* sub esp, stacksize */
+    gen_le32(v);
     o(0x53 * USE_EBX); /* push ebx */
     ind = saved_ind;
 }
