@@ -165,67 +165,24 @@ exit(1);
 static Sym* asm_new_label1(TCCState *s1, int label, int is_local,
                            int sh_num, int value)
 {
-    Sym *sym;
-    ElfSym *esym;
-
-    sym = asm_label_find(label);
-    if (sym) {
-	esym = elfsym(sym);
-	/* A VT_EXTERN symbol, even if it has a section is considered
-	   overridable.  This is how we "define" .set targets.  Real
-	   definitions won't have VT_EXTERN set.  */
-        if (esym && esym->st_shndx != SHN_UNDEF) {
-            /* the label is already defined */
-            if (IS_ASM_SYM(sym)
-                && (is_local == 1 || (sym->type.t & VT_EXTERN)))
-                goto new_label;
-            if (!(sym->type.t & VT_EXTERN))
-                tcc_error("assembler label '%s' already defined",
-                          get_tok_str(label, NULL));
-        }
-    } else {
-    new_label:
-        sym = asm_label_push(label);
-    }
-    if (!sym->c)
-      put_extern_sym2(sym, SHN_UNDEF, 0, 0, 0);
-    esym = elfsym(sym);
-    esym->st_shndx = sh_num;
-    esym->st_value = value;
-    if (is_local != 2)
-        sym->type.t &= ~VT_EXTERN;
-    return sym;
+exit(1);
 }
 
 static Sym* asm_new_label(TCCState *s1, int label, int is_local)
 {
-    return asm_new_label1(s1, label, is_local, cur_text_section->sh_num, ind);
+exit(1);
 }
 
 /* Set the value of LABEL to that of some expression (possibly
    involving other symbols).  LABEL can be overwritten later still.  */
 static Sym* set_symbol(TCCState *s1, int label)
 {
-    long n;
-    ExprValue e;
-    Sym *sym;
-    ElfSym *esym;
-    next();
-    asm_expr(s1, &e);
-    n = e.v;
-    esym = elfsym(e.sym);
-    if (esym)
-	n += esym->st_value;
-    sym = asm_new_label1(s1, label, 2, esym ? esym->st_shndx : SHN_ABS, n);
-    elfsym(sym)->st_other |= ST_ASM_SET;
-    return sym;
+exit(1);
 }
 
 static void use_section1(TCCState *s1, Section *sec)
 {
-    cur_text_section->data_offset = ind;
-    cur_text_section = sec;
-    ind = cur_text_section->data_offset;
+exit(1);
 }
 
 static void use_section(TCCState *s1, const char *name)
@@ -240,11 +197,7 @@ puts("push_section");exit(1);
 
 static void pop_section(TCCState *s1)
 {
-    Section *prev = cur_text_section->prev;
-    if (!prev)
-        tcc_error(".popsection without .pushsection");
-    cur_text_section->prev = NULL;
-    use_section1(s1, prev);
+exit(1);
 }
 
 static void asm_parse_directive(TCCState *s1, int global)
