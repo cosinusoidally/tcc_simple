@@ -652,19 +652,6 @@ static void patch_storage(Sym *sym, AttributeDef *ad, CType *type)
         patch_type(sym, type);
 
     sym->a.weak |= ad->a.weak;
-    if (ad->a.visibility) {
-        int vis = sym->a.visibility;
-        int vis2 = ad->a.visibility;
-        if (vis == STV_DEFAULT)
-            vis = vis2;
-        else if (vis2 != STV_DEFAULT)
-            vis = (vis < vis2) ? vis : vis2;
-        sym->a.visibility = vis;
-    }
-    if (ad->a.aligned)
-        sym->a.aligned = ad->a.aligned;
-    if (ad->asm_label)
-        sym->asm_label = ad->asm_label;
     update_storage(sym);
 }
 
@@ -680,11 +667,6 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
         s->a = ad->a;
         s->sym_scope = 0;
     } else {
-        if (s->type.ref == func_old_type.ref) {
-            s->type.ref = type->ref;
-            s->r = r | VT_CONST | VT_SYM;
-            s->type.t |= VT_EXTERN;
-        }
         patch_storage(s, ad, type);
     }
     return s;
@@ -737,30 +719,23 @@ ST_FUNC void save_reg_upstack(int r, int n)
                 type = &p->type;
                 if ((p->r & VT_LVAL) ||
                     (!is_float(type->t) && (type->t & VT_BTYPE) != VT_LLONG))
-#if PTR_SIZE == 8
-                    type = &char_pointer_type;
-#else
                     type = &int_type;
-#endif
                 size = type_size(type, &align);
                 loc = (loc - size) & -align;
                 sv.type.t = type->t;
                 sv.r = VT_LOCAL | VT_LVAL;
                 sv.c.i = loc;
                 store(r, &sv);
-#if defined(TCC_TARGET_I386) || defined(TCC_TARGET_X86_64)
+
                 /* x86 specific: need to pop fp register ST0 if saved */
                 if (r == TREG_ST0) {
                     o(0xd8dd); /* fstp %st(0) */
                 }
-#endif
-#if PTR_SIZE == 4
                 /* special long long case */
                 if ((type->t & VT_BTYPE) == VT_LLONG) {
                     sv.c.i += 4;
                     store(p->r2, &sv);
                 }
-#endif
                 l = loc;
                 saved = 1;
             }
@@ -815,8 +790,6 @@ ST_FUNC int get_reg(int rc)
             return r;
         }
     }
-    /* Should never comes here */
-    return -1;
 }
 
 /* move register 's' (of type 't') to 'r', and flush previous value of r to memory
@@ -871,15 +844,10 @@ ST_FUNC int gv(int rc)
 
         type.ref = NULL;
         type.t = vtop->type.t & VT_UNSIGNED;
-        if ((vtop->type.t & VT_BTYPE) == VT_BOOL)
-            type.t |= VT_UNSIGNED;
 
         r = adjust_bf(vtop, bit_pos, bit_size);
 
-        if ((vtop->type.t & VT_BTYPE) == VT_LLONG)
-            type.t |= VT_LLONG;
-        else
-            type.t |= VT_INT;
+        type.t |= VT_INT;
 
         int bits = (type.t & VT_BTYPE) == VT_LLONG ? 64 : 32;
         /* cast to int to propagate signedness in following ops */
@@ -1081,10 +1049,6 @@ static void gv_dup(void)
 
     t = vtop->type.t;
     if ((t & VT_BTYPE) == VT_LLONG) {
-        if (t & VT_BITFIELD) {
-            gv(RC_INT);
-            t = vtop->type.t;
-        }
         lexpand();
         gv_dup();
         vswap();
@@ -1135,7 +1099,6 @@ ST_FUNC int gvtst(int inv, int t)
     return gtst(inv, t);
 }
 
-#if PTR_SIZE == 4
 /* generate CPU independent (unsigned) long long operations */
 static void gen_opl(int op)
 {
@@ -1147,15 +1110,9 @@ static void gen_opl(int op)
 
     switch(op) {
     case '/':
-    case TOK_PDIV:
-        func = TOK___divdi3;
-        goto gen_func;
     case TOK_UDIV:
         func = TOK___udivdi3;
         goto gen_func;
-    case '%':
-        func = TOK___moddi3;
-        goto gen_mod_func;
     case TOK_UMOD:
         func = TOK___umoddi3;
     gen_mod_func:
@@ -1272,17 +1229,11 @@ static void gen_opl(int op)
                 gen_op(op);
                 vswap();
                 vpushi(32 - c);
-                if (op == TOK_SHL)
-                    gen_op(TOK_SHR);
-                else
-                    gen_op(TOK_SHL);
+                gen_op(TOK_SHL);
                 vrotb(3);
                 /* stack: L L H */
                 vpushi(c);
-                if (op == TOK_SHL)
-                    gen_op(TOK_SHL);
-                else
-                    gen_op(TOK_SHR);
+                gen_op(TOK_SHR);
                 gen_op('|');
             }
             if (op != TOK_SHL)
@@ -1291,9 +1242,6 @@ static void gen_opl(int op)
         } else {
             /* XXX: should provide a faster fallback on x86 ? */
             switch(op) {
-            case TOK_SAR:
-                func = TOK___ashrdi3;
-                goto gen_func;
             case TOK_SHR:
                 func = TOK___lshrdi3;
                 goto gen_func;
@@ -1358,7 +1306,6 @@ static void gen_opl(int op)
         break;
     }
 }
-#endif
 
 static uint64_t gen_opic_sdiv(uint64_t a, uint64_t b)
 {
@@ -1406,40 +1353,22 @@ static void gen_opic(int op)
         case '%':
         case TOK_UDIV:
         case TOK_UMOD:
-            /* if division by zero, generate explicit division */
-            if (l2 == 0) {
-                if (const_wanted)
-                    tcc_error("division by zero in constant");
-                goto general_case;
-            }
             switch(op) {
             default: l1 = gen_opic_sdiv(l1, l2); break;
-            case '%': l1 = l1 - l2 * gen_opic_sdiv(l1, l2); break;
             case TOK_UDIV: l1 = l1 / l2; break;
-            case TOK_UMOD: l1 = l1 % l2; break;
             }
             break;
         case TOK_SHL: l1 <<= (l2 & shm); break;
-        case TOK_SHR: l1 >>= (l2 & shm); break;
         case TOK_SAR:
             l1 = (l1 >> 63) ? ~(~l1 >> (l2 & shm)) : l1 >> (l2 & shm);
             break;
             /* tests */
-        case TOK_ULT: l1 = l1 < l2; break;
         case TOK_UGE: l1 = l1 >= l2; break;
         case TOK_EQ: l1 = l1 == l2; break;
         case TOK_NE: l1 = l1 != l2; break;
-        case TOK_ULE: l1 = l1 <= l2; break;
-        case TOK_UGT: l1 = l1 > l2; break;
         case TOK_LT: l1 = gen_opic_lt(l1, l2); break;
         case TOK_GE: l1 = !gen_opic_lt(l1, l2); break;
-        case TOK_LE: l1 = !gen_opic_lt(l2, l1); break;
         case TOK_GT: l1 = gen_opic_lt(l2, l1); break;
-            /* logical */
-        case TOK_LAND: l1 = l1 && l2; break;
-        case TOK_LOR: l1 = l1 || l2; break;
-        default:
-            goto general_case;
         }
 	if (t1 != VT_LLONG && (PTR_SIZE != 8 || t1 != VT_PTR))
 	    l1 = ((uint32_t)l1 |
