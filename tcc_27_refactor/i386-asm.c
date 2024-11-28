@@ -617,8 +617,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
             /* this is a reference to another constraint */
             k = find_constraint(operands, nb_operands, str, NULL);
             op->ref_index = k;
-            if (operands[k].input_index >= 0)
-                tcc_error("cannot reference twice the same operand");
             operands[k].input_index = i;
             op->priority = 5;
         } else {
@@ -726,8 +724,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
             }
             break;
         default:
-            tcc_error("asm constraint %d ('%s') could not be satisfied",
-                  j, op->constraint);
             break;
         }
         /* if a reference is present for that operand, we assign it too */
@@ -749,7 +745,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
                 if (!(regs_allocated[reg] & REG_OUT_MASK))
                     goto reg_found2;
             }
-            tcc_error("could not find free output register for reloading");
         reg_found2:
             *pout_reg = reg;
             break;
@@ -805,27 +800,15 @@ ST_FUNC void subst_asm_operand(CString *add_str,
         snprintf(buf, sizeof(buf), "%d", (int)sv->c.i);
         cstr_cat(add_str, buf, -1);
     no_offset:;
-#ifdef TCC_TARGET_X86_64
-        if (r & VT_LVAL)
-            cstr_cat(add_str, "(%rip)", -1);
-#endif
     } else if ((r & VT_VALMASK) == VT_LOCAL) {
-#ifdef TCC_TARGET_X86_64
-        snprintf(buf, sizeof(buf), "%d(%%rbp)", (int)sv->c.i);
-#else
         snprintf(buf, sizeof(buf), "%d(%%ebp)", (int)sv->c.i);
-#endif
         cstr_cat(add_str, buf, -1);
     } else if (r & VT_LVAL) {
         reg = r & VT_VALMASK;
         if (reg >= VT_CONST)
             tcc_error("internal compiler error");
         snprintf(buf, sizeof(buf), "(%%%s)",
-#ifdef TCC_TARGET_X86_64
-                 get_tok_str(TOK_ASM_rax + reg, NULL)
-#else
                  get_tok_str(TOK_ASM_eax + reg, NULL)
-#endif
 		 );
         cstr_cat(add_str, buf, -1);
     } else {
@@ -840,23 +823,14 @@ ST_FUNC void subst_asm_operand(CString *add_str,
             size = 1;
         else if ((sv->type.t & VT_BTYPE) == VT_SHORT)
             size = 2;
-#ifdef TCC_TARGET_X86_64
-        else if ((sv->type.t & VT_BTYPE) == VT_LLONG ||
-		 (sv->type.t & VT_BTYPE) == VT_PTR)
-            size = 8;
-#endif
         else
             size = 4;
         if (size == 1 && reg >= 4)
             size = 4;
 
         if (modifier == 'b') {
-            if (reg >= 4)
-                tcc_error("cannot use byte register");
             size = 1;
         } else if (modifier == 'h') {
-            if (reg >= 4)
-                tcc_error("cannot use byte register");
             size = -1;
         } else if (modifier == 'w') {
             size = 2;
@@ -1001,10 +975,6 @@ ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str)
 {
     int reg;
     TokenSym *ts;
-#ifdef TCC_TARGET_X86_64
-    unsigned int type;
-#endif
-
     if (!strcmp(str, "memory") ||
         !strcmp(str, "cc") ||
 	!strcmp(str, "flags"))
@@ -1015,14 +985,6 @@ ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str)
         reg -= TOK_ASM_eax;
     } else if (reg >= TOK_ASM_ax && reg <= TOK_ASM_di) {
         reg -= TOK_ASM_ax;
-#ifdef TCC_TARGET_X86_64
-    } else if (reg >= TOK_ASM_rax && reg <= TOK_ASM_rdi) {
-        reg -= TOK_ASM_rax;
-    } else if ((reg = asm_parse_numeric_reg(reg, &type)) >= 0) {
-	;
-#endif
-    } else {
-        tcc_error("invalid clobber register '%s'", str);
     }
     clobber_regs[reg] = 1;
 }
