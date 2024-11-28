@@ -1430,45 +1430,18 @@ static void gen_opif(int op)
     c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     if (c1 && c2) {
-        if (v1->type.t == VT_FLOAT) {
-            f1 = v1->c.f;
-            f2 = v2->c.f;
-        } else if (v1->type.t == VT_DOUBLE) {
+        if (v1->type.t == VT_DOUBLE) {
             f1 = v1->c.d;
             f2 = v2->c.d;
-        } else {
-            f1 = v1->c.ld;
-            f2 = v2->c.ld;
         }
-
-        /* NOTE: we only do constant propagation if finite number (not
-           NaN or infinity) (ANSI spec) */
-        if (!ieee_finite(f1) || !ieee_finite(f2))
-            goto general_case;
 
         switch(op) {
-        case '+': f1 += f2; break;
         case '-': f1 -= f2; break;
         case '*': f1 *= f2; break;
-        case '/': 
-            if (f2 == 0.0) {
-                if (const_wanted)
-                    tcc_error("division by zero in constant");
-                goto general_case;
-            }
-            f1 /= f2; 
-            break;
-            /* XXX: also handles tests ? */
-        default:
-            goto general_case;
         }
         /* XXX: overflow test ? */
-        if (v1->type.t == VT_FLOAT) {
-            v1->c.f = f1;
-        } else if (v1->type.t == VT_DOUBLE) {
+        if (v1->type.t == VT_DOUBLE) {
             v1->c.d = f1;
-        } else {
-            v1->c.ld = f1;
         }
         vtop--;
     } else {
