@@ -25,19 +25,12 @@ static Sym* asm_new_label1(TCCState *s1, int label, int is_local, int sh_num, in
 static Sym *asm_label_find(int v)
 {
     Sym *sym = sym_find(v);
-    while (sym && sym->sym_scope)
-        sym = sym->prev_tok;
     return sym;
 }
 
 static Sym *asm_label_push(int v)
 {
-    /* We always add VT_EXTERN, for sym definition that's tentative
-       (for .set, removed for real defs), for mere references it's correct
-       as is.  */
-    Sym *sym = global_identifier_push(v, VT_ASM | VT_EXTERN | VT_STATIC, 0);
-    sym->r = VT_CONST | VT_SYM;
-    return sym;
+exit(1);
 }
 
 /* Return a symbol we can use inside the assembler, having name NAME.
@@ -53,22 +46,12 @@ static Sym *asm_label_push(int v)
 ST_FUNC Sym* get_asm_sym(int name, Sym *csym)
 {
     Sym *sym = asm_label_find(name);
-    if (!sym) {
-	sym = asm_label_push(name);
-	if (csym)
-	  sym->c = csym->c;
-    }
     return sym;
 }
 
 static Sym* asm_section_sym(TCCState *s1, Section *sec)
 {
-    char buf[100];
-    int label = tok_alloc(buf,
-        snprintf(buf, sizeof buf, "L.%s", sec->name)
-        )->tok;
-    Sym *sym = asm_label_find(label);
-    return sym ? sym : asm_new_label1(s1, label, 1, sec->sh_num, 0);
+exit(1);
 }
 
 /* We do not use the C expression parser to handle symbols. Maybe the
@@ -89,8 +72,6 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
             pe->v = n;
             pe->sym = NULL;
 	    pe->pcrel = 0;
-        } else {
-            tcc_error("invalid number syntax");
         }
         next();
         break;
@@ -103,30 +84,10 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
         op = tok;
         next();
         asm_expr_unary(s1, pe);
-        if (pe->sym)
-            tcc_error("invalid operation with label");
         if (op == '-')
             pe->v = -pe->v;
         else
             pe->v = ~pe->v;
-        break;
-    case TOK_CCHAR:
-    case TOK_LCHAR:
-	pe->v = tokc.i;
-	pe->sym = NULL;
-	pe->pcrel = 0;
-	next();
-	break;
-    case '(':
-        next();
-        asm_expr(s1, pe);
-        skip(')');
-        break;
-    case '.':
-        pe->v = ind;
-        pe->sym = asm_section_sym(s1, cur_text_section);
-        pe->pcrel = 0;
-        next();
         break;
     default:
         if (tok >= TOK_IDENT) {
@@ -134,19 +95,10 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
             /* label case : if the label was not found, add one */
 	    sym = get_asm_sym(tok, NULL);
 	    esym = elfsym(sym);
-            if (esym && esym->st_shndx == SHN_ABS) {
-                /* if absolute symbol, no need to put a symbol value */
-                pe->v = esym->st_value;
-                pe->sym = NULL;
-		pe->pcrel = 0;
-            } else {
-                pe->v = 0;
-                pe->sym = sym;
-		pe->pcrel = 0;
-            }
+            pe->v = 0;
+            pe->sym = sym;
+            pe->pcrel = 0;
             next();
-        } else {
-            tcc_error("bad expression syntax [%s]", get_tok_str(tok, &tokc));
         }
         break;
     }
@@ -163,34 +115,6 @@ static void asm_expr_prod(TCCState *s1, ExprValue *pe)
         if (op != '*' && op != '/' && op != '%' && 
             op != TOK_SHL && op != TOK_SAR)
             break;
-        next();
-        asm_expr_unary(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
-        case '*':
-            pe->v *= e2.v;
-            break;
-        case '/':  
-            if (e2.v == 0) {
-            div_error:
-                tcc_error("division by zero");
-            }
-            pe->v /= e2.v;
-            break;
-        case '%':  
-            if (e2.v == 0)
-                goto div_error;
-            pe->v %= e2.v;
-            break;
-        case TOK_SHL:
-            pe->v <<= e2.v;
-            break;
-        default:
-        case TOK_SAR:
-            pe->v >>= e2.v;
-            break;
-        }
     }
 }
 
