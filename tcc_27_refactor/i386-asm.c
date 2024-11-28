@@ -616,19 +616,11 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
         if (isnum(*str) || *str == '[') {
             /* this is a reference to another constraint */
             k = find_constraint(operands, nb_operands, str, NULL);
-            if ((unsigned)k >= i || i < nb_outputs)
-                tcc_error("invalid reference in constraint %d ('%s')",
-                      i, str);
             op->ref_index = k;
             if (operands[k].input_index >= 0)
                 tcc_error("cannot reference twice the same operand");
             operands[k].input_index = i;
             op->priority = 5;
-	} else if ((op->vt->r & VT_VALMASK) == VT_LOCAL
-		   && op->vt->sym
-		   && (reg = op->vt->sym->r & VT_VALMASK) < VT_CONST) {
-	    op->priority = 1;
-	    op->reg = reg;
         } else {
             op->priority = constraint_priority(str);
         }
@@ -676,63 +668,22 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
         } else {
             reg_mask = REG_IN_MASK;
         }
-	if (op->reg >= 0) {
-	    if (is_reg_allocated(op->reg))
-	        tcc_error("asm regvar requests register that's taken already");
-	    reg = op->reg;
-	    goto reg_found;
-	}
     try_next:
         c = *str++;
         switch(c) {
         case '=':
             goto try_next;
-        case '+':
-            op->is_rw = 1;
-            /* FALL THRU */
         case '&':
-            if (j >= nb_outputs)
-                tcc_error("'%c' modifier can only be applied to outputs", c);
             reg_mask = REG_IN_MASK | REG_OUT_MASK;
             goto try_next;
-        case 'A':
-            /* allocate both eax and edx */
-            if (is_reg_allocated(TREG_XAX) ||
-                is_reg_allocated(TREG_XDX))
-                goto try_next;
-            op->is_llong = 1;
-            op->reg = TREG_XAX;
-            regs_allocated[TREG_XAX] |= reg_mask;
-            regs_allocated[TREG_XDX] |= reg_mask;
-            break;
         case 'a':
             reg = TREG_XAX;
-            goto alloc_reg;
-        case 'b':
-            reg = 3;
-            goto alloc_reg;
-        case 'c':
-            reg = TREG_XCX;
             goto alloc_reg;
         case 'd':
             reg = TREG_XDX;
             goto alloc_reg;
-        case 'S':
-            reg = 6;
-            goto alloc_reg;
-        case 'D':
-            reg = 7;
         alloc_reg:
-            if (is_reg_allocated(reg))
-                goto try_next;
             goto reg_found;
-        case 'q':
-            /* eax, ebx, ecx or edx */
-            for(reg = 0; reg < 4; reg++) {
-                if (!is_reg_allocated(reg))
-                    goto reg_found;
-            }
-            goto try_next;
         case 'r':
 	case 'R':
 	case 'p': /* A general address, for x86(64) any register is acceptable*/
@@ -747,17 +698,6 @@ ST_FUNC void asm_compute_constraints(ASMOperand *operands,
             op->is_llong = 0;
             op->reg = reg;
             regs_allocated[reg] |= reg_mask;
-            break;
-	case 'e':
-        case 'i':
-            if (!((op->vt->r & (VT_VALMASK | VT_LVAL)) == VT_CONST))
-                goto try_next;
-            break;
-        case 'I':
-        case 'N':
-        case 'M':
-            if (!((op->vt->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST))
-                goto try_next;
             break;
         case 'm':
         case 'g':
