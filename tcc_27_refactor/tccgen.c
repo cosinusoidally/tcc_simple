@@ -283,26 +283,17 @@ static Sym *__sym_malloc(void)
 static inline Sym *sym_malloc(void)
 {
     Sym *sym;
-#ifndef SYM_DEBUG
     sym = sym_free_first;
     if (!sym)
         sym = __sym_malloc();
     sym_free_first = sym->next;
     return sym;
-#else
-    sym = tcc_malloc(sizeof(Sym));
-    return sym;
-#endif
 }
 
 ST_INLN void sym_free(Sym *sym)
 {
-#ifndef SYM_DEBUG
     sym->next = sym_free_first;
     sym_free_first = sym;
-#else
-    tcc_free(sym);
-#endif
 }
 
 /* push, without hashing */
@@ -1807,9 +1798,6 @@ static void gen_cast(CType *type)
         df = is_float(dbt);
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
-#if !defined TCC_IS_NATIVE && !defined TCC_IS_NATIVE_387
-        c &= dbt != VT_LDOUBLE;
-#endif
         if (c) {
             /* constant case: we can do it now */
             /* XXX: in ISOC, cannot do it if error in convert */
@@ -5533,31 +5521,9 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 		*(double *)ptr = vtop->c.d;
 		break;
 	    case VT_LDOUBLE:
-#if defined TCC_IS_NATIVE_387
-                if (sizeof (long double) >= 10) /* zero pad ten-byte LD */
-                    memcpy(ptr, &vtop->c.ld, 10);
-#ifdef __TINYC__
-                else if (sizeof (long double) == sizeof (double))
-                    __asm__("fldl %1\nfstpt %0\n" : "=m" (*ptr) : "m" (vtop->c.ld));
-#endif
-                else if (vtop->c.ld == 0.0)
-                    ;
-                else
-#endif
-                if (sizeof(long double) == LDOUBLE_SIZE)
-		    *(long double*)ptr = vtop->c.ld;
-                else if (sizeof(double) == LDOUBLE_SIZE)
-		    *(double *)ptr = (double)vtop->c.ld;
-                else
-                    tcc_error("can't cross compile long double constants");
+                /* zero pad ten-byte LD */
+                memcpy(ptr, &vtop->c.ld, 10);
 		break;
-#if PTR_SIZE != 8
-	    case VT_LLONG:
-		*(long long *)ptr |= vtop->c.i;
-		break;
-#else
-	    case VT_LLONG:
-#endif
 	    case VT_PTR:
 		{
 		    addr_t val = vtop->c.i;
