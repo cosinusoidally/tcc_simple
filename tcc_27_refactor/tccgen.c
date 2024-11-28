@@ -217,8 +217,6 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         else
             sym_bind = STB_GLOBAL;
         other = 0;
-        if (sym->asm_label)
-            name = get_tok_str(sym->asm_label, NULL);
         info = ELFW(ST_INFO)(sym_bind, sym_type);
         sym->c = put_elf_sym(symtab_section, value, size, info, other, sh_num, name);
     } else {
@@ -622,10 +620,6 @@ ST_FUNC Sym *external_global_sym(int v, CType *type, int r)
         s = global_identifier_push(v, type->t | VT_EXTERN, 0);
         s->type.ref = type->ref;
         s->r = r | VT_CONST | VT_SYM;
-    } else if (IS_ASM_SYM(s)) {
-        s->type.t = type->t | (s->type.t & VT_EXTERN);
-        s->type.ref = type->ref;
-        update_storage(s);
     }
     return s;
 }
@@ -634,27 +628,11 @@ ST_FUNC Sym *external_global_sym(int v, CType *type, int r)
 static void patch_type(Sym *sym, CType *type)
 {
     if (!(type->t & VT_EXTERN)) {
-        if (!(sym->type.t & VT_EXTERN))
-            tcc_error("redefinition of '%s'", get_tok_str(sym->v, NULL));
         sym->type.t &= ~VT_EXTERN;
     }
 
-    if (IS_ASM_SYM(sym)) {
-        /* stay static if both are static */
-        sym->type.t = type->t & (sym->type.t | ~VT_STATIC);
-        sym->type.ref = type->ref;
-    }
-
-    if (!is_compatible_types(&sym->type, type)) {
-        tcc_error("incompatible types for redefinition of '%s'",
-                  get_tok_str(sym->v, NULL));
-
-    } else if ((sym->type.t & VT_BTYPE) == VT_FUNC) {
+    if ((sym->type.t & VT_BTYPE) == VT_FUNC) {
         int static_proto = sym->type.t & VT_STATIC;
-        /* warn if static follows non-static function declaration */
-        if ((type->t & VT_STATIC) && !static_proto && !(type->t & VT_INLINE))
-            tcc_warning("static storage ignored for redefinition of '%s'",
-                get_tok_str(sym->v, NULL));
 
         if (0 == (type->t & VT_EXTERN)) {
             /* put complete type, use static from prototype */
@@ -663,18 +641,6 @@ static void patch_type(Sym *sym, CType *type)
                 sym->type.t = type->t;
             sym->type.ref = type->ref;
         }
-
-    } else {
-        if ((sym->type.t & VT_ARRAY) && type->ref->c >= 0) {
-            /* set array size if it was omitted in extern declaration */
-            if (sym->type.ref->c < 0)
-                sym->type.ref->c = type->ref->c;
-            else if (sym->type.ref->c != type->ref->c)
-                tcc_error("conflicting type for '%s'", get_tok_str(sym->v, NULL));
-        }
-        if ((type->t ^ sym->type.t) & VT_STATIC)
-            tcc_warning("storage mismatch for redefinition of '%s'",
-                get_tok_str(sym->v, NULL));
     }
 }
 
