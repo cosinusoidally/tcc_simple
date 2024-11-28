@@ -1177,9 +1177,6 @@ ST_FUNC void tcc_add_pragma_libs(TCCState *s1);
 PUB_FUNC int tcc_add_library_err(TCCState *s, const char *f);
 PUB_FUNC void tcc_print_stats(TCCState *s, unsigned total_time);
 PUB_FUNC int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
-#ifdef _WIN32
-ST_FUNC char *normalize_slashes(char *path);
-#endif
 
 /* tcc_parse_args return codes: */
 #define OPT_HELP 1
@@ -1325,10 +1322,6 @@ ST_FUNC void vpush_global_sym(CType *type, int v);
 ST_FUNC void vrote(SValue *e, int n);
 ST_FUNC void vrott(int n);
 ST_FUNC void vrotb(int n);
-#ifdef TCC_TARGET_ARM
-ST_FUNC int get_reg_ex(int rc, int rc2);
-ST_FUNC void lexpand_nr(void);
-#endif
 ST_FUNC void vpushv(SValue *v);
 ST_FUNC void save_reg(int r);
 ST_FUNC void save_reg_upstack(int r, int n);
@@ -1352,20 +1345,12 @@ ST_FUNC void expr_prod(void);
 ST_FUNC void expr_sum(void);
 ST_FUNC void gexpr(void);
 ST_FUNC int expr_const(void);
-#if defined CONFIG_TCC_BCHECK || defined TCC_TARGET_C67
-ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size);
-#endif
-#if defined TCC_TARGET_X86_64 && !defined TCC_TARGET_PE
-ST_FUNC int classify_x86_64_va_arg(CType *ty);
-#endif
 
 /* ------------ tccelf.c ------------ */
 
 #define TCC_OUTPUT_FORMAT_ELF    0 /* default output format: ELF */
 #define TCC_OUTPUT_FORMAT_BINARY 1 /* binary image output */
 #define TCC_OUTPUT_FORMAT_COFF   2 /* COFF */
-
-#define ARMAG  "!<arch>\012"    /* For COFF and a.out archives */
 
 typedef struct {
     unsigned int n_strx;         /* index into string table of name */
@@ -1380,12 +1365,6 @@ ST_DATA Section *common_section;
 ST_DATA Section *cur_text_section; /* current section where function code is generated */
 #ifdef CONFIG_TCC_ASM
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
-#endif
-#ifdef CONFIG_TCC_BCHECK
-/* bound check related sections */
-ST_DATA Section *bounds_section; /* contains global data bound description */
-ST_DATA Section *lbounds_section; /* contains local data bound description */
-ST_FUNC void tccelf_bounds_new(TCCState *s);
 #endif
 /* symbol sections */
 ST_DATA Section *symtab_section;
@@ -1408,9 +1387,7 @@ ST_FUNC Section *new_symtab(TCCState *s1, const char *symtab_name, int sh_type, 
 
 ST_FUNC void put_extern_sym2(Sym *sym, int sh_num, addr_t value, unsigned long size, int can_add_underscore);
 ST_FUNC void put_extern_sym(Sym *sym, Section *section, addr_t value, unsigned long size);
-#if PTR_SIZE == 4
 ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type);
-#endif
 ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type, addr_t addend);
 
 ST_FUNC int put_elf_str(Section *s, const char *sym);
@@ -1440,18 +1417,14 @@ ST_FUNC struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 ST_FUNC void squeeze_multi_relocs(Section *sec, size_t oldrelocoffset);
 
 ST_FUNC addr_t get_elf_sym_addr(TCCState *s, const char *name, int err);
-#if defined TCC_IS_NATIVE || defined TCC_TARGET_PE
 ST_FUNC void *tcc_get_symbol_err(TCCState *s, const char *name);
-#endif
 
-#ifndef TCC_TARGET_PE
 ST_FUNC int tcc_load_dll(TCCState *s1, int fd, const char *filename, int level);
 ST_FUNC int tcc_load_ldscript(TCCState *s1);
 ST_FUNC uint8_t *parse_comment(uint8_t *p);
 ST_FUNC void minp(void);
 ST_INLN void inp(void);
 ST_FUNC int handle_eob(void);
-#endif
 
 /* ------------ xxx-link.c ------------ */
 
@@ -1486,22 +1459,14 @@ ST_FUNC void gfunc_epilog(void);
 ST_FUNC int gjmp(int t);
 ST_FUNC void gjmp_addr(int a);
 ST_FUNC int gtst(int inv, int t);
-#if defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64
 ST_FUNC void gtst_addr(int inv, int a);
-#else
-#define gtst_addr(inv, a) gsym_addr(gtst(inv, 0), a)
-#endif
 ST_FUNC void gen_opi(int op);
 ST_FUNC void gen_opf(int op);
 ST_FUNC void gen_cvt_ftoi(int t);
 ST_FUNC void gen_cvt_ftof(int t);
 ST_FUNC void ggoto(void);
-#ifndef TCC_TARGET_C67
 ST_FUNC void o(unsigned int c);
-#endif
-#ifndef TCC_TARGET_ARM
 ST_FUNC void gen_cvt_itof(int t);
-#endif
 ST_FUNC void gen_vla_sp_save(int addr);
 ST_FUNC void gen_vla_sp_restore(int addr);
 ST_FUNC void gen_vla_alloc(CType *type, int align);
