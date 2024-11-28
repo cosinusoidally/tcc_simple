@@ -769,24 +769,9 @@ ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands,
         for(i = 0; i < nb_operands; i++) {
             op = &operands[i];
             if (op->reg >= 0) {
-                if ((op->vt->r & VT_VALMASK) == VT_LLOCAL &&
-                    op->is_memory) {
-                    /* memory reference case (for both input and
-                       output cases) */
-                    SValue sv;
-                    sv = *op->vt;
-                    sv.r = (sv.r & ~VT_VALMASK) | VT_LOCAL | VT_LVAL;
-                    sv.type.t = VT_PTR;
-                    load(op->reg, &sv);
-                } else if (i >= nb_outputs || op->is_rw) {
+                if (i >= nb_outputs || op->is_rw) {
                     /* load value in register */
                     load(op->reg, op->vt);
-                    if (op->is_llong) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.c.i += 4;
-                        load(TREG_XDX, &sv);
-                    }
                 }
             }
         }
@@ -795,35 +780,13 @@ ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands,
         for(i = 0 ; i < nb_outputs; i++) {
             op = &operands[i];
             if (op->reg >= 0) {
-                if ((op->vt->r & VT_VALMASK) == VT_LLOCAL) {
-                    if (!op->is_memory) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.r = (sv.r & ~VT_VALMASK) | VT_LOCAL;
-			sv.type.t = VT_PTR;
-                        load(out_reg, &sv);
-
-			sv = *op->vt;
-                        sv.r = (sv.r & ~VT_VALMASK) | out_reg;
-                        store(op->reg, &sv);
-                    }
-                } else {
                     store(op->reg, op->vt);
-                    if (op->is_llong) {
-                        SValue sv;
-                        sv = *op->vt;
-                        sv.c.i += 4;
-                        store(TREG_XDX, &sv);
-                    }
-                }
             }
         }
         /* generate reg restore code */
         for(i = sizeof(reg_saved)/sizeof(reg_saved[0]) - 1; i >= 0; i--) {
             reg = reg_saved[i];
             if (regs_allocated[reg]) {
-		if (reg >= 8)
-		  g(0x41), reg-=8;
                 g(0x58 + reg);
             }
         }
@@ -834,16 +797,10 @@ ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str)
 {
     int reg;
     TokenSym *ts;
-    if (!strcmp(str, "memory") ||
-        !strcmp(str, "cc") ||
-	!strcmp(str, "flags"))
-        return;
     ts = tok_alloc(str, strlen(str));
     reg = ts->tok;
     if (reg >= TOK_ASM_eax && reg <= TOK_ASM_edi) {
         reg -= TOK_ASM_eax;
-    } else if (reg >= TOK_ASM_ax && reg <= TOK_ASM_di) {
-        reg -= TOK_ASM_ax;
     }
     clobber_regs[reg] = 1;
 }
