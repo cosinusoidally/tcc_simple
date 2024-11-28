@@ -513,8 +513,6 @@ static void vseti(int r, int v)
 
 ST_FUNC void vpushv(SValue *v)
 {
-    if (vtop >= vstack + (VSTACK_SIZE - 1))
-        tcc_error("memory full (vstack)");
     vtop++;
     *vtop = *v;
 }
@@ -1364,19 +1362,11 @@ static void gen_opic(int op)
             l2 = l1; //l = l1, l1 = l2, l2 = l;
         }
         if (!const_wanted &&
-            c1 && ((l1 == 0 &&
-                    (op == TOK_SHL || op == TOK_SHR || op == TOK_SAR)) ||
-                   (l1 == -1 && op == TOK_SAR))) {
-            /* treat (0 << x), (0 >> x) and (-1 >> x) as constant */
-            vtop--;
-        } else if (!const_wanted &&
                    c2 && ((l2 == 0 && (op == '&' || op == '*')) ||
                           (op == '|' &&
                             (l2 == -1 || (l2 == 0xFFFFFFFF && t2 != VT_LLONG))) ||
                           (l2 == 1 && (op == '%' || op == TOK_UMOD)))) {
             /* treat (x & 0), (x * 0), (x | -1) and (x % 1) as constant */
-            if (l2 == 1)
-                vtop->c.i = 0;
             vswap();
             vtop--;
         } else if (c2 && (((op == '*' || op == '/' || op == TOK_UDIV ||
@@ -1413,10 +1403,6 @@ static void gen_opic(int op)
             if (op == '-')
                 l2 = -l2;
 	    l2 += vtop[-1].c.i;
-	    /* The backends can't always deal with addends to symbols
-	       larger than +-1<<31.  Don't construct such.  */
-	    if ((int)l2 != l2)
-	        goto general_case;
             vtop--;
             vtop->c.i = l2;
         } else {
@@ -1436,10 +1422,6 @@ static void gen_opif(int op)
 {
     int c1, c2;
     SValue *v1, *v2;
-#if defined _MSC_VER && defined _AMD64_
-    /* avoid bad optimization with f1 -= f2 for f1:-0.0, f2:0.0 */
-    volatile
-#endif
     long double f1, f2;
 
     v1 = vtop - 1;
