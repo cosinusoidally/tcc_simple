@@ -1540,10 +1540,6 @@ redo:
         } else {
             t = VT_FLOAT;
         }
-        /* floats can only be used for a few operations */
-        if (op != '+' && op != '-' && op != '*' && op != '/' &&
-            (op < TOK_ULT || op > TOK_GT))
-            tcc_error("invalid operands for binary operation");
         goto std_op;
     } else if (op == TOK_SHR || op == TOK_SAR || op == TOK_SHL) {
         t = bt1 == VT_LLONG ? VT_LLONG : VT_INT;
@@ -2054,20 +2050,6 @@ static void gen_assign_cast(CType *dt)
     st = &vtop->type; /* source type */
     dbt = dt->t & VT_BTYPE;
     sbt = st->t & VT_BTYPE;
-    if (sbt == VT_VOID || dbt == VT_VOID) {
-	if (sbt == VT_VOID && dbt == VT_VOID)
-	    ; /*
-	      It is Ok if both are void
-	      A test program:
-	        void func1() {}
-		void func2() {
-		  return func1();
-		}
-	      gcc accepts this program
-	      */
-	else
-    	    tcc_error("cannot cast from/to void");
-    }
     if (dt->t & VT_CONSTANT)
         tcc_warning("assignment of read-only location");
     switch(dbt) {
@@ -2131,7 +2113,6 @@ static void gen_assign_cast(CType *dt)
         error:
             type_to_str(buf1, sizeof(buf1), st, NULL);
             type_to_str(buf2, sizeof(buf2), dt, NULL);
-            tcc_error("cannot cast '%s' to '%s'", buf1, buf2);
         }
         break;
     }
@@ -2674,7 +2655,6 @@ static void struct_decl(CType *type, int u)
                 goto do_decl;
             if (u == VT_ENUM && IS_ENUM(s->type.t))
                 goto do_decl;
-            tcc_error("redefinition of '%s'", get_tok_str(v, NULL));
         }
     } else {
         v = anon_sym++;
@@ -2691,8 +2671,6 @@ do_decl:
 
     if (tok == '{') {
         next();
-        if (s->c != -1)
-            tcc_error("struct/union/enum already defined");
         /* cannot be empty */
         /* non empty enums are not allowed */
         ps = &s->next;
@@ -2707,9 +2685,6 @@ do_decl:
                 if (v < TOK_UIDENT)
                     expect("identifier");
                 ss = sym_find(v);
-                if (ss && !local_stack)
-                    tcc_error("redefinition of enumerator '%s'",
-                              get_tok_str(v, NULL));
                 next();
                 if (tok == '=') {
                     next();
@@ -2763,9 +2738,6 @@ do_decl:
 		    continue;
 		}
                 while (1) {
-		    if (flexible)
-		        tcc_error("flexible array member '%s' not at the end of struct",
-                              get_tok_str(v, NULL));
                     bit_size = -1;
                     v = 0;
                     type1 = btype;
@@ -2786,45 +2758,20 @@ do_decl:
                         if (type_size(&type1, &align) < 0) {
 			    if ((u == VT_STRUCT) && (type1.t & VT_ARRAY) && c)
 			        flexible = 1;
-			    else
-			        tcc_error("field '%s' has incomplete type",
-                                      get_tok_str(v, NULL));
                         }
-                        if ((type1.t & VT_BTYPE) == VT_FUNC ||
-                            (type1.t & VT_STORAGE))
-                            tcc_error("invalid type for '%s'", 
-                                  get_tok_str(v, NULL));
                     }
                     if (tok == ':') {
                         next();
                         bit_size = expr_const();
-                        /* XXX: handle v = 0 case for messages */
-                        if (bit_size < 0)
-                            tcc_error("negative width in bit-field '%s'", 
-                                  get_tok_str(v, NULL));
-                        if (v && bit_size == 0)
-                            tcc_error("zero width for bit-field '%s'", 
-                                  get_tok_str(v, NULL));
                     }
                     size = type_size(&type1, &align);
                     if (bit_size >= 0) {
                         bt = type1.t & VT_BTYPE;
-                        if (bt != VT_INT && 
-                            bt != VT_BYTE && 
-                            bt != VT_SHORT &&
-                            bt != VT_BOOL &&
-                            bt != VT_LLONG)
-                            tcc_error("bitfields must have scalar type");
                         bsize = size * 8;
-                        if (bit_size > bsize) {
-                            tcc_error("width of '%s' exceeds its type",
-                                  get_tok_str(v, NULL));
-                        } else if (bit_size == bsize
+                        if (bit_size == bsize
                                     && !ad.a.packed && !ad1.a.packed) {
                             /* no need for bit fields */
                             ;
-                        } else if (bit_size == 64) {
-                            tcc_error("field width 64 not implemented");
                         } else {
                             type1.t = (type1.t & ~VT_STRUCT_MASK)
                                 | VT_BITFIELD
@@ -2914,12 +2861,8 @@ static int parse_btype(CType *type, AttributeDef *ad)
             next();
         basic_type1:
             if (u == VT_SHORT || u == VT_LONG) {
-                if (st != -1 || (bt != -1 && bt != VT_INT))
-                    tmbt: tcc_error("too many basic types");
                 st = u;
             } else {
-                if (bt != -1 || (st != -1 && u != VT_INT))
-                    goto tmbt;
                 bt = u;
             }
             if (u != VT_INT)
@@ -3001,8 +2944,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
         case TOK_SIGNED1:
         case TOK_SIGNED2:
         case TOK_SIGNED3:
-            if ((t & (VT_DEFSIGN|VT_UNSIGNED)) == (VT_DEFSIGN|VT_UNSIGNED))
-                tcc_error("signed and unsigned modifier");
             t |= VT_DEFSIGN;
             next();
             typespec_found = 1;
@@ -3015,8 +2956,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             next();
             break;
         case TOK_UNSIGNED:
-            if ((t & (VT_DEFSIGN|VT_UNSIGNED)) == VT_DEFSIGN)
-                tcc_error("signed and unsigned modifier");
             t |= VT_DEFSIGN | VT_UNSIGNED;
             next();
             typespec_found = 1;
@@ -3033,8 +2972,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             g = VT_TYPEDEF;
             goto storage;
        storage:
-            if (t & (VT_EXTERN|VT_STATIC|VT_TYPEDEF) & ~g)
-                tcc_error("multiple storage classes");
             t |= g;
             next();
             break;
@@ -3162,8 +3099,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
                     if ((pt.t & VT_BTYPE) == VT_VOID && tok == ')')
                         break;
                     type_decl(&pt, &ad1, &n, TYPE_DIRECT | TYPE_ABSTRACT);
-                    if ((pt.t & VT_BTYPE) == VT_VOID)
-                        tcc_error("parameter declared as void");
                     arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
                 } else {
                     n = tok;
@@ -3184,8 +3119,9 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
                     next();
                     break;
                 }
-		if (l == FUNC_NEW && !parse_btype(&pt, &ad1))
-		    tcc_error("invalid type");
+		if (l == FUNC_NEW) {
+                    parse_btype(&pt, &ad1);
+                }
             }
         } else
             /* if no parameters, then old type prototype */
