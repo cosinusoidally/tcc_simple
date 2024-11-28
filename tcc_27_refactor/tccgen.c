@@ -1723,8 +1723,6 @@ static void gen_cvt_ftoi1(int t)
         vpushi(0);
         vtop->r = REG_IRET;
         vtop->r2 = REG_LRET;
-    } else {
-        gen_cvt_ftoi(t);
     }
 }
 
@@ -4883,14 +4881,7 @@ static void block(int *bsym, int *csym, int is_expr)
     } else
     if (tok == TOK_GOTO) {
         next();
-        if (tok == '*' && gnu_ext) {
-            /* computed goto */
-            next();
-            gexpr();
-            if ((vtop->type.t & VT_BTYPE) != VT_PTR)
-                expect("pointer");
-            ggoto();
-        } else if (tok >= TOK_UIDENT) {
+        if (tok >= TOK_UIDENT) {
             s = label_find(tok);
             /* put forward definition if needed */
             if (!s) {
@@ -5640,21 +5631,8 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         if (NODATA_WANTED)
             goto no_alloc;
 
-        /* save current stack pointer */
-        if (vlas_in_scope == 0) {
-            if (vla_sp_root_loc == -1)
-                vla_sp_root_loc = (loc -= PTR_SIZE);
-            gen_vla_sp_save(vla_sp_root_loc);
-        }
-
         vla_runtime_type_size(type, &a);
         gen_vla_alloc(type, a);
-#if defined TCC_TARGET_PE && defined TCC_TARGET_X86_64
-        /* on _WIN64, because of the function args scratch area, the
-           result of alloca differs from RSP and is returned in RAX.  */
-        gen_vla_result(addr), addr = (loc -= PTR_SIZE);
-#endif
-        gen_vla_sp_save(addr);
         vla_sp_loc = addr;
         vlas_in_scope++;
 

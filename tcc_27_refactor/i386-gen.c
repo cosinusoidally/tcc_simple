@@ -209,11 +209,6 @@ ST_FUNC void store(int r, SValue *v)
 {
     int fr, bt, ft, fc;
 
-#ifdef TCC_TARGET_PE
-    SValue v2;
-    v = pe_getimport(v, &v2);
-#endif
-
     ft = v->type.t;
     fc = v->c.i;
     fr = v->r & VT_VALMASK;
@@ -783,23 +778,6 @@ ST_FUNC void gen_cvt_itof(int t)
     vtop->r = TREG_ST0;
 }
 
-/* convert fp to int 't' type */
-ST_FUNC void gen_cvt_ftoi(int t)
-{
-    int bt = vtop->type.t & VT_BTYPE;
-    if (bt == VT_FLOAT)
-        vpush_global_sym(&func_old_type, TOK___fixsfdi);
-    else if (bt == VT_LDOUBLE)
-        vpush_global_sym(&func_old_type, TOK___fixxfdi);
-    else
-        vpush_global_sym(&func_old_type, TOK___fixdfdi);
-    vswap();
-    gfunc_call(1);
-    vpushi(0);
-    vtop->r = REG_IRET;
-    vtop->r2 = REG_LRET;
-}
-
 /* convert from one floating point type to another */
 ST_FUNC void gen_cvt_ftof(int t)
 {
@@ -807,106 +785,14 @@ ST_FUNC void gen_cvt_ftof(int t)
     gv(RC_FLOAT);
 }
 
-/* computed goto support */
-ST_FUNC void ggoto(void)
-{
-    gcall_or_jmp(1);
-    vtop--;
-}
-
-/* bound check support functions */
-#ifdef CONFIG_TCC_BCHECK
-
-/* generate a bounded pointer addition */
-ST_FUNC void gen_bounded_ptr_add(void)
-{
-    /* prepare fast i386 function call (args in eax and edx) */
-    gv2(RC_EAX, RC_EDX);
-    /* save all temporary registers */
-    vtop -= 2;
-    save_regs(0);
-    /* do a fast function call */
-    gen_static_call(TOK___bound_ptr_add);
-    /* returned pointer is in eax */
-    vtop++;
-    vtop->r = TREG_EAX | VT_BOUNDED;
-    /* address of bounding function call point */
-    vtop->c.i = (cur_text_section->reloc->data_offset - sizeof(Elf32_Rel));
-}
-
-/* patch pointer addition in vtop so that pointer dereferencing is
-   also tested */
-ST_FUNC void gen_bounded_ptr_deref(void)
-{
-    addr_t func;
-    int  size, align;
-    Elf32_Rel *rel;
-    Sym *sym;
-
-    size = 0;
-    /* XXX: put that code in generic part of tcc */
-    if (!is_float(vtop->type.t)) {
-        if (vtop->r & VT_LVAL_BYTE)
-            size = 1;
-        else if (vtop->r & VT_LVAL_SHORT)
-            size = 2;
-    }
-    if (!size)
-        size = type_size(&vtop->type, &align);
-    switch(size) {
-    case  1: func = TOK___bound_ptr_indir1; break;
-    case  2: func = TOK___bound_ptr_indir2; break;
-    case  4: func = TOK___bound_ptr_indir4; break;
-    case  8: func = TOK___bound_ptr_indir8; break;
-    case 12: func = TOK___bound_ptr_indir12; break;
-    case 16: func = TOK___bound_ptr_indir16; break;
-    default:
-        tcc_error("unhandled size when dereferencing bounded pointer");
-        func = 0;
-        break;
-    }
-
-    /* patch relocation */
-    /* XXX: find a better solution ? */
-    rel = (Elf32_Rel *)(cur_text_section->reloc->data + vtop->c.i);
-    sym = external_global_sym(func, &func_old_type, 0);
-    if (!sym->c)
-        put_extern_sym(sym, NULL, 0, 0);
-    rel->r_info = ELF32_R_INFO(sym->c, ELF32_R_TYPE(rel->r_info));
-}
-#endif
-
-/* Save the stack pointer onto the stack */
-ST_FUNC void gen_vla_sp_save(int addr) {
-    /* mov %esp,addr(%ebp)*/
-    o(0x89);
-    gen_modrm(TREG_ESP, VT_LOCAL, NULL, addr);
-}
-
 /* Restore the SP from a location on the stack */
 ST_FUNC void gen_vla_sp_restore(int addr) {
-    o(0x8b);
-    gen_modrm(TREG_ESP, VT_LOCAL, NULL, addr);
+exit(1);
 }
 
 /* Subtract from the stack pointer, and push the resulting value onto the stack */
 ST_FUNC void gen_vla_alloc(CType *type, int align) {
-#ifdef TCC_TARGET_PE
-    /* alloca does more than just adjust %rsp on Windows */
-    vpush_global_sym(&func_old_type, TOK_alloca);
-    vswap(); /* Move alloca ref past allocation size */
-    gfunc_call(1);
-#else
-    int r;
-    r = gv(RC_INT); /* allocation size */
-    /* sub r,%rsp */
-    o(0x2b);
-    o(0xe0 | r);
-    /* We align to 16 bytes rather than align */
-    /* and ~15, %esp */
-    o(0xf0e483);
-    vpop();
-#endif
+exit(1);
 }
 
 /* end of X86 code generator */
