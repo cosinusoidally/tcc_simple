@@ -75,10 +75,6 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
         }
         next();
         break;
-    case '+':
-        next();
-        asm_expr_unary(s1, pe);
-        break;
     case '-':
     case '~':
         op = tok;
@@ -86,8 +82,6 @@ static void asm_expr_unary(TCCState *s1, ExprValue *pe)
         asm_expr_unary(s1, pe);
         if (op == '-')
             pe->v = -pe->v;
-        else
-            pe->v = ~pe->v;
         break;
     default:
         if (tok >= TOK_IDENT) {
@@ -128,22 +122,6 @@ static void asm_expr_logic(TCCState *s1, ExprValue *pe)
         op = tok;
         if (op != '&' && op != '|' && op != '^')
             break;
-        next();
-        asm_expr_prod(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
-        case '&':
-            pe->v &= e2.v;
-            break;
-        case '|':  
-            pe->v |= e2.v;
-            break;
-        default:
-        case '^':
-            pe->v ^= e2.v;
-            break;
-        }
     }
 }
 
@@ -157,44 +135,6 @@ static inline void asm_expr_sum(TCCState *s1, ExprValue *pe)
         op = tok;
         if (op != '+' && op != '-')
             break;
-        next();
-        asm_expr_logic(s1, &e2);
-        if (op == '+') {
-            if (pe->sym != NULL && e2.sym != NULL)
-                goto cannot_relocate;
-            pe->v += e2.v;
-            if (pe->sym == NULL && e2.sym != NULL)
-                pe->sym = e2.sym;
-        } else {
-            pe->v -= e2.v;
-            /* NOTE: we are less powerful than gas in that case
-               because we store only one symbol in the expression */
-	    if (!e2.sym) {
-		/* OK */
-	    } else if (pe->sym == e2.sym) { 
-		/* OK */
-		pe->sym = NULL; /* same symbols can be subtracted to NULL */
-	    } else {
-		ElfSym *esym1, *esym2;
-		esym1 = elfsym(pe->sym);
-		esym2 = elfsym(e2.sym);
-		if (esym1 && esym1->st_shndx == esym2->st_shndx
-		    && esym1->st_shndx != SHN_UNDEF) {
-		    /* we also accept defined symbols in the same section */
-		    pe->v += esym1->st_value - esym2->st_value;
-		    pe->sym = NULL;
-		} else if (esym2->st_shndx == cur_text_section->sh_num) {
-		    /* When subtracting a defined symbol in current section
-		       this actually makes the value PC-relative.  */
-		    pe->v -= esym2->st_value - ind - 4;
-		    pe->pcrel = 1;
-		    e2.sym = NULL;
-		} else {
-cannot_relocate:
-		    tcc_error("invalid operation with label");
-		}
-	    }
-        }
     }
 }
 
@@ -209,34 +149,6 @@ static inline void asm_expr_cmp(TCCState *s1, ExprValue *pe)
 	if (op != TOK_EQ && op != TOK_NE
 	    && (op > TOK_GT || op < TOK_ULE))
             break;
-        next();
-        asm_expr_sum(s1, &e2);
-        if (pe->sym || e2.sym)
-            tcc_error("invalid operation with label");
-        switch(op) {
-	case TOK_EQ:
-	    pe->v = pe->v == e2.v;
-	    break;
-	case TOK_NE:
-	    pe->v = pe->v != e2.v;
-	    break;
-	case TOK_LT:
-	    pe->v = (int64_t)pe->v < (int64_t)e2.v;
-	    break;
-	case TOK_GE:
-	    pe->v = (int64_t)pe->v >= (int64_t)e2.v;
-	    break;
-	case TOK_LE:
-	    pe->v = (int64_t)pe->v <= (int64_t)e2.v;
-	    break;
-	case TOK_GT:
-	    pe->v = (int64_t)pe->v > (int64_t)e2.v;
-	    break;
-        default:
-            break;
-        }
-	/* GAS compare results are -1/0 not 1/0.  */
-	pe->v = -(int64_t)pe->v;
     }
 }
 
@@ -247,11 +159,7 @@ ST_FUNC void asm_expr(TCCState *s1, ExprValue *pe)
 
 ST_FUNC int asm_int_expr(TCCState *s1)
 {
-    ExprValue e;
-    asm_expr(s1, &e);
-    if (e.sym)
-        expect("constant");
-    return e.v;
+exit(1);
 }
 
 static Sym* asm_new_label1(TCCState *s1, int label, int is_local,
