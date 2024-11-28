@@ -85,7 +85,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has
 static void decl(int l);
 static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
-static void vla_sp_restore(void);
 static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static inline int64_t expr_const64(void);
@@ -1851,35 +1850,16 @@ ST_FUNC int type_size(CType *type, int *a)
             s = type->ref;
             ts = type_size(&s->type, a);
 
-            if (ts < 0 && s->c < 0)
-                ts = -ts;
-
             return ts * s->c;
         } else {
             *a = PTR_SIZE;
             return PTR_SIZE;
         }
-    } else if (IS_ENUM(type->t) && type->ref->c == -1) {
-        return -1; /* incomplete enum */
     } else if (bt == VT_LDOUBLE) {
         *a = LDOUBLE_ALIGN;
         return LDOUBLE_SIZE;
     } else if (bt == VT_DOUBLE || bt == VT_LLONG) {
-#ifdef TCC_TARGET_I386
-#ifdef TCC_TARGET_PE
-        *a = 8;
-#else
         *a = 4;
-#endif
-#elif defined(TCC_TARGET_ARM)
-#ifdef TCC_ARM_EABI
-        *a = 8; 
-#else
-        *a = 4;
-#endif
-#else
-        *a = 8;
-#endif
         return 8;
     } else if (bt == VT_INT || bt == VT_FLOAT) {
         *a = 4;
@@ -1887,17 +1867,11 @@ ST_FUNC int type_size(CType *type, int *a)
     } else if (bt == VT_SHORT) {
         *a = 2;
         return 2;
-    } else if (bt == VT_QLONG || bt == VT_QFLOAT) {
-        *a = 8;
-        return 16;
     } else {
         /* char, void, function, _Bool */
         *a = 1;
         return 1;
     }
-}
-
-static void vla_sp_restore(void) {
 }
 
 static void vla_sp_restore_root(void) {
@@ -4436,7 +4410,6 @@ static void block(int *bsym, int *csym, int is_expr)
 	nocode_wanted &= ~0x20000000;
         next();
         d = ind;
-        vla_sp_restore();
         skip('(');
         gexpr();
         skip(')');
@@ -4503,7 +4476,6 @@ static void block(int *bsym, int *csym, int is_expr)
         /* Pop VLA frames and restore stack pointer if required */
         if (vlas_in_scope > saved_vlas_in_scope) {
             vla_sp_loc = saved_vlas_in_scope ? block_vla_sp_loc : vla_sp_root_loc;
-            vla_sp_restore();
         }
         vlas_in_scope = saved_vlas_in_scope;
         
@@ -4558,7 +4530,6 @@ static void block(int *bsym, int *csym, int is_expr)
         skip(';');
         d = ind;
         c = ind;
-        vla_sp_restore();
         a = 0;
         b = 0;
         if (tok != ';') {
@@ -4569,7 +4540,6 @@ static void block(int *bsym, int *csym, int is_expr)
         if (tok != ')') {
             e = gjmp(0);
             c = ind;
-            vla_sp_restore();
             gexpr();
             vpop();
             gjmp_addr(d);
@@ -4593,7 +4563,6 @@ static void block(int *bsym, int *csym, int is_expr)
         a = 0;
         b = 0;
         d = ind;
-        vla_sp_restore();
 	saved_nocode_wanted = nocode_wanted;
         block(&a, &b, 0);
         skip(TOK_WHILE);
@@ -4712,7 +4681,6 @@ static void block(int *bsym, int *csym, int is_expr)
                 s = label_push(&global_label_stack, b, LABEL_DEFINED);
             }
             s->jnext = ind;
-            vla_sp_restore();
             /* we accept this, but it is a mistake */
         block_after_label:
 	    nocode_wanted &= ~0x20000000;
