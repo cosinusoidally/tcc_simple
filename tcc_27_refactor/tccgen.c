@@ -6185,11 +6185,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
             }
             if (l != VT_CONST)
                 break;
-            if (tok == TOK_ASM1 || tok == TOK_ASM2 || tok == TOK_ASM3) {
-                /* global asm block */
-                asm_global_instr();
-                continue;
-            }
             if (tok >= TOK_UIDENT) {
                /* special test for old K&R protos without explicit int
                   type. Only accepted when defining global data */

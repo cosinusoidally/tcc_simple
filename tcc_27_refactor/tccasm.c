@@ -326,18 +326,8 @@ static void parse_asm_operands(ASMOperand *operands, int *nb_operands_ptr,
         nb_operands = *nb_operands_ptr;
         for(;;) {
 	    CString astr;
-            if (nb_operands >= MAX_ASM_OPERANDS)
-                tcc_error("too many asm operands");
             op = &operands[nb_operands++];
             op->id = 0;
-            if (tok == '[') {
-                next();
-                if (tok < TOK_IDENT)
-                    expect("identifier");
-                op->id = tok;
-                next();
-                skip(']');
-            }
 	    parse_mult_str(&astr, "string constant");
             op->constraint = tcc_malloc(astr.size);
             strcpy(op->constraint, astr.data);
@@ -347,17 +337,6 @@ static void parse_asm_operands(ASMOperand *operands, int *nb_operands_ptr,
             if (is_output) {
                 if (!(vtop->type.t & VT_ARRAY))
                     test_lvalue();
-            } else {
-                /* we want to avoid LLOCAL case, except when the 'm'
-                   constraint is used. Note that it may come from
-                   register storage, so we need to convert (reg)
-                   case */
-                if ((vtop->r & VT_LVAL) &&
-                    ((vtop->r & VT_VALMASK) == VT_LLOCAL ||
-                     (vtop->r & VT_VALMASK) < VT_CONST) &&
-                    !strchr(op->constraint, 'm')) {
-                    gv(RC_INT);
-                }
             }
             op->vt = vtop;
             skip(')');
@@ -380,11 +359,6 @@ ST_FUNC void asm_instr(void)
     uint8_t clobber_regs[NB_ASM_REGS];
 
     next();
-    /* since we always generate the asm() instruction, we can ignore
-       volatile */
-    if (tok == TOK_VOLATILE1 || tok == TOK_VOLATILE2 || tok == TOK_VOLATILE3) {
-        next();
-    }
     parse_asm_str(&astr);
     nb_operands = 0;
     nb_outputs = 0;
@@ -406,8 +380,6 @@ ST_FUNC void asm_instr(void)
                     /* XXX: handle registers */
                     next();
                     for(;;) {
-                        if (tok != TOK_STR)
-                            expect("string constant");
                         asm_clobber(clobber_regs, tokc.str.data);
                         next();
                         if (tok == ',') {
@@ -421,10 +393,6 @@ ST_FUNC void asm_instr(void)
         }
     }
     skip(')');
-    /* NOTE: we do not eat the ';' so that we can restore the current
-       token after the assembler parsing */
-    if (tok != ';')
-        expect("';'");
     
     /* save all values in the memory */
     save_regs(0);
@@ -470,37 +438,4 @@ ST_FUNC void asm_instr(void)
         vpop();
     }
     cstr_free(&astr1);
-}
-
-ST_FUNC void asm_global_instr(void)
-{
-    CString astr;
-    int saved_nocode_wanted = nocode_wanted;
-
-    /* Global asm blocks are always emitted.  */
-    nocode_wanted = 0;
-    next();
-    parse_asm_str(&astr);
-    skip(')');
-    /* NOTE: we do not eat the ';' so that we can restore the current
-       token after the assembler parsing */
-    if (tok != ';')
-        expect("';'");
-    
-#ifdef ASM_DEBUG
-    printf("asm_global: \"%s\"\n", (char *)astr.data);
-#endif
-    cur_text_section = text_section;
-    ind = cur_text_section->data_offset;
-
-    /* assemble the string with tcc internal assembler */
-    tcc_assemble_inline(tcc_state, astr.data, astr.size - 1, 1);
-    
-    cur_text_section->data_offset = ind;
-
-    /* restore the current C token */
-    next();
-
-    cstr_free(&astr);
-    nocode_wanted = saved_nocode_wanted;
 }
