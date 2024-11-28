@@ -716,38 +716,11 @@ ST_FUNC void subst_asm_operand(CString *add_str,
     char buf[64];
 
     r = sv->r;
-    if ((r & VT_VALMASK) == VT_CONST) {
-        if (!(r & VT_LVAL) && modifier != 'c' && modifier != 'n' &&
-	    modifier != 'P')
-            cstr_ccat(add_str, '$');
-        if (r & VT_SYM) {
-	    const char *name = get_tok_str(sv->sym->v, NULL);
-	    if (sv->sym->v >= SYM_FIRST_ANOM) {
-		/* In case of anonymous symbols ("L.42", used
-		   for static data labels) we can't find them
-		   in the C symbol table when later looking up
-		   this name.  So enter them now into the asm label
-		   list when we still know the symbol.  */
-		get_asm_sym(tok_alloc(name, strlen(name))->tok, sv->sym);
-	    }
-            cstr_cat(add_str, name, -1);
-            if ((uint32_t)sv->c.i == 0)
-                goto no_offset;
-	    cstr_ccat(add_str, '+');
-        }
-        val = sv->c.i;
-        if (modifier == 'n')
-            val = -val;
-        snprintf(buf, sizeof(buf), "%d", (int)sv->c.i);
-        cstr_cat(add_str, buf, -1);
-    no_offset:;
-    } else if ((r & VT_VALMASK) == VT_LOCAL) {
+    if ((r & VT_VALMASK) == VT_LOCAL) {
         snprintf(buf, sizeof(buf), "%d(%%ebp)", (int)sv->c.i);
         cstr_cat(add_str, buf, -1);
     } else if (r & VT_LVAL) {
         reg = r & VT_VALMASK;
-        if (reg >= VT_CONST)
-            tcc_error("internal compiler error");
         snprintf(buf, sizeof(buf), "(%%%s)",
                  get_tok_str(TOK_ASM_eax + reg, NULL)
 		 );
@@ -755,53 +728,8 @@ ST_FUNC void subst_asm_operand(CString *add_str,
     } else {
         /* register case */
         reg = r & VT_VALMASK;
-        if (reg >= VT_CONST)
-            tcc_error("internal compiler error");
 
-        /* choose register operand size */
-        if ((sv->type.t & VT_BTYPE) == VT_BYTE ||
-	    (sv->type.t & VT_BTYPE) == VT_BOOL)
-            size = 1;
-        else if ((sv->type.t & VT_BTYPE) == VT_SHORT)
-            size = 2;
-        else
-            size = 4;
-        if (size == 1 && reg >= 4)
-            size = 4;
-
-        if (modifier == 'b') {
-            size = 1;
-        } else if (modifier == 'h') {
-            size = -1;
-        } else if (modifier == 'w') {
-            size = 2;
-        } else if (modifier == 'k') {
-            size = 4;
-#ifdef TCC_TARGET_X86_64
-        } else if (modifier == 'q') {
-            size = 8;
-#endif
-        }
-
-        switch(size) {
-        case -1:
-            reg = TOK_ASM_ah + reg;
-            break;
-        case 1:
-            reg = TOK_ASM_al + reg;
-            break;
-        case 2:
-            reg = TOK_ASM_ax + reg;
-            break;
-        default:
-            reg = TOK_ASM_eax + reg;
-            break;
-#ifdef TCC_TARGET_X86_64
-        case 8:
-            reg = TOK_ASM_rax + reg;
-            break;
-#endif
-        }
+        reg = TOK_ASM_eax + reg;
         snprintf(buf, sizeof(buf), "%%%s", get_tok_str(reg, NULL));
         cstr_cat(add_str, buf, -1);
     }
@@ -819,15 +747,7 @@ ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands,
 
     /* Strictly speaking %Xbp and %Xsp should be included in the
        call-preserved registers, but currently it doesn't matter.  */
-#ifdef TCC_TARGET_X86_64
-#ifdef TCC_TARGET_PE
-    static uint8_t reg_saved[] = { 3, 6, 7, 12, 13, 14, 15 };
-#else
-    static uint8_t reg_saved[] = { 3, 12, 13, 14, 15 };
-#endif
-#else
     static uint8_t reg_saved[] = { 3, 6, 7 };
-#endif
 
     /* mark all used registers */
     memcpy(regs_allocated, clobber_regs, sizeof(regs_allocated));
@@ -841,8 +761,6 @@ ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands,
         for(i = 0; i < sizeof(reg_saved)/sizeof(reg_saved[0]); i++) {
             reg = reg_saved[i];
             if (regs_allocated[reg]) {
-		if (reg >= 8)
-		  g(0x41), reg-=8;
                 g(0x50 + reg);
             }
         }
