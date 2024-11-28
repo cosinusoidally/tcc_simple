@@ -31,10 +31,6 @@ ST_DATA const int reg_classes[NB_REGS] = {
 
 static unsigned long func_sub_sp_offset;
 static int func_ret_sub;
-#ifdef CONFIG_TCC_BCHECK
-static addr_t func_bound_offset;
-static unsigned long func_bound_ind;
-#endif
 
 /* XXX: make it faster ? */
 ST_FUNC void g(int c)
@@ -55,12 +51,6 @@ ST_FUNC void o(unsigned int c)
         g(c);
         c = c >> 8;
     }
-}
-
-ST_FUNC void gen_le16(int v)
-{
-    g(v);
-    g(v >> 8);
 }
 
 ST_FUNC void gen_le32(int c)
@@ -145,11 +135,6 @@ ST_FUNC void load(int r, SValue *sv)
 {
     int v, t, ft, fc, fr;
     SValue v1;
-
-#ifdef TCC_TARGET_PE
-    SValue v2;
-    sv = pe_getimport(sv, &v2);
-#endif
 
     fr = sv->r;
     ft = sv->type.t & ~VT_DEFSIGN;
@@ -272,17 +257,6 @@ static void gadd_sp(int val)
     }
 }
 
-#if defined CONFIG_TCC_BCHECK || defined TCC_TARGET_PE
-static void gen_static_call(int v)
-{
-    Sym *sym;
-
-    sym = external_global_sym(v, &func_old_type, 0);
-    oad(0xe8, -4);
-    greloc(cur_text_section, sym, ind-4, R_386_PC32);
-}
-#endif
-
 /* 'is_jmp' is '1' if it is a jump */
 static void gcall_or_jmp(int is_jmp)
 {
@@ -329,33 +303,6 @@ static void gcall_or_jmp(int is_jmp)
 static uint8_t fastcall_regs[3] = { TREG_EAX, TREG_EDX, TREG_ECX };
 static uint8_t fastcallw_regs[2] = { TREG_ECX, TREG_EDX };
 
-/* Return the number of registers needed to return the struct, or 0 if
-   returning via struct pointer. */
-ST_FUNC int gfunc_sret(CType *vt, int variadic, CType *ret, int *ret_align, int *regsize)
-{
-#ifdef TCC_TARGET_PE
-    int size, align;
-    *ret_align = 1; // Never have to re-align return values for x86
-    *regsize = 4;
-    size = type_size(vt, &align);
-    if (size > 8 || (size & (size - 1)))
-        return 0;
-    if (size == 8)
-        ret->t = VT_LLONG;
-    else if (size == 4)
-        ret->t = VT_INT;
-    else if (size == 2)
-        ret->t = VT_SHORT;
-    else
-        ret->t = VT_BYTE;
-    ret->ref = NULL;
-    return 1;
-#else
-    *ret_align = 1; // Never have to re-align return values for x86
-    return 0;
-#endif
-}
-
 /* Generate function call. The function address is pushed first, then
    all the parameters in call order. This functions pops all the
    parameters and the function address. */
@@ -366,21 +313,7 @@ ST_FUNC void gfunc_call(int nb_args)
     
     args_size = 0;
     for(i = 0;i < nb_args; i++) {
-        if ((vtop->type.t & VT_BTYPE) == VT_STRUCT) {
-            size = type_size(&vtop->type, &align);
-            /* align to stack align size */
-            size = (size + 3) & ~3;
-            /* allocate the necessary size on stack */
-            oad(0xec81, size); /* sub $xxx, %esp */
-            /* generate structure store */
-            r = get_reg(RC_INT);
-            o(0x89); /* mov %esp, r */
-            o(0xe0 + r);
-            vset(&vtop->type, r | VT_LVAL, 0);
-            vswap();
-            vstore();
-            args_size += size;
-        } else if (is_float(vtop->type.t)) {
+        if (is_float(vtop->type.t)) {
             gv(RC_FLOAT); /* only one float register */
             if ((vtop->type.t & VT_BTYPE) == VT_FLOAT)
                 size = 4;

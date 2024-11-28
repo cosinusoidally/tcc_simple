@@ -3999,36 +3999,8 @@ ST_FUNC void unary(void)
             sa = s->next; /* first parameter */
             nb_args = regsize = 0;
             ret.r2 = VT_CONST;
-            /* compute first implicit argument if a structure is returned */
-            if ((s->type.t & VT_BTYPE) == VT_STRUCT) {
-                variadic = (s->f.func_type == FUNC_ELLIPSIS);
-                ret_nregs = gfunc_sret(&s->type, variadic, &ret.type,
-                                       &ret_align, &regsize);
-                if (!ret_nregs) {
-                    /* get some space for the returned structure */
-                    size = type_size(&s->type, &align);
-#ifdef TCC_TARGET_ARM64
-                /* On arm64, a small struct is return in registers.
-                   It is much easier to write it to memory if we know
-                   that we are allowed to write some extra bytes, so
-                   round the allocated space up to a power of 2: */
-                if (size < 16)
-                    while (size & (size - 1))
-                        size = (size | (size - 1)) + 1;
-#endif
-                    loc = (loc - size) & -align;
-                    ret.type = s->type;
-                    ret.r = VT_LOCAL | VT_LVAL;
-                    /* pass it as 'int' to avoid structure arg passing
-                       problems */
-                    vseti(VT_LOCAL, loc);
-                    ret.c = vtop->c;
-                    nb_args++;
-                }
-            } else {
-                ret_nregs = 1;
-                ret.type = s->type;
-            }
+            ret_nregs = 1;
+            ret.type = s->type;
 
             if (ret_nregs) {
                 /* return in register */
@@ -4560,71 +4532,15 @@ static int is_label(void)
     }
 }
 
-#ifndef TCC_TARGET_ARM64
 static void gfunc_return(CType *func_type)
 {
-    if ((func_type->t & VT_BTYPE) == VT_STRUCT) {
-        CType type, ret_type;
-        int ret_align, ret_nregs, regsize;
-        ret_nregs = gfunc_sret(func_type, func_var, &ret_type,
-                               &ret_align, &regsize);
-        if (0 == ret_nregs) {
-            /* if returning structure, must copy it to implicit
-               first pointer arg location */
-            type = *func_type;
-            mk_pointer(&type);
-            vset(&type, VT_LOCAL | VT_LVAL, func_vc);
-            indir();
-            vswap();
-            /* copy structure value to pointer */
-            vstore();
-        } else {
-            /* returning structure packed into registers */
-            int r, size, addr, align;
-            size = type_size(func_type,&align);
-            if ((vtop->r != (VT_LOCAL | VT_LVAL) ||
-                 (vtop->c.i & (ret_align-1)))
-                && (align & (ret_align-1))) {
-                loc = (loc - size) & -ret_align;
-                addr = loc;
-                type = *func_type;
-                vset(&type, VT_LOCAL | VT_LVAL, addr);
-                vswap();
-                vstore();
-                vpop();
-                vset(&ret_type, VT_LOCAL | VT_LVAL, addr);
-            }
-            vtop->type = ret_type;
-            if (is_float(ret_type.t))
-                r = rc_fret(ret_type.t);
-            else
-                r = RC_IRET;
-
-            if (ret_nregs == 1)
-                gv(r);
-            else {
-                for (;;) {
-                    vdup();
-                    gv(r);
-                    vpop();
-                    if (--ret_nregs == 0)
-                      break;
-                    /* We assume that when a structure is returned in multiple
-                       registers, their classes are consecutive values of the
-                       suite s(n) = 2^n */
-                    r <<= 1;
-                    vtop->c.i += regsize;
-                }
-            }
-        }
-    } else if (is_float(func_type->t)) {
+    if (is_float(func_type->t)) {
         gv(rc_fret(func_type->t));
     } else {
         gv(RC_IRET);
     }
     vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
 }
-#endif
 
 static int case_cmp(const void *pa, const void *pb)
 {
