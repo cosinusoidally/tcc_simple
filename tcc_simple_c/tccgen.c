@@ -946,19 +946,6 @@ static void gen_cast(CType *type)
 {
     int sbt, dbt, sf, df, c, p;
 
-    /* special delayed cast for char/short */
-    /* XXX: in some cases (multiple cascaded casts), it may still
-       be incorrect */
-    if (vtop->r & VT_MUSTCAST) {
-        vtop->r &= ~VT_MUSTCAST;
-        force_charshort_cast(vtop->type.t);
-    }
-
-    /* bitfields first get cast to ints */
-    if (vtop->type.t & VT_BITFIELD) {
-        gv(RC_INT);
-    }
-
     dbt = type->t & (VT_BTYPE | VT_UNSIGNED);
     sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
 
@@ -968,34 +955,13 @@ static void gen_cast(CType *type)
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
-            /* constant case: we can do it now */
-            /* XXX: in ISOC, cannot do it if error in convert */
-            if (sbt == VT_DOUBLE)
-                vtop->c.ld = vtop->c.d;
-
-            if (df) {
-                if(!sf) {
-                    vtop->c.ld = (uint32_t)vtop->c.i;
-                }
-
-                if (dbt == VT_FLOAT)
-                    vtop->c.f = (float)vtop->c.ld;
-                else if (dbt == VT_DOUBLE)
-                    vtop->c.d = (double)vtop->c.ld;
-            } else {
-                if (sbt == (VT_LLONG|VT_UNSIGNED))
-                    ;
-                else if (sbt & VT_UNSIGNED)
+                if (sbt & VT_UNSIGNED)
                     vtop->c.i = (uint32_t)vtop->c.i;
                 else if (sbt != VT_LLONG)
                     vtop->c.i = ((uint32_t)vtop->c.i |
                                   -(vtop->c.i & 0x80000000));
 
-                if (dbt == (VT_LLONG|VT_UNSIGNED))
-                    ;
-                else if (dbt == VT_BOOL)
-                    vtop->c.i = (vtop->c.i != 0);
-                else if (dbt != VT_LLONG) {
+                if (dbt != VT_LLONG) {
                     uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
                                   (dbt & VT_BTYPE) == VT_SHORT ? 0xffff :
                                   0xffffffff);
@@ -1003,10 +969,6 @@ static void gen_cast(CType *type)
                     if (!(dbt & VT_UNSIGNED))
                         vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
                 }
-            }
-        } else if (p && dbt == VT_BOOL) {
-            vtop->r = VT_CONST;
-            vtop->c.i = 1;
         } else {
             /* non constant case: generate code */
             if (sf && df) {
