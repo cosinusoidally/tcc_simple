@@ -3616,19 +3616,9 @@ ST_FUNC void unary(void)
                 /* return in register */
                 if (is_float(ret.type.t)) {
                     ret.r = reg_fret(ret.type.t);
-#ifdef TCC_TARGET_X86_64
-                    if ((ret.type.t & VT_BTYPE) == VT_QFLOAT)
-                      ret.r2 = REG_QRET;
-#endif
                 } else {
-#ifndef TCC_TARGET_ARM64
-#ifdef TCC_TARGET_X86_64
-                    if ((ret.type.t & VT_BTYPE) == VT_QLONG)
-#else
                     if ((ret.type.t & VT_BTYPE) == VT_LLONG)
-#endif
                         ret.r2 = REG_LRET;
-#endif
                     ret.r = REG_IRET;
                 }
                 ret.c.i = 0;
@@ -3895,11 +3885,6 @@ static void expr_cond(void)
                each branch */
             if (is_float(vtop->type.t)) {
                 rc = RC_FLOAT;
-#ifdef TCC_TARGET_X86_64
-                if ((vtop->type.t & VT_BTYPE) == VT_LDOUBLE) {
-                    rc = RC_ST0;
-                }
-#endif
             } else
                 rc = RC_INT;
             gv(rc);
@@ -4012,11 +3997,6 @@ static void expr_cond(void)
             rc = RC_INT;
             if (is_float(type.t)) {
                 rc = RC_FLOAT;
-#ifdef TCC_TARGET_X86_64
-                if ((type.t & VT_BTYPE) == VT_LDOUBLE) {
-                    rc = RC_ST0;
-                }
-#endif
             } else if ((type.t & VT_BTYPE) == VT_LLONG) {
                 /* for long longs, we use fixed registers to avoid having
                    to handle a complicated move */
@@ -4600,16 +4580,6 @@ static void parse_init_elem(int expr_type)
         global_expr = 1;
         expr_const1();
         global_expr = saved_global_expr;
-        /* NOTE: symbols are accepted, as well as lvalue for anon symbols
-	   (compound literals).  */
-        if (((vtop->r & (VT_VALMASK | VT_LVAL)) != VT_CONST
-	     && ((vtop->r & (VT_SYM|VT_LVAL)) != (VT_SYM|VT_LVAL)
-		 || vtop->sym->v < SYM_FIRST_ANOM))
-#ifdef TCC_TARGET_PE
-                 || ((vtop->r & VT_SYM) && vtop->sym->a.dllimport)
-#endif
-            )
-            tcc_error("initializer element is not constant");
         break;
     case EXPR_ANY:
         expr_eq();
@@ -4625,13 +4595,8 @@ static void init_putz(Section *sec, unsigned long c, int size)
     } else {
         vpush_global_sym(&func_old_type, TOK_memset);
         vseti(VT_LOCAL, c);
-#ifdef TCC_TARGET_ARM
-        vpushs(size);
-        vpushi(0);
-#else
         vpushi(0);
         vpushs(size);
-#endif
         gfunc_call(3);
     }
 }
