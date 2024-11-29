@@ -96,11 +96,6 @@ ST_FUNC void gen_addr32(int r, Sym *sym, int c)
     gen_le32(c);
 }
 
-ST_FUNC void gen_addrpc32(int r, Sym *sym, int c)
-{
-exit(1);
-}
-
 /* generate a modrm reference. 'op_reg' contains the additional 3
    opcode bits */
 static void gen_modrm(int op_reg, int r, Sym *sym, int c)
@@ -300,11 +295,6 @@ ST_FUNC void gjmp_addr(int a)
     }
 }
 
-ST_FUNC void gtst_addr(int inv, int a)
-{
-exit(1);
-}
-
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
 ST_FUNC int gtst(int inv, int t)
 {
@@ -331,28 +321,10 @@ ST_FUNC void gen_opi(int op)
             r = gv(RC_INT);
             vswap();
             c = vtop->c.i;
-            if (c == (char)c) {
-                /* generate inc and dec for smaller code */
-                if (c==1 && opc==0 && op != TOK_ADDC1) {
-                    o (0x40 | r); // inc
-                } else if (c==1 && opc==5 && op != TOK_SUBC1) {
-                    o (0x48 | r); // dec
-                } else {
-                    o(0x83);
-                    o(0xc0 | (opc << 3) | r);
-                    g(c);
-                }
-            } else {
-                o(0x81);
-                oad(0xc0 | (opc << 3) | r, c);
+                o(0x83);
+                o(0xc0 | (opc << 3) | r);
+                g(c);
             }
-        } else {
-            gv2(RC_INT, RC_INT);
-            r = vtop[-1].r;
-            fr = vtop[0].r;
-            o((opc << 3) | 0x01);
-            o(0xc0 + r + fr * 8); 
-        }
         vtop--;
         if (op >= TOK_ULT && op <= TOK_GT) {
             vtop->r = VT_CMP;
