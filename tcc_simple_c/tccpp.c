@@ -280,28 +280,18 @@ ST_FUNC int handle_eob(void)
 /* read next char from current input file and handle end of input buffer */
 ST_INLN void inp(void)
 {
-    ch = *(++(file->buf_ptr));
-    /* end of buffer/file handling */
-    if (ch == CH_EOB)
-        ch = handle_eob();
+exit(1);
 }
 
 /* handle '\[\r]\n' */
 static int handle_stray_noerror(void)
 {
-    while (ch == '\\') {
-        inp();
-        if (ch == '\n') {
-            file->line_num++;
-            inp();
-        }
-    }
-    return 0;
+exit(1);
 }
 
 static void handle_stray(void)
 {
-    handle_stray_noerror();
+exit(1);
 }
 
 /* skip the stray and handle the \\n case. Output an error if
@@ -315,15 +305,7 @@ static int handle_stray1(uint8_t *p)
         c = handle_eob();
         if (c != '\\')
             return c;
-        p = file->buf_ptr;
     }
-    ch = *p;
-    if (handle_stray_noerror()) {
-        *--file->buf_ptr = '\\';
-    }
-    p = file->buf_ptr;
-    c = *p;
-    return c;
 }
 
 /* handle just the EOB case, but not stray */
