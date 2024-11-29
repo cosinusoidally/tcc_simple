@@ -2356,8 +2356,6 @@ static void struct_decl(CType *type, int u)
         v = tok;
         next();
         /* struct already defined ? return it */
-        if (v < TOK_IDENT)
-            expect("struct/union/enum name");
         s = struct_find(v);
         if (s && (s->sym_scope == local_scope || tok != '{')) {
             if (u == s->type.t)
@@ -2391,8 +2389,6 @@ do_decl:
             t.t = VT_INT|VT_STATIC|VT_ENUM_VAL;
             for(;;) {
                 v = tok;
-                if (v < TOK_UIDENT)
-                    expect("identifier");
                 ss = sym_find(v);
                 next();
                 if (tok == '=') {
@@ -2418,25 +2414,13 @@ do_decl:
             /* set integral type of the enum */
             t.t = VT_INT;
             if (nl >= 0) {
-                if (pl != (unsigned)pl)
-                    t.t = (LONG_SIZE==8 ? VT_LLONG|VT_LONG : VT_LLONG);
                 t.t |= VT_UNSIGNED;
-            } else if (pl != (int)pl || nl != (int)nl)
-                t.t = (LONG_SIZE==8 ? VT_LLONG|VT_LONG : VT_LLONG);
+            }
             s->type.t = type->t = t.t | VT_ENUM;
             s->c = 0;
             /* set type for enum members */
             for (ss = s->next; ss; ss = ss->next) {
                 ll = ss->enum_val;
-                if (ll == (int)ll) /* default is int if it fits */
-                    continue;
-                if (t.t & VT_UNSIGNED) {
-                    ss->type.t |= VT_UNSIGNED;
-                    if (ll == (unsigned)ll)
-                        continue;
-                }
-                ss->type.t = (ss->type.t & ~VT_BTYPE)
-                    | (LONG_SIZE==8 ? VT_LLONG|VT_LONG : VT_LLONG);
             }
         } else {
             c = 0;
