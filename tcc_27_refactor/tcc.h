@@ -35,45 +35,7 @@
 #include <sys/time.h>
 #include <dlfcn.h>
 
-#ifdef _WIN32
-# include <windows.h>
-# include <io.h> /* open, close etc. */
-# include <direct.h> /* getcwd */
-# ifdef __GNUC__
-#  include <stdint.h>
-# endif
-# define inline __inline
-# define snprintf _snprintf
-# define vsnprintf _vsnprintf
-# ifndef __GNUC__
-#  define strtold (long double)strtod
-#  define strtof (float)strtod
-#  define strtoll _strtoi64
-#  define strtoull _strtoui64
-# endif
-# ifdef LIBTCC_AS_DLL
-#  define LIBTCCAPI __declspec(dllexport)
-#  define PUB_FUNC LIBTCCAPI
-# endif
-# define inp next_inp /* inp is an intrinsic on msvc/mingw */
-# ifdef _MSC_VER
-#  pragma warning (disable : 4244)  // conversion from 'uint64_t' to 'int', possible loss of data
-#  pragma warning (disable : 4267)  // conversion from 'size_t' to 'int', possible loss of data
-#  pragma warning (disable : 4996)  // The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name
-#  pragma warning (disable : 4018)  // signed/unsigned mismatch
-#  pragma warning (disable : 4146)  // unary minus operator applied to unsigned type, result still unsigned
-#  define ssize_t intptr_t
-# endif
-# undef CONFIG_TCC_STATIC
-#endif
-
-#ifndef O_BINARY
-# define O_BINARY 0
-#endif
-
-#ifndef offsetof
-#define offsetof(type, field) ((size_t) &((type *)0)->field)
-#endif
+#define O_BINARY 0
 
 #ifndef countof
 #define countof(tab) (sizeof(tab) / sizeof((tab)[0]))
