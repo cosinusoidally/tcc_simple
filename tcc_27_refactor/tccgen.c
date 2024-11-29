@@ -2282,22 +2282,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
                    - an individual alignment was given
                    - it would overflow its base type container and
                      there is no packing */
-                if (bit_size == 0) {
-            new_field:
-		    c = (c + ((bit_pos + 7) >> 3) + align - 1) & -align;
-		    bit_pos = 0;
-                } else if (f->a.aligned) {
-                    goto new_field;
-                } else if (!packed) {
-                    int a8 = align * 8;
-	            int ofs = ((c * 8 + bit_pos) % a8 + bit_size + a8 - 1) / a8;
-                    if (ofs > size / align)
-                        goto new_field;
-                }
-
-                /* in pcc mode, long long bitfields have type int if they fit */
-                if (size == 8 && bit_size <= 32)
-                    f->type.t = (f->type.t & ~VT_BTYPE) | VT_INT, size = 4;
 
                 while (bit_pos >= align * 8)
                     c += align, bit_pos -= align * 8;
@@ -2311,29 +2295,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
                     )
 		    align = 1;
 
-	    } else {
-		bt = f->type.t & VT_BTYPE;
-		if ((bit_pos + bit_size > size * 8)
-                    || (bit_size > 0) == (bt != prevbt)
-                    ) {
-		    c = (c + align - 1) & -align;
-		    offset = c;
-		    bit_pos = 0;
-		    /* In MS bitfield mode a bit-field run always uses
-		       at least as many bits as the underlying type.
-		       To start a new run it's also required that this
-		       or the last bit-field had non-zero width.  */
-		    if (bit_size || prev_bit_size)
-		        c += size;
-		}
-		/* In MS layout the records alignment is normally
-		   influenced by the field, except for a zero-width
-		   field at the start of a run (but by further zero-width
-		   fields it is again).  */
-		if (bit_size == 0 && prevbt != bt)
-		    align = 1;
-		prevbt = bt;
-                prev_bit_size = bit_size;
 	    }
 
 	    f->type.t = (f->type.t & ~(0x3f << VT_STRUCT_SHIFT))
@@ -2345,33 +2306,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
 
 	if (f->v & SYM_FIRST_ANOM && (f->type.t & VT_BTYPE) == VT_STRUCT) {
 	    Sym *ass;
-	    /* An anonymous struct/union.  Adjust member offsets
-	       to reflect the real offset of our containing struct.
-	       Also set the offset of this anon member inside
-	       the outer struct to be zero.  Via this it
-	       works when accessing the field offset directly
-	       (from base object), as well as when recursing
-	       members in initializer handling.  */
-	    int v2 = f->type.ref->v;
-	    if (!(v2 & SYM_FIELD) &&
-		(v2 & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
-		Sym **pps;
-		/* This happens only with MS extensions.  The
-		   anon member has a named struct type, so it
-		   potentially is shared with other references.
-		   We need to unshare members so we can modify
-		   them.  */
-		ass = f->type.ref;
-		f->type.ref = sym_push(anon_sym++ | SYM_FIELD,
-				       &f->type.ref->type, 0,
-				       f->type.ref->c);
-		pps = &f->type.ref->next;
-		while ((ass = ass->next) != NULL) {
-		    *pps = sym_push(ass->v, &ass->type, 0, ass->c);
-		    pps = &((*pps)->next);
-		}
-		*pps = NULL;
-	    }
 	    struct_add_offset(f->type.ref, offset);
 	    f->c = 0;
 	} else {
@@ -2389,13 +2323,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
     if (a < maxalign)
         a = maxalign;
     type->ref->r = a;
-    if (pragma_pack && pragma_pack < maxalign && 0 == pcc) {
-        /* can happen if individual align for some member was given.  In
-           this case MSVC ignores maxalign when aligning the size */
-        a = pragma_pack;
-        if (a < bt)
-            a = bt;
-    }
     c = (c + a - 1) & -a;
     type->ref->c = c;
 
@@ -2409,8 +2336,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
         f->type.ref = f;
         f->auxtype = -1;
         bit_size = BIT_SIZE(f->type.t);
-        if (bit_size == 0)
-            continue;
         bit_pos = BIT_POS(f->type.t);
         size = type_size(&f->type, &align);
         if (bit_pos + bit_size <= size * 8 && f->c + size <= c)
