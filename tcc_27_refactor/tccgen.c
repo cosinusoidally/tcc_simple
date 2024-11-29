@@ -1808,7 +1808,6 @@ static void gen_cast(CType *type)
                     tcc_warning("nonportable conversion from pointer to char/short");
                 }
                 force_charshort_cast(dbt);
-#if PTR_SIZE == 4
             } else if ((dbt & VT_BTYPE) == VT_INT) {
                 /* scalar to int */
                 if ((sbt & VT_BTYPE) == VT_LLONG) {
@@ -1819,7 +1818,6 @@ static void gen_cast(CType *type)
                 /* if lvalue and single word type, nothing to do because
                    the lvalue already contains the real type size (see
                    VT_LVAL_xxx constants) */
-#endif
             }
         }
     } else if ((dbt & VT_BTYPE) == VT_PTR && !(vtop->r & VT_LVAL)) {
@@ -2078,14 +2076,6 @@ ST_FUNC void vstore(void)
             vtop->type.t = VT_PTR;
             gaddrof();
 
-            /* address of memcpy() */
-#ifdef TCC_ARM_EABI
-            if(!(align & 7))
-                vpush_global_sym(&func_old_type, TOK_memcpy8);
-            else if(!(align & 3))
-                vpush_global_sym(&func_old_type, TOK_memcpy4);
-            else
-#endif
             /* Use memmove, rather than memcpy, as dest and src may be same: */
             vpush_global_sym(&func_old_type, TOK_memmove);
 
@@ -2139,48 +2129,24 @@ ST_FUNC void vstore(void)
     } else if (dbt == VT_VOID) {
         --vtop;
     } else {
-#ifdef CONFIG_TCC_BCHECK
-            /* bound check case */
-            if (vtop[-1].r & VT_MUSTBOUND) {
-                vswap();
-                gbound();
-                vswap();
-            }
-#endif
             rc = RC_INT;
             if (is_float(ft)) {
                 rc = RC_FLOAT;
-#ifdef TCC_TARGET_X86_64
-                if ((ft & VT_BTYPE) == VT_LDOUBLE) {
-                    rc = RC_ST0;
-                } else if ((ft & VT_BTYPE) == VT_QFLOAT) {
-                    rc = RC_FRET;
-                }
-#endif
             }
             r = gv(rc);  /* generate value */
             /* if lvalue was saved on stack, must read it */
             if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
                 SValue sv;
                 t = get_reg(RC_INT);
-#if PTR_SIZE == 8
-                sv.type.t = VT_PTR;
-#else
                 sv.type.t = VT_INT;
-#endif
                 sv.r = VT_LOCAL | VT_LVAL;
                 sv.c.i = vtop[-1].c.i;
                 load(t, &sv);
                 vtop[-1].r = t | VT_LVAL;
             }
             /* two word case handling : store second register at word + 4 (or +8 for x86-64)  */
-#if PTR_SIZE == 8
-            if (((ft & VT_BTYPE) == VT_QLONG) || ((ft & VT_BTYPE) == VT_QFLOAT)) {
-                int addr_type = VT_LLONG, load_size = 8, load_type = ((vtop->type.t & VT_BTYPE) == VT_QLONG) ? VT_LLONG : VT_DOUBLE;
-#else
             if ((ft & VT_BTYPE) == VT_LLONG) {
                 int addr_type = VT_INT, load_size = 4, load_type = VT_INT;
-#endif
                 vtop[-1].type.t = load_type;
                 store(r, vtop - 1);
                 vswap();
@@ -2280,7 +2246,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
     prevbt = VT_STRUCT; /* make it never match */
     prev_bit_size = 0;
 
-//#define BF_DEBUG
 
     for (f = type->ref->next; f; f = f->next) {
         if (f->type.t & VT_BITFIELD)
@@ -2402,18 +2367,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
 	if (align > maxalign)
 	    maxalign = align;
 
-#ifdef BF_DEBUG
-	printf("set field %s offset %-2d size %-2d align %-2d",
-	       get_tok_str(f->v & ~SYM_FIELD, NULL), offset, size, align);
-	if (f->type.t & VT_BITFIELD) {
-	    printf(" pos %-2d bits %-2d",
-                    BIT_POS(f->type.t),
-                    BIT_SIZE(f->type.t)
-                    );
-	}
-	printf("\n");
-#endif
-
 	if (f->v & SYM_FIRST_ANOM && (f->type.t & VT_BTYPE) == VT_STRUCT) {
 	    Sym *ass;
 	    /* An anonymous struct/union.  Adjust member offsets
@@ -2470,10 +2423,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
     c = (c + a - 1) & -a;
     type->ref->c = c;
 
-#ifdef BF_DEBUG
-    printf("struct size %-2d align %-2d\n\n", c, a), fflush(stdout);
-#endif
-
     /* check whether we can access bitfields by their type */
     for (f = type->ref->next; f; f = f->next) {
         int s, px, cx, c0;
@@ -2521,19 +2470,9 @@ static void struct_layout(CType *type, AttributeDef *ad)
 		        | (bit_pos << VT_STRUCT_SHIFT);
             if (s != size)
                 f->auxtype = t.t;
-#ifdef BF_DEBUG
-            printf("FIX field %s offset %-2d size %-2d align %-2d "
-                "pos %-2d bits %-2d\n",
-                get_tok_str(f->v & ~SYM_FIELD, NULL),
-                cx, s, align, px, bit_size);
-#endif
         } else {
             /* fall back to load/store single-byte wise */
             f->auxtype = VT_STRUCT;
-#ifdef BF_DEBUG
-            printf("FIX field %s : load byte-wise\n",
-                 get_tok_str(f->v & ~SYM_FIELD, NULL));
-#endif
         }
     }
 }
@@ -2795,13 +2734,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             }
             next();
             break;
-#ifdef TCC_TARGET_ARM64
-        case TOK_UINT128:
-            /* GCC's __uint128_t appears in some Linux header files. Make it a
-               synonym for long double to get the size and alignment right. */
-            u = VT_LDOUBLE;
-            goto basic_type;
-#endif
         case TOK_BOOL:
             u = VT_BOOL;
             goto basic_type;
@@ -2930,10 +2862,6 @@ the_end:
     bt = t & (VT_BTYPE|VT_LONG);
     if (bt == VT_LONG)
         t |= LONG_SIZE == 8 ? VT_LLONG : VT_INT;
-#ifdef TCC_TARGET_PE
-    if (bt == VT_LDOUBLE)
-        t = (t & ~(VT_BTYPE|VT_LONG)) | VT_DOUBLE;
-#endif
     type->t = t;
     return type_found;
 }
@@ -2967,9 +2895,6 @@ static int asm_label_instr(void)
     next();
     parse_asm_str(&astr);
     skip(')');
-#ifdef ASM_DEBUG
-    printf("asm_alias: \"%s\"\n", (char *)astr.data);
-#endif
     v = tok_alloc(astr.data, astr.size - 1)->tok;
     cstr_free(&astr);
     return v;
@@ -3213,11 +3138,6 @@ ST_FUNC void indir(void)
     if (!(vtop->type.t & VT_ARRAY) && !(vtop->type.t & VT_VLA)
         && (vtop->type.t & VT_BTYPE) != VT_FUNC) {
         vtop->r |= lvalue_type(vtop->type.t);
-        /* if bound checking, the referenced pointer must be checked */
-#ifdef CONFIG_TCC_BCHECK
-        if (tcc_state->do_bounds_check)
-            vtop->r |= VT_MUSTBOUND;
-#endif
     }
 }
 
@@ -3472,56 +3392,7 @@ ST_FUNC void unary(void)
             }
         }
         break;
-#ifdef TCC_TARGET_X86_64
-#ifdef TCC_TARGET_PE
-    case TOK_builtin_va_start:
-	parse_builtin_params(0, "ee");
-        r = vtop->r & VT_VALMASK;
-        if (r == VT_LLOCAL)
-            r = VT_LOCAL;
-        if (r != VT_LOCAL)
-            tcc_error("__builtin_va_start expects a local variable");
-        vtop->r = r;
-	vtop->type = char_pointer_type;
-	vtop->c.i += 8;
-	vstore();
-        break;
-#else
-    case TOK_builtin_va_arg_types:
-	parse_builtin_params(0, "t");
-	vpushi(classify_x86_64_va_arg(&vtop->type));
-	vswap();
-	vpop();
-        break;
-#endif
-#endif
 
-#ifdef TCC_TARGET_ARM64
-    case TOK___va_start: {
-	parse_builtin_params(0, "ee");
-        //xx check types
-        gen_va_start();
-        vpushi(0);
-        vtop->type.t = VT_VOID;
-        break;
-    }
-    case TOK___va_arg: {
-	parse_builtin_params(0, "et");
-	type = vtop->type;
-	vpop();
-        //xx check types
-        gen_va_arg(&type);
-        vtop->type = type;
-        break;
-    }
-    case TOK___arm64_clear_cache: {
-	parse_builtin_params(0, "ee");
-        gen_clear_cache();
-        vpushi(0);
-        vtop->type.t = VT_VOID;
-        break;
-    }
-#endif
     /* pre operations */
     case TOK_INC:
     case TOK_DEC:
@@ -3647,13 +3518,7 @@ ST_FUNC void unary(void)
                 tcc_error("'%s' undeclared", name);
             /* for simple function calls, we tolerate undeclared
                external reference to int() function */
-            if (tcc_state->warn_implicit_function_declaration
-#ifdef TCC_TARGET_PE
-                /* people must be warned about using undeclared WINAPI functions
-                   (which usually start with uppercase letter) */
-                || (name[0] >= 'A' && name[0] <= 'Z')
-#endif
-            )
+            if (tcc_state->warn_implicit_function_declaration)
                 tcc_warning("implicit declaration of function '%s'", name);
             s = external_global_sym(t, &func_old_type, 0); 
         }
@@ -3711,11 +3576,6 @@ ST_FUNC void unary(void)
             /* an array is never an lvalue */
             if (!(vtop->type.t & VT_ARRAY)) {
                 vtop->r |= lvalue_type(vtop->type.t);
-#ifdef CONFIG_TCC_BCHECK
-                /* if bound checking, the referenced pointer must be checked */
-                if (tcc_state->do_bounds_check && (vtop->r & VT_VALMASK) != VT_LOCAL)
-                    vtop->r |= VT_MUSTBOUND;
-#endif
             }
             next();
         } else if (tok == '[') {

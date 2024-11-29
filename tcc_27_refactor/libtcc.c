@@ -563,8 +563,6 @@ reparse:
         for(popt = tcc_options; ; ++popt) {
             const char *p1 = popt->name;
             const char *r1 = r + 1;
-            if (p1 == NULL)
-                tcc_error("invalid option -- '%s'", r);
             if (!strstart(p1, &r1))
                 continue;
             optarg = r1;
@@ -572,8 +570,7 @@ reparse:
                 if (*r1 == '\0' && !(popt->flags & TCC_OPTION_NOSEP)) {
                     optarg = argv[optind++];
                 }
-            } else if (*r1 != '\0')
-                continue;
+            }
             break;
         }
 
