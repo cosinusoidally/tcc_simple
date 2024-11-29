@@ -2381,17 +2381,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
         /* patch type size if needed, which happens only for array types */
         if (n < 0)
             s->c = size1 == 1 ? len : ((len + size1 - 1)/size1);
-    } else if ((type->t & VT_BTYPE) == VT_STRUCT) {
-	size1 = 1;
-        no_oblock = 1;
-        if (first || tok == '{') {
-            skip('{');
-            no_oblock = 0;
-        }
-        s = type->ref;
-        f = s->next;
-        n = s->c;
-	goto do_init_list;
     } else if (tok == '{') {
         next();
         decl_initializer(type, sec, c, first, size_only);
@@ -2518,16 +2507,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             vset(type, r, addr);
         }
     } else {
-        if (v && scope == VT_CONST) {
-            /* see if the symbol was already defined */
-            sym = sym_find(v);
-            if (sym) {
-                patch_storage(sym, ad, type);
-                /* we accept several definitions of the same global variable. */
-                if (!has_init && sym->c && elfsym(sym)->st_shndx != SHN_UNDEF)
-                    goto no_alloc;
-            }
-        }
 
         /* allocate symbol in corresponding section */
         sec = ad->section;
@@ -2566,9 +2545,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
     if (type->t & VT_VLA) {
         int a;
-
-        if (NODATA_WANTED)
-            goto no_alloc;
 
         vla_sp_loc = addr;
         vlas_in_scope++;
