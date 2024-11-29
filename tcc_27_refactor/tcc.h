@@ -52,42 +52,6 @@
 
 /* ------------ path configuration ------------ */
 
-#ifndef CONFIG_SYSROOT
-# define CONFIG_SYSROOT ""
-#endif
-#ifndef CONFIG_TCCDIR
-# define CONFIG_TCCDIR "/usr/local/lib/tcc"
-#endif
-#ifndef CONFIG_LDDIR
-# define CONFIG_LDDIR "lib"
-#endif
-#ifdef CONFIG_TRIPLET
-# define USE_TRIPLET(s) s "/" CONFIG_TRIPLET
-# define ALSO_TRIPLET(s) USE_TRIPLET(s) ":" s
-#else
-# define USE_TRIPLET(s) s
-# define ALSO_TRIPLET(s) s
-#endif
-
-/* path to find crt1.o, crti.o and crtn.o */
-#ifndef CONFIG_TCC_CRTPREFIX
-# define CONFIG_TCC_CRTPREFIX USE_TRIPLET(CONFIG_SYSROOT "/usr/" CONFIG_LDDIR)
-#endif
-
-/* Below: {B} is substituted by CONFIG_TCCDIR (rsp. -B option) */
-
-/* system include paths */
-#ifndef CONFIG_TCC_SYSINCLUDEPATHS
-# ifdef TCC_TARGET_PE
-#  define CONFIG_TCC_SYSINCLUDEPATHS "{B}/include"PATHSEP"{B}/include/winapi"
-# else
-#  define CONFIG_TCC_SYSINCLUDEPATHS \
-        "{B}/include" \
-    ":" ALSO_TRIPLET(CONFIG_SYSROOT "/usr/local/include") \
-    ":" ALSO_TRIPLET(CONFIG_SYSROOT "/usr/include")
-# endif
-#endif
-
 /* library search paths */
 #ifndef CONFIG_TCC_LIBPATHS
 # ifdef TCC_TARGET_PE
