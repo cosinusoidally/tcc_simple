@@ -2256,31 +2256,7 @@ static void struct_layout(CType *type, AttributeDef *ad)
         a = f->a.aligned ? 1 << (f->a.aligned - 1) : 0;
         packed = 0;
 
-        if (pcc && bit_size == 0) {
-            /* in pcc mode, packing does not affect zero-width bitfields */
-
-        } else {
-            /* in pcc mode, attribute packed overrides if set. */
-            if (pcc && (f->a.packed || ad->a.packed))
-                align = packed = 1;
-
-            /* pragma pack overrides align if lesser and packs bitfields always */
-            if (pragma_pack) {
-                packed = 1;
-                if (pragma_pack < align)
-                    align = pragma_pack;
-                /* in pcc mode pragma pack also overrides individual align */
-                if (pcc && pragma_pack < a)
-                    a = 0;
-            }
-        }
-        /* some individual align was specified */
-        if (a)
-            align = a;
-
         if (type->ref->type.t == VT_UNION) {
-	    if (pcc && bit_size >= 0)
-	        size = (bit_size + 7) >> 3;
 	    offset = 0;
 	    if (size > c)
 	        c = size;
