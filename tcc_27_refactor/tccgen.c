@@ -2490,10 +2490,6 @@ static void sym_to_attr(AttributeDef *ad, Sym *s)
    are added to the element type, copied because it could be a typedef. */
 static void parse_btype_qualify(CType *type, int qualifiers)
 {
-    while (type->t & VT_ARRAY) {
-        type->ref = sym_push(SYM_FIELD, &type->ref->type, 0, type->ref->c);
-        type = &type->ref->type;
-    }
     type->t |= qualifiers;
 }
 
@@ -2515,11 +2511,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
 
     while(1) {
         switch(tok) {
-        case TOK_EXTENSION:
-            /* currently, we really ignore extension */
-            next();
-            continue;
-
             /* basic types */
         case TOK_CHAR:
             u = VT_BYTE;
@@ -2545,9 +2536,7 @@ static int parse_btype(CType *type, AttributeDef *ad)
             u = VT_INT;
             goto basic_type;
         case TOK_LONG:
-            if ((t & VT_BTYPE) == VT_DOUBLE) {
-                t = (t & ~(VT_BTYPE|VT_LONG)) | VT_LDOUBLE;
-            } else if ((t & (VT_BTYPE|VT_LONG)) == VT_LONG) {
+            if ((t & (VT_BTYPE|VT_LONG)) == VT_LONG) {
                 t = (t & ~(VT_BTYPE|VT_LONG)) | VT_LLONG;
             } else {
                 u = VT_LONG;
@@ -2555,9 +2544,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             }
             next();
             break;
-        case TOK_BOOL:
-            u = VT_BOOL;
-            goto basic_type;
         case TOK_FLOAT:
             u = VT_FLOAT;
             goto basic_type;
@@ -2641,17 +2627,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             next();
             break;
 
-            /* GNUC typeof */
-        case TOK_TYPEOF1:
-        case TOK_TYPEOF2:
-        case TOK_TYPEOF3:
-            next();
-            parse_expr_type(&type1);
-            /* remove all storage modifiers except typedef */
-            type1.t &= ~(VT_STORAGE&~VT_TYPEDEF);
-	    if (type1.ref)
-                sym_to_attr(ad, type1.ref);
-            goto basic_type2;
         default:
             if (typespec_found)
                 goto the_end;
@@ -2675,10 +2650,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
         type_found = 1;
     }
 the_end:
-    if (tcc_state->char_is_unsigned) {
-        if ((t & (VT_DEFSIGN|VT_BTYPE)) == VT_BYTE)
-            t |= VT_UNSIGNED;
-    }
     /* VT_LONG is used just as a modifier for VT_INT / VT_LLONG */
     bt = t & (VT_BTYPE|VT_LONG);
     if (bt == VT_LONG)
