@@ -660,12 +660,6 @@ ST_FUNC int get_reg(int rc)
     }
 }
 
-/* get address of vtop (vtop MUST BE an lvalue) */
-ST_FUNC void gaddrof(void)
-{
-exit(1);
-}
-
 static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
 {
 exit(1);
@@ -1058,104 +1052,25 @@ ST_FUNC void vstore(void)
             gen_assign_cast(&vtop[-1].type);
     }
 
-    if (sbt == VT_STRUCT) {
-        /* if structure, only generate pointer */
-        /* structure assignment : generate memcpy */
-        /* XXX: optimize if small size */
-            size = type_size(&vtop->type, &align);
-
-            /* destination */
-            vswap();
-            vtop->type.t = VT_PTR;
-            gaddrof();
-
-            /* Use memmove, rather than memcpy, as dest and src may be same: */
-            vpush_global_sym(&func_old_type, TOK_memmove);
-
-            vswap();
-            /* source */
-            vpushv(vtop - 2);
-            vtop->type.t = VT_PTR;
-            gaddrof();
-            /* type size */
-            vpushi(size);
-            gfunc_call(3);
-
-        /* leave source on stack */
-    } else if (ft & VT_BITFIELD) {
-        /* bitfield store handling */
-
-        /* save lvalue as expression result (example: s.b = s.a = n;) */
-        vdup(), vtop[-1] = vtop[-2];
-
-        bit_pos = BIT_POS(ft);
-        bit_size = BIT_SIZE(ft);
-        /* remove bit field info to avoid loops */
-        vtop[-1].type.t = ft & ~VT_STRUCT_MASK;
-
-        if ((ft & VT_BTYPE) == VT_BOOL) {
-            gen_cast(&vtop[-1].type);
-            vtop[-1].type.t = (vtop[-1].type.t & ~VT_BTYPE) | (VT_BYTE | VT_UNSIGNED);
-        }
-
-        r = adjust_bf(vtop - 1, bit_pos, bit_size);
-        unsigned long long mask = (1ULL << bit_size) - 1;
-        if ((ft & VT_BTYPE) != VT_BOOL) {
-            /* mask source */
-            vpushi((unsigned)mask);
-            gen_op('&');
-        }
-        /* shift source */
-        vpushi(bit_pos);
-        gen_op(TOK_SHL);
-        vswap();
-        /* duplicate destination */
-        vdup();
-        vrott(3);
-        vpushi(~((unsigned)mask << bit_pos));
-        gen_op('&');
-        gen_op('|');
-        /* store result */
-        vstore();
-        /* ... and discard */
-        vpop();
-    } else if (dbt == VT_VOID) {
+    if (dbt == VT_VOID) {
         --vtop;
     } else {
-            rc = RC_INT;
-            if (is_float(ft)) {
-                rc = RC_FLOAT;
-            }
-            r = gv(rc);  /* generate value */
-            /* if lvalue was saved on stack, must read it */
-            if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
-                SValue sv;
-                t = get_reg(RC_INT);
-                sv.type.t = VT_INT;
-                sv.r = VT_LOCAL | VT_LVAL;
-                sv.c.i = vtop[-1].c.i;
-                load(t, &sv);
-                vtop[-1].r = t | VT_LVAL;
-            }
-            /* two word case handling : store second register at word + 4 (or +8 for x86-64)  */
-            if ((ft & VT_BTYPE) == VT_LLONG) {
-                int addr_type = VT_INT, load_size = 4, load_type = VT_INT;
-                vtop[-1].type.t = load_type;
-                store(r, vtop - 1);
-                vswap();
-                /* convert to int to increment easily */
-                vtop->type.t = addr_type;
-                gaddrof();
-                vpushi(load_size);
-                gen_op('+');
-                vtop->r |= VT_LVAL;
-                vswap();
-                vtop[-1].type.t = load_type;
-                /* XXX: it works because r2 is spilled last ! */
-                store(vtop->r2, vtop - 1);
-            } else {
-                store(r, vtop - 1);
-            }
+        rc = RC_INT;
+        if (is_float(ft)) {
+            rc = RC_FLOAT;
+        }
+        r = gv(rc);  /* generate value */
+        /* if lvalue was saved on stack, must read it */
+        if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
+            SValue sv;
+            t = get_reg(RC_INT);
+            sv.type.t = VT_INT;
+            sv.r = VT_LOCAL | VT_LVAL;
+            sv.c.i = vtop[-1].c.i;
+            load(t, &sv);
+            vtop[-1].r = t | VT_LVAL;
+        }
+        store(r, vtop - 1);
 
         vswap();
         vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
