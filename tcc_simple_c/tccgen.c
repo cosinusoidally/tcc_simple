@@ -2061,19 +2061,7 @@ ST_FUNC int lvalue_type(int t)
 /* indirection with full error checking and bound check */
 ST_FUNC void indir(void)
 {
-    if ((vtop->type.t & VT_BTYPE) != VT_PTR) {
-        if ((vtop->type.t & VT_BTYPE) == VT_FUNC)
-            return;
-        expect("pointer");
-    }
-    if (vtop->r & VT_LVAL)
-        gv(RC_INT);
-    vtop->type = *pointed_type(&vtop->type);
-    /* Arrays and functions are never lvalues */
-    if (!(vtop->type.t & VT_ARRAY) && !(vtop->type.t & VT_VLA)
-        && (vtop->type.t & VT_BTYPE) != VT_FUNC) {
-        vtop->r |= lvalue_type(vtop->type.t);
-    }
+exit(1);
 }
 
 /* pass a parameter to a function and do type checking and casting */
@@ -2323,50 +2311,7 @@ static int case_cmp(const void *pa, const void *pb)
 
 static void gcase(struct case_t **base, int len, int *bsym)
 {
-    struct case_t *p;
-    int e;
-    int ll = (vtop->type.t & VT_BTYPE) == VT_LLONG;
-    gv(RC_INT);
-    while (len > 4) {
-        /* binary search */
-        p = base[len/2];
-        vdup();
-        vpushi(p->v2);
-        gen_op(TOK_LE);
-        e = gtst(1, 0);
-        vdup();
-        vpushi(p->v1);
-        gen_op(TOK_GE);
-        gtst_addr(0, p->sym); /* v1 <= x <= v2 */
-        /* x < v1 */
-        gcase(base, len/2, bsym);
-        if (cur_switch->def_sym)
-            gjmp_addr(cur_switch->def_sym);
-        else
-            *bsym = gjmp(*bsym);
-        /* x > v2 */
-        gsym(e);
-        e = len/2 + 1;
-        base += e; len -= e;
-    }
-    /* linear scan */
-    while (len--) {
-        p = *base++;
-        vdup();
-        vpushi(p->v2);
-        if (p->v1 == p->v2) {
-            gen_op(TOK_EQ);
-            gtst_addr(0, p->sym);
-        } else {
-            gen_op(TOK_LE);
-            e = gtst(1, 0);
-            vdup();
-	    vpushi(p->v1);
-            gen_op(TOK_GE);
-            gtst_addr(0, p->sym);
-            gsym(e);
-        }
-    }
+exit(1);
 }
 
 static void block(int *bsym, int *csym, int is_expr)
