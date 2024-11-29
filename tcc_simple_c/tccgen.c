@@ -86,7 +86,6 @@ static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
 static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
-static inline int64_t expr_const64(void);
 static void vpush(CType *type);
 static int gvtst(int inv, int t);
 static void gen_inline_functions(TCCState *s);
@@ -1546,16 +1545,12 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         n = -1;
         t1 = 0;
         if (tok != ']') {
-            if (!local_stack || (storage & VT_STATIC))
-                vpushi(expr_const());
-            else {
-		/* VLAs (which can only happen with local_stack && !VT_STATIC)
-		   length must always be evaluated, even under nocode_wanted,
-		   so that its size slot is initialized (e.g. under sizeof
-		   or typeof).  */
-		nocode_wanted = 0;
-		gexpr();
-	    }
+            /* VLAs (which can only happen with local_stack && !VT_STATIC)
+               length must always be evaluated, even under nocode_wanted,
+               so that its size slot is initialized (e.g. under sizeof
+               or typeof).  */
+            nocode_wanted = 0;
+            gexpr();
             if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
                 n = vtop->c.i;
                 if (n < 0)
@@ -1836,32 +1831,6 @@ static void expr_eq(void)
 ST_FUNC void gexpr(void)
 {
     expr_eq();
-}
-
-/* parse a constant expression and return value in vtop.  */
-static void expr_const1(void)
-{
-exit(1);
-}
-
-/* parse an integer constant and return its value. */
-static inline int64_t expr_const64(void)
-{
-exit(1);
-}
-
-/* parse an integer constant and return its value.
-   Complain if it doesn't fit 32bit (signed or unsigned).  */
-ST_FUNC int expr_const(void)
-{
-exit(1);
-
-    int c;
-    int64_t wc = expr_const64();
-    c = wc;
-    if (c != wc && (unsigned)c != wc)
-        tcc_error("constant exceeds 32 bit");
-    return c;
 }
 
 /* return the label token if current token is a label, otherwise
