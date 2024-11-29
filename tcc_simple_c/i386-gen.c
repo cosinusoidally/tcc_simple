@@ -313,22 +313,18 @@ ST_FUNC void gen_opi(int op)
 {
     int r, fr, opc, c;
 
-        opc = 7;
-        if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
-            /* constant case */
-            vswap();
-            r = gv(RC_INT);
-            vswap();
-            c = vtop->c.i;
-                o(0x83);
-                o(0xc0 | (opc << 3) | r);
-                g(c);
-            }
-        vtop--;
-        if (op >= TOK_ULT && op <= TOK_GT) {
-            vtop->r = VT_CMP;
-            vtop->c.i = op;
-        }
+    opc = 7;
+    /* constant case */
+    vswap();
+    r = gv(RC_INT);
+    vswap();
+    c = vtop->c.i;
+    o(0x83);
+    o(0xc0 | (opc << 3) | r);
+    g(c);
+    vtop--;
+    vtop->r = VT_CMP;
+    vtop->c.i = op;
 }
 
 /* end of X86 code generator */
