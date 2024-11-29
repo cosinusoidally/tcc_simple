@@ -2338,43 +2338,6 @@ static void struct_layout(CType *type, AttributeDef *ad)
         bit_size = BIT_SIZE(f->type.t);
         bit_pos = BIT_POS(f->type.t);
         size = type_size(&f->type, &align);
-        if (bit_pos + bit_size <= size * 8 && f->c + size <= c)
-            continue;
-
-        /* try to access the field using a different type */
-        c0 = -1, s = align = 1;
-        for (;;) {
-            px = f->c * 8 + bit_pos;
-            cx = (px >> 3) & -align;
-            px = px - (cx << 3);
-            if (c0 == cx)
-                break;
-            s = (px + bit_size + 7) >> 3;
-            if (s > 4) {
-                t.t = VT_LLONG;
-            } else if (s > 2) {
-                t.t = VT_INT;
-            } else if (s > 1) {
-                t.t = VT_SHORT;
-            } else {
-                t.t = VT_BYTE;
-            }
-            s = type_size(&t, &align);
-            c0 = cx;
-        }
-
-        if (px + bit_size <= s * 8 && cx + s <= c) {
-            /* update offset and bit position */
-            f->c = cx;
-            bit_pos = px;
-	    f->type.t = (f->type.t & ~(0x3f << VT_STRUCT_SHIFT))
-		        | (bit_pos << VT_STRUCT_SHIFT);
-            if (s != size)
-                f->auxtype = t.t;
-        } else {
-            /* fall back to load/store single-byte wise */
-            f->auxtype = VT_STRUCT;
-        }
     }
 }
 
