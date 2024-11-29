@@ -26,16 +26,6 @@
  DEF_ASM(ebp)
  DEF_ASM(esi)
  DEF_ASM(edi)
-#ifdef TCC_TARGET_X86_64
- DEF_ASM(rax)
- DEF_ASM(rcx)
- DEF_ASM(rdx)
- DEF_ASM(rbx)
- DEF_ASM(rsp)
- DEF_ASM(rbp)
- DEF_ASM(rsi)
- DEF_ASM(rdi)
-#endif
  DEF_ASM(mm0)
  DEF_ASM(mm1)
  DEF_ASM(mm2)
@@ -93,14 +83,6 @@
  DEF_ASM(st)
  DEF_ASM(rip)
 
-#ifdef TCC_TARGET_X86_64
- /* The four low parts of sp/bp/si/di that exist only on
-    x86-64 (encoding aliased to ah,ch,dh,dh when not using REX). */
- DEF_ASM(spl)
- DEF_ASM(bpl)
- DEF_ASM(sil)
- DEF_ASM(dil)
-#endif
  /* generic two operands */
  DEF_BWLX(mov)
 
@@ -140,16 +122,10 @@
 
  DEF_ASM(pushw)
  DEF_ASM(pushl)
-#ifdef TCC_TARGET_X86_64
- DEF_ASM(pushq)
-#endif
  DEF_ASM(push)
 
  DEF_ASM(popw)
  DEF_ASM(popl)
-#ifdef TCC_TARGET_X86_64
- DEF_ASM(popq)
-#endif
  DEF_ASM(pop)
 
  DEF_BWL(in)
@@ -160,12 +136,6 @@
  DEF_ASM(movsbw)
  DEF_ASM(movsbl)
  DEF_ASM(movswl)
-#ifdef TCC_TARGET_X86_64
- DEF_ASM(movsbq)
- DEF_ASM(movswq)
- DEF_ASM(movzwq)
- DEF_ASM(movslq)
-#endif
 
  DEF_WLX(lea)
 
@@ -234,11 +204,8 @@
 #define DEF_ASM_OP1(name, opcode, group, instr_type, op0)
 #define DEF_ASM_OP2(name, opcode, group, instr_type, op0, op1)
 #define DEF_ASM_OP3(name, opcode, group, instr_type, op0, op1, op2)
-#ifdef TCC_TARGET_X86_64
-# include "x86_64-asm.h"
-#else
-# include "i386-asm.h"
-#endif
+
+#include "i386-asm.h"
 
 #define ALT(x)
 #define DEF_ASM_OP0(name, opcode)
@@ -246,8 +213,5 @@
 #define DEF_ASM_OP1(name, opcode, group, instr_type, op0) DEF_ASM(name)
 #define DEF_ASM_OP2(name, opcode, group, instr_type, op0, op1) DEF_ASM(name)
 #define DEF_ASM_OP3(name, opcode, group, instr_type, op0, op1, op2) DEF_ASM(name)
-#ifdef TCC_TARGET_X86_64
-# include "x86_64-asm.h"
-#else
+
 # include "i386-asm.h"
-#endif
