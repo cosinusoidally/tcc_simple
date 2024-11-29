@@ -1222,15 +1222,6 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
                 n = c - '0';
                 p++;
                 c = *p;
-                if (isoct(c)) {
-                    n = n * 8 + c - '0';
-                    p++;
-                    c = *p;
-                    if (isoct(c)) {
-                        n = n * 8 + c - '0';
-                        p++;
-                    }
-                }
                 c = n;
                 goto add_char_nonext;
             case 'a':

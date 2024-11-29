@@ -974,9 +974,6 @@ static inline int isid(int c) {
 static inline int isnum(int c) {
     return c >= '0' && c <= '9';
 }
-static inline int isoct(int c) {
-    return c >= '0' && c <= '7';
-}
 static inline int toup(int c) {
     return (c >= 'a' && c <= 'z') ? c - 'a' + 'A' : c;
 }
