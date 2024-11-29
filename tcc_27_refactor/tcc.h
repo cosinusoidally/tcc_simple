@@ -385,7 +385,6 @@ typedef struct CachedInclude {
 
 #define CACHED_INCLUDES_HASH_SIZE 32
 
-#ifdef CONFIG_TCC_ASM
 typedef struct ExprValue {
     uint64_t v;
     Sym *sym;
@@ -406,7 +405,6 @@ typedef struct ASMOperand {
     int is_memory; /* true if memory operand */
     int is_rw;     /* for '+' modifier */
 } ASMOperand;
-#endif
 
 /* extra symbol attributes (not in symbol table) */
 struct sym_attr {
@@ -414,9 +412,6 @@ struct sym_attr {
     unsigned plt_offset;
     int plt_sym;
     int dyn_index;
-#ifdef TCC_TARGET_ARM
-    unsigned char plt_thumb_stub:1;
-#endif
 };
 
 struct TCCState {
@@ -457,13 +452,6 @@ struct TCCState {
 
     /* compile with debug symbol (and use them if error during execution) */
     int do_debug;
-#ifdef CONFIG_TCC_BCHECK
-    /* compile with built-in memory and bounds checker */
-    int do_bounds_check;
-#endif
-#ifdef TCC_TARGET_ARM
-    enum float_abi float_abi; /* float ABI of the generated code*/
-#endif
     int run_test; /* nth test to run with -dt -run */
 
     addr_t text_addr; /* address of text section */
@@ -474,12 +462,7 @@ struct TCCState {
     char *init_symbol; /* symbols to call at load-time (not used currently) */
     char *fini_symbol; /* symbols to call at unload-time (not used currently) */
 
-#ifdef TCC_TARGET_I386
     int seg_size; /* 32. Can be 16 with i386 assembler (.code16) */
-#endif
-#ifdef TCC_TARGET_X86_64
-    int nosse; /* For -mno-sse support. */
-#endif
 
     /* array of all loaded dlls (including those referenced by loaded dlls) */
     DLLReference **loaded_dlls;
@@ -569,25 +552,9 @@ struct TCCState {
     struct sym_attr *sym_attrs;
     int nb_sym_attrs;
 
-#ifdef TCC_TARGET_PE
-    /* PE info */
-    int pe_subsystem;
-    unsigned pe_characteristics;
-    unsigned pe_file_align;
-    unsigned pe_stack_size;
-    addr_t pe_imagebase;
-# ifdef TCC_TARGET_X86_64
-    Section *uw_pdata;
-    int uw_sym;
-    unsigned uw_offs;
-# endif
-#endif
-
-#ifdef TCC_IS_NATIVE
     const char *runtime_main;
     void **runtime_mem;
     int nb_runtime_mem;
-#endif
 
     /* used by main and tcc_parse_args only */
     struct filespec **files; /* files seen on command line */
@@ -770,7 +737,6 @@ struct filespec {
 #define TOK_ASMDIR_FIRST TOK_ASMDIR_byte
 #define TOK_ASMDIR_LAST TOK_ASMDIR_section
 
-#if defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64
 /* only used for i386 asm opcodes definitions */
 #define DEF_BWL(x) \
  DEF(TOK_ASM_ ## x ## b, #x "b") \
@@ -781,28 +747,10 @@ struct filespec {
  DEF(TOK_ASM_ ## x ## w, #x "w") \
  DEF(TOK_ASM_ ## x ## l, #x "l") \
  DEF(TOK_ASM_ ## x, #x)
-#ifdef TCC_TARGET_X86_64
-# define DEF_BWLQ(x) \
- DEF(TOK_ASM_ ## x ## b, #x "b") \
- DEF(TOK_ASM_ ## x ## w, #x "w") \
- DEF(TOK_ASM_ ## x ## l, #x "l") \
- DEF(TOK_ASM_ ## x ## q, #x "q") \
- DEF(TOK_ASM_ ## x, #x)
-# define DEF_WLQ(x) \
- DEF(TOK_ASM_ ## x ## w, #x "w") \
- DEF(TOK_ASM_ ## x ## l, #x "l") \
- DEF(TOK_ASM_ ## x ## q, #x "q") \
- DEF(TOK_ASM_ ## x, #x)
-# define DEF_BWLX DEF_BWLQ
-# define DEF_WLX DEF_WLQ
-/* number of sizes + 1 */
-# define NBWLX 5
-#else
 # define DEF_BWLX DEF_BWL
 # define DEF_WLX DEF_WL
 /* number of sizes + 1 */
 # define NBWLX 4
-#endif
 
 #define DEF_FP1(x) \
  DEF(TOK_ASM_ ## f ## x ## s, "f" #x "s") \
@@ -847,8 +795,6 @@ struct filespec {
  DEF_ASM(x ## nle ## suffix) \
  DEF_ASM(x ## g ## suffix)
 
-#endif /* defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64 */
-
 enum tcc_token {
     TOK_LAST = TOK_IDENT - 1
 #define DEF(id, str) ,id
@@ -875,24 +821,11 @@ ST_FUNC char *pstrncpy(char *out, const char *in, size_t num);
 PUB_FUNC char *tcc_basename(const char *name);
 PUB_FUNC char *tcc_fileextension (const char *name);
 
-#ifndef MEM_DEBUG
 PUB_FUNC void tcc_free(void *ptr);
 PUB_FUNC void *tcc_malloc(unsigned long size);
 PUB_FUNC void *tcc_mallocz(unsigned long size);
 PUB_FUNC void *tcc_realloc(void *ptr, unsigned long size);
 PUB_FUNC char *tcc_strdup(const char *str);
-#else
-#define tcc_free(ptr)           tcc_free_debug(ptr)
-#define tcc_malloc(size)        tcc_malloc_debug(size, __FILE__, __LINE__)
-#define tcc_mallocz(size)       tcc_mallocz_debug(size, __FILE__, __LINE__)
-#define tcc_realloc(ptr,size)   tcc_realloc_debug(ptr, size, __FILE__, __LINE__)
-#define tcc_strdup(str)         tcc_strdup_debug(str, __FILE__, __LINE__)
-PUB_FUNC void tcc_free_debug(void *ptr);
-PUB_FUNC void *tcc_malloc_debug(unsigned long size, const char *file, int line);
-PUB_FUNC void *tcc_mallocz_debug(unsigned long size, const char *file, int line);
-PUB_FUNC void *tcc_realloc_debug(void *ptr, unsigned long size, const char *file, int line);
-PUB_FUNC char *tcc_strdup_debug(const char *str, const char *file, int line);
-#endif
 
 #define free(p) use_tcc_free(p)
 #define malloc(s) use_tcc_malloc(s)
@@ -1137,9 +1070,7 @@ typedef struct {
 ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
 ST_DATA Section *common_section;
 ST_DATA Section *cur_text_section; /* current section where function code is generated */
-#ifdef CONFIG_TCC_ASM
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
-#endif
 /* symbol sections */
 ST_DATA Section *symtab_section;
 /* debug sections */
