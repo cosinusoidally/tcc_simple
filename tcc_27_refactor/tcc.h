@@ -35,6 +35,8 @@
 #include <sys/time.h>
 #include <dlfcn.h>
 
+#include <inttypes.h>
+
 #define O_BINARY 0
 
 #define NORETURN __attribute__((noreturn))

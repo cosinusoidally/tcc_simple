@@ -16,10 +16,6 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#define	_ELF_H 1
-
-#include <inttypes.h>
-
 /* Standard ELF types.  */
 
 /* Type for a 16-bit quantity.  */
