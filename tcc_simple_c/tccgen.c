@@ -921,74 +921,25 @@ ST_FUNC void gen_op(int op)
 /* generic itof for unsigned long long case */
 static void gen_cvt_itof1(int t)
 {
-    if ((vtop->type.t & (VT_BTYPE | VT_UNSIGNED)) == 
-        (VT_LLONG | VT_UNSIGNED)) {
-
-        if (t == VT_LDOUBLE)
-            vpush_global_sym(&func_old_type, TOK___floatundixf);
-        vrott(2);
-        gfunc_call(1);
-        vpushi(0);
-        vtop->r = reg_fret(t);
-    } else {
-        gen_cvt_itof(t);
-    }
+exit(1);
 }
 
 /* generic ftoi for unsigned long long case */
 static void gen_cvt_ftoi1(int t)
 {
-    int st;
-
-    if (t == (VT_LLONG | VT_UNSIGNED)) {
-        /* not handled natively */
-        st = vtop->type.t & VT_BTYPE;
-        vpush_global_sym(&func_old_type, TOK___fixunsxfdi);
-        vrott(2);
-        gfunc_call(1);
-        vpushi(0);
-        vtop->r = REG_IRET;
-        vtop->r2 = REG_LRET;
-    }
+exit(1);
 }
 
 /* force char or short cast */
 static void force_charshort_cast(int t)
 {
-    int bits, dbt;
-
-    dbt = t & VT_BTYPE;
-    /* XXX: add optimization if lvalue : just change type and offset */
-    if (dbt == VT_BYTE)
-        bits = 8;
-    else
-        bits = 16;
-    if (t & VT_UNSIGNED) {
-        vpushi((1 << bits) - 1);
-        gen_op('&');
-    } else {
-        if ((vtop->type.t & VT_BTYPE) == VT_LLONG)
-            bits = 64 - bits;
-        else
-            bits = 32 - bits;
-        vpushi(bits);
-        gen_op(TOK_SHL);
-        /* result must be signed or the SAR is converted to an SHL
-           This was not the case when "t" was a signed short
-           and the last value on the stack was an unsigned int */
-        vtop->type.t &= ~VT_UNSIGNED;
-        vpushi(bits);
-        gen_op(TOK_SAR);
-    }
+exit(1);
 }
 
 /* cast 'vtop' to 'type'. Casting to bitfields is forbidden. */
 static void gen_cast_s(int t)
 {
-    CType type;
-    type.t = t;
-    type.ref = NULL;
-    gen_cast(&type);
+exit(1);
 }
 
 static void gen_cast(CType *type)
