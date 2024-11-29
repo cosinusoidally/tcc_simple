@@ -792,39 +792,7 @@ exit(1);
    register */
 static void gv_dup(void)
 {
-    int rc, t, r, r1;
-    SValue sv;
-
-    t = vtop->type.t;
-    if ((t & VT_BTYPE) == VT_LLONG) {
-        lexpand();
-        gv_dup();
-        vswap();
-        vrotb(3);
-        gv_dup();
-        vrotb(4);
-        /* stack: H L L1 H1 */
-        lbuild(t);
-        vrotb(3);
-        vrotb(3);
-        vswap();
-        lbuild(t);
-        vswap();
-    } else
-    {
-        /* duplicate value */
-        rc = RC_INT;
-        sv.type.t = VT_INT;
-        r = gv(rc);
-        r1 = get_reg(rc);
-        sv.r = r;
-        sv.c.i = 0;
-        load(r1, &sv); /* move r to r1 */
-        vdup();
-        /* duplicates value */
-        if (r != r1)
-            vtop->r = r1;
-    }
+exit(1);
 }
 
 /* Generate value test
@@ -902,87 +870,28 @@ static void gen_opic(int op)
 /* generate a floating point operation with constant propagation */
 static void gen_opif(int op)
 {
-    int c1, c2;
-    SValue *v1, *v2;
-    long double f1, f2;
-
-    v1 = vtop - 1;
-    v2 = vtop;
-    /* currently, we cannot do computations with forward symbols */
-    c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
-    c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
-    if (c1 && c2) {
-        if (v1->type.t == VT_DOUBLE) {
-            f1 = v1->c.d;
-            f2 = v2->c.d;
-        }
-
-        switch(op) {
-        case '-': f1 -= f2; break;
-        case '*': f1 *= f2; break;
-        }
-        /* XXX: overflow test ? */
-        if (v1->type.t == VT_DOUBLE) {
-            v1->c.d = f1;
-        }
-        vtop--;
-    } else {
-    general_case:
-        gen_opf(op);
-    }
+exit(1);
 }
 
 static int pointed_size(CType *type)
 {
-    int align;
-    return type_size(pointed_type(type), &align);
+exit(1);
 }
 
 static inline int is_null_pointer(SValue *p)
 {
-    if ((p->r & (VT_VALMASK | VT_LVAL | VT_SYM)) != VT_CONST)
-        return 0;
-    return ((p->type.t & VT_BTYPE) == VT_INT && (uint32_t)p->c.i == 0) ||
-        ((p->type.t & VT_BTYPE) == VT_LLONG && p->c.i == 0) ||
-        ((p->type.t & VT_BTYPE) == VT_PTR &&
-         (PTR_SIZE == 4 ? (uint32_t)p->c.i == 0 : p->c.i == 0));
+exit(1);
 }
 
 static inline int is_integer_btype(int bt)
 {
-    return (bt == VT_BYTE || bt == VT_SHORT || 
-            bt == VT_INT || bt == VT_LLONG);
+exit(1);
 }
 
 /* check types for comparison or subtraction of pointers */
 static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op)
 {
-    CType *type1, *type2, tmp_type1, tmp_type2;
-    int bt1, bt2;
-    
-    /* null pointers are accepted for all comparisons as gcc */
-    if (is_null_pointer(p1) || is_null_pointer(p2))
-        return;
-    type1 = &p1->type;
-    type2 = &p2->type;
-    bt1 = type1->t & VT_BTYPE;
-    bt2 = type2->t & VT_BTYPE;
-
-    /* both must be pointers or implicit function pointers */
-    if (bt1 == VT_PTR) {
-        type1 = pointed_type(type1);
-    }
-
-    if (bt2 == VT_PTR) {
-        type2 = pointed_type(type2);
-    }
-    if ((type1->t & VT_BTYPE) == VT_VOID || 
-        (type2->t & VT_BTYPE) == VT_VOID)
-        return;
-    tmp_type1 = *type1;
-    tmp_type2 = *type2;
-    tmp_type1.t &= ~(VT_DEFSIGN | VT_UNSIGNED | VT_CONSTANT | VT_VOLATILE);
-    tmp_type2.t &= ~(VT_DEFSIGN | VT_UNSIGNED | VT_CONSTANT | VT_VOLATILE);
+exit(1);
 }
 
 /* generic gen_op: handles types problems */
@@ -991,125 +900,22 @@ ST_FUNC void gen_op(int op)
     int u, t1, t2, bt1, bt2, t;
     CType type1;
 
-redo:
     t1 = vtop[-1].type.t;
     t2 = vtop[0].type.t;
     bt1 = t1 & VT_BTYPE;
     bt2 = t2 & VT_BTYPE;
         
-    if (bt1 == VT_PTR || bt2 == VT_PTR) {
-        /* at least one operand is a pointer */
-        /* relational op: must be both pointers */
-        if (op >= TOK_ULT && op <= TOK_LOR) {
-            check_comparison_pointer_types(vtop - 1, vtop, op);
-            /* pointers are handled are unsigned */
-            t = VT_INT | VT_UNSIGNED;
-            goto std_op;
-        }
-        /* if both pointers, then it must be the '-' op */
-        if (bt1 == VT_PTR && bt2 == VT_PTR) {
-            vpushi(pointed_size(&vtop[-1].type));
-            vrott(3);
-            gen_opic(op);
-            vtop->type.t = ptrdiff_type.t;
-            vswap();
-            gen_op(TOK_PDIV);
-        } else {
-            /* Put pointer as first operand */
-            if (bt2 == VT_PTR) {
-                vswap();
-                t = t1, t1 = t2, t2 = t;
-            }
-            if ((vtop[0].type.t & VT_BTYPE) == VT_LLONG)
-                /* XXX: truncate here because gen_opl can't handle ptr + long long */
-            gen_cast_s(VT_INT);
-            type1 = vtop[-1].type;
-            type1.t &= ~VT_ARRAY;
-            u = pointed_size(&vtop[-1].type);
-            vpushi(u);
-            gen_op('*');
-            gen_opic(op);
-            /* put again type if gen_opic() swaped operands */
-            vtop->type = type1;
-        }
-    } else if (is_float(bt1) || is_float(bt2)) {
-        /* compute bigger type and do implicit casts */
-        if (bt1 == VT_LDOUBLE || bt2 == VT_LDOUBLE) {
-            t = VT_LDOUBLE;
-        } else if (bt1 == VT_DOUBLE || bt2 == VT_DOUBLE) {
-            t = VT_DOUBLE;
-        } else {
-            t = VT_FLOAT;
-        }
-        goto std_op;
-    } else if (op == TOK_SHR || op == TOK_SAR || op == TOK_SHL) {
-        t = bt1 == VT_LLONG ? VT_LLONG : VT_INT;
-        if ((t1 & (VT_BTYPE | VT_UNSIGNED | VT_BITFIELD)) == (t | VT_UNSIGNED))
-          t |= VT_UNSIGNED;
-        t |= (VT_LONG & t1);
-        goto std_op;
-    } else if (bt1 == VT_LLONG || bt2 == VT_LLONG) {
-        /* cast to biggest op */
-        t = VT_LLONG | VT_LONG;
-        if (bt1 == VT_LLONG)
-            t &= t1;
-        if (bt2 == VT_LLONG)
-            t &= t2;
-        /* convert to unsigned if it does not fit in a long long */
-        if ((t1 & (VT_BTYPE | VT_UNSIGNED | VT_BITFIELD)) == (VT_LLONG | VT_UNSIGNED) ||
-            (t2 & (VT_BTYPE | VT_UNSIGNED | VT_BITFIELD)) == (VT_LLONG | VT_UNSIGNED))
-            t |= VT_UNSIGNED;
-        goto std_op;
-    } else {
-        /* integer operations */
-        t = VT_INT | (VT_LONG & (t1 | t2));
-        /* convert to unsigned if it does not fit in an integer */
-        if ((t1 & (VT_BTYPE | VT_UNSIGNED | VT_BITFIELD)) == (VT_INT | VT_UNSIGNED) ||
-            (t2 & (VT_BTYPE | VT_UNSIGNED | VT_BITFIELD)) == (VT_INT | VT_UNSIGNED))
-            t |= VT_UNSIGNED;
-    std_op:
-        /* XXX: currently, some unsigned operations are explicit, so
-           we modify them here */
-        if (t & VT_UNSIGNED) {
-            if (op == TOK_SAR)
-                op = TOK_SHR;
-            else if (op == '/')
-                op = TOK_UDIV;
-            else if (op == '%')
-                op = TOK_UMOD;
-            else if (op == TOK_LT)
-                op = TOK_ULT;
-            else if (op == TOK_GT)
-                op = TOK_UGT;
-            else if (op == TOK_LE)
-                op = TOK_ULE;
-            else if (op == TOK_GE)
-                op = TOK_UGE;
-        }
-        vswap();
-        type1.t = t;
-        type1.ref = NULL;
-        gen_cast(&type1);
-        vswap();
-        /* special case for shifts and long long: we keep the shift as
-           an integer */
-        if (op == TOK_SHR || op == TOK_SAR || op == TOK_SHL)
-            type1.t = VT_INT;
-        gen_cast(&type1);
-        if (is_float(t))
-            gen_opif(op);
-        else
-            gen_opic(op);
-        if (op >= TOK_ULT && op <= TOK_GT) {
-            /* relational op: the result is an int */
-            vtop->type.t = VT_INT;
-        } else {
-            vtop->type.t = t;
-        }
-    }
-    // Make sure that we have converted to an rvalue:
-    if (vtop->r & VT_LVAL)
-        gv(is_float(vtop->type.t & VT_BTYPE) ? RC_FLOAT : RC_INT);
+    /* integer operations */
+    t = VT_INT | (VT_LONG & (t1 | t2));
+    vswap();
+    type1.t = t;
+    type1.ref = NULL;
+    gen_cast(&type1);
+    vswap();
+    gen_cast(&type1);
+    gen_opic(op);
+    /* relational op: the result is an int */
+    vtop->type.t = VT_INT;
 }
 
 /* generic itof for unsigned long long case */
