@@ -50,11 +50,6 @@
 /* only native compiler supports -run */
 #define TCC_IS_NATIVE
 
-/* library to use with CONFIG_USE_LIBGCC instead of libtcc1.a */
-#if defined CONFIG_USE_LIBGCC && !defined TCC_LIBGCC
-#define TCC_LIBGCC USE_TRIPLET(CONFIG_SYSROOT "/" CONFIG_LDDIR) "/libgcc_s.so.1"
-#endif
-
 /* -------------------------------------------- */
 
 #include "libtcc.h"
@@ -62,27 +57,11 @@
 
 /* -------------------------------------------- */
 
-#ifndef PUB_FUNC /* functions used by tcc.c but not in libtcc.h */
-# define PUB_FUNC
-#endif
+#define PUB_FUNC
 
-#ifndef ONE_SOURCE
-# define ONE_SOURCE 1
-#endif
-
-#if ONE_SOURCE
 #define ST_INLN static inline
 #define ST_FUNC static
 #define ST_DATA static
-#else
-#define ST_INLN
-#define ST_FUNC
-#define ST_DATA extern
-#endif
-
-#ifdef TCC_PROFILE /* profile all functions */
-# define static
-#endif
 
 /* -------------------------------------------- */
 /* include the target specific definitions */
@@ -159,30 +138,17 @@ enum {
 
 /* -------------------------------------------- */
 
-#if PTR_SIZE == 8
-# define ELFCLASSW ELFCLASS64
-# define ElfW(type) Elf##64##_##type
-# define ELFW(type) ELF##64##_##type
-# define ElfW_Rel ElfW(Rela)
-# define SHT_RELX SHT_RELA
-# define REL_SECTION_FMT ".rela%s"
-#else
 # define ELFCLASSW ELFCLASS32
 # define ElfW(type) Elf##32##_##type
 # define ELFW(type) ELF##32##_##type
 # define ElfW_Rel ElfW(Rel)
 # define SHT_RELX SHT_REL
 # define REL_SECTION_FMT ".rel%s"
-#endif
 /* target address type */
 #define addr_t ElfW(Addr)
 #define ElfSym ElfW(Sym)
 
-#if PTR_SIZE == 8 && !defined TCC_TARGET_PE
-# define LONG_SIZE 8
-#else
-# define LONG_SIZE 4
-#endif
+#define LONG_SIZE 4
 
 /* -------------------------------------------- */
 
@@ -209,11 +175,7 @@ typedef struct TokenSym {
     char str[1];
 } TokenSym;
 
-#ifdef TCC_TARGET_PE
-typedef unsigned short nwchar_t;
-#else
 typedef int nwchar_t;
-#endif
 
 typedef struct CString {
     int size; /* size in bytes */
