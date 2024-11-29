@@ -2740,25 +2740,18 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
     dtype = *type;
     dtype.t &= ~VT_CONSTANT; /* need to do that to avoid false warning */
 
-    if (sec) {
-	int size, align;
-        /* XXX: not portable */
-        /* XXX: generate error if incorrect relocation */
-        gen_assign_cast(&dtype);
-        bt = type->t & VT_BTYPE;
+    int size, align;
+    /* XXX: not portable */
+    /* XXX: generate error if incorrect relocation */
+       gen_assign_cast(&dtype);
+    bt = type->t & VT_BTYPE;
 
-	size = type_size(type, &align);
-	section_reserve(sec, c + size);
-        ptr = sec->data + c;
+    size = type_size(type, &align);
+    section_reserve(sec, c + size);
+    ptr = sec->data + c;
 
-		*(char *)ptr |= vtop->c.i;
-        vtop--;
-    } else {
-        vset(&dtype, VT_LOCAL|VT_LVAL, c);
-        vswap();
-        vstore();
-        vpop();
-    }
+    *(char *)ptr |= vtop->c.i;
+    vtop--;
 }
 
 /* 't' contains the type and storage info. 'c' is the offset of the
