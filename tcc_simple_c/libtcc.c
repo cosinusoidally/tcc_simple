@@ -39,9 +39,6 @@ static int nb_states;
 #include "tccelf.c"
 
 #include "i386-gen.c"
-#include "i386-asm.c"
-
-#include "tccasm.c"
 
 /********************************************************/
 /* copy a string and truncate it. */

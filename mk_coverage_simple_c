@@ -17,7 +17,11 @@ ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 
 # for some reason we need to be in the directory above to run gcovr?
 cd ..
+
+wc tcc_simple_c/*c tcc_simple_c/*h |sort -h
+
 # check the hashes of the test files
 sha256sum -c sums_simple_c
+
 gcovr artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox ./artifacts/example.html

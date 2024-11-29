@@ -4278,8 +4278,6 @@ static void block(int *bsym, int *csym, int is_expr)
             expect("label identifier");
         }
         skip(';');
-    } else if (tok == TOK_ASM1 || tok == TOK_ASM2 || tok == TOK_ASM3) {
-        asm_instr();
     } else {
         b = is_label();
         if (b) {
