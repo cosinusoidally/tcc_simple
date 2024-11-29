@@ -957,37 +957,6 @@ ST_FUNC void mk_pointer(CType *type)
     type->ref = s;
 }
 
-/* compare function types. OLD functions match any new functions */
-static int is_compatible_func(CType *type1, CType *type2)
-{
-return 1;
-}
-
-/* return true if type1 and type2 are the same.  If unqualified is
-   true, qualifiers on the types are ignored.
-
-   - enums are not checked as gcc __builtin_types_compatible_p () 
- */
-static int compare_types(CType *type1, CType *type2, int unqualified)
-{
-exit(1);
-}
-
-/* return true if type1 and type2 are exactly the same (including
-   qualifiers). 
-*/
-static int is_compatible_types(CType *type1, CType *type2)
-{
-    return compare_types(type1,type2,0);
-}
-
-/* return true if type1 and type2 are the same (ignoring qualifiers).
-*/
-static int is_compatible_unqualified_types(CType *type1, CType *type2)
-{
-    return compare_types(type1,type2,1);
-}
-
 /* print a type. If 'varstr' is not NULL, then the variable is also
    printed in the type */
 /* XXX: union */
@@ -2098,14 +2067,7 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
 	have_elem = 1;
     }
 
-    if (have_elem &&
-	!(type->t & VT_ARRAY) &&
-	/* Use i_c_parameter_t, to strip toplevel qualifiers.
-	   The source type might have VT_CONSTANT set, which is
-	   of course assignable to non-const elements.  */
-	is_compatible_unqualified_types(type, &vtop->type)) {
-        init_putv(type, sec, c);
-    } else if (type->t & VT_ARRAY) {
+    if (type->t & VT_ARRAY) {
         s = type->ref;
         n = s->c;
         t1 = pointed_type(type);
