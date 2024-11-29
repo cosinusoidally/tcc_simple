@@ -2192,64 +2192,12 @@ ST_FUNC void unary(void)
     
     /* post operations */
     while (1) {
-        if (tok == TOK_INC || tok == TOK_DEC) {
-            inc(1, tok);
-            next();
-        } else if (tok == '.' || tok == TOK_ARROW || tok == TOK_CDOUBLE) {
-            int qualifiers;
-            /* field */ 
-            if (tok == TOK_ARROW) 
-                indir();
-            qualifiers = vtop->type.t & (VT_CONSTANT | VT_VOLATILE);
-            gaddrof();
-            /* expect pointer on structure */
-            if ((vtop->type.t & VT_BTYPE) != VT_STRUCT)
-                expect("struct or union");
-            if (tok == TOK_CDOUBLE)
-                expect("field name");
-            next();
-            if (tok == TOK_CINT || tok == TOK_CUINT)
-                expect("field name");
-	    s = find_field(&vtop->type, tok);
-            if (!s)
-                tcc_error("field not found: %s",  get_tok_str(tok & ~SYM_FIELD, &tokc));
-            /* add field offset to pointer */
-            vtop->type = char_pointer_type; /* change type to 'char *' */
-            vpushi(s->c);
-            gen_op('+');
-            /* change type to field type, and set to lvalue */
-            vtop->type = s->type;
-            vtop->type.t |= qualifiers;
-            /* an array is never an lvalue */
-            if (!(vtop->type.t & VT_ARRAY)) {
-                vtop->r |= lvalue_type(vtop->type.t);
-            }
-            next();
-        } else if (tok == '[') {
-            next();
-            gexpr();
-            gen_op('+');
-            indir();
-            skip(']');
-        } else if (tok == '(') {
+        if (tok == '(') {
             SValue ret;
             Sym *sa;
             int nb_args, ret_nregs, ret_align, regsize, variadic;
 
-            /* function call  */
-            if ((vtop->type.t & VT_BTYPE) != VT_FUNC) {
-                /* pointer test (no array accepted) */
-                if ((vtop->type.t & (VT_BTYPE | VT_ARRAY)) == VT_PTR) {
-                    vtop->type = *pointed_type(&vtop->type);
-                    if ((vtop->type.t & VT_BTYPE) != VT_FUNC)
-                        goto error_func;
-                } else {
-                error_func:
-                    expect("function pointer");
-                }
-            } else {
-                vtop->r &= ~VT_LVAL; /* no lvalue */
-            }
+            vtop->r &= ~VT_LVAL; /* no lvalue */
             /* get return type */
             s = vtop->type.ref;
             next();
@@ -2259,17 +2207,8 @@ ST_FUNC void unary(void)
             ret_nregs = 1;
             ret.type = s->type;
 
-            if (ret_nregs) {
-                /* return in register */
-                if (is_float(ret.type.t)) {
-                    ret.r = reg_fret(ret.type.t);
-                } else {
-                    if ((ret.type.t & VT_BTYPE) == VT_LLONG)
-                        ret.r2 = REG_LRET;
-                    ret.r = REG_IRET;
-                }
-                ret.c.i = 0;
-            }
+            ret.r = REG_IRET;
+            ret.c.i = 0;
             if (tok != ')') {
                 for(;;) {
                     expr_eq();
@@ -2282,8 +2221,6 @@ ST_FUNC void unary(void)
                     skip(',');
                 }
             }
-            if (sa)
-                tcc_error("too few arguments to function");
             skip(')');
             gfunc_call(nb_args);
 
@@ -2291,30 +2228,6 @@ ST_FUNC void unary(void)
             for (r = ret.r + ret_nregs + !ret_nregs; r-- > ret.r;) {
                 vsetc(&ret.type, r, &ret.c);
                 vtop->r2 = ret.r2; /* Loop only happens when r2 is VT_CONST */
-            }
-
-            /* handle packed struct return */
-            if (((s->type.t & VT_BTYPE) == VT_STRUCT) && ret_nregs) {
-                int addr, offset;
-
-                size = type_size(&s->type, &align);
-		/* We're writing whole regs often, make sure there's enough
-		   space.  Assume register size is power of 2.  */
-		if (regsize > align)
-		  align = regsize;
-                loc = (loc - size) & -align;
-                addr = loc;
-                offset = 0;
-                for (;;) {
-                    vset(&ret.type, VT_LOCAL | VT_LVAL, addr + offset);
-                    vswap();
-                    vstore();
-                    vtop--;
-                    if (--ret_nregs == 0)
-                        break;
-                    offset += regsize;
-                }
-                vset(&s->type, VT_LOCAL | VT_LVAL, addr);
             }
         } else {
             break;
