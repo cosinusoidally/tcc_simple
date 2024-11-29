@@ -1,0 +1,23 @@
+./mk_clean
+
+cd artifacts
+
+set -xe
+
+gcc -O0 -m32 --coverage -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -DONE_SOURCE -o coverage.exe -ldl
+
+# we have to symlink since tcc will include the file name in the object code
+# file which then causes hashes not to match
+ln -s ../M2_simple_asm.c M2_simple_asm.c
+ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
+
+
+./coverage.exe -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./coverage.exe -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+
+# for some reason we need to be in the directory above to run gcovr?
+cd ..
+# check the hashes of the test files
+sha256sum -c sums_simple_c
+gcovr artifacts --html-details -o artifacts/example.html
+~/ffnew/firefox/firefox ./artifacts/example.html
