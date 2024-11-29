@@ -16,24 +16,9 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#ifndef _ELF_H
 #define	_ELF_H 1
 
-#ifndef _WIN32
 #include <inttypes.h>
-#else
-#ifndef __int8_t_defined
-#define __int8_t_defined
-typedef signed char int8_t;
-typedef short int int16_t;
-typedef int int32_t;
-typedef long long int int64_t;
-typedef unsigned char           uint8_t;
-typedef unsigned short int      uint16_t;
-typedef unsigned int            uint32_t;
-typedef unsigned long long int  uint64_t;
-#endif
-#endif
 
 /* Standard ELF types.  */
 
@@ -3232,6 +3217,3 @@ typedef Elf32_Addr Elf32_Conflict;
 #define R_TILEGX_GNU_VTENTRY	129	/* GNU C++ vtable member usage */
 
 #define R_TILEGX_NUM		130
-
-
-#endif	/* elf.h */
