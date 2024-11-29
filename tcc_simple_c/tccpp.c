@@ -336,6 +336,7 @@ static int handle_stray1(uint8_t *p)
    strings or comments */
 ST_FUNC void minp(void)
 {
+exit(1);
     inp();
     if (ch == '\\') 
         handle_stray();
@@ -344,38 +345,7 @@ ST_FUNC void minp(void)
 /* single line C++ comments */
 static uint8_t *parse_line_comment(uint8_t *p)
 {
-    int c;
-
-    p++;
-    for(;;) {
-        c = *p;
-    redo:
-        if (c == '\n' || c == CH_EOF) {
-            break;
-        } else if (c == '\\') {
-            file->buf_ptr = p;
-            c = handle_eob();
-            p = file->buf_ptr;
-            if (c == '\\') {
-                PEEKC_EOB(c, p);
-                if (c == '\n') {
-                    file->line_num++;
-                    PEEKC_EOB(c, p);
-                } else if (c == '\r') {
-                    PEEKC_EOB(c, p);
-                    if (c == '\n') {
-                        file->line_num++;
-                        PEEKC_EOB(c, p);
-                    }
-                }
-            } else {
-                goto redo;
-            }
-        } else {
-            p++;
-        }
-    }
-    return p;
+exit(1);
 }
 
 /* C comments */
