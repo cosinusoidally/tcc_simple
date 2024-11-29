@@ -729,10 +729,8 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
     case TOK_LCHAR:
     case TOK_CFLOAT:
     case TOK_LINENUM:
-#if LONG_SIZE == 4
     case TOK_CLONG:
     case TOK_CULONG:
-#endif
         str[len++] = cv->tab[0];
         break;
     case TOK_PPNUM:
@@ -1045,11 +1043,7 @@ static CachedInclude *search_cached_include(TCCState *s1, const char *filename, 
     h = TOK_HASH_INIT;
     s = (unsigned char *) filename;
     while (*s) {
-#ifdef _WIN32
-        h = TOK_HASH_FUNC(h, toup(*s));
-#else
         h = TOK_HASH_FUNC(h, *s);
-#endif
         s++;
     }
     h &= (CACHED_INCLUDES_HASH_SIZE - 1);
@@ -1073,9 +1067,6 @@ static CachedInclude *search_cached_include(TCCState *s1, const char *filename, 
     /* add in hash table */
     e->hash_next = s1->cached_includes_hash[h];
     s1->cached_includes_hash[h] = s1->nb_cached_includes;
-#ifdef INC_DEBUG
-    printf("adding cached '%s'\n", filename);
-#endif
     return e;
 }
 
@@ -1527,14 +1518,9 @@ static void parse_number(const char *p)
                 tokc.f = (float)d;
             } else if (t == 'L') {
                 ch = *p++;
-#ifdef TCC_TARGET_PE
-                tok = TOK_CDOUBLE;
-                tokc.d = d;
-#else
                 tok = TOK_CLDOUBLE;
                 /* XXX: not large enough */
                 tokc.ld = (long double)d;
-#endif
             } else {
                 tok = TOK_CDOUBLE;
                 tokc.d = d;
@@ -1585,13 +1571,8 @@ static void parse_number(const char *p)
                 tokc.f = strtof(token_buf, NULL);
             } else if (t == 'L') {
                 ch = *p++;
-#ifdef TCC_TARGET_PE
-                tok = TOK_CDOUBLE;
-                tokc.d = strtod(token_buf, NULL);
-#else
                 tok = TOK_CLDOUBLE;
                 tokc.ld = strtold(token_buf, NULL);
-#endif
             } else {
                 tok = TOK_CDOUBLE;
                 tokc.d = strtod(token_buf, NULL);
@@ -1756,9 +1737,6 @@ static inline void next_nomacro1(void)
                 /* test if previous '#endif' was after a #ifdef at
                    start of file */
                 if (tok_flags & TOK_FLAG_ENDIF) {
-#ifdef INC_DEBUG
-                    printf("#endif %s\n", get_tok_str(file->ifndef_macro_saved, NULL));
-#endif
                     search_cached_include(s1, file->filename, 1)
                         ->ifndef_macro = file->ifndef_macro_saved;
                     tok_flags &= ~TOK_FLAG_ENDIF;
