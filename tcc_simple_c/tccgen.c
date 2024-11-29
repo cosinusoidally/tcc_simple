@@ -278,19 +278,6 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c)
     return s;
 }
 
-/* find a symbol and return its associated structure. 's' is the top
-   of the symbol stack */
-ST_FUNC Sym *sym_find2(Sym *s, int v)
-{
-exit(1);
-}
-
-/* structure lookup */
-ST_INLN Sym *struct_find(int v)
-{
-exit(1);
-}
-
 /* find an identifier */
 ST_INLN Sym *sym_find(int v)
 {
@@ -1383,141 +1370,7 @@ static void struct_layout(CType *type, AttributeDef *ad)
 /* enum/struct/union declaration. u is VT_ENUM/VT_STRUCT/VT_UNION */
 static void struct_decl(CType *type, int u)
 {
-    int v, c, size, align, flexible;
-    int bit_size, bsize, bt;
-    Sym *s, *ss, **ps;
-    AttributeDef ad, ad1;
-    CType type1, btype;
-
-    memset(&ad, 0, sizeof ad);
-    next();
-    if (tok != '{') {
-        v = tok;
-        next();
-        /* struct already defined ? return it */
-        s = struct_find(v);
-        if (s && (s->sym_scope == local_scope || tok != '{')) {
-            if (u == s->type.t)
-                goto do_decl;
-            if (u == VT_ENUM && IS_ENUM(s->type.t))
-                goto do_decl;
-        }
-    } else {
-        v = anon_sym++;
-    }
-    /* Record the original enum/struct/union token.  */
-    type1.t = u == VT_ENUM ? u | VT_INT | VT_UNSIGNED : u;
-    type1.ref = NULL;
-    /* we put an undefined size for struct/union */
-    s = sym_push(v | SYM_STRUCT, &type1, 0, -1);
-    s->r = 0; /* default alignment is zero as gcc */
-do_decl:
-    type->t = s->type.t;
-    type->ref = s;
-
-    if (tok == '{') {
-        next();
-        /* cannot be empty */
-        /* non empty enums are not allowed */
-        ps = &s->next;
-        if (u == VT_ENUM) {
-            long long ll = 0, pl = 0, nl = 0;
-	    CType t;
-            t.ref = s;
-            /* enum symbols have static storage */
-            t.t = VT_INT|VT_STATIC|VT_ENUM_VAL;
-            for(;;) {
-                v = tok;
-                ss = sym_find(v);
-                next();
-                if (tok == '=') {
-                    next();
-		    ll = expr_const64();
-                }
-                ss = sym_push(v, &t, VT_CONST, 0);
-                ss->enum_val = ll;
-                *ps = ss, ps = &ss->next;
-                if (ll < nl)
-                    nl = ll;
-                if (ll > pl)
-                    pl = ll;
-                if (tok != ',')
-                    break;
-                next();
-                ll++;
-                /* NOTE: we accept a trailing comma */
-                if (tok == '}')
-                    break;
-            }
-            skip('}');
-            /* set integral type of the enum */
-            t.t = VT_INT;
-            if (nl >= 0) {
-                t.t |= VT_UNSIGNED;
-            }
-            s->type.t = type->t = t.t | VT_ENUM;
-            s->c = 0;
-            /* set type for enum members */
-            for (ss = s->next; ss; ss = ss->next) {
-                ll = ss->enum_val;
-            }
-        } else {
-            c = 0;
-            flexible = 0;
-            while (tok != '}') {
-                parse_btype(&btype, &ad1);
-                while (1) {
-                    bit_size = -1;
-                    v = 0;
-                    type1 = btype;
-                    if (tok != ':') {
-			if (tok != ';')
-                            type_decl(&type1, &ad1, &v, TYPE_DIRECT);
-                        if (type_size(&type1, &align) < 0) {
-			    if ((u == VT_STRUCT) && (type1.t & VT_ARRAY) && c)
-			        flexible = 1;
-                        }
-                    }
-                    if (tok == ':') {
-                        next();
-                        bit_size = expr_const();
-                    }
-                    size = type_size(&type1, &align);
-                    if (bit_size >= 0) {
-                        bt = type1.t & VT_BTYPE;
-                        bsize = size * 8;
-                        type1.t = (type1.t & ~VT_STRUCT_MASK)
-                            | VT_BITFIELD
-                            | (bit_size << (VT_STRUCT_SHIFT + 6));
-                    }
-                    if (v != 0 || (type1.t & VT_BTYPE) == VT_STRUCT) {
-                        /* Remember we've seen a real field to check
-			   for placement of flexible array member. */
-			c = 1;
-                    }
-		    /* If member is a struct or bit-field, enforce
-		       placing into the struct (as anonymous).  */
-                    if (v == 0 &&
-			((type1.t & VT_BTYPE) == VT_STRUCT ||
-			 bit_size >= 0)) {
-		        v = anon_sym++;
-		    }
-                    if (v) {
-                        ss = sym_push(v | SYM_FIELD, &type1, 0, 0);
-                        ss->a = ad1.a;
-                        *ps = ss;
-                        ps = &ss->next;
-                    }
-                    if (tok == ';' || tok == TOK_EOF)
-                        break;
-                    skip(',');
-                }
-                skip(';');
-            }
-            skip('}');
-	    struct_layout(type, &ad);
-        }
-    }
+exit(1);
 }
 
 static void sym_to_attr(AttributeDef *ad, Sym *s)
@@ -1601,13 +1454,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
             u = type1.t;
             type->ref = type1.ref;
             goto basic_type1;
-        case TOK_STRUCT:
-            struct_decl(&type1, VT_STRUCT);
-            goto basic_type2;
-        case TOK_UNION:
-            struct_decl(&type1, VT_UNION);
-            goto basic_type2;
-
             /* type modifiers */
         case TOK_CONST1:
         case TOK_CONST2:
@@ -1954,12 +1800,6 @@ ST_FUNC int lvalue_type(int t)
     return r;
 }
 
-/* indirection with full error checking and bound check */
-ST_FUNC void indir(void)
-{
-exit(1);
-}
-
 /* pass a parameter to a function and do type checking and casting */
 static void gfunc_param_typed(Sym *func, Sym *arg)
 {
@@ -1984,12 +1824,6 @@ static void gfunc_param_typed(Sym *func, Sym *arg)
         type.t &= ~VT_CONSTANT; /* need to do that to avoid false warning */
         gen_assign_cast(&type);
     }
-}
-
-/* parse an expression and return its type without any side effect. */
-static void expr_type(CType *type, void (*expr_fn)(void))
-{
-exit(1);
 }
 
 /* parse an expression of the form '(type)' or '(expr)' and return its
