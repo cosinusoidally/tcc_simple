@@ -18,9 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _TCC_H
-#define _TCC_H
-
 #define _GNU_SOURCE
 #include "config.h"
 
@@ -34,16 +31,9 @@
 #include <setjmp.h>
 #include <time.h>
 
-#ifndef _WIN32
-# include <unistd.h>
-# include <sys/time.h>
-# ifndef CONFIG_TCC_STATIC
-#  include <dlfcn.h>
-# endif
-/* XXX: need to define this to use them in non ISOC99 context */
-extern float strtof (const char *__nptr, char **__endptr);
-extern long double strtold (const char *__nptr, char **__endptr);
-#endif
+#include <unistd.h>
+#include <sys/time.h>
+#include <dlfcn.h>
 
 #ifdef _WIN32
 # include <windows.h>
@@ -1524,4 +1514,3 @@ ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str);
 #define ST_DATA
 #endif
 /********************************************************/
-#endif /* _TCC_H */
