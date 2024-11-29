@@ -658,38 +658,6 @@ ST_FUNC int get_reg(int rc)
         }
     notfound: ;
     }
-    
-    /* no register left : free the first one on the stack (VERY
-       IMPORTANT to start from the bottom to ensure that we don't
-       spill registers used in gen_opi()) */
-    for(p=vstack;p<=vtop;p++) {
-        /* look at second register (if long long) */
-        r = p->r2 & VT_VALMASK;
-        if (r < VT_CONST && (reg_classes[r] & rc))
-            goto save_found;
-        r = p->r & VT_VALMASK;
-        if (r < VT_CONST && (reg_classes[r] & rc)) {
-        save_found:
-            save_reg(r);
-            return r;
-        }
-    }
-}
-
-/* move register 's' (of type 't') to 'r', and flush previous value of r to memory
-   if needed */
-static void move_reg(int r, int s, int t)
-{
-    SValue sv;
-
-    if (r != s) {
-        save_reg(r);
-        sv.type.t = t;
-        sv.type.ref = NULL;
-        sv.r = s;
-        sv.c.i = 0;
-        load(r, &sv);
-    }
 }
 
 /* get address of vtop (vtop MUST BE an lvalue) */
