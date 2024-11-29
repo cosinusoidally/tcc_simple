@@ -1133,24 +1133,6 @@ ST_FUNC void minp(void);
 ST_INLN void inp(void);
 ST_FUNC int handle_eob(void);
 
-/* ------------ xxx-link.c ------------ */
-
-/* Whether to generate a GOT/PLT entry and when. NO_GOTPLT_ENTRY is first so
-   that unknown relocation don't create a GOT or PLT entry */
-enum gotplt_entry {
-    NO_GOTPLT_ENTRY,	/* never generate (eg. GLOB_DAT & JMP_SLOT relocs) */
-    BUILD_GOT_ONLY,	/* only build GOT (eg. TPOFF relocs) */
-    AUTO_GOTPLT_ENTRY,	/* generate if sym is UNDEF */
-    ALWAYS_GOTPLT_ENTRY	/* always generate (eg. PLTOFF relocs) */
-};
-
-ST_FUNC int code_reloc (int reloc_type);
-ST_FUNC int gotplt_entry_type (int reloc_type);
-ST_FUNC unsigned create_plt_entry(TCCState *s1, unsigned got_offset, struct sym_attr *attr);
-ST_FUNC void relocate_init(Section *sr);
-ST_FUNC void relocate(TCCState *s1, ElfW_Rel *rel, int type, unsigned char *ptr, addr_t addr, addr_t val);
-ST_FUNC void relocate_plt(TCCState *s1);
-
 /* ------------ xxx-gen.c ------------ */
 
 ST_DATA const int reg_classes[NB_REGS];
@@ -1190,38 +1172,6 @@ static inline uint32_t read32le(unsigned char *p) {
 static inline void write32le(unsigned char *p, uint32_t x) {
     write16le(p, x);  write16le(p + 2, x >> 16);
 }
-static inline void add32le(unsigned char *p, int32_t x) {
-    write32le(p, read32le(p) + x);
-}
-static inline uint64_t read64le(unsigned char *p) {
-  return read32le(p) | (uint64_t)read32le(p + 4) << 32;
-}
-static inline void write64le(unsigned char *p, uint64_t x) {
-    write32le(p, x);  write32le(p + 4, x >> 32);
-}
-static inline void add64le(unsigned char *p, int64_t x) {
-    write64le(p, read64le(p) + x);
-}
-
-/* ------------ tccasm.c ------------ */
-ST_FUNC void asm_instr(void);
-ST_FUNC void asm_global_instr(void);
-ST_FUNC int find_constraint(ASMOperand *operands, int nb_operands, const char *name, const char **pp);
-ST_FUNC Sym* get_asm_sym(int name, Sym *csym);
-ST_FUNC void asm_expr(TCCState *s1, ExprValue *pe);
-ST_FUNC int asm_int_expr(TCCState *s1);
-ST_FUNC int tcc_assemble(TCCState *s1, int do_preprocess);
-/* ------------ i386-asm.c ------------ */
-ST_FUNC void gen_expr32(ExprValue *pe);
-ST_FUNC void asm_opcode(TCCState *s1, int opcode);
-ST_FUNC int asm_parse_regvar(int t);
-ST_FUNC void asm_compute_constraints(ASMOperand *operands, int nb_operands, int nb_outputs, const uint8_t *clobber_regs, int *pout_reg);
-ST_FUNC void subst_asm_operand(CString *add_str, SValue *sv, int modifier);
-ST_FUNC void asm_gen_code(ASMOperand *operands, int nb_operands, int nb_outputs, int is_output, uint8_t *clobber_regs, int out_reg);
-ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str);
-
-#define ST_ASM_SET 0x04
-
 
 /********************************************************/
 #undef ST_DATA
