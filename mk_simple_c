@@ -4,26 +4,11 @@ cd artifacts
 
 set -xe
 
-# build tcc_27_refactor with gcc
-gcc -O0 -m32 -I ../tcc_27_refactor/ -I ../tcc_27_refactor/include/ ../tcc_27_refactor/tcc.c -DONE_SOURCE -o tcc_27_refactor_gcc -ldl
+# build tcc_simple_c with gcc
+gcc -O0 -m32 -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -o tcc_simple_c_gcc
 
-# rebuild tcc_27_refactor with itself
-
-./tcc_27_refactor_gcc -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27_refactor/include -I ../tcc_27_refactor/ -c ../tcc_27_refactor/tcc.c -U__linux__ -DONE_SOURCE -o tcc_27_refactor.o
-./tcc_27_refactor_gcc -c ../tcc_27_refactor/lib/libtcc1.c -o libtcc1_refactor.o
-
-gcc -m32 tcc_27_refactor.o libtcc1_refactor.o -o tcc_27_refactor -ldl
-
-# rebuild tcc_27_refactor a 2nd time with itself
-
-./tcc_27_refactor -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27_refactor/include -I ../tcc_27_refactor/ -c ../tcc_27_refactor/tcc.c -U__linux__ -DONE_SOURCE -o tcc_27_refactor2.o
-./tcc_27_refactor -c ../tcc_27_refactor/lib/libtcc1.c -o libtcc1_refactor2.o
-rm tcc_27_refactor
-gcc -m32 tcc_27_refactor2.o libtcc1_refactor2.o -o tcc_27_refactor -ldl
-
-# check each build matches
-diff -u -s tcc_27_refactor.o tcc_27_refactor2.o
-diff -u -s libtcc1_refactor.o libtcc1_refactor2.o
+# build tcc_simple_c with tcc
+tcc -O0 -m32 -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -o tcc_simple_c_tcc
 
 # build some test files
 
@@ -34,13 +19,20 @@ ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 
 # do the test file builds
 
-./tcc_27_refactor -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
-./tcc_27_refactor -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+./tcc_simple_c_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
+./tcc_simple_c_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
+
+./tcc_simple_c_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./tcc_simple_c_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
 
 cd ..
 
 # show total lines
 wc tcc_simple_c/*c tcc_simple_c/*h |sort -h
+
+# check files match
+diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
+diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
 
 # check the hashes of the test files
 sha256sum -c sums_simple_c
