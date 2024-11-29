@@ -4797,11 +4797,7 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 				   c + rel->r_offset - esym->st_value,
 				   ELFW(R_TYPE)(rel->r_info),
 				   ELFW(R_SYM)(rel->r_info),
-#if PTR_SIZE == 8
-				   rel->r_addend
-#else
 				   0
-#endif
 				  );
 		}
 	    }
@@ -5367,13 +5363,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
 		type.ref = sym_push(SYM_FIELD, &type.ref->type, 0, type.ref->c);
 	    }
             type_decl(&type, &ad, &v, TYPE_DIRECT);
-#if 0
-            {
-                char buf[500];
-                type_to_str(buf, sizeof(buf), &type, get_tok_str(v, NULL));
-                printf("type = '%s'\n", buf);
-            }
-#endif
             if ((type.t & VT_BTYPE) == VT_FUNC) {
                 if ((type.t & VT_STATIC) && (l == VT_LOCAL)) {
                     tcc_error("function without file scope cannot be static");
