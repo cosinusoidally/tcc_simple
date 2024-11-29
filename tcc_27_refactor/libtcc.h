@@ -1,13 +1,4 @@
-#ifndef LIBTCC_H
-#define LIBTCC_H
-
-#ifndef LIBTCCAPI
-# define LIBTCCAPI
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define LIBTCCAPI
 
 struct TCCState;
 
@@ -92,9 +83,3 @@ LIBTCCAPI int tcc_relocate(TCCState *s1, void *ptr);
 
 /* return symbol value or NULL if not found */
 LIBTCCAPI void *tcc_get_symbol(TCCState *s, const char *name);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
