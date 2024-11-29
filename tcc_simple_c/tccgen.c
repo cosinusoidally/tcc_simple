@@ -793,46 +793,7 @@ ST_FUNC int gv(int rc)
 
     /* NOTE: get_reg can modify vstack[] */
     if (vtop->type.t & VT_BITFIELD) {
-        CType type;
-
-        bit_pos = BIT_POS(vtop->type.t);
-        bit_size = BIT_SIZE(vtop->type.t);
-        /* remove bit field info to avoid loops */
-        vtop->type.t &= ~VT_STRUCT_MASK;
-
-        type.ref = NULL;
-        type.t = vtop->type.t & VT_UNSIGNED;
-
-        r = adjust_bf(vtop, bit_pos, bit_size);
-
-        type.t |= VT_INT;
-
-        int bits = (type.t & VT_BTYPE) == VT_LLONG ? 64 : 32;
-        /* cast to int to propagate signedness in following ops */
-        gen_cast(&type);
-        /* generate shifts */
-        vpushi(bits - (bit_pos + bit_size));
-        gen_op(TOK_SHL);
-        vpushi(bits - bit_size);
-        /* NOTE: transformed to SHR if unsigned */
-        gen_op(TOK_SAR);
-        r = gv(rc);
     } else {
-        if (is_float(vtop->type.t) && 
-            (vtop->r & (VT_VALMASK | VT_LVAL)) == VT_CONST) {
-            unsigned long offset;
-            /* CPUs usually cannot use float constants, so we store them
-               generically in data segment */
-            size = type_size(&vtop->type, &align);
-            if (NODATA_WANTED)
-                size = 0, align = 1;
-            offset = section_add(data_section, size, align);
-            vpush_ref(&vtop->type, data_section, offset, size);
-	    vswap();
-	    init_putv(&vtop->type, data_section, offset);
-	    vtop->r |= VT_LVAL;
-        }
-
         r = vtop->r & VT_VALMASK;
         rc2 = (rc & RC_FLOAT) ? RC_FLOAT : RC_INT;
         if (rc == RC_IRET)
@@ -848,56 +809,7 @@ ST_FUNC int gv(int rc)
             )
         {
             r = get_reg(rc);
-            if ((vtop->type.t & VT_BTYPE) == VT_LLONG) {
-                int addr_type = VT_INT, load_size = 4, load_type = VT_INT;
-                unsigned long long ll;
-                int r2, original_type;
-                original_type = vtop->type.t;
-                /* two register type load : expand to two words
-                   temporarily */
-                if ((vtop->r & (VT_VALMASK | VT_LVAL)) == VT_CONST) {
-                    /* load constant */
-                    ll = vtop->c.i;
-                    vtop->c.i = ll; /* first word */
-                    load(r, vtop);
-                    vtop->r = r; /* save register value */
-                    vpushi(ll >> 32); /* second word */
-                } else
-                if (vtop->r & VT_LVAL) {
-                    /* We do not want to modifier the long long
-                       pointer here, so the safest (and less
-                       efficient) is to save all the other registers
-                       in the stack. XXX: totally inefficient. */
-                    /* lvalue_save: save only if used further down the stack */
-                    save_reg_upstack(vtop->r, 1);
-                    /* load from memory */
-                    vtop->type.t = load_type;
-                    load(r, vtop);
-                    vdup();
-                    vtop[-1].r = r; /* save register value */
-                    /* increment pointer to get second word */
-                    vtop->type.t = addr_type;
-                    gaddrof();
-                    vpushi(load_size);
-                    gen_op('+');
-                    vtop->r |= VT_LVAL;
-                    vtop->type.t = load_type;
-                } else {
-                    /* move registers */
-                    load(r, vtop);
-                    vdup();
-                    vtop[-1].r = r; /* save register value */
-                    vtop->r = vtop[-1].r2;
-                }
-                /* Allocate second register. Here we rely on the fact that
-                   get_reg() tries first to free r2 of an SValue. */
-                r2 = get_reg(rc2);
-                load(r2, vtop);
-                vpop();
-                /* write second register */
-                vtop->r2 = r2;
-                vtop->type.t = original_type;
-            } else if ((vtop->r & VT_LVAL) && !is_float(vtop->type.t)) {
+            if ((vtop->r & VT_LVAL) && !is_float(vtop->type.t)) {
                 int t1, t;
                 /* lvalue of scalar type : need to use lvalue type
                    because of possible cast */
