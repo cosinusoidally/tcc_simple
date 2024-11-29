@@ -174,29 +174,6 @@
 
      DEF(TOK_alloca, "alloca")
 
-/* bound checking symbols */
-#ifdef CONFIG_TCC_BCHECK
-     DEF(TOK___bound_ptr_add, "__bound_ptr_add")
-     DEF(TOK___bound_ptr_indir1, "__bound_ptr_indir1")
-     DEF(TOK___bound_ptr_indir2, "__bound_ptr_indir2")
-     DEF(TOK___bound_ptr_indir4, "__bound_ptr_indir4")
-     DEF(TOK___bound_ptr_indir8, "__bound_ptr_indir8")
-     DEF(TOK___bound_ptr_indir12, "__bound_ptr_indir12")
-     DEF(TOK___bound_ptr_indir16, "__bound_ptr_indir16")
-     DEF(TOK___bound_main_arg, "__bound_main_arg")
-     DEF(TOK___bound_local_new, "__bound_local_new")
-     DEF(TOK___bound_local_delete, "__bound_local_delete")
-# ifdef TCC_TARGET_PE
-     DEF(TOK_malloc, "malloc")
-     DEF(TOK_free, "free")
-     DEF(TOK_realloc, "realloc")
-     DEF(TOK_memalign, "memalign")
-     DEF(TOK_calloc, "calloc")
-# endif
-     DEF(TOK_strlen, "strlen")
-     DEF(TOK_strcpy, "strcpy")
-#endif
-
 /* Tiny Assembler */
  DEF_ASMDIR(byte)              /* must be first directive */
  DEF_ASMDIR(word)
@@ -228,17 +205,11 @@
  DEF_ASMDIR(endr)
  DEF_ASMDIR(org)
  DEF_ASMDIR(quad)
-#if defined(TCC_TARGET_I386)
  DEF_ASMDIR(code16)
  DEF_ASMDIR(code32)
-#elif defined(TCC_TARGET_X86_64)
- DEF_ASMDIR(code64)
-#endif
  DEF_ASMDIR(short)
  DEF_ASMDIR(long)
  DEF_ASMDIR(int)
  DEF_ASMDIR(section)            /* must be last directive */
 
-#if defined TCC_TARGET_I386 || defined TCC_TARGET_X86_64
 #include "i386-tok.h"
-#endif
