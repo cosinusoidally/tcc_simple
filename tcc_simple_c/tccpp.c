@@ -860,179 +860,7 @@ exit(1);
 /* is_bof is true if first non space token at beginning of file */
 ST_FUNC void preprocess(int is_bof)
 {
-    TCCState *s1 = tcc_state;
-    int i, c, n, saved_parse_flags;
-    char buf[1024], *q;
-    Sym *s;
-
-    saved_parse_flags = parse_flags;
-    parse_flags = PARSE_FLAG_PREPROCESS
-        | PARSE_FLAG_TOK_NUM
-        | PARSE_FLAG_TOK_STR
-        | PARSE_FLAG_LINEFEED
-        | (parse_flags & PARSE_FLAG_ASM_FILE)
-        ;
-
-    next_nomacro();
- redo:
-    switch(tok) {
-    case TOK_DEFINE:
-        pp_debug_tok = tok;
-        next_nomacro();
-        pp_debug_symv = tok;
-        parse_define();
-        break;
-    case TOK_UNDEF:
-        pp_debug_tok = tok;
-        next_nomacro();
-        pp_debug_symv = tok;
-        s = define_find(tok);
-        /* undefine symbol by putting an invalid name */
-        if (s)
-            define_undef(s);
-        break;
-    case TOK_INCLUDE:
-    case TOK_INCLUDE_NEXT:
-        ch = file->buf_ptr[0];
-        /* XXX: incorrect if comments : use next_nomacro with a special mode */
-        skip_spaces();
-        if (ch == '<') {
-            c = '>';
-            goto read_name;
-        } else if (ch == '\"') {
-            c = ch;
-        read_name:
-            inp();
-            q = buf;
-            while (ch != c && ch != '\n' && ch != CH_EOF) {
-                if ((q - buf) < sizeof(buf) - 1)
-                    *q++ = ch;
-                inp();
-            }
-            *q = '\0';
-            minp();
-        }
-
-        /* store current file in stack, but increment stack later below */
-        *s1->include_stack_ptr = file;
-        i = tok == TOK_INCLUDE_NEXT ? file->include_next_index : 0;
-        n = 2 + s1->nb_include_paths + s1->nb_sysinclude_paths;
-        for (; i < n; ++i) {
-            char buf1[sizeof file->filename];
-            CachedInclude *e;
-            const char *path;
-
-            if (i == 0) {
-                /* check absolute include path */
-                if (!IS_ABSPATH(buf))
-                    continue;
-                buf1[0] = 0;
-
-            } else if (i == 1) {
-                /* search in file's dir if "header.h" */
-                if (c != '\"')
-                    continue;
-                /* https://savannah.nongnu.org/bugs/index.php?50847 */
-                path = file->true_filename;
-                pstrncpy(buf1, path, tcc_basename(path) - path);
-
-            } else {
-                /* search in all the include paths */
-                int j = i - 2, k = j - s1->nb_include_paths;
-                path = k < 0 ? s1->include_paths[j] : s1->sysinclude_paths[k];
-                pstrcpy(buf1, sizeof(buf1), path);
-                pstrcat(buf1, sizeof(buf1), "/");
-            }
-
-            pstrcat(buf1, sizeof(buf1), buf);
-            e = search_cached_include(s1, buf1, 0);
-            if (e && (define_find(e->ifndef_macro) || e->once == pp_once)) {
-                /* no need to parse the include because the 'ifndef macro'
-                   is defined (or had #pragma once) */
-                goto include_done;
-            }
-
-            if (tcc_open(s1, buf1) < 0)
-                continue;
-
-            file->include_next_index = i + 1;
-            /* update target deps */
-            dynarray_add(&s1->target_deps, &s1->nb_target_deps,
-                    tcc_strdup(buf1));
-            /* push current file in stack */
-            ++s1->include_stack_ptr;
-            tok_flags |= TOK_FLAG_BOF | TOK_FLAG_BOL;
-            ch = file->buf_ptr[0];
-            goto the_end;
-        }
-        tcc_error("include file '%s' not found", buf);
-include_done:
-        break;
-    case TOK_IFNDEF:
-        c = 1;
-        goto do_ifdef;
-    case TOK_IF:
-        c = expr_preprocess();
-        goto do_if;
-    case TOK_IFDEF:
-        c = 0;
-    do_ifdef:
-        next_nomacro();
-        if (is_bof) {
-            if (c) {
-                file->ifndef_macro = tok;
-            }
-        }
-        c = (define_find(tok) != 0) ^ c;
-    do_if:
-        *s1->ifdef_stack_ptr++ = c;
-        goto test_skip;
-    case TOK_ELSE:
-        if (s1->ifdef_stack_ptr == s1->ifdef_stack)
-            tcc_error("#else without matching #if");
-        c = (s1->ifdef_stack_ptr[-1] ^= 3);
-        goto test_else;
-    case TOK_ELIF:
-        c = s1->ifdef_stack_ptr[-1];
-        /* last #if/#elif expression was true: we skip */
-        if (c == 1) {
-            c = 0;
-        } else {
-            c = expr_preprocess();
-            s1->ifdef_stack_ptr[-1] = c;
-        }
-    test_else:
-        if (s1->ifdef_stack_ptr == file->ifdef_stack_ptr + 1)
-            file->ifndef_macro = 0;
-    test_skip:
-        if (!(c & 1)) {
-            preprocess_skip();
-            is_bof = 0;
-            goto redo;
-        }
-        break;
-    case TOK_ENDIF:
-        s1->ifdef_stack_ptr--;
-        /* '#ifndef macro' was at the start of file. Now we check if
-           an '#endif' is exactly at the end of file */
-        if (file->ifndef_macro &&
-            s1->ifdef_stack_ptr == file->ifdef_stack_ptr) {
-            file->ifndef_macro_saved = file->ifndef_macro;
-            /* need to set to zero to avoid false matches if another
-               #ifndef at middle of file */
-            file->ifndef_macro = 0;
-            while (tok != TOK_LINEFEED)
-                next_nomacro();
-            tok_flags |= TOK_FLAG_ENDIF;
-            goto the_end;
-        }
-        break;
-    }
-    /* ignore other preprocess commands or #! for C scripts */
-    while (tok != TOK_LINEFEED)
-        next_nomacro();
- the_end:
-    parse_flags = saved_parse_flags;
+exit(1);
 }
 
 /* evaluate escape codes in a string. */
@@ -1149,21 +977,12 @@ static void parse_string(const char *s, int len)
 /* bn = (bn << shift) | or_val */
 static void bn_lshift(unsigned int *bn, int shift, int or_val)
 {
-    int i;
-    unsigned int v;
-    for(i=0;i<BN_SIZE;i++) {
-        v = bn[i];
-        bn[i] = (v << shift) | or_val;
-        or_val = v >> (32 - shift);
-    }
+exit(1);
 }
 
 static void bn_zero(unsigned int *bn)
 {
-    int i;
-    for(i=0;i<BN_SIZE;i++) {
-        bn[i] = 0;
-    }
+exit(1);
 }
 
 /* parse number in null terminated string 'p' and return it in the
@@ -1898,94 +1717,8 @@ static void macro_subst(
    args (field d) and return allocated string */
 static int *macro_arg_subst(Sym **nested_list, const int *macro_str, Sym *args)
 {
-    int t, t0, t1, spc;
-    const int *st;
-    Sym *s;
-    CValue cval;
-    TokenString str;
-    CString cstr;
-
-    tok_str_new(&str);
-    t0 = t1 = 0;
-    while(1) {
-        TOK_GET(&t, &macro_str, &cval);
-        if (!t)
-            break;
-        if (t == '#') {
-            /* stringize */
-            TOK_GET(&t, &macro_str, &cval);
-            s = sym_find2(args, t);
-            if (s) {
-                cstr_new(&cstr);
-                cstr_ccat(&cstr, '\"');
-                st = s->d;
-                spc = 0;
-                while (*st >= 0) {
-                    TOK_GET(&t, &st, &cval);
-                    if (t != TOK_PLCHLDR
-                     && t != TOK_NOSUBST
-                     && 0 == check_space(t, &spc)) {
-                        const char *s = get_tok_str(t, &cval);
-                        while (*s) {
-                            cstr_ccat(&cstr, *s);
-                            ++s;
-                        }
-                    }
-                }
-                cstr.size -= spc;
-                cstr_ccat(&cstr, '\"');
-                cstr_ccat(&cstr, '\0');
-                /* add string */
-                cval.str.size = cstr.size;
-                cval.str.data = cstr.data;
-                tok_str_add2(&str, TOK_PPSTR, &cval);
-                cstr_free(&cstr);
-            }
-        } else if (t >= TOK_IDENT) {
-            s = sym_find2(args, t);
-            if (s) {
-                int l0 = str.len;
-                st = s->d;
-            add_var:
-                if (!s->next) {
-                    /* Expand arguments tokens and store them.  In most
-                       cases we could also re-expand each argument if
-                       used multiple times, but not if the argument
-                       contains the __COUNTER__ macro.  */
-                    TokenString str2;
-                    sym_push2(&s->next, s->v, s->type.t, 0);
-                    tok_str_new(&str2);
-                    macro_subst(&str2, nested_list, st);
-                    tok_str_add(&str2, 0);
-                    s->next->d = str2.str;
-                }
-                st = s->next->d;
-                for(;;) {
-                    int t2;
-                    TOK_GET(&t2, &st, &cval);
-                    if (t2 <= 0)
-                        break;
-                    tok_str_add2(&str, t2, &cval);
-                }
-                if (str.len == l0) /* expanded to empty string */
-                    tok_str_add(&str, TOK_PLCHLDR);
-            } else {
-                tok_str_add(&str, t);
-            }
-        } else {
-            tok_str_add2(&str, t, &cval);
-        }
-        t0 = t1, t1 = t;
-    }
-    tok_str_add(&str, 0);
-    return str.str;
+exit(1);
 }
-
-static char const ab_month_name[12][4] =
-{
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-};
 
 static int paste_tokens(int t1, CValue *v1, int t2, CValue *v2)
 {
@@ -2167,20 +1900,6 @@ static int macro_subst_tok(
     } else if (tok == TOK___FILE__) {
         cstrval = file->filename;
         goto add_cstr;
-    } else if (tok == TOK___DATE__ || tok == TOK___TIME__) {
-        time_t ti;
-        struct tm *tm;
-
-        time(&ti);
-        tm = localtime(&ti);
-        if (tok == TOK___DATE__) {
-            snprintf(buf, sizeof(buf), "%s %2d %d", 
-                     ab_month_name[tm->tm_mon], tm->tm_mday, tm->tm_year + 1900);
-        } else {
-            snprintf(buf, sizeof(buf), "%02d:%02d:%02d", 
-                     tm->tm_hour, tm->tm_min, tm->tm_sec);
-        }
-        cstrval = buf;
     add_cstr:
         t1 = TOK_STR;
     add_cstr1:
