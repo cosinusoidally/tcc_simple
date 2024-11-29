@@ -2235,70 +2235,6 @@ ST_FUNC void unary(void)
     }
 }
 
-ST_FUNC void expr_prod(void)
-{
-    unary();
-}
-
-ST_FUNC void expr_sum(void)
-{
-    unary();
-}
-
-static void expr_shift(void)
-{
-    unary();
-}
-
-static void expr_cmp(void)
-{
-    unary();
-}
-
-static void expr_cmpeq(void)
-{
-    unary();
-}
-
-static void expr_and(void)
-{
-    unary();
-}
-
-static void expr_xor(void)
-{
-    unary();
-}
-
-static void expr_or(void)
-{
-    unary();
-}
-
-static void expr_land(void)
-{
-    unary();
-}
-
-static void expr_lor(void)
-{
-    unary();
-}
-
-/* Assuming vtop is a value used in a conditional context
-   (i.e. compared with zero) return 0 if it's false, 1 if
-   true and -1 if it can't be statically determined.  */
-static int condition_3way(void)
-{
-    int c = -1;
-    return c;
-}
-
-static void expr_cond(void)
-{
-    unary();
-}
-
 static void expr_eq(void)
 {
     int t;
@@ -2319,13 +2255,7 @@ static void expr_eq(void)
 
 ST_FUNC void gexpr(void)
 {
-    while (1) {
-        expr_eq();
-        if (tok != ',')
-            break;
-        vpop();
-        next();
-    }
+    expr_eq();
 }
 
 /* parse a constant expression and return value in vtop.  */
@@ -2441,7 +2371,7 @@ static void gcase(struct case_t **base, int len, int *bsym)
 
 static void block(int *bsym, int *csym, int is_expr)
 {
-    int a, b, c, d, cond;
+    int a, b, c, d;
     Sym *s;
 
     if (is_expr) {
@@ -2457,27 +2387,17 @@ static void block(int *bsym, int *csym, int is_expr)
         skip('(');
         gexpr();
         skip(')');
-	cond = condition_3way();
-        if (cond == 1)
-            a = 0, vpop();
-        else
-            a = gvtst(1, 0);
-        if (cond == 0)
-	    nocode_wanted |= 0x20000000;
+        a = gvtst(1, 0);
         block(bsym, csym, 0);
-	if (cond != 1)
-	    nocode_wanted = saved_nocode_wanted;
+        nocode_wanted = saved_nocode_wanted;
         c = tok;
         if (c == TOK_ELSE) {
             next();
             d = gjmp(0);
             gsym(a);
-	    if (cond == 1)
-	        nocode_wanted |= 0x20000000;
             block(bsym, csym, 0);
             gsym(d); /* patch else jmp */
-	    if (cond != 0)
-		nocode_wanted = saved_nocode_wanted;
+            nocode_wanted = saved_nocode_wanted;
         } else
             gsym(a);
     } else if (tok == TOK_WHILE) {
@@ -2787,35 +2707,7 @@ static void block(int *bsym, int *csym, int is_expr)
    i.e. "({)}" is accepted.  */
 static void skip_or_save_block(TokenString **str)
 {
-    int braces = tok == '{';
-    int level = 0;
-    if (str)
-      *str = tok_str_alloc();
-
-    while ((level > 0 || (tok != '}' && tok != ',' && tok != ';' && tok != ')'))) {
-	int t;
-	if (tok == TOK_EOF) {
-	     if (str || level > 0)
-	       tcc_error("unexpected end of file");
-	     else
-	       break;
-	}
-	if (str)
-	  tok_str_add_tok(*str);
-	t = tok;
-	next();
-	if (t == '{' || t == '(') {
-	    level++;
-	} else if (t == '}' || t == ')') {
-	    level--;
-	    if (level == 0 && braces && t == '}')
-	      break;
-	}
-    }
-    if (str) {
-	tok_str_add(*str, -1);
-	tok_str_add(*str, 0);
-    }
+exit(1);
 }
 
 #define EXPR_CONST 1
@@ -2823,66 +2715,19 @@ static void skip_or_save_block(TokenString **str)
 
 static void parse_init_elem(int expr_type)
 {
-    int saved_global_expr;
-    switch(expr_type) {
-    case EXPR_CONST:
-        /* compound literals must be allocated globally in this case */
-        saved_global_expr = global_expr;
-        global_expr = 1;
-        expr_const1();
-        global_expr = saved_global_expr;
-        break;
-    case EXPR_ANY:
-        expr_eq();
-        break;
-    }
+exit(1);
 }
 
 /* put zeros for variable based init */
 static void init_putz(Section *sec, unsigned long c, int size)
 {
-    if (sec) {
-        /* nothing to do because globals are already set to zero */
-    } else {
-        vpush_global_sym(&func_old_type, TOK_memset);
-        vseti(VT_LOCAL, c);
-        vpushi(0);
-        vpushs(size);
-        gfunc_call(3);
-    }
+exit(1);
 }
 
-/* t is the array or struct type. c is the array or struct
-   address. cur_field is the pointer to the current
-   field, for arrays the 'c' member contains the current start
-   index.  'size_only' is true if only size info is needed (only used
-   in arrays).  al contains the already initialized length of the
-   current container (starting at c).  This returns the new length of that.  */
 static int decl_designator(CType *type, Section *sec, unsigned long c,
                            Sym **cur_field, int size_only, int al)
 {
-    Sym *s, *f;
-    int index, index_last, align, l, nb_elems, elem_size;
-    unsigned long corig = c;
-
-    elem_size = 0;
-    nb_elems = 1;
-
-    if (type->t & VT_ARRAY) {
-        index = (*cur_field)->c;
-        type = pointed_type(type);
-        c += index * type_size(type, &align);
-    } else {
-        f = *cur_field;
-        type = &f->type;
-        c += f->c;
-    }
-    decl_initializer(type, sec, c, 0, size_only);
-
-    c += nb_elems * type_size(type, &align);
-    if (c - corig > al)
-      al = c - corig;
-    return al;
+exit(1);
 }
 
 /* store a value or an expression directly in global data or in local array */
