@@ -198,35 +198,9 @@ ST_FUNC void gfunc_call(int nb_args)
     
     args_size = 0;
     for(i = 0;i < nb_args; i++) {
-        if (is_float(vtop->type.t)) {
-            gv(RC_FLOAT); /* only one float register */
-            if ((vtop->type.t & VT_BTYPE) == VT_FLOAT)
-                size = 4;
-            else if ((vtop->type.t & VT_BTYPE) == VT_DOUBLE)
-                size = 8;
-            else
-                size = 12;
-            oad(0xec81, size); /* sub $xxx, %esp */
-            if (size == 12)
-                o(0x7cdb);
-            else
-                o(0x5cd9 + size - 4); /* fstp[s|l] 0(%esp) */
-            g(0x24);
-            g(0x00);
-            args_size += size;
-        } else {
-            /* simple type (currently always same size) */
-            /* XXX: implicit cast ? */
-            r = gv(RC_INT);
-            if ((vtop->type.t & VT_BTYPE) == VT_LLONG) {
-                size = 8;
-                o(0x50 + vtop->r2); /* push r */
-            } else {
-                size = 4;
-            }
-            o(0x50 + r); /* push r */
-            args_size += size;
-        }
+        r = gv(RC_INT);
+        o(0x50 + r); /* push r */
+        args_size += 4;
         vtop--;
     }
     save_regs(0); /* save used temporary registers */
