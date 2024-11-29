@@ -4592,13 +4592,6 @@ static void gen_inline_functions(TCCState *s)
 
 ST_FUNC void free_inline_functions(TCCState *s)
 {
-    int i;
-    /* free tokens of unused inline functions */
-    for (i = 0; i < s->nb_inline_fns; ++i) {
-        struct InlineFunc *fn = s->inline_fns[i];
-        if (fn->sym)
-            tok_str_free(fn->func_str);
-    }
     dynarray_reset(&s->inline_fns, &s->nb_inline_fns);
 }
 
@@ -4613,53 +4606,12 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
 
     while (1) {
         if (!parse_btype(&btype, &ad)) {
-            if (is_for_loop_init)
-                return 0;
-            /* skip redundant ';' if not in old parameter decl scope */
-            if (tok == ';' && l != VT_CMP) {
-                next();
-                continue;
-            }
-            if (l != VT_CONST)
                 break;
-            if (tok >= TOK_UIDENT) {
-               /* special test for old K&R protos without explicit int
-                  type. Only accepted when defining global data */
-                btype.t = VT_INT;
-            } else {
-                if (tok != TOK_EOF)
-                    expect("declaration");
-                break;
-            }
-        }
-        if (tok == ';') {
-	    if ((btype.t & VT_BTYPE) == VT_STRUCT) {
-		int v = btype.ref->v;
-		if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) >= SYM_FIRST_ANOM)
-        	    tcc_warning("unnamed struct/union that defines no instances");
-                next();
-                continue;
-	    }
-            if (IS_ENUM(btype.t)) {
-                next();
-                continue;
-            }
         }
         while (1) { /* iterate thru each declaration */
             type = btype;
-	    /* If the base type itself was an array type of unspecified
-	       size (like in 'typedef int arr[]; arr x = {1};') then
-	       we will overwrite the unknown size by the real one for
-	       this decl.  We need to unshare the ref symbol holding
-	       that size.  */
-	    if ((type.t & VT_ARRAY) && type.ref->c < 0) {
-		type.ref = sym_push(SYM_FIELD, &type.ref->type, 0, type.ref->c);
-	    }
             type_decl(&type, &ad, &v, TYPE_DIRECT);
             if ((type.t & VT_BTYPE) == VT_FUNC) {
-                if ((type.t & VT_STATIC) && (l == VT_LOCAL)) {
-                    tcc_error("function without file scope cannot be static");
-                }
                 /* if old style function prototype, we accept a
                    declaration list */
                 sym = type.ref;
@@ -4668,52 +4620,16 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
             }
 
             if (tok == '{') {
-                if (l != VT_CONST)
-                    tcc_error("cannot use local functions");
-                if ((type.t & VT_BTYPE) != VT_FUNC)
-                    expect("function definition");
-
-                /* reject abstract declarators in function definition
-		   make old style params without decl have int type */
-                sym = type.ref;
-                while ((sym = sym->next) != NULL) {
-                    if (!(sym->v & ~SYM_FIELD))
-                        expect("identifier");
-		    if (sym->type.t == VT_VOID)
-		        sym->type = int_type;
-		}
-                
-                /* XXX: cannot do better now: convert extern line to static inline */
-                if ((type.t & (VT_EXTERN | VT_INLINE)) == (VT_EXTERN | VT_INLINE))
-                    type.t = (type.t & ~VT_EXTERN) | VT_STATIC;
-
                 /* put function symbol */
                 sym = external_global_sym(v, &type, 0);
                 type.t &= ~VT_EXTERN;
                 patch_storage(sym, &ad, &type);
 
-                /* static inline functions are just recorded as a kind
-                   of macro. Their code will be emitted at the end of
-                   the compilation unit only if they are used */
-                if ((type.t & (VT_INLINE | VT_STATIC)) == 
-                    (VT_INLINE | VT_STATIC)) {
-                    struct InlineFunc *fn;
-                    const char *filename;
-                           
-                    filename = file ? file->filename : "";
-                    fn = tcc_malloc(sizeof *fn + strlen(filename));
-                    strcpy(fn->filename, filename);
-                    fn->sym = sym;
-		    skip_or_save_block(&fn->func_str);
-                    dynarray_add(&tcc_state->inline_fns,
-				 &tcc_state->nb_inline_fns, fn);
-                } else {
-                    /* compute text section */
-                    cur_text_section = ad.section;
-                    if (!cur_text_section)
-                        cur_text_section = text_section;
-                    gen_function(sym);
-                }
+                /* compute text section */
+                cur_text_section = ad.section;
+                if (!cur_text_section)
+                    cur_text_section = text_section;
+                gen_function(sym);
                 break;
             } else {
 		if (l == VT_CMP) {
