@@ -487,92 +487,7 @@ static uint8_t *parse_pp_string(uint8_t *p,
    #if/#endif */
 static void preprocess_skip(void)
 {
-    int a, start_of_line, c, in_warn_or_error;
-    uint8_t *p;
-
-    p = file->buf_ptr;
-    a = 0;
-redo_start:
-    start_of_line = 1;
-    in_warn_or_error = 0;
-    for(;;) {
-    redo_no_start:
-        c = *p;
-        switch(c) {
-        case ' ':
-        case '\t':
-        case '\f':
-        case '\v':
-        case '\r':
-            p++;
-            goto redo_no_start;
-        case '\n':
-            file->line_num++;
-            p++;
-            goto redo_start;
-        case '\\':
-            file->buf_ptr = p;
-            c = handle_eob();
-            if (c == CH_EOF) {
-                expect("#endif");
-            } else if (c == '\\') {
-                ch = file->buf_ptr[0];
-                handle_stray_noerror();
-            }
-            p = file->buf_ptr;
-            goto redo_no_start;
-        /* skip strings */
-        case '\"':
-        case '\'':
-            if (in_warn_or_error)
-                goto _default;
-            p = parse_pp_string(p, c, NULL);
-            break;
-        /* skip comments */
-        case '/':
-            if (in_warn_or_error)
-                goto _default;
-            file->buf_ptr = p;
-            ch = *p;
-            minp();
-            p = file->buf_ptr;
-            if (ch == '*') {
-                p = parse_comment(p);
-            } else if (ch == '/') {
-                p = parse_line_comment(p);
-            }
-            break;
-        case '#':
-            p++;
-            if (start_of_line) {
-                file->buf_ptr = p;
-                next_nomacro();
-                p = file->buf_ptr;
-                if (a == 0 && 
-                    (tok == TOK_ELSE || tok == TOK_ELIF || tok == TOK_ENDIF))
-                    goto the_end;
-                if (tok == TOK_IF || tok == TOK_IFDEF || tok == TOK_IFNDEF)
-                    a++;
-                else if (tok == TOK_ENDIF)
-                    a--;
-                else if( tok == TOK_ERROR || tok == TOK_WARNING)
-                    in_warn_or_error = 1;
-                else if (tok == TOK_LINEFEED)
-                    goto redo_start;
-                else if (parse_flags & PARSE_FLAG_ASM_FILE)
-                    p = parse_line_comment(p - 1);
-            } else if (parse_flags & PARSE_FLAG_ASM_FILE)
-                p = parse_line_comment(p - 1);
-            break;
-_default:
-        default:
-            p++;
-            break;
-        }
-        start_of_line = 0;
-    }
- the_end: ;
-    file->buf_ptr = p;
+exit(1);
 }
 
 /* token string handling */
@@ -805,27 +720,12 @@ ST_FUNC void free_defines(Sym *b)
 /* label lookup */
 ST_FUNC Sym *label_find(int v)
 {
-    v -= TOK_IDENT;
-    if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
-        return NULL;
-    return table_ident[v]->sym_label;
+exit(1);
 }
 
 ST_FUNC Sym *label_push(Sym **ptop, int v, int flags)
 {
-    Sym *s, **ps;
-    s = sym_push2(ptop, v, 0, 0);
-    s->r = flags;
-    ps = &table_ident[v - TOK_IDENT]->sym_label;
-    if (ptop == &global_label_stack) {
-        /* modify the top most local identifier, so that
-           sym_identifier will point to 's' when popped */
-        while (*ps != NULL)
-            ps = &(*ps)->prev_tok;
-    }
-    s->prev_tok = *ps;
-    *ps = s;
-    return s;
+exit(1);
 }
 
 /* pop labels until element last is reached. Look if any labels are
@@ -859,40 +759,7 @@ ST_FUNC void label_pop(Sym **ptop, Sym *slast, int keep)
 /* eval an expression for #if/#elif */
 static int expr_preprocess(void)
 {
-    int c, t;
-    TokenString *str;
-    
-    str = tok_str_alloc();
-    pp_expr = 1;
-    while (tok != TOK_LINEFEED && tok != TOK_EOF) {
-        next(); /* do macro subst */
-        if (tok == TOK_DEFINED) {
-            next_nomacro();
-            t = tok;
-            if (t == '(') 
-                next_nomacro();
-            c = define_find(tok) != 0;
-            if (t == '(') {
-                next_nomacro();
-            }
-            tok = TOK_CINT;
-            tokc.i = c;
-        } else if (tok >= TOK_IDENT) {
-            /* if undefined macro */
-            tok = TOK_CINT;
-            tokc.i = 0;
-        }
-        tok_str_add_tok(str);
-    }
-    pp_expr = 0;
-    tok_str_add(str, -1); /* simulate end of file */
-    tok_str_add(str, 0);
-    /* now evaluate C constant expression */
-    begin_macro(str, 1);
-    next();
-    c = expr_const();
-    end_macro();
-    return c != 0;
+exit(1);
 }
 
 
@@ -987,39 +854,7 @@ bad_twosharp:
 
 static CachedInclude *search_cached_include(TCCState *s1, const char *filename, int add)
 {
-    const unsigned char *s;
-    unsigned int h;
-    CachedInclude *e;
-    int i;
-
-    h = TOK_HASH_INIT;
-    s = (unsigned char *) filename;
-    while (*s) {
-        h = TOK_HASH_FUNC(h, *s);
-        s++;
-    }
-    h &= (CACHED_INCLUDES_HASH_SIZE - 1);
-
-    i = s1->cached_includes_hash[h];
-    for(;;) {
-        if (i == 0)
-            break;
-        e = s1->cached_includes[i - 1];
-        if (0 == PATHCMP(e->filename, filename))
-            return e;
-        i = e->hash_next;
-    }
-    if (!add)
-        return NULL;
-
-    e = tcc_malloc(sizeof(CachedInclude) + strlen(filename));
-    strcpy(e->filename, filename);
-    e->ifndef_macro = e->once = 0;
-    dynarray_add(&s1->cached_includes, &s1->nb_cached_includes, e);
-    /* add in hash table */
-    e->hash_next = s1->cached_includes_hash[h];
-    s1->cached_includes_hash[h] = s1->nb_cached_includes;
-    return e;
+exit(1);
 }
 
 /* is_bof is true if first non space token at beginning of file */
