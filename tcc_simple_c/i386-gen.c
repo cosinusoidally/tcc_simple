@@ -36,8 +36,6 @@ static int func_ret_sub;
 ST_FUNC void g(int c)
 {
     int ind1;
-    if (nocode_wanted)
-        return;
     ind1 = ind + 1;
     if (ind1 > cur_text_section->data_allocated)
         section_realloc(cur_text_section, ind1);
@@ -81,8 +79,6 @@ ST_FUNC void gsym(int t)
 static int oad(int c, int s)
 {
     int t;
-    if (nocode_wanted)
-        return s;
     o(c);
     t = ind;
     gen_le32(s);
@@ -102,9 +98,7 @@ ST_FUNC void gen_addr32(int r, Sym *sym, int c)
 
 ST_FUNC void gen_addrpc32(int r, Sym *sym, int c)
 {
-    if (r & VT_SYM)
-        greloc(cur_text_section, sym, ind, R_386_PC32);
-    gen_le32(c - 4);
+exit(1);
 }
 
 /* generate a modrm reference. 'op_reg' contains the additional 3
@@ -144,62 +138,12 @@ ST_FUNC void load(int r, SValue *sv)
 
     v = fr & VT_VALMASK;
     if (fr & VT_LVAL) {
-        if (v == VT_LLOCAL) {
-            v1.type.t = VT_INT;
-            v1.r = VT_LOCAL | VT_LVAL;
-            v1.c.i = fc;
-            fr = r;
-            if (!(reg_classes[fr] & RC_INT))
-                fr = get_reg(RC_INT);
-            load(fr, &v1);
-        }
-        if ((ft & VT_BTYPE) == VT_FLOAT) {
-            o(0xd9); /* flds */
-            r = 0;
-        } else if ((ft & VT_BTYPE) == VT_DOUBLE) {
-            o(0xdd); /* fldl */
-            r = 0;
-        } else if ((ft & VT_BTYPE) == VT_LDOUBLE) {
-            o(0xdb); /* fldt */
-            r = 5;
-        } else if ((ft & VT_TYPE) == VT_BYTE || (ft & VT_TYPE) == VT_BOOL) {
-            o(0xbe0f);   /* movsbl */
-        } else if ((ft & VT_TYPE) == (VT_BYTE | VT_UNSIGNED)) {
-            o(0xb60f);   /* movzbl */
-        } else if ((ft & VT_TYPE) == VT_SHORT) {
-            o(0xbf0f);   /* movswl */
-        } else if ((ft & VT_TYPE) == (VT_SHORT | VT_UNSIGNED)) {
-            o(0xb70f);   /* movzwl */
-        } else {
-            o(0x8b);     /* movl */
-        }
+        o(0x8b);     /* movl */
         gen_modrm(r, fr, sv->sym, fc);
     } else {
         if (v == VT_CONST) {
             o(0xb8 + r); /* mov $xx, r */
             gen_addr32(fr, sv->sym, fc);
-        } else if (v == VT_LOCAL) {
-            if (fc) {
-                o(0x8d); /* lea xxx(%ebp), r */
-                gen_modrm(r, VT_LOCAL, sv->sym, fc);
-            } else {
-                o(0x89);
-                o(0xe8 + r); /* mov %ebp, r */
-            }
-        } else if (v == VT_CMP) {
-            oad(0xb8 + r, 0); /* mov $0, r */
-            o(0x0f); /* setxx %br */
-            o(fc);
-            o(0xc0 + r);
-        } else if (v == VT_JMP || v == VT_JMPI) {
-            t = v & 1;
-            oad(0xb8 + r, t); /* mov $1, r */
-            o(0x05eb); /* jmp after */
-            gsym(fc);
-            oad(0xb8 + r, t ^ 1); /* mov $0, r */
-        } else if (v != r) {
-            o(0x89);
-            o(0xc0 + r + v * 8); /* mov v, r */
         }
     }
 }
@@ -214,31 +158,11 @@ ST_FUNC void store(int r, SValue *v)
     fr = v->r & VT_VALMASK;
     ft &= ~(VT_VOLATILE | VT_CONSTANT);
     bt = ft & VT_BTYPE;
-    /* XXX: incorrect if float reg to reg */
-    if (bt == VT_FLOAT) {
-        o(0xd9); /* fsts */
-        r = 2;
-    } else if (bt == VT_DOUBLE) {
-        o(0xdd); /* fstpl */
-        r = 2;
-    } else if (bt == VT_LDOUBLE) {
-        o(0xc0d9); /* fld %st(0) */
-        o(0xdb); /* fstpt */
-        r = 7;
-    } else {
-        if (bt == VT_SHORT)
-            o(0x66);
-        if (bt == VT_BYTE || bt == VT_BOOL)
-            o(0x88);
-        else
-            o(0x89);
-    }
+    o(0x89);
     if (fr == VT_CONST ||
         fr == VT_LOCAL ||
         (v->r & VT_LVAL)) {
         gen_modrm(r, v->r, v->sym, fc);
-    } else if (fr != r) {
-        o(0xc0 + fr + r * 8); /* mov r, fr */
     }
 }
 
@@ -256,43 +180,9 @@ static void gadd_sp(int val)
 static void gcall_or_jmp(int is_jmp)
 {
     int r;
-    if ((vtop->r & (VT_VALMASK | VT_LVAL)) == VT_CONST && (vtop->r & VT_SYM)) {
-        /* constant and relocation case */
-        greloc(cur_text_section, vtop->sym, ind + 1, R_386_PC32);
-        oad(0xe8 + is_jmp, vtop->c.i - 4); /* call/jmp im */
-    } else {
-        /* otherwise, indirect call */
-        r = gv(RC_INT);
-        o(0xff); /* call/jmp *r */
-        o(0xd0 + r + (is_jmp << 4));
-    }
-    if (!is_jmp) {
-        int rt;
-        /* extend the return value to the whole register if necessary
-           visual studio and gcc do not always set the whole eax register
-           when assigning the return value of a function  */
-        rt = vtop->type.ref->type.t;
-        switch (rt & VT_BTYPE) {
-            case VT_BYTE:
-                if (rt & VT_UNSIGNED) {
-                    o(0xc0b60f); /* movzx %al, %eax */
-                }
-                else {
-                    o(0xc0be0f); /* movsx %al, %eax */
-                }
-                break;
-            case VT_SHORT:
-                if (rt & VT_UNSIGNED) {
-                    o(0xc0b70f); /* movzx %ax, %eax */
-                }
-                else {
-                    o(0xc0bf0f); /* movsx %ax, %eax */
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    /* constant and relocation case */
+    greloc(cur_text_section, vtop->sym, ind + 1, R_386_PC32);
+    oad(0xe8 + is_jmp, vtop->c.i - 4); /* call/jmp im */
 }
 
 static uint8_t fastcall_regs[3] = { TREG_EAX, TREG_EDX, TREG_ECX };
