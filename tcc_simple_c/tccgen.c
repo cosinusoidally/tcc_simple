@@ -4654,7 +4654,7 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
                         sym = external_sym(v, &type, r, &ad);
                     } else {
                         r |= l;
-                        else if (l == VT_CONST)
+                        if (l == VT_CONST)
                             /* uninitialized global variables may be overridden */
                             type.t |= VT_EXTERN;
                         decl_initializer_alloc(&type, &ad, r, has_init, v, l);
