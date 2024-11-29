@@ -84,7 +84,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has
 static void decl(int l);
 static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
-static void vla_sp_restore_root(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static void vpush(CType *type);
 static int gvtst(int inv, int t);
@@ -926,43 +925,21 @@ ST_FUNC int type_size(CType *type, int *a)
     int bt;
 
     bt = type->t & VT_BTYPE;
-    if (bt == VT_STRUCT) {
-        /* struct/union */
+    if (bt == VT_PTR) {
+        int ts;
+
         s = type->ref;
-        *a = s->r;
-        return s->c;
-    } else if (bt == VT_PTR) {
-        if (type->t & VT_ARRAY) {
-            int ts;
+        ts = type_size(&s->type, a);
 
-            s = type->ref;
-            ts = type_size(&s->type, a);
-
-            return ts * s->c;
-        } else {
-            *a = PTR_SIZE;
-            return PTR_SIZE;
-        }
-    } else if (bt == VT_LDOUBLE) {
-        *a = LDOUBLE_ALIGN;
-        return LDOUBLE_SIZE;
-    } else if (bt == VT_DOUBLE || bt == VT_LLONG) {
-        *a = 4;
-        return 8;
+        return ts * s->c;
     } else if (bt == VT_INT || bt == VT_FLOAT) {
         *a = 4;
         return 4;
-    } else if (bt == VT_SHORT) {
-        *a = 2;
-        return 2;
     } else {
         /* char, void, function, _Bool */
         *a = 1;
         return 1;
     }
-}
-
-static void vla_sp_restore_root(void) {
 }
 
 /* return the pointed type of t */
