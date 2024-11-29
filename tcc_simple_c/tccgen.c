@@ -2751,45 +2751,7 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 	section_reserve(sec, c + size);
         ptr = sec->data + c;
 
-            switch(bt) {
-		/* XXX: when cross-compiling we assume that each type has the
-		   same representation on host and target, which is likely to
-		   be wrong in the case of long double */
-	    case VT_BOOL:
-		vtop->c.i = vtop->c.i != 0;
-	    case VT_BYTE:
 		*(char *)ptr |= vtop->c.i;
-		break;
-	    case VT_SHORT:
-		*(short *)ptr |= vtop->c.i;
-		break;
-	    case VT_FLOAT:
-		*(float*)ptr = vtop->c.f;
-		break;
-	    case VT_DOUBLE:
-		*(double *)ptr = vtop->c.d;
-		break;
-	    case VT_LDOUBLE:
-                /* zero pad ten-byte LD */
-                memcpy(ptr, &vtop->c.ld, 10);
-		break;
-	    case VT_PTR:
-		{
-		    addr_t val = vtop->c.i;
-		    if (vtop->r & VT_SYM)
-		      greloc(sec, vtop->sym, c, R_DATA_PTR);
-		    *(addr_t *)ptr |= val;
-		    break;
-		}
-	    default:
-		{
-		    int val = vtop->c.i;
-		    if (vtop->r & VT_SYM)
-		      greloc(sec, vtop->sym, c, R_DATA_PTR);
-		    *(int *)ptr |= val;
-		    break;
-		}
-	    }
         vtop--;
     } else {
         vset(&dtype, VT_LOCAL|VT_LVAL, c);
