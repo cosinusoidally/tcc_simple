@@ -4616,102 +4616,18 @@ static int decl_designator(CType *type, Section *sec, unsigned long c,
 
     elem_size = 0;
     nb_elems = 1;
-    if (gnu_ext && (l = is_label()) != 0)
-        goto struct_field;
-    /* NOTE: we only support ranges for last designator */
-    while (nb_elems == 1 && (tok == '[' || tok == '.')) {
-        if (tok == '[') {
-            if (!(type->t & VT_ARRAY))
-                expect("array type");
-            next();
-            index = index_last = expr_const();
-            if (tok == TOK_DOTS && gnu_ext) {
-                next();
-                index_last = expr_const();
-            }
-            skip(']');
-            s = type->ref;
-	    if (index < 0 || (s->c >= 0 && index_last >= s->c) ||
-		index_last < index)
-	        tcc_error("invalid index");
-            if (cur_field)
-		(*cur_field)->c = index_last;
-            type = pointed_type(type);
-            elem_size = type_size(type, &align);
-            c += index * elem_size;
-            nb_elems = index_last - index + 1;
-        } else {
-            next();
-            l = tok;
-        struct_field:
-            next();
-            if ((type->t & VT_BTYPE) != VT_STRUCT)
-                expect("struct/union type");
-	    f = find_field(type, l);
-            if (!f)
-                expect("field");
-            if (cur_field)
-                *cur_field = f;
-	    type = &f->type;
-            c += f->c;
-        }
-        cur_field = NULL;
-    }
-    if (!cur_field) {
-        if (tok == '=') {
-            next();
-        } else if (!gnu_ext) {
-	    expect("=");
-        }
+
+    if (type->t & VT_ARRAY) {
+        index = (*cur_field)->c;
+        type = pointed_type(type);
+        c += index * type_size(type, &align);
     } else {
-        if (type->t & VT_ARRAY) {
-	    index = (*cur_field)->c;
-	    if (type->ref->c >= 0 && index >= type->ref->c)
-	        tcc_error("index too large");
-            type = pointed_type(type);
-            c += index * type_size(type, &align);
-        } else {
-            f = *cur_field;
-	    while (f && (f->v & SYM_FIRST_ANOM) && (f->type.t & VT_BITFIELD))
-	        *cur_field = f = f->next;
-            if (!f)
-                tcc_error("too many field init");
-	    type = &f->type;
-            c += f->c;
-        }
+        f = *cur_field;
+        type = &f->type;
+        c += f->c;
     }
-    /* must put zero in holes (note that doing it that way
-       ensures that it even works with designators) */
-    if (!size_only && c - corig > al)
-	init_putz(sec, corig + al, c - corig - al);
     decl_initializer(type, sec, c, 0, size_only);
 
-    /* XXX: make it more general */
-    if (!size_only && nb_elems > 1) {
-        unsigned long c_end;
-        uint8_t *src, *dst;
-        int i;
-
-        if (!sec) {
-	    vset(type, VT_LOCAL|VT_LVAL, c);
-	    for (i = 1; i < nb_elems; i++) {
-		vset(type, VT_LOCAL|VT_LVAL, c + elem_size * i);
-		vswap();
-		vstore();
-	    }
-	    vpop();
-        } else if (!NODATA_WANTED) {
-	    c_end = c + nb_elems * elem_size;
-	    if (c_end > sec->data_allocated)
-	        section_realloc(sec, c_end);
-	    src = sec->data + c;
-	    dst = src;
-	    for(i = 1; i < nb_elems; i++) {
-		dst += elem_size;
-		memcpy(dst, src, elem_size);
-	    }
-	}
-    }
     c += nb_elems * type_size(type, &align);
     if (c - corig > al)
       al = c - corig;
