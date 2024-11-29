@@ -27,9 +27,7 @@
 ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
 ST_DATA Section *common_section;
 ST_DATA Section *cur_text_section; /* current section where function code is generated */
-#ifdef CONFIG_TCC_ASM
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
-#endif
 /* symbol sections */
 ST_DATA Section *symtab_section;
 /* debug sections */
@@ -106,9 +104,6 @@ ST_FUNC void tccelf_begin_file(TCCState *s1)
     }
     /* disable symbol hashing during compilation */
     s = s1->symtab, s->reloc = s->hash, s->hash = NULL;
-#if defined TCC_TARGET_X86_64 && defined TCC_TARGET_PE
-    s1->uw_sym = 0;
-#endif
 }
 
 /* At the end of compilation, convert any UNDEF syms to global, and merge
@@ -446,12 +441,6 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     rel = section_ptr_add(sr, sizeof(ElfW_Rel));
     rel->r_offset = offset;
     rel->r_info = ELFW(R_INFO)(symbol, type);
-#if SHT_RELX == SHT_RELA
-    rel->r_addend = addend;
-#else
-    if (addend)
-        tcc_error("non-zero addend on REL architecture");
-#endif
 }
 
 ST_FUNC void put_elf_reloc(Section *symtab, Section *s, unsigned long offset,
