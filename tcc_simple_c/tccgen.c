@@ -2747,20 +2747,6 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
         gen_assign_cast(&dtype);
         bt = type->t & VT_BTYPE;
 
-        if ((vtop->r & VT_SYM)
-            && bt != VT_PTR
-            && bt != VT_FUNC
-            && (bt != (PTR_SIZE == 8 ? VT_LLONG : VT_INT)
-                || (type->t & VT_BITFIELD))
-            && !((vtop->r & VT_CONST) && vtop->sym->v >= SYM_FIRST_ANOM)
-            )
-            tcc_error("initializer element is not computable at load time");
-
-        if (NODATA_WANTED) {
-            vtop--;
-            return;
-        }
-
 	size = type_size(type, &align);
 	section_reserve(sec, c + size);
         ptr = sec->data + c;
