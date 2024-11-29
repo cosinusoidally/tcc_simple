@@ -2426,10 +2426,7 @@ do_decl:
             c = 0;
             flexible = 0;
             while (tok != '}') {
-                if (!parse_btype(&btype, &ad1)) {
-		    skip(';');
-		    continue;
-		}
+                parse_btype(&btype, &ad1);
                 while (1) {
                     bit_size = -1;
                     v = 0;
@@ -2437,17 +2434,6 @@ do_decl:
                     if (tok != ':') {
 			if (tok != ';')
                             type_decl(&type1, &ad1, &v, TYPE_DIRECT);
-                        if (v == 0) {
-                    	    if ((type1.t & VT_BTYPE) != VT_STRUCT)
-                        	expect("identifier");
-                    	    else {
-				int v = btype.ref->v;
-				if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
-				    if (tcc_state->ms_extensions == 0)
-                        		expect("identifier");
-				}
-                    	    }
-                        }
                         if (type_size(&type1, &align) < 0) {
 			    if ((u == VT_STRUCT) && (type1.t & VT_ARRAY) && c)
 			        flexible = 1;
@@ -2461,15 +2447,9 @@ do_decl:
                     if (bit_size >= 0) {
                         bt = type1.t & VT_BTYPE;
                         bsize = size * 8;
-                        if (bit_size == bsize
-                                    && !ad.a.packed && !ad1.a.packed) {
-                            /* no need for bit fields */
-                            ;
-                        } else {
-                            type1.t = (type1.t & ~VT_STRUCT_MASK)
-                                | VT_BITFIELD
-                                | (bit_size << (VT_STRUCT_SHIFT + 6));
-                        }
+                        type1.t = (type1.t & ~VT_STRUCT_MASK)
+                            | VT_BITFIELD
+                            | (bit_size << (VT_STRUCT_SHIFT + 6));
                     }
                     if (v != 0 || (type1.t & VT_BTYPE) == VT_STRUCT) {
                         /* Remember we've seen a real field to check
@@ -2503,14 +2483,7 @@ do_decl:
 
 static void sym_to_attr(AttributeDef *ad, Sym *s)
 {
-    if (s->a.aligned && 0 == ad->a.aligned)
-        ad->a.aligned = s->a.aligned;
-    if (s->f.func_call && 0 == ad->f.func_call)
-        ad->f.func_call = s->f.func_call;
-    if (s->f.func_type && 0 == ad->f.func_type)
-        ad->f.func_type = s->f.func_type;
-    if (s->a.packed)
-        ad->a.packed = 1;
+    ad->f.func_type = s->f.func_type;
 }
 
 /* Add type qualifiers to a type. If the type is an array then the qualifiers
