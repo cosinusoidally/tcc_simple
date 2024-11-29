@@ -756,13 +756,6 @@ ST_FUNC void label_pop(Sym **ptop, Sym *slast, int keep)
         *ptop = slast;
 }
 
-/* eval an expression for #if/#elif */
-static int expr_preprocess(void)
-{
-exit(1);
-}
-
-
 /* parse after #define */
 ST_FUNC void parse_define(void)
 {
@@ -1706,11 +1699,6 @@ ST_FUNC void next_nomacro(void)
     } while (tok < 256 && (isidnum_table[tok - CH_EOF] & IS_SPC));
 }
  
-static int paste_tokens(int t1, CValue *v1, int t2, CValue *v2)
-{
-exit(1);
-}
-
 /* return next token with macro substitution */
 ST_FUNC void next(void)
 {
@@ -1799,14 +1787,6 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
 
     parse_flags = is_asm ? PARSE_FLAG_ASM_FILE : 0;
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
-}
-
-/* cleanup from error/setjmp */
-ST_FUNC void preprocess_end(TCCState *s1)
-{
-    while (macro_stack)
-        end_macro();
-    macro_ptr = NULL;
 }
 
 ST_FUNC void tccpp_new(TCCState *s)
