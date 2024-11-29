@@ -791,9 +791,6 @@ ST_FUNC int gv(int rc)
 {
     int r, bit_pos, bit_size, size, align, rc2;
 
-    /* NOTE: get_reg can modify vstack[] */
-    if (vtop->type.t & VT_BITFIELD) {
-    } else {
         r = vtop->r & VT_VALMASK;
         rc2 = (rc & RC_FLOAT) ? RC_FLOAT : RC_INT;
         if (rc == RC_IRET)
@@ -815,13 +812,6 @@ ST_FUNC int gv(int rc)
                    because of possible cast */
                 t = vtop->type.t;
                 t1 = t;
-                /* compute memory access type */
-                if (vtop->r & VT_LVAL_BYTE)
-                    t = VT_BYTE;
-                else if (vtop->r & VT_LVAL_SHORT)
-                    t = VT_SHORT;
-                if (vtop->r & VT_LVAL_UNSIGNED)
-                    t |= VT_UNSIGNED;
                 vtop->type.t = t;
                 load(r, vtop);
                 /* restore wanted type */
@@ -832,40 +822,13 @@ ST_FUNC int gv(int rc)
             }
         }
         vtop->r = r;
-    }
     return r;
 }
 
 /* generate vtop[-1] and vtop[0] in resp. classes rc1 and rc2 */
 ST_FUNC void gv2(int rc1, int rc2)
 {
-    int v;
-
-    /* generate more generic register first. But VT_JMP or VT_CMP
-       values must be generated first in all cases to avoid possible
-       reload errors */
-    v = vtop[0].r & VT_VALMASK;
-    if (v != VT_CMP && (v & ~1) != VT_JMP && rc1 <= rc2) {
-        vswap();
-        gv(rc1);
-        vswap();
-        gv(rc2);
-        /* test if reload is needed for first register */
-        if ((vtop[-1].r & VT_VALMASK) >= VT_CONST) {
-            vswap();
-            gv(rc1);
-            vswap();
-        }
-    } else {
-        gv(rc2);
-        vswap();
-        gv(rc1);
-        vswap();
-        /* test if reload is needed for first register */
-        if ((vtop[0].r & VT_VALMASK) >= VT_CONST) {
-            gv(rc2);
-        }
-    }
+exit(1);
 }
 
 /* wrapper around RC_FRET to return a register by type */
