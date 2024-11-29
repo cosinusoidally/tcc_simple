@@ -2751,72 +2751,6 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 	section_reserve(sec, c + size);
         ptr = sec->data + c;
 
-        /* XXX: make code faster ? */
-	if ((vtop->r & (VT_SYM|VT_CONST)) == (VT_SYM|VT_CONST) &&
-	    vtop->sym->v >= SYM_FIRST_ANOM &&
-	    /* XXX This rejects compound literals like
-	       '(void *){ptr}'.  The problem is that '&sym' is
-	       represented the same way, which would be ruled out
-	       by the SYM_FIRST_ANOM check above, but also '"string"'
-	       in 'char *p = "string"' is represented the same
-	       with the type being VT_PTR and the symbol being an
-	       anonymous one.  That is, there's no difference in vtop
-	       between '(void *){x}' and '&(void *){x}'.  Ignore
-	       pointer typed entities here.  Hopefully no real code
-	       will every use compound literals with scalar type.  */
-	    (vtop->type.t & VT_BTYPE) != VT_PTR) {
-	    /* These come from compound literals, memcpy stuff over.  */
-	    Section *ssec;
-	    ElfSym *esym;
-	    ElfW_Rel *rel;
-	    esym = elfsym(vtop->sym);
-	    ssec = tcc_state->sections[esym->st_shndx];
-	    memmove (ptr, ssec->data + esym->st_value, size);
-	    if (ssec->reloc) {
-		/* We need to copy over all memory contents, and that
-		   includes relocations.  Use the fact that relocs are
-		   created it order, so look from the end of relocs
-		   until we hit one before the copied region.  */
-		int num_relocs = ssec->reloc->data_offset / sizeof(*rel);
-		rel = (ElfW_Rel*)(ssec->reloc->data + ssec->reloc->data_offset);
-		while (num_relocs--) {
-		    rel--;
-		    if (rel->r_offset >= esym->st_value + size)
-		      continue;
-		    if (rel->r_offset < esym->st_value)
-		      break;
-		    /* Note: if the same fields are initialized multiple
-		       times (possible with designators) then we possibly
-		       add multiple relocations for the same offset here.
-		       That would lead to wrong code, the last reloc needs
-		       to win.  We clean this up later after the whole
-		       initializer is parsed.  */
-		    put_elf_reloca(symtab_section, sec,
-				   c + rel->r_offset - esym->st_value,
-				   ELFW(R_TYPE)(rel->r_info),
-				   ELFW(R_SYM)(rel->r_info),
-				   0
-				  );
-		}
-	    }
-	} else {
-            if (type->t & VT_BITFIELD) {
-                int bit_pos, bit_size, bits, n;
-                unsigned char *p, v, m;
-                bit_pos = BIT_POS(vtop->type.t);
-                bit_size = BIT_SIZE(vtop->type.t);
-                p = (unsigned char*)ptr + (bit_pos >> 3);
-                bit_pos &= 7, bits = 0;
-                while (bit_size) {
-                    n = 8 - bit_pos;
-                    if (n > bit_size)
-                        n = bit_size;
-                    v = vtop->c.i >> bits << bit_pos;
-                    m = ((1 << n) - 1) << bit_pos;
-                    *p = (*p & ~m) | (v & m);
-                    bits += n, bit_size -= n, bit_pos = 0, ++p;
-                }
-            } else
             switch(bt) {
 		/* XXX: when cross-compiling we assume that each type has the
 		   same representation on host and target, which is likely to
@@ -2856,7 +2790,6 @@ static void init_putv(CType *type, Section *sec, unsigned long c)
 		    break;
 		}
 	    }
-	}
         vtop--;
     } else {
         vset(&dtype, VT_LOCAL|VT_LVAL, c);
