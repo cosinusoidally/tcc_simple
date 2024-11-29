@@ -4632,38 +4632,6 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
                 gen_function(sym);
                 break;
             } else {
-		if (l == VT_CMP) {
-		    /* find parameter in function parameter list */
-		    for (sym = func_sym->next; sym; sym = sym->next)
-			if ((sym->v & ~SYM_FIELD) == v)
-			    goto found;
-		    tcc_error("declaration for parameter '%s' but no such parameter",
-			      get_tok_str(v, NULL));
-found:
-		    if (type.t & VT_STORAGE) /* 'register' is okay */
-		        tcc_error("storage class specified for '%s'",
-				  get_tok_str(v, NULL));
-		    if (sym->type.t != VT_VOID)
-		        tcc_error("redefinition of parameter '%s'",
-				  get_tok_str(v, NULL));
-		    convert_parameter_type(&type);
-		    sym->type = type;
-		} else if (type.t & VT_TYPEDEF) {
-                    /* save typedefed type  */
-                    /* XXX: test storage specifiers ? */
-                    sym = sym_find(v);
-                    if (sym && sym->sym_scope == local_scope) {
-                        if (!is_compatible_types(&sym->type, &type)
-                            || !(sym->type.t & VT_TYPEDEF))
-                            tcc_error("incompatible redefinition of '%s'",
-                                get_tok_str(v, NULL));
-                        sym->type = type;
-                    } else {
-                        sym = sym_push(v, &type, 0, 0);
-                    }
-                    sym->a = ad.a;
-                    sym->f = ad.f;
-                } else {
                     r = 0;
                     if ((type.t & VT_BTYPE) == VT_FUNC) {
                         /* external function definition */
@@ -4674,8 +4642,6 @@ found:
                         r |= lvalue_type(type.t);
                     }
                     has_init = (tok == '=');
-                    if (has_init && (type.t & VT_VLA))
-                        tcc_error("variable length array cannot be initialized");
                     if (((type.t & VT_EXTERN) && (!has_init || l != VT_CONST)) ||
 			((type.t & VT_BTYPE) == VT_FUNC) ||
                         ((type.t & VT_ARRAY) && (type.t & VT_STATIC) &&
@@ -4686,40 +4652,18 @@ found:
                            extern */
                         type.t |= VT_EXTERN;
                         sym = external_sym(v, &type, r, &ad);
-                        if (ad.alias_target) {
-                            ElfSym *esym;
-                            Sym *alias_target;
-                            alias_target = sym_find(ad.alias_target);
-                            esym = elfsym(alias_target);
-                            if (!esym)
-                                tcc_error("unsupported forward __alias__ attribute");
-                            /* Local statics have a scope until now (for
-                               warnings), remove it here.  */
-                            sym->sym_scope = 0;
-                            put_extern_sym2(sym, esym->st_shndx, esym->st_value, esym->st_size, 0);
-                        }
                     } else {
-                        if (type.t & VT_STATIC)
-                            r |= VT_CONST;
-                        else
-                            r |= l;
-                        if (has_init)
-                            next();
+                        r |= l;
                         else if (l == VT_CONST)
                             /* uninitialized global variables may be overridden */
                             type.t |= VT_EXTERN;
                         decl_initializer_alloc(&type, &ad, r, has_init, v, l);
                     }
-                }
                 if (tok != ',') {
-                    if (is_for_loop_init)
-                        return 1;
                     skip(';');
                     break;
                 }
-                next();
             }
-            ad.a.aligned = 0;
         }
     }
     return 0;
