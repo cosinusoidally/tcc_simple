@@ -210,9 +210,6 @@ ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
 {
     int c = 0;
 
-    if (nocode_wanted && s == cur_text_section)
-        return;
-
     if (sym) {
         if (0 == sym->c)
             put_extern_sym(sym, NULL, 0, 0);
@@ -285,23 +282,13 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c)
    of the symbol stack */
 ST_FUNC Sym *sym_find2(Sym *s, int v)
 {
-    while (s) {
-        if (s->v == v)
-            return s;
-        else if (s->v == -1)
-            return NULL;
-        s = s->prev;
-    }
-    return NULL;
+exit(1);
 }
 
 /* structure lookup */
 ST_INLN Sym *struct_find(int v)
 {
-    v -= TOK_IDENT;
-    if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
-        return NULL;
-    return table_ident[v]->sym_struct;
+exit(1);
 }
 
 /* find an identifier */
@@ -331,10 +318,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c)
     if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
         /* record symbol in token array */
         ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
-        if (v & SYM_STRUCT)
-            ps = &ts->sym_struct;
-        else
-            ps = &ts->sym_identifier;
+        ps = &ts->sym_identifier;
         s->prev_tok = *ps;
         *ps = s;
         s->sym_scope = local_scope;
@@ -376,10 +360,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep)
         /* XXX: simplify */
         if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
             ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
-            if (v & SYM_STRUCT)
-                ps = &ts->sym_struct;
-            else
-                ps = &ts->sym_identifier;
+            ps = &ts->sym_identifier;
             *ps = s->prev_tok;
         }
 	if (!keep)
@@ -443,9 +424,6 @@ ST_FUNC void vpop(void)
     int v;
     v = vtop->r & VT_VALMASK;
     /* for x86, we need to pop the FP stack */
-    if (v == TREG_ST0) {
-        o(0xd8dd); /* fstp %st(0) */
-    } else
     if (v == VT_JMP || v == VT_JMPI) {
         /* need to put correct jump if && or || without test */
         gsym(vtop->c.i);
@@ -456,7 +434,7 @@ ST_FUNC void vpop(void)
 /* push constant of type "type" with useless value */
 ST_FUNC void vpush(CType *type)
 {
-    vset(type, VT_CONST, 0);
+exit(1);
 }
 
 /* push integer constant */
@@ -470,9 +448,7 @@ ST_FUNC void vpushi(int v)
 /* push a pointer sized constant */
 static void vpushs(addr_t v)
 {
-  CValue cval;
-  cval.i = v;
-  vsetc(&size_type, VT_CONST, &cval);
+exit(1);
 }
 
 ST_FUNC void vset(CType *type, int r, int v)
@@ -485,21 +461,17 @@ ST_FUNC void vset(CType *type, int r, int v)
 
 static void vseti(int r, int v)
 {
-    CType type;
-    type.t = VT_INT;
-    type.ref = NULL;
-    vset(&type, r, v);
+exit(1);
 }
 
 ST_FUNC void vpushv(SValue *v)
 {
-    vtop++;
-    *vtop = *v;
+exit(1);
 }
 
 static void vdup(void)
 {
-    vpushv(vtop);
+exit(1);
 }
 
 /* rotate n first stack elements to the bottom
@@ -507,13 +479,7 @@ static void vdup(void)
 */
 ST_FUNC void vrotb(int n)
 {
-    int i;
-    SValue tmp;
-
-    tmp = vtop[-n + 1];
-    for(i=-n+1;i!=0;i++)
-        vtop[i] = vtop[i+1];
-    vtop[0] = tmp;
+exit(1);
 }
 
 /* rotate the n elements before entry e towards the top
@@ -521,13 +487,7 @@ ST_FUNC void vrotb(int n)
  */
 ST_FUNC void vrote(SValue *e, int n)
 {
-    int i;
-    SValue tmp;
-
-    tmp = *e;
-    for(i = 0;i < n - 1; i++)
-        e[-i] = e[-i - 1];
-    e[-n + 1] = tmp;
+exit(1);
 }
 
 /* rotate n first stack elements to the top
@@ -535,7 +495,7 @@ ST_FUNC void vrote(SValue *e, int n)
  */
 ST_FUNC void vrott(int n)
 {
-    vrote(vtop, n);
+exit(1);
 }
 
 /* push a symbol value of TYPE */
