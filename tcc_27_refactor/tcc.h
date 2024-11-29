@@ -1223,9 +1223,5 @@ ST_FUNC void asm_clobber(uint8_t *clobber_regs, const char *str);
 
 /********************************************************/
 #undef ST_DATA
-#if ONE_SOURCE
 #define ST_DATA static
-#else
-#define ST_DATA
-#endif
 /********************************************************/
