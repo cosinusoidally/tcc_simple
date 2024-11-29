@@ -620,8 +620,6 @@ ST_FUNC void save_reg_upstack(int r, int n)
 
     if ((r &= VT_VALMASK) >= VT_CONST)
         return;
-    if (nocode_wanted)
-        return;
 
     /* modify all stack values */
     saved = 0;
@@ -645,27 +643,11 @@ ST_FUNC void save_reg_upstack(int r, int n)
                 sv.c.i = loc;
                 store(r, &sv);
 
-                /* x86 specific: need to pop fp register ST0 if saved */
-                if (r == TREG_ST0) {
-                    o(0xd8dd); /* fstp %st(0) */
-                }
-                /* special long long case */
-                if ((type->t & VT_BTYPE) == VT_LLONG) {
-                    sv.c.i += 4;
-                    store(p->r2, &sv);
-                }
                 l = loc;
                 saved = 1;
             }
             /* mark that stack entry as being saved on the stack */
-            if (p->r & VT_LVAL) {
-                /* also clear the bounded flag because the
-                   relocation address of the function was stored in
-                   p->c.i */
-                p->r = (p->r & ~(VT_VALMASK | VT_BOUNDED)) | VT_LLOCAL;
-            } else {
-                p->r = lvalue_type(p->type.t) | VT_LOCAL;
-            }
+            p->r = lvalue_type(p->type.t) | VT_LOCAL;
             p->r2 = VT_CONST;
             p->c.i = l;
         }
@@ -681,8 +663,6 @@ ST_FUNC int get_reg(int rc)
     /* find a free register */
     for(r=0;r<NB_REGS;r++) {
         if (reg_classes[r] & rc) {
-            if (nocode_wanted)
-                return r;
             for(p=vstack;p<=vtop;p++) {
                 if ((p->r & VT_VALMASK) == r ||
                     (p->r2 & VT_VALMASK) == r)
@@ -729,19 +709,12 @@ static void move_reg(int r, int s, int t)
 /* get address of vtop (vtop MUST BE an lvalue) */
 ST_FUNC void gaddrof(void)
 {
-    vtop->r &= ~VT_LVAL;
-    /* tricky: if saved lvalue, then we can go back to lvalue */
-    if ((vtop->r & VT_VALMASK) == VT_LLOCAL)
-        vtop->r = (vtop->r & ~(VT_VALMASK | VT_LVAL_TYPE)) | VT_LOCAL | VT_LVAL;
-
-
+exit(1);
 }
 
 static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
 {
-    int t;
-    t = sv->type.ref->auxtype;
-    return t;
+exit(1);
 }
 
 /* store vtop a register belonging to class 'rc'. lvalues are
@@ -806,31 +779,13 @@ static int reg_fret(int t)
 /* expand 64bit on stack in two ints */
 static void lexpand(void)
 {
-    int u, v;
-    u = vtop->type.t & (VT_DEFSIGN | VT_UNSIGNED);
-    v = vtop->r & (VT_VALMASK | VT_LVAL);
-    if (v == VT_CONST) {
-        vdup();
-        vtop[0].c.i >>= 32;
-    } else if (v == (VT_LVAL|VT_CONST) || v == (VT_LVAL|VT_LOCAL)) {
-        vdup();
-        vtop[0].c.i += 4;
-    } else {
-        gv(RC_INT);
-        vdup();
-        vtop[0].r = vtop[-1].r2;
-        vtop[0].r2 = vtop[-1].r2 = VT_CONST;
-    }
-    vtop[0].type.t = vtop[-1].type.t = VT_INT | u;
+exit(1);
 }
 
 /* build a long long from two ints */
 static void lbuild(int t)
 {
-    gv2(RC_INT, RC_INT);
-    vtop[-1].r2 = vtop[0].r;
-    vtop[-1].type.t = t;
-    vpop();
+exit(1);
 }
 
 /* convert stack entry to register and duplicate its value in another
