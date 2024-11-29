@@ -955,97 +955,19 @@ static void gen_cast(CType *type)
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
-                if (sbt & VT_UNSIGNED)
-                    vtop->c.i = (uint32_t)vtop->c.i;
-                else if (sbt != VT_LLONG)
-                    vtop->c.i = ((uint32_t)vtop->c.i |
-                                  -(vtop->c.i & 0x80000000));
+            if (sbt & VT_UNSIGNED)
+                vtop->c.i = (uint32_t)vtop->c.i;
+            else if (sbt != VT_LLONG)
+                vtop->c.i = ((uint32_t)vtop->c.i |
+                              -(vtop->c.i & 0x80000000));
 
-                if (dbt != VT_LLONG) {
-                    uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
-                                  (dbt & VT_BTYPE) == VT_SHORT ? 0xffff :
-                                  0xffffffff);
-                    vtop->c.i &= m;
-                    if (!(dbt & VT_UNSIGNED))
-                        vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
-                }
-        } else {
-            /* non constant case: generate code */
-            if (sf && df) {
-                /* convert from fp to fp */
-                gen_cvt_ftof(dbt);
-            } else if (df) {
-                /* convert int to fp */
-                gen_cvt_itof1(dbt);
-            } else if (sf) {
-                /* convert fp to int */
-                if (dbt == VT_BOOL) {
-                     vpushi(0);
-                     gen_op(TOK_NE);
-                } else {
-                    /* we handle char/short/etc... with generic code */
-                    if (dbt != (VT_INT | VT_UNSIGNED) &&
-                        dbt != (VT_LLONG | VT_UNSIGNED) &&
-                        dbt != VT_LLONG)
-                        dbt = VT_INT;
-                    gen_cvt_ftoi1(dbt);
-                    if (dbt == VT_INT && (type->t & (VT_BTYPE | VT_UNSIGNED)) != dbt) {
-                        /* additional cast for char/short... */
-                        vtop->type.t = dbt;
-                        gen_cast(type);
-                    }
-                }
-            } else if ((dbt & VT_BTYPE) == VT_LLONG) {
-                if ((sbt & VT_BTYPE) != VT_LLONG) {
-                    /* scalar to long long */
-                    /* machine independent conversion */
-                    gv(RC_INT);
-                    /* generate high word */
-                    if (sbt == (VT_INT | VT_UNSIGNED)) {
-                        vpushi(0);
-                        gv(RC_INT);
-                    } else {
-                        if (sbt == VT_PTR) {
-                            /* cast from pointer to int before we apply
-                               shift operation, which pointers don't support*/
-                            gen_cast_s(VT_INT);
-                        }
-                        gv_dup();
-                        vpushi(31);
-                        gen_op(TOK_SAR);
-                    }
-                    /* patch second register */
-                    vtop[-1].r2 = vtop->r;
-                    vpop();
-                }
-            } else if (dbt == VT_BOOL) {
-                /* scalar to bool */
-                vpushi(0);
-                gen_op(TOK_NE);
-            } else if ((dbt & VT_BTYPE) == VT_BYTE || 
-                       (dbt & VT_BTYPE) == VT_SHORT) {
-                if (sbt == VT_PTR) {
-                    vtop->type.t = VT_INT;
-                    tcc_warning("nonportable conversion from pointer to char/short");
-                }
-                force_charshort_cast(dbt);
-            } else if ((dbt & VT_BTYPE) == VT_INT) {
-                /* scalar to int */
-                if ((sbt & VT_BTYPE) == VT_LLONG) {
-                    /* from long long: just take low order word */
-                    lexpand();
-                    vpop();
-                } 
-                /* if lvalue and single word type, nothing to do because
-                   the lvalue already contains the real type size (see
-                   VT_LVAL_xxx constants) */
+                uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
+                              (dbt & VT_BTYPE) == VT_SHORT ? 0xffff :
+                              0xffffffff);
+                vtop->c.i &= m;
+                if (!(dbt & VT_UNSIGNED))
+                    vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
             }
-        }
-    } else if ((dbt & VT_BTYPE) == VT_PTR && !(vtop->r & VT_LVAL)) {
-        /* if we are casting between pointer types,
-           we must update the VT_LVAL_xxx size */
-        vtop->r = (vtop->r & ~VT_LVAL_TYPE)
-                  | (lvalue_type(type->ref->type.t) & VT_LVAL_TYPE);
     }
     vtop->type = *type;
 }
