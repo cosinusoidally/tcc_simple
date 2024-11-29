@@ -33,6 +33,7 @@ ln -s ../tcc_27/libc_boot4.c libc_boot4.c
 ln -s ../tcc_27/libc_static.c libc_static.c
 ln -s ../tcc_27/tcc.c tcc.c
 ln -s ../M2_simple_asm.c M2_simple_asm.c
+ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 mkdir lib
 cd lib
 ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
@@ -48,6 +49,7 @@ cd ..
 ./tcc_27_refactor -c libc_boot4.c -o libc_boot4.o
 ./tcc_27_refactor -c libc_static.c -o libc_static.o
 ./tcc_27_refactor -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./tcc_27_refactor -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
 
 cd ..
 
