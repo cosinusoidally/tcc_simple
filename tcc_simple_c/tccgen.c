@@ -1046,37 +1046,7 @@ return 1;
  */
 static int compare_types(CType *type1, CType *type2, int unqualified)
 {
-    int bt1, t1, t2;
-
-    t1 = type1->t & VT_TYPE;
-    t2 = type2->t & VT_TYPE;
-    if (unqualified) {
-        /* strip qualifiers before comparing */
-        t1 &= ~(VT_CONSTANT | VT_VOLATILE);
-        t2 &= ~(VT_CONSTANT | VT_VOLATILE);
-    }
-
-    /* Default Vs explicit signedness only matters for char */
-    if ((t1 & VT_BTYPE) != VT_BYTE) {
-        t1 &= ~VT_DEFSIGN;
-        t2 &= ~VT_DEFSIGN;
-    }
-    /* XXX: bitfields ? */
-    if (t1 != t2)
-        return 0;
-    /* test more complicated cases */
-    bt1 = t1 & VT_BTYPE;
-    if (bt1 == VT_PTR) {
-        type1 = pointed_type(type1);
-        type2 = pointed_type(type2);
-        return is_compatible_types(type1, type2);
-    } else if (bt1 == VT_STRUCT) {
-        return (type1->ref == type2->ref);
-    } else if (bt1 == VT_FUNC) {
-        return is_compatible_func(type1, type2);
-    } else {
-        return 1;
-    }
+exit(1);
 }
 
 /* return true if type1 and type2 are exactly the same (including
@@ -1108,80 +1078,6 @@ exit(1);
    casts if needed. */
 static void gen_assign_cast(CType *dt)
 {
-    CType *st, *type1, *type2;
-    char buf1[256], buf2[256];
-    int dbt, sbt;
-
-    st = &vtop->type; /* source type */
-    dbt = dt->t & VT_BTYPE;
-    sbt = st->t & VT_BTYPE;
-    if (dt->t & VT_CONSTANT)
-        tcc_warning("assignment of read-only location");
-    switch(dbt) {
-    case VT_PTR:
-        /* special cases for pointers */
-        /* '0' can also be a pointer */
-        if (is_null_pointer(vtop))
-            goto type_ok;
-        /* accept implicit pointer to integer cast with warning */
-        if (is_integer_btype(sbt)) {
-            tcc_warning("assignment makes pointer from integer without a cast");
-            goto type_ok;
-        }
-        type1 = pointed_type(dt);
-        /* a function is implicitly a function pointer */
-        if (sbt == VT_FUNC) {
-            if ((type1->t & VT_BTYPE) != VT_VOID &&
-                !is_compatible_types(pointed_type(dt), st))
-                tcc_warning("assignment from incompatible pointer type");
-            goto type_ok;
-        }
-        if (sbt != VT_PTR)
-            goto error;
-        type2 = pointed_type(st);
-        if ((type1->t & VT_BTYPE) == VT_VOID || 
-            (type2->t & VT_BTYPE) == VT_VOID) {
-            /* void * can match anything */
-        } else {
-            //printf("types %08x %08x\n", type1->t, type2->t);
-            /* exact type match, except for qualifiers */
-            if (!is_compatible_unqualified_types(type1, type2)) {
-		/* Like GCC don't warn by default for merely changes
-		   in pointer target signedness.  Do warn for different
-		   base types, though, in particular for unsigned enums
-		   and signed int targets.  */
-		if ((type1->t & (VT_BTYPE|VT_LONG)) != (type2->t & (VT_BTYPE|VT_LONG))
-                    || IS_ENUM(type1->t) || IS_ENUM(type2->t)
-                    )
-		    tcc_warning("assignment from incompatible pointer type");
-	    }
-        }
-        /* check const and volatile */
-        if ((!(type1->t & VT_CONSTANT) && (type2->t & VT_CONSTANT)) ||
-            (!(type1->t & VT_VOLATILE) && (type2->t & VT_VOLATILE)))
-            tcc_warning("assignment discards qualifiers from pointer target type");
-        break;
-    case VT_BYTE:
-    case VT_SHORT:
-    case VT_INT:
-    case VT_LLONG:
-        if (sbt == VT_PTR || sbt == VT_FUNC) {
-            tcc_warning("assignment makes integer from pointer without a cast");
-        } else if (sbt == VT_STRUCT) {
-            goto case_VT_STRUCT;
-        }
-        /* XXX: more tests */
-        break;
-    case VT_STRUCT:
-    case_VT_STRUCT:
-        if (!is_compatible_unqualified_types(dt, st)) {
-        error:
-            type_to_str(buf1, sizeof(buf1), st, NULL);
-            type_to_str(buf2, sizeof(buf2), dt, NULL);
-        }
-        break;
-    }
- type_ok:
     gen_cast(dt);
 }
 
