@@ -77,7 +77,6 @@ static inline CType *pointed_type(CType *type);
 static int is_compatible_types(CType *type1, CType *type2);
 static int parse_btype(CType *type, AttributeDef *ad);
 static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td);
-static void parse_expr_type(CType *type);
 static void init_putv(CType *type, Section *sec, unsigned long c);
 static void decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
@@ -1826,23 +1825,6 @@ static void gfunc_param_typed(Sym *func, Sym *arg)
     }
 }
 
-/* parse an expression of the form '(type)' or '(expr)' and return its
-   type */
-static void parse_expr_type(CType *type)
-{
-exit(1);
-}
-
-static void parse_type(CType *type)
-{
-exit(1);
-}
-
-static void parse_builtin_params(int nc, const char *args)
-{
-exit(1);
-}
-
 ST_FUNC void unary(void)
 {
     int n, t, align, size, r, sizeof_caller;
@@ -1853,9 +1835,6 @@ ST_FUNC void unary(void)
     sizeof_caller = in_sizeof;
     in_sizeof = 0;
     type.ref = NULL;
-    /* XXX: GCC 2.95.3 does not generate a table although it should be
-       better here */
- tok_next:
     switch(tok) {
     case TOK_LCHAR:
     case TOK_CINT:
