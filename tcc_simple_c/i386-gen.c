@@ -313,8 +313,7 @@ ST_FUNC void gen_opi(int op)
 {
     int r, fr, opc, c;
 
-    switch(op) {
-    gen_op8:
+        opc = 7;
         if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
             /* constant case */
             vswap();
@@ -330,11 +329,6 @@ ST_FUNC void gen_opi(int op)
             vtop->r = VT_CMP;
             vtop->c.i = op;
         }
-        break;
-    default:
-        opc = 7;
-        goto gen_op8;
-    }
 }
 
 /* end of X86 code generator */
