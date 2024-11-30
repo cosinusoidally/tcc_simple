@@ -90,11 +90,6 @@ static int gvtst(int inv, int t);
 static void skip_or_save_block(TokenString **str);
 static void gv_dup(void);
 
-ST_INLN int is_float(int t)
-{
-return 0;
-}
-
 /* ------------------------------------------------------------------------- */
 ST_FUNC int tccgen_compile(TCCState *s1)
 {
