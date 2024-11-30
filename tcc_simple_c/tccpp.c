@@ -698,225 +698,92 @@ static void parse_number(const char *p)
         *q++ = ch;
         ch = *p++;
     }
-    if (ch == '.' ||
-        ((ch == 'e' || ch == 'E') && b == 10) ||
-        ((ch == 'p' || ch == 'P') && (b == 16 || b == 2))) {
-        if (b != 10) {
-            /* NOTE: strtox should support that for hexa numbers, but
-               non ISOC99 libcs do not support it, so we prefer to do
-               it by hand */
-            /* hexadecimal or binary floats */
-            /* XXX: handle overflows */
-            *q = '\0';
-            if (b == 16)
-                shift = 4;
-            else 
-                shift = 1;
-            bn_zero(bn);
-            q = token_buf;
-            while (1) {
-                t = *q++;
-                if (t == '\0') {
-                    break;
-                } else if (t >= 'a') {
-                    t = t - 'a' + 10;
-                } else if (t >= 'A') {
-                    t = t - 'A' + 10;
-                } else {
-                    t = t - '0';
-                }
-                bn_lshift(bn, shift, t);
-            }
-            frac_bits = 0;
-            if (ch == '.') {
-                ch = *p++;
-                while (1) {
-                    t = ch;
-                    if (t >= 'a' && t <= 'f') {
-                        t = t - 'a' + 10;
-                    } else if (t >= 'A' && t <= 'F') {
-                        t = t - 'A' + 10;
-                    } else if (t >= '0' && t <= '9') {
-                        t = t - '0';
-                    } else {
-                        break;
-                    }
-                    if (t >= b)
-                        tcc_error("invalid digit");
-                    bn_lshift(bn, shift, t);
-                    frac_bits += shift;
-                    ch = *p++;
-                }
-            }
-            if (ch != 'p' && ch != 'P')
-                expect("exponent");
+    unsigned long long n, n1;
+    int lcount, ucount, ov = 0;
+    const char *p1;
+
+    /* integer number */
+    *q = '\0';
+    q = token_buf;
+    if (b == 10 && *q == '0') {
+        b = 8;
+        q++;
+    }
+    n = 0;
+    while(1) {
+        t = *q++;
+        /* no need for checks except for base 10 / 8 errors */
+        if (t == '\0')
+            break;
+        else if (t >= 'a')
+            t = t - 'a' + 10;
+        else if (t >= 'A')
+            t = t - 'A' + 10;
+        else
+            t = t - '0';
+        if (t >= b)
+            tcc_error("invalid digit");
+        n1 = n;
+        n = n * b + t;
+        /* detect overflow */
+        if (n1 >= 0x1000000000000000ULL && n / b != n1)
+            ov = 1;
+    }
+
+    /* Determine the characteristics (unsigned and/or 64bit) the type of
+       the constant must have according to the constant suffix(es) */
+    lcount = ucount = 0;
+    p1 = p;
+    for(;;) {
+        t = toup(ch);
+        if (t == 'L') {
+            if (lcount >= 2)
+                tcc_error("three 'l's in integer constant");
+            if (lcount && *(p - 1) != ch)
+                tcc_error("incorrect integer suffix: %s", p1);
+            lcount++;
             ch = *p++;
-            s = 1;
-            exp_val = 0;
-            if (ch == '+') {
-                ch = *p++;
-            } else if (ch == '-') {
-                s = -1;
-                ch = *p++;
-            }
-            if (ch < '0' || ch > '9')
-                expect("exponent digits");
-            while (ch >= '0' && ch <= '9') {
-                exp_val = exp_val * 10 + ch - '0';
-                ch = *p++;
-            }
-            exp_val = exp_val * s;
-            
-            /* now we can generate the number */
-            /* XXX: should patch directly float number */
-            d = (double)bn[1] * 4294967296.0 + (double)bn[0];
-            d = ldexp(d, exp_val - frac_bits);
-            t = toup(ch);
-            if (t == 'F') {
-                ch = *p++;
-                tok = TOK_CFLOAT;
-                /* float : should handle overflow */
-                tokc.f = (float)d;
-            } else if (t == 'L') {
-                ch = *p++;
-                tok = TOK_CLDOUBLE;
-                /* XXX: not large enough */
-                tokc.ld = (long double)d;
-            } else {
-                tok = TOK_CDOUBLE;
-                tokc.d = d;
-            }
+        } else if (t == 'U') {
+            if (ucount >= 1)
+                tcc_error("two 'u's in integer constant");
+            ucount++;
+            ch = *p++;
         } else {
-            /* decimal floats */
-            if (ch == '.') {
-                *q++ = ch;
-                ch = *p++;
-            float_frac_parse:
-                while (ch >= '0' && ch <= '9') {
-                    *q++ = ch;
-                    ch = *p++;
-                }
-            }
-            if (ch == 'e' || ch == 'E') {
-                *q++ = ch;
-                ch = *p++;
-                if (ch == '-' || ch == '+') {
-                    *q++ = ch;
-                    ch = *p++;
-                }
-                if (ch < '0' || ch > '9')
-                    expect("exponent digits");
-                while (ch >= '0' && ch <= '9') {
-                    *q++ = ch;
-                    ch = *p++;
-                }
-            }
-            *q = '\0';
-            t = toup(ch);
-/* LJW HACK remove errno use
-            errno = 0;
-*/
-            if (t == 'F') {
-                ch = *p++;
-                tok = TOK_CFLOAT;
-                tokc.f = strtof(token_buf, NULL);
-            } else if (t == 'L') {
-                ch = *p++;
-                tok = TOK_CLDOUBLE;
-                tokc.ld = strtold(token_buf, NULL);
-            } else {
-                tok = TOK_CDOUBLE;
-                tokc.d = strtod(token_buf, NULL);
-            }
+            break;
         }
+    }
+
+    /* Determine if it needs 64 bits and/or unsigned in order to fit */
+    if (ucount == 0 && b == 10) {
+        if (lcount <= (LONG_SIZE == 4)) {
+            if (n >= 0x80000000U)
+                lcount = (LONG_SIZE == 4) + 1;
+        }
+        if (n >= 0x8000000000000000ULL)
+            ov = 1, ucount = 1;
     } else {
-        unsigned long long n, n1;
-        int lcount, ucount, ov = 0;
-        const char *p1;
-
-        /* integer number */
-        *q = '\0';
-        q = token_buf;
-        if (b == 10 && *q == '0') {
-            b = 8;
-            q++;
-        }
-        n = 0;
-        while(1) {
-            t = *q++;
-            /* no need for checks except for base 10 / 8 errors */
-            if (t == '\0')
-                break;
-            else if (t >= 'a')
-                t = t - 'a' + 10;
-            else if (t >= 'A')
-                t = t - 'A' + 10;
-            else
-                t = t - '0';
-            if (t >= b)
-                tcc_error("invalid digit");
-            n1 = n;
-            n = n * b + t;
-            /* detect overflow */
-            if (n1 >= 0x1000000000000000ULL && n / b != n1)
-                ov = 1;
-        }
-
-        /* Determine the characteristics (unsigned and/or 64bit) the type of
-           the constant must have according to the constant suffix(es) */
-        lcount = ucount = 0;
-        p1 = p;
-        for(;;) {
-            t = toup(ch);
-            if (t == 'L') {
-                if (lcount >= 2)
-                    tcc_error("three 'l's in integer constant");
-                if (lcount && *(p - 1) != ch)
-                    tcc_error("incorrect integer suffix: %s", p1);
-                lcount++;
-                ch = *p++;
-            } else if (t == 'U') {
-                if (ucount >= 1)
-                    tcc_error("two 'u's in integer constant");
-                ucount++;
-                ch = *p++;
-            } else {
-                break;
-            }
-        }
-
-        /* Determine if it needs 64 bits and/or unsigned in order to fit */
-        if (ucount == 0 && b == 10) {
-            if (lcount <= (LONG_SIZE == 4)) {
-                if (n >= 0x80000000U)
-                    lcount = (LONG_SIZE == 4) + 1;
-            }
-            if (n >= 0x8000000000000000ULL)
-                ov = 1, ucount = 1;
-        } else {
-            if (lcount <= (LONG_SIZE == 4)) {
-                if (n >= 0x100000000ULL)
-                    lcount = (LONG_SIZE == 4) + 1;
-                else if (n >= 0x80000000U)
-                    ucount = 1;
-            }
-            if (n >= 0x8000000000000000ULL)
+        if (lcount <= (LONG_SIZE == 4)) {
+            if (n >= 0x100000000ULL)
+                lcount = (LONG_SIZE == 4) + 1;
+            else if (n >= 0x80000000U)
                 ucount = 1;
         }
-
-        if (ov)
-            tcc_warning("integer constant overflow");
-
-        tok = TOK_CINT;
-	if (lcount) {
-            tok = TOK_CLONG;
-            if (lcount == 2)
-                tok = TOK_CLLONG;
-	}
-	if (ucount)
-	    ++tok; /* TOK_CU... */
-        tokc.i = n;
+        if (n >= 0x8000000000000000ULL)
+            ucount = 1;
     }
+
+    if (ov)
+        tcc_warning("integer constant overflow");
+
+    tok = TOK_CINT;
+        if (lcount) {
+        tok = TOK_CLONG;
+           if (lcount == 2)
+               tok = TOK_CLLONG;
+        }
+        if (ucount)
+            ++tok; /* TOK_CU... */
+        tokc.i = n;
     if (ch)
         tcc_error("invalid number\n");
 }
