@@ -1207,19 +1207,7 @@ static void gfunc_param_typed(Sym *func, Sym *arg)
     CType type;
 
     func_type = func->f.func_type;
-    if (func_type == FUNC_OLD ||
-        (func_type == FUNC_ELLIPSIS && arg == NULL)) {
-        /* default casting : only need to convert float to double */
-        if ((vtop->type.t & VT_BTYPE) == VT_FLOAT) {
-            gen_cast_s(VT_DOUBLE);
-        } else if (vtop->type.t & VT_BITFIELD) {
-            type.t = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
-	    type.ref = vtop->type.ref;
-            gen_cast(&type);
-        }
-    } else if (arg == NULL) {
-        tcc_error("too many arguments to function");
-    } else {
+    if (func_type != FUNC_OLD) {
         type = arg->type;
         type.t &= ~VT_CONSTANT; /* need to do that to avoid false warning */
         gen_assign_cast(&type);
