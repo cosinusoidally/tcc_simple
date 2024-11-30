@@ -18,15 +18,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* define to 1/0 to [not] have EBX as 4th register */
-#define USE_EBX 0
-
 ST_DATA const int reg_classes[NB_REGS] = {
     /* eax */ RC_INT | RC_EAX,
     /* ecx */ RC_INT | RC_ECX,
     /* edx */ RC_INT | RC_EDX,
-    /* ebx */ (RC_INT | RC_EBX) * USE_EBX,
-    /* st0 */ RC_FLOAT | RC_ST0,
 };
 
 static unsigned long func_sub_sp_offset;
@@ -206,7 +201,7 @@ ST_FUNC void gfunc_call(int nb_args)
     vtop--;
 }
 
-#define FUNC_PROLOG_SIZE (9 + USE_EBX)
+#define FUNC_PROLOG_SIZE 9
 
 /* generate function prolog of type 't' */
 ST_FUNC void gfunc_prolog(CType *func_type)
@@ -262,7 +257,6 @@ ST_FUNC void gfunc_epilog(void)
     o(0xe58955);  /* push %ebp, mov %esp, %ebp */
     o(0xec81);  /* sub esp, stacksize */
     gen_le32(v);
-    o(0x53 * USE_EBX); /* push ebx */
     ind = saved_ind;
 }
 
