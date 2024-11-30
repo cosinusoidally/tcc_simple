@@ -122,10 +122,6 @@ enum {
 #define ELF_START_ADDR 0x08048000
 #define ELF_PAGE_SIZE  0x1000
 
-#define PCRELATIVE_DLLPLT 0
-#define RELOCATE_DLLPLT 0
-
-
 /* -------------------------------------------- */
 
 # define ELFCLASSW ELFCLASS32
@@ -164,8 +160,6 @@ typedef struct TokenSym {
     int len;
     char str[1];
 } TokenSym;
-
-typedef int nwchar_t;
 
 typedef struct CString {
     int size; /* size in bytes */
