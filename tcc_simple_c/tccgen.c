@@ -1011,14 +1011,7 @@ exit(1);
 
 static void struct_add_offset (Sym *s, int offset)
 {
-    while ((s = s->next) != NULL) {
-	if ((s->v & SYM_FIELD) &&
-	    (s->type.t & VT_BTYPE) == VT_STRUCT &&
-	    (s->v & ~SYM_FIELD) >= SYM_FIRST_ANOM) {
-	    struct_add_offset(s->type.ref, offset);
-	} else
-	  s->c += offset;
-    }
+exit(1);
 }
 
 static void struct_layout(CType *type, AttributeDef *ad)
