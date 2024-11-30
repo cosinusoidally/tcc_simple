@@ -1065,16 +1065,10 @@ static int parse_btype(CType *type, AttributeDef *ad)
     while(1) {
         switch(tok) {
             /* basic types */
-        case TOK_CHAR:
-            u = VT_BYTE;
         basic_type:
             next();
         basic_type1:
-            if (u == VT_SHORT || u == VT_LONG) {
-                st = u;
-            } else {
-                bt = u;
-            }
+            bt = u;
             if (u != VT_INT)
                 t = (t & ~(VT_BTYPE|VT_LONG)) | u;
             typespec_found = 1;
@@ -1082,124 +1076,20 @@ static int parse_btype(CType *type, AttributeDef *ad)
         case TOK_VOID:
             u = VT_VOID;
             goto basic_type;
-        case TOK_SHORT:
-            u = VT_SHORT;
-            goto basic_type;
         case TOK_INT:
             u = VT_INT;
             goto basic_type;
-        case TOK_LONG:
-            if ((t & (VT_BTYPE|VT_LONG)) == VT_LONG) {
-                t = (t & ~(VT_BTYPE|VT_LONG)) | VT_LLONG;
-            } else {
-                u = VT_LONG;
-                goto basic_type;
-            }
-            next();
-            break;
-        case TOK_FLOAT:
-            u = VT_FLOAT;
-            goto basic_type;
-        case TOK_DOUBLE:
-            if ((t & (VT_BTYPE|VT_LONG)) == VT_LONG) {
-                t = (t & ~(VT_BTYPE|VT_LONG)) | VT_LDOUBLE;
-            } else {
-                u = VT_DOUBLE;
-                goto basic_type;
-            }
-            next();
-            break;
-        case TOK_ENUM:
-            struct_decl(&type1, VT_ENUM);
-        basic_type2:
-            u = type1.t;
-            type->ref = type1.ref;
-            goto basic_type1;
-            /* type modifiers */
-        case TOK_CONST1:
-        case TOK_CONST2:
-        case TOK_CONST3:
-            type->t = t;
-            parse_btype_qualify(type, VT_CONSTANT);
-            t = type->t;
-            next();
-            break;
-        case TOK_VOLATILE1:
-        case TOK_VOLATILE2:
-        case TOK_VOLATILE3:
-            type->t = t;
-            parse_btype_qualify(type, VT_VOLATILE);
-            t = type->t;
-            next();
-            break;
-        case TOK_SIGNED1:
-        case TOK_SIGNED2:
-        case TOK_SIGNED3:
-            t |= VT_DEFSIGN;
-            next();
-            typespec_found = 1;
-            break;
-        case TOK_REGISTER:
-        case TOK_AUTO:
-        case TOK_RESTRICT1:
-        case TOK_RESTRICT2:
-        case TOK_RESTRICT3:
-            next();
-            break;
-        case TOK_UNSIGNED:
-            t |= VT_DEFSIGN | VT_UNSIGNED;
-            next();
-            typespec_found = 1;
-            break;
-
-            /* storage */
-        case TOK_EXTERN:
-            g = VT_EXTERN;
-            goto storage;
-        case TOK_STATIC:
-            g = VT_STATIC;
-            goto storage;
-        case TOK_TYPEDEF:
-            g = VT_TYPEDEF;
-            goto storage;
-       storage:
-            t |= g;
-            next();
-            break;
-        case TOK_INLINE1:
-        case TOK_INLINE2:
-        case TOK_INLINE3:
-            t |= VT_INLINE;
-            next();
-            break;
-
         default:
             if (typespec_found)
                 goto the_end;
             s = sym_find(tok);
-            if (!s || !(s->type.t & VT_TYPEDEF))
-                goto the_end;
-            t &= ~(VT_BTYPE|VT_LONG);
-            u = t & ~(VT_CONSTANT | VT_VOLATILE), t ^= u;
-            type->t = (s->type.t & ~VT_TYPEDEF) | u;
-            type->ref = s->type.ref;
-            if (t)
-                parse_btype_qualify(type, t);
-            t = type->t;
-            /* get attributes from typedef */
-            sym_to_attr(ad, s);
-            next();
-            typespec_found = 1;
-            st = bt = -2;
-            break;
+            goto the_end;
         }
         type_found = 1;
     }
 the_end:
     /* VT_LONG is used just as a modifier for VT_INT / VT_LLONG */
     bt = t & (VT_BTYPE|VT_LONG);
-    if (bt == VT_LONG)
-        t |= LONG_SIZE == 8 ? VT_LLONG : VT_INT;
     type->t = t;
     return type_found;
 }
