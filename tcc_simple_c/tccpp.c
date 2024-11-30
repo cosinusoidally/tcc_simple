@@ -713,18 +713,6 @@ static void parse_number(const char *p)
     tokc.i = n;
 }
 
-
-#define PARSE2(c1, tok1, c2, tok2)              \
-    case c1:                                    \
-        PEEKC(c, p);                            \
-        if (c == c2) {                          \
-            p++;                                \
-            tok = tok2;                         \
-        } else {                                \
-            tok = tok1;                         \
-        }                                       \
-        break;
-
 /* return next token without macro substitution */
 static inline void next_nomacro1(void)
 {
@@ -854,7 +842,15 @@ maybe_newline:
         tok = TOK_PPSTR;
         break;
 
-    PARSE2('=', '=', '=', TOK_EQ)
+    case '=':
+        PEEKC(c, p);
+        if (c == '=') {
+            p++;
+            tok = TOK_EQ;
+        } else {
+            tok = '=';
+        }
+        break;
 
         /* comments or operator */
     case '/':
