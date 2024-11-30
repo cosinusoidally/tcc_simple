@@ -378,11 +378,6 @@ ST_FUNC void vpop(void)
 {
     int v;
     v = vtop->r & VT_VALMASK;
-    /* for x86, we need to pop the FP stack */
-    if (v == VT_JMP || v == VT_JMPI) {
-        /* need to put correct jump if && or || without test */
-        gsym(vtop->c.i);
-    }
     vtop--;
 }
 
@@ -459,8 +454,6 @@ static void patch_type(Sym *sym, CType *type)
         if (0 == (type->t & VT_EXTERN)) {
             /* put complete type, use static from prototype */
             sym->type.t = (type->t & ~VT_STATIC) | static_proto;
-            if (type->t & VT_INLINE)
-                sym->type.t = type->t;
             sym->type.ref = type->ref;
         }
     }
@@ -497,7 +490,7 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
 /* push a reference to global symbol v */
 ST_FUNC void vpush_global_sym(CType *type, int v)
 {
-    vpushsym(type, external_global_sym(v, type, 0));
+exit(1);
 }
 
 /* save registers up to (vtop - n) stack entry */
