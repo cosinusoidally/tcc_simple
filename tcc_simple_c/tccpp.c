@@ -634,27 +634,14 @@ static void parse_string(const char *s, int len)
     tcc_free(p);
 
     if (sep == '\'') {
-        int char_size, i, n, c;
-        tok = TOK_CCHAR, char_size = 1;
-        n = tokcstr.size / char_size - 1;
-        if (n < 1)
-            tcc_error("empty character constant");
-        if (n > 1)
-            tcc_warning("multi-character character constant");
-        for (c = i = 0; i < n; ++i) {
-            if (is_long)
-                c = ((nwchar_t *)tokcstr.data)[i];
-            else
-                c = (c << 8) | ((char *)tokcstr.data)[i];
-        }
+        int c;
+        tok = TOK_CCHAR;
+        c = ((char *)tokcstr.data)[0];
         tokc.i = c;
     } else {
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
-        if (!is_long)
-            tok = TOK_STR;
-        else
-            tok = TOK_LSTR;
+        tok = TOK_STR;
     }
 }
 
