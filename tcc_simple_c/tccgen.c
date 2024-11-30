@@ -87,7 +87,6 @@ static void expr_eq(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static void vpush(CType *type);
 static int gvtst(int inv, int t);
-static void gen_inline_functions(TCCState *s);
 static void skip_or_save_block(TokenString **str);
 static void gv_dup(void);
 
@@ -128,7 +127,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     parse_flags = PARSE_FLAG_PREPROCESS | PARSE_FLAG_TOK_NUM | PARSE_FLAG_TOK_STR;
     next();
     decl(VT_CONST);
-    gen_inline_functions(s1);
     return 0;
 }
 
@@ -1776,45 +1774,6 @@ static void gen_function(Sym *sym)
     func_var = 0; /* for safety */
     ind = 0; /* for safety */
     nocode_wanted = 0x80000000;
-}
-
-static void gen_inline_functions(TCCState *s)
-{
-    Sym *sym;
-    int inline_generated, i, ln;
-    struct InlineFunc *fn;
-
-    ln = file->line_num;
-    /* iterate while inline function are referenced */
-    do {
-        inline_generated = 0;
-        for (i = 0; i < s->nb_inline_fns; ++i) {
-            fn = s->inline_fns[i];
-            sym = fn->sym;
-            if (sym && sym->c) {
-                /* the function was used: generate its code and
-                   convert it to a normal function */
-                fn->sym = NULL;
-                if (file)
-                    pstrcpy(file->filename, sizeof file->filename, fn->filename);
-                sym->type.t &= ~VT_INLINE;
-
-                begin_macro(fn->func_str, 1);
-                next();
-                cur_text_section = text_section;
-                gen_function(sym);
-                end_macro();
-
-                inline_generated = 1;
-            }
-        }
-    } while (inline_generated);
-    file->line_num = ln;
-}
-
-ST_FUNC void free_inline_functions(TCCState *s)
-{
-    dynarray_reset(&s->inline_fns, &s->nb_inline_fns);
 }
 
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP

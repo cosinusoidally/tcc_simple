@@ -264,7 +264,6 @@ static int tcc_compile(TCCState *s1)
     }
     s1->error_set_jmp_enabled = 0;
 
-    free_inline_functions(s1);
     /* reset define stack, but keep -D and built-ins */
     free_defines(define_start);
     sym_pop(&global_stack, NULL, 0);
