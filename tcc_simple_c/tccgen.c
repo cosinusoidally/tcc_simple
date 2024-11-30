@@ -713,33 +713,6 @@ static void gen_opic(int op)
     }
 }
 
-/* generate a floating point operation with constant propagation */
-static void gen_opif(int op)
-{
-exit(1);
-}
-
-static int pointed_size(CType *type)
-{
-exit(1);
-}
-
-static inline int is_null_pointer(SValue *p)
-{
-exit(1);
-}
-
-static inline int is_integer_btype(int bt)
-{
-exit(1);
-}
-
-/* check types for comparison or subtraction of pointers */
-static void check_comparison_pointer_types(SValue *p1, SValue *p2, int op)
-{
-exit(1);
-}
-
 /* generic gen_op: handles types problems */
 ST_FUNC void gen_op(int op)
 {
@@ -1536,12 +1509,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         if (size < 0) 
             tcc_error("unknown type size");
     }
-    /* If there's a flex member and it was used in the initializer
-       adjust size.  */
-    if (flexible_array &&
-	flexible_array->type.ref->c > 0)
-        size += flexible_array->type.ref->c
-	        * pointed_size(&flexible_array->type);
     /* take into account specified alignment if bigger */
     if (ad->a.aligned) {
 	int speca = 1 << (ad->a.aligned - 1);
