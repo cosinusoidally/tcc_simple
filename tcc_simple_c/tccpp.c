@@ -675,9 +675,7 @@ static void parse_number(const char *p)
     ch = *p++;
     *q++ = t;
     b = 10;
-    if (t == '.') {
-        goto float_frac_parse;
-    } else if (t == '0') {
+    if (t == '0') {
         if (ch == 'x' || ch == 'X') {
             q--;
             ch = *p++;
@@ -691,20 +689,12 @@ static void parse_number(const char *p)
     /* parse all digits. cannot check octal numbers at this stage
        because of floating point constants */
     while (1) {
-        if (ch >= 'a' && ch <= 'f')
-            t = ch - 'a' + 10;
-        else if (ch >= 'A' && ch <= 'F')
+        if (ch >= 'A' && ch <= 'F')
             t = ch - 'A' + 10;
         else if (isnum(ch))
             t = ch - '0';
         else
             break;
-        if (t >= b)
-            break;
-        if (q >= token_buf + STRING_MAX_SIZE) {
-        num_too_long:
-            tcc_error("number too long");
-        }
         *q++ = ch;
         ch = *p++;
     }
@@ -799,34 +789,24 @@ static void parse_number(const char *p)
         } else {
             /* decimal floats */
             if (ch == '.') {
-                if (q >= token_buf + STRING_MAX_SIZE)
-                    goto num_too_long;
                 *q++ = ch;
                 ch = *p++;
             float_frac_parse:
                 while (ch >= '0' && ch <= '9') {
-                    if (q >= token_buf + STRING_MAX_SIZE)
-                        goto num_too_long;
                     *q++ = ch;
                     ch = *p++;
                 }
             }
             if (ch == 'e' || ch == 'E') {
-                if (q >= token_buf + STRING_MAX_SIZE)
-                    goto num_too_long;
                 *q++ = ch;
                 ch = *p++;
                 if (ch == '-' || ch == '+') {
-                    if (q >= token_buf + STRING_MAX_SIZE)
-                        goto num_too_long;
                     *q++ = ch;
                     ch = *p++;
                 }
                 if (ch < '0' || ch > '9')
                     expect("exponent digits");
                 while (ch >= '0' && ch <= '9') {
-                    if (q >= token_buf + STRING_MAX_SIZE)
-                        goto num_too_long;
                     *q++ = ch;
                     ch = *p++;
                 }
