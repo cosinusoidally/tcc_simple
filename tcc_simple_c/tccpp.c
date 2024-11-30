@@ -434,13 +434,6 @@ static uint8_t *parse_pp_string(uint8_t *p,
     return p;
 }
 
-/* skip block of text until #else, #elif or #endif. skip also pairs of
-   #if/#endif */
-static void preprocess_skip(void)
-{
-exit(1);
-}
-
 /* token string handling */
 ST_INLN void tok_str_new(TokenString *s)
 {
@@ -666,45 +659,6 @@ ST_FUNC void free_defines(Sym *b)
         }
         b = b->prev;
     }
-}
-
-/* label lookup */
-ST_FUNC Sym *label_find(int v)
-{
-exit(1);
-}
-
-ST_FUNC Sym *label_push(Sym **ptop, int v, int flags)
-{
-exit(1);
-}
-
-/* pop labels until element last is reached. Look if any labels are
-   undefined. Define symbols if '&&label' was used. */
-ST_FUNC void label_pop(Sym **ptop, Sym *slast, int keep)
-{
-    Sym *s, *s1;
-    for(s = *ptop; s != slast; s = s1) {
-        s1 = s->prev;
-        if (s->r == LABEL_DECLARED) {
-            tcc_warning("label '%s' declared but not used", get_tok_str(s->v, NULL));
-        } else if (s->r == LABEL_FORWARD) {
-                tcc_error("label '%s' used but not defined",
-                      get_tok_str(s->v, NULL));
-        } else {
-            if (s->c) {
-                /* define corresponding symbol. A size of
-                   1 is put. */
-                put_extern_sym(s, cur_text_section, s->jnext, 1);
-            }
-        }
-        /* remove label */
-        table_ident[s->v - TOK_IDENT]->sym_label = s->prev_tok;
-        if (!keep)
-            sym_free(s);
-    }
-    if (!keep)
-        *ptop = slast;
 }
 
 /* parse after #define */
