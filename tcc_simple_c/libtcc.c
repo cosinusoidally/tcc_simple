@@ -103,10 +103,6 @@ PUB_FUNC char *tcc_strdup(const char *str)
     return ptr;
 }
 
-PUB_FUNC void tcc_memcheck(void)
-{
-}
-
 #define free(p) use_tcc_free(p)
 #define malloc(s) use_tcc_malloc(s)
 #define realloc(p, s) use_tcc_realloc(p, s)
@@ -278,8 +274,6 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
     dynarray_reset(&s1->argv, &s1->argc);
 
     tcc_free(s1);
-    if (0 == --nb_states)
-        tcc_memcheck();
 }
 
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
