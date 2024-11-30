@@ -893,17 +893,6 @@ static inline void convert_parameter_type(CType *pt)
     pt->t &= ~VT_ARRAY;
 }
 
-ST_FUNC void parse_asm_str(CString *astr)
-{
-exit(1);
-}
-
-/* Parse an asm label and return the token */
-static int asm_label_instr(void)
-{
-exit(1);
-}
-
 static int post_type(CType *type, AttributeDef *ad, int storage, int td)
 {
     int n, l, t1, arg_size, align;
@@ -1138,16 +1127,6 @@ static void gfunc_return(CType *func_type)
     vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
 }
 
-static int case_cmp(const void *pa, const void *pb)
-{
-exit(1);
-}
-
-static void gcase(struct case_t **base, int len, int *bsym)
-{
-exit(1);
-}
-
 static void block(int *bsym, int *csym, int is_expr)
 {
     int a, b, c, d;
@@ -1248,36 +1227,6 @@ static void block(int *bsym, int *csym, int is_expr)
         }
         skip(';');
     }
-}
-
-/* This skips over a stream of tokens containing balanced {} and ()
-   pairs, stopping at outer ',' ';' and '}' (or matching '}' if we started
-   with a '{').  If STR then allocates and stores the skipped tokens
-   in *STR.  This doesn't check if () and {} are nested correctly,
-   i.e. "({)}" is accepted.  */
-static void skip_or_save_block(TokenString **str)
-{
-exit(1);
-}
-
-#define EXPR_CONST 1
-#define EXPR_ANY   2
-
-static void parse_init_elem(int expr_type)
-{
-exit(1);
-}
-
-/* put zeros for variable based init */
-static void init_putz(Section *sec, unsigned long c, int size)
-{
-exit(1);
-}
-
-static int decl_designator(CType *type, Section *sec, unsigned long c,
-                           Sym **cur_field, int size_only, int al)
-{
-exit(1);
 }
 
 /* store a value or an expression directly in global data or in local array */
@@ -1401,21 +1350,15 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
        literals). It also simplifies local
        initializers handling */
     if (size < 0 || (flexible_array && has_init)) {
-        if (!has_init) 
-            tcc_error("unknown type size");
         /* get all init string */
-        if (has_init == 2) {
-	    init_str = tok_str_alloc();
-            /* only get strings */
-            while (tok == TOK_STR || tok == TOK_LSTR) {
-                tok_str_add_tok(init_str);
-                next();
-            }
-	    tok_str_add(init_str, -1);
-	    tok_str_add(init_str, 0);
-        } else {
-	    skip_or_save_block(&init_str);
+        init_str = tok_str_alloc();
+        /* only get strings */
+        while (tok == TOK_STR || tok == TOK_LSTR) {
+            tok_str_add_tok(init_str);
+            next();
         }
+        tok_str_add(init_str, -1);
+        tok_str_add(init_str, 0);
         unget_tok(0);
 
         /* compute size */
