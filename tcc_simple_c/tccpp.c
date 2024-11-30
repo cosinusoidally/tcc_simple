@@ -814,24 +814,6 @@ maybe_newline:
         }
         tok = ts->tok;
         break;
-    case 'L':
-        t = p[1];
-        if (t != '\\' && t != '\'' && t != '\"') {
-            /* fast case */
-            goto parse_ident_fast;
-        } else {
-            PEEKC(c, p);
-            if (c == '\'' || c == '\"') {
-                is_long = 1;
-                goto str_const;
-            } else {
-                cstr_reset(&tokcstr);
-                cstr_ccat(&tokcstr, 'L');
-                goto parse_ident_slow;
-            }
-        }
-        break;
-
     case '0': case '1': case '2': case '3':
     case '4': case '5': case '6': case '7':
     case '8': case '9':
@@ -845,14 +827,9 @@ maybe_newline:
             cstr_ccat(&tokcstr, t);
             if (!((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
                   || c == '.'
-                  || ((c == '+' || c == '-')
-                      && (((t == 'e' || t == 'E')
-                            && !(parse_flags & PARSE_FLAG_ASM_FILE
-                                /* 0xe+1 is 3 tokens in asm */
-                                && ((char*)tokcstr.data)[0] == '0'
-                                && toup(((char*)tokcstr.data)[1]) == 'X'))
-                          || t == 'p' || t == 'P'))))
+                  || (c == '+' || c == '-'))) {
                 break;
+            }
             t = c;
             PEEKC(c, p);
         }
