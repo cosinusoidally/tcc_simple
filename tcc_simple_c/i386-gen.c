@@ -154,11 +154,7 @@ ST_FUNC void store(int r, SValue *v)
     ft &= ~(VT_VOLATILE | VT_CONSTANT);
     bt = ft & VT_BTYPE;
     o(0x89);
-    if (fr == VT_CONST ||
-        fr == VT_LOCAL ||
-        (v->r & VT_LVAL)) {
-        gen_modrm(r, v->r, v->sym, fc);
-    }
+    gen_modrm(r, v->r, v->sym, fc);
 }
 
 static void gadd_sp(int val)
