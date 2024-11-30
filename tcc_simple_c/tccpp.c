@@ -593,23 +593,6 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             /* escape */
             c = *p;
             switch(c) {
-            case '0': case '1': case '2': case '3':
-            case '4': case '5': case '6': case '7':
-                /* at most three octal digits */
-                n = c - '0';
-                p++;
-                c = *p;
-                c = n;
-                goto add_char_nonext;
-            case 'a':
-                c = '\a';
-                break;
-            case 'b':
-                c = '\b';
-                break;
-            case 'f':
-                c = '\f';
-                break;
             case 'n':
                 c = '\n';
                 break;
@@ -618,9 +601,6 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
                 break;
             case 't':
                 c = '\t';
-                break;
-            case 'v':
-                c = '\v';
                 break;
             case '\'':
             case '\"':
