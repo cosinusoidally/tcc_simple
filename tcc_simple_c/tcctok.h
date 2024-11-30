@@ -173,5 +173,3 @@
      DEF(TOK___fixxfdi, "__fixxfdi")
 
      DEF(TOK_alloca, "alloca")
-
-#include "i386-tok.h"
