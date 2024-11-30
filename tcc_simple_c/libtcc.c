@@ -144,11 +144,6 @@ ST_FUNC void dynarray_reset(void *pp, int *n)
     *(void**)pp = NULL;
 }
 
-static void tcc_split_path(TCCState *s, void *p_ary, int *p_nb_ary, const char *in)
-{
-exit(1);
-}
-
 PUB_FUNC void tcc_error(const char *fmt, ...)
 {
 exit(1);
@@ -366,11 +361,6 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
     tcc_free(s1);
     if (0 == --nb_states)
         tcc_memcheck();
-}
-
-LIBTCCAPI int tcc_add_include_path(TCCState *s, const char *pathname)
-{
-exit(1);
 }
 
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
