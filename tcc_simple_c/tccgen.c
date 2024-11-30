@@ -420,12 +420,6 @@ ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsign
     return sym;
 }
 
-/* push a reference to a section offset by adding a dummy symbol */
-static void vpush_ref(CType *type, Section *sec, unsigned long offset, unsigned long size)
-{
-    vpushsym(type, get_sym_ref(type, sec, offset, size));  
-}
-
 /* define a new external reference to a symbol 'v' of type 'u' */
 ST_FUNC Sym *external_global_sym(int v, CType *type, int r)
 {
@@ -485,12 +479,6 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
         patch_storage(s, ad, type);
     }
     return s;
-}
-
-/* push a reference to global symbol v */
-ST_FUNC void vpush_global_sym(CType *type, int v)
-{
-exit(1);
 }
 
 /* save registers up to (vtop - n) stack entry */
@@ -612,18 +600,6 @@ ST_FUNC int gv(int rc)
     return r;
 }
 
-/* wrapper around RC_FRET to return a register by type */
-static int rc_fret(int t)
-{
-    return RC_FRET;
-}
-
-/* wrapper around REG_FRET to return a register by type */
-static int reg_fret(int t)
-{
-    return REG_FRET;
-}
-
 /* Generate value test
  *
  * Generate a test for any value (jump, comparison and integers) */
@@ -635,9 +611,6 @@ ST_FUNC int gvtst(int inv, int t)
         gen_op(TOK_NE);
     }
     if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
-        /* constant jmp optimization */
-        if ((vtop->c.i != 0) != inv)
-            t = gjmp(t);
         vtop--;
         return t;
     }
@@ -667,7 +640,9 @@ static void gen_opic(int op)
 
     if (c1 && c2) {
         switch(op) {
-        case TOK_NE: l1 = l1 != l2; break;
+        case TOK_NE:
+            l1 = l1 != l2;
+            break;
         }
 	if (t1 != VT_LLONG && (PTR_SIZE != 8 || t1 != VT_PTR))
 	    l1 = ((uint32_t)l1 |
