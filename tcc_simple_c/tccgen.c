@@ -605,11 +605,6 @@ ST_FUNC int get_reg(int rc)
     }
 }
 
-static int adjust_bf(SValue *sv, int bit_pos, int bit_size)
-{
-exit(1);
-}
-
 /* store vtop a register belonging to class 'rc'. lvalues are
    converted to values. Cannot be used if cannot be converted to
    register value (such as structures). */
@@ -651,12 +646,6 @@ ST_FUNC int gv(int rc)
     return r;
 }
 
-/* generate vtop[-1] and vtop[0] in resp. classes rc1 and rc2 */
-ST_FUNC void gv2(int rc1, int rc2)
-{
-exit(1);
-}
-
 /* wrapper around RC_FRET to return a register by type */
 static int rc_fret(int t)
 {
@@ -667,25 +656,6 @@ static int rc_fret(int t)
 static int reg_fret(int t)
 {
     return REG_FRET;
-}
-
-/* expand 64bit on stack in two ints */
-static void lexpand(void)
-{
-exit(1);
-}
-
-/* build a long long from two ints */
-static void lbuild(int t)
-{
-exit(1);
-}
-
-/* convert stack entry to register and duplicate its value in another
-   register */
-static void gv_dup(void)
-{
-exit(1);
 }
 
 /* Generate value test
@@ -706,23 +676,6 @@ ST_FUNC int gvtst(int inv, int t)
         return t;
     }
     return gtst(inv, t);
-}
-
-/* generate CPU independent (unsigned) long long operations */
-static void gen_opl(int op)
-{
-exit(1);
-}
-
-static uint64_t gen_opic_sdiv(uint64_t a, uint64_t b)
-{
-exit(1);
-}
-
-static int gen_opic_lt(uint64_t a, uint64_t b)
-{
-exit(1);
-    return (a ^ (uint64_t)1 << 63) < (b ^ (uint64_t)1 << 63);
 }
 
 /* handle integer constant optimizations and various machine
