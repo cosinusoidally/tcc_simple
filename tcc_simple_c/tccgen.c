@@ -1003,34 +1003,12 @@ exit(1);
 
 ST_FUNC void parse_mult_str (CString *astr, const char *msg)
 {
-    /* read the string */
-    if (tok != TOK_STR)
-        expect(msg);
-    cstr_new(astr);
-    while (tok == TOK_STR) {
-        /* XXX: add \0 handling too ? */
-        cstr_cat(astr, tokc.str.data, -1);
-        next();
-    }
-    cstr_ccat(astr, '\0');
+exit(1);
 }
 
 static Sym * find_field (CType *type, int v)
 {
-    Sym *s = type->ref;
-    v |= SYM_FIELD;
-    while ((s = s->next) != NULL) {
-	if ((s->v & SYM_FIELD) &&
-	    (s->type.t & VT_BTYPE) == VT_STRUCT &&
-	    (s->v & ~SYM_FIELD) >= SYM_FIRST_ANOM) {
-	    Sym *ret = find_field (&s->type, v);
-	    if (ret)
-	        return ret;
-	}
-	if (s->v == v)
-	  break;
-    }
-    return s;
+exit(1);
 }
 
 static void struct_add_offset (Sym *s, int offset)
@@ -1047,112 +1025,7 @@ static void struct_add_offset (Sym *s, int offset)
 
 static void struct_layout(CType *type, AttributeDef *ad)
 {
-    int size, align, maxalign, offset, c, bit_pos, bit_size;
-    int packed, a, bt, prevbt, prev_bit_size;
-    int pcc = !tcc_state->ms_bitfields;
-    int pragma_pack = *tcc_state->pack_stack_ptr;
-    Sym *f;
-
-    maxalign = 1;
-    offset = 0;
-    c = 0;
-    bit_pos = 0;
-    prevbt = VT_STRUCT; /* make it never match */
-    prev_bit_size = 0;
-
-
-    for (f = type->ref->next; f; f = f->next) {
-        if (f->type.t & VT_BITFIELD)
-            bit_size = BIT_SIZE(f->type.t);
-        else
-            bit_size = -1;
-        size = type_size(&f->type, &align);
-        a = f->a.aligned ? 1 << (f->a.aligned - 1) : 0;
-        packed = 0;
-
-        if (type->ref->type.t == VT_UNION) {
-	    offset = 0;
-	    if (size > c)
-	        c = size;
-
-	} else if (bit_size < 0) {
-            if (pcc)
-                c += (bit_pos + 7) >> 3;
-	    c = (c + align - 1) & -align;
-	    offset = c;
-	    if (size > 0)
-	        c += size;
-	    bit_pos = 0;
-	    prevbt = VT_STRUCT;
-	    prev_bit_size = 0;
-
-	} else {
-	    /* A bit-field.  Layout is more complicated.  There are two
-	       options: PCC (GCC) compatible and MS compatible */
-            if (pcc) {
-		/* In PCC layout a bit-field is placed adjacent to the
-                   preceding bit-fields, except if:
-                   - it has zero-width
-                   - an individual alignment was given
-                   - it would overflow its base type container and
-                     there is no packing */
-
-                while (bit_pos >= align * 8)
-                    c += align, bit_pos -= align * 8;
-                offset = c;
-
-		/* In PCC layout named bit-fields influence the alignment
-		   of the containing struct using the base types alignment,
-		   except for packed fields (which here have correct align).  */
-		if (f->v & SYM_FIRST_ANOM
-                    // && bit_size // ??? gcc on ARM/rpi does that
-                    )
-		    align = 1;
-
-	    }
-
-	    f->type.t = (f->type.t & ~(0x3f << VT_STRUCT_SHIFT))
-		        | (bit_pos << VT_STRUCT_SHIFT);
-	    bit_pos += bit_size;
-	}
-	if (align > maxalign)
-	    maxalign = align;
-
-	if (f->v & SYM_FIRST_ANOM && (f->type.t & VT_BTYPE) == VT_STRUCT) {
-	    Sym *ass;
-	    struct_add_offset(f->type.ref, offset);
-	    f->c = 0;
-	} else {
-	    f->c = offset;
-	}
-
-	f->r = 0;
-    }
-
-    if (pcc)
-        c += (bit_pos + 7) >> 3;
-
-    /* store size and alignment */
-    a = bt = ad->a.aligned ? 1 << (ad->a.aligned - 1) : 1;
-    if (a < maxalign)
-        a = maxalign;
-    type->ref->r = a;
-    c = (c + a - 1) & -a;
-    type->ref->c = c;
-
-    /* check whether we can access bitfields by their type */
-    for (f = type->ref->next; f; f = f->next) {
-        int s, px, cx, c0;
-        CType t;
-
-        if (0 == (f->type.t & VT_BITFIELD))
-            continue;
-        f->type.ref = f;
-        f->auxtype = -1;
-        bit_size = BIT_SIZE(f->type.t);
-        bit_pos = BIT_POS(f->type.t);
-        size = type_size(&f->type, &align);
-    }
+exit(1);
 }
 
 /* enum/struct/union declaration. u is VT_ENUM/VT_STRUCT/VT_UNION */
@@ -1163,14 +1036,14 @@ exit(1);
 
 static void sym_to_attr(AttributeDef *ad, Sym *s)
 {
-    ad->f.func_type = s->f.func_type;
+exit(1);
 }
 
 /* Add type qualifiers to a type. If the type is an array then the qualifiers
    are added to the element type, copied because it could be a typedef. */
 static void parse_btype_qualify(CType *type, int qualifiers)
 {
-    type->t |= qualifiers;
+exit(1);
 }
 
 /* return 0 if no type declaration. otherwise, return the basic type
