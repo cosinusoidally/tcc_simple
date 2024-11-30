@@ -316,18 +316,6 @@ typedef struct
   Elf32_Word	p_align;		/* Segment alignment */
 } Elf32_Phdr;
 
-/* Legal values for p_type (segment type).  */
-
-#define	PT_NULL		0		/* Program header table entry unused */
-#define PT_LOAD		1		/* Loadable program segment */
-#define PT_DYNAMIC	2		/* Dynamic linking information */
-#define PT_INTERP	3		/* Program interpreter */
-#define PT_NOTE		4		/* Auxiliary information */
-#define PT_SHLIB	5		/* Reserved */
-#define PT_PHDR		6		/* Entry for header table itself */
-#define PT_TLS		7		/* Thread-local storage segment */
-#define	PT_NUM		8		/* Number of defined types */
-
 /* Intel 80386 specific definitions.  */
 
 /* i386 relocs.  */
