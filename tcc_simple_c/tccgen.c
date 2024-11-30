@@ -1344,26 +1344,6 @@ ST_FUNC void gexpr(void)
     expr_eq();
 }
 
-/* return the label token if current token is a label, otherwise
-   return zero */
-static int is_label(void)
-{
-    int last_tok;
-
-    /* fast test first */
-    if (tok < TOK_UIDENT)
-        return 0;
-    /* no need to save tokc because tok is an identifier */
-    last_tok = tok;
-    next();
-    if (tok == ':') {
-        return last_tok;
-    } else {
-        unget_tok(last_tok);
-        return 0;
-    }
-}
-
 static void gfunc_return(CType *func_type)
 {
     if (is_float(func_type->t)) {
@@ -1456,10 +1436,7 @@ static void block(int *bsym, int *csym, int is_expr)
             }
         }
         while (tok != '}') {
-	    if ((a = is_label()))
-		unget_tok(a);
-	    else
-	        decl(VT_LOCAL);
+	    decl(VT_LOCAL);
             if (tok != '}') {
                 if (is_expr)
                     vpop();
@@ -1510,43 +1487,17 @@ static void block(int *bsym, int *csym, int is_expr)
         skip(';');
 	nocode_wanted |= 0x20000000;
     } else {
-        b = is_label();
-        if (b) {
-            /* label case */
-	    next();
-            s = label_find(b);
-            if (s) {
-                if (s->r == LABEL_DEFINED)
-                    tcc_error("duplicate label '%s'", get_tok_str(s->v, NULL));
-                gsym(s->jnext);
-                s->r = LABEL_DEFINED;
+        /* expression case */
+        if (tok != ';') {
+            if (is_expr) {
+                vpop();
+                gexpr();
             } else {
-                s = label_push(&global_label_stack, b, LABEL_DEFINED);
+                gexpr();
+                vpop();
             }
-            s->jnext = ind;
-            /* we accept this, but it is a mistake */
-        block_after_label:
-	    nocode_wanted &= ~0x20000000;
-            if (tok == '}') {
-                tcc_warning("deprecated use of label at end of compound statement");
-            } else {
-                if (is_expr)
-                    vpop();
-                block(bsym, csym, is_expr);
-            }
-        } else {
-            /* expression case */
-            if (tok != ';') {
-                if (is_expr) {
-                    vpop();
-                    gexpr();
-                } else {
-                    gexpr();
-                    vpop();
-                }
-            }
-            skip(';');
         }
+        skip(';');
     }
 }
 
