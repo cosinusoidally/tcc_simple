@@ -92,9 +92,7 @@ static void gv_dup(void);
 
 ST_INLN int is_float(int t)
 {
-    int bt;
-    bt = t & VT_BTYPE;
-    return bt == VT_LDOUBLE || bt == VT_DOUBLE || bt == VT_FLOAT || bt == VT_QFLOAT;
+return 0;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -519,7 +517,7 @@ ST_FUNC void save_reg_upstack(int r, int n)
                 /* store register in the stack */
                 type = &p->type;
                 if ((p->r & VT_LVAL) ||
-                    (!is_float(type->t) && (type->t & VT_BTYPE) != VT_LLONG))
+                    ((type->t & VT_BTYPE) != VT_LLONG))
                     type = &int_type;
                 size = type_size(type, &align);
                 loc = (loc - size) & -align;
@@ -581,7 +579,7 @@ ST_FUNC int gv(int rc)
             )
         {
             r = get_reg(rc);
-            if ((vtop->r & VT_LVAL) && !is_float(vtop->type.t)) {
+            if ((vtop->r & VT_LVAL)) {
                 int t1, t;
                 /* lvalue of scalar type : need to use lvalue type
                    because of possible cast */
@@ -686,8 +684,8 @@ static void gen_cast(CType *type)
     sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
 
     if (sbt != dbt) {
-        sf = is_float(sbt);
-        df = is_float(dbt);
+        sf = 0;
+        df = 0;
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
