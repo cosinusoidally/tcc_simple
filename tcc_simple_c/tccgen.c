@@ -988,16 +988,6 @@ ST_FUNC void vstore(void)
 
     rc = RC_INT;
     r = gv(rc);  /* generate value */
-    /* if lvalue was saved on stack, must read it */
-    if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
-        SValue sv;
-        t = get_reg(RC_INT);
-        sv.type.t = VT_INT;
-        sv.r = VT_LOCAL | VT_LVAL;
-        sv.c.i = vtop[-1].c.i;
-        load(t, &sv);
-        vtop[-1].r = t | VT_LVAL;
-    }
     store(r, vtop - 1);
 
     vswap();
@@ -1008,18 +998,7 @@ ST_FUNC void vstore(void)
 /* post defines POST/PRE add. c is the token ++ or -- */
 ST_FUNC void inc(int post, int c)
 {
-    vdup(); /* save lvalue */
-    if (post) {
-        gv_dup(); /* duplicate value */
-        vrotb(3);
-        vrotb(3);
-    }
-    /* add constant */
-    vpushi(c - TOK_MID); 
-    gen_op('+');
-    vstore(); /* store value */
-    if (post)
-        vpop(); /* if post op, return saved value */
+exit(1);
 }
 
 ST_FUNC void parse_mult_str (CString *astr, const char *msg)
