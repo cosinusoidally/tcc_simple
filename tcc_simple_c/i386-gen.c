@@ -172,9 +172,6 @@ static void gcall_or_jmp(int is_jmp)
     oad(0xe8 + is_jmp, vtop->c.i - 4); /* call/jmp im */
 }
 
-static uint8_t fastcall_regs[3] = { TREG_EAX, TREG_EDX, TREG_ECX };
-static uint8_t fastcallw_regs[2] = { TREG_ECX, TREG_EDX };
-
 /* Generate function call. The function address is pushed first, then
    all the parameters in call order. This functions pops all the
    parameters and the function address. */
