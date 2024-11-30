@@ -737,30 +737,6 @@ ST_FUNC void gen_op(int op)
     vtop->type.t = VT_INT;
 }
 
-/* generic itof for unsigned long long case */
-static void gen_cvt_itof1(int t)
-{
-exit(1);
-}
-
-/* generic ftoi for unsigned long long case */
-static void gen_cvt_ftoi1(int t)
-{
-exit(1);
-}
-
-/* force char or short cast */
-static void force_charshort_cast(int t)
-{
-exit(1);
-}
-
-/* cast 'vtop' to 'type'. Casting to bitfields is forbidden. */
-static void gen_cast_s(int t)
-{
-exit(1);
-}
-
 static void gen_cast(CType *type)
 {
     int sbt, dbt, sf, df, c, p;
@@ -830,16 +806,6 @@ ST_FUNC void mk_pointer(CType *type)
     type->ref = s;
 }
 
-/* print a type. If 'varstr' is not NULL, then the variable is also
-   printed in the type */
-/* XXX: union */
-/* XXX: add array and function pointers */
-static void type_to_str(char *buf, int buf_size, 
-                 CType *type, const char *varstr)
-{
-exit(1);
-}
-
 /* verify type compatibility to store vtop in 'dt' type, and generate
    casts if needed. */
 static void gen_assign_cast(CType *dt)
@@ -866,50 +832,6 @@ ST_FUNC void vstore(void)
     vswap();
     vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
     vtop->r |= delayed_cast;
-}
-
-/* post defines POST/PRE add. c is the token ++ or -- */
-ST_FUNC void inc(int post, int c)
-{
-exit(1);
-}
-
-ST_FUNC void parse_mult_str (CString *astr, const char *msg)
-{
-exit(1);
-}
-
-static Sym * find_field (CType *type, int v)
-{
-exit(1);
-}
-
-static void struct_add_offset (Sym *s, int offset)
-{
-exit(1);
-}
-
-static void struct_layout(CType *type, AttributeDef *ad)
-{
-exit(1);
-}
-
-/* enum/struct/union declaration. u is VT_ENUM/VT_STRUCT/VT_UNION */
-static void struct_decl(CType *type, int u)
-{
-exit(1);
-}
-
-static void sym_to_attr(AttributeDef *ad, Sym *s)
-{
-exit(1);
-}
-
-/* Add type qualifiers to a type. If the type is an array then the qualifiers
-   are added to the element type, copied because it could be a typedef. */
-static void parse_btype_qualify(CType *type, int qualifiers)
-{
-exit(1);
 }
 
 /* return 0 if no type declaration. otherwise, return the basic type
