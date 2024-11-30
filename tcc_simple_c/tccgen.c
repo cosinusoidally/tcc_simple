@@ -1346,19 +1346,13 @@ ST_FUNC void gexpr(void)
 
 static void gfunc_return(CType *func_type)
 {
-    if (is_float(func_type->t)) {
-        gv(rc_fret(func_type->t));
-    } else {
-        gv(RC_IRET);
-    }
+    gv(RC_IRET);
     vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
 }
 
 static int case_cmp(const void *pa, const void *pb)
 {
-    int64_t a = (*(struct case_t**) pa)->v1;
-    int64_t b = (*(struct case_t**) pb)->v1;
-    return a < b ? -1 : a > b;
+exit(1);
 }
 
 static void gcase(struct case_t **base, int len, int *bsym)
@@ -1419,27 +1413,9 @@ static void block(int *bsym, int *csym, int is_expr)
         llabel = local_label_stack;
         ++local_scope;
         
-        /* handle local labels declarations */
-        if (tok == TOK_LABEL) {
-            next();
-            for(;;) {
-                if (tok < TOK_UIDENT)
-                    expect("label identifier");
-                label_push(&local_label_stack, tok, LABEL_DECLARED);
-                next();
-                if (tok == ',') {
-                    next();
-                } else {
-                    skip(';');
-                    break;
-                }
-            }
-        }
         while (tok != '}') {
 	    decl(VT_LOCAL);
             if (tok != '}') {
-                if (is_expr)
-                    vpop();
                 block(bsym, csym, is_expr);
             }
         }
@@ -1456,10 +1432,6 @@ static void block(int *bsym, int *csym, int is_expr)
 	   tables, though.  sym_pop will do that.  */
 	sym_pop(&local_stack, s, is_expr);
 
-        /* Pop VLA frames and restore stack pointer if required */
-        if (vlas_in_scope > saved_vlas_in_scope) {
-            vla_sp_loc = saved_vlas_in_scope ? block_vla_sp_loc : vla_sp_root_loc;
-        }
         vlas_in_scope = saved_vlas_in_scope;
         
         next();
@@ -1468,10 +1440,7 @@ static void block(int *bsym, int *csym, int is_expr)
         if (tok != ';') {
             gexpr();
             gen_assign_cast(&func_vt);
-            if ((func_vt.t & VT_BTYPE) == VT_VOID)
-                vtop--;
-            else
-                gfunc_return(&func_vt);
+            gfunc_return(&func_vt);
         }
         skip(';');
         /* jump unless last stmt in top-level block */
@@ -1480,22 +1449,14 @@ static void block(int *bsym, int *csym, int is_expr)
 	nocode_wanted |= 0x20000000;
     } else if (tok == TOK_BREAK) {
         /* compute jump */
-        if (!bsym)
-            tcc_error("cannot break");
         *bsym = gjmp(*bsym);
         next();
         skip(';');
 	nocode_wanted |= 0x20000000;
     } else {
-        /* expression case */
         if (tok != ';') {
-            if (is_expr) {
-                vpop();
-                gexpr();
-            } else {
                 gexpr();
                 vpop();
-            }
         }
         skip(';');
     }
@@ -1570,19 +1531,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
     Sym indexsym;
     CType *t1;
 
-    /* If we currently are at an '}' or ',' we have read an initializer
-       element in one of our callers, and not yet consumed it.  */
-    have_elem = tok == '}' || tok == ',';
-    if (!have_elem && tok != '{' &&
-	/* In case of strings we have special handling for arrays, so
-	   don't consume them as initializer value (which would commit them
-	   to some anonymous symbol).  */
-	tok != TOK_LSTR && tok != TOK_STR &&
-	!size_only) {
-	parse_init_elem(!sec ? EXPR_ANY : EXPR_CONST);
-	have_elem = 1;
-    }
-
     if (type->t & VT_ARRAY) {
         s = type->ref;
         n = s->c;
@@ -1590,14 +1538,6 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
         size1 = type_size(t1, &align1);
 
         no_oblock = 1;
-        if ((first && tok != TOK_LSTR && tok != TOK_STR) || 
-            tok == '{') {
-            if (tok != '{')
-                tcc_error("character array initializer must be a literal,"
-                    " optionally enclosed in braces");
-            skip('{');
-            no_oblock = 0;
-        }
 
         /* only parse strings here if correct type (otherwise: handle
            them as ((w)char *) expressions */
