@@ -616,11 +616,6 @@ ST_INLN Sym *define_find(int v)
     return table_ident[v]->sym_define;
 }
 
-static CachedInclude *search_cached_include(TCCState *s1, const char *filename, int add)
-{
-exit(1);
-}
-
 /* is_bof is true if first non space token at beginning of file */
 ST_FUNC void preprocess(int is_bof)
 {
@@ -1093,16 +1088,7 @@ static inline void next_nomacro1(void)
                 tok = TOK_EOF;
             } else {
                 tok_flags &= ~TOK_FLAG_EOF;
-                /* pop include file */
                 
-                /* test if previous '#endif' was after a #ifdef at
-                   start of file */
-                if (tok_flags & TOK_FLAG_ENDIF) {
-                    search_cached_include(s1, file->filename, 1)
-                        ->ifndef_macro = file->ifndef_macro_saved;
-                    tok_flags &= ~TOK_FLAG_ENDIF;
-                }
-
                 /* pop include stack */
                 tcc_close();
                 s1->include_stack_ptr--;
