@@ -30,7 +30,6 @@ ST_DATA const int reg_classes[NB_REGS] = {
 };
 
 static unsigned long func_sub_sp_offset;
-static int func_ret_sub;
 
 /* XXX: make it faster ? */
 ST_FUNC void g(int c)
@@ -86,7 +85,9 @@ static int oad(int c, int s)
 }
 
 /* generate jmp to a label */
-#define gjmp2(instr,lbl) oad(instr,lbl)
+int gjmp2(instr,lbl) {
+    return oad(instr,lbl);
+}
 
 /* output constant with relocation if 'r & VT_SYM' is true */
 ST_FUNC void gen_addr32(int r, Sym *sym, int c)
@@ -244,7 +245,6 @@ ST_FUNC void gfunc_prolog(CType *func_type)
                  VT_LOCAL | lvalue_type(type->t), param_addr);
         param_index++;
     }
-    func_ret_sub = 0;
 }
 
 /* generate function epilog */
@@ -256,13 +256,7 @@ ST_FUNC void gfunc_epilog(void)
     v = (-loc + 3) & -4;
 
     o(0xc9); /* leave */
-    if (func_ret_sub == 0) {
-        o(0xc3); /* ret */
-    } else {
-        o(0xc2); /* ret n */
-        g(func_ret_sub);
-        g(func_ret_sub >> 8);
-    }
+    o(0xc3); /* ret */
     saved_ind = ind;
     ind = func_sub_sp_offset - FUNC_PROLOG_SIZE;
     o(0xe58955);  /* push %ebp, mov %esp, %ebp */
