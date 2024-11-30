@@ -8,60 +8,6 @@
      DEF(TOK_BREAK, "break")
      DEF(TOK_RETURN, "return")
 
-     DEF(TOK_FLOAT, "float")
-     DEF(TOK_DOUBLE, "double")
-     DEF(TOK_BOOL, "_Bool")
-     DEF(TOK_SHORT, "short")
-     DEF(TOK_STRUCT, "struct")
-     DEF(TOK_UNION, "union")
-     DEF(TOK_TYPEDEF, "typedef")
-     DEF(TOK_DEFAULT, "default")
-     DEF(TOK_ENUM, "enum")
-     DEF(TOK_SIZEOF, "sizeof")
-     DEF(TOK_ATTRIBUTE1, "__attribute")
-     DEF(TOK_ATTRIBUTE2, "__attribute__")
-     DEF(TOK_ALIGNOF1, "__alignof")
-     DEF(TOK_ALIGNOF2, "__alignof__")
-     DEF(TOK_TYPEOF1, "typeof")
-     DEF(TOK_TYPEOF2, "__typeof")
-     DEF(TOK_TYPEOF3, "__typeof__")
-     DEF(TOK_LABEL, "__label__")
-     DEF(TOK_ASM1, "asm")
-     DEF(TOK_ASM2, "__asm")
-     DEF(TOK_ASM3, "__asm__")
-
-/*********************************************************************/
-/* the following are not keywords. They are included to ease parsing */
-/* preprocessor only */
-     DEF(TOK_DEFINE, "define")
-     DEF(TOK_INCLUDE, "include")
-     DEF(TOK_INCLUDE_NEXT, "include_next")
-     DEF(TOK_IFDEF, "ifdef")
-     DEF(TOK_IFNDEF, "ifndef")
-     DEF(TOK_ELIF, "elif")
-     DEF(TOK_ENDIF, "endif")
-     DEF(TOK_DEFINED, "defined")
-     DEF(TOK_UNDEF, "undef")
-     DEF(TOK_ERROR, "error")
-     DEF(TOK_WARNING, "warning")
-     DEF(TOK_LINE, "line")
-     DEF(TOK_PRAGMA, "pragma")
-     DEF(TOK___LINE__, "__LINE__")
-     DEF(TOK___FILE__, "__FILE__")
-     DEF(TOK___DATE__, "__DATE__")
-     DEF(TOK___TIME__, "__TIME__")
-     DEF(TOK___FUNCTION__, "__FUNCTION__")
-     DEF(TOK___VA_ARGS__, "__VA_ARGS__")
-     DEF(TOK___COUNTER__, "__COUNTER__")
-
-/* special identifiers */
-     DEF(TOK___FUNC__, "__func__")
-
-/* special floating point values */
-     DEF(TOK___NAN__, "__nan__")
-     DEF(TOK___SNAN__, "__snan__")
-     DEF(TOK___INF__, "__inf__")
-
 /* attribute identifiers */
 /* XXX: handle all tokens generically since speed is not critical */
      DEF(TOK_SECTION1, "section")
