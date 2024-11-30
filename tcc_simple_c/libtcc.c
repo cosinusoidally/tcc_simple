@@ -144,15 +144,6 @@ ST_FUNC void dynarray_reset(void *pp, int *n)
     *(void**)pp = NULL;
 }
 
-PUB_FUNC void tcc_error(const char *fmt, ...)
-{
-exit(1);
-}
-
-PUB_FUNC void tcc_warning(const char *fmt, ...)
-{
-}
-
 /********************************************************/
 /* I/O layer */
 

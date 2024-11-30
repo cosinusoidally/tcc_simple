@@ -136,7 +136,6 @@ ST_FUNC void tccelf_end_file(TCCState *s1)
             ElfW_Rel *rel_end = (ElfW_Rel*)(sr->data + sr->data_offset);
             for (; rel < rel_end; ++rel) {
                 int n = ELFW(R_SYM)(rel->r_info) - first_sym;
-                //if (n < 0) tcc_error("internal: invalid symbol index in relocation");
                 rel->r_info = ELFW(R_INFO)(tr[n], ELFW(R_TYPE)(rel->r_info));
             }
         }
