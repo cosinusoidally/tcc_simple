@@ -741,8 +741,6 @@ static inline void next_nomacro1(void)
     case '\t':
         tok = c;
         p++;
-        if (parse_flags & PARSE_FLAG_SPACES)
-            goto keep_tok_flags;
         while (isidnum_table[*p - CH_EOF] & IS_SPC)
             ++p;
         goto redo_no_start;
@@ -755,38 +753,10 @@ static inline void next_nomacro1(void)
         /* first look if it is in fact an end of buffer */
         c = handle_stray1(p);
         p = file->buf_ptr;
-        if (c == '\\')
-            goto parse_simple;
         if (c != CH_EOF)
             goto redo_no_start;
-        {
-            TCCState *s1 = tcc_state;
-            if ((parse_flags & PARSE_FLAG_LINEFEED)
-                && !(tok_flags & TOK_FLAG_EOF)) {
-                tok_flags |= TOK_FLAG_EOF;
-                tok = TOK_LINEFEED;
-                goto keep_tok_flags;
-            } else if (!(parse_flags & PARSE_FLAG_PREPROCESS)) {
-                tok = TOK_EOF;
-            } else if (s1->ifdef_stack_ptr != file->ifdef_stack_ptr) {
-                tcc_error("missing #endif");
-            } else if (s1->include_stack_ptr == s1->include_stack) {
-                /* no include left : end of file. */
-                tok = TOK_EOF;
-            } else {
-                tok_flags &= ~TOK_FLAG_EOF;
-                
-                /* pop include stack */
-                tcc_close();
-                s1->include_stack_ptr--;
-                p = file->buf_ptr;
-                if (p == file->buffer)
-                    tok_flags = TOK_FLAG_BOF|TOK_FLAG_BOL;
-                goto redo_no_start;
-            }
-        }
+        tok = TOK_EOF;
         break;
-
     case '\n':
         file->line_num++;
         tok_flags |= TOK_FLAG_BOL;
