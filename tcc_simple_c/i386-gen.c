@@ -282,12 +282,8 @@ ST_FUNC void gjmp_addr(int a)
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
 ST_FUNC int gtst(int inv, int t)
 {
-    int v = vtop->r & VT_VALMASK;
-    if (v == VT_CMP) {
-        /* fast case : can jump directly since flags are set */
-        g(0x0f);
-        t = gjmp2((vtop->c.i - 16) ^ inv, t);
-    }
+    g(0x0f);
+    t = gjmp2((vtop->c.i - 16) ^ inv, t);
     vtop--;
     return t;
 }
