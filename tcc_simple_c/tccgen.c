@@ -413,12 +413,6 @@ ST_FUNC void vpop(void)
     vtop--;
 }
 
-/* push constant of type "type" with useless value */
-ST_FUNC void vpush(CType *type)
-{
-exit(1);
-}
-
 /* push integer constant */
 ST_FUNC void vpushi(int v)
 {
@@ -427,57 +421,12 @@ ST_FUNC void vpushi(int v)
     vsetc(&int_type, VT_CONST, &cval);
 }
 
-/* push a pointer sized constant */
-static void vpushs(addr_t v)
-{
-exit(1);
-}
-
 ST_FUNC void vset(CType *type, int r, int v)
 {
     CValue cval;
 
     cval.i = v;
     vsetc(type, r, &cval);
-}
-
-static void vseti(int r, int v)
-{
-exit(1);
-}
-
-ST_FUNC void vpushv(SValue *v)
-{
-exit(1);
-}
-
-static void vdup(void)
-{
-exit(1);
-}
-
-/* rotate n first stack elements to the bottom
-   I1 ... In -> I2 ... In I1 [top is right]
-*/
-ST_FUNC void vrotb(int n)
-{
-exit(1);
-}
-
-/* rotate the n elements before entry e towards the top
-   I1 ... In ... -> In I1 ... I(n-1) ... [top is right]
- */
-ST_FUNC void vrote(SValue *e, int n)
-{
-exit(1);
-}
-
-/* rotate n first stack elements to the top
-   I1 ... In -> In I1 ... I(n-1)  [top is right]
- */
-ST_FUNC void vrott(int n)
-{
-exit(1);
 }
 
 /* push a symbol value of TYPE */
