@@ -335,30 +335,6 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
                     p++;
                 } else if (c == '/') {
                     goto end_of_comment;
-                } else if (c == '\\') {
-                    file->buf_ptr = p;
-                    c = handle_eob();
-                    p = file->buf_ptr;
-                    if (c == CH_EOF)
-                        tcc_error("unexpected end of file in comment");
-                    if (c == '\\') {
-                        /* skip '\[\r]\n', otherwise just skip the stray */
-                        while (c == '\\') {
-                            PEEKC_EOB(c, p);
-                            if (c == '\n') {
-                                file->line_num++;
-                                PEEKC_EOB(c, p);
-                            } else if (c == '\r') {
-                                PEEKC_EOB(c, p);
-                                if (c == '\n') {
-                                    file->line_num++;
-                                    PEEKC_EOB(c, p);
-                                }
-                            } else {
-                                goto after_star;
-                            }
-                        }
-                    }
                 } else {
                     break;
                 }
@@ -369,9 +345,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
             file->buf_ptr = p;
             c = handle_eob();
             p = file->buf_ptr;
-            if (c == CH_EOF) {
-                tcc_error("unexpected end of file in comment");
-            } else if (c == '\\') {
+            if (c == '\\') {
                 p++;
             }
         }
