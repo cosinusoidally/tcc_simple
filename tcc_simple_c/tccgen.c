@@ -1328,19 +1328,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Sym *sym = NULL;
     int saved_nocode_wanted = nocode_wanted;
 
-    if (type->t & VT_STATIC)
-        nocode_wanted |= NODATA_WANTED ? 0x40000000 : 0x80000000;
-
     flexible_array = NULL;
-    if ((type->t & VT_BTYPE) == VT_STRUCT) {
-        Sym *field = type->ref->next;
-        if (field) {
-            while (field->next)
-                field = field->next;
-            if (field->type.t & VT_ARRAY && field->type.ref->c < 0)
-                flexible_array = field;
-        }
-    }
 
     size = type_size(type, &align);
     /* If unknown size, we must evaluate it before
@@ -1371,20 +1359,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         
         /* if still unknown size, error */
         size = type_size(type, &align);
-        if (size < 0) 
-            tcc_error("unknown type size");
     }
-    /* take into account specified alignment if bigger */
-    if (ad->a.aligned) {
-	int speca = 1 << (ad->a.aligned - 1);
-        if (speca > align)
-            align = speca;
-    } else if (ad->a.packed) {
-        align = 1;
-    }
-
-    if (NODATA_WANTED)
-        size = 0, align = 1;
 
     if ((r & VT_VALMASK) == VT_LOCAL) {
         sec = NULL;
@@ -1408,12 +1383,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
                 sec = bss_section;
         }
 
-        if (sec) {
-	    addr = section_add(sec, size, align);
-        } else {
-            addr = align; /* SHN_COMMON is special, symbol value is align */
-	    sec = common_section;
-        }
+        addr = section_add(sec, size, align);
 
         if (v) {
             if (!sym) {
@@ -1434,23 +1404,9 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
     }
 
-    if (type->t & VT_VLA) {
-        int a;
-
-        vla_sp_loc = addr;
-        vlas_in_scope++;
-
-    } else if (has_init) {
+    if (has_init) {
 	size_t oldreloc_offset = 0;
-	if (sec && sec->reloc)
-	  oldreloc_offset = sec->reloc->data_offset;
         decl_initializer(type, sec, addr, 1, 0);
-	if (sec && sec->reloc)
-	  squeeze_multi_relocs(sec, oldreloc_offset);
-        /* patch flexible array member size back to -1, */
-        /* for possible subsequent similar declarations */
-        if (flexible_array)
-            flexible_array->type.ref->c = -1;
     }
 
  no_alloc:
