@@ -281,51 +281,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     tccelf_new(s);
     tccpp_new(s);
 
-    /* we add dummy defines for some special macros to speed up tests
-       and to have working defined() */
-    define_push(TOK___LINE__, MACRO_OBJ, NULL, NULL);
-    define_push(TOK___FILE__, MACRO_OBJ, NULL, NULL);
-    define_push(TOK___DATE__, MACRO_OBJ, NULL, NULL);
-    define_push(TOK___TIME__, MACRO_OBJ, NULL, NULL);
-    define_push(TOK___COUNTER__, MACRO_OBJ, NULL, NULL);
-    {
-        /* define __TINYC__ 92X  */
-        char buffer[32]; int a,b,c;
-        sscanf(TCC_VERSION, "%d.%d.%d", &a, &b, &c);
-        sprintf(buffer, "%d", a*10000 + b*100 + c);
-        tcc_define_symbol(s, "__TINYC__", buffer);
-    }
-
-    /* standard defines */
-    tcc_define_symbol(s, "__STDC__", NULL);
-    tcc_define_symbol(s, "__STDC_VERSION__", "199901L");
-    tcc_define_symbol(s, "__STDC_HOSTED__", NULL);
-
-    /* target defines */
-    tcc_define_symbol(s, "__i386__", NULL);
-    tcc_define_symbol(s, "__i386", NULL);
-    tcc_define_symbol(s, "i386", NULL);
-    tcc_define_symbol(s, "__unix__", NULL);
-    tcc_define_symbol(s, "__unix", NULL);
-    tcc_define_symbol(s, "unix", NULL);
-    tcc_define_symbol(s, "__linux__", NULL);
-    tcc_define_symbol(s, "__linux", NULL);
-
-    /* TinyCC & gcc defines */
-    /* 32bit systems. */
-    tcc_define_symbol(s, "__SIZE_TYPE__", "unsigned int");
-    tcc_define_symbol(s, "__PTRDIFF_TYPE__", "int");
-    tcc_define_symbol(s, "__ILP32__", NULL);
-
-    tcc_define_symbol(s, "__WCHAR_TYPE__", "int");
-    tcc_define_symbol(s, "__WINT_TYPE__", "unsigned int");
-    /* glibc defines */
-    tcc_define_symbol(s, "__REDIRECT(name, proto, alias)",
-        "name proto __asm__ (#alias)");
-    tcc_define_symbol(s, "__REDIRECT_NTH(name, proto, alias)",
-        "name proto __asm__ (#alias) __THROW");
-    /* Some GCC builtins that are simple to express as macros.  */
-    tcc_define_symbol(s, "__builtin_extract_return_addr(x)", "x");
     return s;
 }
 
@@ -427,16 +382,6 @@ static const TCCOption tcc_options[] = {
     { "nostdinc", TCC_OPTION_nostdinc, 1 },
     { NULL, 0, 0 },
 };
-
-static void parse_option_D(TCCState *s1, const char *optarg)
-{
-    char *sym = tcc_strdup(optarg);
-    char *value = strchr(sym, '=');
-    if (value)
-        *value++ = '\0';
-    tcc_define_symbol(s1, sym, value);
-    tcc_free(sym);
-}
 
 static void args_parser_add_file(TCCState *s, const char* filename, int filetype)
 {

@@ -1663,7 +1663,6 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     cstr_cat(&cstr, "\"", -1);
     cstr_cat(&cstr, file->filename, -1);
     cstr_cat(&cstr, "\"", 0);
-    tcc_define_symbol(s1, "__BASE_FILE__", cstr.data);
 
     cstr_reset(&cstr);
     cstr_free(&cstr);
