@@ -103,10 +103,6 @@ PUB_FUNC char *tcc_strdup(const char *str)
     return ptr;
 }
 
-#define free(p) use_tcc_free(p)
-#define malloc(s) use_tcc_malloc(s)
-#define realloc(p, s) use_tcc_realloc(p, s)
-
 /********************************************************/
 /* dynarrays */
 

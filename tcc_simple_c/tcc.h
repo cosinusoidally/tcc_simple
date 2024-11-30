@@ -829,11 +829,6 @@ PUB_FUNC void *tcc_mallocz(unsigned long size);
 PUB_FUNC void *tcc_realloc(void *ptr, unsigned long size);
 PUB_FUNC char *tcc_strdup(const char *str);
 
-#define free(p) use_tcc_free(p)
-#define malloc(s) use_tcc_malloc(s)
-#define realloc(p, s) use_tcc_realloc(p, s)
-#undef strdup
-#define strdup(s) use_tcc_strdup(s)
 PUB_FUNC void tcc_memcheck(void);
 PUB_FUNC void tcc_error_noabort(const char *fmt, ...);
 PUB_FUNC NORETURN void tcc_error(const char *fmt, ...);
