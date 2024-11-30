@@ -619,21 +619,19 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
 
 static void parse_string(const char *s, int len)
 {
-    uint8_t buf[1000], *p = buf;
+    uint8_t *p;
     int is_long, sep;
 
     is_long=0;
     sep = *s++;
     len -= 2;
-    if (len >= sizeof buf)
-        p = tcc_malloc(len + 1);
+    p = tcc_malloc(len + 1);
     memcpy(p, s, len);
     p[len] = 0;
 
     cstr_reset(&tokcstr);
     parse_escape_string(&tokcstr, p, is_long);
-    if (p != buf)
-        tcc_free(p);
+    tcc_free(p);
 
     if (sep == '\'') {
         int char_size, i, n, c;
