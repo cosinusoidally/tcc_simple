@@ -221,8 +221,6 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     return tok_alloc_new(pts, str, len);
 }
 
-/* XXX: buffer overflow */
-/* XXX: float tokens */
 ST_FUNC const char *get_tok_str(int v, CValue *cv)
 {
     char *p;
@@ -231,18 +229,11 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
     cstr_reset(&cstr_buf);
     p = cstr_buf.data;
 
-    switch(v) {
-    case TOK_PPNUM:
-    case TOK_PPSTR:
-        return (char*)cv->str.data;
-    default:
-        if (v < tok_ident) {
-            return table_ident[v - TOK_IDENT]->str;
-        } else if (v >= SYM_FIRST_ANOM) {
-            /* special name for anonymous symbol */
-            sprintf(p, "L.%u", v - SYM_FIRST_ANOM);
-        }
-        break;
+    if (v < tok_ident) {
+        return table_ident[v - TOK_IDENT]->str;
+    } else if (v >= SYM_FIRST_ANOM) {
+        /* special name for anonymous symbol */
+        sprintf(p, "L.%u", v - SYM_FIRST_ANOM);
     }
     return cstr_buf.data;
 }
@@ -275,23 +266,6 @@ ST_FUNC int handle_eob(void)
         bf->buf_ptr = bf->buf_end;
         return CH_EOF;
     }
-}
-
-/* read next char from current input file and handle end of input buffer */
-ST_INLN void inp(void)
-{
-exit(1);
-}
-
-/* handle '\[\r]\n' */
-static int handle_stray_noerror(void)
-{
-exit(1);
-}
-
-static void handle_stray(void)
-{
-exit(1);
 }
 
 /* skip the stray and handle the \\n case. Output an error if
@@ -337,9 +311,6 @@ static int handle_stray1(uint8_t *p)
 ST_FUNC void minp(void)
 {
 exit(1);
-    inp();
-    if (ch == '\\') 
-        handle_stray();
 }
 
 /* single line C++ comments */
