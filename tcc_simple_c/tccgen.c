@@ -1103,29 +1103,17 @@ static inline void convert_parameter_type(CType *pt)
     pt->t &= ~(VT_CONSTANT | VT_VOLATILE);
     /* array must be transformed to pointer according to ANSI C */
     pt->t &= ~VT_ARRAY;
-    if ((pt->t & VT_BTYPE) == VT_FUNC) {
-        mk_pointer(pt);
-    }
 }
 
 ST_FUNC void parse_asm_str(CString *astr)
 {
-    skip('(');
-    parse_mult_str(astr, "string constant");
+exit(1);
 }
 
 /* Parse an asm label and return the token */
 static int asm_label_instr(void)
 {
-    int v;
-    CString astr;
-
-    next();
-    parse_asm_str(&astr);
-    skip(')');
-    v = tok_alloc(astr.data, astr.size - 1)->tok;
-    cstr_free(&astr);
-    return v;
+exit(1);
 }
 
 static int post_type(CType *type, AttributeDef *ad, int storage, int td)
@@ -1138,34 +1126,20 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
     if (tok == '(') {
         /* function type, or recursive declarator (return if so) */
         next();
-	if (td && !(td & TYPE_ABSTRACT))
-	  return 0;
-	if (tok == ')')
+	if (tok == ')') {
 	  l = 0;
-	else if (parse_btype(&pt, &ad1))
-	  l = FUNC_NEW;
-	else if (td)
-	  return 0;
-	else
-	  l = FUNC_OLD;
+	} else {
+            parse_btype(&pt, &ad1);
+            l = FUNC_NEW;
+        }
         first = NULL;
         plast = &first;
         arg_size = 0;
         if (l) {
             for(;;) {
                 /* read param name and compute offset */
-                if (l != FUNC_OLD) {
-                    if ((pt.t & VT_BTYPE) == VT_VOID && tok == ')')
-                        break;
-                    type_decl(&pt, &ad1, &n, TYPE_DIRECT | TYPE_ABSTRACT);
-                    arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
-                } else {
-                    n = tok;
-                    if (n < TOK_UIDENT)
-                        expect("identifier");
-                    pt.t = VT_VOID; /* invalid type */
-                    next();
-                }
+                type_decl(&pt, &ad1, &n, TYPE_DIRECT | TYPE_ABSTRACT);
+                arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
                 convert_parameter_type(&pt);
                 s = sym_push(n | SYM_FIELD, &pt, 0, 0);
                 *plast = s;
@@ -1173,14 +1147,7 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
                 if (tok == ')')
                     break;
                 skip(',');
-                if (l == FUNC_NEW && tok == TOK_DOTS) {
-                    l = FUNC_ELLIPSIS;
-                    next();
-                    break;
-                }
-		if (l == FUNC_NEW) {
-                    parse_btype(&pt, &ad1);
-                }
+                parse_btype(&pt, &ad1);
             }
         } else
             /* if no parameters, then old type prototype */
