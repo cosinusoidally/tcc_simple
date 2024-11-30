@@ -450,15 +450,6 @@ ST_FUNC TokenString *tok_str_alloc(void)
     return str;
 }
 
-ST_FUNC int *tok_str_dup(TokenString *s)
-{
-    int *str;
-
-    str = tal_realloc(tokstr_alloc, 0, s->len * sizeof(int));
-    memcpy(str, s->str, s->len * sizeof(int));
-    return str;
-}
-
 ST_FUNC void tok_str_free_str(int *str)
 {
     tal_free(tokstr_alloc, str);
@@ -515,11 +506,7 @@ ST_FUNC void end_macro(void)
     macro_stack = str->prev;
     macro_ptr = str->prev_ptr;
     file->line_num = str->save_line_num;
-    if (str->alloc == 2) {
-        str->alloc = 3; /* just mark as finished */
-    } else {
-        tok_str_free(str);
-    }
+    tok_str_free(str);
 }
 
 static void tok_str_add2(TokenString *s, int t, CValue *cv)
@@ -621,14 +608,6 @@ ST_INLN void define_push(int v, int macro_type, int *str, Sym *first_arg)
     table_ident[v - TOK_IDENT]->sym_define = s;
 }
 
-/* undefined a define symbol. Its name is just set to zero */
-ST_FUNC void define_undef(Sym *s)
-{
-    int v = s->v;
-    if (v >= TOK_IDENT && v < tok_ident)
-        table_ident[v - TOK_IDENT]->sym_define = NULL;
-}
-
 ST_INLN Sym *define_find(int v)
 {
     v -= TOK_IDENT;
@@ -640,31 +619,7 @@ ST_INLN Sym *define_find(int v)
 /* free define stack until top reaches 'b' */
 ST_FUNC void free_defines(Sym *b)
 {
-    while (define_stack != b) {
-        Sym *top = define_stack;
-        define_stack = top->prev;
-        tok_str_free_str(top->d);
-        define_undef(top);
-        sym_free(top);
-    }
-
-    /* restore remaining (-D or predefined) symbols if they were
-       #undef'd in the file */
-    while (b) {
-        int v = b->v;
-        if (v >= TOK_IDENT && v < tok_ident) {
-            Sym **d = &table_ident[v - TOK_IDENT]->sym_define;
-            if (!*d)
-                *d = b;
-        }
-        b = b->prev;
-    }
-}
-
-/* parse after #define */
-ST_FUNC void parse_define(void)
-{
-exit(1);
+return;
 }
 
 static CachedInclude *search_cached_include(TCCState *s1, const char *filename, int add)

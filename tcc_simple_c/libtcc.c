@@ -229,23 +229,7 @@ static int tcc_compile(TCCState *s1)
 /* define a preprocessor symbol. A value can also be provided with the '=' operator */
 LIBTCCAPI void tcc_define_symbol(TCCState *s1, const char *sym, const char *value)
 {
-    int len1, len2;
-    /* default value */
-    if (!value)
-        value = "1";
-    len1 = strlen(sym);
-    len2 = strlen(value);
-
-    /* init file structure */
-    tcc_open_bf(s1, "<define>", len1 + len2 + 1);
-    memcpy(file->buffer, sym, len1);
-    file->buffer[len1] = ' ';
-    memcpy(file->buffer + len1 + 1, value, len2);
-
-    /* parse with define parser */
-    next_nomacro();
-    parse_define();
-    tcc_close();
+exit(1);
 }
 
 /* cleanup all static data used during compilation */
