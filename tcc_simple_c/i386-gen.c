@@ -206,9 +206,8 @@ ST_FUNC void gfunc_call(int nb_args)
 /* generate function prolog of type 't' */
 ST_FUNC void gfunc_prolog(CType *func_type)
 {
-    int addr, align, size, func_call, fastcall_nb_regs;
+    int addr, align, size, func_call;
     int param_index, param_addr;
-    uint8_t *fastcall_regs_ptr;
     Sym *sym;
     CType *type;
 
@@ -218,17 +217,10 @@ ST_FUNC void gfunc_prolog(CType *func_type)
     loc = 0;
     func_vc = 0;
 
-    fastcall_nb_regs = 0;
-    fastcall_regs_ptr = NULL;
-
     param_index = 0;
 
     ind += FUNC_PROLOG_SIZE;
     func_sub_sp_offset = ind;
-    /* if the function returns a structure, then add an
-       implicit pointer parameter */
-    func_vt = sym->type;
-    func_var = (sym->f.func_type == FUNC_ELLIPSIS);
     /* define parameters */
     while ((sym = sym->next) != NULL) {
         type = &sym->type;
