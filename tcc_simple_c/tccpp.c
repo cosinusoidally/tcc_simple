@@ -305,20 +305,6 @@ static int handle_stray1(uint8_t *p)
     }\
 }
 
-/* input with '\[\r]\n' handling. Note that this function cannot
-   handle other characters after '\', so you cannot call it inside
-   strings or comments */
-ST_FUNC void minp(void)
-{
-exit(1);
-}
-
-/* single line C++ comments */
-static uint8_t *parse_line_comment(uint8_t *p)
-{
-exit(1);
-}
-
 /* C comments */
 ST_FUNC uint8_t *parse_comment(uint8_t *p)
 {
@@ -403,12 +389,6 @@ ST_FUNC int set_idnum(int c, int val)
 }
 
 #define cinp minp
-
-static inline void skip_spaces(void)
-{
-    while (isidnum_table[ch - CH_EOF] & IS_SPC)
-        cinp();
-}
 
 static inline int check_space(int t, int *spc) 
 {
@@ -1338,12 +1318,7 @@ maybe_newline:
                 p++;
                 tok = TOK_TWOSHARPS;
             } else {
-                if (parse_flags & PARSE_FLAG_ASM_FILE) {
-                    p = parse_line_comment(p - 1);
-                    goto redo_no_start;
-                } else {
-                    tok = '#';
-                }
+                tok = '#';
             }
         }
         break;
@@ -1599,10 +1574,6 @@ maybe_newline:
         if (c == '*') {
             p = parse_comment(p);
             /* comments replaced by a blank */
-            tok = ' ';
-            goto keep_tok_flags;
-        } else if (c == '/') {
-            p = parse_line_comment(p);
             tok = ' ';
             goto keep_tok_flags;
         } else if (c == '=') {
