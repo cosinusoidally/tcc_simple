@@ -648,17 +648,6 @@ static void parse_string(const char *s, int len)
 /* we use 64 bit numbers */
 #define BN_SIZE 2
 
-/* bn = (bn << shift) | or_val */
-static void bn_lshift(unsigned int *bn, int shift, int or_val)
-{
-exit(1);
-}
-
-static void bn_zero(unsigned int *bn)
-{
-exit(1);
-}
-
 /* parse number in null terminated string 'p' and return it in the
    current token */
 static void parse_number(const char *p)
