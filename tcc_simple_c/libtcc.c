@@ -61,32 +61,6 @@ ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
     return buf;
 }
 
-/* strcat and truncate. */
-ST_FUNC char *pstrcat(char *buf, int buf_size, const char *s)
-{
-    int len;
-    len = strlen(buf);
-    if (len < buf_size)
-        pstrcpy(buf + len, buf_size - len, s);
-    return buf;
-}
-
-ST_FUNC char *pstrncpy(char *out, const char *in, size_t num)
-{
-    memcpy(out, in, num);
-    out[num] = '\0';
-    return out;
-}
-
-/* extract the basename of a file */
-PUB_FUNC char *tcc_basename(const char *name)
-{
-    char *p = strchr(name, 0);
-    while (p > name && !IS_DIRSEP(p[-1]))
-        --p;
-    return p;
-}
-
 /********************************************************/
 /* memory management */
 
@@ -172,22 +146,7 @@ ST_FUNC void dynarray_reset(void *pp, int *n)
 
 static void tcc_split_path(TCCState *s, void *p_ary, int *p_nb_ary, const char *in)
 {
-    const char *p;
-    do {
-        int c;
-        CString str;
-
-        cstr_new(&str);
-        for (p = in; c = *p, c != '\0' && c != PATHSEP[0]; ++p) {
-            cstr_ccat(&str, c);
-        }
-        if (str.size) {
-            cstr_ccat(&str, '\0');
-            dynarray_add(p_ary, p_nb_ary, tcc_strdup(str.data));
-        }
-        cstr_free(&str);
-        in = p+1;
-    } while (*p);
+exit(1);
 }
 
 PUB_FUNC void tcc_error(const char *fmt, ...)
@@ -434,8 +393,7 @@ LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type)
 
 LIBTCCAPI int tcc_add_include_path(TCCState *s, const char *pathname)
 {
-    tcc_split_path(s, &s->include_paths, &s->nb_include_paths, pathname);
-    return 0;
+exit(1);
 }
 
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
