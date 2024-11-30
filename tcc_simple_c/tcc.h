@@ -30,9 +30,6 @@
 
 #define O_BINARY 0
 
-#define NORETURN __attribute__((noreturn))
-#define ALIGNED(x) __attribute__((aligned(x)))
-
 #define IS_DIRSEP(c) (c == '/')
 #define IS_ABSPATH(p) IS_DIRSEP(p[0])
 #define PATHCMP strcmp
@@ -758,7 +755,6 @@ PUB_FUNC char *tcc_strdup(const char *str);
 
 PUB_FUNC void tcc_memcheck(void);
 PUB_FUNC void tcc_error_noabort(const char *fmt, ...);
-PUB_FUNC NORETURN void tcc_error(const char *fmt, ...);
 PUB_FUNC void tcc_warning(const char *fmt, ...);
 
 /* other utilities */
@@ -884,7 +880,6 @@ ST_FUNC void tccpp_new(TCCState *s);
 ST_FUNC void tccpp_delete(TCCState *s);
 ST_FUNC int tcc_preprocess(TCCState *s1);
 ST_FUNC void skip(int c);
-ST_FUNC NORETURN void expect(const char *msg);
 
 /* space excluding newline */
 static inline int is_space(int ch) {
