@@ -719,44 +719,9 @@ static void parse_number(const char *p)
         n = n * b + t;
     }
 
-    /* Determine the characteristics (unsigned and/or 64bit) the type of
-       the constant must have according to the constant suffix(es) */
-    lcount = ucount = 0;
-    p1 = p;
-
-    /* Determine if it needs 64 bits and/or unsigned in order to fit */
-    if (ucount == 0 && b == 10) {
-        if (lcount <= (LONG_SIZE == 4)) {
-            if (n >= 0x80000000U)
-                lcount = (LONG_SIZE == 4) + 1;
-        }
-        if (n >= 0x8000000000000000ULL)
-            ov = 1, ucount = 1;
-    } else {
-        if (lcount <= (LONG_SIZE == 4)) {
-            if (n >= 0x100000000ULL)
-                lcount = (LONG_SIZE == 4) + 1;
-            else if (n >= 0x80000000U)
-                ucount = 1;
-        }
-        if (n >= 0x8000000000000000ULL)
-            ucount = 1;
-    }
-
-    if (ov)
-        tcc_warning("integer constant overflow");
-
     tok = TOK_CINT;
-        if (lcount) {
-        tok = TOK_CLONG;
-           if (lcount == 2)
-               tok = TOK_CLLONG;
-        }
-        if (ucount)
-            ++tok; /* TOK_CU... */
-        tokc.i = n;
-    if (ch)
-        tcc_error("invalid number\n");
+    ++tok; /* TOK_CU... */
+    tokc.i = n;
 }
 
 
