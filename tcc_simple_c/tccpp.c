@@ -388,19 +388,6 @@ ST_FUNC int set_idnum(int c, int val)
     return prev;
 }
 
-#define cinp minp
-
-static inline int check_space(int t, int *spc) 
-{
-    if (t < 256 && (isidnum_table[t - CH_EOF] & IS_SPC)) {
-        if (*spc) 
-            return 1;
-        *spc = 1;
-    } else 
-        *spc = 0;
-    return 0;
-}
-
 /* parse a string without interpreting escapes */
 static uint8_t *parse_pp_string(uint8_t *p,
                                 int sep, CString *str)
@@ -614,12 +601,6 @@ ST_INLN Sym *define_find(int v)
     if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
         return NULL;
     return table_ident[v]->sym_define;
-}
-
-/* is_bof is true if first non space token at beginning of file */
-ST_FUNC void preprocess(int is_bof)
-{
-exit(1);
 }
 
 /* evaluate escape codes in a string. */
@@ -1116,7 +1097,6 @@ maybe_newline:
         if ((tok_flags & TOK_FLAG_BOL) && 
             (parse_flags & PARSE_FLAG_PREPROCESS)) {
             file->buf_ptr = p;
-            preprocess(tok_flags & TOK_FLAG_BOF);
             p = file->buf_ptr;
             goto maybe_newline;
         } else {
