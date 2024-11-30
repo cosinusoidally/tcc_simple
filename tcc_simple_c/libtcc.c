@@ -182,8 +182,6 @@ ST_FUNC void tcc_close(void)
         close(bf->fd);
         total_lines += bf->line_num;
     }
-    if (bf->true_filename != bf->filename)
-        tcc_free(bf->true_filename);
     file = bf->prev;
     tcc_free(bf);
 }
@@ -192,8 +190,6 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename)
 {
     int fd;
     fd = open(filename, O_RDONLY | O_BINARY);
-    if (fd < 0)
-        return -1;
     tcc_open_bf(s1, filename, 0);
     file->fd = fd;
     return fd;
@@ -219,17 +215,10 @@ static int tcc_compile(TCCState *s1)
     s1->error_set_jmp_enabled = 0;
 
     /* reset define stack, but keep -D and built-ins */
-    free_defines(define_start);
     sym_pop(&global_stack, NULL, 0);
     sym_pop(&local_stack, NULL, 0);
     tccelf_end_file(s1);
     return s1->nb_errors != 0 ? -1 : 0;
-}
-
-/* define a preprocessor symbol. A value can also be provided with the '=' operator */
-LIBTCCAPI void tcc_define_symbol(TCCState *s1, const char *sym, const char *value)
-{
-exit(1);
 }
 
 /* cleanup all static data used during compilation */

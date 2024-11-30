@@ -616,12 +616,6 @@ ST_INLN Sym *define_find(int v)
     return table_ident[v]->sym_define;
 }
 
-/* free define stack until top reaches 'b' */
-ST_FUNC void free_defines(Sym *b)
-{
-return;
-}
-
 static CachedInclude *search_cached_include(TCCState *s1, const char *filename, int add)
 {
 exit(1);
@@ -1586,9 +1580,6 @@ ST_FUNC void tccpp_new(TCCState *s)
 ST_FUNC void tccpp_delete(TCCState *s)
 {
     int i, n;
-
-    /* free -D and compiler defines */
-    free_defines(NULL);
 
     /* free tokens */
     n = tok_ident - TOK_IDENT;
