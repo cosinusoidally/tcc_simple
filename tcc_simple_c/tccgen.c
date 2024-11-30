@@ -357,27 +357,6 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep)
 
 static void vsetc(CType *type, int r, CValue *vc)
 {
-    int v;
-
-    /* cannot let cpu flags if other instruction are generated. Also
-       avoid leaving VT_JMP anywhere except on the top of the stack
-       because it would complicate the code generator.
-
-       Don't do this when nocode_wanted.  vtop might come from
-       !nocode_wanted regions (see 88_codeopt.c) and transforming
-       it to a register without actually generating code is wrong
-       as their value might still be used for real.  All values
-       we push under nocode_wanted will eventually be popped
-       again, so that the VT_CMP/VT_JMP value will be in vtop
-       when code is unsuppressed again.
-
-       Same logic below in vswap(); */
-    if (vtop >= vstack && !nocode_wanted) {
-        v = vtop->r & VT_VALMASK;
-        if (v == VT_CMP || (v & ~1) == VT_JMP)
-            gv(RC_INT);
-    }
-
     vtop++;
     vtop->type = *type;
     vtop->r = r;
@@ -389,12 +368,6 @@ static void vsetc(CType *type, int r, CValue *vc)
 ST_FUNC void vswap(void)
 {
     SValue tmp;
-    /* cannot vswap cpu flags. See comment at vsetc() above */
-    if (vtop >= vstack && !nocode_wanted) {
-        int v = vtop->r & VT_VALMASK;
-        if (v == VT_CMP || (v & ~1) == VT_JMP)
-            gv(RC_INT);
-    }
     tmp = vtop[0];
     vtop[0] = vtop[-1];
     vtop[-1] = tmp;
