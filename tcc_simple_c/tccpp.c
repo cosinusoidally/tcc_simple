@@ -744,11 +744,6 @@ static inline void next_nomacro1(void)
         while (isidnum_table[*p - CH_EOF] & IS_SPC)
             ++p;
         goto redo_no_start;
-    case '\f':
-    case '\v':
-    case '\r':
-        p++;
-        goto redo_no_start;
     case '\\':
         /* first look if it is in fact an end of buffer */
         c = handle_stray1(p);
@@ -764,33 +759,6 @@ static inline void next_nomacro1(void)
 maybe_newline:
         if (0 == (parse_flags & PARSE_FLAG_LINEFEED))
             goto redo_no_start;
-        tok = TOK_LINEFEED;
-        goto keep_tok_flags;
-
-    case '#':
-        /* XXX: simplify */
-        PEEKC(c, p);
-        if ((tok_flags & TOK_FLAG_BOL) && 
-            (parse_flags & PARSE_FLAG_PREPROCESS)) {
-            file->buf_ptr = p;
-            p = file->buf_ptr;
-            goto maybe_newline;
-        } else {
-            if (c == '#') {
-                p++;
-                tok = TOK_TWOSHARPS;
-            } else {
-                tok = '#';
-            }
-        }
-        break;
-    
-    /* dollar is allowed to start identifiers when not parsing asm */
-    case '$':
-        if (!(isidnum_table[c - CH_EOF] & IS_ID)
-         || (parse_flags & PARSE_FLAG_ASM_FILE))
-            goto parse_simple;
-
     case 'a': case 'b': case 'c': case 'd':
     case 'e': case 'f': case 'g': case 'h':
     case 'i': case 'j': case 'k': case 'l':
