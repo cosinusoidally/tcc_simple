@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <errno.h>
-#include <math.h>
 #include <fcntl.h>
 #include <setjmp.h>
 #include <unistd.h>
