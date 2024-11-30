@@ -664,90 +664,7 @@ ST_FUNC void free_defines(Sym *b)
 /* parse after #define */
 ST_FUNC void parse_define(void)
 {
-    Sym *s, *first, **ps;
-    int v, t, varg, is_vaargs, spc;
-    int saved_parse_flags = parse_flags;
-
-    v = tok;
-    if (v < TOK_IDENT || v == TOK_DEFINED)
-        tcc_error("invalid macro name '%s'", get_tok_str(tok, &tokc));
-    /* XXX: should check if same macro (ANSI) */
-    first = NULL;
-    t = MACRO_OBJ;
-    /* We have to parse the whole define as if not in asm mode, in particular
-       no line comment with '#' must be ignored.  Also for function
-       macros the argument list must be parsed without '.' being an ID
-       character.  */
-    parse_flags = ((parse_flags & ~PARSE_FLAG_ASM_FILE) | PARSE_FLAG_SPACES);
-    /* '(' must be just after macro definition for MACRO_FUNC */
-    next_nomacro_spc();
-    if (tok == '(') {
-        int dotid = set_idnum('.', 0);
-        next_nomacro();
-        ps = &first;
-        if (tok != ')') for (;;) {
-            varg = tok;
-            next_nomacro();
-            is_vaargs = 0;
-            if (varg == TOK_DOTS) {
-                varg = TOK___VA_ARGS__;
-                is_vaargs = 1;
-            } else if (tok == TOK_DOTS && gnu_ext) {
-                is_vaargs = 1;
-                next_nomacro();
-            }
-            if (varg < TOK_IDENT)
-        bad_list:
-                tcc_error("bad macro parameter list");
-            s = sym_push2(&define_stack, varg | SYM_FIELD, is_vaargs, 0);
-            *ps = s;
-            ps = &s->next;
-            if (tok == ')')
-                break;
-            if (tok != ',' || is_vaargs)
-                goto bad_list;
-            next_nomacro();
-        }
-        next_nomacro_spc();
-        t = MACRO_FUNC;
-        set_idnum('.', dotid);
-    }
-
-    tokstr_buf.len = 0;
-    spc = 2;
-    parse_flags |= PARSE_FLAG_ACCEPT_STRAYS | PARSE_FLAG_SPACES | PARSE_FLAG_LINEFEED;
-    /* The body of a macro definition should be parsed such that identifiers
-       are parsed like the file mode determines (i.e. with '.' being an
-       ID character in asm mode).  But '#' should be retained instead of
-       regarded as line comment leader, so still don't set ASM_FILE
-       in parse_flags. */
-    while (tok != TOK_LINEFEED && tok != TOK_EOF) {
-        /* remove spaces around ## and after '#' */
-        if (TOK_TWOSHARPS == tok) {
-            if (2 == spc)
-                goto bad_twosharp;
-            if (1 == spc)
-                --tokstr_buf.len;
-            spc = 3;
-	    tok = TOK_PPJOIN;
-        } else if ('#' == tok) {
-            spc = 4;
-        } else if (check_space(tok, &spc)) {
-            goto skip;
-        }
-        tok_str_add2(&tokstr_buf, tok, &tokc);
-    skip:
-        next_nomacro_spc();
-    }
-
-    parse_flags = saved_parse_flags;
-    if (spc == 1)
-        --tokstr_buf.len; /* remove trailing space */
-    tok_str_add(&tokstr_buf, 0);
-    if (3 == spc)
-bad_twosharp:
-        tcc_error("'##' cannot appear at either end of macro");
-    define_push(v, t, tok_str_dup(&tokstr_buf), first);
+exit(1);
 }
 
 static CachedInclude *search_cached_include(TCCState *s1, const char *filename, int add)
@@ -1690,11 +1607,6 @@ ST_FUNC void tccpp_new(TCCState *s)
 
     for(i = 128; i<256; i++)
         set_idnum(i, IS_ID);
-
-    /* init allocators */
-    tal_new(&toksym_alloc, TOKSYM_TAL_LIMIT, TOKSYM_TAL_SIZE);
-    tal_new(&tokstr_alloc, TOKSTR_TAL_LIMIT, TOKSTR_TAL_SIZE);
-    tal_new(&cstr_alloc, CSTR_TAL_LIMIT, CSTR_TAL_SIZE);
 
     memset(hash_ident, 0, TOK_HASH_SIZE * sizeof(TokenSym *));
     cstr_new(&cstr_buf);
