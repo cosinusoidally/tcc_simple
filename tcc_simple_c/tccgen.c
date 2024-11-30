@@ -1465,14 +1465,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         /* NOTE: const is ignored in returned type as it has a special
            meaning in gcc / C++ */
         type->t &= ~VT_CONSTANT; 
-        /* some ancient pre-K&R C allows a function to return an array
-           and the array brackets to be put after the arguments, such 
-           that "int c()[]" means something like "int[] c()" */
-        if (tok == '[') {
-            next();
-            skip(']'); /* only handle simple "[]" */
-            mk_pointer(type);
-        }
         /* we push a anonymous symbol which will contain the function prototype */
         ad->f.func_args = arg_size;
         ad->f.func_type = l;
@@ -1481,57 +1473,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         s->f = ad->f;
         s->next = first;
         type->t = VT_FUNC;
-        type->ref = s;
-    } else if (tok == '[') {
-	int saved_nocode_wanted = nocode_wanted;
-        /* array definition */
-        next();
-        if (tok == TOK_RESTRICT1)
-            next();
-        n = -1;
-        t1 = 0;
-        if (tok != ']') {
-            /* VLAs (which can only happen with local_stack && !VT_STATIC)
-               length must always be evaluated, even under nocode_wanted,
-               so that its size slot is initialized (e.g. under sizeof
-               or typeof).  */
-            nocode_wanted = 0;
-            gexpr();
-            if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
-                n = vtop->c.i;
-                if (n < 0)
-                    tcc_error("invalid array size");
-            } else {
-                if (!is_integer_btype(vtop->type.t & VT_BTYPE))
-                    tcc_error("size of variable length array should be an integer");
-                t1 = VT_VLA;
-            }
-        }
-        skip(']');
-        /* parse next post type */
-        post_type(type, ad, storage, 0);
-        if (type->t == VT_FUNC)
-            tcc_error("declaration of an array of functions");
-        t1 |= type->t & VT_VLA;
-        
-        if (t1 & VT_VLA) {
-            loc -= type_size(&int_type, &align);
-            loc &= -align;
-            n = loc;
-
-            gen_op('*');
-            vset(&int_type, VT_LOCAL|VT_LVAL, n);
-            vswap();
-            vstore();
-        }
-        if (n != -1)
-            vpop();
-	nocode_wanted = saved_nocode_wanted;
-                
-        /* we push an anonymous symbol which will contain the array
-           element type */
-        s = sym_push(SYM_FIELD, type, 0, n);
-        type->t = (t1 ? VT_VLA : VT_ARRAY) | VT_PTR;
         type->ref = s;
     }
     return 1;
