@@ -680,10 +680,6 @@ static void parse_number(const char *p)
             q--;
             ch = *p++;
             b = 16;
-        } else if (tcc_ext && (ch == 'b' || ch == 'B')) {
-            q--;
-            ch = *p++;
-            b = 2;
         }
     }
     /* parse all digits. cannot check octal numbers at this stage
@@ -715,43 +711,18 @@ static void parse_number(const char *p)
         /* no need for checks except for base 10 / 8 errors */
         if (t == '\0')
             break;
-        else if (t >= 'a')
-            t = t - 'a' + 10;
         else if (t >= 'A')
             t = t - 'A' + 10;
         else
             t = t - '0';
-        if (t >= b)
-            tcc_error("invalid digit");
         n1 = n;
         n = n * b + t;
-        /* detect overflow */
-        if (n1 >= 0x1000000000000000ULL && n / b != n1)
-            ov = 1;
     }
 
     /* Determine the characteristics (unsigned and/or 64bit) the type of
        the constant must have according to the constant suffix(es) */
     lcount = ucount = 0;
     p1 = p;
-    for(;;) {
-        t = toup(ch);
-        if (t == 'L') {
-            if (lcount >= 2)
-                tcc_error("three 'l's in integer constant");
-            if (lcount && *(p - 1) != ch)
-                tcc_error("incorrect integer suffix: %s", p1);
-            lcount++;
-            ch = *p++;
-        } else if (t == 'U') {
-            if (ucount >= 1)
-                tcc_error("two 'u's in integer constant");
-            ucount++;
-            ch = *p++;
-        } else {
-            break;
-        }
-    }
 
     /* Determine if it needs 64 bits and/or unsigned in order to fit */
     if (ucount == 0 && b == 10) {
