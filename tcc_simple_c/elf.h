@@ -280,9 +280,6 @@ typedef struct
 #define SHF_EXCLUDE	     (1 << 31)	/* Section is excluded unless
 					   referenced or allocated (Solaris).*/
 
-/* Section group handling.  */
-#define GRP_COMDAT	0x1		/* Mark group as COMDAT.  */
-
 /* Symbol table entry.  */
 
 typedef struct
@@ -295,16 +292,6 @@ typedef struct
   Elf32_Section	st_shndx;		/* Section index */
 } Elf32_Sym;
 
-typedef struct
-{
-  Elf64_Word	st_name;		/* Symbol name (string tbl index) */
-  unsigned char	st_info;		/* Symbol type and binding */
-  unsigned char st_other;		/* Symbol visibility */
-  Elf64_Section	st_shndx;		/* Section index */
-  Elf64_Addr	st_value;		/* Symbol value */
-  Elf64_Xword	st_size;		/* Symbol size */
-} Elf64_Sym;
-
 /* The syminfo section if available contains additional information about
    every dynamic symbol.  */
 
@@ -314,39 +301,11 @@ typedef struct
   Elf32_Half si_flags;			/* Per symbol flags */
 } Elf32_Syminfo;
 
-typedef struct
-{
-  Elf64_Half si_boundto;		/* Direct bindings, symbol bound to */
-  Elf64_Half si_flags;			/* Per symbol flags */
-} Elf64_Syminfo;
-
-/* Possible values for si_boundto.  */
-#define SYMINFO_BT_SELF		0xffff	/* Symbol bound to self */
-#define SYMINFO_BT_PARENT	0xfffe	/* Symbol bound to parent */
-#define SYMINFO_BT_LOWRESERVE	0xff00	/* Beginning of reserved entries */
-
-/* Possible bitmasks for si_flags.  */
-#define SYMINFO_FLG_DIRECT	0x0001	/* Direct bound symbol */
-#define SYMINFO_FLG_PASSTHRU	0x0002	/* Pass-thru symbol for translator */
-#define SYMINFO_FLG_COPY	0x0004	/* Symbol is a copy-reloc */
-#define SYMINFO_FLG_LAZYLOAD	0x0008	/* Symbol bound to object to be lazy
-					   loaded */
-/* Syminfo version values.  */
-#define SYMINFO_NONE		0
-#define SYMINFO_CURRENT		1
-#define SYMINFO_NUM		2
-
-
 /* How to extract and insert information held in the st_info field.  */
 
 #define ELF32_ST_BIND(val)		(((unsigned char) (val)) >> 4)
 #define ELF32_ST_TYPE(val)		((val) & 0xf)
 #define ELF32_ST_INFO(bind, type)	(((bind) << 4) + ((type) & 0xf))
-
-/* Both Elf32_Sym and Elf64_Sym use the same one-byte st_info field.  */
-#define ELF64_ST_BIND(val)		ELF32_ST_BIND (val)
-#define ELF64_ST_TYPE(val)		ELF32_ST_TYPE (val)
-#define ELF64_ST_INFO(bind, type)	ELF32_ST_INFO ((bind), (type))
 
 /* Legal values for ST_BIND subfield of st_info (symbol binding).  */
 
@@ -388,9 +347,6 @@ typedef struct
 
 #define ELF32_ST_VISIBILITY(o)	((o) & 0x03)
 
-/* For ELF64 the definitions are the same.  */
-#define ELF64_ST_VISIBILITY(o)	ELF32_ST_VISIBILITY (o)
-
 /* Symbol visibility specification encoded in the st_other field.  */
 #define STV_DEFAULT	0		/* Default symbol visibility rules */
 #define STV_INTERNAL	1		/* Processor specific hidden class */
@@ -406,17 +362,6 @@ typedef struct
   Elf32_Word	r_info;			/* Relocation type and symbol index */
 } Elf32_Rel;
 
-/* I have seen two different definitions of the Elf64_Rel and
-   Elf64_Rela structures, so we'll leave them out until Novell (or
-   whoever) gets their act together.  */
-/* The following, at least, is used on Sparc v9, MIPS, and Alpha.  */
-
-typedef struct
-{
-  Elf64_Addr	r_offset;		/* Address */
-  Elf64_Xword	r_info;			/* Relocation type and symbol index */
-} Elf64_Rel;
-
 /* Relocation table entry with addend (in section of type SHT_RELA).  */
 
 typedef struct
@@ -425,13 +370,6 @@ typedef struct
   Elf32_Word	r_info;			/* Relocation type and symbol index */
   Elf32_Sword	r_addend;		/* Addend */
 } Elf32_Rela;
-
-typedef struct
-{
-  Elf64_Addr	r_offset;		/* Address */
-  Elf64_Xword	r_info;			/* Relocation type and symbol index */
-  Elf64_Sxword	r_addend;		/* Addend */
-} Elf64_Rela;
 
 /* How to extract and insert information held in the r_info field.  */
 
@@ -457,24 +395,6 @@ typedef struct
   Elf32_Word	p_align;		/* Segment alignment */
 } Elf32_Phdr;
 
-typedef struct
-{
-  Elf64_Word	p_type;			/* Segment type */
-  Elf64_Word	p_flags;		/* Segment flags */
-  Elf64_Off	p_offset;		/* Segment file offset */
-  Elf64_Addr	p_vaddr;		/* Segment virtual address */
-  Elf64_Addr	p_paddr;		/* Segment physical address */
-  Elf64_Xword	p_filesz;		/* Segment size in file */
-  Elf64_Xword	p_memsz;		/* Segment size in memory */
-  Elf64_Xword	p_align;		/* Segment alignment */
-} Elf64_Phdr;
-
-/* Special value for e_phnum.  This indicates that the real number of
-   program headers is too large to fit into e_phnum.  Instead the real
-   value is in the field sh_info of section 0.  */
-
-#define PN_XNUM		0xffff
-
 /* Legal values for p_type (segment type).  */
 
 #define	PT_NULL		0		/* Program header table entry unused */
@@ -486,17 +406,6 @@ typedef struct
 #define PT_PHDR		6		/* Entry for header table itself */
 #define PT_TLS		7		/* Thread-local storage segment */
 #define	PT_NUM		8		/* Number of defined types */
-#define PT_LOOS		0x60000000	/* Start of OS-specific */
-#define PT_GNU_EH_FRAME	0x6474e550	/* GCC .eh_frame_hdr segment */
-#define PT_GNU_STACK	0x6474e551	/* Indicates stack executability */
-#define PT_GNU_RELRO	0x6474e552	/* Read-only after relocation */
-#define PT_LOSUNW	0x6ffffffa
-#define PT_SUNWBSS	0x6ffffffa	/* Sun Specific segment */
-#define PT_SUNWSTACK	0x6ffffffb	/* Stack segment */
-#define PT_HISUNW	0x6fffffff
-#define PT_HIOS		0x6fffffff	/* End of OS-specific */
-#define PT_LOPROC	0x70000000	/* Start of processor-specific */
-#define PT_HIPROC	0x7fffffff	/* End of processor-specific */
 
 /* Legal values for p_flags (segment flags).  */
 
