@@ -982,45 +982,27 @@ ST_FUNC void vstore(void)
     ft = vtop[-1].type.t;
     sbt = vtop->type.t & VT_BTYPE;
     dbt = ft & VT_BTYPE;
-    if ((((sbt == VT_INT || sbt == VT_SHORT) && dbt == VT_BYTE) ||
-         (sbt == VT_INT && dbt == VT_SHORT))
-	&& !(vtop->type.t & VT_BITFIELD)) {
-        /* optimize char/short casts */
-        delayed_cast = VT_MUSTCAST;
-        vtop->type.t = ft & VT_TYPE;
-        /* XXX: factorize */
-        if (ft & VT_CONSTANT)
-            tcc_warning("assignment of read-only location");
-    } else {
-        delayed_cast = 0;
-        if (!(ft & VT_BITFIELD))
-            gen_assign_cast(&vtop[-1].type);
-    }
+    delayed_cast = 0;
+    if (!(ft & VT_BITFIELD))
+        gen_assign_cast(&vtop[-1].type);
 
-    if (dbt == VT_VOID) {
-        --vtop;
-    } else {
-        rc = RC_INT;
-        if (is_float(ft)) {
-            rc = RC_FLOAT;
-        }
-        r = gv(rc);  /* generate value */
-        /* if lvalue was saved on stack, must read it */
-        if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
-            SValue sv;
-            t = get_reg(RC_INT);
-            sv.type.t = VT_INT;
-            sv.r = VT_LOCAL | VT_LVAL;
-            sv.c.i = vtop[-1].c.i;
-            load(t, &sv);
-            vtop[-1].r = t | VT_LVAL;
-        }
-        store(r, vtop - 1);
-
-        vswap();
-        vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
-        vtop->r |= delayed_cast;
+    rc = RC_INT;
+    r = gv(rc);  /* generate value */
+    /* if lvalue was saved on stack, must read it */
+    if ((vtop[-1].r & VT_VALMASK) == VT_LLOCAL) {
+        SValue sv;
+        t = get_reg(RC_INT);
+        sv.type.t = VT_INT;
+        sv.r = VT_LOCAL | VT_LVAL;
+        sv.c.i = vtop[-1].c.i;
+        load(t, &sv);
+        vtop[-1].r = t | VT_LVAL;
     }
+    store(r, vtop - 1);
+
+    vswap();
+    vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
+    vtop->r |= delayed_cast;
 }
 
 /* post defines POST/PRE add. c is the token ++ or -- */
