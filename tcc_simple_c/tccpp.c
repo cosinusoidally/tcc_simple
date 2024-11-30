@@ -99,10 +99,6 @@ ST_FUNC void skip(int c)
     next();
 }
 
-ST_FUNC void expect(const char *msg)
-{
-}
-
 #define tal_free(al, p) tcc_free(p)
 #define tal_realloc(al, p, size) tcc_realloc(p, size)
 #define tal_new(a,b,c)
