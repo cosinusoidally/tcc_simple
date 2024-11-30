@@ -28,10 +28,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <setjmp.h>
-#include <time.h>
 #include <unistd.h>
-#include <sys/time.h>
-#include <dlfcn.h>
 #include <inttypes.h>
 
 #define O_BINARY 0
