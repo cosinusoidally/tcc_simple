@@ -622,8 +622,7 @@ static void parse_string(const char *s, int len)
     uint8_t buf[1000], *p = buf;
     int is_long, sep;
 
-    if ((is_long = *s == 'L'))
-        ++s, --len;
+    is_long=0;
     sep = *s++;
     len -= 2;
     if (len >= sizeof buf)
@@ -638,11 +637,7 @@ static void parse_string(const char *s, int len)
 
     if (sep == '\'') {
         int char_size, i, n, c;
-        /* XXX: make it portable */
-        if (!is_long)
-            tok = TOK_CCHAR, char_size = 1;
-        else
-            tok = TOK_LCHAR, char_size = sizeof(nwchar_t);
+        tok = TOK_CCHAR, char_size = 1;
         n = tokcstr.size / char_size - 1;
         if (n < 1)
             tcc_error("empty character constant");
