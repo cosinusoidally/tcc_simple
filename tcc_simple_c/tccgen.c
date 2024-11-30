@@ -1186,53 +1186,9 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
     type->t &= ~VT_STORAGE;
     post = ret = type;
 
-    while (tok == '*') {
-        qualifiers = 0;
-    redo:
-        next();
-        switch(tok) {
-        case TOK_CONST1:
-        case TOK_CONST2:
-        case TOK_CONST3:
-            qualifiers |= VT_CONSTANT;
-            goto redo;
-        case TOK_VOLATILE1:
-        case TOK_VOLATILE2:
-        case TOK_VOLATILE3:
-            qualifiers |= VT_VOLATILE;
-            goto redo;
-        case TOK_RESTRICT1:
-        case TOK_RESTRICT2:
-        case TOK_RESTRICT3:
-            goto redo;
-        }
-        mk_pointer(type);
-        type->t |= qualifiers;
-	if (ret == type)
-	    /* innermost pointed to type is the one for the first derivation */
-	    ret = pointed_type(type);
-    }
-
-    if (tok == '(') {
-	/* This is possibly a parameter type list for abstract declarators
-	   ('int ()'), use post_type for testing this.  */
-	if (!post_type(type, ad, 0, td)) {
-	    /* It's not, so it's a nested declarator, and the post operations
-	       apply to the innermost pointed to type (if any).  */
-	    /* XXX: this is not correct to modify 'ad' at this point, but
-	       the syntax is not clear */
-	    post = type_decl(type, ad, v, td);
-	    skip(')');
-	}
-    } else if (tok >= TOK_IDENT && (td & TYPE_DIRECT)) {
-	/* type identifier */
-	*v = tok;
-	next();
-    } else {
-	if (!(td & TYPE_ABSTRACT))
-	  expect("identifier");
-	*v = 0;
-    }
+    /* type identifier */
+    *v = tok;
+    next();
     post_type(post, ad, storage, 0);
     type->t |= storage;
     return ret;
