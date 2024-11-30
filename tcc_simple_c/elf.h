@@ -73,24 +73,6 @@ typedef struct
   Elf32_Half	e_shstrndx;		/* Section header string table index */
 } Elf32_Ehdr;
 
-typedef struct
-{
-  unsigned char	e_ident[EI_NIDENT];	/* Magic number and other info */
-  Elf64_Half	e_type;			/* Object file type */
-  Elf64_Half	e_machine;		/* Architecture */
-  Elf64_Word	e_version;		/* Object file version */
-  Elf64_Addr	e_entry;		/* Entry point virtual address */
-  Elf64_Off	e_phoff;		/* Program header table file offset */
-  Elf64_Off	e_shoff;		/* Section header table file offset */
-  Elf64_Word	e_flags;		/* Processor-specific flags */
-  Elf64_Half	e_ehsize;		/* ELF header size in bytes */
-  Elf64_Half	e_phentsize;		/* Program header table entry size */
-  Elf64_Half	e_phnum;		/* Program header table entry count */
-  Elf64_Half	e_shentsize;		/* Section header table entry size */
-  Elf64_Half	e_shnum;		/* Section header table entry count */
-  Elf64_Half	e_shstrndx;		/* Section header string table index */
-} Elf64_Ehdr;
-
 /* Fields in the e_ident array.  The EI_* macros are indices into the
    array.  The macros under each EI_* macro are the values the byte
    may have.  */
@@ -114,7 +96,6 @@ typedef struct
 #define EI_CLASS	4		/* File class byte index */
 #define ELFCLASSNONE	0		/* Invalid class */
 #define ELFCLASS32	1		/* 32-bit objects */
-#define ELFCLASS64	2		/* 64-bit objects */
 #define ELFCLASSNUM	3
 
 #define EI_DATA		5		/* Data encoding byte index */
@@ -126,26 +107,6 @@ typedef struct
 #define EI_VERSION	6		/* File version byte index */
 					/* Value must be EV_CURRENT */
 
-#define EI_OSABI	7		/* OS ABI identification */
-#define ELFOSABI_NONE		0	/* UNIX System V ABI */
-#define ELFOSABI_SYSV		0	/* Alias.  */
-#define ELFOSABI_HPUX		1	/* HP-UX */
-#define ELFOSABI_NETBSD		2	/* NetBSD.  */
-#define ELFOSABI_GNU		3	/* Object uses GNU ELF extensions.  */
-#define ELFOSABI_LINUX		ELFOSABI_GNU /* Compatibility alias.  */
-#define ELFOSABI_SOLARIS	6	/* Sun Solaris.  */
-#define ELFOSABI_AIX		7	/* IBM AIX.  */
-#define ELFOSABI_IRIX		8	/* SGI Irix.  */
-#define ELFOSABI_FREEBSD	9	/* FreeBSD.  */
-#define ELFOSABI_TRU64		10	/* Compaq TRU64 UNIX.  */
-#define ELFOSABI_MODESTO	11	/* Novell Modesto.  */
-#define ELFOSABI_OPENBSD	12	/* OpenBSD.  */
-#define ELFOSABI_ARM_AEABI	64	/* ARM EABI */
-#define ELFOSABI_ARM		97	/* ARM */
-#define ELFOSABI_STANDALONE	255	/* Standalone (embedded) application */
-
-#define EI_ABIVERSION	8		/* ABI version */
-
 #define EI_PAD		9		/* Byte index of padding bytes */
 
 /* Legal values for e_type (object file type).  */
@@ -156,10 +117,6 @@ typedef struct
 #define ET_DYN		3		/* Shared object file */
 #define ET_CORE		4		/* Core file */
 #define	ET_NUM		5		/* Number of defined types */
-#define ET_LOOS		0xfe00		/* OS-specific range start */
-#define ET_HIOS		0xfeff		/* OS-specific range end */
-#define ET_LOPROC	0xff00		/* Processor-specific range start */
-#define ET_HIPROC	0xffff		/* Processor-specific range end */
 
 /* Legal values for e_machine (architecture).  */
 
@@ -188,20 +145,6 @@ typedef struct
   Elf32_Word	sh_addralign;		/* Section alignment */
   Elf32_Word	sh_entsize;		/* Entry size if section holds table */
 } Elf32_Shdr;
-
-typedef struct
-{
-  Elf64_Word	sh_name;		/* Section name (string tbl index) */
-  Elf64_Word	sh_type;		/* Section type */
-  Elf64_Xword	sh_flags;		/* Section flags */
-  Elf64_Addr	sh_addr;		/* Section virtual addr at execution */
-  Elf64_Off	sh_offset;		/* Section file offset */
-  Elf64_Xword	sh_size;		/* Section size in bytes */
-  Elf64_Word	sh_link;		/* Link to another section */
-  Elf64_Word	sh_info;		/* Additional section information */
-  Elf64_Xword	sh_addralign;		/* Section alignment */
-  Elf64_Xword	sh_entsize;		/* Entry size if section holds table */
-} Elf64_Shdr;
 
 /* Special section indices.  */
 
