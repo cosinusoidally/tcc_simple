@@ -51,7 +51,6 @@ int main(int argc0, char **argv0)
 
     n = s->nb_files;
 
-    tcc_set_output_type(s, s->output_type);
     s->ppfp = ppfp;
 
     /* compile or add each files or library */

@@ -380,17 +380,6 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
         tcc_memcheck();
 }
 
-LIBTCCAPI int tcc_set_output_type(TCCState *s, int output_type)
-{
-    s->output_type = output_type;
-
-    /* always elf for objects */
-    if (output_type == TCC_OUTPUT_OBJ)
-        s->output_format = TCC_OUTPUT_FORMAT_ELF;
-
-    return 0;
-}
-
 LIBTCCAPI int tcc_add_include_path(TCCState *s, const char *pathname)
 {
 exit(1);
@@ -505,7 +494,6 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
     while (optind < argc) {
         r = argv[optind];
         optind++;
-reparse:
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@') /* allow "tcc file(s) -run @ args ..." */
                 args_parser_add_file(s, r, s->filetype);
@@ -528,20 +516,6 @@ reparse:
         }
 
         switch(popt->index) {
-        case TCC_OPTION_I:
-            tcc_add_include_path(s, optarg);
-            break;
-        case TCC_OPTION_D:
-            parse_option_D(s, optarg);
-            break;
-        case TCC_OPTION_U:
-            tcc_undefine_symbol(s, optarg);
-            break;
-        case TCC_OPTION_c:
-            x = TCC_OUTPUT_OBJ;
-        set_output_type:
-            s->output_type = x;
-            break;
         case TCC_OPTION_o:
             s->outfile = tcc_strdup(optarg);
             break;
