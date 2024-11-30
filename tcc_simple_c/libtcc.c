@@ -253,18 +253,6 @@ LIBTCCAPI void tcc_define_symbol(TCCState *s1, const char *sym, const char *valu
     tcc_close();
 }
 
-/* undefine a preprocessor symbol */
-LIBTCCAPI void tcc_undefine_symbol(TCCState *s1, const char *sym)
-{
-    TokenSym *ts;
-    Sym *s;
-    ts = tok_alloc(sym, strlen(sym));
-    s = define_find(ts->tok);
-    /* undefine symbol by putting an invalid name */
-    if (s)
-        define_undef(s);
-}
-
 /* cleanup all static data used during compilation */
 static void tcc_cleanup(void)
 {
@@ -435,26 +423,18 @@ typedef struct TCCOption {
 } TCCOption;
 
 enum {
-    TCC_OPTION_I,
-    TCC_OPTION_D,
-    TCC_OPTION_U,
     TCC_OPTION_c,
     TCC_OPTION_o,
     TCC_OPTION_nostdinc,
-    TCC_OPTION_nostdlib,
 };
 
 #define TCC_OPTION_HAS_ARG 0x0001
 #define TCC_OPTION_NOSEP   0x0002 /* cannot have space before option and arg */
 
 static const TCCOption tcc_options[] = {
-    { "I", TCC_OPTION_I, TCC_OPTION_HAS_ARG },
-    { "D", TCC_OPTION_D, TCC_OPTION_HAS_ARG },
-    { "U", TCC_OPTION_U, TCC_OPTION_HAS_ARG },
     { "c", TCC_OPTION_c, 0 },
     { "o", TCC_OPTION_o, TCC_OPTION_HAS_ARG },
     { "nostdinc", TCC_OPTION_nostdinc, 1 },
-    { "nostdlib", TCC_OPTION_nostdlib, 0 },
     { NULL, 0, 0 },
 };
 
