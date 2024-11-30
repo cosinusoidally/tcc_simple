@@ -883,13 +883,6 @@ maybe_newline:
         tok = c;
         p++;
         break;
-    default:
-        if (c >= 0x80 && c <= 0xFF) /* utf8 identifiers */
-	    goto parse_ident_fast;
-        if (parse_flags & PARSE_FLAG_ASM_FILE)
-            goto parse_simple;
-        tcc_error("unrecognized character \\x%02x", c);
-        break;
     }
     tok_flags = 0;
 keep_tok_flags:
