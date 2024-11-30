@@ -1770,20 +1770,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     tcc_define_symbol(s1, "__BASE_FILE__", cstr.data);
 
     cstr_reset(&cstr);
-    for (i = 0; i < s1->nb_cmd_include_files; i++) {
-        cstr_cat(&cstr, "#include \"", -1);
-        cstr_cat(&cstr, s1->cmd_include_files[i], -1);
-        cstr_cat(&cstr, "\"\n", -1);
-    }
-    if (cstr.size) {
-        *s1->include_stack_ptr++ = file;
-	tcc_open_bf(s1, "<command line>", cstr.size);
-	memcpy(file->buffer, cstr.data, cstr.size);
-    }
     cstr_free(&cstr);
-
-    if (is_asm)
-        tcc_define_symbol(s1, "__ASSEMBLER__", NULL);
 
     parse_flags = is_asm ? PARSE_FLAG_ASM_FILE : 0;
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
