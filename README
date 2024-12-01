@@ -32,7 +32,7 @@ hex1          - A "compiler" for commented hex dumps with support for single
 hex2          - similar to hex1 but has support for larger labels
 M0            - A simple macro language used to implement a simple assembler
 cc_x86        - a C compiler written in assembly (the version from
-                tcc_bootstrap_alt). cc_x86_min.M1  or M2_simple_asm.M1 could
+                tcc_bootstrap_alt). cc_x86_min.M1 or M2_simple_asm.M1 could
                 also be used.
 M2_simple_asm - a C compiler written in the "simple_c" dialect.
 tcc_boot_min  - cut down version of tcc-0.9.27 implemented in the simple_c
