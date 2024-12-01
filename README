@@ -45,10 +45,11 @@ tcc_boot_max - tcc_27_refactor ported to the M2_simple_asm.c dialect. Will also
 The bootstrap process would then be as follows:
 
 hex0          - A "compiler" for commented hex dumps. See tcc_bootstrap_alt,
-                the hex tools are from stage0-posix
+                the base bootstrap tools are from stage0-posix
 hex1          - A "compiler" for commented hex dumps with support for single
                 character labels.
-hex2          - similar to hex1 but has support for larger labels
+hex2          - similar to hex1 but has support for larger labels, plus
+                relative and absolute addressing modes.
 M0            - A simple macro language used to implement a simple assembler
 cc_x86        - a C compiler written in assembly (the version from
                 tcc_bootstrap_alt). cc_x86_min.M1 or M2_simple_asm.M1 could
