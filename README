@@ -4,6 +4,25 @@ This repo is essentially the hypothetical v2 version of:
 
 https://github.com/cosinusoidally/tcc_bootstrap_alt
 
+To build tcc_simple, in general you also need tcc_bootstrap_alt checked out in
+the parent directory eg:
+
+$ ls
+tcc_bootstrap_alt
+tcc_simple
+$ cd tcc_simple
+$ ./mk_coverage_simple_c
+
+The above should in theory work on many Linux systems, but you will need to
+have the 32 bit libc installed, plus a copy of gcc that supports -m32. Works
+fine on a i386 Ubuntu Bionic 18.04 chroot (except the gcovr step) or an Ubuntu
+Jammy 22.04 64 bit system with 32 bit libs installed.
+
+Note some of the mk scripts depend on the exitence of a prebuilt copy of a
+stock tcc-0.9.27 (specifically the release tarball from 2017). The coverage mk
+scripts depend on gcovr (they also try to start firefox from a specific path).
+You might need to tweak things slightly.
+
 The code in this repo is not yet complete, but the general plan is as follows:
 
 Strip down The Tiny C Compiler (tcc-0.9.27) into 2 versions:
