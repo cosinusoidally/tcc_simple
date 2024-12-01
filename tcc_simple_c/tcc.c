@@ -39,36 +39,24 @@ static const char version[] =
 int main(int argc0, char **argv0)
 {
     TCCState *s;
-    int ret, opt, n = 0, t = 0;
-    unsigned start_time = 0;
-    const char *first_file;
+    int opt;
     int argc; char **argv;
     FILE *ppfp = stdout;
+    struct filespec *f;
 
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
 
-    n = s->nb_files;
-
     s->ppfp = ppfp;
 
-    /* compile or add each files or library */
-    for (first_file = NULL, ret = 0;;) {
-        struct filespec *f = s->files[s->nb_files - n];
-        s->filetype = f->type;
-        if (!first_file) {
-            first_file = f->name;
-        }
-        tcc_add_file(s, f->name);
-        s->filetype = 0;
-        if (--n == 0) {
-            break;
-        }
-    }
+    f = s->files[0];
+    s->filetype = f->type;
+    tcc_add_file(s, f->name);
+    s->filetype = 0;
 
     tcc_output_file(s, s->outfile);
 
     tcc_delete(s);
-    return ret;
+    return 0;
 }
