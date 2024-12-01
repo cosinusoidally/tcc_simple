@@ -23,4 +23,24 @@ tcc_boot_min - tcc_simple_c ported to the M2_simple_asm.c dialect. Will also be
 tcc_boot_max - tcc_27_refactor ported to the M2_simple_asm.c dialect. Will also
                be self hosted.
 
+The boostrap process would then be as follows:
 
+hex0          - See tcc_bootstrap_alt
+hex1          - See tcc_bootstrap_alt
+hex2          - See tcc_bootstrap_alt
+M0            - See tcc_bootstrap_alt
+cc_x86        - a C compiler written in assembly (the version from
+                tcc_bootstrap_alt). cc_x86_min.M1  or M2_simple_asm.M1 could
+                also be used.
+M2_simple_asm - a C compiler written in the "simple_c" dialect.
+tcc_boot_min  - cut down version of tcc-0.9.27 implemented in the simple_c
+                dialect. Implements the simple_c dialect.
+tcc_boot_max  - cut down version of tcc-0.9.27 implemented in the simple_c
+                dialect. Implements a large enough subset of C in order to
+                to compile tcc-0.9.27.
+tcc_27        - a nearly stock tcc-0.9.27 from tcc_bootstrap_alt . This version
+                is capable of compiling a stock tcc-0.9.27 and can even be
+                plugged into live-bootstrap to replace the mescc steps
+
+For reference, fork of live-bootstrap that uses tcc_bootstrap_alt instead of mescc:
+https://github.com/cosinusoidally/live-bootstrap/tree/tcc_bootstrap_alt-refactor_nov24
