@@ -1,1 +1,26 @@
 tcc_simple
+
+This repo is essentially the v2 version of:
+
+https://github.com/cosinusoidally/tcc_bootstrap_alt
+
+The code in this repo is not complete yet, but the general plan is as follows:
+
+Strip down The Tiny C Compiler (tcc-0.9.27) into 2 versions:
+
+tcc_27_refactor - a cut down version of tcc-0.9.27 that is complete enough to
+                  compile tcc-0.9.27
+tcc_simple_c    - a cut down version of tcc_27_refactor that is only capable of
+                  compiling a cut down version of the C language. Specifically
+                  the language supported by M2_simple_asm.c (also included in
+                  this repo).
+
+Once tcc_simple_c and tcc_27_refactor are complete the next step is to create
+2 bootstrap compilers:
+
+tcc_boot_min - tcc_simple_c ported to the M2_simple_asm.c dialect. Will also be
+               self hosted.
+tcc_boot_max - tcc_27_refactor ported to the M2_simple_asm.c dialect. Will also
+               be self hosted.
+
+
