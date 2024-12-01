@@ -422,7 +422,6 @@ struct TCCState {
     /* C language options */
     int char_is_unsigned;
     int leading_underscore;
-    int ms_extensions;	/* allow nested named struct w/o identifier behave like unnamed */
     int dollars_in_identifiers;	/* allows '$' char in identifiers */
     int ms_bitfields; /* if true, emulate MS algorithm for aligning bitfields */
 
@@ -431,7 +430,6 @@ struct TCCState {
     int warn_unsupported;
     int warn_error;
     int warn_none;
-    int warn_implicit_function_declaration;
     int warn_gcc_compat;
 
     /* compile with debug symbol (and use them if error during execution) */

@@ -222,9 +222,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     ++nb_states;
 
     s->nocommon = 1;
-    s->warn_implicit_function_declaration = 1;
-    s->ms_extensions = 1;
-
     s->seg_size = 32;
 
     tccelf_new(s);
