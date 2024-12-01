@@ -23,7 +23,7 @@ tcc_boot_min - tcc_simple_c ported to the M2_simple_asm.c dialect. Will also be
 tcc_boot_max - tcc_27_refactor ported to the M2_simple_asm.c dialect. Will also
                be self hosted.
 
-The boostrap process would then be as follows:
+The bootstrap process would then be as follows:
 
 hex0          - See tcc_bootstrap_alt
 hex1          - See tcc_bootstrap_alt
