@@ -221,7 +221,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     tcc_state = s;
     ++nb_states;
 
-    s->alacarte_link = 1;
     s->nocommon = 1;
     s->warn_implicit_function_declaration = 1;
     s->ms_extensions = 1;
@@ -335,7 +334,6 @@ static void args_parser_add_file(TCCState *s, const char* filename, int filetype
 {
     struct filespec *f = tcc_malloc(sizeof *f + strlen(filename));
     f->type = filetype;
-    f->alacarte = s->alacarte_link;
     strcpy(f->name, filename);
     dynarray_add(&s->files, &s->nb_files, f);
 }

@@ -57,13 +57,11 @@ int main(int argc0, char **argv0)
     for (first_file = NULL, ret = 0;;) {
         struct filespec *f = s->files[s->nb_files - n];
         s->filetype = f->type;
-        s->alacarte_link = f->alacarte;
         if (!first_file) {
             first_file = f->name;
         }
         tcc_add_file(s, f->name);
         s->filetype = 0;
-        s->alacarte_link = 1;
         if (--n == 0) {
             break;
         }
