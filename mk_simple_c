@@ -5,7 +5,7 @@ cd artifacts
 set -xe
 
 # build tcc_simple_c with gcc
-gcc -O0 -m32 -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -o tcc_simple_c_gcc
+gcc -g3 -O0 -m32 -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -o tcc_simple_c_gcc
 
 # build tcc_simple_c with tcc
 tcc -O0 -m32 -I ../tcc_simple_c/ -I ../tcc_simple_c/include/ ../tcc_simple_c/tcc.c -o tcc_simple_c_tcc
