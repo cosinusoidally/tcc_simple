@@ -4,7 +4,7 @@ This repo is essentially the v2 version of:
 
 https://github.com/cosinusoidally/tcc_bootstrap_alt
 
-The code in this repo is not complete yet, but the general plan is as follows:
+The code in this repo is not yet complete, but the general plan is as follows:
 
 Strip down The Tiny C Compiler (tcc-0.9.27) into 2 versions:
 
