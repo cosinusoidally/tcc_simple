@@ -68,3 +68,18 @@ tcc_27        - a nearly stock tcc-0.9.27 from tcc_bootstrap_alt . This version
 
 For reference, fork of live-bootstrap that uses tcc_bootstrap_alt instead of mescc:
 https://github.com/cosinusoidally/live-bootstrap/tree/tcc_bootstrap_alt-refactor_nov24
+
+FAQs
+
+Why not go from cc_x86 straight to tcc_boot_max?
+
+It will be a bigger job to port tcc_boot_max to the simple_c dialect. By
+starting with tcc_boot_min I can prove out the process. In theory once
+tcc_boot_max is done it can then replace tcc_boot_min, but if there there are
+any issues then tcc_boot_min would serve as a useful intermediate stepping
+stone.
+
+Even if I fail to finish tcc_boot_max I should still be able to use
+tcc_boot_min to simplify tcc_bootstrap_alt. I could even potentially use the
+unfinished version of tcc_boot_max to eliminate some steps in
+tcc_bootstrap_alt.
