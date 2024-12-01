@@ -980,7 +980,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     cstr_reset(&cstr);
     cstr_free(&cstr);
 
-    parse_flags = is_asm ? PARSE_FLAG_ASM_FILE : 0;
+    parse_flags = 0;
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
 }
 

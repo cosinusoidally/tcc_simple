@@ -705,7 +705,6 @@ static int elf_output_file(TCCState *s1, const char *filename)
     int textrel;
 
     file_type = s1->output_type;
-    s1->nb_errors = 0;
     ret = -1;
     phdr = NULL;
     sec_order = NULL;

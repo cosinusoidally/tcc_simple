@@ -188,20 +188,14 @@ static int tcc_compile(TCCState *s1)
     filetype = s1->filetype;
     tccelf_begin_file(s1);
 
-    if (setjmp(s1->error_jmp_buf) == 0) {
-        s1->nb_errors = 0;
-        s1->error_set_jmp_enabled = 1;
-
-        preprocess_start(s1, 0);
-        tccgen_compile(s1);
-    }
-    s1->error_set_jmp_enabled = 0;
+    preprocess_start(s1, 0);
+    tccgen_compile(s1);
 
     /* reset define stack, but keep -D and built-ins */
     sym_pop(&global_stack, NULL, 0);
     sym_pop(&local_stack, NULL, 0);
     tccelf_end_file(s1);
-    return s1->nb_errors != 0 ? -1 : 0;
+    return 0;
 }
 
 /* cleanup all static data used during compilation */
