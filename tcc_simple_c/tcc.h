@@ -448,11 +448,6 @@ struct TCCState {
     int ifdef_stack[IFDEF_STACK_SIZE];
     int *ifdef_stack_ptr;
 
-    /* inline functions are stored as token lists and compiled last
-       only if referenced */
-    struct InlineFunc **inline_fns;
-    int nb_inline_fns;
-
     /* sections */
     Section **sections;
     int nb_sections; /* number of sections, including first dummy section */
