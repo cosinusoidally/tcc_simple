@@ -180,18 +180,6 @@ typedef struct SValue {
     			      result of unary() for an identifier. */
 } SValue;
 
-/* symbol attributes */
-struct SymAttr {
-    unsigned short
-    aligned     : 5, /* alignment as log2+1 (0 == unspecified) */
-    packed      : 1,
-    weak        : 1,
-    visibility  : 2,
-    dllexport   : 1,
-    dllimport   : 1,
-    unused      : 5;
-};
-
 /* function attributes or temporary attributes for parsing */
 struct FuncAttr {
     unsigned
@@ -202,7 +190,6 @@ struct FuncAttr {
 
 /* GNUC attribute definition */
 typedef struct AttributeDef {
-    struct SymAttr a;
     struct FuncAttr f;
     struct Section *section;
     int alias_target; /* token */
@@ -214,7 +201,6 @@ typedef struct AttributeDef {
 typedef struct Sym {
     int v; /* symbol token */
     unsigned short r; /* associated register or VT_CONST/VT_LOCAL and LVAL type */
-    struct SymAttr a; /* symbol attributes */
     union {
         struct {
             int c; /* associated number or Elf symbol index */

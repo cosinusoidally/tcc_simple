@@ -447,7 +447,6 @@ static void patch_storage(Sym *sym, AttributeDef *ad, CType *type)
     if (type)
         patch_type(sym, type);
 
-    sym->a.weak |= ad->a.weak;
     update_storage(sym);
 }
 
@@ -460,7 +459,6 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
         /* push forward reference */
         s = sym_push(v, type, r | VT_CONST | VT_SYM, 0);
         s->type.t |= VT_EXTERN;
-        s->a = ad->a;
         s->sym_scope = 0;
     } else {
         patch_storage(s, ad, type);
@@ -853,7 +851,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         ad->f.func_args = arg_size;
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
-        s->a = ad->a;
         s->f = ad->f;
         s->next = first;
         type->t = VT_FUNC;
@@ -1266,7 +1263,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         addr = loc;
         if (v) {
             sym = sym_push(v, type, r, addr);
-            sym->a = ad->a;
         } else {
             /* push local reference */
             vset(type, r, addr);
