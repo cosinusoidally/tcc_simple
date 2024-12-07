@@ -560,7 +560,6 @@ struct filespec {
 #define TOK_CLLONG  0xb7 /* long long constant */
 #define TOK_CULLONG 0xb8 /* unsigned long long constant */
 #define TOK_STR     0xb9 /* pointer to string in tokc */
-#define TOK_LSTR    0xba
 #define TOK_CFLOAT  0xbb /* float constant */
 #define TOK_CDOUBLE 0xbc /* double constant */
 #define TOK_CLDOUBLE 0xbd /* long double constant */

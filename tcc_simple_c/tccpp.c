@@ -448,7 +448,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
     case TOK_PPNUM:
     case TOK_PPSTR:
     case TOK_STR:
-    case TOK_LSTR:
         {
             /* Insert the string into the int array. */
             size_t nb_words =
@@ -482,7 +481,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     tab = cv->tab;
     switch(*t = *p++) {
     case TOK_STR:
-    case TOK_LSTR:
     case TOK_PPNUM:
     case TOK_PPSTR:
         cv->str.size = *p++;

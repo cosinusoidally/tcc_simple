@@ -1174,11 +1174,10 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c,
 
     /* only parse strings here if correct type (otherwise: handle
        them as ((w)char *) expressions */
-    if ((tok == TOK_LSTR && 
-         (t1->t & VT_BTYPE) == VT_INT
-        ) || (tok == TOK_STR && (t1->t & VT_BTYPE) == VT_BYTE)) {
+    if (((t1->t & VT_BTYPE) == VT_INT) ||
+        (tok == TOK_STR && (t1->t & VT_BTYPE) == VT_BYTE)) {
         len = 0;
-        while (tok == TOK_STR || tok == TOK_LSTR) {
+        while (tok == TOK_STR) {
             int cstr_len, ch;
 
             cstr_len = tokc.str.size;
@@ -1237,7 +1236,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         /* get all init string */
         init_str = tok_str_alloc();
         /* only get strings */
-        while (tok == TOK_STR || tok == TOK_LSTR) {
+        while (tok == TOK_STR) {
             tok_str_add_tok(init_str);
             next();
         }
