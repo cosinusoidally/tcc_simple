@@ -1028,10 +1028,7 @@ static void expr_eq(void)
     int t;
     
     unary();
-    if (tok == '=' ||
-        (tok >= TOK_A_MOD && tok <= TOK_A_DIV) ||
-        tok == TOK_A_XOR || tok == TOK_A_OR ||
-        tok == TOK_A_SHL || tok == TOK_A_SAR) {
+    if (tok == '=') {
         t = tok;
         next();
         if (t == '=') {
