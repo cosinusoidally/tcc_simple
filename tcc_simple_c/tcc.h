@@ -461,10 +461,6 @@ struct TCCState {
     struct sym_attr *sym_attrs;
     int nb_sym_attrs;
 
-    const char *runtime_main;
-    void **runtime_mem;
-    int nb_runtime_mem;
-
     /* used by main and tcc_parse_args only */
     struct filespec **files; /* files seen on command line */
     int nb_files; /* number thereof */
