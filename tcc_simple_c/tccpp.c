@@ -445,16 +445,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
         str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
     str[len++] = t;
     switch(t) {
-    case TOK_CINT:
-    case TOK_CUINT:
-    case TOK_CCHAR:
-    case TOK_LCHAR:
-    case TOK_CFLOAT:
-    case TOK_LINENUM:
-    case TOK_CLONG:
-    case TOK_CULONG:
-        str[len++] = cv->tab[0];
-        break;
     case TOK_PPNUM:
     case TOK_PPSTR:
     case TOK_STR:
