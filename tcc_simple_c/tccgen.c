@@ -746,22 +746,19 @@ static void gen_assign_cast(CType *dt)
 /* store vtop in lvalue pushed on stack */
 ST_FUNC void vstore(void)
 {
-    int sbt, dbt, ft, r, t, size, align, bit_size, bit_pos, rc, delayed_cast;
+    int sbt, dbt, ft, r;
 
     ft = vtop[-1].type.t;
     sbt = vtop->type.t & VT_BTYPE;
     dbt = ft & VT_BTYPE;
-    delayed_cast = 0;
     if (!(ft & VT_BITFIELD))
         gen_assign_cast(&vtop[-1].type);
 
-    rc = RC_INT;
-    r = gv(rc);  /* generate value */
+    r = gv(RC_INT);  /* generate value */
     store(r, vtop - 1);
 
     vswap();
     vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
-    vtop->r |= delayed_cast;
 }
 
 /* return 0 if no type declaration. otherwise, return the basic type
