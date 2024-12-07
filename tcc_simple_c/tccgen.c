@@ -48,9 +48,6 @@ ST_DATA int vla_sp_loc; /* Pointer to variable holding location to store stack p
 ST_DATA SValue __vstack[1+VSTACK_SIZE], *vtop, *pvtop;
 
 ST_DATA int const_wanted; /* true if constant wanted */
-ST_DATA int nocode_wanted; /* no code generation wanted */
-#define NODATA_WANTED (nocode_wanted > 0) /* no static data output wanted either */
-#define STATIC_DATA_WANTED (nocode_wanted & 0xC0000000) /* only static data output */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_var; /* true if current function is variadic (used by return instruction) */
@@ -98,7 +95,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     anon_sym = SYM_FIRST_ANOM;
     section_sym = 0;
     const_wanted = 0;
-    nocode_wanted = 0x80000000;
 
     /* define some often used types */
     int_type.t = VT_INT;
@@ -1054,14 +1050,12 @@ static void block(int *bsym, int *csym, int is_expr)
 
     if (tok == TOK_IF) {
         /* if test */
-	int saved_nocode_wanted = nocode_wanted;
         next();
         skip('(');
         gexpr();
         skip(')');
         a = gvtst(1, 0);
         block(bsym, csym, 0);
-        nocode_wanted = saved_nocode_wanted;
         c = tok;
         if (c == TOK_ELSE) {
             next();
@@ -1069,12 +1063,9 @@ static void block(int *bsym, int *csym, int is_expr)
             gsym(a);
             block(bsym, csym, 0);
             gsym(d); /* patch else jmp */
-            nocode_wanted = saved_nocode_wanted;
         } else
             gsym(a);
     } else if (tok == TOK_WHILE) {
-	int saved_nocode_wanted;
-	nocode_wanted &= ~0x20000000;
         next();
         d = ind;
         skip('(');
@@ -1083,9 +1074,7 @@ static void block(int *bsym, int *csym, int is_expr)
         a = gvtst(1, 0);
         b = 0;
         ++local_scope;
-	saved_nocode_wanted = nocode_wanted;
         block(&a, &b, 0);
-	nocode_wanted = saved_nocode_wanted;
         --local_scope;
         gjmp_addr(d);
         gsym(a);
@@ -1131,13 +1120,11 @@ static void block(int *bsym, int *csym, int is_expr)
         /* jump unless last stmt in top-level block */
         if (tok != '}' || local_scope != 1)
             rsym = gjmp(rsym);
-	nocode_wanted |= 0x20000000;
     } else if (tok == TOK_BREAK) {
         /* compute jump */
         *bsym = gjmp(*bsym);
         next();
         skip(';');
-	nocode_wanted |= 0x20000000;
     } else {
         if (tok != ';') {
                 gexpr();
@@ -1244,7 +1231,6 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Section *sec;
     Sym *flexible_array;
     Sym *sym = NULL;
-    int saved_nocode_wanted = nocode_wanted;
 
     flexible_array = NULL;
 
@@ -1334,14 +1320,12 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         next();
     }
 
-    nocode_wanted = saved_nocode_wanted;
 }
 
 /* parse a function defined by symbol 'sym' and generate its code in
    'cur_text_section' */
 static void gen_function(Sym *sym)
 {
-    nocode_wanted = 0;
     ind = cur_text_section->data_offset;
     /* NOTE: we patch the symbol size later */
     put_extern_sym(sym, cur_text_section, ind, 0);
@@ -1357,7 +1341,6 @@ static void gen_function(Sym *sym)
     local_scope = 0;
     rsym = 0;
     block(NULL, NULL, 0);
-    nocode_wanted = 0;
     gsym(rsym);
     gfunc_epilog();
     cur_text_section->data_offset = ind;
@@ -1373,7 +1356,6 @@ static void gen_function(Sym *sym)
     func_vt.t = VT_VOID; /* for safety */
     func_var = 0; /* for safety */
     ind = 0; /* for safety */
-    nocode_wanted = 0x80000000;
 }
 
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
