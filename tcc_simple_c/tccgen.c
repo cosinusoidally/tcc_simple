@@ -551,21 +551,16 @@ ST_FUNC int get_reg(int rc)
    register value (such as structures). */
 ST_FUNC int gv(int rc)
 {
-    int r, bit_pos, bit_size, size, align, rc2;
+    int r;
 
         r = vtop->r & VT_VALMASK;
-        rc2 = (rc & RC_FLOAT) ? RC_FLOAT : RC_INT;
-        if (rc == RC_IRET)
-            rc2 = RC_LRET;
         /* need to reload if:
            - constant
            - lvalue (need to dereference pointer)
            - already a register, but not in the right class */
         if (r >= VT_CONST
          || (vtop->r & VT_LVAL)
-         || !(reg_classes[r] & rc)
-         || ((vtop->type.t & VT_BTYPE) == VT_LLONG && !(reg_classes[vtop->r2] & rc2))
-            )
+         || !(reg_classes[r] & rc))
         {
             r = get_reg(rc);
             if ((vtop->r & VT_LVAL)) {
@@ -582,7 +577,9 @@ ST_FUNC int gv(int rc)
                 /* one register type load */
                 load(r, vtop);
             }
-        }
+        } else {
+puts("here");
+}
         vtop->r = r;
     return r;
 }

@@ -63,16 +63,13 @@
    sorted from more general to more precise (see gv2() code which does
    assumptions on it). */
 #define RC_INT     0x0001 /* generic integer register */
-#define RC_FLOAT   0x0002 /* generic float register */
 #define RC_EAX     0x0004
-#define RC_ST0     0x0008
 #define RC_ECX     0x0010
 #define RC_EDX     0x0020
 #define RC_EBX     0x0040
 
 #define RC_IRET    RC_EAX /* function return: integer register */
 #define RC_LRET    RC_EDX /* function return: second integer register */
-#define RC_FRET    RC_ST0 /* function return: float register */
 
 /* pretty names for the registers */
 enum {
