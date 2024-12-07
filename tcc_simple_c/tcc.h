@@ -126,7 +126,6 @@ enum {
 /* token symbol management */
 typedef struct TokenSym {
     struct TokenSym *hash_next;
-    struct Sym *sym_struct; /* direct pointer to structure */
     struct Sym *sym_identifier; /* direct pointer to identifier */
     int tok; /* token number */
     int len;
