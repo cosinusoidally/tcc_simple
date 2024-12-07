@@ -65,11 +65,8 @@
 #define RC_INT     0x0001 /* generic integer register */
 #define RC_EAX     0x0004
 #define RC_ECX     0x0010
-#define RC_EDX     0x0020
-#define RC_EBX     0x0040
 
 #define RC_IRET    RC_EAX /* function return: integer register */
-#define RC_LRET    RC_EDX /* function return: second integer register */
 
 /* pretty names for the registers */
 enum {
