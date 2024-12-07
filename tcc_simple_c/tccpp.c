@@ -912,8 +912,6 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     int i;
 
     s1->include_stack_ptr = s1->include_stack;
-    s1->ifdef_stack_ptr = s1->ifdef_stack;
-    file->ifdef_stack_ptr = s1->ifdef_stack_ptr;
     pp_expr = 0;
     pp_counter = 0;
     pp_debug_tok = pp_debug_symv = 0;

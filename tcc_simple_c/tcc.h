@@ -115,11 +115,9 @@ enum {
 /* -------------------------------------------- */
 
 #define INCLUDE_STACK_SIZE  32
-#define IFDEF_STACK_SIZE    64
 #define VSTACK_SIZE         256
 #define STRING_MAX_SIZE     1024
 #define TOKSTR_MAX_SIZE     256
-#define PACK_STACK_SIZE     8
 
 #define TOK_HASH_SIZE       16384 /* must be a power of two */
 #define TOK_ALLOC_INCR      512  /* must be a power of two */
@@ -444,9 +442,6 @@ struct TCCState {
     /* compilation */
     BufferedFile *include_stack[INCLUDE_STACK_SIZE];
     BufferedFile **include_stack_ptr;
-
-    int ifdef_stack[IFDEF_STACK_SIZE];
-    int *ifdef_stack_ptr;
 
     /* sections */
     Section **sections;

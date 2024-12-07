@@ -151,7 +151,6 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen)
     pstrcpy(bf->filename, sizeof(bf->filename), filename);
     bf->true_filename = bf->filename;
     bf->line_num = 1;
-    bf->ifdef_stack_ptr = s1->ifdef_stack_ptr;
     bf->fd = -1;
     bf->prev = file;
     file = bf;
