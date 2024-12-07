@@ -252,7 +252,6 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
     tcc_free(s1->init_symbol);
     tcc_free(s1->fini_symbol);
     tcc_free(s1->outfile);
-    tcc_free(s1->deps_outfile);
     dynarray_reset(&s1->files, &s1->nb_files);
     dynarray_reset(&s1->target_deps, &s1->nb_target_deps);
     dynarray_reset(&s1->argv, &s1->argc);

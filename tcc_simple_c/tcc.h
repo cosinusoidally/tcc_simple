@@ -467,11 +467,6 @@ struct TCCState {
     int nb_libraries; /* number of libs thereof */
     int filetype;
     char *outfile; /* output filename */
-    int option_r; /* option -r */
-    int do_bench; /* option -bench */
-    int gen_deps; /* option -MD  */
-    char *deps_outfile; /* option -MF */
-    int option_pthread; /* -pthread option */
     int argc;
     char **argv;
 };
