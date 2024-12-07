@@ -84,9 +84,6 @@ enum {
 /* pointer size, in bytes */
 #define PTR_SIZE 4
 
-/* long double size and alignment, in bytes */
-#define LDOUBLE_SIZE  12
-
 /* maximum alignment (for aligned attribute support) */
 #define MAX_ALIGN     8
 
@@ -146,15 +143,12 @@ typedef struct CType {
 
 /* constant value */
 typedef union CValue {
-    long double ld;
-    double d;
-    float f;
     uint64_t i;
     struct {
         int size;
         const void *data;
     } str;
-    int tab[LDOUBLE_SIZE/4];
+    int tab[1];
 } CValue;
 
 /* value on stack */
