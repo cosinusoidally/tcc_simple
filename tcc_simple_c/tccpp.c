@@ -481,13 +481,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
 
     tab = cv->tab;
     switch(*t = *p++) {
-    case TOK_CLONG:
-    case TOK_CINT:
-    case TOK_CCHAR:
-    case TOK_LCHAR:
-    case TOK_LINENUM:
-        cv->i = *p++;
-        break;
     case TOK_STR:
     case TOK_LSTR:
     case TOK_PPNUM:
