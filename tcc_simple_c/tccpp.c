@@ -147,7 +147,6 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     ts = tal_realloc(toksym_alloc, 0, sizeof(TokenSym) + len);
     table_ident[i] = ts;
     ts->tok = tok_ident++;
-    ts->sym_label = NULL;
     ts->sym_struct = NULL;
     ts->sym_identifier = NULL;
     ts->len = len;
