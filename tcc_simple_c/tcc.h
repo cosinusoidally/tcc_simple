@@ -448,12 +448,6 @@ struct TCCState {
     int ifdef_stack[IFDEF_STACK_SIZE];
     int *ifdef_stack_ptr;
 
-    /* #pragma pack stack */
-    int pack_stack[PACK_STACK_SIZE];
-    int *pack_stack_ptr;
-    char **pragma_libs;
-    int nb_pragma_libs;
-
     /* inline functions are stored as token lists and compiled last
        only if referenced */
     struct InlineFunc **inline_fns;
