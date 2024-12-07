@@ -38,8 +38,6 @@ static int new_undef_sym = 0; /* Is there a new undefined sym since last new_und
 
 /* special flag to indicate that the section should not be linked to the other ones */
 #define SHF_PRIVATE 0x80000000
-/* section is dynsymtab_section */
-#define SHF_DYNSYM 0x40000000
 
 /* ------------------------------------------------------------------------- */
 
@@ -61,10 +59,6 @@ ST_FUNC void tccelf_new(TCCState *s)
                                 ".hashtab", SHF_PRIVATE);
     s->symtab = symtab_section;
 
-    /* private symbol table for dynamic symbols */
-    s->dynsymtab_section = new_symtab(s, ".dynsymtab", SHT_SYMTAB, SHF_PRIVATE|SHF_DYNSYM,
-                                      ".dynstrtab",
-                                      ".dynhashtab", SHF_PRIVATE);
     get_sym_attr(s, 0, 1);
 }
 
