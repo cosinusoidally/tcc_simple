@@ -62,36 +62,6 @@ static const char tcc_keywords[] =
 #undef DEF
 ;
 
-/* WARNING: the content of this string encodes token numbers */
-static const unsigned char tok_two_chars[] =
-/* outdated -- gr
-    "<=\236>=\235!=\225&&\240||\241++\244--\242==\224<<\1>>\2+=\253"
-    "-=\255*=\252/=\257%=\245&=\246^=\336|=\374->\313..\250##\266";
-*/{
-    '<','=', TOK_LE,
-    '>','=', TOK_GE,
-    '!','=', TOK_NE,
-    '&','&', TOK_LAND,
-    '|','|', TOK_LOR,
-    '+','+', TOK_INC,
-    '-','-', TOK_DEC,
-    '=','=', TOK_EQ,
-    '<','<', TOK_SHL,
-    '>','>', TOK_SAR,
-    '+','=', TOK_A_ADD,
-    '-','=', TOK_A_SUB,
-    '*','=', TOK_A_MUL,
-    '/','=', TOK_A_DIV,
-    '%','=', TOK_A_MOD,
-    '&','=', TOK_A_AND,
-    '^','=', TOK_A_XOR,
-    '|','=', TOK_A_OR,
-    '-','>', TOK_ARROW,
-    '.','.', TOK_TWODOTS,
-    '#','#', TOK_TWOSHARPS,
-    0
-};
-
 static void next_nomacro_spc(void);
 
 ST_FUNC void skip(int c)
