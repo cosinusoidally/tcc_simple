@@ -983,7 +983,7 @@ ST_FUNC void unary(void)
         if (tok == '(') {
             SValue ret;
             Sym *sa;
-            int nb_args, ret_nregs, ret_align, regsize, variadic;
+            int nb_args, ret_nregs, regsize;
 
             vtop->r &= ~VT_LVAL; /* no lvalue */
             /* get return type */
