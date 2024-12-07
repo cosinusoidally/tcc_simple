@@ -59,7 +59,7 @@ ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc 
 ST_DATA const char *funcname;
 ST_DATA int g_debug;
 
-ST_DATA CType char_pointer_type, func_old_type, int_type, size_type, ptrdiff_type;
+ST_DATA CType func_old_type, int_type, size_type, ptrdiff_type;
 
 ST_DATA struct switch_t {
     struct case_t {
@@ -102,8 +102,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
 
     /* define some often used types */
     int_type.t = VT_INT;
-    char_pointer_type.t = VT_BYTE;
-    mk_pointer(&char_pointer_type);
     size_type.t = VT_INT | VT_UNSIGNED;
     ptrdiff_type.t = VT_INT;
     func_old_type.t = VT_FUNC;
