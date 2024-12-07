@@ -1031,9 +1031,7 @@ static void expr_eq(void)
     if (tok == '=') {
         t = tok;
         next();
-        if (t == '=') {
-            expr_eq();
-        }
+        expr_eq();
         vstore();
     }
 }
