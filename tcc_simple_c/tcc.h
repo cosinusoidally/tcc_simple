@@ -339,14 +339,6 @@ typedef struct ASMOperand {
     int is_rw;     /* for '+' modifier */
 } ASMOperand;
 
-/* extra symbol attributes (not in symbol table) */
-struct sym_attr {
-    unsigned got_offset;
-    unsigned plt_offset;
-    int plt_sym;
-    int dyn_index;
-};
-
 struct TCCState {
 
     int verbose; /* if true, display some information during compilation */
@@ -452,9 +444,6 @@ struct TCCState {
 
     /* copy of the global symtab_section variable */
     Section *symtab;
-    /* extra attributes (eg. GOT/PLT value) for symtab symbols */
-    struct sym_attr *sym_attrs;
-    int nb_sym_attrs;
 
     /* used by main and tcc_parse_args only */
     struct filespec **files; /* files seen on command line */
@@ -938,7 +927,6 @@ ST_FUNC void tcc_add_bcheck(TCCState *s1);
 ST_FUNC void tcc_add_runtime(TCCState *s1);
 
 ST_FUNC void build_got_entries(TCCState *s1);
-ST_FUNC struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc);
 ST_FUNC void squeeze_multi_relocs(Section *sec, size_t oldrelocoffset);
 
 ST_FUNC addr_t get_elf_sym_addr(TCCState *s, const char *name, int err);

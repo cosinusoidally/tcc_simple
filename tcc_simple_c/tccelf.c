@@ -59,7 +59,6 @@ ST_FUNC void tccelf_new(TCCState *s)
                                 ".hashtab", SHF_PRIVATE);
     s->symtab = symtab_section;
 
-    get_sym_attr(s, 0, 1);
 }
 
 static void free_section(Section *s)
@@ -83,7 +82,6 @@ ST_FUNC void tccelf_delete(TCCState *s1)
     /* free any loaded DLLs */
     /* free loaded dlls array */
     dynarray_reset(&s1->loaded_dlls, &s1->nb_loaded_dlls);
-    tcc_free(s1->sym_attrs);
 
     symtab_section = NULL; /* for tccrun.c:rt_printline() */
 }
@@ -434,27 +432,6 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     rel = section_ptr_add(sr, sizeof(ElfW_Rel));
     rel->r_offset = offset;
     rel->r_info = ELFW(R_INFO)(symbol, type);
-}
-
-ST_FUNC struct sym_attr *get_sym_attr(TCCState *s1, int index, int alloc)
-{
-    int n;
-    struct sym_attr *tab;
-
-    if (index >= s1->nb_sym_attrs) {
-        if (!alloc)
-            return s1->sym_attrs;
-        /* find immediately bigger power of 2 and reallocate array */
-        n = 1;
-        while (index >= n)
-            n *= 2;
-        tab = tcc_realloc(s1->sym_attrs, n * sizeof(*s1->sym_attrs));
-        s1->sym_attrs = tab;
-        memset(s1->sym_attrs + s1->nb_sym_attrs, 0,
-               (n - s1->nb_sym_attrs) * sizeof(*s1->sym_attrs));
-        s1->nb_sym_attrs = n;
-    }
-    return &s1->sym_attrs[index];
 }
 
 /* Browse each elem of type <type> in section <sec> starting at elem <startoff>
