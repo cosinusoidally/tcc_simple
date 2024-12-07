@@ -147,7 +147,6 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     ts = tal_realloc(toksym_alloc, 0, sizeof(TokenSym) + len);
     table_ident[i] = ts;
     ts->tok = tok_ident++;
-    ts->sym_define = NULL;
     ts->sym_label = NULL;
     ts->sym_struct = NULL;
     ts->sym_identifier = NULL;
@@ -523,14 +522,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     *pp = p;
 }
 
-ST_INLN Sym *define_find(int v)
-{
-    v -= TOK_IDENT;
-    if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
-        return NULL;
-    return table_ident[v]->sym_define;
-}
-
 /* evaluate escape codes in a string. */
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long)
 {
@@ -879,10 +870,6 @@ ST_FUNC void next(void)
             end_macro();
             goto redo;
         }
-    } else if (tok >= TOK_IDENT && (parse_flags & PARSE_FLAG_PREPROCESS)) {
-        Sym *s;
-        /* if reading from file, try to substitute macros */
-        s = define_find(tok);
     }
     /* convert preprocessor tokens into C tokens */
     if (tok == TOK_PPNUM) {
