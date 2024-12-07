@@ -553,18 +553,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     *pp = p;
 }
 
-/* defines handling */
-ST_INLN void define_push(int v, int macro_type, int *str, Sym *first_arg)
-{
-    Sym *s, *o;
-
-    o = define_find(v);
-    s = sym_push2(&define_stack, v, macro_type, 0);
-    s->d = str;
-    s->next = first_arg;
-    table_ident[v - TOK_IDENT]->sym_define = s;
-}
-
 ST_INLN Sym *define_find(int v)
 {
     v -= TOK_IDENT;
