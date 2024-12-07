@@ -803,8 +803,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
         type_found = 1;
     }
 the_end:
-    /* VT_LONG is used just as a modifier for VT_INT / VT_LLONG */
-    bt = t & (VT_BTYPE|VT_LONG);
     type->t = t;
     return type_found;
 }
