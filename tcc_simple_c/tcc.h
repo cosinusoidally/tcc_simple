@@ -80,22 +80,13 @@ enum {
 
 /* return registers for function */
 #define REG_IRET TREG_EAX /* single word int return register */
-#define REG_LRET TREG_EDX /* second word return register (for long long) */
-#define REG_FRET TREG_ST0 /* float return register */
-
-/* defined if function parameters must be evaluated in reverse order */
-#define INVERT_FUNC_PARAMS
-
-/* defined if structures are passed as pointers. Otherwise structures
-   are directly pushed on stack. */
-/* #define FUNC_STRUCT_PARAM_AS_PTR */
 
 /* pointer size, in bytes */
 #define PTR_SIZE 4
 
 /* long double size and alignment, in bytes */
 #define LDOUBLE_SIZE  12
-#define LDOUBLE_ALIGN 4
+
 /* maximum alignment (for aligned attribute support) */
 #define MAX_ALIGN     8
 
