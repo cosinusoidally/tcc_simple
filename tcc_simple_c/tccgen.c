@@ -848,7 +848,6 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
            meaning in gcc / C++ */
         type->t &= ~VT_CONSTANT; 
         /* we push a anonymous symbol which will contain the function prototype */
-        ad->f.func_args = arg_size;
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
         s->f = ad->f;
