@@ -118,12 +118,11 @@ static void gen_modrm(int op_reg, int r, Sym *sym, int c)
 /* load 'r' from value 'sv' */
 ST_FUNC void load(int r, SValue *sv)
 {
-    int v, t, fc, fr;
+    int v, fc, fr;
 
     fr = sv->r;
     fc = sv->c.i;
 
-    v = fr & VT_VALMASK;
     if (fr & VT_LVAL) {
         o(0x8b);     /* movl */
         gen_modrm(r, fr, sv->sym, fc);
