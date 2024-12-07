@@ -553,34 +553,32 @@ ST_FUNC int gv(int rc)
 {
     int r;
 
-        r = vtop->r & VT_VALMASK;
-        /* need to reload if:
-           - constant
-           - lvalue (need to dereference pointer)
-           - already a register, but not in the right class */
-        if (r >= VT_CONST
-         || (vtop->r & VT_LVAL)
-         || !(reg_classes[r] & rc))
-        {
-            r = get_reg(rc);
-            if ((vtop->r & VT_LVAL)) {
-                int t1, t;
-                /* lvalue of scalar type : need to use lvalue type
-                   because of possible cast */
-                t = vtop->type.t;
-                t1 = t;
-                vtop->type.t = t;
-                load(r, vtop);
-                /* restore wanted type */
-                vtop->type.t = t1;
-            } else {
-                /* one register type load */
-                load(r, vtop);
-            }
+    r = vtop->r & VT_VALMASK;
+    /* need to reload if:
+       - constant
+       - lvalue (need to dereference pointer)
+       - already a register, but not in the right class */
+    if (r >= VT_CONST
+     || (vtop->r & VT_LVAL)
+     || !(reg_classes[r] & rc))
+    {
+        r = get_reg(rc);
+        if ((vtop->r & VT_LVAL)) {
+            int t1, t;
+            /* lvalue of scalar type : need to use lvalue type
+               because of possible cast */
+            t = vtop->type.t;
+            t1 = t;
+            vtop->type.t = t;
+            load(r, vtop);
+            /* restore wanted type */
+            vtop->type.t = t1;
         } else {
-puts("here");
-}
-        vtop->r = r;
+            /* one register type load */
+            load(r, vtop);
+        }
+    }
+    vtop->r = r;
     return r;
 }
 
