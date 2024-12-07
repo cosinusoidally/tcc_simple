@@ -956,7 +956,7 @@ ST_FUNC void unary(void)
         t = tok;
         next();
         s = sym_find(t);
-        if (!s || IS_ASM_SYM(s)) {
+        if (!s) {
             const char *name = get_tok_str(t, NULL);
             s = external_global_sym(t, &func_old_type, 0); 
         }
