@@ -58,8 +58,6 @@
 
 /* number of available registers */
 #define NB_REGS         5
-#define NB_ASM_REGS     8
-#define CONFIG_TCC_ASM
 
 /* a register can belong to several classes. The classes must be
    sorted from more general to more precise (see gv2() code which does
