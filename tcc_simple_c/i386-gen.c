@@ -142,15 +142,8 @@ ST_FUNC void load(int r, SValue *sv)
 /* store register 'r' in lvalue 'v' */
 ST_FUNC void store(int r, SValue *v)
 {
-    int fr, bt, ft, fc;
-
-    ft = v->type.t;
-    fc = v->c.i;
-    fr = v->r & VT_VALMASK;
-    ft &= ~(VT_VOLATILE | VT_CONSTANT);
-    bt = ft & VT_BTYPE;
     o(0x89);
-    gen_modrm(r, v->r, v->sym, fc);
+    gen_modrm(r, v->r, v->sym, v->c.i);
 }
 
 static void gadd_sp(int val)
