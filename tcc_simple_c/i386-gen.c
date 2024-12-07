@@ -118,24 +118,18 @@ static void gen_modrm(int op_reg, int r, Sym *sym, int c)
 /* load 'r' from value 'sv' */
 ST_FUNC void load(int r, SValue *sv)
 {
-    int v, t, ft, fc, fr;
-    SValue v1;
+    int v, t, fc, fr;
 
     fr = sv->r;
-    ft = sv->type.t & ~VT_DEFSIGN;
     fc = sv->c.i;
-
-    ft &= ~(VT_VOLATILE | VT_CONSTANT);
 
     v = fr & VT_VALMASK;
     if (fr & VT_LVAL) {
         o(0x8b);     /* movl */
         gen_modrm(r, fr, sv->sym, fc);
     } else {
-        if (v == VT_CONST) {
             o(0xb8 + r); /* mov $xx, r */
             gen_addr32(fr, sv->sym, fc);
-        }
     }
 }
 
