@@ -479,14 +479,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
 /* add the current parse token in token string 's' */
 ST_FUNC void tok_str_add_tok(TokenString *s)
 {
-    CValue cval;
-
-    /* save line number info */
-    if (file->line_num != s->last_line_num) {
-        s->last_line_num = file->line_num;
-        cval.i = s->last_line_num;
-        tok_str_add2(s, TOK_LINENUM, &cval);
-    }
     tok_str_add2(s, tok, &tokc);
 }
 
@@ -832,15 +824,10 @@ static void next_nomacro_spc(void)
         tok = *macro_ptr;
         if (tok) {
             TOK_GET(&tok, &macro_ptr, &tokc);
-            if (tok == TOK_LINENUM) {
-                file->line_num = tokc.i;
-                goto redo;
-            }
         }
     } else {
         next_nomacro1();
     }
-    //printf("token = %s\n", get_tok_str(tok, &tokc));
 }
 
 ST_FUNC void next_nomacro(void)
