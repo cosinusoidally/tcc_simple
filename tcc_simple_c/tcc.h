@@ -320,17 +320,6 @@ typedef struct InlineFunc {
     char filename[1];
 } InlineFunc;
 
-/* include file cache, used to find files faster and also to eliminate
-   inclusion if the include file is protected by #ifndef ... #endif */
-typedef struct CachedInclude {
-    int ifndef_macro;
-    int once;
-    int hash_next; /* -1 if none */
-    char filename[1]; /* path specified in #include */
-} CachedInclude;
-
-#define CACHED_INCLUDES_HASH_SIZE 32
-
 typedef struct ExprValue {
     uint64_t v;
     Sym *sym;
@@ -458,11 +447,6 @@ struct TCCState {
 
     int ifdef_stack[IFDEF_STACK_SIZE];
     int *ifdef_stack_ptr;
-
-    /* included files enclosed with #ifndef MACRO */
-    int cached_includes_hash[CACHED_INCLUDES_HASH_SIZE];
-    CachedInclude **cached_includes;
-    int nb_cached_includes;
 
     /* #pragma pack stack */
     int pack_stack[PACK_STACK_SIZE];
