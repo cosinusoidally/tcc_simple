@@ -828,12 +828,7 @@ maybe_newline:
 
     case '=':
         PEEKC(c, p);
-        if (c == '=') {
-            p++;
-            tok = TOK_EQ;
-        } else {
-            tok = '=';
-        }
+        tok = '=';
         break;
 
         /* comments or operator */
