@@ -455,10 +455,6 @@ struct TCCState {
     Section **priv_sections;
     int nb_priv_sections; /* number of private sections */
 
-    /* got & plt handling */
-    Section *got;
-    Section *plt;
-
     /* temporary dynamic symbol sections (for dll loading) */
     Section *dynsymtab_section;
     /* exported dynamic symbol section */
