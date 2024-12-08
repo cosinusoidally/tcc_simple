@@ -143,7 +143,6 @@ ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh
     case SHT_HASH:
     case SHT_REL:
     case SHT_RELA:
-    case SHT_DYNSYM:
     case SHT_SYMTAB:
     case SHT_DYNAMIC:
         sec->sh_addralign = 4;
