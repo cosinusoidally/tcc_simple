@@ -219,8 +219,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     tcc_state = s;
     ++nb_states;
 
-    s->seg_size = 32;
-
     tccelf_new(s);
     tccpp_new(s);
 

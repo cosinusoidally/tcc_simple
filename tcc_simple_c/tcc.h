@@ -251,15 +251,6 @@ struct TCCState {
 
     unsigned section_align; /* section alignment */
 
-    int seg_size; /* 32. Can be 16 with i386 assembler (.code16) */
-
-    /* error handling */
-    void *error_opaque;
-    void (*error_func)(void *opaque, const char *msg);
-    int error_set_jmp_enabled;
-    jmp_buf error_jmp_buf;
-    int nb_errors;
-
     /* output file for preprocessing (-E) */
     FILE *ppfp;
     enum {
