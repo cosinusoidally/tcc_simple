@@ -251,18 +251,6 @@ struct TCCState {
 
     unsigned section_align; /* section alignment */
 
-    /* output file for preprocessing (-E) */
-    FILE *ppfp;
-    char dflag; /* -dX value */
-
-    /* for -MD/-MF: collected dependencies for this compilation */
-    char **target_deps;
-    int nb_target_deps;
-
-    /* compilation */
-    BufferedFile *include_stack[INCLUDE_STACK_SIZE];
-    BufferedFile **include_stack_ptr;
-
     /* sections */
     Section **sections;
     int nb_sections; /* number of sections, including first dummy section */

@@ -861,7 +861,6 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     CString cstr;
     int i;
 
-    s1->include_stack_ptr = s1->include_stack;
     pp_expr = 0;
     pp_counter = 0;
     pp_debug_tok = pp_debug_symv = 0;
@@ -889,7 +888,6 @@ ST_FUNC void tccpp_new(TCCState *s)
     const char *p, *r;
 
     /* might be used in error() before preprocess_start() */
-    s->include_stack_ptr = s->include_stack;
 
     /* init isid table */
     for(i = CH_EOF; i<128; i++)
