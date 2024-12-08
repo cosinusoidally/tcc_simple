@@ -161,11 +161,10 @@ typedef struct SValue {
 } SValue;
 
 /* function attributes or temporary attributes for parsing */
-struct FuncAttr {
-    unsigned
-    func_call   : 3, /* calling convention (0..5), see below */
-    func_type   : 2; /* FUNC_OLD/NEW/ELLIPSIS */
-};
+typedef struct FuncAttr {
+    int func_call; /* calling convention (0..5), see below */
+    int func_type; /* FUNC_OLD/NEW/ELLIPSIS */
+} FuncAttr;
 
 /* GNUC attribute definition */
 typedef struct AttributeDef {
