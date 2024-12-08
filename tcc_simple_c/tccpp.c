@@ -504,15 +504,9 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             case 't':
                 c = '\t';
                 break;
-            case '\'':
-            case '\"':
-            case '\\': 
-            case '?':
-                break;
             }
         }
         p++;
-    add_char_nonext:
         cstr_ccat(outstr, c);
     }
     /* add a trailing '\0' */
