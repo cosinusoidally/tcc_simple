@@ -176,16 +176,9 @@ typedef struct AttributeDef {
 typedef struct Sym {
     int v; /* symbol token */
     unsigned short r; /* associated register or VT_CONST/VT_LOCAL and LVAL type */
-    union {
-        struct {
-            int c; /* associated number or Elf symbol index */
-            union {
-                int sym_scope; /* scope level for locals */
-                struct FuncAttr f; /* function attributes */
-            };
-        };
-        int *d; /* define token stream */
-    };
+    int c; /* associated number or Elf symbol index */
+    int sym_scope; /* scope level for locals */
+    struct FuncAttr f; /* function attributes */
     CType type; /* associated type */
     struct Sym *next; /* next related symbol (for fields and anoms) */
     struct Sym *prev; /* prev symbol in stack */
