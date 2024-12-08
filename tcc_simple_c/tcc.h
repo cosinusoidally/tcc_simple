@@ -241,27 +241,15 @@ typedef struct TokenString {
 
 struct TCCState {
 
-    int nostdinc; /* if true, no standard headers are added */
-
     /* output type, see TCC_OUTPUT_XXX */
     int output_type;
     /* output format, see TCC_OUTPUT_FORMAT_xxx */
     int output_format;
 
-    /* warning switches */
-    int warn_write_strings;
-    int warn_unsupported;
-    int warn_error;
-    int warn_none;
-    int warn_gcc_compat;
-
     addr_t text_addr; /* address of text section */
     int has_text_addr;
 
     unsigned section_align; /* section alignment */
-
-    char *init_symbol; /* symbols to call at load-time (not used currently) */
-    char *fini_symbol; /* symbols to call at unload-time (not used currently) */
 
     int seg_size; /* 32. Can be 16 with i386 assembler (.code16) */
 
