@@ -309,18 +309,6 @@ struct filespec {
 #define TOK_PPSTR   0xbf /* preprocessor string */
 /* <-- */
 
-/* assignment operators : normal operator or 0x80 */
-#define TOK_A_MOD 0xa5
-#define TOK_A_AND 0xa6
-#define TOK_A_MUL 0xaa
-#define TOK_A_ADD 0xab
-#define TOK_A_SUB 0xad
-#define TOK_A_DIV 0xaf
-#define TOK_A_XOR 0xde
-#define TOK_A_OR  0xfc
-#define TOK_A_SHL 0x81
-#define TOK_A_SAR 0x82
-
 #define TOK_EOF       (-1)  /* end of file */
 #define TOK_LINEFEED  10    /* line feed */
 
