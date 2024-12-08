@@ -534,18 +534,6 @@ ST_FUNC int expr_const(void);
 
 /* ------------ tccelf.c ------------ */
 
-#define TCC_OUTPUT_FORMAT_ELF    0 /* default output format: ELF */
-#define TCC_OUTPUT_FORMAT_BINARY 1 /* binary image output */
-#define TCC_OUTPUT_FORMAT_COFF   2 /* COFF */
-
-typedef struct {
-    unsigned int n_strx;         /* index into string table of name */
-    unsigned char n_type;         /* type of symbol */
-    unsigned char n_other;        /* misc info (usually empty) */
-    unsigned short n_desc;        /* description field */
-    unsigned int n_value;        /* value of symbol */
-} Stab_Sym;
-
 ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
 ST_DATA Section *common_section;
 ST_DATA Section *cur_text_section; /* current section where function code is generated */
