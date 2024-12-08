@@ -277,7 +277,6 @@ struct filespec {
 
 /* types */
 #define VT_BTYPE       0x000f  /* mask for basic type */
-#define VT_VOID             0  /* void type */
 #define VT_BYTE             1  /* signed byte type */
 #define VT_SHORT            2  /* short type */
 #define VT_INT              3  /* integer type */
