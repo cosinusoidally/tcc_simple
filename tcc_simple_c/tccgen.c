@@ -729,8 +729,7 @@ ST_FUNC void vstore(void)
     ft = vtop[-1].type.t;
     sbt = vtop->type.t & VT_BTYPE;
     dbt = ft & VT_BTYPE;
-    if (!(ft & VT_BITFIELD))
-        gen_assign_cast(&vtop[-1].type);
+    gen_assign_cast(&vtop[-1].type);
 
     r = gv(RC_INT);  /* generate value */
     store(r, vtop - 1);
