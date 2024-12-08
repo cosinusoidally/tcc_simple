@@ -327,10 +327,6 @@ enum tcc_token {
 
 /* ------------ libtcc.c ------------ */
 
-/* use GNU C extensions */
-ST_DATA int gnu_ext;
-/* use Tiny C extensions */
-ST_DATA int tcc_ext;
 /* XXX: get rid of this ASAP */
 ST_DATA struct TCCState *tcc_state;
 
