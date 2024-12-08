@@ -798,7 +798,7 @@ static inline void convert_parameter_type(CType *pt)
     pt->t &= ~VT_ARRAY;
 }
 
-static int post_type(CType *type, AttributeDef *ad, int storage, int td)
+static int post_type(CType *type, AttributeDef *ad, int storage)
 {
     int n, l, t1, arg_size, align;
     Sym **plast, *s, *first;
@@ -869,7 +869,7 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v)
     /* type identifier */
     *v = tok;
     next();
-    post_type(post, ad, storage, 0);
+    post_type(post, ad, storage);
     type->t |= storage;
     return ret;
 }
