@@ -872,14 +872,13 @@ ST_FUNC void unary(void)
         type.t |= VT_ARRAY;
         memset(&ad, 0, sizeof(AttributeDef));
         decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
-    } else {
-    switch(tok) {
-    case '(':
+    } else if(tok == '(') {
         next();
         parse_btype(&type, &ad);
         gexpr();
         skip(')');
-        break;
+    } else {
+    switch(tok) {
     default:
         t = tok;
         next();
