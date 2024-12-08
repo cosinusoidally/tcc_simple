@@ -580,10 +580,8 @@ ST_FUNC int gv(int rc)
 ST_FUNC int gvtst(int inv, int t)
 {
     int v = vtop->r & VT_VALMASK;
-    if (v != VT_CMP && v != VT_JMP && v != VT_JMPI) {
-        vpushi(0);
-        gen_op(TOK_NE);
-    }
+    vpushi(0);
+    gen_op(TOK_NE);
     if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
         vtop--;
         return t;
