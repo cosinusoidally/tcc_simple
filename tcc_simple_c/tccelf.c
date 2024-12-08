@@ -142,6 +142,8 @@ ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh
     if((sh_type == SHT_HASH) || (sh_type == SHT_REL) ||
        (sh_type == SHT_RELA) || (sh_type == SHT_SYMTAB)) {
         sec->sh_addralign = 4;
+    } else if (sh_type == SHT_STRTAB) {
+        sec->sh_addralign = 1;
     }
 
     switch(sh_type) {
@@ -151,7 +153,6 @@ ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh
     case SHT_SYMTAB:
         break;
     case SHT_STRTAB:
-        sec->sh_addralign = 1;
         break;
     default:
         sec->sh_addralign =  PTR_SIZE; /* gcc/pcc default alignment */
