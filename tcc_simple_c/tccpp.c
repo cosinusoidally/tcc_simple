@@ -669,8 +669,9 @@ static inline void next_nomacro1(void)
                 ts = *pts;
                 if (!ts)
                     break;
-                if (ts->len == len && !memcmp(ts->str, p1, len))
+                if (ts->len == len && !memcmp(ts->str, p1, len)) {
                     goto token_found;
+                }
                 pts = &(ts->hash_next);
             }
             ts = tok_alloc_new(pts, (char *) p1, len);
