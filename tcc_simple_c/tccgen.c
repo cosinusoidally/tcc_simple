@@ -41,10 +41,6 @@ static int local_scope;
 static int in_sizeof;
 static int section_sym;
 
-ST_DATA int vlas_in_scope; /* number of VLAs that are currently in scope */
-ST_DATA int vla_sp_root_loc; /* vla_sp_loc for SP before any VLAs were pushed */
-ST_DATA int vla_sp_loc; /* Pointer to variable holding location to store stack pointer on the stack when modifying stack pointer */
-
 ST_DATA SValue __vstack[1+VSTACK_SIZE], *vtop, *pvtop;
 
 ST_DATA int const_wanted; /* true if constant wanted */
@@ -1055,7 +1051,6 @@ static void block(int *bsym, int *csym, int is_expr)
         gsym_addr(b, d);
     } else if (tok == '{') {
         Sym *llabel;
-        int block_vla_sp_loc = vla_sp_loc, saved_vlas_in_scope = vlas_in_scope;
 
         next();
         /* record local declaration stack position */
@@ -1080,8 +1075,6 @@ static void block(int *bsym, int *csym, int is_expr)
 	   tables, though.  sym_pop will do that.  */
 	sym_pop(&local_stack, s, is_expr);
 
-        vlas_in_scope = saved_vlas_in_scope;
-        
         next();
     } else if (tok == TOK_RETURN) {
         next();
@@ -1303,9 +1296,6 @@ static void gen_function(Sym *sym)
     put_extern_sym(sym, cur_text_section, ind, 0);
     funcname = get_tok_str(sym->v, NULL);
     func_ind = ind;
-    /* Initialize VLA state */
-    vla_sp_loc = -1;
-    vla_sp_root_loc = -1;
     /* push a dummy symbol to enable local sym storage */
     sym_push2(&local_stack, SYM_FIELD, 0, 0);
     local_scope = 1; /* for function parameters */
