@@ -346,10 +346,6 @@ struct TCCState {
     int warn_none;
     int warn_gcc_compat;
 
-    /* compile with debug symbol (and use them if error during execution) */
-    int do_debug;
-    int run_test; /* nth test to run with -dt -run */
-
     addr_t text_addr; /* address of text section */
     int has_text_addr;
 
