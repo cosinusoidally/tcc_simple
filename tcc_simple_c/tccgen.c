@@ -884,7 +884,6 @@ ST_FUNC void unary(void)
         skip(')');
         break;
     default:
-    tok_identifier:
         t = tok;
         next();
         s = sym_find(t);
