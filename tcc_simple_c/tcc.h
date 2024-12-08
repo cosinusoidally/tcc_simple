@@ -309,20 +309,8 @@ struct filespec {
 #define TOK_PPSTR   0xbf /* preprocessor string */
 /* <-- */
 
-#define TOK_UMULL    0xc2 /* unsigned 32x32 -> 64 mul */
-#define TOK_ADDC1    0xc3 /* add with carry generation */
-#define TOK_ADDC2    0xc4 /* add with carry use */
-#define TOK_SUBC1    0xc5 /* add with carry generation */
-#define TOK_SUBC2    0xc6 /* add with carry use */
-#define TOK_ARROW    0xc7
-#define TOK_DOTS     0xc8 /* three dots */
-#define TOK_SHR      0xc9 /* unsigned shift right */
-#define TOK_TWOSHARPS 0xca /* ## preprocessing token */
 #define TOK_PLCHLDR  0xcb /* placeholder token as defined in C99 */
 #define TOK_NOSUBST  0xcc /* means following token has already been pp'd */
-#define TOK_PPJOIN   0xcd /* A '##' in the right position to mean pasting */
-#define TOK_CLONG    0xce /* long constant */
-#define TOK_CULONG   0xcf /* unsigned long constant */
 
 #define TOK_SHL   0x01 /* shift left */
 #define TOK_SAR   0x02 /* signed shift right */
