@@ -767,7 +767,6 @@ static inline void next_nomacro1(void)
     case '?':
     case '~':
     case '@': /* only used in assembler */
-    parse_simple:
         tok = c;
         p++;
         break;
