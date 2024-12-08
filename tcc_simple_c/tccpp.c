@@ -302,7 +302,6 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
                     break;
                 }
             }
-        after_star: ;
         } else {
             /* stray, eob or eof */
             file->buf_ptr = p;
