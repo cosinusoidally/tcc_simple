@@ -772,9 +772,6 @@ static int parse_btype(CType *type, AttributeDef *ad)
                 t = (t & ~(VT_BTYPE|VT_LONG)) | u;
             typespec_found = 1;
             break;
-        case TOK_VOID:
-            u = VT_VOID;
-            goto basic_type;
         case TOK_INT:
             u = VT_INT;
             goto basic_type;
