@@ -590,27 +590,11 @@ static void gen_opic(int op)
 {
     SValue *v1 = vtop - 1;
     SValue *v2 = vtop;
-    int t1 = v1->type.t & VT_BTYPE;
-    int t2 = v2->type.t & VT_BTYPE;
     int c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     int c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
-    uint64_t l1 = c1 ? v1->c.i : 0;
-    uint64_t l2 = c2 ? v2->c.i : 0;
-
-    l1 = ((uint32_t)l1 |
-              (v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
-    l2 = ((uint32_t)l2 |
-              (v2->type.t & VT_UNSIGNED ? 0 : -(l2 & 0x80000000)));
 
     if (c1 && c2) {
-        switch(op) {
-        case TOK_NE:
-            l1 = l1 != l2;
-            break;
-        }
-	l1 = ((uint32_t)l1 |
-             (v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
-        v1->c.i = l1;
+        v1->c.i = 1;
         vtop--;
     } else {
         gen_opi(op);
