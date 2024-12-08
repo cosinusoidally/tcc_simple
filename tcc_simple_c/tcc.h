@@ -312,9 +312,6 @@ struct filespec {
 #define TOK_PLCHLDR  0xcb /* placeholder token as defined in C99 */
 #define TOK_NOSUBST  0xcc /* means following token has already been pp'd */
 
-#define TOK_SHL   0x01 /* shift left */
-#define TOK_SAR   0x02 /* signed shift right */
-
 /* assignment operators : normal operator or 0x80 */
 #define TOK_A_MOD 0xa5
 #define TOK_A_AND 0xa6
