@@ -289,14 +289,10 @@ struct filespec {
 /* storage */
 #define VT_EXTERN  0x00001000  /* extern definition */
 #define VT_STATIC  0x00002000  /* static variable */
-#define VT_TYPEDEF 0x00004000  /* typedef definition */
-#define VT_INLINE  0x00008000  /* inline definition */
 /* currently unused: 0x000[1248]0000  */
 
-
-
 /* type mask (except storage) */
-#define VT_STORAGE (VT_EXTERN | VT_STATIC | VT_TYPEDEF | VT_INLINE)
+#define VT_STORAGE (VT_EXTERN | VT_STATIC)
 #define VT_TYPE (~(VT_STORAGE))
 
 /* token values */
