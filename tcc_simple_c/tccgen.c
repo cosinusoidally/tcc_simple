@@ -859,14 +859,13 @@ ST_FUNC void unary(void)
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-    } else {
-    switch(tok) {
-    case TOK_CUINT:
+    } else if(tok == TOK_CUINT) {
         t = VT_INT | VT_UNSIGNED;
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-        break;
+    } else {
+    switch(tok) {
     case TOK_STR:
         /* string parsing */
         t = VT_BYTE;
