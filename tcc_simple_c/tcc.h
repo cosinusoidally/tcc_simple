@@ -379,16 +379,6 @@ PUB_FUNC int tcc_add_library_err(TCCState *s, const char *f);
 PUB_FUNC void tcc_print_stats(TCCState *s, unsigned total_time);
 PUB_FUNC int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 
-/* tcc_parse_args return codes: */
-#define OPT_HELP 1
-#define OPT_HELP2 2
-#define OPT_V 3
-#define OPT_PRINT_DIRS 4
-#define OPT_AR 5
-#define OPT_IMPDEF 6
-#define OPT_M32 32
-#define OPT_M64 64
-
 /* ------------ tccpp.c ------------ */
 
 ST_DATA struct BufferedFile *file;
