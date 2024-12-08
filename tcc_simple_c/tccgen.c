@@ -723,16 +723,12 @@ static int parse_btype(CType *type, AttributeDef *ad)
 
     while(1) {
         switch(tok) {
-            /* basic types */
-        basic_type:
+        case TOK_INT:
+            u = VT_INT;
             next();
-        basic_type1:
             bt = u;
             typespec_found = 1;
             break;
-        case TOK_INT:
-            u = VT_INT;
-            goto basic_type;
         default:
             if (typespec_found)
                 goto the_end;
