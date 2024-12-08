@@ -73,7 +73,7 @@ static void gen_cast_s(int t);
 static inline CType *pointed_type(CType *type);
 static int is_compatible_types(CType *type1, CType *type2);
 static int parse_btype(CType *type, AttributeDef *ad);
-static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td);
+static CType *type_decl(CType *type, AttributeDef *ad, int *v);
 static void init_putv(CType *type, Section *sec, unsigned long c);
 static void decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
@@ -820,7 +820,7 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
         if (l) {
             for(;;) {
                 /* read param name and compute offset */
-                type_decl(&pt, &ad1, &n, TYPE_DIRECT | TYPE_ABSTRACT);
+                type_decl(&pt, &ad1, &n);
                 arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
                 convert_parameter_type(&pt);
                 s = sym_push(n | SYM_FIELD, &pt, 0, 0);
@@ -850,13 +850,13 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
 }
 
 /* Parse a type declarator (except basic type), and return the type
-   in 'type'. 'td' is a bitmask indicating which kind of type decl is
-   expected. 'type' should contain the basic type. 'ad' is the
+   in 'type'.
+   'type' should contain the basic type. 'ad' is the
    attribute definition of the basic type. It can be modified by
    type_decl().  If this (possibly abstract) declarator is a pointer chain
    it returns the innermost pointed to type (equals *type, but is a different
    pointer), otherwise returns type itself, that's used for recursive calls.  */
-static CType *type_decl(CType *type, AttributeDef *ad, int *v, int td)
+static CType *type_decl(CType *type, AttributeDef *ad, int *v)
 {
     CType *post, *ret;
     int qualifiers, storage;
@@ -1351,7 +1351,7 @@ static int decl0(int l, int is_for_loop_init, Sym *func_sym)
         }
         while (1) { /* iterate thru each declaration */
             type = btype;
-            type_decl(&type, &ad, &v, TYPE_DIRECT);
+            type_decl(&type, &ad, &v);
             if ((type.t & VT_BTYPE) == VT_FUNC) {
                 /* if old style function prototype, we accept a
                    declaration list */
