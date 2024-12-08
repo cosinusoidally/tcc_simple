@@ -216,12 +216,6 @@ typedef struct Section {
     char name[1];           /* section name */
 } Section;
 
-typedef struct DLLReference {
-    int level;
-    void *handle;
-    char name[1];
-} DLLReference;
-
 /* -------------------------------------------------- */
 
 #define SYM_STRUCT     0x40000000 /* struct/union/enum symbol space */
@@ -365,10 +359,6 @@ struct TCCState {
     char *fini_symbol; /* symbols to call at unload-time (not used currently) */
 
     int seg_size; /* 32. Can be 16 with i386 assembler (.code16) */
-
-    /* array of all loaded dlls (including those referenced by loaded dlls) */
-    DLLReference **loaded_dlls;
-    int nb_loaded_dlls;
 
     /* include paths */
     char **include_paths;

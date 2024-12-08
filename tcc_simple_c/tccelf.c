@@ -79,10 +79,6 @@ ST_FUNC void tccelf_delete(TCCState *s1)
         free_section(s1->priv_sections[i]);
     dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
 
-    /* free any loaded DLLs */
-    /* free loaded dlls array */
-    dynarray_reset(&s1->loaded_dlls, &s1->nb_loaded_dlls);
-
     symtab_section = NULL; /* for tccrun.c:rt_printline() */
 }
 
