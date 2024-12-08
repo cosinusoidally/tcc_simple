@@ -617,7 +617,6 @@ ST_FUNC void gen_opi(int op);
 ST_FUNC void gen_opf(int op);
 ST_FUNC void gen_cvt_ftoi(int t);
 ST_FUNC void gen_cvt_ftof(int t);
-ST_FUNC void ggoto(void);
 ST_FUNC void o(unsigned int c);
 ST_FUNC void gen_cvt_itof(int t);
 ST_FUNC void gen_vla_sp_save(int addr);
