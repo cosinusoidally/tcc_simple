@@ -878,8 +878,6 @@ ST_FUNC void unary(void)
         gexpr();
         skip(')');
     } else {
-    switch(tok) {
-    default:
         t = tok;
         next();
         s = sym_find(t);
@@ -898,8 +896,6 @@ ST_FUNC void unary(void)
         if (r & VT_SYM) {
             vtop->c.i = 0;
         }
-        break;
-    }
     }
     
     /* post operations */
