@@ -872,7 +872,6 @@ ST_FUNC void unary(void)
     in_sizeof = 0;
     type.ref = NULL;
     switch(tok) {
-    case TOK_LCHAR:
     case TOK_CINT:
     case TOK_CCHAR: 
 	t = VT_INT;

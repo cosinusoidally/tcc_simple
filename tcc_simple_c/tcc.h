@@ -302,19 +302,11 @@ struct filespec {
 
 /* tokens that carry values (in additional token string space / tokc) --> */
 #define TOK_CCHAR   0xb3 /* char constant in tokc */
-#define TOK_LCHAR   0xb4
 #define TOK_CINT    0xb5 /* number in tokc */
 #define TOK_CUINT   0xb6 /* unsigned int constant */
-#define TOK_CLLONG  0xb7 /* long long constant */
-#define TOK_CULLONG 0xb8 /* unsigned long long constant */
 #define TOK_STR     0xb9 /* pointer to string in tokc */
-#define TOK_CFLOAT  0xbb /* float constant */
-#define TOK_CDOUBLE 0xbc /* double constant */
-#define TOK_CLDOUBLE 0xbd /* long double constant */
 #define TOK_PPNUM   0xbe /* preprocessor number */
 #define TOK_PPSTR   0xbf /* preprocessor string */
-#define TOK_LINENUM 0xc0 /* line number info */
-#define TOK_TWODOTS 0xa8 /* C++ token ? */
 /* <-- */
 
 #define TOK_UMULL    0xc2 /* unsigned 32x32 -> 64 mul */
