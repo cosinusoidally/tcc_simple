@@ -233,25 +233,11 @@ typedef struct TokenString {
     int len;
     int lastlen;
     int allocated_len;
-    int save_line_num;
     /* used to chain token-strings with begin/end_macro() */
     struct TokenString *prev;
     const int *prev_ptr;
     char alloc;
 } TokenString;
-
-/* inline functions */
-typedef struct InlineFunc {
-    TokenString *func_str;
-    Sym *sym;
-    char filename[1];
-} InlineFunc;
-
-typedef struct ExprValue {
-    uint64_t v;
-    Sym *sym;
-    int pcrel;
-} ExprValue;
 
 #define MAX_ASM_OPERANDS 30
 typedef struct ASMOperand {
