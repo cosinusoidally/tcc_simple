@@ -182,19 +182,13 @@ typedef struct Sym {
             int c; /* associated number or Elf symbol index */
             union {
                 int sym_scope; /* scope level for locals */
-                int jnext; /* next jump label */
                 struct FuncAttr f; /* function attributes */
-                int auxtype; /* bitfield access type */
             };
         };
-        long long enum_val; /* enum constant if IS_ENUM_VAL */
         int *d; /* define token stream */
     };
     CType type; /* associated type */
-    union {
-        struct Sym *next; /* next related symbol (for fields and anoms) */
-        int asm_label; /* associated asm label */
-    };
+    struct Sym *next; /* next related symbol (for fields and anoms) */
     struct Sym *prev; /* prev symbol in stack */
     struct Sym *prev_tok; /* previous symbol for this token */
 } Sym;
