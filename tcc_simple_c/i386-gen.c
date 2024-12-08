@@ -187,13 +187,12 @@ ST_FUNC void gfunc_call(int nb_args)
 /* generate function prolog of type 't' */
 ST_FUNC void gfunc_prolog(CType *func_type)
 {
-    int addr, align, size, func_call;
+    int addr, align, size;
     int param_index, param_addr;
     Sym *sym;
     CType *type;
 
     sym = func_type->ref;
-    func_call = sym->f.func_call;
     addr = 8;
     loc = 0;
     func_vc = 0;
