@@ -371,22 +371,6 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename);
 ST_FUNC void tcc_close(void);
 
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags);
-/* flags: */
-#define AFF_PRINT_ERROR     0x10 /* print error if file not found */
-#define AFF_REFERENCED_DLL  0x20 /* load a referenced dll from another dll */
-#define AFF_TYPE_BIN        0x40 /* file to add is binary */
-/* s->filetype: */
-#define AFF_TYPE_NONE   0
-#define AFF_TYPE_C      1
-#define AFF_TYPE_ASM    2
-#define AFF_TYPE_ASMPP  3
-#define AFF_TYPE_LIB    4
-/* values from tcc_object_type(...) */
-#define AFF_BINTYPE_REL 1
-#define AFF_BINTYPE_DYN 2
-#define AFF_BINTYPE_AR  3
-#define AFF_BINTYPE_C67 4
-
 
 ST_FUNC int tcc_add_crt(TCCState *s, const char *filename);
 ST_FUNC int tcc_add_dll(TCCState *s, const char *filename, int flags);
