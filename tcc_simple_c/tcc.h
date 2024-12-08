@@ -30,16 +30,6 @@
 
 #define O_BINARY 0
 
-#define IS_DIRSEP(c) (c == '/')
-#define IS_ABSPATH(p) IS_DIRSEP(p[0])
-#define PATHCMP strcmp
-#define PATHSEP ":"
-
-#define TCC_TARGET_I386
-
-/* only native compiler supports -run */
-#define TCC_IS_NATIVE
-
 /* -------------------------------------------- */
 
 #include "libtcc.h"
