@@ -722,16 +722,15 @@ static int parse_btype(CType *type, AttributeDef *ad)
     type->ref = NULL;
 
     while(1) {
-        switch(tok) {
-        case TOK_INT:
+        if(tok == TOK_INT) {
             u = VT_INT;
             next();
             bt = u;
             typespec_found = 1;
-            break;
-        default:
-            if (typespec_found)
+        } else {
+            if (typespec_found) {
                 goto the_end;
+            }
             s = sym_find(tok);
             goto the_end;
         }
