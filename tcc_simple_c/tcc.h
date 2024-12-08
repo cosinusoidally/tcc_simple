@@ -298,18 +298,7 @@ struct filespec {
 /* token values */
 
 /* warning: the following compare tokens depend on i386 asm code */
-#define TOK_ULT 0x92
-#define TOK_UGE 0x93
-#define TOK_EQ  0x94
 #define TOK_NE  0x95
-#define TOK_ULE 0x96
-#define TOK_UGT 0x97
-#define TOK_Nset 0x98
-#define TOK_Nclear 0x99
-#define TOK_LT  0x9c
-#define TOK_GE  0x9d
-#define TOK_LE  0x9e
-#define TOK_GT  0x9f
 
 #define TOK_LAND  0xa0
 #define TOK_LOR   0xa1
