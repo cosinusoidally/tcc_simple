@@ -347,7 +347,6 @@ static void vsetc(CType *type, int r, CValue *vc)
     vtop++;
     vtop->type = *type;
     vtop->r = r;
-    vtop->r2 = VT_CONST;
     vtop->c = *vc;
     vtop->sym = NULL;
 }
@@ -495,11 +494,9 @@ ST_FUNC void save_reg_upstack(int r, int n)
     saved = 0;
     l = 0;
     for(p = vstack, p1 = vtop - n; p <= p1; p++) {
-        if ((p->r & VT_VALMASK) == r ||
-            ((p->type.t & VT_BTYPE) == VT_LLONG && (p->r2 & VT_VALMASK) == r)) {
+        if ((p->r & VT_VALMASK) == r) {
             /* must save value on stack if not already done */
             if (!saved) {
-                /* NOTE: must reload 'r' because r might be equal to r2 */
                 r = p->r & VT_VALMASK;
                 /* store register in the stack */
                 type = &p->type;
@@ -518,7 +515,6 @@ ST_FUNC void save_reg_upstack(int r, int n)
             }
             /* mark that stack entry as being saved on the stack */
             p->r = lvalue_type(p->type.t) | VT_LOCAL;
-            p->r2 = VT_CONST;
             p->c.i = l;
         }
     }
@@ -534,8 +530,7 @@ ST_FUNC int get_reg(int rc)
     for(r=0;r<NB_REGS;r++) {
         if (reg_classes[r] & rc) {
             for(p=vstack;p<=vtop;p++) {
-                if ((p->r & VT_VALMASK) == r ||
-                    (p->r2 & VT_VALMASK) == r)
+                if ((p->r & VT_VALMASK) == r)
                     goto notfound;
             }
             return r;
@@ -978,7 +973,6 @@ ST_FUNC void unary(void)
             next();
             sa = s->next; /* first parameter */
             nb_args = regsize = 0;
-            ret.r2 = VT_CONST;
             ret_nregs = 1;
             ret.type = s->type;
 
@@ -1002,7 +996,6 @@ ST_FUNC void unary(void)
             /* return value */
             for (r = ret.r + ret_nregs + !ret_nregs; r-- > ret.r;) {
                 vsetc(&ret.type, r, &ret.c);
-                vtop->r2 = ret.r2; /* Loop only happens when r2 is VT_CONST */
             }
         } else {
             break;
