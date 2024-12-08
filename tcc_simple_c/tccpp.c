@@ -297,7 +297,8 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
                 if (c == '*') {
                     p++;
                 } else if (c == '/') {
-                    goto end_of_comment;
+                    p++;
+                    return p;
                 } else {
                     break;
                 }
@@ -312,7 +313,6 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
             }
         }
     }
- end_of_comment:
     p++;
     return p;
 }
