@@ -729,14 +729,14 @@ static int parse_btype(CType *type, AttributeDef *ad)
             typespec_found = 1;
         } else {
             if (typespec_found) {
-                goto the_end;
+                break;
             }
             s = sym_find(tok);
-            goto the_end;
+            break;
         }
         type_found = 1;
     }
-the_end:
+
     type->t = t;
     return type_found;
 }
