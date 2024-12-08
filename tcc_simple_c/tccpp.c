@@ -494,16 +494,12 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             p++;
             /* escape */
             c = *p;
-            switch(c) {
-            case 'n':
+            if(c == 'n') {
                 c = '\n';
-                break;
-            case 'r':
+            } else if(c == 'r') {
                 c = '\r';
-                break;
-            case 't':
+            } else if(c == 't') {
                 c = '\t';
-                break;
             }
         }
         p++;
