@@ -858,18 +858,19 @@ ST_FUNC void unary(void)
     case TOK_CINT:
     case TOK_CCHAR: 
 	t = VT_INT;
- push_tokc:
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
         break;
     case TOK_CUINT:
         t = VT_INT | VT_UNSIGNED;
-        goto push_tokc;
+	type.t = t;
+	vsetc(&type, VT_CONST, &tokc);
+        next();
+        break;
     case TOK_STR:
         /* string parsing */
         t = VT_BYTE;
-    str_init:
         type.t = t;
         mk_pointer(&type);
         type.t |= VT_ARRAY;
