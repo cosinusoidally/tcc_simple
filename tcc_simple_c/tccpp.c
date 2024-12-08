@@ -740,7 +740,8 @@ static inline void next_nomacro1(void)
             p = parse_comment(p);
             /* comments replaced by a blank */
             tok = ' ';
-            goto keep_tok_flags;
+            file->buf_ptr = p;
+            return;
         }
         
         /* simple tokens */
@@ -761,7 +762,6 @@ static inline void next_nomacro1(void)
         break;
     }
     tok_flags = 0;
-keep_tok_flags:
     file->buf_ptr = p;
 }
 
