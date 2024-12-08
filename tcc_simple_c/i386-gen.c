@@ -162,7 +162,7 @@ static void gcall_or_jmp(int is_jmp)
    parameters and the function address. */
 ST_FUNC void gfunc_call(int nb_args)
 {
-    int size, align, r, args_size, i, func_call;
+    int r, args_size, i;
     Sym *func_sym;
     
     args_size = 0;
@@ -174,7 +174,6 @@ ST_FUNC void gfunc_call(int nb_args)
     }
     save_regs(0); /* save used temporary registers */
     func_sym = vtop->type.ref;
-    func_call = func_sym->f.func_call;
 
     gcall_or_jmp(0);
 
