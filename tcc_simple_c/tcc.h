@@ -281,12 +281,6 @@ struct filespec {
 #define VT_INT              3  /* integer type */
 #define VT_PTR              5  /* pointer */
 #define VT_FUNC             6  /* function type */
-#define VT_FLOAT            8  /* IEEE float */
-#define VT_DOUBLE           9  /* IEEE double */
-#define VT_LDOUBLE         10  /* IEEE long double */
-#define VT_BOOL            11  /* ISOC99 boolean type */
-#define VT_QLONG           13  /* 128-bit integer. Only used for x86-64 ABI */
-#define VT_QFLOAT          14  /* 128-bit float. Only used for x86-64 ABI */
 
 #define VT_UNSIGNED    0x0010  /* unsigned type */
 #define VT_DEFSIGN     0x0020  /* explicitly signed or unsigned */

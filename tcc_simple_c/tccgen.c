@@ -689,7 +689,7 @@ ST_FUNC int type_size(CType *type, int *a)
         ts = type_size(&s->type, a);
 
         return ts * s->c;
-    } else if (bt == VT_INT || bt == VT_FLOAT) {
+    } else if (bt == VT_INT) {
         *a = 4;
         return 4;
     } else {
