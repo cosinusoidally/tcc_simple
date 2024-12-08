@@ -597,11 +597,9 @@ static void gen_opic(int op)
     uint64_t l1 = c1 ? v1->c.i : 0;
     uint64_t l2 = c2 ? v2->c.i : 0;
 
-    if (t1 != VT_PTR)
-        l1 = ((uint32_t)l1 |
+    l1 = ((uint32_t)l1 |
               (v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
-    if (t2 != VT_PTR)
-        l2 = ((uint32_t)l2 |
+    l2 = ((uint32_t)l2 |
               (v2->type.t & VT_UNSIGNED ? 0 : -(l2 & 0x80000000)));
 
     if (c1 && c2) {
