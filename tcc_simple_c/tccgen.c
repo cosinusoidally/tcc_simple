@@ -509,19 +509,23 @@ ST_FUNC void save_reg_upstack(int r, int n)
 /* find a free register of class 'rc'. If none, save one register */
 ST_FUNC int get_reg(int rc)
 {
-    int r;
+    int r, notfound;
     SValue *p;
 
     /* find a free register */
     for(r=0;r<NB_REGS;r++) {
+        notfound = 0;
         if (reg_classes[r] & rc) {
             for(p=vstack;p<=vtop;p++) {
-                if ((p->r & VT_VALMASK) == r)
-                    goto notfound;
+                if ((p->r & VT_VALMASK) == r) {
+                    notfound = 1;
+                    break;
+                }
             }
-            return r;
+            if(notfound == 0) {
+                return r;
+            }
         }
-    notfound: ;
     }
 }
 
