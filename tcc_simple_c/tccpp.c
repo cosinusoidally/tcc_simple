@@ -442,8 +442,6 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
         str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
     str[len++] = t;
     switch(t) {
-    case TOK_PPNUM:
-    case TOK_PPSTR:
     case TOK_STR:
         {
             /* Insert the string into the int array. */
