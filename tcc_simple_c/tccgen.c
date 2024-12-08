@@ -499,8 +499,7 @@ ST_FUNC void save_reg_upstack(int r, int n)
                 r = p->r & VT_VALMASK;
                 /* store register in the stack */
                 type = &p->type;
-                if ((p->r & VT_LVAL) ||
-                    ((type->t & VT_BTYPE) != VT_LLONG))
+                if ((p->r & VT_LVAL))
                     type = &int_type;
                 size = type_size(type, &align);
                 loc = (loc - size) & -align;
@@ -601,12 +600,11 @@ static void gen_opic(int op)
     int c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     uint64_t l1 = c1 ? v1->c.i : 0;
     uint64_t l2 = c2 ? v2->c.i : 0;
-    int shm = (t1 == VT_LLONG) ? 63 : 31;
 
-    if (t1 != VT_LLONG && (PTR_SIZE != 8 || t1 != VT_PTR))
+    if ((PTR_SIZE != 8 || t1 != VT_PTR))
         l1 = ((uint32_t)l1 |
               (v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
-    if (t2 != VT_LLONG && (PTR_SIZE != 8 || t2 != VT_PTR))
+    if ((PTR_SIZE != 8 || t2 != VT_PTR))
         l2 = ((uint32_t)l2 |
               (v2->type.t & VT_UNSIGNED ? 0 : -(l2 & 0x80000000)));
 
@@ -616,7 +614,7 @@ static void gen_opic(int op)
             l1 = l1 != l2;
             break;
         }
-	if (t1 != VT_LLONG && (PTR_SIZE != 8 || t1 != VT_PTR))
+	if ((PTR_SIZE != 8 || t1 != VT_PTR))
 	    l1 = ((uint32_t)l1 |
 		(v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
         v1->c.i = l1;
@@ -663,16 +661,16 @@ static void gen_cast(CType *type)
         if (c) {
             if (sbt & VT_UNSIGNED)
                 vtop->c.i = (uint32_t)vtop->c.i;
-            else if (sbt != VT_LLONG)
+            else
                 vtop->c.i = ((uint32_t)vtop->c.i |
                               -(vtop->c.i & 0x80000000));
 
-                uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
+            uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
                               0xffffffff);
-                vtop->c.i &= m;
-                if (!(dbt & VT_UNSIGNED))
-                    vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
-            }
+            vtop->c.i &= m;
+            if (!(dbt & VT_UNSIGNED))
+                vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
+        }
     }
     vtop->type = *type;
 }
