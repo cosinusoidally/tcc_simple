@@ -281,7 +281,6 @@ struct filespec {
 #define VT_INT              3  /* integer type */
 #define VT_PTR              5  /* pointer */
 #define VT_FUNC             6  /* function type */
-#define VT_STRUCT           7  /* struct/union definition */
 #define VT_FLOAT            8  /* IEEE float */
 #define VT_DOUBLE           9  /* IEEE double */
 #define VT_LDOUBLE         10  /* IEEE long double */
@@ -305,22 +304,11 @@ struct filespec {
 #define VT_INLINE  0x00008000  /* inline definition */
 /* currently unused: 0x000[1248]0000  */
 
-#define VT_STRUCT_SHIFT 20     /* shift for bitfield shift values (32 - 2*6) */
-#define VT_STRUCT_MASK (((1 << (6+6)) - 1) << VT_STRUCT_SHIFT | VT_BITFIELD)
-#define BIT_POS(t) (((t) >> VT_STRUCT_SHIFT) & 0x3f)
-#define BIT_SIZE(t) (((t) >> (VT_STRUCT_SHIFT + 6)) & 0x3f)
 
-#define VT_UNION    (1 << VT_STRUCT_SHIFT | VT_STRUCT)
-#define VT_ENUM     (2 << VT_STRUCT_SHIFT) /* integral type is an enum really */
-#define VT_ENUM_VAL (3 << VT_STRUCT_SHIFT) /* integral type is an enum constant really */
-
-#define IS_ENUM(t) ((t & VT_STRUCT_MASK) == VT_ENUM)
-#define IS_ENUM_VAL(t) ((t & VT_STRUCT_MASK) == VT_ENUM_VAL)
-#define IS_UNION(t) ((t & (VT_STRUCT_MASK|VT_BTYPE)) == VT_UNION)
 
 /* type mask (except storage) */
 #define VT_STORAGE (VT_EXTERN | VT_STATIC | VT_TYPEDEF | VT_INLINE)
-#define VT_TYPE (~(VT_STORAGE|VT_STRUCT_MASK))
+#define VT_TYPE (~(VT_STORAGE))
 
 /* token values */
 
