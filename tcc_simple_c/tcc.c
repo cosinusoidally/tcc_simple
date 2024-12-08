@@ -41,14 +41,11 @@ int main(int argc0, char **argv0)
     TCCState *s;
     int opt;
     int argc; char **argv;
-    FILE *ppfp = stdout;
     struct filespec *f;
 
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
-
-    s->ppfp = ppfp;
 
     f = s->files[0];
     s->filetype = f->type;

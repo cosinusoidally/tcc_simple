@@ -890,7 +890,6 @@ ST_FUNC void tccpp_new(TCCState *s)
 
     /* might be used in error() before preprocess_start() */
     s->include_stack_ptr = s->include_stack;
-    s->ppfp = stdout;
 
     /* init isid table */
     for(i = CH_EOF; i<128; i++)
