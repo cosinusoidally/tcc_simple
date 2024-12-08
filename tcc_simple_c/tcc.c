@@ -21,13 +21,6 @@
 #include "tcc.h"
 #include "libtcc.c"
 
-static const char version[] =
-    "tcc version "TCC_VERSION" ("
-        "i386"
-        " Linux"
-    ")\n"
-    ;
-
 int main(int argc0, char **argv0)
 {
     TCCState *s;
