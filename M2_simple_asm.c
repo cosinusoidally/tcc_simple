@@ -1023,7 +1023,7 @@ int process_break() {
 	skip(";");
 }
 
-void recursive_statement() {
+int recursive_statement() {
 	int frame;
 	int i;
 	int c;
