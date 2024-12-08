@@ -442,14 +442,14 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
         str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
     str[len++] = t;
     if(t == TOK_STR) {
-            /* Insert the string into the int array. */
-            size_t nb_words =
-                1 + (cv->str.size + sizeof(int) - 1) / sizeof(int);
-            if (len + nb_words >= s->allocated_len)
-                str = tok_str_realloc(s, len + nb_words + 1);
-            str[len] = cv->str.size;
-            memcpy(&str[len + 1], cv->str.data, cv->str.size);
-            len += nb_words;
+        /* Insert the string into the int array. */
+        size_t nb_words =
+            1 + (cv->str.size + sizeof(int) - 1) / sizeof(int);
+        if (len + nb_words >= s->allocated_len)
+            str = tok_str_realloc(s, len + nb_words + 1);
+        str[len] = cv->str.size;
+        memcpy(&str[len + 1], cv->str.data, cv->str.size);
+        len += nb_words;
     }
     s->len = len;
 }
