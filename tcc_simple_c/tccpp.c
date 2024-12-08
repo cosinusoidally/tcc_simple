@@ -470,17 +470,12 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     tab = cv->tab;
 
     tmp = (*t = *p++);
-    switch(tmp) {
-    case TOK_STR:
-    case TOK_PPNUM:
-    case TOK_PPSTR:
+    if((tmp == TOK_STR) || (tmp == TOK_PPNUM) || (tmp == TOK_PPSTR)) {
         cv->str.size = *p++;
         cv->str.data = p;
         p += (cv->str.size + sizeof(int) - 1) / sizeof(int);
-        break;
-    default:
-        break;
     }
+
     *pp = p;
 }
 
