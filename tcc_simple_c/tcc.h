@@ -264,7 +264,6 @@ struct TCCState {
     /* used by main and tcc_parse_args only */
     struct filespec **files; /* files seen on command line */
     int nb_files; /* number thereof */
-    int nb_libraries; /* number of libs thereof */
     int filetype;
     char *outfile; /* output filename */
     int argc;
@@ -273,7 +272,6 @@ struct TCCState {
 
 struct filespec {
     char type;
-    char alacarte;
     char name[1];
 };
 

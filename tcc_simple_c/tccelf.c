@@ -501,7 +501,7 @@ static void sort_syms(TCCState *s1, Section *s)
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
-static int alloc_sec_names(TCCState *s1, int file_type, Section *strsec)
+static int alloc_sec_names(TCCState *s1, Section *strsec)
 {
     int i;
     Section *s;
@@ -533,18 +533,16 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
                            Section *interp, Section* strsec,
                            struct dyn_inf *dyninf, int *sec_order)
 {
-    int i, j, k, file_type, sh_order_index, file_offset;
+    int i, j, k, sh_order_index, file_offset;
     unsigned long s_align;
     long long tmp;
     addr_t addr;
     ElfW(Phdr) *ph;
     Section *s;
 
-    file_type = s1->output_type;
     sh_order_index = 1;
     file_offset = 0;
-    if (s1->output_format == TCC_OUTPUT_FORMAT_ELF)
-        file_offset = sizeof(ElfW(Ehdr)) + phnum * sizeof(ElfW(Phdr));
+    file_offset = sizeof(ElfW(Ehdr)) + phnum * sizeof(ElfW(Phdr));
     s_align = ELF_PAGE_SIZE;
 
     /* all other sections come after */
@@ -567,12 +565,11 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
                            int file_offset, int *sec_order)
 {
-    int i, shnum, offset, size, file_type;
+    int i, shnum, offset, size;
     Section *s;
     ElfW(Ehdr) ehdr;
     ElfW(Shdr) shdr, *sh;
 
-    file_type = s1->output_type;
     shnum = s1->nb_sections;
 
     memset(&ehdr, 0, sizeof(ehdr));
@@ -648,7 +645,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
                               ElfW(Phdr) *phdr, int file_offset, int *sec_order)
 {
-    int fd, mode, file_type;
+    int fd, mode;
     FILE *f;
 
     unlink(filename);
@@ -664,14 +661,13 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
 /* XXX: suppress unneeded sections */
 static int elf_output_file(TCCState *s1, const char *filename)
 {
-    int i, ret, phnum, shnum, file_type, file_offset, *sec_order;
+    int i, ret, phnum, shnum, file_offset, *sec_order;
     struct dyn_inf dyninf = {0};
     ElfW(Phdr) *phdr;
     ElfW(Sym) *sym;
     Section *strsec, *interp, *dynamic, *dynstr;
     int textrel;
 
-    file_type = s1->output_type;
     ret = -1;
     phdr = NULL;
     sec_order = NULL;
@@ -683,7 +679,7 @@ static int elf_output_file(TCCState *s1, const char *filename)
     put_elf_str(strsec, "");
 
     /* Allocate strings for section names */
-    textrel = alloc_sec_names(s1, file_type, strsec);
+    textrel = alloc_sec_names(s1, strsec);
 
     /* compute number of program headers */
     phnum = 0;
