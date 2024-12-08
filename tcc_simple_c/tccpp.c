@@ -825,10 +825,7 @@ ST_FUNC void next(void)
         next_nomacro();
 
     if (macro_ptr) {
-        if (tok == TOK_NOSUBST || tok == TOK_PLCHLDR) {
-        /* discard preprocessor markers */
-            goto redo;
-        } else if (tok == 0) {
+        if (tok == 0) {
             /* end of macro or unget token string */
             end_macro();
             goto redo;

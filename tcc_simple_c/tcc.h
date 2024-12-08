@@ -309,9 +309,6 @@ struct filespec {
 #define TOK_PPSTR   0xbf /* preprocessor string */
 /* <-- */
 
-#define TOK_PLCHLDR  0xcb /* placeholder token as defined in C99 */
-#define TOK_NOSUBST  0xcc /* means following token has already been pp'd */
-
 /* assignment operators : normal operator or 0x80 */
 #define TOK_A_MOD 0xa5
 #define TOK_A_AND 0xa6
