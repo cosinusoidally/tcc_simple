@@ -646,7 +646,6 @@ static inline void next_nomacro1(void)
         file->line_num++;
         tok_flags |= TOK_FLAG_BOL;
         p++;
-maybe_newline:
         if (0 == (parse_flags & PARSE_FLAG_LINEFEED))
             goto redo_no_start;
     case 'a': case 'b': case 'c': case 'd':
@@ -664,7 +663,6 @@ maybe_newline:
     case 'U': case 'V': case 'W': case 'X':
     case 'Y': case 'Z': 
     case '_':
-    parse_ident_fast:
         p1 = p;
         h = TOK_HASH_INIT;
         h = TOK_HASH_FUNC(h, c);
@@ -694,7 +692,6 @@ maybe_newline:
             cstr_cat(&tokcstr, (char *) p1, len);
             p--;
             PEEKC(c, p);
-        parse_ident_slow:
             while (isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
             {
                 cstr_ccat(&tokcstr, c);
@@ -711,7 +708,6 @@ maybe_newline:
         PEEKC(c, p);
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
-    parse_num:
         cstr_reset(&tokcstr);
         for(;;) {
             cstr_ccat(&tokcstr, t);
@@ -733,7 +729,6 @@ maybe_newline:
     case '\'':
     case '\"':
         is_long = 0;
-    str_const:
         cstr_reset(&tokcstr);
         cstr_ccat(&tokcstr, c);
         p = parse_pp_string(p, c, &tokcstr);
