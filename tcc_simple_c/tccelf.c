@@ -144,19 +144,8 @@ ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh
         sec->sh_addralign = 4;
     } else if (sh_type == SHT_STRTAB) {
         sec->sh_addralign = 1;
-    }
-
-    switch(sh_type) {
-    case SHT_HASH:
-    case SHT_REL:
-    case SHT_RELA:
-    case SHT_SYMTAB:
-        break;
-    case SHT_STRTAB:
-        break;
-    default:
+    } else {
         sec->sh_addralign =  PTR_SIZE; /* gcc/pcc default alignment */
-        break;
     }
 
     if (sh_flags & SHF_PRIVATE) {
