@@ -219,9 +219,7 @@ typedef struct BufferedFile {
     int fd;
     struct BufferedFile *prev;
     int line_num;    /* current line number - here to simplify code */
-    int include_next_index; /* next search path */
     char filename[1024];    /* filename */
-    char *true_filename; /* filename not modified by # line directive */
     unsigned char unget[4];
     unsigned char buffer[1]; /* extra size for CH_EOB char */
 } BufferedFile;
@@ -235,7 +233,6 @@ typedef struct TokenString {
     int len;
     int lastlen;
     int allocated_len;
-    int last_line_num;
     int save_line_num;
     /* used to chain token-strings with begin/end_macro() */
     struct TokenString *prev;

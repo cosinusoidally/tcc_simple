@@ -364,7 +364,6 @@ ST_INLN void tok_str_new(TokenString *s)
     s->str = NULL;
     s->len = s->lastlen = 0;
     s->allocated_len = 0;
-    s->last_line_num = -1;
 }
 
 ST_FUNC TokenString *tok_str_alloc(void)
@@ -419,7 +418,6 @@ ST_FUNC void begin_macro(TokenString *str, int alloc)
     str->alloc = alloc;
     str->prev = macro_stack;
     str->prev_ptr = macro_ptr;
-    str->save_line_num = file->line_num;
     macro_ptr = str->str;
     macro_stack = str;
 }
@@ -429,7 +427,6 @@ ST_FUNC void end_macro(void)
     TokenString *str = macro_stack;
     macro_stack = str->prev;
     macro_ptr = str->prev_ptr;
-    file->line_num = str->save_line_num;
     tok_str_free(str);
 }
 

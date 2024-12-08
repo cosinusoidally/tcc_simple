@@ -149,7 +149,6 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen)
     bf->buf_end = bf->buffer + initlen;
     bf->buf_end[0] = CH_EOB; /* put eob symbol */
     pstrcpy(bf->filename, sizeof(bf->filename), filename);
-    bf->true_filename = bf->filename;
     bf->line_num = 1;
     bf->fd = -1;
     bf->prev = file;
