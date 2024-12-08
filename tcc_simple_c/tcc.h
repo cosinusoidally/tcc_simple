@@ -152,7 +152,6 @@ typedef struct SValue {
 
 /* function attributes or temporary attributes for parsing */
 typedef struct FuncAttr {
-    int func_call; /* calling convention (0..5), see below */
     int func_type; /* FUNC_OLD/NEW/ELLIPSIS */
 } FuncAttr;
 
@@ -207,9 +206,6 @@ typedef struct Section {
 /* stored in 'Sym->f.func_type' field */
 #define FUNC_NEW       1 /* ansi function prototype */
 #define FUNC_OLD       2 /* old function prototype */
-
-/* stored in 'Sym->f.func_call' field */
-#define FUNC_CDECL     0 /* standard c call */
 
 /* field 'Sym.t' for macros */
 #define MACRO_OBJ      0 /* object like macro */
