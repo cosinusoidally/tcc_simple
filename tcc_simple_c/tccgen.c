@@ -854,14 +854,13 @@ ST_FUNC void unary(void)
     sizeof_caller = in_sizeof;
     in_sizeof = 0;
     type.ref = NULL;
-    switch(tok) {
-    case TOK_CINT:
-    case TOK_CCHAR: 
+    if((tok == TOK_CINT) || (tok == TOK_CCHAR)) {
 	t = VT_INT;
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-        break;
+    } else {
+    switch(tok) {
     case TOK_CUINT:
         t = VT_INT | VT_UNSIGNED;
 	type.t = t;
@@ -903,6 +902,7 @@ ST_FUNC void unary(void)
             vtop->c.i = 0;
         }
         break;
+    }
     }
     
     /* post operations */
