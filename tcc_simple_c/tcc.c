@@ -21,14 +21,6 @@
 #include "tcc.h"
 #include "libtcc.c"
 
-static const char help[] =
-    "Tiny C Compiler "TCC_VERSION" - Copyright (C) 2001-2006 Fabrice Bellard\n"
-    ;
-
-static const char help2[] =
-    "Tiny C Compiler "TCC_VERSION" - More Options\n"
-    ;
-
 static const char version[] =
     "tcc version "TCC_VERSION" ("
         "i386"
