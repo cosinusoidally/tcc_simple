@@ -279,7 +279,6 @@ struct filespec {
 #define VT_BTYPE       0x000f  /* mask for basic type */
 #define VT_BYTE             1  /* signed byte type */
 #define VT_INT              3  /* integer type */
-#define VT_LLONG            4  /* 64 bit integer */
 #define VT_PTR              5  /* pointer */
 #define VT_FUNC             6  /* function type */
 #define VT_STRUCT           7  /* struct/union definition */
