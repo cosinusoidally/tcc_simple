@@ -274,9 +274,9 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
     int c;
 
     p++;
-    for(;;) {
+    while(1) {
         /* fast skip loop */
-        for(;;) {
+        while(1) {
             c = *p;
             if (c == '\n' || c == '*' || c == '\\')
                 break;
@@ -292,7 +292,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
             p++;
         } else if (c == '*') {
             p++;
-            for(;;) {
+            while(1) {
                 c = *p;
                 if (c == '*') {
                     p++;
