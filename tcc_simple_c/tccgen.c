@@ -608,9 +608,8 @@ static void gen_opic(int op)
             l1 = l1 != l2;
             break;
         }
-	if (t1 != VT_PTR)
-	    l1 = ((uint32_t)l1 |
-		(v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
+	l1 = ((uint32_t)l1 |
+             (v1->type.t & VT_UNSIGNED ? 0 : -(l1 & 0x80000000)));
         v1->c.i = l1;
         vtop--;
     } else {
