@@ -178,7 +178,7 @@ ST_FUNC void gfunc_call(int nb_args)
 
     gcall_or_jmp(0);
 
-    if (args_size && func_call != FUNC_STDCALL && func_call != FUNC_FASTCALLW)
+    if (args_size)
         gadd_sp(args_size);
     vtop--;
 }
