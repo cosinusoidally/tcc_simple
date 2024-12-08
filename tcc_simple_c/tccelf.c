@@ -139,8 +139,13 @@ ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh
     strcpy(sec->name, name);
     sec->sh_type = sh_type;
     sec->sh_flags = sh_flags;
+    if((sh_type == SHT_HASH)) {
+        sec->sh_addralign = 4;
+    }
+
     switch(sh_type) {
     case SHT_HASH:
+        break;
     case SHT_REL:
     case SHT_RELA:
     case SHT_SYMTAB:
