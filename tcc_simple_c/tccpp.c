@@ -871,7 +871,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     pp_once++;
     pvtop = vtop = vstack - 1;
 
-    set_idnum('$', s1->dollars_in_identifiers ? IS_ID : 0);
+    set_idnum('$', 0);
     set_idnum('.', is_asm ? IS_ID : 0);
 
     cstr_new(&cstr);

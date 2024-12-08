@@ -321,12 +321,6 @@ struct TCCState {
     /* output format, see TCC_OUTPUT_FORMAT_xxx */
     int output_format;
 
-    /* C language options */
-    int char_is_unsigned;
-    int leading_underscore;
-    int dollars_in_identifiers;	/* allows '$' char in identifiers */
-    int ms_bitfields; /* if true, emulate MS algorithm for aligning bitfields */
-
     /* warning switches */
     int warn_write_strings;
     int warn_unsupported;
