@@ -864,9 +864,7 @@ ST_FUNC void unary(void)
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-    } else {
-    switch(tok) {
-    case TOK_STR:
+    } else if(tok == TOK_STR) {
         /* string parsing */
         t = VT_BYTE;
         type.t = t;
@@ -874,7 +872,8 @@ ST_FUNC void unary(void)
         type.t |= VT_ARRAY;
         memset(&ad, 0, sizeof(AttributeDef));
         decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
-        break;
+    } else {
+    switch(tok) {
     case '(':
         next();
         parse_btype(&type, &ad);
