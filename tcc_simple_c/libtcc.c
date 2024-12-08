@@ -343,12 +343,8 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
             break;
         }
 
-        switch(popt->index) {
-        case TCC_OPTION_o:
+        if(popt->index == TCC_OPTION_o) {
             s->outfile = tcc_strdup(optarg);
-            break;
-        default:
-            break;
         }
     }
 
