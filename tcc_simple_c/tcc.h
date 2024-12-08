@@ -325,10 +325,6 @@ struct filespec {
 #define VT_STORAGE (VT_EXTERN | VT_STATIC | VT_TYPEDEF | VT_INLINE)
 #define VT_TYPE (~(VT_STORAGE|VT_STRUCT_MASK))
 
-/* symbol was created by tccasm.c first */
-#define VT_ASM (VT_VOID | VT_UNSIGNED)
-#define IS_ASM_SYM(sym) (((sym)->type.t & (VT_BTYPE | VT_ASM)) == VT_ASM)
-
 /* token values */
 
 /* warning: the following compare tokens depend on i386 asm code */

@@ -1329,7 +1329,7 @@ static void gen_function(Sym *sym)
     /* It's better to crash than to generate wrong code */
     cur_text_section = NULL;
     funcname = ""; /* for safety */
-    func_vt.t = VT_VOID; /* for safety */
+    func_vt.t = 0; /* for safety */
     func_var = 0; /* for safety */
     ind = 0; /* for safety */
 }
