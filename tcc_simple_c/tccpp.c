@@ -464,11 +464,13 @@ ST_FUNC void tok_str_add_tok(TokenString *s)
    accordingly. we code it as a macro to avoid pointer aliasing. */
 static inline void TOK_GET(int *t, const int **pp, CValue *cv)
 {
+    int n, *tab, tmp;
     const int *p = *pp;
-    int n, *tab;
 
     tab = cv->tab;
-    switch(*t = *p++) {
+
+    tmp = (*t = *p++);
+    switch(tmp) {
     case TOK_STR:
     case TOK_PPNUM:
     case TOK_PPSTR:
