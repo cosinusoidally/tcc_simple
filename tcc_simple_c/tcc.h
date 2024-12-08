@@ -300,15 +300,6 @@ struct filespec {
 /* warning: the following compare tokens depend on i386 asm code */
 #define TOK_NE  0x95
 
-#define TOK_LAND  0xa0
-#define TOK_LOR   0xa1
-#define TOK_DEC   0xa2
-#define TOK_MID   0xa3 /* inc/dec, to void constant */
-#define TOK_INC   0xa4
-#define TOK_UDIV  0xb0 /* unsigned division */
-#define TOK_UMOD  0xb1 /* unsigned modulo */
-#define TOK_PDIV  0xb2 /* fast division with undefined rounding for pointers */
-
 /* tokens that carry values (in additional token string space / tokc) --> */
 #define TOK_CCHAR   0xb3 /* char constant in tokc */
 #define TOK_LCHAR   0xb4
