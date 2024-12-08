@@ -234,15 +234,6 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
     /* free sections */
     tccelf_delete(s1);
 
-    /* free library paths */
-    dynarray_reset(&s1->library_paths, &s1->nb_library_paths);
-    dynarray_reset(&s1->crt_paths, &s1->nb_crt_paths);
-
-    /* free include paths */
-    dynarray_reset(&s1->include_paths, &s1->nb_include_paths);
-    dynarray_reset(&s1->sysinclude_paths, &s1->nb_sysinclude_paths);
-    dynarray_reset(&s1->cmd_include_files, &s1->nb_cmd_include_files);
-
     tcc_free(s1->outfile);
     dynarray_reset(&s1->files, &s1->nb_files);
     dynarray_reset(&s1->target_deps, &s1->nb_target_deps);

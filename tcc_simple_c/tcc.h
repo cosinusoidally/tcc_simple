@@ -253,25 +253,6 @@ struct TCCState {
 
     int seg_size; /* 32. Can be 16 with i386 assembler (.code16) */
 
-    /* include paths */
-    char **include_paths;
-    int nb_include_paths;
-
-    char **sysinclude_paths;
-    int nb_sysinclude_paths;
-
-    /* library paths */
-    char **library_paths;
-    int nb_library_paths;
-
-    /* crt?.o object path */
-    char **crt_paths;
-    int nb_crt_paths;
-
-    /* -include files */
-    char **cmd_include_files;
-    int nb_cmd_include_files;
-
     /* error handling */
     void *error_opaque;
     void (*error_func)(void *opaque, const char *msg);
