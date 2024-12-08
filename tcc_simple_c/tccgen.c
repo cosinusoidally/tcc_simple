@@ -710,22 +710,18 @@ ST_FUNC void vstore(void)
  */
 static int parse_btype(CType *type, AttributeDef *ad)
 {
-    int t, u, bt, st, type_found, typespec_found, g;
+    int type_found, typespec_found;
     Sym *s;
     CType type1;
 
     memset(ad, 0, sizeof(AttributeDef));
     type_found = 0;
     typespec_found = 0;
-    t = VT_INT;
-    bt = st = -1;
     type->ref = NULL;
 
     while(1) {
         if(tok == TOK_INT) {
-            u = VT_INT;
             next();
-            bt = u;
             typespec_found = 1;
         } else {
             if (typespec_found) {
@@ -737,7 +733,7 @@ static int parse_btype(CType *type, AttributeDef *ad)
         type_found = 1;
     }
 
-    type->t = t;
+    type->t = VT_INT;
     return type_found;
 }
 
