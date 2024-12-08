@@ -314,10 +314,7 @@ typedef struct ASMOperand {
 
 struct TCCState {
 
-    int verbose; /* if true, display some information during compilation */
     int nostdinc; /* if true, no standard headers are added */
-    int nostdlib; /* if true, no standard libraries are added */
-    int nocommon; /* if true, do not use common symbols for .bss data */
     int static_link; /* if true, static linking is performed */
     int rdynamic; /* if true, all symbols are exported */
     int symbolic; /* if true, resolve symbols in the current module first */

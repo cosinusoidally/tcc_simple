@@ -1265,7 +1265,7 @@ static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         if (!sec) {
             if (has_init)
                 sec = data_section;
-            else if (tcc_state->nocommon)
+            else
                 sec = bss_section;
         }
 
