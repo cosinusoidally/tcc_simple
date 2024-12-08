@@ -785,9 +785,9 @@ the_end:
    function pointer) */
 static inline void convert_parameter_type(CType *pt)
 {
-    /* remove const and volatile qualifiers (XXX: const could be used
+    /* remove const qualifiers (XXX: const could be used
        to indicate a const function parameter */
-    pt->t &= ~(VT_CONSTANT | VT_VOLATILE);
+    pt->t &= ~(VT_CONSTANT);
     /* array must be transformed to pointer according to ANSI C */
     pt->t &= ~VT_ARRAY;
 }

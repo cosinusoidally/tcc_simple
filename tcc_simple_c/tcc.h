@@ -285,7 +285,6 @@ struct filespec {
 #define VT_UNSIGNED    0x0010  /* unsigned type */
 #define VT_ARRAY       0x0040  /* array type (also has VT_PTR) */
 #define VT_CONSTANT    0x0100  /* const modifier */
-#define VT_VOLATILE    0x0200  /* volatile modifier */
 #define VT_VLA         0x0400  /* VLA type (also has VT_PTR and VT_ARRAY) */
 #define VT_LONG        0x0800  /* long type (also has VT_INT rsp. VT_LLONG) */
 
