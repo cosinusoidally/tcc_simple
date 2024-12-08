@@ -241,11 +241,6 @@ typedef struct TokenString {
 
 struct TCCState {
 
-    /* output type, see TCC_OUTPUT_XXX */
-    int output_type;
-    /* output format, see TCC_OUTPUT_FORMAT_xxx */
-    int output_format;
-
     addr_t text_addr; /* address of text section */
     int has_text_addr;
 
