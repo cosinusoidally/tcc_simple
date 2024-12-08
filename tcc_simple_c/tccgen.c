@@ -102,7 +102,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     ptrdiff_type.t = VT_INT;
     func_old_type.t = VT_FUNC;
     func_old_type.ref = sym_push(SYM_FIELD, &int_type, 0, 0);
-    func_old_type.ref->f.func_call = FUNC_CDECL;
     func_old_type.ref->f.func_type = FUNC_OLD;
 
     /* an elf symbol of type STT_FILE must be put so that STB_LOCAL

@@ -217,15 +217,9 @@ typedef struct Section {
 /* stored in 'Sym->f.func_type' field */
 #define FUNC_NEW       1 /* ansi function prototype */
 #define FUNC_OLD       2 /* old function prototype */
-#define FUNC_ELLIPSIS  3 /* ansi function prototype with ... */
 
 /* stored in 'Sym->f.func_call' field */
 #define FUNC_CDECL     0 /* standard c call */
-#define FUNC_STDCALL   1 /* pascal c call */
-#define FUNC_FASTCALL1 2 /* first param in %eax */
-#define FUNC_FASTCALL2 3 /* first parameters in %eax, %edx */
-#define FUNC_FASTCALL3 4 /* first parameter in %eax, %edx, %ecx */
-#define FUNC_FASTCALLW 5 /* first parameter in %ecx, %edx */
 
 /* field 'Sym.t' for macros */
 #define MACRO_OBJ      0 /* object like macro */
