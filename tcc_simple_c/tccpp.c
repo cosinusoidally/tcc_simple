@@ -733,17 +733,10 @@ static inline void next_nomacro1(void)
             return;
         }
     } else if((c == '(') || (c == ')') ||
-              (c == '{') || (c == '}')){
+              (c == '{') || (c == '}') ||
+              (c == ',') || (c == ';')){
         tok = c;
         p++;
-    } else {
-    switch(c) {
-    case ',':
-    case ';':
-        tok = c;
-        p++;
-        break;
-    }
     }
     tok_flags = 0;
     file->buf_ptr = p;
