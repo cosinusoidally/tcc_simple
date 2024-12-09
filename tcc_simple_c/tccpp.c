@@ -617,14 +617,16 @@ static inline void next_nomacro1(void)
     while(1) {
         redo_no_start = 0;
         c = *p;
-        switch(c) {
-        case ' ':
-        case '\t':
+        if((c == ' ') || (c == '\t')) {
             tok = c;
             p++;
             while (isidnum_table[*p - CH_EOF] & IS_SPC)
                 ++p;
             redo_no_start = 1;
+        } else {
+        switch(c) {
+        case ' ':
+        case '\t':
             break;
         case '\\':
             /* first look if it is in fact an end of buffer */
@@ -644,6 +646,7 @@ static inline void next_nomacro1(void)
                 redo_no_start = 1;
                 break;
             }
+        }
         }
         if(redo_no_start == 0) {
             break;
