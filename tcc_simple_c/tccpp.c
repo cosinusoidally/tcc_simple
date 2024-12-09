@@ -665,17 +665,21 @@ static inline void next_nomacro1(void)
                and we have already hashed it */
             h &= (TOK_HASH_SIZE - 1);
             pts = &hash_ident[h];
+            int token_found;
             for(;;) {
+                token_found = 0;
                 ts = *pts;
                 if (!ts)
                     break;
                 if (ts->len == len && !memcmp(ts->str, p1, len)) {
-                    goto token_found;
+                    token_found = 1;
+                    break;
                 }
                 pts = &(ts->hash_next);
             }
-            ts = tok_alloc_new(pts, (char *) p1, len);
-        token_found: ;
+            if(token_found == 0) {
+                ts = tok_alloc_new(pts, (char *) p1, len);
+            }
         } else {
             /* slower case */
             cstr_reset(&tokcstr);
