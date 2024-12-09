@@ -710,10 +710,7 @@ static inline void next_nomacro1(void)
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
         tok = TOK_PPNUM;
-    } else {
-    switch(c) {
-    case '\'':
-    case '\"':
+    } else if((c == '\'') || (c == '\"')){
         is_long = 0;
         cstr_reset(&tokcstr);
         cstr_ccat(&tokcstr, c);
@@ -723,8 +720,8 @@ static inline void next_nomacro1(void)
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
         tok = TOK_PPSTR;
-        break;
-
+    } else {
+    switch(c) {
     case '=':
         PEEKC(c, p);
         tok = '=';
