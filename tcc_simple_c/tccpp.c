@@ -611,9 +611,11 @@ static inline void next_nomacro1(void)
     TokenSym *ts;
     uint8_t *p, *p1;
     unsigned int h;
+    int redo_no_start_;
 
     p = file->buf_ptr;
- redo_no_start:
+    while(1) {
+    redo_no_start_ = 0;
     c = *p;
     switch(c) {
     case ' ':
@@ -622,21 +624,30 @@ static inline void next_nomacro1(void)
         p++;
         while (isidnum_table[*p - CH_EOF] & IS_SPC)
             ++p;
-        goto redo_no_start;
+        redo_no_start_ = 1;
+        break;
     case '\\':
         /* first look if it is in fact an end of buffer */
         c = handle_stray1(p);
         p = file->buf_ptr;
-        if (c != CH_EOF)
-            goto redo_no_start;
+        if (c != CH_EOF) {
+            redo_no_start_ = 1;
+            break;
+        }
         tok = TOK_EOF;
         break;
     case '\n':
         file->line_num++;
         tok_flags |= TOK_FLAG_BOL;
         p++;
-        if (0 == (parse_flags & PARSE_FLAG_LINEFEED))
-            goto redo_no_start;
+        if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
+            redo_no_start_ = 1;
+            break;
+        }
+    }
+    if(redo_no_start_ == 0) {
+        break;
+    }
     }
 
     c = *p;
