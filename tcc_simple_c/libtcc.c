@@ -310,21 +310,16 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
     const TCCOption *popt;
     const char *optarg, *r;
     const char *run = NULL;
-    int last_o = -1;
     int x;
-    CString linker_arg; /* collect -Wl options */
-    int tool = 0, arg_start = 0, noaction = optind;
     char **argv = *pargv;
     int argc = *pargc;
 
-    cstr_new(&linker_arg);
 
     while (optind < argc) {
         r = argv[optind];
         optind++;
         if (r[0] != '-' || r[1] == '\0') {
-            if (r[0] != '@') /* allow "tcc file(s) -run @ args ..." */
-                args_parser_add_file(s, r, s->filetype);
+            args_parser_add_file(s, r, s->filetype);
         } else {
 
             /* find option in table */
