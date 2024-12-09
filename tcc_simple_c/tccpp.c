@@ -637,6 +637,10 @@ static inline void next_nomacro1(void)
         p++;
         if (0 == (parse_flags & PARSE_FLAG_LINEFEED))
             goto redo_no_start;
+    }
+
+    c = *p;
+    switch(c) {
     case 'a': case 'b': case 'c': case 'd':
     case 'e': case 'f': case 'g': case 'h':
     case 'i': case 'j': case 'k': case 'l':
