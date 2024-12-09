@@ -689,11 +689,7 @@ static inline void next_nomacro1(void)
             ts = tok_alloc(tokcstr.data, tokcstr.size);
         }
         tok = ts->tok;
-    } else {
-    switch(c) {
-    case '0': case '1': case '2': case '3':
-    case '4': case '5': case '6': case '7':
-    case '8': case '9':
+    } else if(isnum(c)){
         t = c;
         PEEKC(c, p);
         /* after the first digit, accept digits, alpha, '.' or sign if
@@ -714,8 +710,8 @@ static inline void next_nomacro1(void)
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
         tok = TOK_PPNUM;
-        break;
-
+    } else {
+    switch(c) {
     case '\'':
     case '\"':
         is_long = 0;
