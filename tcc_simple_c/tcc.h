@@ -101,7 +101,6 @@ enum {
 
 /* -------------------------------------------- */
 
-#define INCLUDE_STACK_SIZE  32
 #define VSTACK_SIZE         256
 #define STRING_MAX_SIZE     1024
 #define TOKSTR_MAX_SIZE     256
@@ -397,17 +396,13 @@ ST_DATA TokenSym **table_ident;
 
 #define TOK_FLAG_BOL   0x0001 /* beginning of line before */
 #define TOK_FLAG_BOF   0x0002 /* beginning of file before */
-#define TOK_FLAG_ENDIF 0x0004 /* a endif was found matching starting #ifdef */
-#define TOK_FLAG_EOF   0x0008 /* end of file */
 
 #define PARSE_FLAG_PREPROCESS 0x0001 /* activate preprocessing */
 #define PARSE_FLAG_TOK_NUM    0x0002 /* return numbers instead of TOK_PPNUM */
 #define PARSE_FLAG_LINEFEED   0x0004 /* line feed is returned as a
                                         token. line feed is also
                                         returned at eof */
-#define PARSE_FLAG_ASM_FILE 0x0008 /* we processing an asm file: '#' can be used for line comment, etc. */
 #define PARSE_FLAG_SPACES     0x0010 /* next() returns space tokens (for -E) */
-#define PARSE_FLAG_ACCEPT_STRAYS 0x0020 /* next() returns '\\' token */
 #define PARSE_FLAG_TOK_STR    0x0040 /* return parsed strings instead of TOK_PPSTR */
 
 /* isidnum_table flags: */
