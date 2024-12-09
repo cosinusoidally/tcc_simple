@@ -732,11 +732,11 @@ static inline void next_nomacro1(void)
             file->buf_ptr = p;
             return;
         }
+    } else if((c == '(') || (c == ')')){
+        tok = c;
+        p++;
     } else {
     switch(c) {
-        /* simple tokens */
-    case '(':
-    case ')':
     case '{':
     case '}':
     case ',':
