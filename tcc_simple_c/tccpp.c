@@ -737,16 +737,10 @@ static inline void next_nomacro1(void)
         /* simple tokens */
     case '(':
     case ')':
-    case '[':
-    case ']':
     case '{':
     case '}':
     case ',':
     case ';':
-    case ':':
-    case '?':
-    case '~':
-    case '@': /* only used in assembler */
         tok = c;
         p++;
         break;
