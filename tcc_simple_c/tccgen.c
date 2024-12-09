@@ -772,7 +772,7 @@ static int post_type(CType *type, AttributeDef *ad, int storage)
         plast = &first;
         arg_size = 0;
         if (l) {
-            for(;;) {
+            while(1) {
                 /* read param name and compute offset */
                 type_decl(&pt, &ad1, &n);
                 arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
@@ -921,7 +921,7 @@ ST_FUNC void unary(void)
             ret.r = REG_IRET;
             ret.c.i = 0;
             if (tok != ')') {
-                for(;;) {
+                while(1) {
                     expr_eq();
                     gfunc_param_typed(s, sa);
                     nb_args++;
