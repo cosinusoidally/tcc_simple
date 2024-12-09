@@ -720,14 +720,11 @@ static inline void next_nomacro1(void)
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
         tok = TOK_PPSTR;
-    } else {
-    switch(c) {
-    case '=':
+    } else if(c == '='){
         PEEKC(c, p);
         tok = '=';
-        break;
-
-        /* comments or operator */
+    } else {
+    switch(c) {
     case '/':
         PEEKC(c, p);
         if (c == '*') {
