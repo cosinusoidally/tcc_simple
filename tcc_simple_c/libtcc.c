@@ -325,8 +325,7 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
         if (r[0] != '-' || r[1] == '\0') {
             if (r[0] != '@') /* allow "tcc file(s) -run @ args ..." */
                 args_parser_add_file(s, r, s->filetype);
-            continue;
-        }
+        } else {
 
         /* find option in table */
         for(popt = tcc_options; ; ++popt) {
@@ -345,6 +344,7 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 
         if(popt->index == TCC_OPTION_o) {
             s->outfile = tcc_strdup(optarg);
+        }
         }
     }
 
