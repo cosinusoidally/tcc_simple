@@ -797,22 +797,22 @@ ST_FUNC void next(void)
 {
     int redo;
     while(1) {
-    redo = 0;
-    if (parse_flags & PARSE_FLAG_SPACES)
-        next_nomacro_spc();
-    else
-        next_nomacro();
+        redo = 0;
+        if (parse_flags & PARSE_FLAG_SPACES)
+            next_nomacro_spc();
+        else
+            next_nomacro();
 
-    if (macro_ptr) {
-        if (tok == 0) {
-            /* end of macro or unget token string */
-            end_macro();
-            redo = 1;
+        if (macro_ptr) {
+            if (tok == 0) {
+                /* end of macro or unget token string */
+                end_macro();
+                redo = 1;
+            }
         }
-    }
-    if(redo == 0) {
-        break;
-    }
+        if(redo == 0) {
+            break;
+        }
     }
     /* convert preprocessor tokens into C tokens */
     if (tok == TOK_PPNUM) {
