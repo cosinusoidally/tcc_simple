@@ -615,39 +615,39 @@ static inline void next_nomacro1(void)
 
     p = file->buf_ptr;
     while(1) {
-    redo_no_start_ = 0;
-    c = *p;
-    switch(c) {
-    case ' ':
-    case '\t':
-        tok = c;
-        p++;
-        while (isidnum_table[*p - CH_EOF] & IS_SPC)
-            ++p;
-        redo_no_start_ = 1;
-        break;
-    case '\\':
-        /* first look if it is in fact an end of buffer */
-        c = handle_stray1(p);
-        p = file->buf_ptr;
-        if (c != CH_EOF) {
+        redo_no_start_ = 0;
+        c = *p;
+        switch(c) {
+        case ' ':
+        case '\t':
+            tok = c;
+            p++;
+            while (isidnum_table[*p - CH_EOF] & IS_SPC)
+                ++p;
             redo_no_start_ = 1;
             break;
+        case '\\':
+            /* first look if it is in fact an end of buffer */
+            c = handle_stray1(p);
+            p = file->buf_ptr;
+            if (c != CH_EOF) {
+                redo_no_start_ = 1;
+                break;
+            }
+            tok = TOK_EOF;
+            break;
+        case '\n':
+            file->line_num++;
+            tok_flags |= TOK_FLAG_BOL;
+            p++;
+            if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
+                redo_no_start_ = 1;
+                break;
+            }
         }
-        tok = TOK_EOF;
-        break;
-    case '\n':
-        file->line_num++;
-        tok_flags |= TOK_FLAG_BOL;
-        p++;
-        if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
-            redo_no_start_ = 1;
+        if(redo_no_start_ == 0) {
             break;
         }
-    }
-    if(redo_no_start_ == 0) {
-        break;
-    }
     }
 
     c = *p;
