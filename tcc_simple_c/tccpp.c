@@ -173,7 +173,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     h &= (TOK_HASH_SIZE - 1);
 
     pts = &hash_ident[h];
-    for(;;) {
+    while(1) {
         ts = *pts;
         if (!ts)
             break;
@@ -330,7 +330,7 @@ static uint8_t *parse_pp_string(uint8_t *p,
 {
     int c;
     p++;
-    for(;;) {
+    while(1) {
         c = *p;
         if (c == sep) {
             break;
@@ -485,7 +485,7 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
     const uint8_t *p;
 
     p = buf;
-    for(;;) {
+    while(1) {
         c = *p;
         if (c == '\0')
             break;
@@ -661,7 +661,7 @@ static inline void next_nomacro1(void)
             h &= (TOK_HASH_SIZE - 1);
             pts = &hash_ident[h];
             int token_found;
-            for(;;) {
+            while(1) {
                 token_found = 0;
                 ts = *pts;
                 if (!ts)
@@ -695,7 +695,7 @@ static inline void next_nomacro1(void)
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
         cstr_reset(&tokcstr);
-        for(;;) {
+        while(1) {
             cstr_ccat(&tokcstr, t);
             if (!((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
                   || c == '.'
@@ -862,7 +862,7 @@ ST_FUNC void tccpp_new(TCCState *s)
     p = tcc_keywords;
     while (*p) {
         r = p;
-        for(;;) {
+        while(1) {
             c = *r++;
             if (c == '\0')
                 break;
