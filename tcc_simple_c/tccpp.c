@@ -629,20 +629,16 @@ static inline void next_nomacro1(void)
             p = file->buf_ptr;
             if (c != CH_EOF) {
                 redo_no_start = 1;
-                break;
+            } else {
+                tok = TOK_EOF;
             }
-            tok = TOK_EOF;
-        } else {
-        switch(c) {
-        case '\n':
+        } else if(c == '\n'){
             file->line_num++;
             tok_flags |= TOK_FLAG_BOL;
             p++;
             if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
                 redo_no_start = 1;
-                break;
             }
-        }
         }
         if(redo_no_start == 0) {
             break;
