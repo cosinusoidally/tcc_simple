@@ -723,9 +723,7 @@ static inline void next_nomacro1(void)
     } else if(c == '='){
         PEEKC(c, p);
         tok = '=';
-    } else {
-    switch(c) {
-    case '/':
+    } else if(c == '/'){
         PEEKC(c, p);
         if (c == '*') {
             p = parse_comment(p);
@@ -734,7 +732,8 @@ static inline void next_nomacro1(void)
             file->buf_ptr = p;
             return;
         }
-        
+    } else {
+    switch(c) {
         /* simple tokens */
     case '(':
     case ')':
