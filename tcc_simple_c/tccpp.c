@@ -623,9 +623,7 @@ static inline void next_nomacro1(void)
             while (isidnum_table[*p - CH_EOF] & IS_SPC)
                 ++p;
             redo_no_start = 1;
-        } else {
-        switch(c) {
-        case '\\':
+        } else if(c == '\\'){
             /* first look if it is in fact an end of buffer */
             c = handle_stray1(p);
             p = file->buf_ptr;
@@ -634,7 +632,8 @@ static inline void next_nomacro1(void)
                 break;
             }
             tok = TOK_EOF;
-            break;
+        } else {
+        switch(c) {
         case '\n':
             file->line_num++;
             tok_flags |= TOK_FLAG_BOL;
