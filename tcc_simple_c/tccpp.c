@@ -795,7 +795,9 @@ ST_FUNC void next_nomacro(void)
 /* return next token with macro substitution */
 ST_FUNC void next(void)
 {
- redo:
+    int redo;
+    while(1) {
+    redo = 0;
     if (parse_flags & PARSE_FLAG_SPACES)
         next_nomacro_spc();
     else
@@ -805,8 +807,12 @@ ST_FUNC void next(void)
         if (tok == 0) {
             /* end of macro or unget token string */
             end_macro();
-            goto redo;
+            redo = 1;
         }
+    }
+    if(redo == 0) {
+        break;
+    }
     }
     /* convert preprocessor tokens into C tokens */
     if (tok == TOK_PPNUM) {
