@@ -732,13 +732,12 @@ static inline void next_nomacro1(void)
             file->buf_ptr = p;
             return;
         }
-    } else if((c == '(') || (c == ')')){
+    } else if((c == '(') || (c == ')') ||
+              (c == '{') || (c == '}')){
         tok = c;
         p++;
     } else {
     switch(c) {
-    case '{':
-    case '}':
     case ',':
     case ';':
         tok = c;
