@@ -625,9 +625,6 @@ static inline void next_nomacro1(void)
             redo_no_start = 1;
         } else {
         switch(c) {
-        case ' ':
-        case '\t':
-            break;
         case '\\':
             /* first look if it is in fact an end of buffer */
             c = handle_stray1(p);
