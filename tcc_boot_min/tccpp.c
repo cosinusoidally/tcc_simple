@@ -834,7 +834,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
 }
 
-ST_FUNC void tccpp_new(TCCState *s)
+void tccpp_new(TCCState *s)
 {
     int i, c;
     const char *p, *r;

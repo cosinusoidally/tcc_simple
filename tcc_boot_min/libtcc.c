@@ -27,9 +27,6 @@ ST_DATA int gnu_ext = 1;
 /* use TinyCC extensions */
 ST_DATA int tcc_ext = 1;
 
-/* XXX: get rid of this ASAP */
-ST_DATA struct TCCState *tcc_state;
-
 /********************************************************/
 
 #include "tccpp.c"

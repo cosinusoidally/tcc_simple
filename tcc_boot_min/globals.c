@@ -11,5 +11,7 @@ int filespec_type_o;
 int filespec_name_o;
 int sizeof_filespec;
 
+int tcc_state;
+
 /* =============== end globals.c ========================================== */
 

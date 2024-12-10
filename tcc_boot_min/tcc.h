@@ -327,7 +327,7 @@ enum tcc_token {
 /* ------------ libtcc.c ------------ */
 
 /* XXX: get rid of this ASAP */
-ST_DATA struct TCCState *tcc_state;
+extern struct TCCState *tcc_state;
 
 /* public functions currently used by the tcc main function */
 ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s);
@@ -435,7 +435,7 @@ ST_FUNC void next(void);
 ST_INLN void unget_tok(int last_tok);
 ST_FUNC void preprocess_start(TCCState *s1, int is_asm);
 ST_FUNC void preprocess_end(TCCState *s1);
-ST_FUNC void tccpp_new(TCCState *s);
+void tccpp_new(TCCState *s);
 ST_FUNC void tccpp_delete(TCCState *s);
 ST_FUNC int tcc_preprocess(TCCState *s1);
 ST_FUNC void skip(int c);
@@ -538,7 +538,7 @@ ST_DATA Section *symtab_section;
 /* debug sections */
 ST_DATA Section *stab_section, *stabstr_section;
 
-ST_FUNC void tccelf_new(TCCState *s);
+void tccelf_new(TCCState *s);
 ST_FUNC void tccelf_delete(TCCState *s);
 ST_FUNC void tccelf_stab_new(TCCState *s);
 ST_FUNC void tccelf_begin_file(TCCState *s1);

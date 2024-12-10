@@ -41,7 +41,7 @@ static int new_undef_sym = 0; /* Is there a new undefined sym since last new_und
 
 /* ------------------------------------------------------------------------- */
 
-ST_FUNC void tccelf_new(TCCState *s)
+void tccelf_new(TCCState *s)
 {
     /* no section zero */
     dynarray_add(&s->sections, &s->nb_sections, NULL);

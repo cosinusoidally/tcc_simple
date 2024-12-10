@@ -72,6 +72,18 @@ int init_runtime(){
   init_c();
 }
 
+int tcc_new_() {
+    int s;
+
+    s = tcc_mallocz(sizeof_TCCState);
+    tcc_state = s;
+
+    tccelf_new(s);
+    tccpp_new(s);
+
+    return s;
+}
+
 int main(argc0, argv0){
     int s;
     int argc;
