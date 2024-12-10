@@ -27,8 +27,7 @@ int main_(int argc0, char **argv0)
     int s_;
     int argc;
     int argv;
-    struct filespec *f;
-    int f_;
+    int f;
 
     init_runtime();
 
@@ -40,16 +39,13 @@ int main_(int argc0, char **argv0)
     wi32(argv, argv0);
     s_ = tcc_new();
     s = s_;
-    tcc_parse_args(s, argc, argv, 1);
 
-    f_ = ri32(s->files);
-    f = f_;
-    sts_filetype(s_,gfs_type(f_));
-//    s->filetype = f->type;
-    tcc_add_file(s, gfs_name(f_));
-//    tcc_add_file(s, f->name);
+    tcc_parse_args(s_, argc, argv, 1);
+
+    f = ri32(s->files);
+    sts_filetype(s_,gfs_type(f));
+    tcc_add_file(s_, gfs_name(f));
     sts_filetype(s_, 0);
-//    s->filetype = 0;
 
     tcc_output_file(s_, gts_outfile(s_));
 
