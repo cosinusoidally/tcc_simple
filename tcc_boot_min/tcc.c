@@ -42,7 +42,7 @@ int main_(int argc0, char **argv0)
 
     tcc_parse_args(s_, argc, argv, 1);
 
-    f = ri32(s->files);
+    f = ri32(gts_files(s_));
     sts_filetype(s_,gfs_type(f));
     tcc_add_file(s_, gfs_name(f));
     sts_filetype(s_, 0);
