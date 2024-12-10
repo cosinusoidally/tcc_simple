@@ -48,10 +48,11 @@ int main_(int argc0, char **argv0)
 //    s->filetype = f->type;
     tcc_add_file(s, gfs_name(f_));
 //    tcc_add_file(s, f->name);
-    s->filetype = 0;
+    sts_filetype(s_, 0);
+//    s->filetype = 0;
 
-    tcc_output_file(s, s->outfile);
+    tcc_output_file(s_, s->outfile);
 
-    tcc_delete(s);
+    tcc_delete(s_);
     return leave(0);
 }
