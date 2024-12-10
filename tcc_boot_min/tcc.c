@@ -21,7 +21,7 @@
 #include "tcc.h"
 #include "libtcc.c"
 
-int main(int argc0, char **argv0)
+int main_(int argc0, char **argv0)
 {
     TCCState *s;
     int opt;

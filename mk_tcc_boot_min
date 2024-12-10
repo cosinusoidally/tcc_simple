@@ -4,17 +4,19 @@ cd artifacts
 
 set -xe
 
-cat ../tcc_boot_min/globals.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
+cat ../tcc_boot_min/globals.c ../tcc_boot_min/support_common.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
 
 # build tcc_boot_min with gcc
 gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_gcc.o
+gcc -g3 -O0 -m32 -nostdinc -c ../tcc_boot_min/support.c -o support_gcc.o
 gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc.o
-gcc -g3 -O0 -m32 tcc_boot_min_full_gcc.o tcc_boot_min_gcc.o -o tcc_boot_min_gcc
+gcc -g3 -O0 -m32 support_gcc.o tcc_boot_min_full_gcc.o tcc_boot_min_gcc.o -o tcc_boot_min_gcc
 
 # build tcc_boot_min with tcc
 tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_tcc.o
+tcc -nostdinc -c ../tcc_boot_min/support.c -o support_tcc.o
 tcc -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc.o
-tcc tcc_boot_min_full_tcc.o tcc_boot_min_tcc.o -o tcc_boot_min_tcc
+tcc support_tcc.o tcc_boot_min_full_tcc.o tcc_boot_min_tcc.o -o tcc_boot_min_tcc
 
 # build some test files
 
@@ -27,10 +29,11 @@ ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 
 ./tcc_boot_min_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
 ./tcc_boot_min_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
-./tcc_boot_min_tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self.o
+./tcc_boot_min_tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self2.o
 
 ./tcc_boot_min_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
 ./tcc_boot_min_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+./tcc_boot_min_gcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self.o
 
 cd ..
 
@@ -40,6 +43,7 @@ wc tcc_boot_min/*c tcc_boot_min/*h |sort -h
 # check files match
 diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
 diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
+diff -u -s artifacts/tcc_boot_min_full_self.o artifacts/tcc_boot_min_full_self2.o
 diff -u -s artifacts/tcc_boot_min_full_tcc.o artifacts/tcc_boot_min_full_self.o
 
 # check the hashes of the test files
