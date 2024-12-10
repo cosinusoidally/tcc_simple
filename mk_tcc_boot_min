@@ -4,6 +4,8 @@ cd artifacts
 
 set -xe
 
+cat ../tcc_boot_min/globals.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
+
 # build tcc_simple_c with gcc
 gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc
 
