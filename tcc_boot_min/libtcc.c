@@ -194,24 +194,9 @@ static int tcc_compile(TCCState *s1)
     return 0;
 }
 
-/* cleanup all static data used during compilation */
-static void tcc_cleanup(void)
-{
-    if (NULL == tcc_state)
-        return;
-    tccpp_delete(tcc_state);
-    tcc_state = NULL;
-    /* free sym_pools */
-    dynarray_reset(&sym_pools, &nb_sym_pools);
-    /* reset symbol stack */
-    sym_free_first = NULL;
-}
-
 LIBTCCAPI TCCState *tcc_new(void)
 {
     TCCState *s;
-
-    tcc_cleanup();
 
     s = tcc_mallocz(sizeof(TCCState));
     tcc_state = s;
@@ -224,8 +209,6 @@ LIBTCCAPI TCCState *tcc_new(void)
 
 LIBTCCAPI void tcc_delete(TCCState *s1)
 {
-    tcc_cleanup();
-
     /* free sections */
     tccelf_delete(s1);
 
