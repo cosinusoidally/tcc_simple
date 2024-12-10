@@ -30,8 +30,6 @@ ST_DATA int tcc_ext = 1;
 /* XXX: get rid of this ASAP */
 ST_DATA struct TCCState *tcc_state;
 
-static int nb_states;
-
 /********************************************************/
 
 #include "tccpp.c"
@@ -217,7 +215,6 @@ LIBTCCAPI TCCState *tcc_new(void)
 
     s = tcc_mallocz(sizeof(TCCState));
     tcc_state = s;
-    ++nb_states;
 
     tccelf_new(s);
     tccpp_new(s);
