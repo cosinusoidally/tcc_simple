@@ -28,6 +28,8 @@ int main(int argc0, char **argv0)
     int argc; char **argv;
     struct filespec *f;
 
+    init_runtime();
+
     argc = argc0, argv = argv0;
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
