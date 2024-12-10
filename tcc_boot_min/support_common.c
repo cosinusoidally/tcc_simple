@@ -1,3 +1,5 @@
+/* ================= start support_common.c =============================== */
+
 int ri32(int o) {
         return or(or(and(ri8(o), 255),
                 shl(and(ri8(add(o, 1)), 255), 8)),
@@ -14,3 +16,6 @@ int wi32(int o, int v) {
   v = shr(v, 8);
   wi8(add(o, 3), and(v, 0xFF));
 }
+
+/* ================= end support_common.c ================================= */
+
