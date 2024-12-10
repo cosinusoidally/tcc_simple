@@ -72,7 +72,32 @@ int init_runtime(){
   init_c();
 }
 
-int main(argc, argv){
-  puts(mks("tcc_boot_min main"));
-  return main_(argc,argv);
+int main(argc0, argv0){
+    int s;
+    int argc;
+    int argv;
+    int f;
+
+    init_runtime();
+
+    enter();
+
+    argc = v_alloca(4);
+    argv = v_alloca(4);
+    wi32(argc, argc0);
+    wi32(argv, argv0);
+
+    s = tcc_new();
+
+    tcc_parse_args(s, argc, argv, 1);
+
+    f = ri32(gts_files(s));
+    sts_filetype(s,gfs_type(f));
+    tcc_add_file(s, gfs_name(f));
+    sts_filetype(s, 0);
+
+    tcc_output_file(s, gts_outfile(s));
+
+    tcc_delete(s);
+    return leave(0);
 }
