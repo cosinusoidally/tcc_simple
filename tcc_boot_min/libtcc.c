@@ -191,19 +191,6 @@ static int tcc_compile(TCCState *s1)
     return 0;
 }
 
-LIBTCCAPI TCCState *tcc_new(void)
-{
-    int s;
-
-    s = tcc_mallocz(sizeof_TCCState);
-    tcc_state = s;
-
-    tccelf_new(s);
-    tccpp_new(s);
-
-    return s;
-}
-
 LIBTCCAPI void tcc_delete(TCCState *s1)
 {
     /* free sections */

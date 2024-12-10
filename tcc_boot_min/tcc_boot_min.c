@@ -72,7 +72,7 @@ int init_runtime(){
   init_c();
 }
 
-int tcc_new_() {
+int tcc_new() {
     int s;
 
     s = tcc_mallocz(sizeof_TCCState);
