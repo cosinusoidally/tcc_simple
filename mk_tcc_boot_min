@@ -7,10 +7,14 @@ set -xe
 cat ../tcc_boot_min/globals.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
 
 # build tcc_simple_c with gcc
-gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc
+gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_gcc.o
+gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc.o
+gcc -g3 -O0 -m32 tcc_boot_min_full_gcc.o tcc_boot_min_gcc.o -o tcc_boot_min_gcc
 
 # build tcc_boot_min with tcc
-tcc -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc
+tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_tcc.o
+tcc -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc.o
+tcc tcc_boot_min_full_tcc.o tcc_boot_min_tcc.o -o tcc_boot_min_tcc
 
 # build some test files
 
