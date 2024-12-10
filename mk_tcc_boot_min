@@ -1,0 +1,38 @@
+./mk_clean
+
+cd artifacts
+
+set -xe
+
+# build tcc_simple_c with gcc
+gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc
+
+# build tcc_boot_min with tcc
+tcc -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc
+
+# build some test files
+
+# we have to symlink since tcc will include the file name in the object code
+# file which then causes hashes not to match
+ln -s ../M2_simple_asm.c M2_simple_asm.c
+ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
+
+# do the test file builds
+
+./tcc_boot_min_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
+./tcc_boot_min_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
+
+./tcc_boot_min_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./tcc_boot_min_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+
+cd ..
+
+# show total lines
+wc tcc_simple_c/*c tcc_simple_c/*h |sort -h
+
+# check files match
+diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
+diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
+
+# check the hashes of the test files
+sha256sum -c sums_simple_c
