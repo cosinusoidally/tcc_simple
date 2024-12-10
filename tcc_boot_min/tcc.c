@@ -23,7 +23,7 @@
 
 int main_(int argc0, char **argv0)
 {
-    int s_;
+    int s;
     int argc;
     int argv;
     int f;
@@ -36,17 +36,17 @@ int main_(int argc0, char **argv0)
 
     wi32(argc, argc0);
     wi32(argv, argv0);
-    s_ = tcc_new();
+    s = tcc_new();
 
-    tcc_parse_args(s_, argc, argv, 1);
+    tcc_parse_args(s, argc, argv, 1);
 
-    f = ri32(gts_files(s_));
-    sts_filetype(s_,gfs_type(f));
-    tcc_add_file(s_, gfs_name(f));
-    sts_filetype(s_, 0);
+    f = ri32(gts_files(s));
+    sts_filetype(s,gfs_type(f));
+    tcc_add_file(s, gfs_name(f));
+    sts_filetype(s, 0);
 
-    tcc_output_file(s_, gts_outfile(s_));
+    tcc_output_file(s, gts_outfile(s));
 
-    tcc_delete(s_);
+    tcc_delete(s);
     return leave(0);
 }
