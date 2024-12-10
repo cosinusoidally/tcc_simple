@@ -27,6 +27,7 @@ ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 
 ./tcc_boot_min_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
 ./tcc_boot_min_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
+./tcc_boot_min_tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self.o
 
 ./tcc_boot_min_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
 ./tcc_boot_min_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
@@ -39,6 +40,7 @@ wc tcc_simple_c/*c tcc_simple_c/*h |sort -h
 # check files match
 diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
 diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
+diff -u -s artifacts/tcc_boot_min_full_tcc.o artifacts/tcc_boot_min_full_self.o
 
 # check the hashes of the test files
 sha256sum -c sums_simple_c
