@@ -280,9 +280,9 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 
 
     while (lt(optind, argc)) {
-        r = argv[optind];
-        optind = optind + 1;
-        if (or(ri8(r) != '-', ri8(add(r, 1)) == '\0')) {
+        r = ri32(add(argv, mul(optind, 4)));
+        optind = add(optind, 1);
+        if (or(ri8(r) != mkc('-'), ri8(add(r, 1)) == 0)) {
             args_parser_add_file(s, r, s->filetype);
         } else {
 
