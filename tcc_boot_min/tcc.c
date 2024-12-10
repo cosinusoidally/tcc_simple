@@ -51,7 +51,7 @@ int main_(int argc0, char **argv0)
     sts_filetype(s_, 0);
 //    s->filetype = 0;
 
-    tcc_output_file(s_, s->outfile);
+    tcc_output_file(s_, gts_outfile(s_));
 
     tcc_delete(s_);
     return leave(0);
