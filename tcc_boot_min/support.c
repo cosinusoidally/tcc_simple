@@ -72,3 +72,13 @@ int wi8(int o,int v) {
 	h[o]=v;
 	return;
 }
+
+/* string and char functions */
+
+int mks(int s) {
+  return s;
+}
+
+int mkc(int c) {
+  return c;
+}
