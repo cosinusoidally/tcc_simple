@@ -635,3 +635,5 @@ static inline void write32le(unsigned char *p, uint32_t x) {
 #undef ST_DATA
 #define ST_DATA static
 /********************************************************/
+
+extern int sizeof_TCCState;

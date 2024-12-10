@@ -196,9 +196,9 @@ static int tcc_compile(TCCState *s1)
 
 LIBTCCAPI TCCState *tcc_new(void)
 {
-    TCCState *s;
+    int s;
 
-    s = tcc_mallocz(sizeof(TCCState));
+    s = tcc_mallocz(sizeof_TCCState);
     tcc_state = s;
 
     tccelf_new(s);
