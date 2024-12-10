@@ -25,6 +25,9 @@ int sts_filetype(int o,int v) {
                              }
 */
 
+
+/* struct filespec */
+
 int gfs_type(int o) {
   return ri8(add(o,filespec_type_o));
 }
@@ -45,9 +48,11 @@ int init_runtime(){
   printf(mks("blah: %d\n"),add(1,2));
 
   TCCState_filetype_o = 40;
+  sizeof_TCCState = 56;
 
   filespec_type_o = 0;
   filespec_name_o = 1;
+  sizeof_filespec = 2;
 
   init_c();
 }
