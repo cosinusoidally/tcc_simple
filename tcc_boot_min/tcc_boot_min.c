@@ -25,17 +25,15 @@ int sts_filetype(int o,int v) {
                              }
 */
 
-/*
-(gdb) ptype /o f
-type = struct filespec {
-      0      |       1     char type;
-*/
 int gfs_type(int o) {
-  return ri32(add(o,filespec_type_o));
+  return ri8(add(o,filespec_type_o));
 }
-/*
-      1      |       1     char name[1];
 
+int gfs_name(int o) {
+  return add(o,filespec_name_o);
+}
+
+/*
                                 total size (bytes):    2
                              }
 */

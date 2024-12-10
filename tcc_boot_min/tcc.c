@@ -24,6 +24,7 @@
 int main_(int argc0, char **argv0)
 {
     TCCState *s;
+    int s_;
     int argc;
     int argv;
     struct filespec *f;
@@ -37,14 +38,16 @@ int main_(int argc0, char **argv0)
 
     wi32(argc, argc0);
     wi32(argv, argv0);
-    s = tcc_new();
+    s_ = tcc_new();
+    s = s_;
     tcc_parse_args(s, argc, argv, 1);
 
     f_ = ri32(s->files);
     f = f_;
-//    sts_filetype(s_,gfs_type(f_));
-    s->filetype = f->type;
-    tcc_add_file(s, f->name);
+    sts_filetype(s_,gfs_type(f_));
+//    s->filetype = f->type;
+    tcc_add_file(s, gfs_name(f_));
+//    tcc_add_file(s, f->name);
     s->filetype = 0;
 
     tcc_output_file(s, s->outfile);
