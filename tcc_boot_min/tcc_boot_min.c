@@ -18,6 +18,13 @@ int sts_filetype(int o,int v) {
 }
 /*
      44      |       4     char *outfile;
+*/
+
+int gts_outfile(int o) {
+  ri32(add(o, TCCState_outfile_o));
+}
+
+/*
      48      |       4     int argc;
      52      |       4     char **argv;
 
@@ -48,6 +55,7 @@ int init_runtime(){
   printf(mks("blah: %d\n"),add(1,2));
 
   TCCState_filetype_o = 40;
+  TCCState_outfile_o = 44;
   sizeof_TCCState = 56;
 
   filespec_type_o = 0;
