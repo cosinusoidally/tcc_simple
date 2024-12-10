@@ -199,7 +199,6 @@ LIBTCCAPI TCCState *tcc_new(void)
     int s;
 
     s = tcc_mallocz(sizeof_TCCState);
-    tcc_state = s;
 
     tccelf_new(s);
     tccpp_new(s);
