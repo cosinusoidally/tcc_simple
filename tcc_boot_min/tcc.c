@@ -23,7 +23,6 @@
 
 int main_(int argc0, char **argv0)
 {
-    TCCState *s;
     int s_;
     int argc;
     int argv;
@@ -38,7 +37,6 @@ int main_(int argc0, char **argv0)
     wi32(argc, argc0);
     wi32(argv, argv0);
     s_ = tcc_new();
-    s = s_;
 
     tcc_parse_args(s_, argc, argv, 1);
 
