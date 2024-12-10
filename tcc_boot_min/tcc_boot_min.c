@@ -11,6 +11,12 @@ type = struct TCCState {
      24      |       4     int nb_priv_sections;
      28      |       4     Section *symtab;
      32      |       4     struct filespec **files;
+*/
+int gts_files(int o) {
+  ri32(add(o, TCCState_files_o));
+}
+
+/*
      36      |       4     int nb_files;
      40      |       4     int filetype; */
 int sts_filetype(int o,int v) {
@@ -54,6 +60,7 @@ int init_runtime(){
   puts(foo);
   printf(mks("blah: %d\n"),add(1,2));
 
+  TCCState_files_o = 32;
   TCCState_filetype_o = 40;
   TCCState_outfile_o = 44;
   sizeof_TCCState = 56;

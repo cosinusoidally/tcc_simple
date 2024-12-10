@@ -2,6 +2,7 @@
 
 int foo;
 
+int TCCState_files_o;
 int TCCState_filetype_o;
 int TCCState_outfile_o;
 int sizeof_TCCState;
