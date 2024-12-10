@@ -25,14 +25,20 @@ int main_(int argc0, char **argv0)
 {
     TCCState *s;
     int opt;
-    int argc; char **argv;
+    int argc;
+    int argv;
     struct filespec *f;
 
     init_runtime();
 
-    argc = argc0, argv = argv0;
+    enter();
+    argc = v_alloca(4);
+    argv = v_alloca(4);
+
+    wi32(argc, argc0);
+    wi32(argv, argv0);
     s = tcc_new();
-    opt = tcc_parse_args(s, &argc, &argv, 1);
+    opt = tcc_parse_args(s, argc, argv, 1);
 
     f = s->files[0];
     s->filetype = f->type;
@@ -42,5 +48,5 @@ int main_(int argc0, char **argv0)
     tcc_output_file(s, s->outfile);
 
     tcc_delete(s);
-    return 0;
+    return leave(0);
 }
