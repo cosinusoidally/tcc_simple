@@ -42,6 +42,7 @@ int main_(int argc0, char **argv0)
 
     f_ = ri32(s->files);
     f = f_;
+//    sts_filetype(s_,gfs_type(f_));
     s->filetype = f->type;
     tcc_add_file(s, f->name);
     s->filetype = 0;
