@@ -6,7 +6,7 @@ set -xe
 
 cat ../tcc_boot_min/globals.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
 
-# build tcc_simple_c with gcc
+# build tcc_boot_min with gcc
 gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_gcc.o
 gcc -g3 -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_gcc.o
 gcc -g3 -O0 -m32 tcc_boot_min_full_gcc.o tcc_boot_min_gcc.o -o tcc_boot_min_gcc
@@ -35,7 +35,7 @@ ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
 cd ..
 
 # show total lines
-wc tcc_simple_c/*c tcc_simple_c/*h |sort -h
+wc tcc_boot_min/*c tcc_boot_min/*h |sort -h
 
 # check files match
 diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
