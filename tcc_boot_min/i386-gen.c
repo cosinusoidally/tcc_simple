@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-ST_DATA int reg_classes[NB_REGS];
-
 extern int func_sub_sp_offset;
 
 int init_reg_classes() {

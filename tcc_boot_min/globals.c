@@ -39,5 +39,7 @@ int RC_INT;
 
 int vtop;
 
+int reg_classes;
+
 /* =============== end globals.c ========================================== */
 

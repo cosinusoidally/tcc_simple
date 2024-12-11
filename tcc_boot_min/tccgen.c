@@ -516,7 +516,7 @@ ST_FUNC int get_reg(int rc)
     /* find a free register */
     for(r=0;r<NB_REGS;r++) {
         notfound = 0;
-        if (reg_classes[r] & rc) {
+        if (ri32(add(reg_classes, mul(r,4))) & rc) {
             for(p=vstack;p<=vtop;p++) {
                 if ((p->r & VT_VALMASK) == r) {
                     notfound = 1;
@@ -544,7 +544,7 @@ ST_FUNC int gv(int rc)
        - already a register, but not in the right class */
     if (r >= VT_CONST
      || (vtop->r & VT_LVAL)
-     || !(reg_classes[r] & rc))
+     || !(ri32(add(reg_classes, mul(r, 4))) & rc))
     {
         r = get_reg(rc);
         if ((vtop->r & VT_LVAL)) {

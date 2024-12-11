@@ -596,7 +596,7 @@ ST_FUNC int handle_eob(void);
 
 /* ------------ xxx-gen.c ------------ */
 
-ST_DATA int reg_classes[NB_REGS];
+extern int reg_classes;
 
 int gsym_addr(int t, int a);
 int gsym(int t);
