@@ -99,7 +99,7 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
         gen_addr32(r, sym, c);
     } else if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         /* currently, we use only ebp as base */
-        if (eq(c, (char)c)) {
+        if (lt(and(c,255), 256)) {
             /* short reference */
             o(or(0x45, op_reg));
             g(c);
@@ -136,7 +136,7 @@ int store(int r, SValue *v) {
 }
 
 int gadd_sp(int val) {
-    if (eq(val, (char)val)) {
+    if (lt(and(val,255), 256)) {
         o(0xc483);
         g(val);
     } else {
