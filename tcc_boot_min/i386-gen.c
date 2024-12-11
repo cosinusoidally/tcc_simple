@@ -51,27 +51,6 @@ int gsym_addr(int t, int a) {
     }
 }
 
-/* 5 */
-int gsym(int t) {
-    gsym_addr(t, ind);
-}
-
-/* 6 */
-/* instruction + 4 bytes data. Return the address of the data */
-int oad(int c, int s) {
-    int t;
-    o(c);
-    t = ind;
-    gen_le32(s);
-    return t;
-}
-
-/* 7 */
-/* generate jmp to a label */
-int gjmp2(instr,lbl) {
-    return oad(instr,lbl);
-}
-
 /* 8 */
 /* output constant with relocation if 'r & VT_SYM' is true */
 int gen_addr32(int r, int sym, int c) {

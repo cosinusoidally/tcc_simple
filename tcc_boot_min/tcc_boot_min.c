@@ -62,6 +62,27 @@ int gen_le32(int c) {
     g(shr(c, 24));
 }
 
+/* 5 */
+int gsym(int t) {
+    gsym_addr(t, ind);
+}
+
+/* 6 */
+/* instruction + 4 bytes data. Return the address of the data */
+int oad(int c, int s) {
+    int t;
+    o(c);
+    t = ind;
+    gen_le32(s);
+    return t;
+}
+
+/* 7 */
+/* generate jmp to a label */
+int gjmp2(int instr,int lbl) {
+    return oad(instr,lbl);
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {

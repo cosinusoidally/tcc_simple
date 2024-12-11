@@ -17,5 +17,7 @@ int tcc_state;
 
 int FUNC_PROLOG_SIZE;
 
+int ind;
+
 /* =============== end globals.c ========================================== */
 
