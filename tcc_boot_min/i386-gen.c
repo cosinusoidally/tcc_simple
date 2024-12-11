@@ -157,24 +157,29 @@ int gcall_or_jmp(int is_jmp) {
    all the parameters in call order. This functions pops all the
    parameters and the function address. */
 int gfunc_call(int nb_args) {
-    int r, args_size, i;
+    int r;
+    int args_size;
+    int i;
     Sym *func_sym;
     
     args_size = 0;
-    for(i = 0;i < nb_args; i++) {
+    i = 0;
+    while(lt(i, nb_args)) {
         r = gv(RC_INT);
-        o(0x50 + r); /* push r */
-        args_size += 4;
-        vtop--;
+        o(add(0x50, r)); /* push r */
+        args_size = add(args_size, 4);
+        vtop = vtop - 1;
+        i = add(i, 1);
     }
     save_regs(0); /* save used temporary registers */
     func_sym = vtop->type.ref;
 
     gcall_or_jmp(0);
 
-    if (args_size)
+    if (neq(args_size, 0)) {
         gadd_sp(args_size);
-    vtop--;
+    }
+    vtop = vtop - 1;
 }
 
 /* generate function prolog of type 't' */
