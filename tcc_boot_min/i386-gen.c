@@ -43,7 +43,7 @@ int load(int r, SValue *sv) {
 /* store register 'r' in lvalue 'v' */
 int store(int r, SValue *v) {
     o(137); /* 0x89 */
-    gen_modrm(r, v->r, v->sym, v->c.i);
+    gen_modrm(r, gsv_r(v), gsv_sym(v), gcv_i(gsv_c(v)));
 }
 
 /* 13 */
