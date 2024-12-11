@@ -64,6 +64,10 @@ int not(int a) {
   return ~a;
 }
 
+int xor(int a, int b) {
+  return a ^ b;
+}
+
 /* memory functions */
 
 int ri8(int o) {
