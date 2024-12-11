@@ -87,6 +87,7 @@ int init_runtime(){
   VT_VALMASK = 63;
   VT_CONST = 48;
   VT_LOCAL = 50;
+  VT_CMP = 51;
   VT_LVAL = 256;
   VT_SYM = 512;
 

@@ -35,7 +35,10 @@ int gfunc_prolog(CType *func_type) {
 /* 20 */
 /* generate an integer binary operation */
 int gen_opi(int op) {
-    int r, fr, opc, c;
+    int r;
+    int fr;
+    int opc;
+    int c;
 
     opc = 7;
     /* constant case */

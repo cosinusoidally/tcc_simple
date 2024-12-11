@@ -39,6 +39,7 @@ int VT_SYM;
 int VT_CONST;
 int VT_LOCAL;
 int VT_LVAL;
+int VT_CMP;
 
 int R_386_32;
 int R_386_PC32;
