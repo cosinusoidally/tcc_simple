@@ -82,9 +82,10 @@ int gjmp2(instr,lbl) {
 }
 
 /* output constant with relocation if 'r & VT_SYM' is true */
-int gen_addr32(int r, Sym *sym, int c) {
-    if (r & VT_SYM)
+int gen_addr32(int r, int sym, int c) {
+    if (and(r, VT_SYM)) {
         greloc(cur_text_section, sym, ind, R_386_32);
+    }
     gen_le32(c);
 }
 
