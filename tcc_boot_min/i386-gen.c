@@ -95,7 +95,6 @@ int gfunc_call(int nb_args) {
     int r;
     int args_size;
     int i;
-    Sym *func_sym;
     
     args_size = 0;
     i = 0;
@@ -107,7 +106,6 @@ int gfunc_call(int nb_args) {
         i = add(i, 1);
     }
     save_regs(0); /* save used temporary registers */
-    func_sym = vtop->type.ref;
 
     gcall_or_jmp(0);
 
