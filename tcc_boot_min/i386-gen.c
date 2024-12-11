@@ -20,32 +20,6 @@
 
 extern int func_sub_sp_offset;
 
-/* 10 */
-/* load 'r' from value 'sv' */
-int load(int r, SValue *sv) {
-    int v;
-    int fc;
-    int fr;
-
-    fr = gsv_r(sv);
-    fc = gcv_i(gsv_c(sv));
-
-    if (and(fr, VT_LVAL)) {
-        o(139);     /* 0x8b movl */
-        gen_modrm(r, fr, gsv_sym(sv), fc);
-    } else {
-            o(add(184, r)); /* 0xb8 mov $xx, r */
-            gen_addr32(fr, gsv_sym(sv), fc);
-    }
-}
-
-/* 11 */
-/* store register 'r' in lvalue 'v' */
-int store(int r, SValue *v) {
-    o(137); /* 0x89 */
-    gen_modrm(r, gsv_r(v), gsv_sym(v), gcv_i(gsv_c(v)));
-}
-
 /* 13 */
 /* 'is_jmp' is '1' if it is a jump */
 int gcall_or_jmp(int is_jmp) {

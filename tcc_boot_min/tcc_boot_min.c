@@ -207,6 +207,32 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
     }
 }
 
+/* 10 */
+/* load 'r' from value 'sv' */
+int load(int r, int sv) {
+    int v;
+    int fc;
+    int fr;
+
+    fr = gsv_r(sv);
+    fc = gcv_i(gsv_c(sv));
+
+    if (and(fr, VT_LVAL)) {
+        o(139);     /* 0x8b movl */
+        gen_modrm(r, fr, gsv_sym(sv), fc);
+    } else {
+            o(add(184, r)); /* 0xb8 mov $xx, r */
+            gen_addr32(fr, gsv_sym(sv), fc);
+    }
+}
+
+/* 11 */
+/* store register 'r' in lvalue 'v' */
+int store(int r, int v) {
+    o(137); /* 0x89 */
+    gen_modrm(r, gsv_r(v), gsv_sym(v), gcv_i(gsv_c(v)));
+}
+
 /* 12 */
 int gadd_sp(int val) {
     if (eq(val, movsx_eax_al(val))) {
