@@ -78,7 +78,10 @@ int init_runtime(){
 
 /* i386-gen.c */
 
-
+int init_reg_classes() {
+  wi32(reg_classes, or(RC_INT, RC_EAX));
+  wi32(add(reg_classes, 4), or(RC_INT, RC_ECX));
+}
 
 /* 1 */
 /* XXX: make it faster ? */
