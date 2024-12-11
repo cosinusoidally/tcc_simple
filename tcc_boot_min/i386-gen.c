@@ -196,7 +196,6 @@ int gfunc_prolog(CType *func_type) {
     sym = func_type->ref;
     addr = 8;
     loc = 0;
-    func_vc = 0;
 
     ind = add(ind, FUNC_PROLOG_SIZE);
     func_sub_sp_offset = ind;
