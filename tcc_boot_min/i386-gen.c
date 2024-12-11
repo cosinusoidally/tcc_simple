@@ -204,7 +204,7 @@ int gfunc_prolog(CType *func_type) {
     while (neq((sym = sym->next), 0)) {
         type = &sym->type;
         size = type_size(type, &align);
-        size = (size + 3) & ~3;
+        size = and(add(size, 3), ~3);
         param_addr = addr;
         addr += size;
         sym_push(sym->v & ~SYM_FIELD, type,

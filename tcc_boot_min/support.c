@@ -60,6 +60,10 @@ int sub(int a, int b) {
 	return a - b;
 }
 
+int not(int a) {
+  return ~a;
+}
+
 /* memory functions */
 
 int ri8(int o) {
