@@ -99,6 +99,29 @@ int gen_addr32(int r, int sym, int c) {
     gen_le32(c);
 }
 
+/* 9 */
+/* generate a modrm reference. 'op_reg' contains the additional 3
+   opcode bits */
+int gen_modrm(int op_reg, int r, int sym, int c) {
+    op_reg = shl(op_reg, 3);
+    if (eq(and(r, VT_VALMASK), VT_CONST)) {
+        /* constant memory reference */
+        o(or(5, op_reg));
+        gen_addr32(r, sym, c);
+    } else if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
+        /* currently, we use only ebp as base */
+        if (lt(and(c,255), 256)) {
+            /* short reference */
+            o(or(69, op_reg)); /* 0x45 */
+            g(c);
+        } else {
+            oad(or(133, op_reg), c); /* 0x85 */
+        }
+    } else {
+        g(or(op_reg, and(r, VT_VALMASK)));
+    }
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
