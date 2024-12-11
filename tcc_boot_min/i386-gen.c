@@ -251,7 +251,7 @@ int gjmp_addr(int a) {
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
 int gtst(int inv, int t) {
     g(0x0f);
-    t = gjmp2((vtop->c.i - 16) ^ inv, t);
+    t = gjmp2(xor(sub(vtop->c.i, 16), inv), t);
     vtop--;
     return t;
 }
