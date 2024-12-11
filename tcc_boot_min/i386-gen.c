@@ -214,11 +214,11 @@ int gfunc_prolog(CType *func_type) {
 }
 
 /* generate function epilog */
-int gfunc_epilog(void) {
+int gfunc_epilog() {
     addr_t v, saved_ind;
 
     /* align local size to word & save local variables */
-    v = (-loc + 3) & -4;
+    v = add(sub(0,loc), 3) & -4;
 
     o(0xc9); /* leave */
     o(0xc3); /* ret */
