@@ -1,23 +1,3 @@
-/*
- *  X86 code generator for TCC
- * 
- *  Copyright (c) 2001-2004 Fabrice Bellard
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
 extern int func_sub_sp_offset;
 
 /* 15 */
@@ -55,8 +35,8 @@ int gfunc_prolog(CType *func_type) {
 /* 19 */
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
 int gtst(int inv, int t) {
-    g(0x0f);
-    t = gjmp2(xor(sub(vtop->c.i, 16), inv), t);
+    g(15); /* 0x0f */
+    t = gjmp2(xor(sub(gcv_i(gsv_c(vtop)), 16), inv), t);
     vtop = sub(vtop, sizeof_SValue);
     return t;
 }
@@ -71,14 +51,11 @@ int gen_opi(int op) {
     vswap();
     r = gv(RC_INT);
     vswap();
-    c = vtop->c.i;
-    o(0x83);
-    o(or(or(0xc0, shl(opc, 3)), r));
+    c = gcv_i(gsv_c(vtop));
+    o(131); /* 0x83 */
+    o(or(or(192, shl(opc, 3)), r)); /* 0xc0 */
     g(c);
     vtop = sub(vtop, sizeof_SValue);
     vtop->r = VT_CMP;
     vtop->c.i = op;
 }
-
-/* end of X86 code generator */
-/*************************************************************/
