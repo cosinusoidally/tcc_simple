@@ -179,7 +179,7 @@ int gfunc_call(int nb_args) {
     if (neq(args_size, 0)) {
         gadd_sp(args_size);
     }
-    vtop = vtop - 1;
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* generate function prolog of type 't' */
