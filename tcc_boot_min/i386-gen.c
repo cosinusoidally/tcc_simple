@@ -47,9 +47,9 @@ ST_FUNC void o(unsigned int c)
 ST_FUNC void gen_le32(int c)
 {
     g(c);
-    g(c >> 8);
-    g(c >> 16);
-    g(c >> 24);
+    g(shr(c, 8));
+    g(shr(c, 16));
+    g(shr(c, 24));
 }
 
 /* output a symbol and patch all calls to it */

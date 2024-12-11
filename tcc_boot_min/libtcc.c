@@ -273,8 +273,6 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 {
     const TCCOption *popt;
     const char *optarg, *r;
-    const char *run = NULL;
-    int x;
     char **argv = *pargv;
     int argc = *pargc;
 
@@ -282,12 +280,12 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
     while (lt(optind, argc)) {
         r = ri32(add(argv, mul(optind, 4)));
         optind = add(optind, 1);
-        if (or(ri8(r) != mkc('-'), ri8(add(r, 1)) == 0)) {
+        if (or(neq(ri8(r), mkc('-')), eq(ri8(add(r, 1)), 0))) {
             args_parser_add_file(s, r, s->filetype);
         } else {
 
             /* find option in table */
-            for(popt = tcc_options; ; ++popt) {
+            for(popt = tcc_options; ; ) {
                 const char *p1 = popt->name;
                 const char *r1 = r + 1;
                 if (strstart(p1, &r1)) {
@@ -299,6 +297,7 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
                     }
                     break;
                 }
+                popt = popt + 1;
             }
 
             if(popt->index == TCC_OPTION_o) {
