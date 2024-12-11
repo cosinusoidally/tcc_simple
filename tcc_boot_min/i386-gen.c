@@ -184,17 +184,19 @@ int gfunc_call(int nb_args) {
 
 /* generate function prolog of type 't' */
 int gfunc_prolog(CType *func_type) {
-    int addr, align, size;
-    int param_index, param_addr;
+    int addr;
+    int align;
+    int size;
+    int param_addr;
     Sym *sym;
     CType *type;
+
+    enter();
 
     sym = func_type->ref;
     addr = 8;
     loc = 0;
     func_vc = 0;
-
-    param_index = 0;
 
     ind = add(ind, FUNC_PROLOG_SIZE);
     func_sub_sp_offset = ind;
@@ -207,8 +209,8 @@ int gfunc_prolog(CType *func_type) {
         addr += size;
         sym_push(sym->v & ~SYM_FIELD, type,
                  VT_LOCAL | lvalue_type(type->t), param_addr);
-        param_index++;
     }
+    leave(0);
 }
 
 /* generate function epilog */
