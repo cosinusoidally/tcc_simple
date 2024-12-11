@@ -168,6 +168,7 @@ int gfunc_call(int nb_args) {
         r = gv(RC_INT);
         o(add(0x50, r)); /* push r */
         args_size = add(args_size, 4);
+//        vtop = sub(vtop, sizeof_SValue);
         vtop = vtop - 1;
         i = add(i, 1);
     }

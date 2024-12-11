@@ -39,9 +39,9 @@
 
 #define PUB_FUNC
 
-#define ST_INLN static inline
-#define ST_FUNC static
-#define ST_DATA static
+#define ST_INLN 
+#define ST_FUNC 
+#define ST_DATA 
 
 /* -------------------------------------------- */
 /* include the target specific definitions */
@@ -624,9 +624,6 @@ static inline void write32le(unsigned char *p, uint32_t x) {
     write16le(p, x);  write16le(p + 2, x >> 16);
 }
 
-/********************************************************/
-#undef ST_DATA
-#define ST_DATA static
 /********************************************************/
 
 extern int sizeof_TCCState;
