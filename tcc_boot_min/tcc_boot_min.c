@@ -36,15 +36,15 @@ int gs_data_allocated(int o) {
 /* SValue accessors */
 
 int gsv_r(int o) {
-  return ri32(add(o, SValue_r_o));
+  return ri32(add(o, SValue_r_o)); /* int r */
 }
 
 int gsv_c(int o) {
-  return ri32(add(o, SValue_c_o));
+  return add(o, SValue_c_o); /* CValue c */
 }
 
 int gsv_sym(int o) {
-  return ri32(add(o, SValue_sym_o));
+  return ri32(add(o, SValue_sym_o)); /* struct Sym *sym */
 }
 
 /* CValue accessors */

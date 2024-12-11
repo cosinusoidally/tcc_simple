@@ -28,7 +28,7 @@ int load(int r, SValue *sv) {
     int fr;
 
     fr = gsv_r(sv);
-    fc = sv->c.i;
+    fc = gcv_i(gsv_c(sv));
 
     if (and(fr, VT_LVAL)) {
         o(0x8b);     /* movl */
