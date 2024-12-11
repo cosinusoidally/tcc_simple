@@ -58,7 +58,7 @@ int gsym_addr(int t, int a) {
     while (t) {
         ptr = add(cur_text_section->data, t);
         n = read32le(ptr); /* next value */
-        write32le(ptr, a - t - 4);
+        write32le(ptr, sub(sub(a, t), 4));
         t = n;
     }
 }
