@@ -23,8 +23,8 @@ ST_DATA int reg_classes[NB_REGS];
 extern int func_sub_sp_offset;
 
 int init_reg_classes() {
-  reg_classes[0] = RC_INT | RC_EAX;
-  reg_classes[1] = RC_INT | RC_ECX;
+  wi32(reg_classes, or(RC_INT, RC_EAX));
+  wi32(add(reg_classes, 4), or(RC_INT, RC_ECX));
 }
 
 /* 10 */
