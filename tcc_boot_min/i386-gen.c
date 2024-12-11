@@ -219,7 +219,7 @@ int gfunc_epilog() {
     int saved_ind;
 
     /* align local size to word & save local variables */
-    v = add(sub(0,loc), 3) & -4;
+    v = and(add(sub(0,loc), 3), sub(0,4));
 
     o(0xc9); /* leave */
     o(0xc3); /* ret */
