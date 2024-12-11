@@ -19,8 +19,9 @@ int FUNC_PROLOG_SIZE;
 
 int ind;
 
-int VT_SYM;
+int cur_text_section;
 
+int VT_SYM;
 
 int R_386_32;
 

@@ -87,6 +87,15 @@ int gjmp2(int instr,int lbl) {
     return oad(instr,lbl);
 }
 
+/* 8 */
+/* output constant with relocation if 'r & VT_SYM' is true */
+int gen_addr32(int r, int sym, int c) {
+    if (and(r, VT_SYM)) {
+        greloc(cur_text_section, sym, ind, R_386_32);
+    }
+    gen_le32(c);
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {

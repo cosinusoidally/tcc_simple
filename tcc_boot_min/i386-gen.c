@@ -51,15 +51,6 @@ int gsym_addr(int t, int a) {
     }
 }
 
-/* 8 */
-/* output constant with relocation if 'r & VT_SYM' is true */
-int gen_addr32(int r, int sym, int c) {
-    if (and(r, VT_SYM)) {
-        greloc(cur_text_section, sym, ind, R_386_32);
-    }
-    gen_le32(c);
-}
-
 /* 9 */
 /* generate a modrm reference. 'op_reg' contains the additional 3
    opcode bits */
