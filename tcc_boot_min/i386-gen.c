@@ -37,14 +37,6 @@ int g(int c) {
     ind = ind1;
 }
 
-/* 3 */
-int gen_le32(int c) {
-    g(c);
-    g(shr(c, 8));
-    g(shr(c, 16));
-    g(shr(c, 24));
-}
-
 /* 4 */
 /* output a symbol and patch all calls to it */
 int gsym_addr(int t, int a) {

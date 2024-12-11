@@ -54,6 +54,14 @@ int o(int c) {
     }
 }
 
+/* 3 */
+int gen_le32(int c) {
+    g(c);
+    g(shr(c, 8));
+    g(shr(c, 16));
+    g(shr(c, 24));
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
