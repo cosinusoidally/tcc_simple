@@ -207,7 +207,7 @@ int gfunc_prolog(CType *func_type) {
         size = and(add(size, 3), not(3));
         param_addr = addr;
         addr += size;
-        sym_push(sym->v & not(SYM_FIELD), type,
+        sym_push(and(sym->v , not(SYM_FIELD)), type,
                  or(VT_LOCAL, lvalue_type(type->t)), param_addr);
     }
     leave(0);
