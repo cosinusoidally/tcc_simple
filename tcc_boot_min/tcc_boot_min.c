@@ -47,6 +47,12 @@ int gsv_sym(int o) {
   return ri32(add(o, SValue_sym_o));
 }
 
+/* CValue accessors */
+
+int gcv_i(int o) {
+  return ri32(add(o, CValue_i_o));
+}
+
 /* stuff */
 
 int init_runtime(){
