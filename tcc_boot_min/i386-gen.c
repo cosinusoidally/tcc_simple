@@ -239,12 +239,12 @@ int gjmp(int t) {
 /* generate a jump to a fixed address */
 int gjmp_addr(int a) {
     int r;
-    r = a - ind - 2;
+    r = sub(sub(a, ind), 2);
     if (r == (char)r) {
         g(0xeb);
         g(r);
     } else {
-        oad(0xe9, a - ind - 5);
+        oad(0xe9, sub(sub(a, ind), 5));
     }
 }
 
