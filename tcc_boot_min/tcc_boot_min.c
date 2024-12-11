@@ -41,6 +41,10 @@ int init_runtime(){
 
   FUNC_PROLOG_SIZE = 9;
 
+  VT_SYM = 512;
+
+  R_386_32 = 1;
+
   init_c();
 }
 
