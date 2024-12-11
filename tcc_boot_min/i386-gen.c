@@ -113,16 +113,18 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
 
 /* load 'r' from value 'sv' */
 int load(int r, SValue *sv) {
-    int v, fc, fr;
+    int v;
+    int fc;
+    int fr;
 
     fr = sv->r;
     fc = sv->c.i;
 
-    if (fr & VT_LVAL) {
+    if (and(fr, VT_LVAL)) {
         o(0x8b);     /* movl */
         gen_modrm(r, fr, sv->sym, fc);
     } else {
-            o(0xb8 + r); /* mov $xx, r */
+            o(add(0xb8, r)); /* mov $xx, r */
             gen_addr32(fr, sv->sym, fc);
     }
 }
@@ -134,7 +136,7 @@ int store(int r, SValue *v) {
 }
 
 int gadd_sp(int val) {
-    if (val == (char)val) {
+    if (eq(val, (char)val)) {
         o(0xc483);
         g(val);
     } else {
