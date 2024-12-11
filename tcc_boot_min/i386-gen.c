@@ -154,7 +154,7 @@ int gfunc_prolog(CType *func_type) {
 int gjmp_addr(int a) {
     int r;
     r = sub(sub(a, ind), 2);
-    if (eq(r, (char)r)) {
+    if (eq(r, movsx_eax_al(r))) {
         g(235); /* 0xeb */
         g(r);
     } else {
