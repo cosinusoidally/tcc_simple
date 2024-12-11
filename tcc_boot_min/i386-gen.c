@@ -155,10 +155,10 @@ int gjmp_addr(int a) {
     int r;
     r = sub(sub(a, ind), 2);
     if (eq(r, (char)r)) {
-        g(0xeb);
+        g(235); /* 0xeb */
         g(r);
     } else {
-        oad(0xe9, sub(sub(a, ind), 5));
+        oad(233, sub(sub(a, ind), 5)); /* 0xe9 */
     }
 }
 
