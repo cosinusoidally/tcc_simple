@@ -150,7 +150,7 @@ int gcall_or_jmp(int is_jmp) {
 
     /* constant and relocation case */
     greloc(cur_text_section, vtop->sym, add(ind, 1), R_386_PC32);
-    oad(add(0xe8, is_jmp), vtop->c.i - 4); /* call/jmp im */
+    oad(add(0xe8, is_jmp), sub(vtop->c.i, 4)); /* call/jmp im */
 }
 
 /* Generate function call. The function address is pushed first, then

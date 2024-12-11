@@ -132,7 +132,7 @@ typedef struct CType {
 
 /* constant value */
 typedef union CValue {
-    uint64_t i;
+    int i;
     struct {
         int size;
         const void *data;
