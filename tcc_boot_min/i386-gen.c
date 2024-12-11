@@ -240,7 +240,7 @@ int gjmp(int t) {
 int gjmp_addr(int a) {
     int r;
     r = sub(sub(a, ind), 2);
-    if (r == (char)r) {
+    if (eq(r, (char)r)) {
         g(0xeb);
         g(r);
     } else {
@@ -267,9 +267,9 @@ int gen_opi(int op) {
     vswap();
     c = vtop->c.i;
     o(0x83);
-    o(0xc0 | (opc << 3) | r);
+    o(or(or(0xc0, shl(opc, 3)), r));
     g(c);
-    vtop--;
+    vtop = sub(vtop, sizeof_SValue);
     vtop->r = VT_CMP;
     vtop->c.i = op;
 }
