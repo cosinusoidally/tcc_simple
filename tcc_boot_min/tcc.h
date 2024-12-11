@@ -609,7 +609,7 @@ int gjmp_addr(int a);
 int gtst(int inv, int t);
 int gtst_addr(int inv, int a);
 int gen_opi(int op);
-int o(unsigned int c);
+int o(int c);
 
 static inline uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;

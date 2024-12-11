@@ -36,10 +36,10 @@ int g(int c) {
     ind = ind1;
 }
 
-int o(unsigned int c) {
-    while (c) {
+int o(int c) {
+    while (neq(0, c)) {
         g(c);
-        c = c >> 8;
+        c = shr(c, 8);
     }
 }
 
