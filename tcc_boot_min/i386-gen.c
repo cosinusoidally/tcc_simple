@@ -52,9 +52,11 @@ int gen_le32(int c) {
 
 /* output a symbol and patch all calls to it */
 int gsym_addr(int t, int a) {
+    unsigned char *ptr;
+    uint32_t n;
     while (t) {
-        unsigned char *ptr = cur_text_section->data + t;
-        uint32_t n = read32le(ptr); /* next value */
+        ptr = add(cur_text_section->data, t);
+        n = read32le(ptr); /* next value */
         write32le(ptr, a - t - 4);
         t = n;
     }
