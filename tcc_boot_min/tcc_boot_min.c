@@ -71,6 +71,8 @@ int gct_ref(int o) {
   return ri32(add(o, CType_ref_o));
 }
 
+/* Sym accessors */
+
 /* stuff */
 
 int init_runtime(){
@@ -103,6 +105,10 @@ int init_runtime(){
   CType_t_o = 0;
   CType_ref_o = 4;
   sizeof_CType = 8;
+
+  Sym_v_o = 0;
+  Sym_type_o = 20;
+  sizeof_Sym = 40;
 
   FUNC_PROLOG_SIZE = 9;
 

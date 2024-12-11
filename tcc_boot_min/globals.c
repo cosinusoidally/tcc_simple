@@ -28,6 +28,10 @@ int CType_t_o;
 int CType_ref_o;
 int sizeof_CType;
 
+int Sym_v_o;
+int Sym_type_o;
+int sizeof_Sym;
+
 int tcc_state;
 
 int FUNC_PROLOG_SIZE;
