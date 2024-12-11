@@ -50,6 +50,6 @@ int gen_opi(int op) {
     o(or(or(192, shl(opc, 3)), r)); /* 0xc0 */
     g(c);
     vtop = sub(vtop, sizeof_SValue);
-    vtop->r = VT_CMP;
-    vtop->c.i = op;
+    ssv_r(vtop, VT_CMP);
+    scv_i(gsv_c(vtop), op);
 }

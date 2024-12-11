@@ -57,6 +57,10 @@ int gcv_i(int o) {
   return ri32(add(o, CValue_i_o));
 }
 
+int scv_i(int o, int v) {
+  wi32(add(o, CValue_i_o), v);
+}
+
 /* stuff */
 
 int init_runtime(){
