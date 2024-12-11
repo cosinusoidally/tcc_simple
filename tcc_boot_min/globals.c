@@ -31,5 +31,9 @@ int R_386_32;
 
 int func_sub_sp_offset;
 
+int RC_INT;
+
+int vtop;
+
 /* =============== end globals.c ========================================== */
 

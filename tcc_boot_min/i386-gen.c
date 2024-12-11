@@ -18,12 +18,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-ST_DATA const int reg_classes[NB_REGS] = {
-    /* eax */ RC_INT | RC_EAX,
-    /* ecx */ RC_INT | RC_ECX,
-};
+ST_DATA int reg_classes[NB_REGS];
 
 extern int func_sub_sp_offset;
+
+int init_reg_classes() {
+  reg_classes[0] = RC_INT | RC_EAX;
+  reg_classes[1] = RC_INT | RC_ECX;
+}
 
 /* 1 */
 /* XXX: make it faster ? */
@@ -85,34 +87,6 @@ int gcall_or_jmp(int is_jmp) {
     /* constant and relocation case */
     greloc(cur_text_section, vtop->sym, add(ind, 1), R_386_PC32);
     oad(add(0xe8, is_jmp), sub(vtop->c.i, 4)); /* call/jmp im */
-}
-
-/* 14 */
-/* Generate function call. The function address is pushed first, then
-   all the parameters in call order. This functions pops all the
-   parameters and the function address. */
-int gfunc_call(int nb_args) {
-    int r;
-    int args_size;
-    int i;
-    
-    args_size = 0;
-    i = 0;
-    while(lt(i, nb_args)) {
-        r = gv(RC_INT);
-        o(add(0x50, r)); /* push r */
-        args_size = add(args_size, 4);
-        vtop = sub(vtop, sizeof_SValue);
-        i = add(i, 1);
-    }
-    save_regs(0); /* save used temporary registers */
-
-    gcall_or_jmp(0);
-
-    if (neq(args_size, 0)) {
-        gadd_sp(args_size);
-    }
-    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 15 */

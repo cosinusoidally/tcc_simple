@@ -48,7 +48,10 @@ int init_runtime(){
 
   R_386_32 = 1;
 
+  RC_INT = 1;
+
   init_c();
+  init_reg_classes();
 }
 
 /* i386-gen.c */
@@ -130,6 +133,34 @@ int gadd_sp(int val) {
     } else {
         oad(50305, val); /* 0xc481 add $xxx, %esp */
     }
+}
+
+/* 14 */
+/* Generate function call. The function address is pushed first, then
+   all the parameters in call order. This functions pops all the
+   parameters and the function address. */
+int gfunc_call(int nb_args) {
+    int r;
+    int args_size;
+    int i;
+
+    args_size = 0;
+    i = 0;
+    while(lt(i, nb_args)) {
+        r = gv(RC_INT);
+        o(add(0x50, r)); /* push r */
+        args_size = add(args_size, 4);
+        vtop = sub(vtop, sizeof_SValue);
+        i = add(i, 1);
+    }
+    save_regs(0); /* save used temporary registers */
+
+    gcall_or_jmp(0);
+
+    if (neq(args_size, 0)) {
+        gadd_sp(args_size);
+    }
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 16 */

@@ -52,7 +52,7 @@
 /* a register can belong to several classes. The classes must be
    sorted from more general to more precise (see gv2() code which does
    assumptions on it). */
-#define RC_INT     0x0001 /* generic integer register */
+extern int RC_INT;  /*  0x0001 generic integer register */
 #define RC_EAX     0x0004
 #define RC_ECX     0x0010
 
@@ -467,7 +467,8 @@ ST_DATA Sym *local_label_stack;
 ST_DATA Sym *global_label_stack;
 ST_DATA Sym *define_stack;
 ST_DATA CType char_pointer_type, func_old_type, int_type, size_type;
-ST_DATA SValue __vstack[1+/*to make bcheck happy*/ VSTACK_SIZE], *vtop, *pvtop;
+ST_DATA SValue __vstack[1+/*to make bcheck happy*/ VSTACK_SIZE], *pvtop;
+extern SValue *vtop;
 #define vstack  (__vstack + 1)
 ST_DATA int rsym, anon_sym;
 extern int loc;
@@ -595,7 +596,7 @@ ST_FUNC int handle_eob(void);
 
 /* ------------ xxx-gen.c ------------ */
 
-ST_DATA const int reg_classes[NB_REGS];
+ST_DATA int reg_classes[NB_REGS];
 
 int gsym_addr(int t, int a);
 int gsym(int t);
