@@ -33,6 +33,22 @@ int gs_data_allocated(int o) {
   return ri32(add(o, Section_data_allocated_o));
 }
 
+/* SValue accessors */
+
+int gsv_r(int o) {
+  return ri32(add(o, SValue_r_o));
+}
+
+int gsv_c(int o) {
+  return ri32(add(o, SValue_c_o));
+}
+
+int gsv_sym(int o) {
+  return ri32(add(o, SValue_sym_o));
+}
+
+/* stuff */
+
 int init_runtime(){
   foo=mks("hello world");
   puts(foo);
