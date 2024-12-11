@@ -77,16 +77,6 @@ int store(int r, SValue *v) {
     gen_modrm(r, v->r, v->sym, v->c.i);
 }
 
-/* 12 */
-int gadd_sp(int val) {
-    if (lt(and(val,255), 256)) {
-        o(50307); /* 0xc483 */
-        g(val);
-    } else {
-        oad(50305, val); /* 0xc481 add $xxx, %esp */
-    }
-}
-
 /* 13 */
 /* 'is_jmp' is '1' if it is a jump */
 int gcall_or_jmp(int is_jmp) {

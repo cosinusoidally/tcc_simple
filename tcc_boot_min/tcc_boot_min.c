@@ -122,6 +122,16 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
     }
 }
 
+/* 12 */
+int gadd_sp(int val) {
+    if (lt(and(val,255), 256)) {
+        o(50307); /* 0xc483 */
+        g(val);
+    } else {
+        oad(50305, val); /* 0xc481 add $xxx, %esp */
+    }
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
