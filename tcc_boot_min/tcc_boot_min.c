@@ -23,6 +23,16 @@ int gfs_name(int o) {
   return add(o,filespec_name_o);
 }
 
+/* Section accessors */
+
+int gs_data(int o) {
+  return ri32(add(o, Section_data_o));
+}
+
+int gs_data_allocated(int o) {
+  return ri32(add(o, Section_data_allocated_o));
+}
+
 int init_runtime(){
   foo=mks("hello world");
   puts(foo);
@@ -36,6 +46,11 @@ int init_runtime(){
   filespec_type_o = 0;
   filespec_name_o = 1;
   sizeof_filespec = 2;
+
+
+  Section_data_o = 4;
+  Section_data_allocated_o = 8;
+  sizeof_Section = 76;
 
   sizeof_SValue = 24;
 

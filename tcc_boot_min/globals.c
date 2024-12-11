@@ -11,6 +11,10 @@ int filespec_type_o;
 int filespec_name_o;
 int sizeof_filespec;
 
+int Section_data_o;
+int Section_data_allocated_o;
+int sizeof_Section;
+
 int sizeof_SValue;
 
 int tcc_state;
