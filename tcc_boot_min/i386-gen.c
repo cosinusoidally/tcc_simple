@@ -27,20 +27,6 @@ int init_reg_classes() {
   reg_classes[1] = RC_INT | RC_ECX;
 }
 
-/* 4 */
-/* output a symbol and patch all calls to it */
-int gsym_addr(int t, int a) {
-    int ptr;
-    int n;
-
-    while (t) {
-        ptr = add(gs_data(cur_text_section), t);
-        n = read32le(ptr); /* next value */
-        write32le(ptr, sub(sub(a, t), 4));
-        t = n;
-    }
-}
-
 /* 10 */
 /* load 'r' from value 'sv' */
 int load(int r, SValue *sv) {
