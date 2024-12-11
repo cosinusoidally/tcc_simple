@@ -27,15 +27,15 @@ int load(int r, SValue *sv) {
     int fc;
     int fr;
 
-    fr = sv->r;
+    fr = gsv_r(sv);
     fc = sv->c.i;
 
     if (and(fr, VT_LVAL)) {
         o(0x8b);     /* movl */
-        gen_modrm(r, fr, sv->sym, fc);
+        gen_modrm(r, fr, gsv_sym(sv), fc);
     } else {
             o(add(0xb8, r)); /* mov $xx, r */
-            gen_addr32(fr, sv->sym, fc);
+            gen_addr32(fr, gsv_sym(sv), fc);
     }
 }
 
