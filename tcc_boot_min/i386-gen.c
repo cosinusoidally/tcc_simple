@@ -80,10 +80,10 @@ int store(int r, SValue *v) {
 /* 12 */
 int gadd_sp(int val) {
     if (lt(and(val,255), 256)) {
-        o(0xc483);
+        o(50307); /* 0xc483 */
         g(val);
     } else {
-        oad(0xc481, val); /* add $xxx, %esp */
+        oad(50305, val); /* 0xc481 add $xxx, %esp */
     }
 }
 
