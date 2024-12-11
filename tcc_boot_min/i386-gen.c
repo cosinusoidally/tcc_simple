@@ -192,6 +192,7 @@ int gfunc_prolog(CType *func_type) {
     CType *type;
 
     enter();
+    align = v_alloca(4);
 
     sym = func_type->ref;
     addr = 8;
@@ -202,10 +203,10 @@ int gfunc_prolog(CType *func_type) {
     /* define parameters */
     while (neq((sym = sym->next), 0)) {
         type = &sym->type;
-        size = type_size(type, &align);
+        size = type_size(type, align);
         size = and(add(size, 3), not(3));
         param_addr = addr;
-        addr += size;
+        addr = add(addr, size);
         sym_push(and(sym->v , not(SYM_FIELD)), type,
                  or(VT_LOCAL, lvalue_type(type->t)), param_addr);
     }
