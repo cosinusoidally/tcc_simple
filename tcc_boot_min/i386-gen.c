@@ -58,16 +58,16 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
     op_reg = shl(op_reg, 3);
     if (eq(and(r, VT_VALMASK), VT_CONST)) {
         /* constant memory reference */
-        o(or(0x05, op_reg));
+        o(or(5, op_reg));
         gen_addr32(r, sym, c);
     } else if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         /* currently, we use only ebp as base */
         if (lt(and(c,255), 256)) {
             /* short reference */
-            o(or(0x45, op_reg));
+            o(or(69, op_reg)); /* 0x45 */
             g(c);
         } else {
-            oad(or(0x85, op_reg), c);
+            oad(or(133, op_reg), c); /* 0x85 */
         }
     } else {
         g(or(op_reg, and((r, VT_VALMASK))));
