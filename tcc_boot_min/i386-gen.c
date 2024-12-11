@@ -20,16 +20,6 @@
 
 extern int func_sub_sp_offset;
 
-/* 13 */
-/* 'is_jmp' is '1' if it is a jump */
-int gcall_or_jmp(int is_jmp) {
-    int r;
-
-    /* constant and relocation case */
-    greloc(cur_text_section, gsv_sym(vtop), add(ind, 1), R_386_PC32);
-    oad(add(232, is_jmp), sub(gcv_i(gsv_c(vtop)), 4)); /* 0xe8 call/jmp im */
-}
-
 /* 15 */
 /* generate function prolog of type 't' */
 int gfunc_prolog(CType *func_type) {
