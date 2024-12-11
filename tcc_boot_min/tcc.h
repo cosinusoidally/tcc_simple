@@ -163,7 +163,7 @@ typedef struct AttributeDef {
 /* symbol management */
 typedef struct Sym {
     int v; /* symbol token */
-    unsigned short r; /* associated register or VT_CONST/VT_LOCAL and LVAL type */
+    int r; /* associated register or VT_CONST/VT_LOCAL and LVAL type */
     int c; /* associated number or Elf symbol index */
     int sym_scope; /* scope level for locals */
     struct FuncAttr f; /* function attributes */
