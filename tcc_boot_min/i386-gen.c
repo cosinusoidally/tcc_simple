@@ -31,25 +31,3 @@ int gfunc_prolog(CType *func_type) {
     }
     leave(0);
 }
-
-/* 20 */
-/* generate an integer binary operation */
-int gen_opi(int op) {
-    int r;
-    int fr;
-    int opc;
-    int c;
-
-    opc = 7;
-    /* constant case */
-    vswap();
-    r = gv(RC_INT);
-    vswap();
-    c = gcv_i(gsv_c(vtop));
-    o(131); /* 0x83 */
-    o(or(or(192, shl(opc, 3)), r)); /* 0xc0 */
-    g(c);
-    vtop = sub(vtop, sizeof_SValue);
-    ssv_r(vtop, VT_CMP);
-    scv_i(gsv_c(vtop), op);
-}
