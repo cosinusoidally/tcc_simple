@@ -157,6 +157,19 @@ int gjmp(int t) {
     return gjmp2(233, t); /* 0xe9 */
 }
 
+/* 18 */
+/* generate a jump to a fixed address */
+int gjmp_addr(int a) {
+    int r;
+    r = sub(sub(a, ind), 2);
+    if (eq(r, movsx_eax_al(r))) {
+        g(235); /* 0xeb */
+        g(r);
+    } else {
+        oad(233, sub(sub(a, ind), 5)); /* 0xe9 */
+    }
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
