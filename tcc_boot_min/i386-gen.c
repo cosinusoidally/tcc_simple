@@ -149,12 +149,6 @@ int gfunc_prolog(CType *func_type) {
     leave(0);
 }
 
-/* 17 */
-/* generate a jump to a label */
-int gjmp(int t) {
-    return gjmp2(233, t); /* 0xe9 */
-}
-
 /* 18 */
 /* generate a jump to a fixed address */
 int gjmp_addr(int a) {

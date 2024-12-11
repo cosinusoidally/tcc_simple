@@ -151,6 +151,12 @@ int gfunc_epilog() {
     ind = saved_ind;
 }
 
+/* 17 */
+/* generate a jump to a label */
+int gjmp(int t) {
+    return gjmp2(233, t); /* 0xe9 */
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
