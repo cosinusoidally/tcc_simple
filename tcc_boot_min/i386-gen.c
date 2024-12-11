@@ -91,23 +91,23 @@ int gen_addr32(int r, int sym, int c) {
 
 /* generate a modrm reference. 'op_reg' contains the additional 3
    opcode bits */
-int gen_modrm(int op_reg, int r, Sym *sym, int c) {
-    op_reg = op_reg << 3;
-    if ((r & VT_VALMASK) == VT_CONST) {
+int gen_modrm(int op_reg, int r, int sym, int c) {
+    op_reg = shl(op_reg, 3);
+    if (eq(and(r, VT_VALMASK), VT_CONST)) {
         /* constant memory reference */
-        o(0x05 | op_reg);
+        o(or(0x05, op_reg));
         gen_addr32(r, sym, c);
-    } else if ((r & VT_VALMASK) == VT_LOCAL) {
+    } else if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         /* currently, we use only ebp as base */
-        if (c == (char)c) {
+        if (eq(c, (char)c)) {
             /* short reference */
-            o(0x45 | op_reg);
+            o(or(0x45, op_reg));
             g(c);
         } else {
-            oad(0x85 | op_reg, c);
+            oad(or(0x85, op_reg), c);
         }
     } else {
-        g(0x00 | op_reg | (r & VT_VALMASK));
+        g(or(op_reg, and((r, VT_VALMASK))));
     }
 }
 
