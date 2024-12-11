@@ -38,6 +38,7 @@ int VT_VALMASK;
 int VT_SYM;
 int VT_CONST;
 int VT_LOCAL;
+int VT_LVAL;
 
 int R_386_32;
 
