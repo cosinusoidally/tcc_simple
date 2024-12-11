@@ -37,14 +37,6 @@ int g(int c) {
     ind = ind1;
 }
 
-/* 2 */
-int o(int c) {
-    while (neq(0, c)) {
-        g(c);
-        c = shr(c, 8);
-    }
-}
-
 /* 3 */
 int gen_le32(int c) {
     g(c);

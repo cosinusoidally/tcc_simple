@@ -44,6 +44,18 @@ int init_runtime(){
   init_c();
 }
 
+/* i386-gen.c */
+
+/* 2 */
+int o(int c) {
+    while (neq(0, c)) {
+        g(c);
+        c = shr(c, 8);
+    }
+}
+
+/* end of i386-gen.c */
+
 int tcc_new() {
     int s;
 
