@@ -73,6 +73,10 @@ int gct_ref(int o) {
 
 /* Sym accessors */
 
+int gsym_v(int o) {
+  return ri32(add(o, Sym_v_o));
+}
+
 /* stuff */
 
 int init_runtime(){
