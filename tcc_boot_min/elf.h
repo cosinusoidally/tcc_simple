@@ -314,7 +314,10 @@ typedef struct
 /* i386 relocs.  */
 
 #define R_386_NONE	   0		/* No reloc */
-#define R_386_32	   1		/* Direct 32 bit  */
+
+/* #define R_386_32	   1		Direct 32 bit  */
+extern int R_386_32;
+
 #define R_386_PC32	   2		/* PC relative 32 bit */
 #define R_386_GOT32	   3		/* 32 bit GOT entry */
 #define R_386_PLT32	   4		/* 32 bit PLT address */
