@@ -21,6 +21,10 @@ int SValue_c_o;
 int SValue_sym_o;
 int sizeof_SValue;
 
+int CValue_i_o;
+int sizeof_CValue;
+
+
 int tcc_state;
 
 int FUNC_PROLOG_SIZE;

@@ -73,6 +73,9 @@ int init_runtime(){
   SValue_sym_o = 20;
   sizeof_SValue = 24;
 
+  CValue_i_o = 0;
+  sizeof_CValue = 8;
+
   FUNC_PROLOG_SIZE = 9;
 
   VT_VALMASK = 63;
