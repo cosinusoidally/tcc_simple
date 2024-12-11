@@ -71,6 +71,18 @@ int init_runtime(){
 
 /* i386-gen.c */
 
+/* 1 */
+/* XXX: make it faster ? */
+int g(int c) {
+    int ind1;
+    ind1 = add(ind, 1);
+    if (gt(ind1, gs_data_allocated(cur_text_section))) {
+        section_realloc(cur_text_section, ind1);
+    }
+    wi8(add(gs_data(cur_text_section), ind), c);
+    ind = ind1;
+}
+
 /* 2 */
 int o(int c) {
     while (neq(0, c)) {

@@ -27,18 +27,6 @@ int init_reg_classes() {
   reg_classes[1] = RC_INT | RC_ECX;
 }
 
-/* 1 */
-/* XXX: make it faster ? */
-int g(int c) {
-    int ind1;
-    ind1 = add(ind, 1);
-    if (gt(ind1, gs_data_allocated(cur_text_section))) {
-        section_realloc(cur_text_section, ind1);
-    }
-    wi8(add(gs_data(cur_text_section), ind), c);
-    ind = ind1;
-}
-
 /* 4 */
 /* output a symbol and patch all calls to it */
 int gsym_addr(int t, int a) {
