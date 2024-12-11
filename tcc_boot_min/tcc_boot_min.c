@@ -90,6 +90,10 @@ int init_runtime(){
   CValue_i_o = 0;
   sizeof_CValue = 8;
 
+  CType_t_o = 0;
+  CType_ref_o = 4;
+  sizeof_CType = 8;
+
   FUNC_PROLOG_SIZE = 9;
 
   VT_VALMASK = 63;

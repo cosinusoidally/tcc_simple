@@ -24,6 +24,9 @@ int sizeof_SValue;
 int CValue_i_o;
 int sizeof_CValue;
 
+int CType_t_o;
+int CType_ref_o;
+int sizeof_CType;
 
 int tcc_state;
 
