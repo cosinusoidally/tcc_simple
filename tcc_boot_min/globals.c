@@ -18,6 +18,7 @@ int tcc_state;
 int FUNC_PROLOG_SIZE;
 
 int ind;
+int loc;
 
 int cur_text_section;
 
@@ -27,6 +28,8 @@ int VT_CONST;
 int VT_LOCAL;
 
 int R_386_32;
+
+int func_sub_sp_offset;
 
 /* =============== end globals.c ========================================== */
 

@@ -132,6 +132,25 @@ int gadd_sp(int val) {
     }
 }
 
+/* 16 */
+/* generate function epilog */
+int gfunc_epilog() {
+    int v;
+    int saved_ind;
+
+    /* align local size to word & save local variables */
+    v = and(add(sub(0,loc), 3), sub(0,4));
+
+    o(201); /* 0xc9 leave */
+    o(195); /* 0xc3 ret */
+    saved_ind = ind;
+    ind = sub(func_sub_sp_offset, FUNC_PROLOG_SIZE);
+    o(15042901);  /* 0xe58955 push %ebp, mov %esp, %ebp */
+    o(60545);  /* 0xec81 sub esp, stacksize */
+    gen_le32(v);
+    ind = saved_ind;
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {
