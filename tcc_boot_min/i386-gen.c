@@ -26,8 +26,8 @@ int gcall_or_jmp(int is_jmp) {
     int r;
 
     /* constant and relocation case */
-    greloc(cur_text_section, vtop->sym, add(ind, 1), R_386_PC32);
-    oad(add(0xe8, is_jmp), sub(vtop->c.i, 4)); /* call/jmp im */
+    greloc(cur_text_section, gsv_sym(vtop), add(ind, 1), R_386_PC32);
+    oad(add(0xe8, is_jmp), sub(gcv_i(gsv_c(vtop)), 4)); /* call/jmp im */
 }
 
 /* 15 */
