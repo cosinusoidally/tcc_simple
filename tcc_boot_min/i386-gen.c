@@ -32,10 +32,10 @@ int init_reg_classes() {
 int g(int c) {
     int ind1;
     ind1 = add(ind, 1);
-    if (gt(ind1, cur_text_section->data_allocated)) {
+    if (gt(ind1, gs_data_allocated(cur_text_section))) {
         section_realloc(cur_text_section, ind1);
     }
-    wi8(add(cur_text_section->data, ind), c);
+    wi8(add(gs_data(cur_text_section), ind), c);
     ind = ind1;
 }
 
@@ -46,7 +46,7 @@ int gsym_addr(int t, int a) {
     int n;
 
     while (t) {
-        ptr = add(cur_text_section->data, t);
+        ptr = add(gs_data(cur_text_section), t);
         n = read32le(ptr); /* next value */
         write32le(ptr, sub(sub(a, t), 4));
         t = n;
