@@ -31,10 +31,10 @@ int load(int r, SValue *sv) {
     fc = gcv_i(gsv_c(sv));
 
     if (and(fr, VT_LVAL)) {
-        o(0x8b);     /* movl */
+        o(139);     /* 0x8b movl */
         gen_modrm(r, fr, gsv_sym(sv), fc);
     } else {
-            o(add(0xb8, r)); /* mov $xx, r */
+            o(add(184, r)); /* 0xb8 mov $xx, r */
             gen_addr32(fr, gsv_sym(sv), fc);
     }
 }
@@ -42,7 +42,7 @@ int load(int r, SValue *sv) {
 /* 11 */
 /* store register 'r' in lvalue 'v' */
 int store(int r, SValue *v) {
-    o(0x89);
+    o(137); /* 0x89 */
     gen_modrm(r, v->r, v->sym, v->c.i);
 }
 
