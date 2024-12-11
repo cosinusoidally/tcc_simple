@@ -53,10 +53,10 @@
    sorted from more general to more precise (see gv2() code which does
    assumptions on it). */
 extern int RC_INT;  /*  0x0001 generic integer register */
-#define RC_EAX     0x0004
-#define RC_ECX     0x0010
+extern int RC_EAX;   /*  0x0004 */
+extern int RC_ECX;   /*  0x0010 */
 
-#define RC_IRET    RC_EAX /* function return: integer register */
+extern int RC_IRET;    /* RC_EAX function return: integer register */
 
 /* pretty names for the registers */
 enum {

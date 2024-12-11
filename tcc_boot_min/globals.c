@@ -41,5 +41,9 @@ int vtop;
 
 int reg_classes;
 
+int RC_EAX;
+int RC_ECX;
+int RC_IRET;
+
 /* =============== end globals.c ========================================== */
 

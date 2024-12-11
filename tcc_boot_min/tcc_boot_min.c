@@ -65,6 +65,11 @@ int init_runtime(){
 
   RC_INT = 1;
 
+  RC_EAX = 4;
+  RC_ECX = 16;
+  RC_IRET = RC_EAX;
+
+
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 
   init_c();
@@ -72,6 +77,8 @@ int init_runtime(){
 }
 
 /* i386-gen.c */
+
+
 
 /* 1 */
 /* XXX: make it faster ? */
