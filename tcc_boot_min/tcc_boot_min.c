@@ -110,7 +110,7 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
         gen_addr32(r, sym, c);
     } else if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         /* currently, we use only ebp as base */
-        if (lt(and(c,255), 256)) { /* FIXME this is probably wrong */
+        if (eq(c, movsx_eax_al(c))) {
             /* short reference */
             o(or(69, op_reg)); /* 0x45 */
             g(c);
@@ -124,7 +124,7 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
 
 /* 12 */
 int gadd_sp(int val) {
-    if (lt(and(val,255), 256)) { /* FIXME this is probably wrong */
+    if (eq(val, movsx_eax_al(val))) {
         o(50307); /* 0xc483 */
         g(val);
     } else {
