@@ -596,27 +596,20 @@ ST_FUNC int handle_eob(void);
 
 ST_DATA const int reg_classes[NB_REGS];
 
-ST_FUNC void gsym_addr(int t, int a);
-ST_FUNC void gsym(int t);
-ST_FUNC void load(int r, SValue *sv);
-ST_FUNC void store(int r, SValue *v);
-ST_FUNC int gfunc_sret(CType *vt, int variadic, CType *ret, int *align, int *regsize);
-ST_FUNC void gfunc_call(int nb_args);
-ST_FUNC void gfunc_prolog(CType *func_type);
-ST_FUNC void gfunc_epilog(void);
-ST_FUNC int gjmp(int t);
-ST_FUNC void gjmp_addr(int a);
-ST_FUNC int gtst(int inv, int t);
-ST_FUNC void gtst_addr(int inv, int a);
-ST_FUNC void gen_opi(int op);
-ST_FUNC void gen_opf(int op);
-ST_FUNC void gen_cvt_ftoi(int t);
-ST_FUNC void gen_cvt_ftof(int t);
-ST_FUNC void o(unsigned int c);
-ST_FUNC void gen_cvt_itof(int t);
-ST_FUNC void gen_vla_sp_save(int addr);
-ST_FUNC void gen_vla_sp_restore(int addr);
-ST_FUNC void gen_vla_alloc(CType *type, int align);
+int gsym_addr(int t, int a);
+int gsym(int t);
+int load(int r, SValue *sv);
+int store(int r, SValue *v);
+int gfunc_sret(CType *vt, int variadic, CType *ret, int *align, int *regsize);
+int gfunc_call(int nb_args);
+int gfunc_prolog(CType *func_type);
+int gfunc_epilog(void);
+int gjmp(int t);
+int gjmp_addr(int a);
+int gtst(int inv, int t);
+int gtst_addr(int inv, int a);
+int gen_opi(int op);
+int o(unsigned int c);
 
 static inline uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;

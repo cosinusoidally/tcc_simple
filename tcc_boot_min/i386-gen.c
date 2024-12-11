@@ -26,8 +26,7 @@ ST_DATA const int reg_classes[NB_REGS] = {
 static unsigned long func_sub_sp_offset;
 
 /* XXX: make it faster ? */
-ST_FUNC void g(int c)
-{
+int g(int c) {
     int ind1;
     ind1 = ind + 1;
     if (ind1 > cur_text_section->data_allocated)
@@ -36,16 +35,14 @@ ST_FUNC void g(int c)
     ind = ind1;
 }
 
-ST_FUNC void o(unsigned int c)
-{
+int o(unsigned int c) {
     while (c) {
         g(c);
         c = c >> 8;
     }
 }
 
-ST_FUNC void gen_le32(int c)
-{
+int gen_le32(int c) {
     g(c);
     g(shr(c, 8));
     g(shr(c, 16));
@@ -53,8 +50,7 @@ ST_FUNC void gen_le32(int c)
 }
 
 /* output a symbol and patch all calls to it */
-ST_FUNC void gsym_addr(int t, int a)
-{
+int gsym_addr(int t, int a) {
     while (t) {
         unsigned char *ptr = cur_text_section->data + t;
         uint32_t n = read32le(ptr); /* next value */
@@ -63,14 +59,12 @@ ST_FUNC void gsym_addr(int t, int a)
     }
 }
 
-ST_FUNC void gsym(int t)
-{
+int gsym(int t) {
     gsym_addr(t, ind);
 }
 
 /* instruction + 4 bytes data. Return the address of the data */
-static int oad(int c, int s)
-{
+int oad(int c, int s) {
     int t;
     o(c);
     t = ind;
@@ -84,8 +78,7 @@ int gjmp2(instr,lbl) {
 }
 
 /* output constant with relocation if 'r & VT_SYM' is true */
-ST_FUNC void gen_addr32(int r, Sym *sym, int c)
-{
+int gen_addr32(int r, Sym *sym, int c) {
     if (r & VT_SYM)
         greloc(cur_text_section, sym, ind, R_386_32);
     gen_le32(c);
@@ -93,8 +86,7 @@ ST_FUNC void gen_addr32(int r, Sym *sym, int c)
 
 /* generate a modrm reference. 'op_reg' contains the additional 3
    opcode bits */
-static void gen_modrm(int op_reg, int r, Sym *sym, int c)
-{
+int gen_modrm(int op_reg, int r, Sym *sym, int c) {
     op_reg = op_reg << 3;
     if ((r & VT_VALMASK) == VT_CONST) {
         /* constant memory reference */
@@ -115,8 +107,7 @@ static void gen_modrm(int op_reg, int r, Sym *sym, int c)
 }
 
 /* load 'r' from value 'sv' */
-ST_FUNC void load(int r, SValue *sv)
-{
+int load(int r, SValue *sv) {
     int v, fc, fr;
 
     fr = sv->r;
@@ -132,14 +123,12 @@ ST_FUNC void load(int r, SValue *sv)
 }
 
 /* store register 'r' in lvalue 'v' */
-ST_FUNC void store(int r, SValue *v)
-{
+int store(int r, SValue *v) {
     o(0x89);
     gen_modrm(r, v->r, v->sym, v->c.i);
 }
 
-static void gadd_sp(int val)
-{
+int gadd_sp(int val) {
     if (val == (char)val) {
         o(0xc483);
         g(val);
@@ -149,8 +138,7 @@ static void gadd_sp(int val)
 }
 
 /* 'is_jmp' is '1' if it is a jump */
-static void gcall_or_jmp(int is_jmp)
-{
+int gcall_or_jmp(int is_jmp) {
     int r;
     /* constant and relocation case */
     greloc(cur_text_section, vtop->sym, ind + 1, R_386_PC32);
@@ -160,8 +148,7 @@ static void gcall_or_jmp(int is_jmp)
 /* Generate function call. The function address is pushed first, then
    all the parameters in call order. This functions pops all the
    parameters and the function address. */
-ST_FUNC void gfunc_call(int nb_args)
-{
+int gfunc_call(int nb_args) {
     int r, args_size, i;
     Sym *func_sym;
     
@@ -182,11 +169,8 @@ ST_FUNC void gfunc_call(int nb_args)
     vtop--;
 }
 
-#define FUNC_PROLOG_SIZE 9
-
 /* generate function prolog of type 't' */
-ST_FUNC void gfunc_prolog(CType *func_type)
-{
+int gfunc_prolog(CType *func_type) {
     int addr, align, size;
     int param_index, param_addr;
     Sym *sym;
@@ -199,7 +183,7 @@ ST_FUNC void gfunc_prolog(CType *func_type)
 
     param_index = 0;
 
-    ind += FUNC_PROLOG_SIZE;
+    ind = add(ind,9); /* FUNC_PROLOG_SIZE */
     func_sub_sp_offset = ind;
     /* define parameters */
     while ((sym = sym->next) != NULL) {
@@ -215,8 +199,7 @@ ST_FUNC void gfunc_prolog(CType *func_type)
 }
 
 /* generate function epilog */
-ST_FUNC void gfunc_epilog(void)
-{
+int gfunc_epilog(void) {
     addr_t v, saved_ind;
 
     /* align local size to word & save local variables */
@@ -225,7 +208,7 @@ ST_FUNC void gfunc_epilog(void)
     o(0xc9); /* leave */
     o(0xc3); /* ret */
     saved_ind = ind;
-    ind = func_sub_sp_offset - FUNC_PROLOG_SIZE;
+    ind = sub(func_sub_sp_offset, 9); /* - FUNC_PROLOG_SIZE */
     o(0xe58955);  /* push %ebp, mov %esp, %ebp */
     o(0xec81);  /* sub esp, stacksize */
     gen_le32(v);
@@ -233,14 +216,12 @@ ST_FUNC void gfunc_epilog(void)
 }
 
 /* generate a jump to a label */
-ST_FUNC int gjmp(int t)
-{
+int gjmp(int t) {
     return gjmp2(0xe9, t);
 }
 
 /* generate a jump to a fixed address */
-ST_FUNC void gjmp_addr(int a)
-{
+int gjmp_addr(int a) {
     int r;
     r = a - ind - 2;
     if (r == (char)r) {
@@ -252,8 +233,7 @@ ST_FUNC void gjmp_addr(int a)
 }
 
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
-ST_FUNC int gtst(int inv, int t)
-{
+int gtst(int inv, int t) {
     g(0x0f);
     t = gjmp2((vtop->c.i - 16) ^ inv, t);
     vtop--;
@@ -261,8 +241,7 @@ ST_FUNC int gtst(int inv, int t)
 }
 
 /* generate an integer binary operation */
-ST_FUNC void gen_opi(int op)
-{
+int gen_opi(int op) {
     int r, fr, opc, c;
 
     opc = 7;
