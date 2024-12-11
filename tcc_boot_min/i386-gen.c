@@ -196,10 +196,10 @@ int gfunc_prolog(CType *func_type) {
 
     param_index = 0;
 
-    ind = add(ind,9); /* FUNC_PROLOG_SIZE */
+    ind = add(ind, FUNC_PROLOG_SIZE);
     func_sub_sp_offset = ind;
     /* define parameters */
-    while ((sym = sym->next) != NULL) {
+    while (neq((sym = sym->next), 0)) {
         type = &sym->type;
         size = type_size(type, &align);
         size = (size + 3) & ~3;
@@ -221,7 +221,7 @@ int gfunc_epilog(void) {
     o(0xc9); /* leave */
     o(0xc3); /* ret */
     saved_ind = ind;
-    ind = sub(func_sub_sp_offset, 9); /* - FUNC_PROLOG_SIZE */
+    ind = sub(func_sub_sp_offset, FUNC_PROLOG_SIZE);
     o(0xe58955);  /* push %ebp, mov %esp, %ebp */
     o(0xec81);  /* sub esp, stacksize */
     gen_le32(v);

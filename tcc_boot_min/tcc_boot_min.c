@@ -39,6 +39,8 @@ int init_runtime(){
 
   sizeof_SValue = 24;
 
+  FUNC_PROLOG_SIZE = 9;
+
   init_c();
 }
 

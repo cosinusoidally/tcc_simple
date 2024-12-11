@@ -15,5 +15,7 @@ int sizeof_SValue;
 
 int tcc_state;
 
+int FUNC_PROLOG_SIZE;
+
 /* =============== end globals.c ========================================== */
 
