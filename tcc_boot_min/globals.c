@@ -15,6 +15,10 @@ int Section_data_o;
 int Section_data_allocated_o;
 int sizeof_Section;
 
+int SValue_type_o;
+int SValue_r_o;
+int SValue_c_o;
+int SValue_sym_o;
 int sizeof_SValue;
 
 int tcc_state;

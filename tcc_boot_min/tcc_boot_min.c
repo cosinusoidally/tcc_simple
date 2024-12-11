@@ -47,11 +47,14 @@ int init_runtime(){
   filespec_name_o = 1;
   sizeof_filespec = 2;
 
-
   Section_data_o = 4;
   Section_data_allocated_o = 8;
   sizeof_Section = 76;
 
+  SValue_type_o = 0;
+  SValue_r_o = 8;
+  SValue_c_o = 12;
+  SValue_sym_o = 20;
   sizeof_SValue = 24;
 
   FUNC_PROLOG_SIZE = 9;
