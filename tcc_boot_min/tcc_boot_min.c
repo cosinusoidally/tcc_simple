@@ -39,6 +39,10 @@ int gsv_r(int o) {
   return ri32(add(o, SValue_r_o)); /* int r */
 }
 
+int ssv_r(int o, int v) {
+  wi32(add(o, SValue_r_o), v);
+}
+
 int gsv_c(int o) {
   return add(o, SValue_c_o); /* CValue c */
 }
