@@ -252,7 +252,7 @@ int gjmp_addr(int a) {
 int gtst(int inv, int t) {
     g(0x0f);
     t = gjmp2(xor(sub(vtop->c.i, 16), inv), t);
-    vtop--;
+    vtop = sub(vtop, sizeof_SValue);
     return t;
 }
 
