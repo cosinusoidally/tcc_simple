@@ -91,6 +91,7 @@ int init_runtime(){
   VT_SYM = 512;
 
   R_386_32 = 1;
+  R_386_PC32 = 2;
 
   RC_INT = 1;
 

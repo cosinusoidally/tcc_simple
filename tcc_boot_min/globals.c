@@ -41,6 +41,7 @@ int VT_LOCAL;
 int VT_LVAL;
 
 int R_386_32;
+int R_386_PC32;
 
 int func_sub_sp_offset;
 
