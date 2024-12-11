@@ -266,10 +266,10 @@ struct filespec {
 };
 
 /* The current value can be: */
-#define VT_VALMASK   0x003f  /* mask for value location, register or: */
-#define VT_CONST     0x0030  /* constant in vc (must be first non register value) */
+extern int VT_VALMASK;  /* mask for value location, register or: */
+extern int VT_CONST;    /* constant in vc (must be first non register value) */
 #define VT_LLOCAL    0x0031  /* lvalue, offset on stack */
-#define VT_LOCAL     0x0032  /* offset on stack */
+extern int VT_LOCAL;  /* offset on stack */
 #define VT_CMP       0x0033  /* the value is stored in processor flags (in vc) */
 #define VT_LVAL      0x0100  /* var is an lvalue */
 #define VT_SYM       0x0200  /* a symbol value is added */
