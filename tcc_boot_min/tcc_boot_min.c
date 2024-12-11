@@ -320,6 +320,15 @@ int gjmp_addr(int a) {
     }
 }
 
+/* 19 */
+/* generate a test. set 'inv' to invert test. Stack entry is popped */
+int gtst(int inv, int t) {
+    g(15); /* 0x0f */
+    t = gjmp2(xor(sub(gcv_i(gsv_c(vtop)), 16), inv), t);
+    vtop = sub(vtop, sizeof_SValue);
+    return t;
+}
+
 /* end of i386-gen.c */
 
 int tcc_new() {

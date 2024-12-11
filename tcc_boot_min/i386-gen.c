@@ -32,15 +32,6 @@ int gfunc_prolog(CType *func_type) {
     leave(0);
 }
 
-/* 19 */
-/* generate a test. set 'inv' to invert test. Stack entry is popped */
-int gtst(int inv, int t) {
-    g(15); /* 0x0f */
-    t = gjmp2(xor(sub(gcv_i(gsv_c(vtop)), 16), inv), t);
-    vtop = sub(vtop, sizeof_SValue);
-    return t;
-}
-
 /* 20 */
 /* generate an integer binary operation */
 int gen_opi(int op) {
