@@ -627,3 +627,4 @@ static inline void write32le(unsigned char *p, uint32_t x) {
 /********************************************************/
 
 extern int sizeof_TCCState;
+extern int sizeof_SValue;

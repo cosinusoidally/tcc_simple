@@ -69,6 +69,8 @@ int init_runtime(){
   filespec_name_o = 1;
   sizeof_filespec = 2;
 
+  sizeof_SValue = 24;
+
   init_c();
 }
 
