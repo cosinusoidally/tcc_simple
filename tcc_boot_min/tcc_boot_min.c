@@ -543,6 +543,15 @@ int dynarray_reset(int pp, int n) {
     wi32(pp, 0);
 }
 
+/* 3 */
+int tcc_open(int s1, int filename) {
+    int fd;
+    fd = open(filename, or(O_RDONLY, O_BINARY));
+    tcc_open_bf(s1, filename, 0);
+    sbf_fd(file, fd);
+    return fd;
+}
+
 /* 4 */
 /* compile the file opened in 'file'. Return non zero if errors. */
 int tcc_compile(int s1) {

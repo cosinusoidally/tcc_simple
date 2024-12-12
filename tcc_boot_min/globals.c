@@ -78,5 +78,7 @@ int alocal_stack;
 int O_RDONLY;
 int O_BINARY;
 
+int file;
+
 /* =============== end globals.c ========================================== */
 

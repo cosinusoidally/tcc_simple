@@ -24,7 +24,7 @@
 ST_DATA int tok_flags;
 ST_DATA int parse_flags;
 
-ST_DATA struct BufferedFile *file;
+extern struct BufferedFile *file;
 ST_DATA int ch, tok;
 ST_DATA CValue tokc;
 ST_DATA const int *macro_ptr;
