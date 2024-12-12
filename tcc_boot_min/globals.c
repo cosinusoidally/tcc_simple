@@ -91,5 +91,8 @@ int CH_EOB;
 
 int IO_BUF_SIZE;
 
+int TOK_FLAG_BOL;
+int TOK_FLAG_BOF;
+
 /* =============== end globals.c ========================================== */
 

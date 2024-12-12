@@ -229,6 +229,9 @@ int init_runtime(){
 
   CH_EOB = mkc('\\');
 
+  TOK_FLAG_BOL = 1;
+  TOK_FLAG_BOF = 2;
+
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 
   init_c();
