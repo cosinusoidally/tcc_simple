@@ -32,12 +32,12 @@ ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
     char *q_end;
     int c;
 
-    if (buf_size > 0) {
+    if (gt(buf_size, 0)) {
         q = buf;
-        q_end = buf + buf_size - 1;
-        while (q < q_end) {
+        q_end = sub(add(buf, buf_size), 1);
+        while (neq(sub(q, q_end), 0)) {
             c = *s++;
-            if (c == 0)
+            if (eq(c, 0))
                 break;
             *q++ = c;
         }
