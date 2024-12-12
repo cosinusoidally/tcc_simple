@@ -52,7 +52,7 @@ int tcc_realloc(int ptr, int size) {
 
 int tcc_strdup(int str) {
     int ptr;
-    ptr = tcc_malloc(strlen(str) + 1);
+    ptr = tcc_malloc(add(strlen(str), 1));
     strcpy(ptr, str);
     return ptr;
 }
