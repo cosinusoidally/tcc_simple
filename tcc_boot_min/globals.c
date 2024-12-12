@@ -89,5 +89,7 @@ int file;
 
 int CH_EOB;
 
+int IO_BUF_SIZE;
+
 /* =============== end globals.c ========================================== */
 

@@ -206,7 +206,7 @@ extern int SYM_FIELD;  /*    0x20000000 struct/union field symbol space */
 #define FUNC_NEW       1 /* ansi function prototype */
 #define FUNC_OLD       2 /* old function prototype */
 
-#define IO_BUF_SIZE 8192
+extern int IO_BUF_SIZE; /* 8192 */
 
 typedef struct BufferedFile {
     uint8_t *buf_ptr;

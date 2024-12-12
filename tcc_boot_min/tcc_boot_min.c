@@ -225,6 +225,8 @@ int init_runtime(){
   O_RDONLY = 0;
   O_BINARY = 0;
 
+  IO_BUF_SIZE = 8192;
+
   CH_EOB = mkc('\\');
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
