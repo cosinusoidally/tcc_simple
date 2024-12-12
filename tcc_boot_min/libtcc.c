@@ -65,7 +65,7 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename) {
     int fd;
     fd = open(filename, or(O_RDONLY, O_BINARY));
     tcc_open_bf(s1, filename, 0);
-    file->fd = fd;
+    sbf_fd(file, fd);
     return fd;
 }
 
