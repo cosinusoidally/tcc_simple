@@ -517,6 +517,24 @@ int dynarray_reset(int pp, int n) {
     wi32(pp, 0);
 }
 
+/* 4 */
+/* compile the file opened in 'file'. Return non zero if errors. */
+int tcc_compile(int s1) {
+    int filetype;
+
+    filetype = gts_filetype(s1);
+    tccelf_begin_file(s1);
+
+    preprocess_start(s1, 0);
+    tccgen_compile(s1);
+
+    /* reset define stack, but keep -D and built-ins */
+    sym_pop(aglobal_stack, 0, 0);
+    sym_pop(alocal_stack, 0, 0);
+    tccelf_end_file(s1);
+    return 0;
+}
+
 /* end of libtcc.c */
 
 int tcc_new() {
