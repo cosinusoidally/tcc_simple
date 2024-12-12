@@ -41,10 +41,10 @@ void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     sbf_buf_ptr(bf, gbf_buffer(bf));
     sbf_buf_end(bf, add(gbf_buffer(bf), initlen));
     wi8(gbf_buf_end(bf), CH_EOB); /* put eob symbol */
-    pstrcpy(bf->filename, sizeof(bf->filename), filename);
+    pstrcpy(bf->filename, sizeof_BufferedFile_filename, filename);
     sbf_line_num(bf, 1);
     sbf_fd(bf, sub(0, 1));
-    bf->prev = file;
+    sbf_prev(bf, file);
     file = bf;
     tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
 }
