@@ -111,6 +111,22 @@ int sbf_fd(int o, int v) {
   wi32(add(o, BufferedFile_fd_o), v);
 }
 
+int gbf_prev(int o) {
+  return ri32(add(o, BufferedFile_prev_o));
+}
+
+int sbf_prev(int o, int v) {
+  wi32(add(o, BufferedFile_prev_o), v);
+}
+
+int gbf_line_num(int o) {
+  return ri32(add(o, BufferedFile_line_num_o));
+}
+
+int sbf_line_num(int o, int v) {
+  wi32(add(o, BufferedFile_line_num_o), v);
+}
+
 /* stuff */
 
 int init_runtime(){
