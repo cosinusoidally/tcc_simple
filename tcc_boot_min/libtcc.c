@@ -76,9 +76,9 @@ int init_globals() {
 
 /* 8 */
 static int strstart(const char *val, const char **str) {
-    char *p;
-    char *q;
-    p = *str;
+    int p;
+    int q;
+    p = ri32(str);
     q = val;
     while (neq(ri8(q),0)) {
         if (neq(ri8(p), ri8(q))) {
@@ -87,7 +87,7 @@ static int strstart(const char *val, const char **str) {
         p = add(p, 1);
         q = add(q, 1);
     }
-    *str = p;
+    wi32(str, p);
     return 1;
 }
 
