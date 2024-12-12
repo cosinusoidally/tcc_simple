@@ -193,6 +193,7 @@ int init_runtime(){
   BufferedFile_line_num_o = 16;
   BufferedFile_buffer_o = 1048;
   sizeof_BufferedFile = 1052;
+  sizeof_BufferedFile_filename = 1024;
 
 
   sizeof_void = 4;

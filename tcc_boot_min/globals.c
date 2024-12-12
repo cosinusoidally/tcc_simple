@@ -42,6 +42,7 @@ int BufferedFile_line_num_o;
 int BufferedFile_filename_o;
 int BufferedFile_buffer_o;
 int sizeof_BufferedFile;
+int sizeof_BufferedFile_filename;
 
 int sizeof_void;
 
