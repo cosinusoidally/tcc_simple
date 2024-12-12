@@ -517,6 +517,20 @@ int dynarray_add(int ptab, int nb_ptr, int data) {
     wi32(nb_ptr, nb);
 }
 
+int dynarray_reset(int pp, int n) {
+    int p;
+    p = ri32(pp);
+    while(neq(ri32(n),0 )) {
+        if (neq(p,0)) {
+            tcc_free(ri32(p));
+        }
+        p = add(p, sizeof_void);
+        wi32(n, sub(ri32(n), 1));
+    }
+    wi32(n, 0);
+    tcc_free(ri32(pp));
+    wi32(pp, 0);
+}
 
 /* end of libtcc.c */
 
