@@ -27,7 +27,7 @@
 /********************************************************/
 /* dynarrays */
 
-ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
+int dynarray_add(int ptab, int nb_ptr, int data) {
     int nb;
     int nb_alloc;
     int pp;
