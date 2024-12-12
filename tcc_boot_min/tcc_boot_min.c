@@ -714,6 +714,15 @@ int strstart(int val, int str) {
     return 1;
 }
 
+/* 9 */
+int args_parser_add_file(int s, int filename, int filetype) {
+    int f;
+    f = tcc_malloc(add(sizeof_filespec, strlen(filename)));
+    sfs_type(f, filetype);
+    strcpy(gfs_name(f), filename);
+    dynarray_add(ats_files(s), ats_nb_files(s), f);
+}
+
 /* end of libtcc.c */
 
 int tcc_new() {
