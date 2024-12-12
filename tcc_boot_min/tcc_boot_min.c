@@ -35,6 +35,10 @@ int gfs_type(int o) {
   return ri8(add(o,filespec_type_o));
 }
 
+int sfs_type(int o, int v) {
+  wi8(add(o,filespec_type_o, v));
+}
+
 int gfs_name(int o) {
   return add(o,filespec_name_o);
 }
