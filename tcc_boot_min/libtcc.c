@@ -50,22 +50,20 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
 }
 
 /* 2 */
-ST_FUNC void tcc_close(void)
-{
+ST_FUNC void tcc_close() {
     BufferedFile *bf = file;
-    if (bf->fd > 0) {
+    if (gt(bf->fd, 0)) {
         close(bf->fd);
-        total_lines += bf->line_num;
+        total_lines = add(total_lines, bf->line_num);
     }
     file = bf->prev;
     tcc_free(bf);
 }
 
 /* 3 */
-ST_FUNC int tcc_open(TCCState *s1, const char *filename)
-{
+ST_FUNC int tcc_open(TCCState *s1, const char *filename) {
     int fd;
-    fd = open(filename, O_RDONLY | O_BINARY);
+    fd = open(filename, or(O_RDONLY, O_BINARY));
     tcc_open_bf(s1, filename, 0);
     file->fd = fd;
     return fd;
