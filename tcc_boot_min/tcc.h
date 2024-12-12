@@ -28,7 +28,7 @@
 #include <setjmp.h>
 #include <inttypes.h>
 
-#define O_BINARY 0
+extern int O_BINARY;
 
 /* -------------------------------------------- */
 

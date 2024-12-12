@@ -172,6 +172,9 @@ int init_runtime(){
 
   SYM_FIELD = 536870912; /* 0x20000000 */
 
+  O_RDONLY = 0;
+  O_BINARY = 0;
+
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 
   init_c();

@@ -75,5 +75,8 @@ int SYM_FIELD;
 int aglobal_stack;
 int alocal_stack;
 
+int O_RDONLY;
+int O_BINARY;
+
 /* =============== end globals.c ========================================== */
 
