@@ -97,19 +97,20 @@ static const TCCOption tcc_options[] = {
 };
 
 /* 9 */
-static void args_parser_add_file(TCCState *s, const char* filename, int filetype)
-{
-    struct filespec *f = tcc_malloc(sizeof *f + strlen(filename));
+void args_parser_add_file(TCCState *s, const char* filename, int filetype) {
+    struct filespec *f;
+    f = tcc_malloc(add(sizeof *f, strlen(filename)));
     f->type = filetype;
     strcpy(f->name, filename);
-    dynarray_add(&s->files, &s->nb_files, f);
+    dynarray_add(ats_files(s), ats_nb_files(s), f);
 }
 
 /* 10 */
 PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 {
     const TCCOption *popt;
-    const char *optarg, *r;
+    char *optarg;
+    char *r;
     char **argv = *pargv;
     int argc = *pargc;
 
