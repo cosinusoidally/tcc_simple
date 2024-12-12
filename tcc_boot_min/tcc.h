@@ -604,7 +604,7 @@ int load(int r, SValue *sv);
 int store(int r, SValue *v);
 int gfunc_sret(CType *vt, int variadic, CType *ret, int *align, int *regsize);
 int gfunc_call(int nb_args);
-int gfunc_prolog(CType *func_type);
+int gfunc_prolog(int func_type);
 int gfunc_epilog(void);
 int gjmp(int t);
 int gjmp_addr(int a);

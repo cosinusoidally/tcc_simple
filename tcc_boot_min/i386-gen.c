@@ -2,12 +2,12 @@ extern int func_sub_sp_offset;
 
 /* 15 */
 /* generate function prolog of type 't' */
-int gfunc_prolog(CType *func_type) {
+int gfunc_prolog(int func_type) {
     int addr;
     int align;
     int size;
     int param_addr;
-    Sym *sym;
+    int sym;
     int type;
 
     enter();
