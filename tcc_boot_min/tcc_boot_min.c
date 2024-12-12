@@ -9,6 +9,14 @@ int gts_files(int o) {
   return ri32(add(o, TCCState_files_o));
 }
 
+int ats_nb_files(int o) {
+  return add(o, TCCState_nb_files_o);
+}
+
+int gts_nb_files(int o) {
+  return ri32(add(o, TCCState_nb_files_o));
+}
+
 int gts_filetype(int o) {
   return ri32(add(o, TCCState_filetype_o));
 }
@@ -101,6 +109,7 @@ int init_runtime(){
   printf(mks("blah: %d\n"),add(1,2));
 
   TCCState_files_o = 32;
+  TCCState_nb_files_o = 36;
   TCCState_filetype_o = 40;
   TCCState_outfile_o = 44;
   sizeof_TCCState = 56;
