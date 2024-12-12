@@ -20,7 +20,11 @@ int gfunc_prolog(int func_type) {
     ind = add(ind, FUNC_PROLOG_SIZE);
     func_sub_sp_offset = ind;
     /* define parameters */
-    while (neq((sym = gsym_next(sym)), 0)) {
+    while (1) {
+        sym = gsym_next(sym);
+        if(eq(sym, 0)) {
+            break;
+        }
         type = gsym_type(sym);
         size = type_size(type, align);
         size = and(add(size, 3), not(3));
