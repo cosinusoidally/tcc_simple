@@ -27,7 +27,7 @@
 /********************************************************/
 /* I/O layer */
 /* 1 */
-ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
+void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     BufferedFile *bf;
     int buflen;
 
@@ -37,16 +37,16 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
         buflen = IO_BUF_SIZE;
     }
 
-    bf = tcc_mallocz(sizeof(BufferedFile) + buflen);
+    bf = tcc_mallocz(add(sizeof_BufferedFile, buflen));
     bf->buf_ptr = bf->buffer;
-    bf->buf_end = bf->buffer + initlen;
+    bf->buf_end = add(bf->buffer, initlen);
     bf->buf_end[0] = CH_EOB; /* put eob symbol */
     pstrcpy(bf->filename, sizeof(bf->filename), filename);
-    bf->line_num = 1;
-    bf->fd = -1;
+    sbf_line_num(bf, 1);
+    sbf_fd(bf, sub(0, 1));
     bf->prev = file;
     file = bf;
-    tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
+    tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
 }
 
 int init_globals() {
