@@ -578,6 +578,23 @@ int tcc_add_file(int s, int filename) {
     return tcc_add_file_internal(s, filename, 0);
 }
 
+/* 8 */
+int strstart(int val, int str) {
+    int p;
+    int q;
+    p = ri32(str);
+    q = val;
+    while (neq(ri8(q),0)) {
+        if (neq(ri8(p), ri8(q))) {
+            return 0;
+        }
+        p = add(p, 1);
+        q = add(q, 1);
+    }
+    wi32(str, p);
+    return 1;
+}
+
 /* end of libtcc.c */
 
 int tcc_new() {

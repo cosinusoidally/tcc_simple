@@ -74,23 +74,6 @@ int init_globals() {
     alocal_stack = &local_stack;
 }
 
-/* 8 */
-static int strstart(const char *val, const char **str) {
-    int p;
-    int q;
-    p = ri32(str);
-    q = val;
-    while (neq(ri8(q),0)) {
-        if (neq(ri8(p), ri8(q))) {
-            return 0;
-        }
-        p = add(p, 1);
-        q = add(q, 1);
-    }
-    wi32(str, p);
-    return 1;
-}
-
 typedef struct TCCOption {
     const char *name;
     uint16_t index;
