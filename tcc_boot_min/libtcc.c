@@ -49,18 +49,6 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
 }
 
-/* 2 */
-ST_FUNC void tcc_close() {
-    int bf;
-    bf = file;
-    if (gt(gbf_fd(bf), 0)) {
-        close(gbf_fd(bf));
-        total_lines = add(total_lines, gbf_line_num(bf));
-    }
-    file = gbf_prev(bf);
-    tcc_free(bf);
-}
-
 int init_globals() {
     aglobal_stack = &global_stack;
     alocal_stack = &local_stack;

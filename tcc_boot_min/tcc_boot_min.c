@@ -565,6 +565,17 @@ int dynarray_reset(int pp, int n) {
     wi32(pp, 0);
 }
 
+/* 2 */
+int tcc_close() {
+    int bf;
+    bf = file;
+    if (gt(gbf_fd(bf), 0)) {
+        close(gbf_fd(bf));
+    }
+    file = gbf_prev(bf);
+    tcc_free(bf);
+}
+
 /* 3 */
 int tcc_open(int s1, int filename) {
     int fd;
