@@ -81,6 +81,10 @@ int gsym_v(int o) {
   return ri32(add(o, Sym_v_o)); /* int v */
 }
 
+int gsym_next(int o) {
+  return ri32(add(o, Sym_next_o)); /* struct Sym *next */
+}
+
 /* stuff */
 
 int init_runtime(){
@@ -116,6 +120,7 @@ int init_runtime(){
 
   Sym_v_o = 0;
   Sym_type_o = 20;
+  Sym_next_o = 28;
   sizeof_Sym = 40;
 
   FUNC_PROLOG_SIZE = 9;

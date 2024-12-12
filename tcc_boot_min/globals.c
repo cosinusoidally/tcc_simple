@@ -30,6 +30,7 @@ int sizeof_CType;
 
 int Sym_v_o;
 int Sym_type_o;
+int Sym_next_o;
 int sizeof_Sym;
 
 int tcc_state;
