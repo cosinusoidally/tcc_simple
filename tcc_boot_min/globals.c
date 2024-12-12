@@ -35,6 +35,8 @@ int Sym_next_o;
 int sizeof_Sym;
 
 int BufferedFile_fd_o;
+int BufferedFile_prev_o;
+int BufferedFile_line_num_o;
 int sizeof_BufferedFile;
 
 int sizeof_void;

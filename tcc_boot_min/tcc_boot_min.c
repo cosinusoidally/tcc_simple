@@ -151,6 +151,8 @@ int init_runtime(){
   sizeof_Sym = 40;
 
   BufferedFile_fd_o = 8;
+  BufferedFile_prev_o = 12;
+  BufferedFile_line_num_o = 16;
   sizeof_BufferedFile = 1052;
 
 
