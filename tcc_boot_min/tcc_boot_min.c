@@ -200,7 +200,6 @@ int init_runtime(){
   sizeof_BufferedFile = 1052;
   sizeof_BufferedFile_filename = 1024;
 
-
   sizeof_void = 4;
 
   FUNC_PROLOG_SIZE = 9;
@@ -225,6 +224,8 @@ int init_runtime(){
 
   O_RDONLY = 0;
   O_BINARY = 0;
+
+  CH_EOB = mkc('\\');
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 

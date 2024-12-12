@@ -219,7 +219,7 @@ typedef struct BufferedFile {
     unsigned char buffer[1]; /* extra size for CH_EOB char */
 } BufferedFile;
 
-#define CH_EOB   '\\'       /* end of buffer or '\0' char in file */
+extern int CH_EOB; /* '\\'   end of buffer or '\0' char in file */
 #define CH_EOF   (-1)   /* end of file */
 
 /* used to record tokens */
