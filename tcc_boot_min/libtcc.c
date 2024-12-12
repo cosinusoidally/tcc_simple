@@ -35,7 +35,7 @@ ST_FUNC void dynarray_reset(void *pp, int *n) {
             tcc_free(ri32(p));
         }
         p++;
-        --*n;
+        wi32(n, sub(ri32(n), 1));
     }
     tcc_free(*(void**)pp);
     *(void**)pp = NULL;
