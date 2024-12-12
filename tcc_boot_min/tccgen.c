@@ -35,7 +35,6 @@ ST_DATA int nb_sym_pools;
 
 ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
-ST_DATA Sym *define_stack;
 ST_DATA Sym *global_label_stack;
 ST_DATA Sym *local_label_stack;
 static int local_scope;

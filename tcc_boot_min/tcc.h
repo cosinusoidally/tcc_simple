@@ -465,7 +465,6 @@ ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
 ST_DATA Sym *local_label_stack;
 ST_DATA Sym *global_label_stack;
-ST_DATA Sym *define_stack;
 ST_DATA CType char_pointer_type, func_old_type, int_type, size_type;
 ST_DATA SValue __vstack[1+/*to make bcheck happy*/ VSTACK_SIZE], *pvtop;
 extern SValue *vtop;
