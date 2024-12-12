@@ -432,6 +432,8 @@ int gen_opi(int op) {
 
 /* end of i386-gen.c */
 
+/* start of libtcc.c */
+
 /* copy a string and truncate it. */
 int pstrcpy(int buf, int buf_size, int s) {
     int q;
@@ -454,8 +456,6 @@ int pstrcpy(int buf, int buf_size, int s) {
     }
     return buf;
 }
-
-/* start of libtcc.c */
 
 /* end of libtcc.c */
 
