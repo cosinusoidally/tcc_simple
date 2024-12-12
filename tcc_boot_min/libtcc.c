@@ -36,10 +36,11 @@ ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
     pp = *(void ***)ptab;
     /* every power of two we double array size */
     if (eq(and(nb, sub(nb, 1)), 0)) {
-        if (!nb)
+        if (eq(nb, 0)) {
             nb_alloc = 1;
-        else
+        } else {
             nb_alloc = nb * 2;
+        }
         pp = tcc_realloc(pp, nb_alloc * sizeof(void *));
         *(void***)ptab = pp;
     }
