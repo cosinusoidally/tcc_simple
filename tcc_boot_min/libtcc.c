@@ -33,8 +33,6 @@ ST_DATA int tcc_ext = 1;
 #include "tccgen.c"
 #include "tccelf.c"
 
-#include "i386-gen.c"
-
 /********************************************************/
 /* copy a string and truncate it. */
 ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
