@@ -28,7 +28,8 @@
 /* copy a string and truncate it. */
 ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
 {
-    char *q, *q_end;
+    char *q;
+    char *q_end;
     int c;
 
     if (buf_size > 0) {
@@ -36,11 +37,11 @@ ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
         q_end = buf + buf_size - 1;
         while (q < q_end) {
             c = *s++;
-            if (c == '\0')
+            if (c == 0)
                 break;
             *q++ = c;
         }
-        *q = '\0';
+        *q = 0;
     }
     return buf;
 }
