@@ -64,5 +64,7 @@ int RC_EAX;
 int RC_ECX;
 int RC_IRET;
 
+int SYM_FIELD;
+
 /* =============== end globals.c ========================================== */
 

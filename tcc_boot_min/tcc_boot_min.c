@@ -141,6 +141,7 @@ int init_runtime(){
   RC_ECX = 16;
   RC_IRET = RC_EAX;
 
+  SYM_FIELD = 536870912; /* 0x20000000 */
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 
