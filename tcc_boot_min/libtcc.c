@@ -25,39 +25,6 @@
 #include "tccelf.c"
 
 /********************************************************/
-/* memory management */
-
-int tcc_free(int ptr) {
-    free(ptr);
-}
-
-int tcc_malloc(int size) {
-    int ptr;
-    ptr = malloc(size);
-    return ptr;
-}
-
-int tcc_mallocz(int size) {
-    int ptr;
-    ptr = tcc_malloc(size);
-    memset(ptr, 0, size);
-    return ptr;
-}
-
-int tcc_realloc(int ptr, int size) {
-    int ptr1;
-    ptr1 = realloc(ptr, size);
-    return ptr1;
-}
-
-int tcc_strdup(int str) {
-    int ptr;
-    ptr = tcc_malloc(add(strlen(str), 1));
-    strcpy(ptr, str);
-    return ptr;
-}
-
-/********************************************************/
 /* dynarrays */
 
 ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data)
