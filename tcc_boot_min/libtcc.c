@@ -26,7 +26,7 @@
 
 /********************************************************/
 /* I/O layer */
-
+/* 1 */
 ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     BufferedFile *bf;
     int buflen;
@@ -49,6 +49,7 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
 }
 
+/* 2 */
 ST_FUNC void tcc_close(void)
 {
     BufferedFile *bf = file;
@@ -60,6 +61,7 @@ ST_FUNC void tcc_close(void)
     tcc_free(bf);
 }
 
+/* 3 */
 ST_FUNC int tcc_open(TCCState *s1, const char *filename)
 {
     int fd;
@@ -69,6 +71,7 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename)
     return fd;
 }
 
+/* 4 */
 /* compile the file opened in 'file'. Return non zero if errors. */
 static int tcc_compile(TCCState *s1)
 {
@@ -89,6 +92,7 @@ static int tcc_compile(TCCState *s1)
     return 0;
 }
 
+/* 5 */
 LIBTCCAPI void tcc_delete(TCCState *s1)
 {
     /* free sections */
@@ -101,6 +105,7 @@ LIBTCCAPI void tcc_delete(TCCState *s1)
     tcc_free(s1);
 }
 
+/* 6 */
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
 {
     int ret;
@@ -113,6 +118,7 @@ ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
     return ret;
 }
 
+/* 7 */
 LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
 {
     int filetype = s->filetype;
@@ -122,6 +128,7 @@ LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
 #define WD_ALL    0x0001 /* warning is activated when using -Wall */
 #define FD_INVERT 0x0002 /* invert value before storing */
 
+/* 8 */
 static int strstart(const char *val, const char **str)
 {
     const char *p, *q;
@@ -159,6 +166,7 @@ static const TCCOption tcc_options[] = {
     { NULL, 0, 0 },
 };
 
+/* 9 */
 static void args_parser_add_file(TCCState *s, const char* filename, int filetype)
 {
     struct filespec *f = tcc_malloc(sizeof *f + strlen(filename));
@@ -167,6 +175,7 @@ static void args_parser_add_file(TCCState *s, const char* filename, int filetype
     dynarray_add(&s->files, &s->nb_files, f);
 }
 
+/* 10 */
 PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
 {
     const TCCOption *popt;
