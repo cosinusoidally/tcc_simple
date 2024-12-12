@@ -74,9 +74,6 @@ int init_globals() {
     alocal_stack = &local_stack;
 }
 
-#define WD_ALL    0x0001 /* warning is activated when using -Wall */
-#define FD_INVERT 0x0002 /* invert value before storing */
-
 /* 8 */
 static int strstart(const char *val, const char **str)
 {
