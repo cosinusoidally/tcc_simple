@@ -75,16 +75,17 @@ int init_globals() {
 }
 
 /* 8 */
-static int strstart(const char *val, const char **str)
-{
-    const char *p, *q;
+static int strstart(const char *val, const char **str) {
+    char *p;
+    char *q;
     p = *str;
     q = val;
-    while (*q) {
-        if (*p != *q)
+    while (neq(ri8(q),0)) {
+        if (neq(ri8(p), ri8(q))) {
             return 0;
-        p++;
-        q++;
+        }
+        p = add(p, 1);
+        q = add(q, 1);
     }
     *str = p;
     return 1;
