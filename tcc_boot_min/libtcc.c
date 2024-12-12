@@ -29,15 +29,13 @@
 
 ST_FUNC void dynarray_reset(void *pp, int *n) {
     void **p;
-    while(1) {
-        p = *(void***)pp;
-        if(eq(ri32(n),0)) {
-            break;
-        }
-        --*n;
+    p = *(void***)pp;
+    while(neq(ri32(n),0 )) {
         if (neq(p,0)) {
-            tcc_free(*p);
+            tcc_free(ri32(p));
         }
+        p++;
+        --*n;
     }
     tcc_free(*(void**)pp);
     *(void**)pp = NULL;
