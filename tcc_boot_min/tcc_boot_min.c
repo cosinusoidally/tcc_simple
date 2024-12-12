@@ -29,6 +29,10 @@ int gts_outfile(int o) {
   ri32(add(o, TCCState_outfile_o));
 }
 
+int sts_outfile(int o,int v) {
+  wi32(add(o, TCCState_outfile_o), v);
+}
+
 /* struct filespec accessors */
 
 int gfs_type(int o) {
