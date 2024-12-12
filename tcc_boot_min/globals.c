@@ -33,6 +33,8 @@ int Sym_type_o;
 int Sym_next_o;
 int sizeof_Sym;
 
+int sizeof_void;
+
 int tcc_state;
 
 int FUNC_PROLOG_SIZE;

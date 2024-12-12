@@ -33,7 +33,7 @@ ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
     void **pp;
 
     nb = ri32(nb_ptr);
-    pp = *(void ***)ptab;
+    pp = ri32(ptab);
     /* every power of two we double array size */
     if (eq(and(nb, sub(nb, 1)), 0)) {
         if (eq(nb, 0)) {
@@ -42,7 +42,7 @@ ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
             nb_alloc = nb * 2;
         }
         pp = tcc_realloc(pp, nb_alloc * sizeof(void *));
-        *(void***)ptab = pp;
+        wi32(ptab, pp);
     }
     pp[nb] = data;
     nb = add(nb, 1);

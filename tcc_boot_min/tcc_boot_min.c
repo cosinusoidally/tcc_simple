@@ -123,6 +123,8 @@ int init_runtime(){
   Sym_next_o = 28;
   sizeof_Sym = 40;
 
+  sizeof_void = 4;
+
   FUNC_PROLOG_SIZE = 9;
 
   VT_VALMASK = 63;
