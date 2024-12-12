@@ -74,19 +74,6 @@ int init_globals() {
     alocal_stack = &local_stack;
 }
 
-/* 6 */
-ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
-{
-    int ret;
-
-    /* open the file */
-    ret = tcc_open(s1, filename);
-
-    ret = tcc_compile(s1);
-    tcc_close();
-    return ret;
-}
-
 #define WD_ALL    0x0001 /* warning is activated when using -Wall */
 #define FD_INVERT 0x0002 /* invert value before storing */
 

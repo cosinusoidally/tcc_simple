@@ -559,6 +559,18 @@ int tcc_delete(int s1) {
     tcc_free(s1);
 }
 
+/* 6 */
+int tcc_add_file_internal(int s1, int filename, int flags) {
+    int ret;
+
+    /* open the file */
+    ret = tcc_open(s1, filename);
+
+    ret = tcc_compile(s1);
+    tcc_close();
+    return ret;
+}
+
 /* 7 */
 int tcc_add_file(int s, int filename) {
     int filetype;
