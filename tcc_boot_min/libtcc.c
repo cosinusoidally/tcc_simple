@@ -26,24 +26,24 @@
 
 /********************************************************/
 /* copy a string and truncate it. */
-ST_FUNC char *pstrcpy(char *buf, int buf_size, const char *s)
-{
-    char *q;
-    char *q_end;
+char *pstrcpy(char *buf, int buf_size, const char *s) {
+    int q;
+    int q_end;
     int c;
 
     if (gt(buf_size, 0)) {
         q = buf;
         q_end = sub(add(buf, buf_size), 1);
         while (neq(sub(q, q_end), 0)) {
-            c = *s;
+            c = ri8(s);
             s = add(s, 1);
-            if (eq(c, 0))
+            if (eq(c, 0)) {
                 break;
-            *q = c;
+            }
+            wi8(q, c);
             q = add(q, 1);
         }
-        *q = 0;
+        wi8(q, 0);
     }
     return buf;
 }
