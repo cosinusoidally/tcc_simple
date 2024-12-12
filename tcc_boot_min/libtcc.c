@@ -27,10 +27,15 @@
 /********************************************************/
 /* I/O layer */
 
-ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen)
-{
+ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     BufferedFile *bf;
-    int buflen = initlen ? initlen : IO_BUF_SIZE;
+    int buflen;
+
+    if(neq(initlen,0)) {
+        buflen = initlen;
+    } else {
+        buflen = IO_BUF_SIZE;
+    }
 
     bf = tcc_mallocz(sizeof(BufferedFile) + buflen);
     bf->buf_ptr = bf->buffer;
