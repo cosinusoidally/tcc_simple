@@ -34,6 +34,9 @@ int Sym_type_o;
 int Sym_next_o;
 int sizeof_Sym;
 
+int BufferedFile_fd_o;
+int sizeof_BufferedFile;
+
 int sizeof_void;
 
 int tcc_state;

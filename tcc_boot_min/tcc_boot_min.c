@@ -101,6 +101,12 @@ int gsym_next(int o) {
   return ri32(add(o, Sym_next_o)); /* struct Sym *next */
 }
 
+/* BufferedFile accessors */
+
+int sbf_fd(int o, int v) {
+  wi32(add(o, BufferedFile_fd_o), v);
+}
+
 /* stuff */
 
 int init_runtime(){
@@ -139,6 +145,10 @@ int init_runtime(){
   Sym_type_o = 20;
   Sym_next_o = 28;
   sizeof_Sym = 40;
+
+  BufferedFile_fd_o = 8;
+  sizeof_BufferedFile = 1052;
+
 
   sizeof_void = 4;
 
