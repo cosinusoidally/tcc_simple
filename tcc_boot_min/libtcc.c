@@ -27,28 +27,6 @@
 /********************************************************/
 /* dynarrays */
 
-int dynarray_add(int ptab, int nb_ptr, int data) {
-    int nb;
-    int nb_alloc;
-    int pp;
-
-    nb = ri32(nb_ptr);
-    pp = ri32(ptab);
-    /* every power of two we double array size */
-    if (eq(and(nb, sub(nb, 1)), 0)) {
-        if (eq(nb, 0)) {
-            nb_alloc = 1;
-        } else {
-            nb_alloc = mul(nb, 2);
-        }
-        pp = tcc_realloc(pp, mul(nb_alloc, sizeof_void));
-        wi32(ptab, pp);
-    }
-    wi32(add(pp, mul(nb, sizeof_void)), data);
-    nb = add(nb, 1);
-    wi32(nb_ptr, nb);
-}
-
 ST_FUNC void dynarray_reset(void *pp, int *n)
 {
     void **p;
