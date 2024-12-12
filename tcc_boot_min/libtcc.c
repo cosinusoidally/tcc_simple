@@ -57,9 +57,10 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
     const TCCOption *popt;
     char *optarg;
     char *r;
+    char *p1;
+    char *r1;
     char **argv = *pargv;
     int argc = *pargc;
-
 
     while (lt(optind, argc)) {
         r = ri32(add(argv, mul(optind, 4)));
@@ -68,9 +69,10 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
             args_parser_add_file(s, r, gts_filetype(s));
         } else {
             /* find option in table */
-            for(popt = tcc_options; ; ) {
-                const char *p1 = popt->name;
-                const char *r1 = r + 1;
+            popt = tcc_options;
+            while(1) {
+                p1 = popt->name;
+                r1 = add(r, 1);
                 if (strstart(p1, &r1)) {
                     optarg = r1;
                     if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
