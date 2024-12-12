@@ -28,17 +28,18 @@
 /* dynarrays */
 
 ST_FUNC void dynarray_reset(void *pp, int *n) {
-    void **p;
-    p = *(void***)pp;
+    int p;
+    p = ri32(pp);
     while(neq(ri32(n),0 )) {
         if (neq(p,0)) {
             tcc_free(ri32(p));
         }
-        p++;
+        p = add(p, sizeof_void);
         wi32(n, sub(ri32(n), 1));
     }
-    tcc_free(*(void**)pp);
-    *(void**)pp = NULL;
+    wi32(n, 0);
+    tcc_free(ri32(pp));
+    wi32(pp, 0);
 }
 
 /********************************************************/
