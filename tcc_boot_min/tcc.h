@@ -632,6 +632,7 @@ extern int FUNC_PROLOG_SIZE;
 extern int sizeof_void;
 extern int sizeof_BufferedFile;
 extern int sizeof_BufferedFile_filename;
+extern int sizeof_filespec;
 
 extern int aglobal_stack;
 extern int alocal_stack;

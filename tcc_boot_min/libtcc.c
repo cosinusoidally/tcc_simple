@@ -54,7 +54,7 @@ static const TCCOption tcc_options[] = {
 /* 9 */
 void args_parser_add_file(TCCState *s, const char* filename, int filetype) {
     struct filespec *f;
-    f = tcc_malloc(add(sizeof *f, strlen(filename)));
+    f = tcc_malloc(add(sizeof_filespec, strlen(filename)));
     f->type = filetype;
     strcpy(f->name, filename);
     dynarray_add(ats_files(s), ats_nb_files(s), f);
