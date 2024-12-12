@@ -25,30 +25,6 @@
 #include "tccelf.c"
 
 /********************************************************/
-/* copy a string and truncate it. */
-char *pstrcpy(char *buf, int buf_size, const char *s) {
-    int q;
-    int q_end;
-    int c;
-
-    if (gt(buf_size, 0)) {
-        q = buf;
-        q_end = sub(add(buf, buf_size), 1);
-        while (neq(sub(q, q_end), 0)) {
-            c = ri8(s);
-            s = add(s, 1);
-            if (eq(c, 0)) {
-                break;
-            }
-            wi8(q, c);
-            q = add(q, 1);
-        }
-        wi8(q, 0);
-    }
-    return buf;
-}
-
-/********************************************************/
 /* memory management */
 
 #undef free
