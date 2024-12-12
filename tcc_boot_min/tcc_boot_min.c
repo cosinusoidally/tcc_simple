@@ -1,8 +1,12 @@
 
 /* TCCState accessors */
 
+int ats_files(int o) {
+  return ri32(add(o, TCCState_files_o));
+}
+
 int gts_files(int o) {
-  ri32(add(o, TCCState_files_o));
+  return ri32(add(o, TCCState_files_o));
 }
 
 int gts_filetype(int o) {

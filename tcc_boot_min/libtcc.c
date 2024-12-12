@@ -77,12 +77,11 @@ int init_globals() {
 }
 
 /* 5 */
-LIBTCCAPI void tcc_delete(TCCState *s1)
-{
+LIBTCCAPI void tcc_delete(TCCState *s1) {
     /* free sections */
     tccelf_delete(s1);
 
-    tcc_free(s1->outfile);
+    tcc_free(gts_outfile(s1));
     dynarray_reset(&s1->files, &s1->nb_files);
     dynarray_reset(&s1->argv, &s1->argc);
 
