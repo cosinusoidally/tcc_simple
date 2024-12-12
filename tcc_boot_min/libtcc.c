@@ -27,15 +27,15 @@
 /********************************************************/
 /* dynarrays */
 
-ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data)
-{
-    int nb, nb_alloc;
+ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
+    int nb;
+    int nb_alloc;
     void **pp;
 
-    nb = *nb_ptr;
+    nb = ri32(nb_ptr);
     pp = *(void ***)ptab;
     /* every power of two we double array size */
-    if ((nb & (nb - 1)) == 0) {
+    if (eq(and(nb, sub(nb, 1)), 0)) {
         if (!nb)
             nb_alloc = 1;
         else
@@ -44,7 +44,7 @@ ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data)
         *(void***)ptab = pp;
     }
     pp[nb++] = data;
-    *nb_ptr = nb;
+    wi32(nb_ptr, nb);
 }
 
 ST_FUNC void dynarray_reset(void *pp, int *n)
