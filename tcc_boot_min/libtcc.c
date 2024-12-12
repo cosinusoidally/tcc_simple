@@ -27,7 +27,7 @@
 /********************************************************/
 /* dynarrays */
 
-ST_FUNC void dynarray_reset(void *pp, int *n) {
+int dynarray_reset(int pp, int n) {
     int p;
     p = ri32(pp);
     while(neq(ri32(n),0 )) {

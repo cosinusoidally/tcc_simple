@@ -348,7 +348,7 @@ PUB_FUNC void tcc_warning(const char *fmt, ...);
 
 /* other utilities */
 int dynarray_add(int ptab, int nb_ptr, int data);
-ST_FUNC void dynarray_reset(void *pp, int *n);
+int dynarray_reset(int pp, int n);
 ST_INLN void cstr_ccat(CString *cstr, int ch);
 ST_FUNC void cstr_cat(CString *cstr, const char *str, int len);
 ST_FUNC void cstr_wccat(CString *cstr, int ch);
