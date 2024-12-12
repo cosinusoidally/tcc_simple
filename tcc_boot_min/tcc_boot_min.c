@@ -559,6 +559,13 @@ int tcc_delete(int s1) {
     tcc_free(s1);
 }
 
+/* 7 */
+int tcc_add_file(int s, int filename) {
+    int filetype;
+    filetype = gts_filetype(s);
+    return tcc_add_file_internal(s, filename, 0);
+}
+
 /* end of libtcc.c */
 
 int tcc_new() {

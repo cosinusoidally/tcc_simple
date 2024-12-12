@@ -89,13 +89,6 @@ ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
     return ret;
 }
 
-/* 7 */
-LIBTCCAPI int tcc_add_file(TCCState *s, const char *filename)
-{
-    int filetype = s->filetype;
-    return tcc_add_file_internal(s, filename, 0);
-}
-
 #define WD_ALL    0x0001 /* warning is activated when using -Wall */
 #define FD_INVERT 0x0002 /* invert value before storing */
 
