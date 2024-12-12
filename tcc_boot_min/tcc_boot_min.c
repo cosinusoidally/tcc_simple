@@ -153,6 +153,7 @@ int init_runtime(){
 
   init_c();
   init_reg_classes();
+  init_globals();
 }
 
 /* i386-gen.c */

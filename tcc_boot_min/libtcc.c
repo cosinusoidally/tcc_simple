@@ -71,6 +71,11 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename)
     return fd;
 }
 
+int init_globals() {
+    aglobal_stack = &global_stack;
+    alocal_stack = &local_stack;
+}
+
 /* 4 */
 /* compile the file opened in 'file'. Return non zero if errors. */
 static int tcc_compile(TCCState *s1) {
@@ -83,8 +88,8 @@ static int tcc_compile(TCCState *s1) {
     tccgen_compile(s1);
 
     /* reset define stack, but keep -D and built-ins */
-    sym_pop(&global_stack, NULL, 0);
-    sym_pop(&local_stack, NULL, 0);
+    sym_pop(aglobal_stack, 0, 0);
+    sym_pop(alocal_stack, 0, 0);
     tccelf_end_file(s1);
     return 0;
 }

@@ -68,5 +68,8 @@ int RC_IRET;
 
 int SYM_FIELD;
 
+int aglobal_stack;
+int alocal_stack;
+
 /* =============== end globals.c ========================================== */
 

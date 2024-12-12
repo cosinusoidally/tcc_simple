@@ -631,3 +631,6 @@ extern int sizeof_TCCState;
 extern int sizeof_SValue;
 extern int FUNC_PROLOG_SIZE;
 extern int sizeof_void;
+
+extern int aglobal_stack;
+extern int alocal_stack;
