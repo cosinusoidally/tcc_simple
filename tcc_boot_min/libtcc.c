@@ -39,9 +39,9 @@ ST_FUNC void dynarray_add(void *ptab, int *nb_ptr, void *data) {
         if (eq(nb, 0)) {
             nb_alloc = 1;
         } else {
-            nb_alloc = nb * 2;
+            nb_alloc = mul(nb, 2);
         }
-        pp = tcc_realloc(pp, nb_alloc * sizeof(void *));
+        pp = tcc_realloc(pp, mul(nb_alloc, sizeof_void));
         wi32(ptab, pp);
     }
     pp[nb] = data;
