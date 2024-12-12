@@ -40,7 +40,7 @@ void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
     bf = tcc_mallocz(add(sizeof_BufferedFile, buflen));
     bf->buf_ptr = bf->buffer;
     bf->buf_end = add(bf->buffer, initlen);
-    bf->buf_end[0] = CH_EOB; /* put eob symbol */
+    wi8(bf->buf_end, CH_EOB); /* put eob symbol */
     pstrcpy(bf->filename, sizeof(bf->filename), filename);
     sbf_line_num(bf, 1);
     sbf_fd(bf, sub(0, 1));
