@@ -158,7 +158,6 @@ int init_reg_classes() {
   wi32(add(reg_classes, 4), or(RC_INT, RC_ECX));
 }
 
-/* 1 */
 /* XXX: make it faster ? */
 int g(int c) {
     int ind1;
@@ -170,7 +169,6 @@ int g(int c) {
     ind = ind1;
 }
 
-/* 2 */
 int o(int c) {
     while (neq(0, c)) {
         g(c);
@@ -178,7 +176,6 @@ int o(int c) {
     }
 }
 
-/* 3 */
 int gen_le32(int c) {
     g(c);
     g(shr(c, 8));
@@ -186,7 +183,6 @@ int gen_le32(int c) {
     g(shr(c, 24));
 }
 
-/* 4 */
 /* output a symbol and patch all calls to it */
 int gsym_addr(int t, int a) {
     int ptr;
@@ -200,12 +196,10 @@ int gsym_addr(int t, int a) {
     }
 }
 
-/* 5 */
 int gsym(int t) {
     gsym_addr(t, ind);
 }
 
-/* 6 */
 /* instruction + 4 bytes data. Return the address of the data */
 int oad(int c, int s) {
     int t;
@@ -215,13 +209,11 @@ int oad(int c, int s) {
     return t;
 }
 
-/* 7 */
 /* generate jmp to a label */
 int gjmp2(int instr,int lbl) {
     return oad(instr,lbl);
 }
 
-/* 8 */
 /* output constant with relocation if 'r & VT_SYM' is true */
 int gen_addr32(int r, int sym, int c) {
     if (and(r, VT_SYM)) {
@@ -230,7 +222,6 @@ int gen_addr32(int r, int sym, int c) {
     gen_le32(c);
 }
 
-/* 9 */
 /* generate a modrm reference. 'op_reg' contains the additional 3
    opcode bits */
 int gen_modrm(int op_reg, int r, int sym, int c) {
@@ -253,7 +244,6 @@ int gen_modrm(int op_reg, int r, int sym, int c) {
     }
 }
 
-/* 10 */
 /* load 'r' from value 'sv' */
 int load(int r, int sv) {
     int v;
@@ -272,14 +262,12 @@ int load(int r, int sv) {
     }
 }
 
-/* 11 */
 /* store register 'r' in lvalue 'v' */
 int store(int r, int v) {
     o(137); /* 0x89 */
     gen_modrm(r, gsv_r(v), gsv_sym(v), gcv_i(gsv_c(v)));
 }
 
-/* 12 */
 int gadd_sp(int val) {
     if (eq(val, movsx_eax_al(val))) {
         o(50307); /* 0xc483 */
@@ -289,7 +277,6 @@ int gadd_sp(int val) {
     }
 }
 
-/* 13 */
 /* 'is_jmp' is '1' if it is a jump */
 int gcall_or_jmp(int is_jmp) {
     int r;
@@ -299,7 +286,6 @@ int gcall_or_jmp(int is_jmp) {
     oad(add(232, is_jmp), sub(gcv_i(gsv_c(vtop)), 4)); /* 0xe8 call/jmp im */
 }
 
-/* 14 */
 /* Generate function call. The function address is pushed first, then
    all the parameters in call order. This functions pops all the
    parameters and the function address. */
@@ -327,7 +313,6 @@ int gfunc_call(int nb_args) {
     vtop = sub(vtop, sizeof_SValue);
 }
 
-/* 15 */
 /* generate function prolog of type 't' */
 int gfunc_prolog(int func_type) {
     int addr;
@@ -363,7 +348,6 @@ int gfunc_prolog(int func_type) {
     leave(0);
 }
 
-/* 16 */
 /* generate function epilog */
 int gfunc_epilog() {
     int v;
@@ -382,13 +366,11 @@ int gfunc_epilog() {
     ind = saved_ind;
 }
 
-/* 17 */
 /* generate a jump to a label */
 int gjmp(int t) {
     return gjmp2(233, t); /* 0xe9 */
 }
 
-/* 18 */
 /* generate a jump to a fixed address */
 int gjmp_addr(int a) {
     int r;
@@ -401,7 +383,6 @@ int gjmp_addr(int a) {
     }
 }
 
-/* 19 */
 /* generate a test. set 'inv' to invert test. Stack entry is popped */
 int gtst(int inv, int t) {
     g(15); /* 0x0f */
@@ -410,7 +391,6 @@ int gtst(int inv, int t) {
     return t;
 }
 
-/* 20 */
 /* generate an integer binary operation */
 int gen_opi(int op) {
     int r;
