@@ -27,12 +27,13 @@
 /********************************************************/
 /* dynarrays */
 
-ST_FUNC void dynarray_reset(void *pp, int *n)
-{
+ST_FUNC void dynarray_reset(void *pp, int *n) {
     void **p;
-    for (p = *(void***)pp; *n; ++p, --*n)
-        if (*p)
+    for (p = *(void***)pp; *n; ++p, --*n) {
+        if (neq(p,0)) {
             tcc_free(*p);
+        }
+    }
     tcc_free(*(void**)pp);
     *(void**)pp = NULL;
 }
