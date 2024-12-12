@@ -73,8 +73,12 @@ int gct_ref(int o) {
 
 /* Sym accessors */
 
+int gsym_type(int o) {
+  return add(o, Sym_type_o); /* CType type */
+}
+
 int gsym_v(int o) {
-  return ri32(add(o, Sym_v_o));
+  return ri32(add(o, Sym_v_o)); /* int v */
 }
 
 /* stuff */
