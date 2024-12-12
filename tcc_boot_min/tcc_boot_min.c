@@ -143,6 +143,10 @@ int sbf_line_num(int o, int v) {
   wi32(add(o, BufferedFile_line_num_o), v);
 }
 
+int gbf_filename(int o){
+  return add(o, BufferedFile_filename_o); /* char filename[1024] */
+}
+
 int gbf_buffer(int o){
   return add(o, BufferedFile_buffer_o); /* unsigned char buffer[1] */
 }
