@@ -27,39 +27,30 @@
 /********************************************************/
 /* memory management */
 
-#undef free
-#undef malloc
-#undef realloc
-
-PUB_FUNC void tcc_free(void *ptr)
-{
+int tcc_free(int ptr) {
     free(ptr);
 }
 
-PUB_FUNC void *tcc_malloc(unsigned long size)
-{
-    void *ptr;
+int tcc_malloc(unsigned long size) {
+    int ptr;
     ptr = malloc(size);
     return ptr;
 }
 
-PUB_FUNC void *tcc_mallocz(unsigned long size)
-{
-    void *ptr;
+int tcc_mallocz(unsigned long size) {
+    int ptr;
     ptr = tcc_malloc(size);
     memset(ptr, 0, size);
     return ptr;
 }
 
-PUB_FUNC void *tcc_realloc(void *ptr, unsigned long size)
-{
+int tcc_realloc(void *ptr, unsigned long size) {
     void *ptr1;
     ptr1 = realloc(ptr, size);
     return ptr1;
 }
 
-PUB_FUNC char *tcc_strdup(const char *str)
-{
+int tcc_strdup(const char *str) {
     char *ptr;
     ptr = tcc_malloc(strlen(str) + 1);
     strcpy(ptr, str);

@@ -336,11 +336,11 @@ ST_FUNC char *pstrncpy(char *out, const char *in, size_t num);
 PUB_FUNC char *tcc_basename(const char *name);
 PUB_FUNC char *tcc_fileextension (const char *name);
 
-PUB_FUNC void tcc_free(void *ptr);
-PUB_FUNC void *tcc_malloc(unsigned long size);
-PUB_FUNC void *tcc_mallocz(unsigned long size);
-PUB_FUNC void *tcc_realloc(void *ptr, unsigned long size);
-PUB_FUNC char *tcc_strdup(const char *str);
+PUB_FUNC int tcc_free(int ptr);
+PUB_FUNC int tcc_malloc(unsigned long size);
+PUB_FUNC int tcc_mallocz(unsigned long size);
+PUB_FUNC int tcc_realloc(void *ptr, unsigned long size);
+PUB_FUNC int tcc_strdup(const char *str);
 
 PUB_FUNC void tcc_memcheck(void);
 PUB_FUNC void tcc_error_noabort(const char *fmt, ...);
