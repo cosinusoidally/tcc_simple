@@ -52,8 +52,8 @@ ST_FUNC void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
 /* 2 */
 ST_FUNC void tcc_close() {
     BufferedFile *bf = file;
-    if (gt(bf->fd, 0)) {
-        close(bf->fd);
+    if (gt(gbf_fd(bf), 0)) {
+        close(gbf_fd(bf));
         total_lines = add(total_lines, bf->line_num);
     }
     file = bf->prev;

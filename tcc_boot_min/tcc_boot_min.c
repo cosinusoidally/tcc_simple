@@ -103,6 +103,10 @@ int gsym_next(int o) {
 
 /* BufferedFile accessors */
 
+int gbf_fd(int o) {
+  return ri32(add(o, BufferedFile_fd_o));
+}
+
 int sbf_fd(int o, int v) {
   wi32(add(o, BufferedFile_fd_o), v);
 }
