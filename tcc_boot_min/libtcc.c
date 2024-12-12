@@ -48,7 +48,7 @@ static const TCCOption tcc_options[] = {
     { "c", TCC_OPTION_c, 0 },
     { "o", TCC_OPTION_o, TCC_OPTION_HAS_ARG },
     { "nostdinc", TCC_OPTION_nostdinc, 1 },
-    { NULL, 0, 0 },
+    { 0, 0, 0 },
 };
 
 /* 10 */
@@ -76,7 +76,7 @@ PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
                 if (strstart(p1, &r1)) {
                     optarg = r1;
                     if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
-                        if ((*r1 == 0) && !(popt->flags & TCC_OPTION_NOSEP)) {
+                        if (and((*r1 == 0), !(popt->flags & TCC_OPTION_NOSEP))) {
                             optarg = argv[optind++];
                         }
                     }
