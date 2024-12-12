@@ -30,9 +30,9 @@ int init_globals() {
 }
 
 typedef struct TCCOption {
-    const char *name;
-    uint16_t index;
-    uint16_t flags;
+    char *name;
+    int index;
+    int flags;
 } TCCOption;
 
 enum {
