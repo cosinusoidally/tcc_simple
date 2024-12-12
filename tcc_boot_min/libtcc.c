@@ -76,17 +76,6 @@ int init_globals() {
     alocal_stack = &local_stack;
 }
 
-/* 5 */
-LIBTCCAPI void tcc_delete(TCCState *s1) {
-    /* free sections */
-    tccelf_delete(s1);
-
-    tcc_free(gts_outfile(s1));
-    dynarray_reset(ats_files(s1), ats_nb_files(s1));
-
-    tcc_free(s1);
-}
-
 /* 6 */
 ST_FUNC int tcc_add_file_internal(TCCState *s1, const char *filename, int flags)
 {

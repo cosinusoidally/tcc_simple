@@ -548,6 +548,17 @@ int tcc_compile(int s1) {
     return 0;
 }
 
+/* 5 */
+int tcc_delete(int s1) {
+    /* free sections */
+    tccelf_delete(s1);
+
+    tcc_free(gts_outfile(s1));
+    dynarray_reset(ats_files(s1), ats_nb_files(s1));
+
+    tcc_free(s1);
+}
+
 /* end of libtcc.c */
 
 int tcc_new() {
