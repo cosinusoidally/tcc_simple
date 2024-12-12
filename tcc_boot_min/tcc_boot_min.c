@@ -5,6 +5,10 @@ int gts_files(int o) {
   ri32(add(o, TCCState_files_o));
 }
 
+int gts_filetype(int o) {
+  return ri32(add(o, TCCState_filetype_o));
+}
+
 int sts_filetype(int o,int v) {
   wi32(add(o, TCCState_filetype_o), v);
 }
