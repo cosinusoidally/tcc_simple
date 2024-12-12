@@ -19,15 +19,6 @@
  */
 
 /********************************************************/
-/* global variables */
-
-/* use GNU C extensions */
-ST_DATA int gnu_ext = 1;
-
-/* use TinyCC extensions */
-ST_DATA int tcc_ext = 1;
-
-/********************************************************/
 
 #include "tccpp.c"
 #include "tccgen.c"
