@@ -74,7 +74,7 @@ ST_FUNC int tcc_open(TCCState *s1, const char *filename)
 /* 4 */
 /* compile the file opened in 'file'. Return non zero if errors. */
 static int tcc_compile(TCCState *s1) {
-    int filetype, is_asm;
+    int filetype;
 
     filetype = gts_filetype(s1);
     tccelf_begin_file(s1);
