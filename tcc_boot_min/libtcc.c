@@ -24,31 +24,6 @@
 #include "tccgen.c"
 #include "tccelf.c"
 
-/********************************************************/
-/* I/O layer */
-/* 1 */
-void tcc_open_bf(TCCState *s1, const char *filename, int initlen) {
-    BufferedFile *bf;
-    int buflen;
-
-    if(neq(initlen,0)) {
-        buflen = initlen;
-    } else {
-        buflen = IO_BUF_SIZE;
-    }
-
-    bf = tcc_mallocz(add(sizeof_BufferedFile, buflen));
-    sbf_buf_ptr(bf, gbf_buffer(bf));
-    sbf_buf_end(bf, add(gbf_buffer(bf), initlen));
-    wi8(gbf_buf_end(bf), CH_EOB); /* put eob symbol */
-    pstrcpy(gbf_filename(bf), sizeof_BufferedFile_filename, filename);
-    sbf_line_num(bf, 1);
-    sbf_fd(bf, sub(0, 1));
-    sbf_prev(bf, file);
-    file = bf;
-    tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
-}
-
 int init_globals() {
     aglobal_stack = &global_stack;
     alocal_stack = &local_stack;

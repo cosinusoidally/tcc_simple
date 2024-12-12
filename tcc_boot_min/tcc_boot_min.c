@@ -600,6 +600,31 @@ int dynarray_reset(int pp, int n) {
     wi32(pp, 0);
 }
 
+/********************************************************/
+/* I/O layer */
+/* 1 */
+int tcc_open_bf(int s1, int filename, int initlen) {
+    int bf;
+    int buflen;
+
+    if(neq(initlen,0)) {
+        buflen = initlen;
+    } else {
+        buflen = IO_BUF_SIZE;
+    }
+
+    bf = tcc_mallocz(add(sizeof_BufferedFile, buflen));
+    sbf_buf_ptr(bf, gbf_buffer(bf));
+    sbf_buf_end(bf, add(gbf_buffer(bf), initlen));
+    wi8(gbf_buf_end(bf), CH_EOB); /* put eob symbol */
+    pstrcpy(gbf_filename(bf), sizeof_BufferedFile_filename, filename);
+    sbf_line_num(bf, 1);
+    sbf_fd(bf, sub(0, 1));
+    sbf_prev(bf, file);
+    file = bf;
+    tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
+}
+
 /* 2 */
 int tcc_close() {
     int bf;

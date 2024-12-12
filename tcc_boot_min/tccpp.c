@@ -21,7 +21,6 @@
 /********************************************************/
 /* global variables */
 
-ST_DATA int tok_flags;
 ST_DATA int parse_flags;
 
 extern struct BufferedFile *file;

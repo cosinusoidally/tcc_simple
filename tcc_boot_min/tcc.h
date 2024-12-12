@@ -385,7 +385,7 @@ ST_DATA int ch, tok;
 ST_DATA CValue tokc;
 ST_DATA const int *macro_ptr;
 ST_DATA int parse_flags;
-ST_DATA int tok_flags;
+extern int tok_flags;
 ST_DATA CString tokcstr; /* current parsed string, if any */
 
 /* display benchmark infos */

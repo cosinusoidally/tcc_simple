@@ -94,5 +94,7 @@ int IO_BUF_SIZE;
 int TOK_FLAG_BOL;
 int TOK_FLAG_BOF;
 
+int tok_flags;
+
 /* =============== end globals.c ========================================== */
 
