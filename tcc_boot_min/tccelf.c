@@ -107,7 +107,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     s = s1->symtab;
 
     first_sym = div_(s->sh_offset, sizeof (ElfSym));
-    nb_syms = s->data_offset / sizeof (ElfSym) - first_sym;
+    nb_syms = sub(div_(s->data_offset, sizeof (ElfSym)), first_sym);
     s->data_offset = s->sh_offset;
     s->link->data_offset = s->link->sh_offset;
     s->hash = s->reloc, s->reloc = NULL;
