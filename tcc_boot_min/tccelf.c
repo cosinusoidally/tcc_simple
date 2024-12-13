@@ -486,15 +486,17 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
    the global and weak ones. Since TCC cannot sort it while generating
    the code, we must do it after. All the relocation tables are also
    modified to take into account the symbol table sorting */
-static void sort_syms(TCCState *s1, Section *s)
-{
+static void sort_syms(TCCState *s1, Section *s) {
     int *old_to_new_syms;
     ElfW(Sym) *new_syms;
-    int nb_syms, i;
-    ElfW(Sym) *p, *q;
+    int nb_syms;
+    int i;
+    ElfW(Sym) *p;
+    ElfW(Sym) *q;
     ElfW_Rel *rel;
     Section *sr;
-    int type, sym_index;
+    int type;
+    int sym_index;
 
     nb_syms = s->data_offset / sizeof(ElfW(Sym));
     new_syms = tcc_malloc(nb_syms * sizeof(ElfW(Sym)));
