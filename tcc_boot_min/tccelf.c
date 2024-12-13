@@ -261,12 +261,12 @@ ST_FUNC void section_reserve(Section *sec, int size) {
 
 /* ------------------------------------------------------------------------- */
 
-ST_FUNC int put_elf_str(Section *s, const char *sym)
-{
-    int offset, len;
-    char *ptr;
+ST_FUNC int put_elf_str(Section *s, const char *sym) {
+    int offset;
+    int len;
+    int ptr;
 
-    len = strlen(sym) + 1;
+    len = add(strlen(sym), 1);
     offset = s->data_offset;
     ptr = section_ptr_add(s, len);
     memmove(ptr, sym, len);
