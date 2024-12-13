@@ -208,16 +208,18 @@ ST_FUNC Section *new_symtab(TCCState *s1,
 
 /* realloc section and set its content to zero */
 ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
-    unsigned long size;
-    unsigned char *data;
+    int size;
+    int data;
 
     size = sec->data_allocated;
-    if (size == 0)
+    if (eq(size, 0)) {
         size = 1;
-    while (size < new_size)
-        size = size * 2;
+    }
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
     data = tcc_realloc(sec->data, size);
-    memset(data + sec->data_allocated, 0, size - sec->data_allocated);
+    memset(add(data, sec->data_allocated), 0, sub(size, sec->data_allocated));
     sec->data = data;
     sec->data_allocated = size;
 }
