@@ -376,7 +376,6 @@ ST_FUNC int tcc_add_dll(TCCState *s, const char *filename, int flags);
 ST_FUNC void tcc_add_pragma_libs(TCCState *s1);
 PUB_FUNC int tcc_add_library_err(TCCState *s, const char *f);
 PUB_FUNC void tcc_print_stats(TCCState *s, unsigned total_time);
-PUB_FUNC int tcc_parse_args(TCCState *s, int *argc, char ***argv, int optind);
 
 /* ------------ tccpp.c ------------ */
 
