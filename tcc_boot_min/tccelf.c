@@ -103,6 +103,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     int nb_syms;
     int *tr;
     int i;
+    Section *sr;
+    int n;
 
     s = s1->symtab;
 
@@ -127,12 +129,12 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     }
     /* now update relocations */
     for (i = 1; i < s1->nb_sections; i++) {
-        Section *sr = s1->sections[i];
+        sr = s1->sections[i];
         if (sr->sh_type == SHT_RELX && sr->link == s) {
             ElfW_Rel *rel = (ElfW_Rel*)(sr->data + sr->sh_offset);
             ElfW_Rel *rel_end = (ElfW_Rel*)(sr->data + sr->data_offset);
             for (; rel < rel_end; ++rel) {
-                int n = ELFW(R_SYM)(rel->r_info) - first_sym;
+                n = ELFW(R_SYM)(rel->r_info) - first_sym;
                 rel->r_info = ELFW(R_INFO)(tr[n], ELFW(R_TYPE)(rel->r_info));
             }
         }
