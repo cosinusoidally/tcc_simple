@@ -147,8 +147,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     tcc_free(tr);
 }
 
-Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags)
-{
+Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     Section *sec;
 
     sec = tcc_mallocz(add(sizeof(Section), strlen(name)));
@@ -156,10 +155,10 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags)
     sec->sh_type = sh_type;
     sec->sh_flags = sh_flags;
 
-    if((sh_type == SHT_HASH) || (sh_type == SHT_REL) ||
-       (sh_type == SHT_RELA) || (sh_type == SHT_SYMTAB)) {
+    if(or(or(eq(sh_type, SHT_HASH), eq(sh_type, SHT_REL)),
+          or(eq(sh_type, SHT_RELA), eq(sh_type, SHT_SYMTAB)))) {
         sec->sh_addralign = 4;
-    } else if (sh_type == SHT_STRTAB) {
+    } else if (eq(sh_type, SHT_STRTAB)) {
         sec->sh_addralign = 1;
     } else {
         sec->sh_addralign =  PTR_SIZE; /* gcc/pcc default alignment */
