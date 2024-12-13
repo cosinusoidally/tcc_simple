@@ -543,7 +543,7 @@ ST_FUNC void tccelf_stab_new(TCCState *s);
 ST_FUNC void tccelf_begin_file(TCCState *s1);
 ST_FUNC void tccelf_end_file(TCCState *s1);
 
-ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags);
+ST_FUNC Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags);
 ST_FUNC void section_realloc(Section *sec, unsigned long new_size);
 ST_FUNC size_t section_add(Section *sec, addr_t size, int align);
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size);

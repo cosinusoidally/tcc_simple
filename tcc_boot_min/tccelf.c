@@ -147,7 +147,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     tcc_free(tr);
 }
 
-Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags)
+Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags)
 {
     Section *sec;
 
