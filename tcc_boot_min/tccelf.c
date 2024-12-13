@@ -436,7 +436,7 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
     sym_type = ELFW(ST_TYPE)(info);
     sym_vis = ELFW(ST_VISIBILITY)(other);
 
-    if (sym_bind != STB_LOCAL) {
+    if (neq(sym_bind, STB_LOCAL)) {
         /* we search global or weak symbols */
         sym_index = find_elf_sym(s, name);
     }
