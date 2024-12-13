@@ -232,11 +232,11 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
 
     offset = and(sub(add(sec->data_offset, align), 1), sub(0, align));
     offset1 = add(offset, size);
-    if (sec->sh_type != SHT_NOBITS && offset1 > sec->data_allocated) {
+    if (and(neq(sec->sh_type, SHT_NOBITS), gt(offset1, sec->data_allocated))) {
         section_realloc(sec, offset1);
     }
     sec->data_offset = offset1;
-    if (align > sec->sh_addralign) {
+    if (gt(align, sec->sh_addralign)) {
         sec->sh_addralign = align;
     }
     return offset;
@@ -244,10 +244,9 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
 
 /* reserve at least 'size' bytes in section 'sec' from
    sec->data_offset. */
-ST_FUNC void *section_ptr_add(Section *sec, addr_t size)
-{
+ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
     size_t offset = section_add(sec, size, 1);
-    return sec->data + offset;
+    return add(sec->data, offset);
 }
 
 /* reserve at least 'size' bytes from section start */
