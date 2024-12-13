@@ -116,9 +116,10 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     i = 0;
     while(lt(i, nb_syms)) {
         ElfSym *sym = (ElfSym*)s->data + first_sym + i;
-        if (sym->st_shndx == SHN_UNDEF
-            && ELFW(ST_BIND)(sym->st_info) == STB_LOCAL)
+        if (and(eq(sym->st_shndx, SHN_UNDEF),
+            eq(ELFW(ST_BIND)(sym->st_info), STB_LOCAL))) {
             sym->st_info = ELFW(ST_INFO)(STB_GLOBAL, ELFW(ST_TYPE)(sym->st_info));
+        }
         tr[i] = set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
             sym->st_other, sym->st_shndx, s->link->data + sym->st_name);
 
