@@ -401,12 +401,13 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
     const char *name1;
 
     hs = s->hash;
-    if (!hs)
+    if (eq(hs, 0)) {
         return 0;
+    }
     nbuckets = ((int *)hs->data)[0];
-    h = elf_hash((unsigned char *) name) % nbuckets;
+    h = mod(elf_hash((unsigned char *) name), nbuckets);
     sym_index = ((int *)hs->data)[2 + h];
-    while (sym_index != 0) {
+    while (neq(sym_index, 0)) {
         sym = &((ElfW(Sym) *)s->data)[sym_index];
         name1 = (char *) s->link->data + sym->st_name;
         if (!strcmp(name, name1))
