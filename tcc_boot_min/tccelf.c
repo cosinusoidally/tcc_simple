@@ -371,10 +371,11 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
         ptr = section_ptr_add(hs, sizeof(int));
         base = (int *)hs->data;
         /* only add global or weak symbols. */
-        if (ELFW(ST_BIND)(info) != STB_LOCAL) {
+        if (neq(ELFW(ST_BIND)(info), STB_LOCAL)) {
             /* add another hashing entry */
-            nbuckets = base[0];
-            h = elf_hash((unsigned char *)s->link->data + name_offset) % nbuckets;
+            nbuckets = ri32(base);
+            h = mod(elf_hash(add((unsigned char *)s->link->data, name_offset)),
+                    nbuckets);
             *ptr = base[2 + h];
             base[2 + h] = sym_index;
             base[1]++;
