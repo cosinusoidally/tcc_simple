@@ -35,19 +35,24 @@ typedef struct TCCOption {
     int flags;
 } TCCOption;
 
-enum {
-    TCC_OPTION_c,
-    TCC_OPTION_o,
-    TCC_OPTION_nostdinc,
-};
+int TCC_OPTION_c;
+int TCC_OPTION_o;
+int TCC_OPTION_nostdinc;
 
-#define TCC_OPTION_HAS_ARG 0x0001
-#define TCC_OPTION_NOSEP   0x0002 /* cannot have space before option and arg */
+int TCC_OPTION_HAS_ARG; /* 0x0001 */
+int TCC_OPTION_NOSEP;   /* 0x0002 cannot have space before option and arg */
 
 TCCOption *tcc_options;
 
 int init_options() {
   int i;
+
+  TCC_OPTION_c = 0;
+  TCC_OPTION_o = 1;
+  TCC_OPTION_nostdinc = 2;
+
+  TCC_OPTION_HAS_ARG = 1;
+  TCC_OPTION_NOSEP = 2;
 
   tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
 
