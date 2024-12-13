@@ -8,7 +8,8 @@ int and(int a, int b) {
 	return a & b;
 }
 
-int div(int a, int b) {
+/* FIXME this needed an _ since it somehow clashes with something? */
+int div_(int a, int b) {
 	return a / b;
 }
 
