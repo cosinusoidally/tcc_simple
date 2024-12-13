@@ -42,31 +42,3 @@ extern int TCC_OPTION_HAS_ARG; /* 0x0001 */
 extern int TCC_OPTION_NOSEP;   /* 0x0002 cannot have space before option and arg */
 
 extern TCCOption *tcc_options;
-
-int init_options() {
-  TCCOption *t;
-
-  TCC_OPTION_c = 0;
-  TCC_OPTION_o = 1;
-  TCC_OPTION_nostdinc = 2;
-
-  TCC_OPTION_HAS_ARG = 1;
-  TCC_OPTION_NOSEP = 2;
-
-  tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
-
-  t = tcc_options;
-  sto_name(t, mks("c"));
-  sto_index(t, TCC_OPTION_c);
-  sto_flags(t, 0);
-
-  t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("o"));
-  sto_index(t, TCC_OPTION_o);
-  sto_flags(t, TCC_OPTION_HAS_ARG);
-
-  t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("nostdinc"));
-  sto_index(t, TCC_OPTION_nostdinc);
-  sto_flags(t, 1);
-}
