@@ -61,6 +61,8 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     char **argv = *pargv;
     int argc = *pargc;
 
+    enter();
+
     while (lt(optind, argc)) {
         r = ri32(add(argv, mul(optind, 4)));
         optind = add(optind, 1);
@@ -75,7 +77,7 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
                 if (strstart(p1, &r1)) {
                     optarg = r1;
                     if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
-                        if (and((*r1 == 0),
+                        if (and(eq(*r1, 0),
                             eq(and(popt->flags, TCC_OPTION_NOSEP), 0))) {
                             optarg = argv[optind];
                             optind = add(optind, 1);
@@ -92,5 +94,5 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
         }
     }
 
-    return 0;
+    return leave(0);
 }
