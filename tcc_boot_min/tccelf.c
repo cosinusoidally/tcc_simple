@@ -395,7 +395,9 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
 ST_FUNC int find_elf_sym(Section *s, const char *name) {
     ElfW(Sym) *sym;
     Section *hs;
-    int nbuckets, sym_index, h;
+    int nbuckets;
+    int sym_index;
+    int h;
     const char *name1;
 
     hs = s->hash;
