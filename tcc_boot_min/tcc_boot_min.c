@@ -165,6 +165,10 @@ int gto_name(int o) {
   return ri32(add(o, TCCOption_name_o));
 }
 
+int sto_name(int o, int v) {
+  wi32(add(o, TCCOption_name_o), v);
+}
+
 int gto_index(int o) {
   return ri32(add(o, TCCOption_index_o));
 }
