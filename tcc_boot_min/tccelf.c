@@ -97,10 +97,14 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
 
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
-ST_FUNC void tccelf_end_file(TCCState *s1)
-{
-    Section *s = s1->symtab;
-    int first_sym, nb_syms, *tr, i;
+ST_FUNC void tccelf_end_file(TCCState *s1) {
+    Section *s;
+    int first_sym;
+    int nb_syms;
+    int *tr;
+    int i;
+
+    s = s1->symtab;
 
     first_sym = s->sh_offset / sizeof (ElfSym);
     nb_syms = s->data_offset / sizeof (ElfSym) - first_sym;
