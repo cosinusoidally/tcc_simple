@@ -58,13 +58,15 @@ static void free_section(Section *s) {
     tcc_free(s->data);
 }
 
-ST_FUNC void tccelf_delete(TCCState *s1)
-{
+ST_FUNC void tccelf_delete(TCCState *s1) {
     int i;
 
     /* free all sections */
-    for(i = 1; i < s1->nb_sections; i++)
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         free_section(s1->sections[i]);
+        i = add(i, 1);
+    }
     dynarray_reset(&s1->sections, &s1->nb_sections);
 
     for(i = 0; i < s1->nb_priv_sections; i++)
