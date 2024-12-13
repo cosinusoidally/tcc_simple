@@ -179,13 +179,16 @@ ST_FUNC Section *new_symtab(TCCState *s1,
                            const char *strtab_name,
                            const char *hash_name, int hash_sh_flags)
 {
-    Section *symtab, *strtab, *hash;
-    int *ptr, nb_buckets;
+    Section *symtab;
+    Section *strtab;
+    Section *hash;
+    int *ptr;
+    int nb_buckets;
 
     symtab = new_section(s1, symtab_name, sh_type, sh_flags);
     symtab->sh_entsize = sizeof(ElfW(Sym));
     strtab = new_section(s1, strtab_name, SHT_STRTAB, sh_flags);
-    put_elf_str(strtab, "");
+    put_elf_str(strtab, mks(""));
     symtab->link = strtab;
     put_elf_sym(symtab, 0, 0, 0, 0, 0, NULL);
 
@@ -199,7 +202,7 @@ ST_FUNC Section *new_symtab(TCCState *s1,
     ptr = section_ptr_add(hash, (2 + nb_buckets + 1) * sizeof(int));
     ptr[0] = nb_buckets;
     ptr[1] = 1;
-    memset(ptr + 2, 0, (nb_buckets + 1) * sizeof(int));
+    memset(add(ptr, 2), 0, (nb_buckets + 1) * sizeof(int));
     return symtab;
 }
 
