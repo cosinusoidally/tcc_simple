@@ -448,16 +448,19 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
 
 /* put relocation */
 ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
-                            int type, int symbol, addr_t addend)
-{
-    char buf[256];
+                            int type, int symbol, addr_t addend) {
+    char *buf;
+    int buf_size;
     Section *sr;
     ElfW_Rel *rel;
 
+    buf_size=256;
+    buf = tcc_mallocz(buf_size);
+
     sr = s->reloc;
-    if (!sr) {
+    if (eq(sr, 0)) {
         /* if no relocation section, create it */
-        snprintf(buf, sizeof(buf), REL_SECTION_FMT, s->name);
+        snprintf(buf, buf_size, REL_SECTION_FMT, s->name);
         /* if the symtab is allocated, then we consider the relocation
            are also */
         sr = new_section(tcc_state, buf, SHT_RELX, symtab->sh_flags);
@@ -469,6 +472,8 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     rel = section_ptr_add(sr, sizeof(ElfW_Rel));
     rel->r_offset = offset;
     rel->r_info = ELFW(R_INFO)(symbol, type);
+
+    tcc_free(buf);
 }
 
 /* Browse each elem of type <type> in section <sec> starting at elem <startoff>
