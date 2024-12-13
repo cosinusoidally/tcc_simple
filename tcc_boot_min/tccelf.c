@@ -378,7 +378,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
                     nbuckets);
             wi32(ptr, ri32(base,mul(add(2, h), 4)));
             base[2 + h] = sym_index;
-            base[1]++;
+            wi32(add(base, 4), add(ri32(add(base, 4)), 1));
             /* we resize the hash table */
             hs->nb_hashed_syms++;
             if (hs->nb_hashed_syms > 2 * nbuckets) {
