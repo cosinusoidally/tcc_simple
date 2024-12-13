@@ -199,10 +199,10 @@ ST_FUNC Section *new_symtab(TCCState *s1,
     symtab->hash = hash;
     hash->link = symtab;
 
-    ptr = section_ptr_add(hash, (2 + nb_buckets + 1) * sizeof(int));
+    ptr = section_ptr_add(hash, mul(add(add(2, nb_buckets), 1), sizeof(int)));
     ptr[0] = nb_buckets;
     ptr[1] = 1;
-    memset(add(ptr, 2), 0, (nb_buckets + 1) * sizeof(int));
+    memset(add(ptr, 2), 0, mul(add(nb_buckets, 1), sizeof(int)));
     return symtab;
 }
 
