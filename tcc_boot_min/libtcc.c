@@ -82,8 +82,8 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     int argc;
     int argv;
 
-    argv = *pargv;
-    argc = *pargc;
+    argv = ri32(pargv);
+    argc = ri32(pargc);
 
     enter();
     r1 = v_alloca(4);
