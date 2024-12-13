@@ -18,9 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* Define this to get some debug output during relocation processing.  */
-#undef DEBUG_RELOC
-
 /********************************************************/
 /* global variables */
 
@@ -33,16 +30,12 @@ ST_DATA Section *symtab_section;
 /* debug sections */
 ST_DATA Section *stab_section, *stabstr_section;
 
-/* XXX: avoid static variable */
-static int new_undef_sym = 0; /* Is there a new undefined sym since last new_undef_sym() */
-
 /* special flag to indicate that the section should not be linked to the other ones */
 #define SHF_PRIVATE 0x80000000
 
 /* ------------------------------------------------------------------------- */
 
-void tccelf_new(TCCState *s)
-{
+void tccelf_new(TCCState *s) {
     /* no section zero */
     dynarray_add(&s->sections, &s->nb_sections, NULL);
 
@@ -61,8 +54,7 @@ void tccelf_new(TCCState *s)
 
 }
 
-static void free_section(Section *s)
-{
+static void free_section(Section *s) {
     tcc_free(s->data);
 }
 
