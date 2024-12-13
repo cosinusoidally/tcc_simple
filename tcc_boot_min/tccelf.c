@@ -113,13 +113,16 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     s->hash = s->reloc, s->reloc = NULL;
     tr = tcc_mallocz(nb_syms * sizeof *tr);
 
-    for (i = 0; i < nb_syms; ++i) {
+    i = 0;
+    while(lt(i, nb_syms)) {
         ElfSym *sym = (ElfSym*)s->data + first_sym + i;
         if (sym->st_shndx == SHN_UNDEF
             && ELFW(ST_BIND)(sym->st_info) == STB_LOCAL)
             sym->st_info = ELFW(ST_INFO)(STB_GLOBAL, ELFW(ST_TYPE)(sym->st_info));
         tr[i] = set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
             sym->st_other, sym->st_shndx, s->link->data + sym->st_name);
+
+        i = add(i, 1);
     }
     /* now update relocations */
     for (i = 1; i < s1->nb_sections; i++) {
