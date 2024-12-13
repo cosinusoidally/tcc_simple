@@ -377,12 +377,12 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
             h = mod(elf_hash(add((unsigned char *)s->link->data, name_offset)),
                     nbuckets);
             wi32(ptr, ri32(base,mul(add(2, h), 4)));
-            base[2 + h] = sym_index;
+            wi32(add(base,mul(add(2, h), 4)), sym_index);
             wi32(add(base, 4), add(ri32(add(base, 4)), 1));
             /* we resize the hash table */
             hs->nb_hashed_syms++;
-            if (hs->nb_hashed_syms > 2 * nbuckets) {
-                rebuild_hash(s, 2 * nbuckets);
+            if (hs->nb_hashed_syms > mul(2, nbuckets)) {
+                rebuild_hash(s, mul(2, nbuckets));
             }
         } else {
             *ptr = 0;
