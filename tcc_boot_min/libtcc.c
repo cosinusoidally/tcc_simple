@@ -75,13 +75,14 @@ int init_options() {
 /* 10 */
 int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     const TCCOption *popt;
-    char *optarg;
-    char *r;
-    char *p1;
-    char *r1;
+    int optarg;
+    int r;
+    int p1;
+    int r1;
     int argc;
-    char **argv = *pargv;
+    int argv;
 
+    argv = *pargv;
     argc = *pargc;
 
     enter();
@@ -112,7 +113,7 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
                 popt = add(popt, sizeof_TCCOption);
             }
 
-            if(eq(popt->index, TCC_OPTION_o)) {
+            if(eq(gto_index(popt), TCC_OPTION_o)) {
                 sts_outfile(s, tcc_strdup(optarg));
             }
         }
