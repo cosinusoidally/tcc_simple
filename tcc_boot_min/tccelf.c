@@ -347,10 +347,14 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     int h;
     ElfW(Sym) *sym;
     Section *hs;
+    int *ptr;
+    int *base;
 
     sym = section_ptr_add(s, sizeof(ElfW(Sym)));
-    if (name && name[0]) {
-        name_offset = put_elf_str(s->link, name);
+    if (name) {
+        if(ri8(name)) {
+            name_offset = put_elf_str(s->link, name);
+        }
     } else {
         name_offset = 0;
     }
@@ -364,7 +368,6 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     sym_index = sym - (ElfW(Sym) *)s->data;
     hs = s->hash;
     if (hs) {
-        int *ptr, *base;
         ptr = section_ptr_add(hs, sizeof(int));
         base = (int *)hs->data;
         /* only add global or weak symbols. */
