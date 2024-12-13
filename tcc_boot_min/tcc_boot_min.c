@@ -159,6 +159,20 @@ int gbf_buffer(int o){
   return add(o, BufferedFile_buffer_o); /* unsigned char buffer[1] */
 }
 
+/* TCCOption accessors */
+
+int gto_name(int o) {
+  return ri32(add(o, TCCOption_name_o));
+}
+
+int gto_index(int o) {
+  return ri32(add(o, TCCOption_index_o));
+}
+
+int gto_flags(int o) {
+  return ri32(add(o, TCCOption_flags_o));
+}
+
 /* stuff */
 
 int init_runtime(){
