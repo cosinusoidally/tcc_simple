@@ -44,34 +44,27 @@ enum {
 #define TCC_OPTION_HAS_ARG 0x0001
 #define TCC_OPTION_NOSEP   0x0002 /* cannot have space before option and arg */
 
-TCCOption tcc_options[] = {
-    { "c", TCC_OPTION_c, 0 },
-    { "o", TCC_OPTION_o, TCC_OPTION_HAS_ARG },
-    { "nostdinc", TCC_OPTION_nostdinc, 1 },
-    { 0, 0, 0 },
-};
-
-TCCOption *tcc_options_;
+TCCOption *tcc_options;
 
 int init_options() {
   int i;
 
-  tcc_options_ = tcc_mallocz(mul(sizeof(TCCOption), 4));
+  tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
 
   i = 0;
-  tcc_options_[i].name = "c";
-  tcc_options_[i].index = TCC_OPTION_c;
-  tcc_options_[i].flags = 0;
+  tcc_options[i].name = "c";
+  tcc_options[i].index = TCC_OPTION_c;
+  tcc_options[i].flags = 0;
 
   i = add(i, 1);
-  tcc_options_[i].name = "o";
-  tcc_options_[i].index = TCC_OPTION_c;
-  tcc_options_[i].flags = TCC_OPTION_HAS_ARG;
+  tcc_options[i].name = "o";
+  tcc_options[i].index = TCC_OPTION_o;
+  tcc_options[i].flags = TCC_OPTION_HAS_ARG;
 
   i = add(i, 1);
-  tcc_options_[i].name = "nostdinc";
-  tcc_options_[i].index = TCC_OPTION_nostdinc;
-  tcc_options_[i].flags = 1;
+  tcc_options[i].name = "nostdinc";
+  tcc_options[i].index = TCC_OPTION_nostdinc;
+  tcc_options[i].flags = 1;
 }
 
 /* 10 */
