@@ -285,7 +285,8 @@ static unsigned long elf_hash(const unsigned char *name) {
         name = add(name, 1);
         g = and(h, 0xf0000000);
         if (g) {
-            h = xor(h, and(g >> 24, 255)); /* ljw see original extra bit twid */
+            h = xor(h, and(shr(g, 24), 255)); /* ljw see original extra bit
+                                                 twiddling for sign */
         }
         h = and(h, not(g));
     }
