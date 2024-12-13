@@ -45,7 +45,7 @@ extern int TCC_OPTION_NOSEP;   /* 0x0002 cannot have space before option and arg
 extern TCCOption *tcc_options;
 
 int init_options() {
-  int i;
+  TCCOption *t;
 
   TCC_OPTION_c = 0;
   TCC_OPTION_o = 1;
@@ -56,18 +56,12 @@ int init_options() {
 
   tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
 
-  i = 0;
-  tcc_options[i].name = mks("c");
-  tcc_options[i].index = TCC_OPTION_c;
-  tcc_options[i].flags = 0;
+  t = tcc_options;
+  t->name = mks("c"); t->index = TCC_OPTION_c; t->flags = 0;
 
-  i = add(i, 1);
-  tcc_options[i].name = mks("o");
-  tcc_options[i].index = TCC_OPTION_o;
-  tcc_options[i].flags = TCC_OPTION_HAS_ARG;
+  t = add(t, sizeof_TCCOption);
+  t->name = mks("o"); t->index = TCC_OPTION_o; t->flags = TCC_OPTION_HAS_ARG;
 
-  i = add(i, 1);
-  tcc_options[i].name = mks("nostdinc");
-  tcc_options[i].index = TCC_OPTION_nostdinc;
-  tcc_options[i].flags = 1;
+  t = add(t, sizeof_TCCOption);
+  t->name = mks("nostdinc"); t->index = TCC_OPTION_nostdinc; t->flags = 1;
 }
