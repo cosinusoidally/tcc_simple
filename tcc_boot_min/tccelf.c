@@ -295,17 +295,21 @@ static unsigned long elf_hash(const unsigned char *name) {
 
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */
-static void rebuild_hash(Section *s, unsigned int nb_buckets)
-{
+static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     ElfW(Sym) *sym;
-    int *ptr, *hash, nb_syms, sym_index, h;
+    int *ptr;
+    int *hash;
+    int nb_syms;
+    int sym_index;
+    int h;
     unsigned char *strtab;
 
     strtab = s->link->data;
-    nb_syms = s->data_offset / sizeof(ElfW(Sym));
+    nb_syms = div_(s->data_offset, sizeof(ElfW(Sym)));
 
-    if (!nb_buckets)
+    if (eq(nb_buckets, 0)) {
         nb_buckets = ((int*)s->hash->data)[0];
+    }
 
     s->hash->data_offset = 0;
     ptr = section_ptr_add(s->hash, (2 + nb_buckets + nb_syms) * sizeof(int));
