@@ -245,6 +245,8 @@ int init_runtime(){
   init_c();
   init_reg_classes();
   init_globals();
+
+  init_options();
 }
 
 /* i386-gen.c */

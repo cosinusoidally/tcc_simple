@@ -51,6 +51,12 @@ static const TCCOption tcc_options[] = {
     { 0, 0, 0 },
 };
 
+TCCOption *tcc_options_;
+
+int init_options() {
+  tcc_options_ = tcc_mallocz(mul(sizeof(TCCOption), 4));
+}
+
 /* 10 */
 int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     const TCCOption *popt;
@@ -82,7 +88,7 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
                     if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
                         if (and(eq(ri8(ri32(r1)), 0),
                             eq(and(popt->flags, TCC_OPTION_NOSEP), 0))) {
-                            optarg = argv[optind];
+                            optarg = ri32(add(argv, mul(optind, 4)));
                             optind = add(optind, 1);
                         }
                     }
