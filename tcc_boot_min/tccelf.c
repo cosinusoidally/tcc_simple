@@ -498,14 +498,15 @@ static void sort_syms(TCCState *s1, Section *s) {
     int type;
     int sym_index;
 
-    nb_syms = s->data_offset / sizeof(ElfW(Sym));
-    new_syms = tcc_malloc(nb_syms * sizeof(ElfW(Sym)));
-    old_to_new_syms = tcc_malloc(nb_syms * sizeof(int));
+    nb_syms = div_(s->data_offset, sizeof(ElfW(Sym)));
+    new_syms = tcc_malloc(mul(nb_syms, sizeof(ElfW(Sym))));
+    old_to_new_syms = tcc_malloc(mul(nb_syms, sizeof(int)));
 
     /* first pass for local symbols */
     p = (ElfW(Sym) *)s->data;
     q = new_syms;
-    for(i = 0; i < nb_syms; i++) {
+    i = 0;
+    for(; i < nb_syms; i++) {
         if (ELFW(ST_BIND)(p->st_info) == STB_LOCAL) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
