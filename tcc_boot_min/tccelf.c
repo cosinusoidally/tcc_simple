@@ -424,8 +424,13 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
                        int info, int other, int shndx, const char *name)
 {
     ElfW(Sym) *esym;
-    int sym_bind, sym_index, sym_type, esym_bind;
-    unsigned char sym_vis, esym_vis, new_vis;
+    int sym_bind;
+    int sym_index;
+    int sym_type;
+    int esym_bind;
+    unsigned char sym_vis;
+    unsigned char esym_vis;
+    unsigned char new_vis;
 
     sym_bind = ELFW(ST_BIND)(info);
     sym_type = ELFW(ST_TYPE)(info);
