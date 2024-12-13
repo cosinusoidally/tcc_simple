@@ -164,7 +164,7 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
         sec->sh_addralign =  PTR_SIZE; /* gcc/pcc default alignment */
     }
 
-    if (sh_flags & SHF_PRIVATE) {
+    if (and(sh_flags, SHF_PRIVATE)) {
         dynarray_add(&s1->priv_sections, &s1->nb_priv_sections, sec);
     } else {
         sec->sh_num = s1->nb_sections;
