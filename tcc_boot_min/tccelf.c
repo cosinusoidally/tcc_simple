@@ -381,19 +381,18 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
             wi32(add(base, 4), add(ri32(add(base, 4)), 1));
             /* we resize the hash table */
             hs->nb_hashed_syms++;
-            if (hs->nb_hashed_syms > mul(2, nbuckets)) {
+            if (gt(hs->nb_hashed_syms, mul(2, nbuckets))) {
                 rebuild_hash(s, mul(2, nbuckets));
             }
         } else {
-            *ptr = 0;
-            base[1]++;
+            wi32(ptr, 0);
+            wi32(add(base, 4),add(ri32(add(base, 4)), 1));
         }
     }
     return sym_index;
 }
 
-ST_FUNC int find_elf_sym(Section *s, const char *name)
-{
+ST_FUNC int find_elf_sym(Section *s, const char *name) {
     ElfW(Sym) *sym;
     Section *hs;
     int nbuckets, sym_index, h;
