@@ -54,7 +54,26 @@ static const TCCOption tcc_options[] = {
 TCCOption *tcc_options_;
 
 int init_options() {
+  TCCOption *tcc_options;
+  int i;
+
+  i = 0;
   tcc_options_ = tcc_mallocz(mul(sizeof(TCCOption), 4));
+  tcc_options_[i].name = "c";
+  tcc_options_[i].index = TCC_OPTION_c;
+  tcc_options_[i].flags = 0;
+
+  i = add(i, 1);
+  tcc_options_[i].name = "o";
+  tcc_options_[i].index = TCC_OPTION_c;
+  tcc_options_[i].flags = TCC_OPTION_HAS_ARG;
+
+  i = add(i, 1);
+  tcc_options_[i].name = "nostdinc";
+  tcc_options_[i].index = TCC_OPTION_nostdinc;
+  tcc_options_[i].flags = 1;
+
+  tcc_options = tcc_options_;
 }
 
 /* 10 */
