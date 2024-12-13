@@ -96,20 +96,20 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
             /* find option in table */
             popt = tcc_options;
             while(1) {
-                p1 = popt->name;
+                p1 = gto_name(popt);
                 wi32(r1, add(r, 1));
                 if (strstart(p1, r1)) {
                     optarg = r1;
-                    if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
+                    if (and(gto_flags(popt), TCC_OPTION_HAS_ARG)) {
                         if (and(eq(ri8(ri32(r1)), 0),
-                            eq(and(popt->flags, TCC_OPTION_NOSEP), 0))) {
+                            eq(and(gto_flags(popt), TCC_OPTION_NOSEP), 0))) {
                             optarg = ri32(add(argv, mul(optind, 4)));
                             optind = add(optind, 1);
                         }
                     }
                     break;
                 }
-                popt = popt + 1;
+                popt = add(popt, sizeof_TCCOption);
             }
 
             if(eq(popt->index, TCC_OPTION_o)) {
