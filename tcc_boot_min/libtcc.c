@@ -54,7 +54,6 @@ static const TCCOption tcc_options[] = {
 TCCOption *tcc_options_;
 
 int init_options() {
-  TCCOption *tcc_options;
   int i;
 
   tcc_options_ = tcc_mallocz(mul(sizeof(TCCOption), 4));
@@ -73,8 +72,6 @@ int init_options() {
   tcc_options_[i].name = "nostdinc";
   tcc_options_[i].index = TCC_OPTION_nostdinc;
   tcc_options_[i].flags = 1;
-
-  tcc_options = tcc_options_;
 }
 
 /* 10 */
