@@ -134,10 +134,10 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
         if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
-            rel = (ElfW_Rel*)(sr->data + sr->sh_offset);
-            rel_end = (ElfW_Rel*)(sr->data + sr->data_offset);
+            rel = (ElfW_Rel*)(add(sr->data, sr->sh_offset));
+            rel_end = (ElfW_Rel*)(add(sr->data, sr->data_offset));
             while(lt(rel, rel_end)) {
-                n = ELFW(R_SYM)(rel->r_info) - first_sym;
+                n = sub(ELFW(R_SYM)(rel->r_info), first_sym);
                 rel->r_info = ELFW(R_INFO)(tr[n], ELFW(R_TYPE)(rel->r_info));
                 rel = rel + 1;
             }
@@ -147,11 +147,11 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     tcc_free(tr);
 }
 
-ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags)
+Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags)
 {
     Section *sec;
 
-    sec = tcc_mallocz(sizeof(Section) + strlen(name));
+    sec = tcc_mallocz(add(sizeof(Section), strlen(name)));
     strcpy(sec->name, name);
     sec->sh_type = sh_type;
     sec->sh_flags = sh_flags;
