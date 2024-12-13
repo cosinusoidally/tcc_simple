@@ -506,12 +506,13 @@ static void sort_syms(TCCState *s1, Section *s) {
     p = (ElfW(Sym) *)s->data;
     q = new_syms;
     i = 0;
-    for(; i < nb_syms; i++) {
+    while(lt(i, nb_syms)) {
         if (ELFW(ST_BIND)(p->st_info) == STB_LOCAL) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
         }
         p++;
+        i = add(i, 1);
     }
     /* save the number of local symbols in section header */
     if( s->sh_size )    /* this 'if' makes IDA happy */
@@ -519,12 +520,14 @@ static void sort_syms(TCCState *s1, Section *s) {
 
     /* then second pass for non local symbols */
     p = (ElfW(Sym) *)s->data;
-    for(i = 0; i < nb_syms; i++) {
-        if (ELFW(ST_BIND)(p->st_info) != STB_LOCAL) {
+    i = 0;
+    while(lt(i, nb_syms)) {
+        if (neq(ELFW(ST_BIND)(p->st_info), STB_LOCAL)) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
         }
         p++;
+        i = add(i, 1);
     }
 
     /* we copy the new symbols to the old */
