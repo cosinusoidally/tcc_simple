@@ -52,8 +52,7 @@ static const TCCOption tcc_options[] = {
 };
 
 /* 10 */
-PUB_FUNC int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind)
-{
+int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     const TCCOption *popt;
     char *optarg;
     char *r;
