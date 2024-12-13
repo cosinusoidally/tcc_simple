@@ -73,7 +73,7 @@ int init_options() {
 }
 
 /* 10 */
-int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
+int tcc_parse_args(int s, int pargc, int pargv, int optind) {
     int popt;
     int optarg;
     int r;
