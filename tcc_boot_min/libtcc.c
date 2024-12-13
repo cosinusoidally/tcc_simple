@@ -57,17 +57,17 @@ int init_options() {
   tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
 
   i = 0;
-  tcc_options[i].name = "c";
+  tcc_options[i].name = mks("c");
   tcc_options[i].index = TCC_OPTION_c;
   tcc_options[i].flags = 0;
 
   i = add(i, 1);
-  tcc_options[i].name = "o";
+  tcc_options[i].name = mks("o");
   tcc_options[i].index = TCC_OPTION_o;
   tcc_options[i].flags = TCC_OPTION_HAS_ARG;
 
   i = add(i, 1);
-  tcc_options[i].name = "nostdinc";
+  tcc_options[i].name = mks("nostdinc");
   tcc_options[i].index = TCC_OPTION_nostdinc;
   tcc_options[i].flags = 1;
 }
