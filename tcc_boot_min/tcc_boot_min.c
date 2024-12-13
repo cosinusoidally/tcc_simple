@@ -181,6 +181,10 @@ int gto_flags(int o) {
   return ri32(add(o, TCCOption_flags_o));
 }
 
+int sto_flags(int o, int v) {
+  wi32(add(o, TCCOption_flags_o), v);
+}
+
 /* stuff */
 
 int init_runtime(){

@@ -58,15 +58,15 @@ int init_options() {
   t = tcc_options;
   sto_name(t, mks("c"));
   sto_index(t, TCC_OPTION_c);
-  t->flags = 0;
+  sto_flags(t, 0);
 
   t = add(t, sizeof_TCCOption);
   sto_name(t, mks("o"));
   sto_index(t, TCC_OPTION_o);
-  t->flags = TCC_OPTION_HAS_ARG;
+  sto_flags(t, TCC_OPTION_HAS_ARG);
 
   t = add(t, sizeof_TCCOption);
   sto_name(t, mks("nostdinc"));
   sto_index(t, TCC_OPTION_nostdinc);
-  t->flags = 1;
+  sto_flags(t, 1);
 }
