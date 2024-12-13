@@ -128,7 +128,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
         i = add(i, 1);
     }
     /* now update relocations */
-    for (i = 1; i < s1->nb_sections; i++) {
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
         if (sr->sh_type == SHT_RELX && sr->link == s) {
             ElfW_Rel *rel = (ElfW_Rel*)(sr->data + sr->sh_offset);
@@ -138,6 +139,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
                 rel->r_info = ELFW(R_INFO)(tr[n], ELFW(R_TYPE)(rel->r_info));
             }
         }
+        i = add(i, 1);
     }
     tcc_free(tr);
 }
