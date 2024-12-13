@@ -312,13 +312,14 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     }
 
     s->hash->data_offset = 0;
-    ptr = section_ptr_add(s->hash, (2 + nb_buckets + nb_syms) * sizeof(int));
-    ptr[0] = nb_buckets;
-    ptr[1] = nb_syms;
-    ptr += 2;
+    ptr = section_ptr_add(s->hash, mul(add(add(2, nb_buckets), nb_syms),
+                                       sizeof(int)));
+    wi32(ptr, nb_buckets);
+    wi32(add(ptr, 4), nb_syms);
+    ptr = add(ptr, 8);
     hash = ptr;
-    memset(hash, 0, (nb_buckets + 1) * sizeof(int));
-    ptr += nb_buckets + 1;
+    memset(hash, 0, mul(add(nb_buckets, 1), sizeof(int)));
+    ptr = add(ptr, mul(add(nb_buckets, 1), 4));
 
     sym = (ElfW(Sym) *)s->data + 1;
     for(sym_index = 1; sym_index < nb_syms; sym_index++) {
