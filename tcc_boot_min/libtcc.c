@@ -44,7 +44,7 @@ enum {
 #define TCC_OPTION_HAS_ARG 0x0001
 #define TCC_OPTION_NOSEP   0x0002 /* cannot have space before option and arg */
 
-static const TCCOption tcc_options[] = {
+TCCOption tcc_options[] = {
     { "c", TCC_OPTION_c, 0 },
     { "o", TCC_OPTION_o, TCC_OPTION_HAS_ARG },
     { "nostdinc", TCC_OPTION_nostdinc, 1 },
