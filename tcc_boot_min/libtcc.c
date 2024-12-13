@@ -58,10 +58,13 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
     char *r;
     char *p1;
     char *r1;
+    int argc;
     char **argv = *pargv;
-    int argc = *pargc;
+
+    argc = *pargc;
 
     enter();
+    r1 = v_alloca(4);
 
     while (lt(optind, argc)) {
         r = ri32(add(argv, mul(optind, 4)));
@@ -73,11 +76,11 @@ int tcc_parse_args(TCCState *s, int *pargc, char ***pargv, int optind) {
             popt = tcc_options;
             while(1) {
                 p1 = popt->name;
-                r1 = add(r, 1);
-                if (strstart(p1, &r1)) {
+                wi32(r1, add(r, 1));
+                if (strstart(p1, r1)) {
                     optarg = r1;
                     if (and(popt->flags, TCC_OPTION_HAS_ARG)) {
-                        if (and(eq(*r1, 0),
+                        if (and(eq(ri8(ri32(r1)), 0),
                             eq(and(popt->flags, TCC_OPTION_NOSEP), 0))) {
                             optarg = argv[optind];
                             optind = add(optind, 1);
