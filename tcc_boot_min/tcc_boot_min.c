@@ -643,7 +643,6 @@ int dynarray_reset(int pp, int n) {
 
 /********************************************************/
 /* I/O layer */
-/* 1 */
 int tcc_open_bf(int s1, int filename, int initlen) {
     int bf;
     int buflen;
@@ -666,7 +665,6 @@ int tcc_open_bf(int s1, int filename, int initlen) {
     tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
 }
 
-/* 2 */
 int tcc_close() {
     int bf;
     bf = file;
@@ -677,7 +675,6 @@ int tcc_close() {
     tcc_free(bf);
 }
 
-/* 3 */
 int tcc_open(int s1, int filename) {
     int fd;
     fd = open(filename, or(O_RDONLY, O_BINARY));
@@ -686,7 +683,6 @@ int tcc_open(int s1, int filename) {
     return fd;
 }
 
-/* 4 */
 /* compile the file opened in 'file'. Return non zero if errors. */
 int tcc_compile(int s1) {
     int filetype;
@@ -704,7 +700,6 @@ int tcc_compile(int s1) {
     return 0;
 }
 
-/* 5 */
 int tcc_delete(int s1) {
     /* free sections */
     tccelf_delete(s1);
@@ -715,7 +710,6 @@ int tcc_delete(int s1) {
     tcc_free(s1);
 }
 
-/* 6 */
 int tcc_add_file_internal(int s1, int filename, int flags) {
     int ret;
 
@@ -727,14 +721,12 @@ int tcc_add_file_internal(int s1, int filename, int flags) {
     return ret;
 }
 
-/* 7 */
 int tcc_add_file(int s, int filename) {
     int filetype;
     filetype = gts_filetype(s);
     return tcc_add_file_internal(s, filename, 0);
 }
 
-/* 8 */
 int strstart(int val, int str) {
     int p;
     int q;
@@ -751,7 +743,6 @@ int strstart(int val, int str) {
     return 1;
 }
 
-/* 9 */
 int args_parser_add_file(int s, int filename, int filetype) {
     int f;
     f = tcc_malloc(add(sizeof_filespec, strlen(filename)));
@@ -760,7 +751,6 @@ int args_parser_add_file(int s, int filename, int filetype) {
     dynarray_add(ats_files(s), ats_nb_files(s), f);
 }
 
-/* 10 */
 int tcc_parse_args(int s, int pargc, int pargv, int optind) {
     int popt;
     int optarg;
@@ -810,6 +800,13 @@ int tcc_parse_args(int s, int pargc, int pargv, int optind) {
     return leave(0);
 }
 
+int init_option(int t,int name, int index, int flags) {
+  sto_name(t, name);
+  sto_index(t, index);
+  sto_flags(t, flags);
+  return add(t, sizeof_TCCOption);
+}
+
 int init_options() {
   int t;
 
@@ -823,19 +820,10 @@ int init_options() {
   tcc_options = tcc_mallocz(mul(sizeof_TCCOption, 4));
 
   t = tcc_options;
-  sto_name(t, mks("c"));
-  sto_index(t, TCC_OPTION_c);
-  sto_flags(t, 0);
-
-  t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("o"));
-  sto_index(t, TCC_OPTION_o);
-  sto_flags(t, TCC_OPTION_HAS_ARG);
-
-  t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("nostdinc"));
-  sto_index(t, TCC_OPTION_nostdinc);
-  sto_flags(t, 1);
+  t = init_option(t, mks("c"), TCC_OPTION_c, 0);
+  t = init_option(t, mks("o"), TCC_OPTION_o, TCC_OPTION_HAS_ARG);
+  t = init_option(t, mks("nostdinc"), TCC_OPTION_nostdinc, 1);
+  t = init_option(t, 0, 0, 0);
 }
 
 /* end of libtcc.c */
