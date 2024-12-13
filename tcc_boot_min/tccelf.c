@@ -275,16 +275,19 @@ ST_FUNC int put_elf_str(Section *s, const char *sym) {
 
 /* elf symbol hashing function */
 static unsigned long elf_hash(const unsigned char *name) {
-    unsigned long h = 0, g;
+    unsigned long h;
+    unsigned long g;
+
+    h = 0;
 
     while (neq(0, ri8(name))) {
         h = add(shl(h, 4), ri8(name));
         name = add(name, 1);
-        g = h & 0xf0000000;
+        g = and(h, 0xf0000000);
         if (g) {
-            h = xor(h, g >> 24);
+            h = xor(h, and(g >> 24, 255)); /* ljw see original extra bit twid */
         }
-        h &= ~g;
+        h = and(h, not(g));
     }
     return h;
 }
