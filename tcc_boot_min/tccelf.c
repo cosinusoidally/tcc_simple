@@ -105,6 +105,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     int i;
     Section *sr;
     int n;
+    ElfW_Rel *rel;
+    ElfW_Rel *rel_end;
 
     s = s1->symtab;
 
@@ -132,8 +134,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
         if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
-            ElfW_Rel *rel = (ElfW_Rel*)(sr->data + sr->sh_offset);
-            ElfW_Rel *rel_end = (ElfW_Rel*)(sr->data + sr->data_offset);
+            rel = (ElfW_Rel*)(sr->data + sr->sh_offset);
+            rel_end = (ElfW_Rel*)(sr->data + sr->data_offset);
             while(lt(rel, rel_end)) {
                 n = ELFW(R_SYM)(rel->r_info) - first_sym;
                 rel->r_info = ELFW(R_INFO)(tr[n], ELFW(R_TYPE)(rel->r_info));
