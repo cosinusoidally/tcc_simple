@@ -200,15 +200,14 @@ ST_FUNC Section *new_symtab(TCCState *s1,
     hash->link = symtab;
 
     ptr = section_ptr_add(hash, mul(add(add(2, nb_buckets), 1), sizeof(int)));
-    ptr[0] = nb_buckets;
-    ptr[1] = 1;
+    wi32(ptr, nb_buckets);
+    wi32(add(ptr, 4), 1);
     memset(add(ptr, 2), 0, mul(add(nb_buckets, 1), sizeof(int)));
     return symtab;
 }
 
 /* realloc section and set its content to zero */
-ST_FUNC void section_realloc(Section *sec, unsigned long new_size)
-{
+ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
     unsigned long size;
     unsigned char *data;
 
