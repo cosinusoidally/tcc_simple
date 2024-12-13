@@ -341,16 +341,19 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
 ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     int info, int other, int shndx, const char *name)
 {
-    int name_offset, sym_index;
-    int nbuckets, h;
+    int name_offset;
+    int sym_index;
+    int nbuckets;
+    int h;
     ElfW(Sym) *sym;
     Section *hs;
 
     sym = section_ptr_add(s, sizeof(ElfW(Sym)));
-    if (name && name[0])
+    if (name && name[0]) {
         name_offset = put_elf_str(s->link, name);
-    else
+    } else {
         name_offset = 0;
+    }
     /* XXX: endianness */
     sym->st_name = name_offset;
     sym->st_value = value;
