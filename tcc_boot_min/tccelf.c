@@ -325,12 +325,12 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     for(sym_index = 1; sym_index < nb_syms; sym_index++) {
         if (ELFW(ST_BIND)(sym->st_info) != STB_LOCAL) {
             h = elf_hash(strtab + sym->st_name) % nb_buckets;
-            *ptr = hash[h];
+            wi32(ptr, hash[h]);
             hash[h] = sym_index;
         } else {
-            *ptr = 0;
+            wi32(ptr, 0);
         }
-        ptr++;
+        ptr = add(ptr, 4);
         sym++;
     }
 }
