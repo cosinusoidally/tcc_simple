@@ -409,9 +409,10 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
     sym_index = ((int *)hs->data)[2 + h];
     while (neq(sym_index, 0)) {
         sym = &((ElfW(Sym) *)s->data)[sym_index];
-        name1 = (char *) s->link->data + sym->st_name;
-        if (!strcmp(name, name1))
+        name1 = add((char *) s->link->data, sym->st_name);
+        if (eq(strcmp(name, name1), 0)) {
             return sym_index;
+        }
         sym_index = ((int *)hs->data)[2 + nbuckets + sym_index];
     }
     return 0;
