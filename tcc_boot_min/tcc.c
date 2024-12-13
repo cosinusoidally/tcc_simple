@@ -19,4 +19,48 @@
  */
 
 #include "tcc.h"
-#include "libtcc.c"
+#include "tccpp.c"
+#include "tccgen.c"
+#include "tccelf.c"
+
+int init_globals() {
+    aglobal_stack = &global_stack;
+    alocal_stack = &local_stack;
+}
+
+typedef struct TCCOption {
+    char *name;
+    int index;
+    int flags;
+} TCCOption;
+
+extern int TCC_OPTION_c;
+extern int TCC_OPTION_o;
+extern int TCC_OPTION_nostdinc;
+
+extern int TCC_OPTION_HAS_ARG; /* 0x0001 */
+extern int TCC_OPTION_NOSEP;   /* 0x0002 cannot have space before option and arg */
+
+extern TCCOption *tcc_options;
+
+int init_options() {
+  TCCOption *t;
+
+  TCC_OPTION_c = 0;
+  TCC_OPTION_o = 1;
+  TCC_OPTION_nostdinc = 2;
+
+  TCC_OPTION_HAS_ARG = 1;
+  TCC_OPTION_NOSEP = 2;
+
+  tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
+
+  t = tcc_options;
+  t->name = mks("c"); t->index = TCC_OPTION_c; t->flags = 0;
+
+  t = add(t, sizeof_TCCOption);
+  t->name = mks("o"); t->index = TCC_OPTION_o; t->flags = TCC_OPTION_HAS_ARG;
+
+  t = add(t, sizeof_TCCOption);
+  t->name = mks("nostdinc"); t->index = TCC_OPTION_nostdinc; t->flags = 1;
+}
