@@ -250,12 +250,13 @@ ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
 }
 
 /* reserve at least 'size' bytes from section start */
-ST_FUNC void section_reserve(Section *sec, unsigned long size)
-{
-    if (size > sec->data_allocated)
+ST_FUNC void section_reserve(Section *sec, int size) {
+    if (gt(size, sec->data_allocated)) {
         section_realloc(sec, size);
-    if (size > sec->data_offset)
+    }
+    if (gt(size, sec->data_offset)) {
         sec->data_offset = size;
+    }
 }
 
 /* ------------------------------------------------------------------------- */
