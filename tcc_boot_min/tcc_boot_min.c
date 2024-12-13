@@ -748,6 +748,57 @@ int args_parser_add_file(int s, int filename, int filetype) {
     dynarray_add(ats_files(s), ats_nb_files(s), f);
 }
 
+/* 10 */
+int tcc_parse_args(int s, int pargc, int pargv, int optind) {
+    int popt;
+    int optarg;
+    int r;
+    int p1;
+    int r1;
+    int argc;
+    int argv;
+
+    argv = ri32(pargv);
+    argc = ri32(pargc);
+
+    enter();
+    r1 = v_alloca(4);
+
+    while (lt(optind, argc)) {
+        r = ri32(add(argv, mul(optind, 4)));
+        optind = add(optind, 1);
+        if (or(neq(ri8(r), mkc('-')), eq(ri8(add(r, 1)), 0))) {
+            args_parser_add_file(s, r, gts_filetype(s));
+        } else {
+            /* find option in table */
+            popt = tcc_options;
+            while(1) {
+                p1 = gto_name(popt);
+                wi32(r1, add(r, 1));
+                if (strstart(p1, r1)) {
+                    optarg = r1;
+                    if (and(gto_flags(popt), TCC_OPTION_HAS_ARG)) {
+                        if (and(eq(ri8(ri32(r1)), 0),
+                            eq(and(gto_flags(popt), TCC_OPTION_NOSEP), 0))) {
+                            optarg = ri32(add(argv, mul(optind, 4)));
+                            optind = add(optind, 1);
+                        }
+                    }
+                    break;
+                }
+                popt = add(popt, sizeof_TCCOption);
+            }
+
+            if(eq(gto_index(popt), TCC_OPTION_o)) {
+                sts_outfile(s, tcc_strdup(optarg));
+            }
+        }
+    }
+
+    return leave(0);
+}
+
+
 /* end of libtcc.c */
 
 int tcc_new() {

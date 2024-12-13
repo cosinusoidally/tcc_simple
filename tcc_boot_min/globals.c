@@ -101,5 +101,13 @@ int TOK_FLAG_BOF;
 
 int tok_flags;
 
+int TCC_OPTION_c;
+int TCC_OPTION_o;
+int TCC_OPTION_nostdinc;
+int TCC_OPTION_HAS_ARG;
+int TCC_OPTION_NOSEP;
+
+int tcc_options;
+
 /* =============== end globals.c ========================================== */
 
