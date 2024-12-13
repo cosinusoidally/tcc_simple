@@ -56,11 +56,17 @@ int init_options() {
   tcc_options = tcc_mallocz(mul(sizeof(TCCOption), 4));
 
   t = tcc_options;
-  sto_name(t, mks("c")); t->index = TCC_OPTION_c; t->flags = 0;
+  sto_name(t, mks("c"));
+  sto_index(t, TCC_OPTION_c);
+  t->flags = 0;
 
   t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("o")); t->index = TCC_OPTION_o; t->flags = TCC_OPTION_HAS_ARG;
+  sto_name(t, mks("o"));
+  sto_index(t, TCC_OPTION_o);
+  t->flags = TCC_OPTION_HAS_ARG;
 
   t = add(t, sizeof_TCCOption);
-  sto_name(t, mks("nostdinc")); t->index = TCC_OPTION_nostdinc; t->flags = 1;
+  sto_name(t, mks("nostdinc"));
+  sto_index(t, TCC_OPTION_nostdinc);
+  t->flags = 1;
 }

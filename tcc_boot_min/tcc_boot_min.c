@@ -173,6 +173,10 @@ int gto_index(int o) {
   return ri32(add(o, TCCOption_index_o));
 }
 
+int sto_index(int o, int v) {
+  wi32(add(o, TCCOption_index_o), v);
+}
+
 int gto_flags(int o) {
   return ri32(add(o, TCCOption_flags_o));
 }
