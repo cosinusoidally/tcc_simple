@@ -44,6 +44,11 @@ int BufferedFile_buffer_o;
 int sizeof_BufferedFile;
 int sizeof_BufferedFile_filename;
 
+int TCCOption_name_o;
+int TCCOption_index_o;
+int TCCOption_flags_o;
+int sizeof_TCCOption;
+
 int sizeof_void;
 
 int tcc_state;

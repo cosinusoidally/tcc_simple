@@ -208,6 +208,11 @@ int init_runtime(){
   sizeof_BufferedFile = 1052;
   sizeof_BufferedFile_filename = 1024;
 
+  TCCOption_name_o = 0;
+  TCCOption_index_o = 4;
+  TCCOption_flags_o = 8;
+  sizeof_TCCOption = 12;
+
   sizeof_void = 4;
 
   FUNC_PROLOG_SIZE = 9;
