@@ -275,8 +275,8 @@ ST_FUNC int put_elf_str(Section *s, const char *sym) {
 
 /* elf symbol hashing function */
 static unsigned long elf_hash(const unsigned char *name) {
-    unsigned long h;
-    unsigned long g;
+    int h;
+    int g;
 
     h = 0;
 
