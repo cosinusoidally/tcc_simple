@@ -37,19 +37,19 @@ ST_DATA Section *stab_section, *stabstr_section;
 
 void tccelf_new(TCCState *s) {
     /* no section zero */
-    dynarray_add(&s->sections, &s->nb_sections, NULL);
+    dynarray_add(&s->sections, &s->nb_sections, 0);
 
     /* create standard sections */
-    text_section = new_section(s, ".text", SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR);
-    data_section = new_section(s, ".data", SHT_PROGBITS, SHF_ALLOC | SHF_WRITE);
-    bss_section = new_section(s, ".bss", SHT_NOBITS, SHF_ALLOC | SHF_WRITE);
-    common_section = new_section(s, ".common", SHT_NOBITS, SHF_PRIVATE);
+    text_section = new_section(s, mks(".text"), SHT_PROGBITS, or(SHF_ALLOC, SHF_EXECINSTR));
+    data_section = new_section(s, mks(".data"), SHT_PROGBITS, or(SHF_ALLOC, SHF_WRITE));
+    bss_section = new_section(s, mks(".bss"), SHT_NOBITS, or(SHF_ALLOC, SHF_WRITE));
+    common_section = new_section(s, mks(".common"), SHT_NOBITS, SHF_PRIVATE);
     common_section->sh_num = SHN_COMMON;
 
     /* symbols are always generated for linking stage */
-    symtab_section = new_symtab(s, ".symtab", SHT_SYMTAB, 0,
-                                ".strtab",
-                                ".hashtab", SHF_PRIVATE);
+    symtab_section = new_symtab(s, mks(".symtab"), SHT_SYMTAB, 0,
+                                mks(".strtab"),
+                                mks(".hashtab"), SHF_PRIVATE);
     s->symtab = symtab_section;
 
 }
