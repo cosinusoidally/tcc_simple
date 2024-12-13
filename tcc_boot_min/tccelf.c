@@ -80,15 +80,19 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
 }
 
 /* save section data state */
-ST_FUNC void tccelf_begin_file(TCCState *s1)
-{
-    Section *s; int i;
-    for (i = 1; i < s1->nb_sections; i++) {
+ST_FUNC void tccelf_begin_file(TCCState *s1) {
+    Section *s;
+    int i;
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         s = s1->sections[i];
         s->sh_offset = s->data_offset;
+        i = add(i, 1);
     }
     /* disable symbol hashing during compilation */
-    s = s1->symtab, s->reloc = s->hash, s->hash = NULL;
+    s = s1->symtab;
+    s->reloc = s->hash;
+    s->hash = 0;
 }
 
 /* At the end of compilation, convert any UNDEF syms to global, and merge
