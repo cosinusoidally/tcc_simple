@@ -818,7 +818,7 @@ int init_options() {
   TCC_OPTION_nostdinc = 2;
 
   TCC_OPTION_HAS_ARG = 1;
-  TCC_OPTION_NOSEP = 2;
+  TCC_OPTION_NOSEP = 2; /* 0x0002 cannot have space before option and arg */
 
   tcc_options = tcc_mallocz(mul(sizeof_TCCOption, 4));
 
