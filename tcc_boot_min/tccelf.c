@@ -511,15 +511,6 @@ static int alloc_sec_names(TCCState *s1, Section *strsec)
     return textrel;
 }
 
-/* Info to be copied in dynamic section */
-struct dyn_inf {
-    Section *dynamic;
-    Section *dynstr;
-    unsigned long data_offset;
-    addr_t rel_addr;
-    addr_t rel_size;
-};
-
 /* Assign sections to segments and decide how are sections laid out when loaded
    in memory. This function also fills corresponding program headers. */
 static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
@@ -655,7 +646,6 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
 static int elf_output_file(TCCState *s1, const char *filename)
 {
     int i, ret, phnum, shnum, file_offset, *sec_order;
-    struct dyn_inf dyninf = {0};
     ElfW(Phdr) *phdr;
     ElfW(Sym) *sym;
     Section *strsec, *interp, *dynamic, *dynstr;
@@ -688,7 +678,7 @@ static int elf_output_file(TCCState *s1, const char *filename)
     sec_order[0] = 0;
 
     /* compute section to program header mapping */
-    file_offset = layout_sections(s1, phdr, phnum, interp, strsec, &dyninf,
+    file_offset = layout_sections(s1, phdr, phnum, interp, strsec, 0,
                                   sec_order);
 
     /* Create the ELF file with name 'filename' */
