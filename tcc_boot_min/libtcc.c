@@ -57,8 +57,9 @@ int init_options() {
   TCCOption *tcc_options;
   int i;
 
-  i = 0;
   tcc_options_ = tcc_mallocz(mul(sizeof(TCCOption), 4));
+
+  i = 0;
   tcc_options_[i].name = "c";
   tcc_options_[i].index = TCC_OPTION_c;
   tcc_options_[i].flags = 0;
