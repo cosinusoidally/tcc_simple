@@ -28,7 +28,6 @@ Section *bss_section;
 Section *common_section;
 
 Section *cur_text_section; /* current section where function code is generated */
-Section *last_text_section; /* to handle .previous asm directive */
 /* symbol sections */
 Section *symtab_section;
 
