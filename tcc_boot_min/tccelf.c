@@ -21,14 +21,12 @@
 /********************************************************/
 /* global variables */
 
-ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
-ST_DATA Section *common_section;
-ST_DATA Section *cur_text_section; /* current section where function code is generated */
-ST_DATA Section *last_text_section; /* to handle .previous asm directive */
+Section *text_section, *data_section, *bss_section; /* predefined sections */
+Section *common_section;
+Section *cur_text_section; /* current section where function code is generated */
+Section *last_text_section; /* to handle .previous asm directive */
 /* symbol sections */
-ST_DATA Section *symtab_section;
-/* debug sections */
-ST_DATA Section *stab_section, *stabstr_section;
+Section *symtab_section;
 
 /* special flag to indicate that the section should not be linked to the other ones */
 #define SHF_PRIVATE 0x80000000
