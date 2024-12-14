@@ -535,7 +535,8 @@ static void sort_syms(TCCState *s1, Section *s) {
     tcc_free(new_syms);
 
     /* now we modify all the relocations */
-    for(i = 1; i < s1->nb_sections; i++) {
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
         if (sr->sh_type == SHT_RELX && sr->link == s) {
             for_each_elem(sr, 0, rel, ElfW_Rel) {
@@ -545,6 +546,7 @@ static void sort_syms(TCCState *s1, Section *s) {
                 rel->r_info = ELFW(R_INFO)(sym_index, type);
             }
         }
+        i = add(i, 1);
     }
 
     tcc_free(old_to_new_syms);
