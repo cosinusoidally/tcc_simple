@@ -608,9 +608,11 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
-                           int file_offset, int *sec_order)
-{
-    int i, shnum, offset, size;
+                           int file_offset, int *sec_order) {
+    int i;
+    int shnum;
+    int offset;
+    int size;
     Section *s;
     ElfW(Ehdr) ehdr;
     ElfW(Shdr) shdr, *sh;
@@ -624,9 +626,9 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 
     /* fill header */
     ehdr.e_ident[0] = ELFMAG0;
-    ehdr.e_ident[1] = ELFMAG1;
-    ehdr.e_ident[2] = ELFMAG2;
-    ehdr.e_ident[3] = ELFMAG3;
+    ehdr.e_ident[1] = mkc('E');
+    ehdr.e_ident[2] = mkc('L');
+    ehdr.e_ident[3] = mkc('F');
     ehdr.e_ident[4] = ELFCLASSW;
     ehdr.e_ident[5] = ELFDATA2LSB;
     ehdr.e_ident[6] = EV_CURRENT;
@@ -638,7 +640,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     ehdr.e_ehsize = sizeof(ElfW(Ehdr));
     ehdr.e_shentsize = sizeof(ElfW(Shdr));
     ehdr.e_shnum = shnum;
-    ehdr.e_shstrndx = shnum - 1;
+    ehdr.e_shstrndx = sub(shnum, 1);
 
     fwrite(&ehdr, 1, sizeof(ElfW(Ehdr)), f);
     fwrite(phdr, 1, phnum * sizeof(ElfW(Phdr)), f);
