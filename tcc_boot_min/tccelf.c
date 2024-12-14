@@ -538,7 +538,7 @@ static void sort_syms(TCCState *s1, Section *s) {
     i = 1;
     while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
-        if (sr->sh_type == SHT_RELX && sr->link == s) {
+        if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
             for_each_elem(sr, 0, rel, ElfW_Rel) {
                 sym_index = ELFW(R_SYM)(rel->r_info);
                 type = ELFW(R_TYPE)(rel->r_info);
