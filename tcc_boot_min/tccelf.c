@@ -702,7 +702,7 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
 
     unlink(filename);
 
-    f = fopen(filename, "wb");
+    f = fopen(filename, mks("wb"));
     tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
     fclose(f);
 
@@ -711,18 +711,23 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
 
 /* Output an elf, coff or binary file */
 /* XXX: suppress unneeded sections */
-static int elf_output_file(TCCState *s1, const char *filename)
-{
-    int i, ret, phnum, shnum, file_offset, *sec_order;
+static int elf_output_file(TCCState *s1, const char *filename) {
+    int i;
+    int ret;
+    int phnum;
+    int shnum;
+    int file_offset;
+    int *sec_order;
     ElfW(Phdr) *phdr;
     ElfW(Sym) *sym;
-    Section *strsec, *interp, *dynamic, *dynstr;
+    Section *strsec;
+    Section *interp;
     int textrel;
 
-    ret = -1;
+    ret = sub(0, 1);
     phdr = NULL;
     sec_order = NULL;
-    interp = dynamic = dynstr = NULL; /* avoid warning */
+    interp = 0; /* avoid warning */
     textrel = 0;
 
     /* we add a section for symbols */
