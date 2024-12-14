@@ -540,7 +540,7 @@ static void sort_syms(TCCState *s1, Section *s) {
         sr = s1->sections[i];
         if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
             rel = (ElfW_Rel *) sr->data;
-            while(lt(rel, (ElfW_Rel *) (sr->data + sr->data_offset))) {
+            while(lt(rel, (ElfW_Rel *) (add(sr->data, sr->data_offset)))) {
                 sym_index = ELFW(R_SYM)(rel->r_info);
                 type = ELFW(R_TYPE)(rel->r_info);
                 sym_index = old_to_new_syms[sym_index];
