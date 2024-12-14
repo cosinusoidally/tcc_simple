@@ -731,8 +731,8 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     textrel = 0;
 
     /* we add a section for symbols */
-    strsec = new_section(s1, ".shstrtab", SHT_STRTAB, 0);
-    put_elf_str(strsec, "");
+    strsec = new_section(s1, mks(".shstrtab"), SHT_STRTAB, 0);
+    put_elf_str(strsec, mks(""));
 
     /* Allocate strings for section names */
     textrel = alloc_sec_names(s1, strsec);
@@ -741,13 +741,13 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     phnum = 0;
 
     /* allocate program segment headers */
-    phdr = tcc_mallocz(phnum * sizeof(ElfW(Phdr)));
+    phdr = tcc_mallocz(mul(phnum, sizeof(ElfW(Phdr))));
 
     /* compute number of sections */
     shnum = s1->nb_sections;
 
     /* this array is used to reorder sections in the output file */
-    sec_order = tcc_malloc(sizeof(int) * shnum);
+    sec_order = tcc_malloc(mul(sizeof(int), shnum));
     sec_order[0] = 0;
 
     /* compute section to program header mapping */
@@ -757,14 +757,12 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     /* Create the ELF file with name 'filename' */
     ret = tcc_write_elf_file(s1, filename, phnum, phdr, file_offset, sec_order);
     s1->nb_sections = shnum;
- the_end:
     tcc_free(sec_order);
     tcc_free(phdr);
     return ret;
 }
 
-LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename)
-{
+LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename) {
     int ret;
     ret = elf_output_file(s, filename);
     return ret;
