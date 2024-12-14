@@ -622,7 +622,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     memset(&ehdr, 0, sizeof(ehdr));
 
     /* align to 4 */
-    file_offset = (file_offset + 3) & -4;
+    file_offset = and(add(file_offset, 3), sub(0, 4));
 
     /* fill header */
     ehdr.e_ident[0] = ELFMAG0;
