@@ -539,11 +539,13 @@ static void sort_syms(TCCState *s1, Section *s) {
     while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
         if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
-            for_each_elem(sr, 0, rel, ElfW_Rel) {
+            rel = (ElfW_Rel *) sr->data;
+            while(lt(rel, (ElfW_Rel *) (sr->data + sr->data_offset))) {
                 sym_index = ELFW(R_SYM)(rel->r_info);
                 type = ELFW(R_TYPE)(rel->r_info);
                 sym_index = old_to_new_syms[sym_index];
                 rel->r_info = ELFW(R_INFO)(sym_index, type);
+                rel = rel + 1;
             }
         }
         i = add(i, 1);
