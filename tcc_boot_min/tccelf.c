@@ -577,20 +577,14 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
                            Section *interp, Section* strsec,
                            struct dyn_inf *dyninf, int *sec_order) {
     int i;
-    int j;
-    int k;
     int sh_order_index;
     int file_offset;
-    unsigned long s_align;
-    long long tmp;
-    addr_t addr;
     ElfW(Phdr) *ph;
     Section *s;
 
     sh_order_index = 1;
     file_offset = 0;
     file_offset = add(sizeof(ElfW(Ehdr)), mul(phnum, sizeof(ElfW(Phdr))));
-    s_align = ELF_PAGE_SIZE;
 
     /* all other sections come after */
     for(i = 1; i < s1->nb_sections; i++) {
