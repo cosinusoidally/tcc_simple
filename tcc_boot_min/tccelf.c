@@ -587,15 +587,18 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
     file_offset = add(sizeof(ElfW(Ehdr)), mul(phnum, sizeof(ElfW(Phdr))));
 
     /* all other sections come after */
-    for(i = 1; i < s1->nb_sections; i++) {
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         s = s1->sections[i];
         sec_order[sh_order_index++] = i;
 
         file_offset = (file_offset + s->sh_addralign - 1) &
             ~(s->sh_addralign - 1);
         s->sh_offset = file_offset;
-        if (s->sh_type != SHT_NOBITS)
+        if (s->sh_type != SHT_NOBITS) {
             file_offset += s->sh_size;
+        }
+        i = add(i, 1);
     }
 
     return file_offset;
