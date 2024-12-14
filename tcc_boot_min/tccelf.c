@@ -650,21 +650,22 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     i = 1;
     while(lt(i, s1->nb_sections)) {
         s = s1->sections[sec_order[i]];
-        if (s->sh_type != SHT_NOBITS) {
-            while (offset < s->sh_offset) {
+        if (neq(s->sh_type, SHT_NOBITS)) {
+            while (lt(offset, s->sh_offset)) {
                 fputc(0, f);
-                offset++;
+                offset = add(offset, 1);
             }
             size = s->sh_size;
-            if (size)
+            if (size) {
                 fwrite(s->data, 1, size, f);
-            offset += size;
+            }
+            offset = add(offset, size);
         }
         i = add(i, 1);
     }
 
     /* output section headers */
-    while (offset < ehdr.e_shoff) {
+    while (lt(offset, ehdr.e_shoff)) {
         fputc(0, f);
         offset++;
     }
