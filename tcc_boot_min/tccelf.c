@@ -596,7 +596,7 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
         file_offset = and((add(file_offset, sub(s->sh_addralign, 1))),
                           not(sub(s->sh_addralign, 1)));
         s->sh_offset = file_offset;
-        if (s->sh_type != SHT_NOBITS) {
+        if (neq(s->sh_type, SHT_NOBITS)) {
             file_offset += s->sh_size;
         }
         i = add(i, 1);
