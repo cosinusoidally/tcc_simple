@@ -476,12 +476,6 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     tcc_free(buf);
 }
 
-/* Browse each elem of type <type> in section <sec> starting at elem <startoff>
-   using variable <elem> */
-#define for_each_elem(sec, startoff, elem, type) \
-    for (elem = (type *) sec->data + startoff; \
-         elem < (type *) (sec->data + sec->data_offset); elem++)
-
 /* In an ELF file symbol table, the local symbols must appear below
    the global and weak ones. Since TCC cannot sort it while generating
    the code, we must do it after. All the relocation tables are also
@@ -557,12 +551,12 @@ static void sort_syms(TCCState *s1, Section *s) {
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
-static int alloc_sec_names(TCCState *s1, Section *strsec)
-{
+static int alloc_sec_names(TCCState *s1, Section *strsec) {
     int i;
     Section *s;
-    int textrel = 0;
+    int textrel;
 
+    textrel = 0;
     /* Allocate strings for section names */
     for(i = 1; i < s1->nb_sections; i++) {
         s = s1->sections[i];
