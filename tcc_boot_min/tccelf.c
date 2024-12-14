@@ -590,14 +590,14 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
     i = 1;
     while(lt(i, s1->nb_sections)) {
         s = s1->sections[i];
-        sec_order[sh_order_index] = i;
+        wi32(add(sec_order, mul(sh_order_index, 4)), i);
         sh_order_index = add(sh_order_index, 1);
 
         file_offset = and((add(file_offset, sub(s->sh_addralign, 1))),
                           not(sub(s->sh_addralign, 1)));
         s->sh_offset = file_offset;
         if (neq(s->sh_type, SHT_NOBITS)) {
-            file_offset += s->sh_size;
+            file_offset = add(file_offset, s->sh_size);
         }
         i = add(i, 1);
     }
