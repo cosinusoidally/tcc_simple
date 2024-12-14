@@ -562,7 +562,7 @@ static int alloc_sec_names(TCCState *s1, Section *strsec) {
     while(lt(i, s1->nb_sections)) {
         s = s1->sections[i];
         s->sh_size = s->data_offset;
-	if (s->sh_size || (s->sh_flags & SHF_ALLOC)) {
+	if (or(s->sh_size, and(s->sh_flags, SHF_ALLOC))) {
             s->sh_name = put_elf_str(strsec, s->name);
         }
         i = add(i, 1);
@@ -575,8 +575,7 @@ static int alloc_sec_names(TCCState *s1, Section *strsec) {
    in memory. This function also fills corresponding program headers. */
 static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
                            Section *interp, Section* strsec,
-                           struct dyn_inf *dyninf, int *sec_order)
-{
+                           struct dyn_inf *dyninf, int *sec_order) {
     int i, j, k, sh_order_index, file_offset;
     unsigned long s_align;
     long long tmp;
