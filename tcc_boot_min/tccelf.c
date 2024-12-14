@@ -643,11 +643,12 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     ehdr.e_shstrndx = sub(shnum, 1);
 
     fwrite(&ehdr, 1, sizeof(ElfW(Ehdr)), f);
-    fwrite(phdr, 1, phnum * sizeof(ElfW(Phdr)), f);
-    offset = sizeof(ElfW(Ehdr)) + phnum * sizeof(ElfW(Phdr));
+    fwrite(phdr, 1, mul(phnum, sizeof(ElfW(Phdr))), f);
+    offset = add(sizeof(ElfW(Ehdr)), mul(phnum, sizeof(ElfW(Phdr))));
 
     sort_syms(s1, symtab_section);
-    for(i = 1; i < s1->nb_sections; i++) {
+    i = 1;
+    while(lt(i, s1->nb_sections)) {
         s = s1->sections[sec_order[i]];
         if (s->sh_type != SHT_NOBITS) {
             while (offset < s->sh_offset) {
@@ -659,6 +660,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
                 fwrite(s->data, 1, size, f);
             offset += size;
         }
+        i = add(i, 1);
     }
 
     /* output section headers */
