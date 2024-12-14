@@ -670,7 +670,8 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
         offset++;
     }
 
-    for(i = 0; i < s1->nb_sections; i++) {
+    i = 0;
+    while(lt(i, s1->nb_sections)) {
         sh = &shdr;
         memset(sh, 0, sizeof(ElfW(Shdr)));
         s = s1->sections[i];
@@ -688,6 +689,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
             sh->sh_size = s->sh_size;
         }
         fwrite(sh, 1, sizeof(ElfW(Shdr)), f);
+        i = add(i, 1);
     }
 }
 
