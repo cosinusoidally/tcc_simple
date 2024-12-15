@@ -466,8 +466,9 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
             sh->sh_flags = s->sh_flags;
             sh->sh_entsize = s->sh_entsize;
             sh->sh_info = s->sh_info;
-            if (s->link)
+            if (s->link) {
                 sh->sh_link = s->link->sh_num;
+            }
             sh->sh_addralign = s->sh_addralign;
             sh->sh_addr = s->sh_addr;
             sh->sh_offset = s->sh_offset;
