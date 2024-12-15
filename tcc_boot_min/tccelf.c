@@ -103,10 +103,10 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     }
 
     if (and(sh_flags, SHF_PRIVATE)) {
-        dynarray_add(&s1->priv_sections, &s1->nb_priv_sections, sec);
+        dynarray_add(ats_priv_sections(s1), ats_nb_priv_sections(s1), sec);
     } else {
-        sec->sh_num = s1->nb_sections;
-        dynarray_add(&s1->sections, &s1->nb_sections, sec);
+        sec->sh_num = gts_nb_sections(s1);
+        dynarray_add(ats_sections(s1), ats_nb_sections(s1), sec);
     }
 
     return sec;
