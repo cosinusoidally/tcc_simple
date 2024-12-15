@@ -62,8 +62,6 @@ int FUNC_PROLOG_SIZE;
 int ind;
 int loc;
 
-int cur_text_section;
-
 int VT_VALMASK;
 int VT_SYM;
 int VT_CONST;
@@ -123,6 +121,16 @@ int TCC_OPTION_HAS_ARG;
 int TCC_OPTION_NOSEP;
 
 int tcc_options;
+
+/* predefined sections */
+int text_section;
+int data_section;
+int bss_section;
+int common_section;
+
+int cur_text_section; /* current section where function code is generated */
+/* symbol sections */
+int symtab_section;
 
 /* =============== end globals.c ========================================== */
 
