@@ -51,7 +51,7 @@ void tccelf_new(TCCState *s) {
     symtab_section = new_symtab(s, mks(".symtab"), SHT_SYMTAB, 0,
                                 mks(".strtab"),
                                 mks(".hashtab"), SHF_PRIVATE);
-    s->symtab = symtab_section;
+    sts_symtab(s, symtab_section);
 
 }
 
