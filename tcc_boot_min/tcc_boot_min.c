@@ -288,9 +288,9 @@ int init_runtime(){
 
   SHN_COMMON = 65522;  /* 0xfff2 Associated symbol is common */
 
-  SHT_NOBITS = 0;  /* Program space with no data (bss) */
   SHT_PROGBITS = 1; /* Program data */
   SHT_SYMTAB = 2;  /* Symbol table */
+  SHT_NOBITS = 8;  /* Program space with no data (bss) */
 
   O_RDONLY = 0;
   O_BINARY = 0;

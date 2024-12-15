@@ -159,29 +159,29 @@ typedef struct
 #define SHN_LOOS	0xff20		/* Start of OS-specific */
 #define SHN_HIOS	0xff3f		/* End of OS-specific */
 #define SHN_ABS		0xfff1		/* Associated symbol is absolute */
-#define SHN_COMMON	0xfff2		/* Associated symbol is common */
+extern int SHN_COMMON;	/* 0xfff2	 Associated symbol is common */
 #define SHN_XINDEX	0xffff		/* Index is in extra table.  */
 #define SHN_HIRESERVE	0xffff		/* End of reserved indices */
 
 /* Legal values for sh_type (section type).  */
 
 #define SHT_NULL	  0		/* Section header table entry unused */
-#define SHT_PROGBITS	  1		/* Program data */
-#define SHT_SYMTAB	  2		/* Symbol table */
+extern int SHT_PROGBITS; /* 1		Program data */
+extern int SHT_SYMTAB;	/*  2		Symbol table */
 #define SHT_STRTAB	  3		/* String table */
 #define SHT_RELA	  4		/* Relocation entries with addends */
 #define SHT_HASH	  5		/* Symbol hash table */
 #define SHT_DYNAMIC	  6		/* Dynamic linking information */
 #define SHT_NOTE	  7		/* Notes */
-#define SHT_NOBITS	  8		/* Program space with no data (bss) */
+extern int SHT_NOBITS;/*  8		Program space with no data (bss) */
 #define SHT_REL		  9		/* Relocation entries, no addends */
 #define SHT_SHLIB	  10		/* Reserved */
 
 /* Legal values for sh_flags (section flags).  */
 
-#define SHF_WRITE	     (1 << 0)	/* Writable */
-#define SHF_ALLOC	     (1 << 1)	/* Occupies memory during execution */
-#define SHF_EXECINSTR	     (1 << 2)	/* Executable */
+extern int SHF_WRITE;	/*   (1 << 0)	Writable */
+extern int SHF_ALLOC;	/*   (1 << 1)	Occupies memory during execution */
+extern int SHF_EXECINSTR; /* (1 << 2)	Executable */
 #define SHF_MERGE	     (1 << 4)	/* Might be merged */
 #define SHF_STRINGS	     (1 << 5)	/* Contains nul-terminated strings */
 #define SHF_INFO_LINK	     (1 << 6)	/* `sh_info' contains SHT index */
