@@ -415,18 +415,18 @@ static int alloc_sec_names(TCCState *s1, Section *strsec) {
 /* 21 */
 /* Assign sections to segments and decide how are sections laid out when loaded
    in memory. This function also fills corresponding program headers. */
-static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
+static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
                            Section *interp, Section* strsec,
                            struct dyn_inf *dyninf, int *sec_order) {
     int i;
     int sh_order_index;
     int file_offset;
-    ElfW(Phdr) *ph;
+    Elf32_Phdr *ph;
     Section *s;
 
     sh_order_index = 1;
     file_offset = 0;
-    file_offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof(ElfW(Phdr))));
+    file_offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof_Elf32_Phdr));
 
     /* all other sections come after */
     i = 1;
