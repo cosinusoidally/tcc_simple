@@ -38,6 +38,7 @@ int gfs_name(int o) {return add(o,filespec_name_o);}
 /* Section accessors */
 
 int gs_data_offset(int o) {return ri32(add(o, Section_data_offset_o));}
+int ss_data_offset(int o, int v) {wi32(add(o, Section_data_offset_o), v);}
 
 int gs_data(int o) {return ri32(add(o, Section_data_o));}
 int ss_data(int o, int v) {wi32(add(o, Section_data_o), v);}

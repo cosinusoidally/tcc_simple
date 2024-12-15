@@ -132,7 +132,7 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
     if (and(neq(gs_sh_type(sec), SHT_NOBITS), gt(offset1, gs_data_allocated(sec)))) {
         section_realloc(sec, offset1);
     }
-    sec->data_offset = offset1;
+    ss_data_offset(sec, offset1);
     if (gt(align, sec->sh_addralign)) {
         sec->sh_addralign = align;
     }
