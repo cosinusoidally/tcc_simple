@@ -408,7 +408,7 @@ int alloc_sec_names(TCCState *s1, Section *strsec) {
         }
         i = add(i, 1);
     }
-    strsec->sh_size = strsec->data_offset;
+    ss_sh_size(strsec, gs_data_offset(strsec));
     return textrel;
 }
 
