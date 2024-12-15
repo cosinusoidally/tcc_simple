@@ -56,7 +56,7 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
         free_section(ri32(add(gts_priv_sections(s1), mul(i, 4))));
         i = add(i, 1);
     }
-    dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
+    dynarray_reset(ats_priv_sections(s1), ats_nb_priv_sections(s1));
 
     symtab_section = 0; /* for tccrun.c:rt_printline() */
 }
