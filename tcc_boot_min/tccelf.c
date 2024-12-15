@@ -412,41 +412,6 @@ static int alloc_sec_names(TCCState *s1, Section *strsec) {
     return textrel;
 }
 
-/* 21 */
-/* Assign sections to segments and decide how are sections laid out when loaded
-   in memory. This function also fills corresponding program headers. */
-static int layout_sections(TCCState *s1, Elf32_Phdr *phdr, int phnum,
-                           Section *interp, Section* strsec,
-                           struct dyn_inf *dyninf, int *sec_order) {
-    int i;
-    int sh_order_index;
-    int file_offset;
-    Elf32_Phdr *ph;
-    Section *s;
-
-    sh_order_index = 1;
-    file_offset = 0;
-    file_offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof_Elf32_Phdr));
-
-    /* all other sections come after */
-    i = 1;
-    while(lt(i, gts_nb_sections(s1))) {
-        s = ri32(add(gts_sections(s1), mul(i, 4)));
-        wi32(add(sec_order, mul(sh_order_index, 4)), i);
-        sh_order_index = add(sh_order_index, 1);
-
-        file_offset = and((add(file_offset, sub(gs_sh_addralign(s), 1))),
-                          not(sub(gs_sh_addralign(s), 1)));
-        ss_sh_offset(s, file_offset);
-        if (neq(gs_sh_type(s), SHT_NOBITS)) {
-            file_offset = add(file_offset, gs_sh_size(s));
-        }
-        i = add(i, 1);
-    }
-
-    return file_offset;
-}
-
 /* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
