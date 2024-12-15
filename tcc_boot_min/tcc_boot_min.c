@@ -861,6 +861,31 @@ int tccelf_begin_file(int s1) {
     ss_hash(s, 0);
 }
 
+/* 6 */
+int new_section(int s1, int name, int sh_type, int sh_flags) {
+    int sec;
+
+    sec = tcc_mallocz(add(sizeof_Section, strlen(name)));
+    strcpy(gs_name(sec), name);
+    ss_sh_type(sec, sh_type);
+    ss_sh_flags(sec, sh_flags);
+
+    if (eq(sh_type, SHT_STRTAB)) {
+        ss_sh_addralign(sec, 1);
+    } else {
+        ss_sh_addralign(sec, 4);
+    }
+
+    if (and(sh_flags, SHF_PRIVATE)) {
+        dynarray_add(ats_priv_sections(s1), ats_nb_priv_sections(s1), sec);
+    } else {
+        ss_sh_num(sec, gts_nb_sections(s1));
+        dynarray_add(ats_sections(s1), ats_nb_sections(s1), sec);
+    }
+
+    return sec;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
