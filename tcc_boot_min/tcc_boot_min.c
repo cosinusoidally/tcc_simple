@@ -58,6 +58,7 @@ int gs_sh_addralign(int o) {return ri32(add(o, Section_sh_addralign_o));}
 int ss_sh_addralign(int o, int v) {wi32(add(o, Section_sh_addralign_o), v);}
 
 int gs_sh_size(int o) {ri32(add(o, Section_sh_size_o));}
+int ss_sh_size(int o, int v) {wi32(add(o, Section_sh_size_o), v);}
 
 int ss_sh_offset(int o, int v) {wi32(add(o, Section_sh_offset_o), v);}
 

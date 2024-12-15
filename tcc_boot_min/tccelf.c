@@ -400,11 +400,11 @@ int alloc_sec_names(TCCState *s1, Section *strsec) {
     textrel = 0;
     /* Allocate strings for section names */
     i = 1;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         s = s1->sections[i];
-        s->sh_size = s->data_offset;
+        ss_sh_size(s, gs_data_offset(s));
 	if (or(s->sh_size, and(s->sh_flags, SHF_ALLOC))) {
-            s->sh_name = put_elf_str(strsec, s->name);
+            s->sh_name = put_elf_str(strsec, gs_name(s));
         }
         i = add(i, 1);
     }
