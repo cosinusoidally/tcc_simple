@@ -510,11 +510,11 @@ int elf_output_file(TCCState *s1, const char *filename) {
     int phnum;
     int shnum;
     int file_offset;
-    int *sec_order;
-    Elf32_Phdr *phdr;
-    Elf32_Sym *sym;
-    Section *strsec;
-    Section *interp;
+    int sec_order;
+    int phdr;
+    int sym;
+    int strsec;
+    int interp;
     int textrel;
 
     ret = sub(0, 1);
