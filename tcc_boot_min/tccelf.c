@@ -539,7 +539,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 /* 24 */
 /* Output an elf, coff or binary file */
 /* XXX: suppress unneeded sections */
-static int elf_output_file(TCCState *s1, const char *filename) {
+int elf_output_file(TCCState *s1, const char *filename) {
     int i;
     int ret;
     int phnum;
@@ -587,12 +587,5 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     s1->nb_sections = shnum;
     tcc_free(sec_order);
     tcc_free(phdr);
-    return ret;
-}
-
-/* 25 */
-LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename) {
-    int ret;
-    ret = elf_output_file(s, filename);
     return ret;
 }

@@ -992,6 +992,13 @@ int tcc_write_elf_file(int s1, int filename, int phnum,
     return 0;
 }
 
+/* 25 */
+int tcc_output_file(int s, int filename) {
+    int ret;
+    ret = elf_output_file(s, filename);
+    return ret;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
