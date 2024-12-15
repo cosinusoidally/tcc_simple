@@ -50,27 +50,17 @@ int scv_i(int o, int v) {wi32(add(o, CValue_i_o), v);}
 
 /* CType accessors */
 
-int gct_t(int o) {
-  return ri32(add(o, CType_t_o));
-}
+int gct_t(int o) {return ri32(add(o, CType_t_o));}
 
-int gct_ref(int o) {
-  return ri32(add(o, CType_ref_o));
-}
+int gct_ref(int o) {return ri32(add(o, CType_ref_o));}
 
 /* Sym accessors */
 
-int gsym_type(int o) {
-  return add(o, Sym_type_o); /* CType type */
-}
+int gsym_type(int o) {return add(o, Sym_type_o);} /* CType type */
 
-int gsym_v(int o) {
-  return ri32(add(o, Sym_v_o)); /* int v */
-}
+int gsym_v(int o) {return ri32(add(o, Sym_v_o));} /* int v */
 
-int gsym_next(int o) {
-  return ri32(add(o, Sym_next_o)); /* struct Sym *next */
-}
+int gsym_next(int o) {return ri32(add(o, Sym_next_o));} /* struct Sym *next */
 
 /* BufferedFile accessors */
 
