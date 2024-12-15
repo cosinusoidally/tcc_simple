@@ -634,6 +634,9 @@ extern int sizeof_BufferedFile_filename;
 extern int sizeof_filespec;
 extern int sizeof_TCCOption;
 extern int sizeof_Section;
+extern int sizeof_Elf32_Ehdr;
+extern int sizeof_Elf32_Phdr;
+
 
 extern int aglobal_stack;
 extern int alocal_stack;

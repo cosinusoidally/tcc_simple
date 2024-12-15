@@ -426,7 +426,7 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
 
     sh_order_index = 1;
     file_offset = 0;
-    file_offset = add(sizeof(ElfW(Ehdr)), mul(phnum, sizeof(ElfW(Phdr))));
+    file_offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof(ElfW(Phdr))));
 
     /* all other sections come after */
     i = 1;
