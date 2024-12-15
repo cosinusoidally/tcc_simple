@@ -21,59 +21,32 @@ int sts_outfile(int o,int v) {wi32(add(o, TCCState_outfile_o), v);}
 
 /* struct filespec accessors */
 
-int gfs_type(int o) {
-  return ri8(add(o,filespec_type_o));
-}
+int gfs_type(int o) {return ri8(add(o,filespec_type_o));}
+int sfs_type(int o, int v) {wi8(add(o,filespec_type_o, v));}
 
-int sfs_type(int o, int v) {
-  wi8(add(o,filespec_type_o, v));
-}
-
-int gfs_name(int o) {
-  return add(o,filespec_name_o);
-}
+int gfs_name(int o) {return add(o,filespec_name_o);}
 
 /* Section accessors */
 
-int gs_data(int o) {
-  return ri32(add(o, Section_data_o));
-}
+int gs_data(int o) {return ri32(add(o, Section_data_o));}
 
-int gs_data_allocated(int o) {
-  return ri32(add(o, Section_data_allocated_o));
-}
+int gs_data_allocated(int o) {return ri32(add(o, Section_data_allocated_o));}
 
-int ss_sh_num(int o, int v) {
-  wi32(add(o, Section_sh_num_o), v);
+int ss_sh_num(int o, int v) {wi32(add(o, Section_sh_num_o), v);}
 
-}
 /* SValue accessors */
 
-int gsv_r(int o) {
-  return ri32(add(o, SValue_r_o)); /* int r */
-}
+int gsv_r(int o) {return ri32(add(o, SValue_r_o));} /* int r */
+int ssv_r(int o, int v) {wi32(add(o, SValue_r_o), v);}
 
-int ssv_r(int o, int v) {
-  wi32(add(o, SValue_r_o), v);
-}
+int gsv_c(int o) { return add(o, SValue_c_o);} /* CValue c */
 
-int gsv_c(int o) {
-  return add(o, SValue_c_o); /* CValue c */
-}
-
-int gsv_sym(int o) {
-  return ri32(add(o, SValue_sym_o)); /* struct Sym *sym */
-}
+int gsv_sym(int o) { return ri32(add(o, SValue_sym_o));} /* struct Sym *sym */
 
 /* CValue accessors */
 
-int gcv_i(int o) {
-  return ri32(add(o, CValue_i_o));
-}
-
-int scv_i(int o, int v) {
-  wi32(add(o, CValue_i_o), v);
-}
+int gcv_i(int o) {return ri32(add(o, CValue_i_o));}
+int scv_i(int o, int v) {wi32(add(o, CValue_i_o), v);}
 
 /* CType accessors */
 
