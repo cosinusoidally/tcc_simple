@@ -91,7 +91,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
 Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     Section *sec;
 
-    sec = tcc_mallocz(add(sizeof(Section), strlen(name)));
+    sec = tcc_mallocz(add(sizeof_Section, strlen(name)));
     strcpy(gs_name(sec), name);
     ss_sh_type(sec, sh_type);
     ss_sh_flags(sec, sh_flags);
@@ -105,7 +105,7 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     if (and(sh_flags, SHF_PRIVATE)) {
         dynarray_add(ats_priv_sections(s1), ats_nb_priv_sections(s1), sec);
     } else {
-        sec->sh_num = gts_nb_sections(s1);
+        ss_sh_num(sec, gts_nb_sections(s1));
         dynarray_add(ats_sections(s1), ats_nb_sections(s1), sec);
     }
 
