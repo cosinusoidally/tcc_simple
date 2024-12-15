@@ -511,15 +511,15 @@ int elf_output_file(TCCState *s1, const char *filename) {
     int shnum;
     int file_offset;
     int *sec_order;
-    ElfW(Phdr) *phdr;
-    ElfW(Sym) *sym;
+    Elf32_Phdr *phdr;
+    Elf32_Sym *sym;
     Section *strsec;
     Section *interp;
     int textrel;
 
     ret = sub(0, 1);
-    phdr = NULL;
-    sec_order = NULL;
+    phdr = 0;
+    sec_order = 0;
     interp = 0; /* avoid warning */
     textrel = 0;
 
@@ -534,7 +534,7 @@ int elf_output_file(TCCState *s1, const char *filename) {
     phnum = 0;
 
     /* allocate program segment headers */
-    phdr = tcc_mallocz(mul(phnum, sizeof(ElfW(Phdr))));
+    phdr = tcc_mallocz(mul(phnum, sizeof_Elf32_Phdr));
 
     /* compute number of sections */
     shnum = s1->nb_sections;
