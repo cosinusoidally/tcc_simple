@@ -281,6 +281,17 @@ int init_runtime(){
 
   SYM_FIELD = 536870912; /* 0x20000000 */
 
+  SHF_WRITE = shl(1, 0); /* Writable */
+  SHF_ALLOC = shl(1, 1);  /* Occupies memory during execution */
+  SHF_EXECINSTR = shl(1, 2); /* Executable */
+  SHF_PRIVATE = shl(1, 31);
+
+  SHN_COMMON = 65522;  /* 0xfff2 Associated symbol is common */
+
+  SHT_NOBITS = 0;  /* Program space with no data (bss) */
+  SHT_PROGBITS = 1; /* Program data */
+  SHT_SYMTAB = 2;  /* Symbol table */
+
   O_RDONLY = 0;
   O_BINARY = 0;
 

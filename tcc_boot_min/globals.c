@@ -88,6 +88,17 @@ int RC_IRET;
 
 int SYM_FIELD;
 
+int SHF_ALLOC;
+int SHF_EXECINSTR;
+int SHF_PRIVATE;
+int SHF_WRITE;
+
+int SHN_COMMON;
+
+int SHT_NOBITS;
+int SHT_PROGBITS;
+int SHT_SYMTAB;
+
 int aglobal_stack;
 int alocal_stack;
 
