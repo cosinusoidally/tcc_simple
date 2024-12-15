@@ -45,7 +45,7 @@ void tccelf_new(TCCState *s) {
     data_section = new_section(s, mks(".data"), SHT_PROGBITS, or(SHF_ALLOC, SHF_WRITE));
     bss_section = new_section(s, mks(".bss"), SHT_NOBITS, or(SHF_ALLOC, SHF_WRITE));
     common_section = new_section(s, mks(".common"), SHT_NOBITS, SHF_PRIVATE);
-    common_section->sh_num = SHN_COMMON;
+    ss_sh_num(common_section, SHN_COMMON);
 
     /* symbols are always generated for linking stage */
     symtab_section = new_symtab(s, mks(".symtab"), SHT_SYMTAB, 0,
