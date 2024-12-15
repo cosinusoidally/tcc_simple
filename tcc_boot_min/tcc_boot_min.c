@@ -198,6 +198,8 @@ int init_runtime(){
   TCCOption_flags_o = 8;
   sizeof_TCCOption = 12;
 
+  sizeof_Elf32_Ehdr = 52;
+
   sizeof_void = 4;
 
   FUNC_PROLOG_SIZE = 9;

@@ -64,6 +64,8 @@ int TCCOption_index_o;
 int TCCOption_flags_o;
 int sizeof_TCCOption;
 
+int sizeof_Elf32_Ehdr;
+
 int sizeof_void;
 
 int tcc_state;
