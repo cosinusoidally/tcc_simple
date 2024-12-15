@@ -2,6 +2,8 @@
 
 int foo;
 
+int TCCState_sections_o;
+int TCCState_nb_sections_o;
 int TCCState_files_o;
 int TCCState_nb_files_o;
 int TCCState_filetype_o;

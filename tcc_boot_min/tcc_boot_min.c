@@ -1,6 +1,14 @@
 
 /* TCCState accessors */
 
+int ats_sections(int o) {
+  return add(o, TCCState_sections_o);
+}
+
+int ats_nb_sections(int o) {
+  return add(o, TCCState_nb_sections_o);
+}
+
 int ats_files(int o) {
   return add(o, TCCState_files_o);
 }
@@ -192,6 +200,8 @@ int init_runtime(){
   puts(foo);
   printf(mks("blah: %d\n"),add(1,2));
 
+  TCCState_sections_o = 12;
+  TCCState_nb_sections_o = 16;
   TCCState_files_o = 32;
   TCCState_nb_files_o = 36;
   TCCState_filetype_o = 40;
