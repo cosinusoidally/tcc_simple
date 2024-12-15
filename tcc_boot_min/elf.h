@@ -168,13 +168,13 @@ extern int SHN_COMMON;	/* 0xfff2	 Associated symbol is common */
 #define SHT_NULL	  0		/* Section header table entry unused */
 extern int SHT_PROGBITS; /* 1		Program data */
 extern int SHT_SYMTAB;	/*  2		Symbol table */
-#define SHT_STRTAB	  3		/* String table */
-#define SHT_RELA	  4		/* Relocation entries with addends */
-#define SHT_HASH	  5		/* Symbol hash table */
+extern int SHT_STRTAB;	/*  3		String table */
+extern int SHT_RELA;	/*  4		Relocation entries with addends */
+extern int SHT_HASH;	/*  5		Symbol hash table */
 #define SHT_DYNAMIC	  6		/* Dynamic linking information */
 #define SHT_NOTE	  7		/* Notes */
 extern int SHT_NOBITS;/*  8		Program space with no data (bss) */
-#define SHT_REL		  9		/* Relocation entries, no addends */
+extern SHT_REL;		/*  9		Relocation entries, no addends */
 #define SHT_SHLIB	  10		/* Reserved */
 
 /* Legal values for sh_flags (section flags).  */

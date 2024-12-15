@@ -102,7 +102,7 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     } else if (eq(sh_type, SHT_STRTAB)) {
         sec->sh_addralign = 1;
     } else {
-        sec->sh_addralign =  PTR_SIZE; /* gcc/pcc default alignment */
+        sec->sh_addralign = 4; /* gcc/pcc default alignment */
     }
 
     if (and(sh_flags, SHF_PRIVATE)) {

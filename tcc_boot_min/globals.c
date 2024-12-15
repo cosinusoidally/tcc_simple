@@ -102,8 +102,12 @@ int SHF_WRITE;
 
 int SHN_COMMON;
 
+int SHT_HASH;
 int SHT_NOBITS;
 int SHT_PROGBITS;
+int SHT_REL;
+int SHT_RELA;
+int SHT_STRTAB;
 int SHT_SYMTAB;
 
 int aglobal_stack;

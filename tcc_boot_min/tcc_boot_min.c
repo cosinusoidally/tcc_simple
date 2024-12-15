@@ -218,7 +218,11 @@ int init_runtime(){
 
   SHT_PROGBITS = 1; /* Program data */
   SHT_SYMTAB = 2;  /* Symbol table */
+  SHT_STRTAB = 3; /* String table */
+  SHT_RELA = 4; /* Relocation entries with addends */
+  SHT_HASH = 5;  /* Symbol hash table */
   SHT_NOBITS = 8;  /* Program space with no data (bss) */
+  SHT_REL = 9; /* Relocation entries, no addends */
 
   O_RDONLY = 0;
   O_BINARY = 0;
