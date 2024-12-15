@@ -38,7 +38,7 @@ Section *symtab_section;
 
 void tccelf_new(TCCState *s) {
     /* no section zero */
-    dynarray_add(&s->sections, &s->nb_sections, 0);
+    dynarray_add(ats_sections(s), ats_nb_sections(s), 0);
 
     /* create standard sections */
     text_section = new_section(s, mks(".text"), SHT_PROGBITS, or(SHF_ALLOC, SHF_EXECINSTR));

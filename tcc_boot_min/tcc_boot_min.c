@@ -9,6 +9,10 @@ int ats_nb_sections(int o) {
   return add(o, TCCState_nb_sections_o);
 }
 
+int sts_symtab(int o,int v) {
+  wi32(add(o, TCCState_symtab_o), v);
+}
+
 int ats_files(int o) {
   return add(o, TCCState_files_o);
 }
@@ -202,6 +206,7 @@ int init_runtime(){
 
   TCCState_sections_o = 12;
   TCCState_nb_sections_o = 16;
+  TCCState_symtab_o = 28;
   TCCState_files_o = 32;
   TCCState_nb_files_o = 36;
   TCCState_filetype_o = 40;
