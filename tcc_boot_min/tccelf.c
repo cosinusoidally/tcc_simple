@@ -22,14 +22,14 @@
 /* global variables */
 
 /* predefined sections */
-Section *text_section;
-Section *data_section;
-Section *bss_section;
-Section *common_section;
+extern Section *text_section;
+extern Section *data_section;
+extern Section *bss_section;
+extern Section *common_section;
 
-Section *cur_text_section; /* current section where function code is generated */
+extern Section *cur_text_section; /* current section where function code is generated */
 /* symbol sections */
-Section *symtab_section;
+extern Section *symtab_section;
 
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
