@@ -126,7 +126,7 @@ ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
     int size;
     int data;
 
-    size = sec->data_allocated;
+    size = gs_data_allocated(sec);
     if (eq(size, 0)) {
         size = 1;
     }
@@ -134,7 +134,7 @@ ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
         size = mul(size, 2);
     }
     data = tcc_realloc(gs_data(sec), size);
-    memset(add(data, sec->data_allocated), 0, sub(size, sec->data_allocated));
+    memset(add(data, gs_data_allocated(sec)), 0, sub(size, gs_data_allocated(sec)));
     ss_data(sec, data);
     ss_data_allocated(sec, size);
 }
