@@ -404,7 +404,7 @@ int alloc_sec_names(TCCState *s1, Section *strsec) {
         s = s1->sections[i];
         ss_sh_size(s, gs_data_offset(s));
 	if (or(gs_sh_size(s), and(gs_sh_flags(s), SHF_ALLOC))) {
-            s->sh_name = put_elf_str(strsec, gs_name(s));
+            ss_sh_name(s, put_elf_str(strsec, gs_name(s)));
         }
         i = add(i, 1);
     }
