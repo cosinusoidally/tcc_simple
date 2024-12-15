@@ -34,23 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 4 */
-/* save section data state */
-ST_FUNC void tccelf_begin_file(TCCState *s1) {
-    int s;
-    int i;
-    i = 1;
-    while(lt(i, gts_nb_sections(s1))) {
-        s = ri32(add(gts_sections(s1), mul(i, 4)));
-        ss_sh_offset(s, gs_data_offset(s));
-        i = add(i, 1);
-    }
-    /* disable symbol hashing during compilation */
-    s = gts_symtab(s1);
-    ss_reloc(s, gs_hash(s));
-    ss_hash(s, 0);
-}
-
 /* 5 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */

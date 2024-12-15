@@ -828,6 +828,23 @@ int tccelf_delete(int s1) {
     symtab_section = 0; /* for tccrun.c:rt_printline() */
 }
 
+/* 4 */
+/* save section data state */
+int tccelf_begin_file(int s1) {
+    int s;
+    int i;
+    i = 1;
+    while(lt(i, gts_nb_sections(s1))) {
+        s = ri32(add(gts_sections(s1), mul(i, 4)));
+        ss_sh_offset(s, gs_data_offset(s));
+        i = add(i, 1);
+    }
+    /* disable symbol hashing during compilation */
+    s = gts_symtab(s1);
+    ss_reloc(s, gs_hash(s));
+    ss_hash(s, 0);
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
