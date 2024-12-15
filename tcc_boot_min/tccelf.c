@@ -34,33 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 2 */
-static void free_section(Section *s) {
-    tcc_free(gs_data(s));
-}
-
-/* 3 */
-ST_FUNC void tccelf_delete(TCCState *s1) {
-    int i;
-
-    /* free all sections */
-    i = 1;
-    while(lt(i, gts_nb_sections(s1))) {
-        free_section(ri32(add(gts_sections(s1), mul(i, 4))));
-        i = add(i, 1);
-    }
-    dynarray_reset(ats_sections(s1), ats_nb_sections(s1));
-
-    i = 0;
-    while(lt(i, gts_nb_priv_sections(s1))) {
-        free_section(ri32(add(gts_priv_sections(s1), mul(i, 4))));
-        i = add(i, 1);
-    }
-    dynarray_reset(ats_priv_sections(s1), ats_nb_priv_sections(s1));
-
-    symtab_section = 0; /* for tccrun.c:rt_printline() */
-}
-
 /* 4 */
 /* save section data state */
 ST_FUNC void tccelf_begin_file(TCCState *s1) {

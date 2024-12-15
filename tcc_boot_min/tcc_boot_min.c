@@ -787,6 +787,33 @@ int tccelf_new(int s) {
 
 }
 
+/* 2 */
+int free_section(int s) {
+    tcc_free(gs_data(s));
+}
+
+/* 3 */
+int tccelf_delete(int s1) {
+    int i;
+
+    /* free all sections */
+    i = 1;
+    while(lt(i, gts_nb_sections(s1))) {
+        free_section(ri32(add(gts_sections(s1), mul(i, 4))));
+        i = add(i, 1);
+    }
+    dynarray_reset(ats_sections(s1), ats_nb_sections(s1));
+
+    i = 0;
+    while(lt(i, gts_nb_priv_sections(s1))) {
+        free_section(ri32(add(gts_priv_sections(s1), mul(i, 4))));
+        i = add(i, 1);
+    }
+    dynarray_reset(ats_priv_sections(s1), ats_nb_priv_sections(s1));
+
+    symtab_section = 0; /* for tccrun.c:rt_printline() */
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
