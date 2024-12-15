@@ -133,10 +133,10 @@ ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
     while (lt(size, new_size)) {
         size = mul(size, 2);
     }
-    data = tcc_realloc(sec->data, size);
+    data = tcc_realloc(gs_data(sec), size);
     memset(add(data, sec->data_allocated), 0, sub(size, sec->data_allocated));
-    sec->data = data;
-    sec->data_allocated = size;
+    ss_data(sec, data);
+    ss_data_allocated(sec, size);
 }
 
 /* 9 */
