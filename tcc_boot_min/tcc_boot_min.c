@@ -87,29 +87,14 @@ int gbf_buffer(int o){ return add(o, BufferedFile_buffer_o);}
 
 /* TCCOption accessors */
 
-int gto_name(int o) {
-  return ri32(add(o, TCCOption_name_o));
-}
+int gto_name(int o) {return ri32(add(o, TCCOption_name_o));}
+int sto_name(int o, int v) {wi32(add(o, TCCOption_name_o), v);}
 
-int sto_name(int o, int v) {
-  wi32(add(o, TCCOption_name_o), v);
-}
+int gto_index(int o) {return ri32(add(o, TCCOption_index_o));}
+int sto_index(int o, int v) {wi32(add(o, TCCOption_index_o), v);}
 
-int gto_index(int o) {
-  return ri32(add(o, TCCOption_index_o));
-}
-
-int sto_index(int o, int v) {
-  wi32(add(o, TCCOption_index_o), v);
-}
-
-int gto_flags(int o) {
-  return ri32(add(o, TCCOption_flags_o));
-}
-
-int sto_flags(int o, int v) {
-  wi32(add(o, TCCOption_flags_o), v);
-}
+int gto_flags(int o) {return ri32(add(o, TCCOption_flags_o));}
+int sto_flags(int o, int v) {wi32(add(o, TCCOption_flags_o), v);}
 
 /* stuff */
 
