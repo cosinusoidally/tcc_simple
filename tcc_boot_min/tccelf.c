@@ -433,10 +433,10 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
 
     sort_syms(s1, symtab_section);
     i = 1;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         s = s1->sections[sec_order[i]];
-        if (neq(s->sh_type, SHT_NOBITS)) {
-            while (lt(offset, s->sh_offset)) {
+        if (neq(gs_sh_type(s), SHT_NOBITS)) {
+            while (lt(offset, gs_sh_offset(s))) {
                 fputc(0, f);
                 offset = add(offset, 1);
             }
