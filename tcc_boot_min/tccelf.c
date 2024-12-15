@@ -53,7 +53,7 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
 
     i = 0;
     while(lt(i, gts_nb_priv_sections(s1))) {
-        free_section(ri32(add(s1->priv_sections, mul(i, 4))));
+        free_section(ri32(add(gts_priv_sections(s1), mul(i, 4))));
         i = add(i, 1);
     }
     dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
