@@ -47,6 +47,7 @@ int ss_data(int o, int v) {wi32(add(o, Section_data_o), v);}
 int gs_data_allocated(int o) {return ri32(add(o, Section_data_allocated_o));}
 int ss_data_allocated(int o, int v) {wi32(add(o, Section_data_allocated_o), v);}
 
+int gs_sh_name(int o) {return ri32(add(o, Section_sh_name_o));}
 int ss_sh_name(int o, int v) {wi32(add(o, Section_sh_name_o), v);}
 
 int ss_sh_num(int o, int v) {wi32(add(o, Section_sh_num_o), v);}
