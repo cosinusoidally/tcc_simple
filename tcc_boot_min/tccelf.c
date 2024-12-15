@@ -124,18 +124,17 @@ ST_FUNC Section *new_symtab(TCCState *s1,
 /* reserve at least 'size' bytes in section 'sec' from
    sec->data_offset. */
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
-    size_t offset = section_add(sec, size, 1);
-    return add(sec->data, offset);
+    return add(sec->data, section_add(sec, size, 1));
 }
 
 /* 11 */
 /* reserve at least 'size' bytes from section start */
 ST_FUNC void section_reserve(Section *sec, int size) {
-    if (gt(size, sec->data_allocated)) {
+    if (gt(size, gs_data_allocated(sec))) {
         section_realloc(sec, size);
     }
-    if (gt(size, sec->data_offset)) {
-        sec->data_offset = size;
+    if (gt(size, gs_data_offset(sec))) {
+        ss_data_offset(sec, size);
     }
 }
 
@@ -147,7 +146,7 @@ ST_FUNC int put_elf_str(Section *s, const char *sym) {
     int ptr;
 
     len = add(strlen(sym), 1);
-    offset = s->data_offset;
+    offset = gs_data_offset(s);
     ptr = section_ptr_add(s, len);
     memmove(ptr, sym, len);
     return offset;
