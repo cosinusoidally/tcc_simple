@@ -1,49 +1,23 @@
 
 /* TCCState accessors */
 
-int ats_sections(int o) {
-  return add(o, TCCState_sections_o);
-}
+int ats_sections(int o) {return add(o, TCCState_sections_o);}
 
-int ats_nb_sections(int o) {
-  return add(o, TCCState_nb_sections_o);
-}
+int ats_nb_sections(int o) {return add(o, TCCState_nb_sections_o);}
 
-int sts_symtab(int o,int v) {
-  wi32(add(o, TCCState_symtab_o), v);
-}
+int sts_symtab(int o,int v) {wi32(add(o, TCCState_symtab_o), v);}
 
-int ats_files(int o) {
-  return add(o, TCCState_files_o);
-}
+int ats_files(int o) {return add(o, TCCState_files_o);}
+int gts_files(int o) {return ri32(add(o, TCCState_files_o));}
 
-int gts_files(int o) {
-  return ri32(add(o, TCCState_files_o));
-}
+int ats_nb_files(int o) {return add(o, TCCState_nb_files_o);}
+int gts_nb_files(int o) {return ri32(add(o, TCCState_nb_files_o));}
 
-int ats_nb_files(int o) {
-  return add(o, TCCState_nb_files_o);
-}
+int gts_filetype(int o) {return ri32(add(o, TCCState_filetype_o));}
+int sts_filetype(int o,int v) {wi32(add(o, TCCState_filetype_o), v);}
 
-int gts_nb_files(int o) {
-  return ri32(add(o, TCCState_nb_files_o));
-}
-
-int gts_filetype(int o) {
-  return ri32(add(o, TCCState_filetype_o));
-}
-
-int sts_filetype(int o,int v) {
-  wi32(add(o, TCCState_filetype_o), v);
-}
-
-int gts_outfile(int o) {
-  ri32(add(o, TCCState_outfile_o));
-}
-
-int sts_outfile(int o,int v) {
-  wi32(add(o, TCCState_outfile_o), v);
-}
+int gts_outfile(int o) {ri32(add(o, TCCState_outfile_o));}
+int sts_outfile(int o,int v) {wi32(add(o, TCCState_outfile_o), v);}
 
 /* struct filespec accessors */
 
