@@ -96,13 +96,10 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     ss_sh_type(sec, sh_type);
     ss_sh_flags(sec, sh_flags);
 
-    if(or(or(eq(sh_type, SHT_HASH), eq(sh_type, SHT_REL)),
-          or(eq(sh_type, SHT_RELA), eq(sh_type, SHT_SYMTAB)))) {
-        sec->sh_addralign = 4;
-    } else if (eq(sh_type, SHT_STRTAB)) {
-        sec->sh_addralign = 1;
+    if (eq(sh_type, SHT_STRTAB)) {
+        ss_sh_addralign(sec, 1);
     } else {
-        sec->sh_addralign = 4; /* gcc/pcc default alignment */
+        ss_sh_addralign(sec, 4);
     }
 
     if (and(sh_flags, SHF_PRIVATE)) {
