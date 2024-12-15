@@ -41,7 +41,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
     int i;
     i = 1;
     while(lt(i, gts_nb_sections(s1))) {
-        s = ri32(add(s1->sections, mul(i, 4)));
+        s = ri32(add(gts_sections(s1), mul(i, 4)));
         s->sh_offset = s->data_offset;
         i = add(i, 1);
     }
