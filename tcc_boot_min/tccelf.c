@@ -388,28 +388,6 @@ static void sort_syms(TCCState *s1, Section *s) {
     tcc_free(old_to_new_syms);
 }
 
-/* 20 */
-/* Allocate strings for section names and decide if an unallocated section
-   should be output.
-   NOTE: the strsec section comes last, so its size is also correct ! */
-int alloc_sec_names(TCCState *s1, Section *strsec) {
-    int i;
-    int s;
-
-    /* Allocate strings for section names */
-    i = 1;
-    while(lt(i, gts_nb_sections(s1))) {
-        s = ri32(add((gts_sections(s1)), (mul(i, 4))));
-        ss_sh_size(s, gs_data_offset(s));
-	if (or(gs_sh_size(s), and(gs_sh_flags(s), SHF_ALLOC))) {
-            ss_sh_name(s, put_elf_str(strsec, gs_name(s)));
-        }
-        i = add(i, 1);
-    }
-    ss_sh_size(strsec, gs_data_offset(strsec));
-    return 0;
-}
-
 /* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */

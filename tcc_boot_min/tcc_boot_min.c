@@ -988,6 +988,28 @@ int elf_hash(int name) {
     return h;
 }
 
+/* 20 */
+/* Allocate strings for section names and decide if an unallocated section
+   should be output.
+   NOTE: the strsec section comes last, so its size is also correct ! */
+int alloc_sec_names(int s1, int strsec) {
+    int i;
+    int s;
+
+    /* Allocate strings for section names */
+    i = 1;
+    while(lt(i, gts_nb_sections(s1))) {
+        s = ri32(add((gts_sections(s1)), (mul(i, 4))));
+        ss_sh_size(s, gs_data_offset(s));
+        if (or(gs_sh_size(s), and(gs_sh_flags(s), SHF_ALLOC))) {
+            ss_sh_name(s, put_elf_str(strsec, gs_name(s)));
+        }
+        i = add(i, 1);
+    }
+    ss_sh_size(strsec, gs_data_offset(strsec));
+    return 0;
+}
+
 /* 21 */
 /* Assign sections to segments and decide how are sections laid out when loaded
    in memory. This function also fills corresponding program headers. */
