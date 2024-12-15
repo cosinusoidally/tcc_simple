@@ -64,13 +64,8 @@ int gsym_next(int o) {return ri32(add(o, Sym_next_o));} /* struct Sym *next */
 
 /* BufferedFile accessors */
 
-int gbf_buf_ptr(int o) {
-  return ri32(add(o, BufferedFile_buf_ptr_o));
-}
-
-int sbf_buf_ptr(int o, int v) {
-  wi32(add(o, BufferedFile_buf_ptr_o), v);
-}
+int gbf_buf_ptr(int o) {return ri32(add(o, BufferedFile_buf_ptr_o));}
+int sbf_buf_ptr(int o, int v) {wi32(add(o, BufferedFile_buf_ptr_o), v);}
 
 int gbf_buf_end(int o) {
   return ri32(add(o, BufferedFile_buf_end_o));
