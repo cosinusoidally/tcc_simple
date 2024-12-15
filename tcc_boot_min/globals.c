@@ -26,6 +26,7 @@ int Section_sh_flags_o;
 int Section_sh_offset_o;
 int Section_reloc_o;
 int Section_hash_o;
+int Section_name_o;
 int sizeof_Section;
 
 int SValue_type_o;

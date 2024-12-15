@@ -56,6 +56,8 @@ int ss_reloc(int o, int v) {wi32(add(o, Section_reloc_o), v);}
 int gs_hash(int o) {return ri32(add(o, Section_hash_o));}
 int ss_hash(int o, int v) {wi32(add(o, Section_hash_o), v);}
 
+int gs_name(int o) {return add(o, Section_name_o);}
+
 /* SValue accessors */
 
 int gsv_r(int o) {return ri32(add(o, SValue_r_o));} /* int r */
@@ -149,6 +151,7 @@ int init_runtime(){
   Section_sh_offset_o = 48;
   Section_reloc_o = 60;
   Section_hash_o = 64;
+  Section_name_o = 72;
   sizeof_Section = 76;
 
   SValue_type_o = 0;
