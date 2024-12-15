@@ -17,6 +17,7 @@ int sizeof_filespec;
 
 int Section_data_o;
 int Section_data_allocated_o;
+int Section_sh_num_o;
 int sizeof_Section;
 
 int SValue_type_o;
