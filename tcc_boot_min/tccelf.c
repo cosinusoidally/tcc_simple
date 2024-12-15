@@ -127,9 +127,9 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
     int offset;
     int offset1;
 
-    offset = and(sub(add(sec->data_offset, align), 1), sub(0, align));
+    offset = and(sub(add(gs_data_offset(sec), align), 1), sub(0, align));
     offset1 = add(offset, size);
-    if (and(neq(sec->sh_type, SHT_NOBITS), gt(offset1, sec->data_allocated))) {
+    if (and(neq(gs_sh_type(sec), SHT_NOBITS), gt(offset1, gs_data_allocated(sec)))) {
         section_realloc(sec, offset1);
     }
     sec->data_offset = offset1;
