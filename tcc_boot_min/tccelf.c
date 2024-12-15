@@ -48,7 +48,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     ElfW_Rel *rel;
     ElfW_Rel *rel_end;
 
-    s = s1->symtab;
+    s = gts_symtab(s1);
 
     first_sym = div_(s->sh_offset, sizeof (ElfSym));
     nb_syms = sub(div_(s->data_offset, sizeof (ElfSym)), first_sym);
