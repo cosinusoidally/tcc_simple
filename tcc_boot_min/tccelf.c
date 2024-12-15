@@ -440,9 +440,9 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
                 fputc(0, f);
                 offset = add(offset, 1);
             }
-            size = s->sh_size;
+            size = gs_sh_size(s);
             if (size) {
-                fwrite(s->data, 1, size, f);
+                fwrite(gs_data(s), 1, size, f);
             }
             offset = add(offset, size);
         }
@@ -452,7 +452,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     /* output section headers */
     while (lt(offset, ehdr.e_shoff)) {
         fputc(0, f);
-        offset++;
+        offset = add(offset, 1);
     }
 
     i = 0;
