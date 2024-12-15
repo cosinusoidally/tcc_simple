@@ -133,7 +133,7 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
         section_realloc(sec, offset1);
     }
     ss_data_offset(sec, offset1);
-    if (gt(align, sec->sh_addralign)) {
+    if (gt(align, gs_sh_addralign(sec))) {
         sec->sh_addralign = align;
     }
     return offset;
