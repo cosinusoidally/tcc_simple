@@ -127,27 +127,6 @@ ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
     return add(sec->data, section_add(sec, size, 1));
 }
 
-/* 13 */
-/* elf symbol hashing function */
-static unsigned long elf_hash(const unsigned char *name) {
-    int h;
-    int g;
-
-    h = 0;
-
-    while (neq(0, ri8(name))) {
-        h = add(shl(h, 4), ri8(name));
-        name = add(name, 1);
-        g = and(h, 0xf0000000);
-        if (g) {
-            h = xor(h, and(shr(g, 24), 255)); /* ljw see original extra bit
-                                                 twiddling for sign */
-        }
-        h = and(h, not(g));
-    }
-    return h;
-}
-
 /* 14 */
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */

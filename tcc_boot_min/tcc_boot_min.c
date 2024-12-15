@@ -954,6 +954,27 @@ int put_elf_str(int s, int sym) {
     return offset;
 }
 
+/* 13 */
+/* elf symbol hashing function */
+int elf_hash(int name) {
+    int h;
+    int g;
+
+    h = 0;
+
+    while (neq(0, ri8(name))) {
+        h = add(shl(h, 4), ri8(name));
+        name = add(name, 1);
+        g = and(h, shl(15, 28));  /* 0xf0000000 */
+        if (g) {
+            h = xor(h, and(shr(g, 24), 255)); /* ljw see original extra bit
+                                                 twiddling for sign */
+        }
+        h = and(h, not(g));
+    }
+    return h;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
