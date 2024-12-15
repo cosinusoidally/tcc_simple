@@ -888,6 +888,25 @@ int new_section(int s1, int name, int sh_type, int sh_flags) {
     return sec;
 }
 
+/* 8 */
+/* realloc section and set its content to zero */
+int section_realloc(int sec, int new_size) {
+    int size;
+    int data;
+
+    size = gs_data_allocated(sec);
+    if (eq(size, 0)) {
+        size = 1;
+    }
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
+    data = tcc_realloc(gs_data(sec), size);
+    memset(add(data, gs_data_allocated(sec)), 0, sub(size, gs_data_allocated(sec)));
+    ss_data(sec, data);
+    ss_data_allocated(sec, size);
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {

@@ -120,25 +120,6 @@ ST_FUNC Section *new_symtab(TCCState *s1,
     return symtab;
 }
 
-/* 8 */
-/* realloc section and set its content to zero */
-ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
-    int size;
-    int data;
-
-    size = gs_data_allocated(sec);
-    if (eq(size, 0)) {
-        size = 1;
-    }
-    while (lt(size, new_size)) {
-        size = mul(size, 2);
-    }
-    data = tcc_realloc(gs_data(sec), size);
-    memset(add(data, gs_data_allocated(sec)), 0, sub(size, gs_data_allocated(sec)));
-    ss_data(sec, data);
-    ss_data_allocated(sec, size);
-}
-
 /* 9 */
 /* reserve at least 'size' bytes aligned per 'align' in section
    'sec' from current offset, and return the aligned offset */
