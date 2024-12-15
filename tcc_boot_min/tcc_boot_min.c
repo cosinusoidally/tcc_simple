@@ -910,6 +910,25 @@ int section_realloc(int sec, int new_size) {
     ss_data_allocated(sec, size);
 }
 
+/* 9 */
+/* reserve at least 'size' bytes aligned per 'align' in section
+   'sec' from current offset, and return the aligned offset */
+int section_add(int sec, int size, int align) {
+    int offset;
+    int offset1;
+
+    offset = and(sub(add(gs_data_offset(sec), align), 1), sub(0, align));
+    offset1 = add(offset, size);
+    if (and(neq(gs_sh_type(sec), SHT_NOBITS), gt(offset1, gs_data_allocated(sec)))) {
+        section_realloc(sec, offset1);
+    }
+    ss_data_offset(sec, offset1);
+    if (gt(align, gs_sh_addralign(sec))) {
+        ss_sh_addralign(sec, align);
+    }
+    return offset;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {
