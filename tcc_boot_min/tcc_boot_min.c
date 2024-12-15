@@ -49,6 +49,8 @@ int ss_sh_type(int o, int v) {wi32(add(o, Section_sh_type_o), v);}
 
 int ss_sh_flags(int o, int v) {wi32(add(o, Section_sh_flags_o), v);}
 
+int ss_sh_addralign(int o, int v) {wi32(add(o, Section_sh_addralign_o), v);}
+
 int ss_sh_offset(int o, int v) {wi32(add(o, Section_sh_offset_o), v);}
 
 int ss_reloc(int o, int v) {wi32(add(o, Section_reloc_o), v);}
@@ -148,6 +150,7 @@ int init_runtime(){
   Section_sh_num_o = 16;
   Section_sh_type_o = 20;
   Section_sh_flags_o = 24;
+  Section_sh_addralign_o = 32;
   Section_sh_offset_o = 48;
   Section_reloc_o = 60;
   Section_hash_o = 64;

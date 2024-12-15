@@ -23,6 +23,7 @@ int Section_data_allocated_o;
 int Section_sh_num_o;
 int Section_sh_type_o;
 int Section_sh_flags_o;
+int Section_sh_addralign_o;
 int Section_sh_offset_o;
 int Section_reloc_o;
 int Section_hash_o;
