@@ -403,7 +403,7 @@ int alloc_sec_names(TCCState *s1, Section *strsec) {
     while(lt(i, gts_nb_sections(s1))) {
         s = s1->sections[i];
         ss_sh_size(s, gs_data_offset(s));
-	if (or(s->sh_size, and(s->sh_flags, SHF_ALLOC))) {
+	if (or(gs_sh_size(s), and(gs_sh_flags(s), SHF_ALLOC))) {
             s->sh_name = put_elf_str(strsec, gs_name(s));
         }
         i = add(i, 1);
