@@ -46,7 +46,7 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
     /* free all sections */
     i = 1;
     while(lt(i, s1->nb_sections)) {
-        free_section(s1->sections[i]);
+        free_section(ri32(add(s1->sections, mul(i, 4))));
         i = add(i, 1);
     }
     dynarray_reset(&s1->sections, &s1->nb_sections);
