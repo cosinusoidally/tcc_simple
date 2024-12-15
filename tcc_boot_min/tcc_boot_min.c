@@ -157,6 +157,7 @@ int init_runtime(){
   Section_data_offset_o = 0;
   Section_data_o = 4;
   Section_data_allocated_o = 8;
+  Section_sh_name_o = 12;
   Section_sh_num_o = 16;
   Section_sh_type_o = 20;
   Section_sh_flags_o = 24;

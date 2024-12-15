@@ -20,6 +20,7 @@ int sizeof_filespec;
 int Section_data_offset_o;
 int Section_data_o;
 int Section_data_allocated_o;
+int Section_sh_name_o;
 int Section_sh_num_o;
 int Section_sh_type_o;
 int Section_sh_flags_o;
