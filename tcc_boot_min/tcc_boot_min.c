@@ -929,6 +929,31 @@ int section_add(int sec, int size, int align) {
     return offset;
 }
 
+/* 11 */
+/* reserve at least 'size' bytes from section start */
+int section_reserve(int sec, int size) {
+    if (gt(size, gs_data_allocated(sec))) {
+        section_realloc(sec, size);
+    }
+    if (gt(size, gs_data_offset(sec))) {
+        ss_data_offset(sec, size);
+    }
+}
+
+/* ------------------------------------------------------------------------- */
+/* 12 */
+int put_elf_str(int s, int sym) {
+    int offset;
+    int len;
+    int ptr;
+
+    len = add(strlen(sym), 1);
+    offset = gs_data_offset(s);
+    ptr = section_ptr_add(s, len);
+    memmove(ptr, sym, len);
+    return offset;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {

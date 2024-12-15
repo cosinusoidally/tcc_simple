@@ -127,31 +127,6 @@ ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
     return add(sec->data, section_add(sec, size, 1));
 }
 
-/* 11 */
-/* reserve at least 'size' bytes from section start */
-ST_FUNC void section_reserve(Section *sec, int size) {
-    if (gt(size, gs_data_allocated(sec))) {
-        section_realloc(sec, size);
-    }
-    if (gt(size, gs_data_offset(sec))) {
-        ss_data_offset(sec, size);
-    }
-}
-
-/* ------------------------------------------------------------------------- */
-/* 12 */
-ST_FUNC int put_elf_str(Section *s, const char *sym) {
-    int offset;
-    int len;
-    int ptr;
-
-    len = add(strlen(sym), 1);
-    offset = gs_data_offset(s);
-    ptr = section_ptr_add(s, len);
-    memmove(ptr, sym, len);
-    return offset;
-}
-
 /* 13 */
 /* elf symbol hashing function */
 static unsigned long elf_hash(const unsigned char *name) {
