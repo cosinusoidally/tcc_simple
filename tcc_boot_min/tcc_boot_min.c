@@ -4,6 +4,9 @@
 int ats_sections(int o) {return add(o, TCCState_sections_o);}
 int gts_sections(int o) {return ri32(add(o, TCCState_sections_o));}
 
+int ats_priv_sections(int o) {return add(o, TCCState_priv_sections_o);}
+int gts_priv_sections(int o) {return ri32(add(o, TCCState_priv_sections_o));}
+
 int ats_nb_sections(int o) {return add(o, TCCState_nb_sections_o);}
 int gts_nb_sections(int o) {return ri32(add(o, TCCState_nb_sections_o));}
 
@@ -107,6 +110,8 @@ int init_runtime(){
 
   TCCState_sections_o = 12;
   TCCState_nb_sections_o = 16;
+  TCCState_priv_sections_o = 20;
+  TCCState_nb_priv_sections_o = 24;
   TCCState_symtab_o = 28;
   TCCState_files_o = 32;
   TCCState_nb_files_o = 36;

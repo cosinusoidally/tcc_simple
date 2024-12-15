@@ -4,6 +4,8 @@ int foo;
 
 int TCCState_sections_o;
 int TCCState_nb_sections_o;
+int TCCState_priv_sections_o;
+int TCCState_nb_priv_sections_o;
 int TCCState_symtab_o;
 int TCCState_files_o;
 int TCCState_nb_files_o;
