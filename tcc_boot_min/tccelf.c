@@ -458,7 +458,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     i = 0;
     while(lt(i, gts_nb_sections(s1))) {
         sh = &shdr;
-        memset(sh, 0, sizeof(ElfW(Shdr)));
+        memset(sh, 0, sizeof(Elf32_Shdr));
         s = s1->sections[i];
         if (s) {
             sh->sh_name = s->sh_name;
@@ -473,7 +473,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
             sh->sh_offset = s->sh_offset;
             sh->sh_size = s->sh_size;
         }
-        fwrite(sh, 1, sizeof(ElfW(Shdr)), f);
+        fwrite(sh, 1, sizeof(Elf32_Shdr), f);
         i = add(i, 1);
     }
 }
