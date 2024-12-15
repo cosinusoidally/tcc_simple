@@ -44,6 +44,8 @@ int gs_data_allocated(int o) {return ri32(add(o, Section_data_allocated_o));}
 
 int ss_sh_num(int o, int v) {wi32(add(o, Section_sh_num_o), v);}
 
+int gs_hash(int o) {return ri32(add(o, Section_hash_o));}
+
 /* SValue accessors */
 
 int gsv_r(int o) {return ri32(add(o, SValue_r_o));} /* int r */
@@ -133,8 +135,8 @@ int init_runtime(){
   Section_data_allocated_o = 8;
   Section_sh_num_o = 16;
   Section_sh_offset_o = 48;
-  Section_sh_reloc_o = 60;
-  Section_sh_hash_o = 64;
+  Section_reloc_o = 60;
+  Section_hash_o = 64;
   sizeof_Section = 76;
 
   SValue_type_o = 0;

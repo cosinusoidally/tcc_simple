@@ -42,7 +42,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
     i = 1;
     while(lt(i, gts_nb_sections(s1))) {
         s = ri32(add(gts_sections(s1), mul(i, 4)));
-        s->sh_offset = s->data_offset;
+        s->sh_offset = gs_data_offset(s);
         i = add(i, 1);
     }
     /* disable symbol hashing during compilation */

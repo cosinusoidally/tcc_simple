@@ -22,8 +22,8 @@ int Section_data_o;
 int Section_data_allocated_o;
 int Section_sh_num_o;
 int Section_sh_offset_o;
-int Section_sh_reloc_o;
-int Section_sh_hash_o;
+int Section_reloc_o;
+int Section_hash_o;
 int sizeof_Section;
 
 int SValue_type_o;
