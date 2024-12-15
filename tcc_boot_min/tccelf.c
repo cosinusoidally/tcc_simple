@@ -34,27 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* ------------------------------------------------------------------------- */
-/* 1 */
-void tccelf_new(TCCState *s) {
-    /* no section zero */
-    dynarray_add(ats_sections(s), ats_nb_sections(s), 0);
-
-    /* create standard sections */
-    text_section = new_section(s, mks(".text"), SHT_PROGBITS, or(SHF_ALLOC, SHF_EXECINSTR));
-    data_section = new_section(s, mks(".data"), SHT_PROGBITS, or(SHF_ALLOC, SHF_WRITE));
-    bss_section = new_section(s, mks(".bss"), SHT_NOBITS, or(SHF_ALLOC, SHF_WRITE));
-    common_section = new_section(s, mks(".common"), SHT_NOBITS, SHF_PRIVATE);
-    ss_sh_num(common_section, SHN_COMMON);
-
-    /* symbols are always generated for linking stage */
-    symtab_section = new_symtab(s, mks(".symtab"), SHT_SYMTAB, 0,
-                                mks(".strtab"),
-                                mks(".hashtab"), SHF_PRIVATE);
-    sts_symtab(s, symtab_section);
-
-}
-
 /* 2 */
 static void free_section(Section *s) {
     tcc_free(s->data);
