@@ -430,16 +430,16 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
 
     /* all other sections come after */
     i = 1;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         s = s1->sections[i];
         wi32(add(sec_order, mul(sh_order_index, 4)), i);
         sh_order_index = add(sh_order_index, 1);
 
         file_offset = and((add(file_offset, sub(s->sh_addralign, 1))),
                           not(sub(s->sh_addralign, 1)));
-        s->sh_offset = file_offset;
-        if (neq(s->sh_type, SHT_NOBITS)) {
-            file_offset = add(file_offset, s->sh_size);
+        ss_sh_offset(s, file_offset);
+        if (neq(gs_sh_type(s), SHT_NOBITS)) {
+            file_offset = add(file_offset, gs_sh_size(s));
         }
         i = add(i, 1);
     }
