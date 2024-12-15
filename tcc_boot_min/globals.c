@@ -17,9 +17,13 @@ int filespec_type_o;
 int filespec_name_o;
 int sizeof_filespec;
 
+int Section_data_offset_o;
 int Section_data_o;
 int Section_data_allocated_o;
 int Section_sh_num_o;
+int Section_sh_offset_o;
+int Section_sh_reloc_o;
+int Section_sh_hash_o;
 int sizeof_Section;
 
 int SValue_type_o;

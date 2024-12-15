@@ -36,6 +36,8 @@ int gfs_name(int o) {return add(o,filespec_name_o);}
 
 /* Section accessors */
 
+int gs_data_offset(int o) {return ri32(add(o, Section_data_offset_o));}
+
 int gs_data(int o) {return ri32(add(o, Section_data_o));}
 
 int gs_data_allocated(int o) {return ri32(add(o, Section_data_allocated_o));}
@@ -126,9 +128,13 @@ int init_runtime(){
   filespec_name_o = 1;
   sizeof_filespec = 2;
 
+  Section_data_offset_o = 0;
   Section_data_o = 4;
   Section_data_allocated_o = 8;
   Section_sh_num_o = 16;
+  Section_sh_offset_o = 48;
+  Section_sh_reloc_o = 60;
+  Section_sh_hash_o = 64;
   sizeof_Section = 76;
 
   SValue_type_o = 0;
