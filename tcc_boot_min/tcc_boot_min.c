@@ -13,6 +13,7 @@ int gts_priv_sections(int o) {return ri32(add(o, TCCState_priv_sections_o));}
 int ats_nb_priv_sections(int o) {return add(o, TCCState_nb_priv_sections_o);}
 int gts_nb_priv_sections(int o) {return ri32(add(o, TCCState_nb_priv_sections_o));}
 
+int gts_symtab(int o) {return ri32(add(o, TCCState_symtab_o));}
 int sts_symtab(int o,int v) {wi32(add(o, TCCState_symtab_o), v);}
 
 int ats_files(int o) {return add(o, TCCState_files_o);}

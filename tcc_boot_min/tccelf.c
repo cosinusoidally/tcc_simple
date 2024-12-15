@@ -37,7 +37,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* 4 */
 /* save section data state */
 ST_FUNC void tccelf_begin_file(TCCState *s1) {
-    Section *s;
+    int s;
     int i;
     i = 1;
     while(lt(i, gts_nb_sections(s1))) {
@@ -46,7 +46,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
         i = add(i, 1);
     }
     /* disable symbol hashing during compilation */
-    s = s1->symtab;
+    s = gts_symtab(s1);
     ss_reloc(s, gs_hash(s));
     ss_hash(s, 0);
 }
