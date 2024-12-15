@@ -391,17 +391,18 @@ static void sort_syms(TCCState *s1, Section *s) {
 /* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
-void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
+void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
                            int file_offset, int *sec_order) {
     int i;
     int shnum;
     int offset;
     int size;
     Section *s;
-    ElfW(Ehdr) ehdr;
-    ElfW(Shdr) shdr, *sh;
+    Elf32_Ehdr ehdr;
+    Elf32_Shdr shdr;
+    Elf32_Shdr *sh;
 
-    shnum = s1->nb_sections;
+    shnum = gts_nb_sections(s1);
 
     memset(&ehdr, 0, sizeof(ehdr));
 
