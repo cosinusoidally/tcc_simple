@@ -134,7 +134,7 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
     }
     ss_data_offset(sec, offset1);
     if (gt(align, gs_sh_addralign(sec))) {
-        sec->sh_addralign = align;
+        ss_sh_addralign(sec, align);
     }
     return offset;
 }
