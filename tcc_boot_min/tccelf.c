@@ -47,7 +47,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
     }
     /* disable symbol hashing during compilation */
     s = s1->symtab;
-    s->reloc = gs_hash(s);
+    ss_reloc(s, gs_hash(s));
     ss_hash(s, 0);
 }
 
