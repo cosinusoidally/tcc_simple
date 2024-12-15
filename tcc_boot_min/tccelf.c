@@ -394,14 +394,12 @@ static void sort_syms(TCCState *s1, Section *s) {
    NOTE: the strsec section comes last, so its size is also correct ! */
 int alloc_sec_names(TCCState *s1, Section *strsec) {
     int i;
-    Section *s;
-    int textrel;
+    int s;
 
-    textrel = 0;
     /* Allocate strings for section names */
     i = 1;
     while(lt(i, gts_nb_sections(s1))) {
-        s = s1->sections[i];
+        s = ri32(add((gts_sections(s1)), (mul(i, 4))));
         ss_sh_size(s, gs_data_offset(s));
 	if (or(gs_sh_size(s), and(gs_sh_flags(s), SHF_ALLOC))) {
             ss_sh_name(s, put_elf_str(strsec, gs_name(s)));
@@ -409,7 +407,7 @@ int alloc_sec_names(TCCState *s1, Section *strsec) {
         i = add(i, 1);
     }
     ss_sh_size(strsec, gs_data_offset(strsec));
-    return textrel;
+    return 0;
 }
 
 /* 22 */
