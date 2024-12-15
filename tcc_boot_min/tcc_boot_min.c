@@ -859,6 +859,10 @@ int init_options() {
 
 /* end of libtcc.c */
 
+/* start of tccelf.c */
+
+/* end of tccelf.c */
+
 int tcc_new() {
     int s;
 
