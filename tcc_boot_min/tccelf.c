@@ -36,7 +36,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 
 /* 2 */
 static void free_section(Section *s) {
-    tcc_free(s->data);
+    tcc_free(gs_data(s));
 }
 
 /* 3 */
@@ -58,7 +58,7 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
     }
     dynarray_reset(&s1->priv_sections, &s1->nb_priv_sections);
 
-    symtab_section = NULL; /* for tccrun.c:rt_printline() */
+    symtab_section = 0; /* for tccrun.c:rt_printline() */
 }
 
 /* save section data state */
