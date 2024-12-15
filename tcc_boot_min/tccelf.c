@@ -537,10 +537,10 @@ int elf_output_file(TCCState *s1, const char *filename) {
     phdr = tcc_mallocz(mul(phnum, sizeof_Elf32_Phdr));
 
     /* compute number of sections */
-    shnum = s1->nb_sections;
+    shnum = gts_nb_sections(s1);
 
     /* this array is used to reorder sections in the output file */
-    sec_order = tcc_malloc(mul(sizeof(int), shnum));
+    sec_order = tcc_malloc(mul(4, shnum));
     sec_order[0] = 0;
 
     /* compute section to program header mapping */
