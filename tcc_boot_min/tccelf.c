@@ -456,7 +456,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     }
 
     i = 0;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         sh = &shdr;
         memset(sh, 0, sizeof(ElfW(Shdr)));
         s = s1->sections[i];
