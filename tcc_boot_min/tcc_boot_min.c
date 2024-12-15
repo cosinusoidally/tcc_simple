@@ -5,6 +5,7 @@ int ats_sections(int o) {return add(o, TCCState_sections_o);}
 int gts_sections(int o) {return ri32(add(o, TCCState_sections_o));}
 
 int ats_nb_sections(int o) {return add(o, TCCState_nb_sections_o);}
+int gts_nb_sections(int o) {return ri32(add(o, TCCState_nb_sections_o));}
 
 int sts_symtab(int o,int v) {wi32(add(o, TCCState_symtab_o), v);}
 
