@@ -94,7 +94,7 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     sec = tcc_mallocz(add(sizeof(Section), strlen(name)));
     strcpy(sec->name, name);
     ss_sh_type(sec, sh_type);
-    sec->sh_flags = sh_flags;
+    ss_sh_flags(sec, sh_flags);
 
     if(or(or(eq(sh_type, SHT_HASH), eq(sh_type, SHT_REL)),
           or(eq(sh_type, SHT_RELA), eq(sh_type, SHT_SYMTAB)))) {
