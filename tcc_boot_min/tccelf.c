@@ -422,14 +422,14 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     ehdr.e_machine = EM_TCC_TARGET;
     ehdr.e_version = EV_CURRENT;
     ehdr.e_shoff = file_offset;
-    ehdr.e_ehsize = sizeof(ElfW(Ehdr));
-    ehdr.e_shentsize = sizeof(ElfW(Shdr));
+    ehdr.e_ehsize = sizeof_Elf32_Ehdr;
+    ehdr.e_shentsize = sizeof(Elf32_Shdr);
     ehdr.e_shnum = shnum;
     ehdr.e_shstrndx = sub(shnum, 1);
 
-    fwrite(&ehdr, 1, sizeof(ElfW(Ehdr)), f);
-    fwrite(phdr, 1, mul(phnum, sizeof(ElfW(Phdr))), f);
-    offset = add(sizeof(ElfW(Ehdr)), mul(phnum, sizeof(ElfW(Phdr))));
+    fwrite(&ehdr, 1, sizeof_Elf32_Ehdr, f);
+    fwrite(phdr, 1, mul(phnum, sizeof_Elf32_Phdr), f);
+    offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof_Elf32_Phdr));
 
     sort_syms(s1, symtab_section);
     i = 1;
