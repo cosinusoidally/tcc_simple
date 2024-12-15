@@ -502,8 +502,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
 }
 
 /* 24 */
-/* Output an elf, coff or binary file */
-/* XXX: suppress unneeded sections */
+/* Output an elf file */
 int elf_output_file(TCCState *s1, const char *filename) {
     int i;
     int ret;
