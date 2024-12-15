@@ -35,7 +35,7 @@ Section *symtab_section;
 extern int SHF_PRIVATE; /* 0x80000000 */
 
 /* ------------------------------------------------------------------------- */
-
+/* 1 */
 void tccelf_new(TCCState *s) {
     /* no section zero */
     dynarray_add(ats_sections(s), ats_nb_sections(s), 0);
@@ -55,10 +55,12 @@ void tccelf_new(TCCState *s) {
 
 }
 
+/* 2 */
 static void free_section(Section *s) {
     tcc_free(s->data);
 }
 
+/* 3 */
 ST_FUNC void tccelf_delete(TCCState *s1) {
     int i;
 
