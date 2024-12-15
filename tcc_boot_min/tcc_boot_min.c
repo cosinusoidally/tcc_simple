@@ -45,6 +45,7 @@ int gs_data_allocated(int o) {return ri32(add(o, Section_data_allocated_o));}
 int ss_sh_num(int o, int v) {wi32(add(o, Section_sh_num_o), v);}
 
 int gs_hash(int o) {return ri32(add(o, Section_hash_o));}
+int ss_hash(int o, int v) {wi32(add(o, Section_hash_o), v);}
 
 /* SValue accessors */
 
