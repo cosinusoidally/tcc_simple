@@ -975,6 +975,23 @@ int elf_hash(int name) {
     return h;
 }
 
+/* 23 */
+/* Write an elf file */
+int tcc_write_elf_file(int s1, int filename, int phnum,
+                              int phdr, int file_offset, int sec_order) {
+    int fd;
+    int mode;
+    int f;
+
+    unlink(filename);
+
+    f = fopen(filename, mks("wb"));
+    tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
+    fclose(f);
+
+    return 0;
+}
+
 /* end of tccelf.c */
 
 int tcc_new() {

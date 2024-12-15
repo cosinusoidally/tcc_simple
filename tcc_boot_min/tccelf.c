@@ -450,7 +450,7 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
 /* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
-static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
+void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
                            int file_offset, int *sec_order) {
     int i;
     int shnum;
@@ -534,23 +534,6 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
         fwrite(sh, 1, sizeof(ElfW(Shdr)), f);
         i = add(i, 1);
     }
-}
-
-/* 23 */
-/* Write an elf file */
-static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
-                              ElfW(Phdr) *phdr, int file_offset, int *sec_order)
-{
-    int fd, mode;
-    FILE *f;
-
-    unlink(filename);
-
-    f = fopen(filename, mks("wb"));
-    tcc_output_elf(s1, f, phnum, phdr, file_offset, sec_order);
-    fclose(f);
-
-    return 0;
 }
 
 /* 24 */
