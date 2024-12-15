@@ -541,7 +541,7 @@ int elf_output_file(TCCState *s1, const char *filename) {
 
     /* this array is used to reorder sections in the output file */
     sec_order = tcc_malloc(mul(4, shnum));
-    sec_order[0] = 0;
+    wi32(sec_order, 0);
 
     /* compute section to program header mapping */
     file_offset = layout_sections(s1, phdr, phnum, interp, strsec, 0,
@@ -549,7 +549,7 @@ int elf_output_file(TCCState *s1, const char *filename) {
 
     /* Create the ELF file with name 'filename' */
     ret = tcc_write_elf_file(s1, filename, phnum, phdr, file_offset, sec_order);
-    s1->nb_sections = shnum;
+    sts_nb_sections(s1, shnum);
     tcc_free(sec_order);
     tcc_free(phdr);
     return ret;
