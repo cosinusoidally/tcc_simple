@@ -1035,6 +1035,59 @@ int tcc_write_elf_file(int s1, int filename, int phnum,
     return 0;
 }
 
+/* 24 */
+/* Output an elf file */
+int elf_output_file(int s1, int filename) {
+    int i;
+    int ret;
+    int phnum;
+    int shnum;
+    int file_offset;
+    int sec_order;
+    int phdr;
+    int sym;
+    int strsec;
+    int interp;
+    int textrel;
+
+    ret = sub(0, 1);
+    phdr = 0;
+    sec_order = 0;
+    interp = 0; /* avoid warning */
+    textrel = 0;
+
+    /* we add a section for symbols */
+    strsec = new_section(s1, mks(".shstrtab"), SHT_STRTAB, 0);
+    put_elf_str(strsec, mks(""));
+
+    /* Allocate strings for section names */
+    textrel = alloc_sec_names(s1, strsec);
+
+    /* compute number of program headers */
+    phnum = 0;
+
+    /* allocate program segment headers */
+    phdr = tcc_mallocz(mul(phnum, sizeof_Elf32_Phdr));
+
+    /* compute number of sections */
+    shnum = gts_nb_sections(s1);
+
+    /* this array is used to reorder sections in the output file */
+    sec_order = tcc_malloc(mul(4, shnum));
+    wi32(sec_order, 0);
+
+    /* compute section to program header mapping */
+    file_offset = layout_sections(s1, phdr, phnum, interp, strsec, 0,
+                                  sec_order);
+
+    /* Create the ELF file with name 'filename' */
+    ret = tcc_write_elf_file(s1, filename, phnum, phdr, file_offset, sec_order);
+    sts_nb_sections(s1, shnum);
+    tcc_free(sec_order);
+    tcc_free(phdr);
+    return ret;
+}
+
 /* 25 */
 int tcc_output_file(int s, int filename) {
     int ret;
