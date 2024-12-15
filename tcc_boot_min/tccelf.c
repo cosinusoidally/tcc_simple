@@ -61,6 +61,7 @@ ST_FUNC void tccelf_delete(TCCState *s1) {
     symtab_section = 0; /* for tccrun.c:rt_printline() */
 }
 
+/* 4 */
 /* save section data state */
 ST_FUNC void tccelf_begin_file(TCCState *s1) {
     Section *s;
@@ -77,6 +78,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1) {
     s->hash = 0;
 }
 
+/* 5 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
 ST_FUNC void tccelf_end_file(TCCState *s1) {
@@ -129,6 +131,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     tcc_free(tr);
 }
 
+/* 6 */
 Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     Section *sec;
 
@@ -156,6 +159,7 @@ Section *new_section(TCCState *s1, char *name, int sh_type, int sh_flags) {
     return sec;
 }
 
+/* 7 */
 ST_FUNC Section *new_symtab(TCCState *s1,
                            const char *symtab_name, int sh_type, int sh_flags,
                            const char *strtab_name,
@@ -188,6 +192,7 @@ ST_FUNC Section *new_symtab(TCCState *s1,
     return symtab;
 }
 
+/* 8 */
 /* realloc section and set its content to zero */
 ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
     int size;
@@ -206,6 +211,7 @@ ST_FUNC void section_realloc(Section *sec, unsigned long new_size) {
     sec->data_allocated = size;
 }
 
+/* 9 */
 /* reserve at least 'size' bytes aligned per 'align' in section
    'sec' from current offset, and return the aligned offset */
 ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
@@ -224,6 +230,7 @@ ST_FUNC size_t section_add(Section *sec, addr_t size, int align) {
     return offset;
 }
 
+/* 10 */
 /* reserve at least 'size' bytes in section 'sec' from
    sec->data_offset. */
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
@@ -231,6 +238,7 @@ ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
     return add(sec->data, offset);
 }
 
+/* 11 */
 /* reserve at least 'size' bytes from section start */
 ST_FUNC void section_reserve(Section *sec, int size) {
     if (gt(size, sec->data_allocated)) {
@@ -242,7 +250,7 @@ ST_FUNC void section_reserve(Section *sec, int size) {
 }
 
 /* ------------------------------------------------------------------------- */
-
+/* 12 */
 ST_FUNC int put_elf_str(Section *s, const char *sym) {
     int offset;
     int len;
@@ -255,6 +263,7 @@ ST_FUNC int put_elf_str(Section *s, const char *sym) {
     return offset;
 }
 
+/* 13 */
 /* elf symbol hashing function */
 static unsigned long elf_hash(const unsigned char *name) {
     int h;
@@ -275,6 +284,7 @@ static unsigned long elf_hash(const unsigned char *name) {
     return h;
 }
 
+/* 14 */
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */
 static void rebuild_hash(Section *s, unsigned int nb_buckets) {
@@ -319,6 +329,7 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     }
 }
 
+/* 15 */
 /* return the symbol number */
 ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     int info, int other, int shndx, const char *name)
@@ -374,6 +385,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     return sym_index;
 }
 
+/* 16 */
 ST_FUNC int find_elf_sym(Section *s, const char *name) {
     ElfW(Sym) *sym;
     Section *hs;
@@ -400,6 +412,7 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
     return 0;
 }
 
+/* 17 */
 /* add an elf symbol : check if it is already defined and patch
    it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
 ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
@@ -428,6 +441,7 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
     return sym_index;
 }
 
+/* 18 */
 /* put relocation */
 ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
                             int type, int symbol, addr_t addend) {
@@ -458,6 +472,7 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     tcc_free(buf);
 }
 
+/* 19 */
 /* In an ELF file symbol table, the local symbols must appear below
    the global and weak ones. Since TCC cannot sort it while generating
    the code, we must do it after. All the relocation tables are also
@@ -530,6 +545,7 @@ static void sort_syms(TCCState *s1, Section *s) {
     tcc_free(old_to_new_syms);
 }
 
+/* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
@@ -553,6 +569,7 @@ static int alloc_sec_names(TCCState *s1, Section *strsec) {
     return textrel;
 }
 
+/* 21 */
 /* Assign sections to segments and decide how are sections laid out when loaded
    in memory. This function also fills corresponding program headers. */
 static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
@@ -587,6 +604,7 @@ static int layout_sections(TCCState *s1, ElfW(Phdr) *phdr, int phnum,
     return file_offset;
 }
 
+/* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
 static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
@@ -675,6 +693,7 @@ static void tcc_output_elf(TCCState *s1, FILE *f, int phnum, ElfW(Phdr) *phdr,
     }
 }
 
+/* 23 */
 /* Write an elf file */
 static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
                               ElfW(Phdr) *phdr, int file_offset, int *sec_order)
@@ -691,6 +710,7 @@ static int tcc_write_elf_file(TCCState *s1, const char *filename, int phnum,
     return 0;
 }
 
+/* 24 */
 /* Output an elf, coff or binary file */
 /* XXX: suppress unneeded sections */
 static int elf_output_file(TCCState *s1, const char *filename) {
@@ -744,6 +764,7 @@ static int elf_output_file(TCCState *s1, const char *filename) {
     return ret;
 }
 
+/* 25 */
 LIBTCCAPI int tcc_output_file(TCCState *s, const char *filename) {
     int ret;
     ret = elf_output_file(s, filename);
