@@ -67,45 +67,23 @@ int gsym_next(int o) {return ri32(add(o, Sym_next_o));} /* struct Sym *next */
 int gbf_buf_ptr(int o) {return ri32(add(o, BufferedFile_buf_ptr_o));}
 int sbf_buf_ptr(int o, int v) {wi32(add(o, BufferedFile_buf_ptr_o), v);}
 
-int gbf_buf_end(int o) {
-  return ri32(add(o, BufferedFile_buf_end_o));
-}
+int gbf_buf_end(int o) {return ri32(add(o, BufferedFile_buf_end_o));}
+int sbf_buf_end(int o, int v) {wi32(add(o, BufferedFile_buf_end_o), v);}
 
-int sbf_buf_end(int o, int v) {
-  wi32(add(o, BufferedFile_buf_end_o), v);
-}
+int gbf_fd(int o) {return ri32(add(o, BufferedFile_fd_o));}
+int sbf_fd(int o, int v) {wi32(add(o, BufferedFile_fd_o), v);}
 
-int gbf_fd(int o) {
-  return ri32(add(o, BufferedFile_fd_o));
-}
+int gbf_prev(int o) {return ri32(add(o, BufferedFile_prev_o));}
+int sbf_prev(int o, int v) {wi32(add(o, BufferedFile_prev_o), v);}
 
-int sbf_fd(int o, int v) {
-  wi32(add(o, BufferedFile_fd_o), v);
-}
+int gbf_line_num(int o) {return ri32(add(o, BufferedFile_line_num_o));}
+int sbf_line_num(int o, int v) {wi32(add(o, BufferedFile_line_num_o), v);}
 
-int gbf_prev(int o) {
-  return ri32(add(o, BufferedFile_prev_o));
-}
+/* char filename[1024] */
+int gbf_filename(int o){return add(o, BufferedFile_filename_o);}
 
-int sbf_prev(int o, int v) {
-  wi32(add(o, BufferedFile_prev_o), v);
-}
-
-int gbf_line_num(int o) {
-  return ri32(add(o, BufferedFile_line_num_o));
-}
-
-int sbf_line_num(int o, int v) {
-  wi32(add(o, BufferedFile_line_num_o), v);
-}
-
-int gbf_filename(int o){
-  return add(o, BufferedFile_filename_o); /* char filename[1024] */
-}
-
-int gbf_buffer(int o){
-  return add(o, BufferedFile_buffer_o); /* unsigned char buffer[1] */
-}
+/* unsigned char buffer[1] */
+int gbf_buffer(int o){ return add(o, BufferedFile_buffer_o);}
 
 /* TCCOption accessors */
 
