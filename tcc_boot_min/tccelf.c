@@ -34,33 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 17 */
-/* add an elf symbol : check if it is already defined and patch
-   it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
-ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
-                       int info, int other, int shndx, const char *name) {
-    int sym_bind;
-    int sym_index;
-    int sym_type;
-    int esym_bind;
-    int sym_vis;
-    int esym_vis;
-    int new_vis;
-
-    sym_bind = ELFW_ST_BIND(info);
-    sym_type = ELFW_ST_TYPE(info);
-    sym_vis = ELFW_ST_VISIBILITY(other);
-
-    if (neq(sym_bind, STB_LOCAL)) {
-        /* we search global or weak symbols */
-        sym_index = find_elf_sym(s, name);
-    }
-    sym_index = put_elf_sym(s, value, size,
-                                ELFW_ST_INFO(sym_bind, sym_type), other,
-                                shndx, name);
-    return sym_index;
-}
-
 /* 18 */
 /* put relocation */
 ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,

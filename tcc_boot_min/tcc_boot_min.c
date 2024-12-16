@@ -1297,6 +1297,33 @@ int find_elf_sym(int s, int name) {
     return 0;
 }
 
+/* 17 */
+/* add an elf symbol : check if it is already defined and patch
+   it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
+int set_elf_sym(int s, int value, int size,
+                       int info, int other, int shndx, int name) {
+    int sym_bind;
+    int sym_index;
+    int sym_type;
+    int esym_bind;
+    int sym_vis;
+    int esym_vis;
+    int new_vis;
+
+    sym_bind = ELFW_ST_BIND(info);
+    sym_type = ELFW_ST_TYPE(info);
+    sym_vis = ELFW_ST_VISIBILITY(other);
+
+    if (neq(sym_bind, STB_LOCAL)) {
+        /* we search global or weak symbols */
+        sym_index = find_elf_sym(s, name);
+    }
+    sym_index = put_elf_sym(s, value, size,
+                                ELFW_ST_INFO(sym_bind, sym_type), other,
+                                shndx, name);
+    return sym_index;
+}
+
 /* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
