@@ -56,7 +56,7 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
         if (eq(strcmp(name, name1), 0)) {
             return sym_index;
         }
-        sym_index = ((int *)hs->data)[add(add(2, nbuckets), sym_index)];
+        sym_index = ri32(add(hs->data, mul(add(add(2, nbuckets), sym_index), 4)));
     }
     return 0;
 }
