@@ -34,26 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-int ELFW_ST_BIND(int val) {
-  return and(shr(val, 4),15);
-}
-
-int ELFW_ST_TYPE(int val) {
-  return and(val,15);
-}
-
-int ELFW_ST_INFO(int bind, int type) {
-   return add(shl(bind, 4), and(type, 15));
-}
-
-int ELFW_R_INFO(int sym, int type) {
-   return add(shl(sym, 8), and(type, 255));
-}
-
-int ELFW_R_TYPE(int val) {
-  return and(val,255);
-}
-
 /* 5 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
