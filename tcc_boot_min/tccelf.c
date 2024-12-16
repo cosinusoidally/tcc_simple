@@ -62,7 +62,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     i = 0;
     while(lt(i, nb_syms)) {
         sym = add(gs_data(s), mul(add(first_sym, i), sizeof_Elf32_Sym));
-        if (and(eq(sym->st_shndx, SHN_UNDEF),
+        if (and(eq(ges_st_shndx(sym), SHN_UNDEF),
             eq(ELFW_ST_BIND(sym->st_info), STB_LOCAL))) {
             sym->st_info = ELFW_ST_INFO(STB_GLOBAL, ELFW_ST_TYPE(sym->st_info));
         }
