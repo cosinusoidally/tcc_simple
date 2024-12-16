@@ -55,7 +55,7 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
         sr = new_section(tcc_state, buf, SHT_RELX, gs_sh_flags(symtab));
         ss_sh_entsize(sr, sizeof_Elf32_Rel);
         ss_link(sr, symtab);
-        sr->sh_info = s->sh_num;
+        sr->sh_info = gs_sh_num(s);
         ss_reloc(s, sr);
     }
     rel = section_ptr_add(sr, sizeof_Elf32_Rel);
