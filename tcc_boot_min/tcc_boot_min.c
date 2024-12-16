@@ -294,6 +294,8 @@ int init_runtime(){
   SHT_NOBITS = 8;  /* Program space with no data (bss) */
   SHT_REL = 9; /* Relocation entries, no addends */
 
+  STB_LOCAL = 0; /* Local symbol */
+
   O_RDONLY = 0;
   O_BINARY = 0;
 
