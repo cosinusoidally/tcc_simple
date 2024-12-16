@@ -147,6 +147,9 @@ int sto_flags(int o, int v) {wi32(add(o, TCCOption_flags_o), v);}
 int ger_r_offset(int o) {return ri32(add(o, Elf32_Rel_r_offset_o));}
 int ser_r_offset(int o, int v) {wi32(add(o, Elf32_Rel_r_offset_o), v);}
 
+int ger_r_info(int o) {return ri32(add(o, Elf32_Rel_r_info_o));}
+int ser_r_info(int o, int v) {wi32(add(o, Elf32_Rel_r_info_o), v);}
+
 /* Elf32_Sym accessors */
 int ges_st_name(int o) {return ri32(add(o, Elf32_Sym_st_name_o));}
 int ses_st_name(int o, int v) {wi32(add(o, Elf32_Sym_st_name_o), v);}
