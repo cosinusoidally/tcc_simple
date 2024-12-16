@@ -221,12 +221,6 @@ int init_runtime(){
 
   sizeof_Elf32_Rel = 8;
 
-  int Elf32_st_name_o = 0;
-  int Elf32_st_value_o = 4;
-  int Elf32_st_size_o = 8;
-  int Elf32_st_info_o = 12;
-  int Elf32_st_other_o = 13;
-  int Elf32_st_shndx_o = 14;
   sizeof_Elf32_Sym = 16;
 
   sizeof_void = 4;
