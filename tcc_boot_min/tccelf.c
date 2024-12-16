@@ -37,21 +37,20 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* 15 */
 /* return the symbol number */
 ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
-    int info, int other, int shndx, const char *name)
-{
+    int info, int other, int shndx, const char *name) {
     int name_offset;
     int sym_index;
     int nbuckets;
     int h;
-    ElfW(Sym) *sym;
+    Elf32_Sym *sym;
     Section *hs;
     int *ptr;
     int *base;
 
-    sym = section_ptr_add(s, sizeof(ElfW(Sym)));
+    sym = section_ptr_add(s, sizeof_Elf32_Sym);
     if (name) {
         if(ri8(name)) {
-            name_offset = put_elf_str(s->link, name);
+            name_offset = put_elf_str(gs_link(s), name);
         }
     } else {
         name_offset = 0;
