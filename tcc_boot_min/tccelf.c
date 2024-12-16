@@ -42,10 +42,10 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     int sym_index;
     int nbuckets;
     int h;
-    Elf32_Sym *sym;
-    Section *hs;
-    int *ptr;
-    int *base;
+    int sym;
+    int hs;
+    int ptr;
+    int base;
 
     sym = section_ptr_add(s, sizeof_Elf32_Sym);
     if (name) {
