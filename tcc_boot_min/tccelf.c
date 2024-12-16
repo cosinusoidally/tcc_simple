@@ -46,7 +46,7 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     buf_size=256;
     buf = tcc_mallocz(buf_size);
 
-    sr = s->reloc;
+    sr = gs_reloc(s);
     if (eq(sr, 0)) {
         /* if no relocation section, create it */
         snprintf(buf, buf_size, REL_SECTION_FMT, gs_name(s));
