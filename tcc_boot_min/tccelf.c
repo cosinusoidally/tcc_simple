@@ -70,7 +70,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
         wi32(add(tr, mul(i, 4)),
              set_elf_sym(s, ges_st_value(sym), ges_st_size(sym), ges_st_info(sym),
              sym->st_other, ges_st_shndx(sym), add(gs_data(gs_link(s)),
-                                               sym->st_name)));
+                                               ges_st_name(sym))));
 
         i = add(i, 1);
     }
