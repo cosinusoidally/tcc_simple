@@ -62,7 +62,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     ses_st_info(sym, info);
     ses_st_other(sym, other);
     ses_st_shndx(sym, shndx);
-    sym_index = div_(sub(sym, s->data), sizeof_Elf32_Sym);
+    sym_index = div_(sub(sym, gs_data(s)), sizeof_Elf32_Sym);
     hs = gs_hash(s);
     if (hs) {
         ptr = section_ptr_add(hs, sizeof(int));
