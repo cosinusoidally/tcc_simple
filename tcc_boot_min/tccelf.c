@@ -38,7 +38,9 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* reserve at least 'size' bytes in section 'sec' from
    sec->data_offset. */
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
-    return add(sec->data, section_add(sec, size, 1));
+    int offset;
+    offset = section_add(sec, size, 1);
+    return add(sec->data, offset);
 }
 
 /* 14 */
