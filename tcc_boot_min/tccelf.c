@@ -36,19 +36,19 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 
 /* 16 */
 ST_FUNC int find_elf_sym(Section *s, const char *name) {
-    ElfW(Sym) *sym;
+    Elf32_Sym *sym;
     Section *hs;
     int nbuckets;
     int sym_index;
     int h;
     const char *name1;
 
-    hs = s->hash;
+    hs = gs_hash(s);
     if (eq(hs, 0)) {
         return 0;
     }
-    nbuckets = ((int *)hs->data)[0];
-    h = mod(elf_hash((unsigned char *) name), nbuckets);
+    nbuckets = ri32(hs->data);
+    h = mod(elf_hash(name), nbuckets);
     sym_index = ((int *)hs->data)[2 + h];
     while (neq(sym_index, 0)) {
         sym = &((ElfW(Sym) *)s->data)[sym_index];
