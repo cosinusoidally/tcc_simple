@@ -50,7 +50,7 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     nb_syms = div_(gs_data_offset(s), sizeof_Elf32_Sym);
 
     if (eq(nb_buckets, 0)) {
-        nb_buckets = ((int*)s->hash->data)[0];
+        nb_buckets = ri32(gs_data(gs_hash(s)));
     }
 
     s->hash->data_offset = 0;
