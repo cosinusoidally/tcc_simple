@@ -38,15 +38,15 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
 ST_FUNC void tccelf_end_file(TCCState *s1) {
-    Section *s;
+    int s;
     int first_sym;
     int nb_syms;
-    int *tr;
+    int tr;
     int i;
-    Section *sr;
+    int sr;
     int n;
-    Elf32_Rel *rel;
-    Elf32_Rel *rel_end;
+    int rel;
+    int rel_end;
     int sym;
 
     s = gts_symtab(s1);
