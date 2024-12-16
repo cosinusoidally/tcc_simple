@@ -34,8 +34,12 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-int ELFW_ST_BIND(int x) {
-  return and(shr(x, 4),15);
+int ELFW_ST_BIND(int val) {
+  return and(shr(val, 4),15);
+}
+
+int ELFW_ST_TYPE(int val) {
+  return and(val,15);
 }
 
 int ELFW_ST_INFO(int bind, int type) {
