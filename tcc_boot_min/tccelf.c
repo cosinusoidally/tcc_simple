@@ -76,8 +76,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     while(lt(i, gts_nb_sections(s1))) {
         sr = add(gts_sections(s1),mul(i, 4));
         if (and(eq(sr->sh_type, SHT_RELX), eq(gs_link(sr), s))) {
-            rel = (ElfW_Rel*)(add(sr->data, sr->sh_offset));
-            rel_end = (ElfW_Rel*)(add(sr->data, sr->data_offset));
+            rel = add(sr->data, sr->sh_offset);
+            rel_end = add(sr->data, sr->data_offset);
             while(lt(rel, rel_end)) {
                 n = sub(ELFW_R_SYM(rel->r_info), first_sym);
                 rel->r_info = ELFW_R_INFO(tr[n], ELFW_R_TYPE(rel->r_info));
