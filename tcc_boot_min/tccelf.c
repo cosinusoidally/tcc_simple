@@ -81,7 +81,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
             while(lt(rel, rel_end)) {
                 n = sub(ELFW_R_SYM(rel->r_info), first_sym);
                 rel->r_info = ELFW_R_INFO(tr[n], ELFW_R_TYPE(rel->r_info));
-                rel = rel + 1;
+                rel = add(rel, sizeof_Elf32_Rel);
             }
         }
         i = add(i, 1);
