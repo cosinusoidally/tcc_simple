@@ -202,6 +202,7 @@ int init_runtime(){
   Section_sh_entsize_o = 36;
   Section_sh_size_o = 40;
   Section_sh_offset_o = 48;
+  Section_nb_hashed_syms_o = 52;
   Section_link_o = 56;
   Section_reloc_o = 60;
   Section_hash_o = 64;
