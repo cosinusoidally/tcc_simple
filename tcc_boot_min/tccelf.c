@@ -51,8 +51,8 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
     h = mod(elf_hash(name), nbuckets);
     sym_index = ((int *)gs_data(hs))[2 + h];
     while (neq(sym_index, 0)) {
-        sym = &((ElfW(Sym) *)s->data)[sym_index];
-        name1 = add((char *) s->link->data, sym->st_name);
+        sym = &((ElfW(Sym) *)gs_data(s))[sym_index];
+        name1 = add((char *) gs_data(gs_link(s)), ges_st_name(sym));
         if (eq(strcmp(name, name1), 0)) {
             return sym_index;
         }
