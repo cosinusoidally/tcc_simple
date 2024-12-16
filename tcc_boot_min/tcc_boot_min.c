@@ -61,11 +61,17 @@ int ss_sh_flags(int o, int v) {wi32(add(o, Section_sh_flags_o), v);}
 int gs_sh_addralign(int o) {return ri32(add(o, Section_sh_addralign_o));}
 int ss_sh_addralign(int o, int v) {wi32(add(o, Section_sh_addralign_o), v);}
 
+int gs_sh_entsize(int o) {return ri32(add(o, Section_sh_entsize_o));}
+int ss_sh_entsize(int o, int v) {wi32(add(o, Section_sh_entsize_o), v);}
+
 int gs_sh_size(int o) {return ri32(add(o, Section_sh_size_o));}
 int ss_sh_size(int o, int v) {wi32(add(o, Section_sh_size_o), v);}
 
 int gs_sh_offset(int o) {return ri32(add(o, Section_sh_offset_o));}
 int ss_sh_offset(int o, int v) {wi32(add(o, Section_sh_offset_o), v);}
+
+int gs_link(int o) {return ri32(add(o, Section_link_o));}
+int ss_link(int o, int v) {wi32(add(o, Section_link_o), v);}
 
 int ss_reloc(int o, int v) {wi32(add(o, Section_reloc_o), v);}
 
@@ -166,8 +172,10 @@ int init_runtime(){
   Section_sh_type_o = 20;
   Section_sh_flags_o = 24;
   Section_sh_addralign_o = 32;
+  Section_sh_entsize_o = 36;
   Section_sh_size_o = 40;
   Section_sh_offset_o = 48;
+  Section_link_o = 56;
   Section_reloc_o = 60;
   Section_hash_o = 64;
   Section_name_o = 72;
