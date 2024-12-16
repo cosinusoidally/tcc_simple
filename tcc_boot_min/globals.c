@@ -73,6 +73,12 @@ int sizeof_Elf32_Phdr;
 
 int sizeof_Elf32_Rel;
 
+int Elf32_Sym_st_name_o;
+int Elf32_Sym_st_value_o;
+int Elf32_Sym_st_size_o;
+int Elf32_Sym_st_info_o;
+int Elf32_Sym_st_other_o;
+int Elf32_Sym_st_shndx_o;
 int sizeof_Elf32_Sym;
 
 int sizeof_void;
