@@ -68,7 +68,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
         }
         wi32(add(tr, mul(i, 4)),
              set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
-             sym->st_other, sym->st_shndx, add(s->link->data, sym->st_name)));
+             sym->st_other, sym->st_shndx, add(gs_data(gs_link(s)),
+                                               sym->st_name)));
 
         i = add(i, 1);
     }
