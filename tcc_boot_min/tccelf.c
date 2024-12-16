@@ -83,7 +83,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
             rel_end = add(gs_data(sr), gs_data_offset(sr));
             while(lt(rel, rel_end)) {
                 n = sub(ELFW_R_SYM(ger_r_info(rel)), first_sym);
-                rel->r_info = ELFW_R_INFO(tr[n], ELFW_R_TYPE(ger_r_info(rel)));
+                ser_r_info(rel, ELFW_R_INFO(tr[n],
+                                            ELFW_R_TYPE(ger_r_info(rel))));
                 rel = add(rel, sizeof_Elf32_Rel);
             }
         }
