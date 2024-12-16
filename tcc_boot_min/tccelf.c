@@ -87,13 +87,13 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
             sym->st_info = ELFW_ST_INFO(STB_GLOBAL, ELFW_ST_TYPE(sym->st_info));
         }
         tr[i] = set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
-            sym->st_other, sym->st_shndx, s->link->data + sym->st_name);
+            sym->st_other, sym->st_shndx, add(s->link->data, sym->st_name));
 
         i = add(i, 1);
     }
     /* now update relocations */
     i = 1;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         sr = s1->sections[i];
         if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
             rel = (ElfW_Rel*)(add(sr->data, sr->sh_offset));
