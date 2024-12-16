@@ -70,6 +70,9 @@ int ss_sh_size(int o, int v) {wi32(add(o, Section_sh_size_o), v);}
 int gs_sh_offset(int o) {return ri32(add(o, Section_sh_offset_o));}
 int ss_sh_offset(int o, int v) {wi32(add(o, Section_sh_offset_o), v);}
 
+int gs_nb_hashed_syms(int o) {return ri32(add(o, Section_nb_hashed_syms_o));}
+int ss_nb_hashed_syms(int o, int v) {wi32(add(o, Section_nb_hashed_syms_o), v);}
+
 int gs_link(int o) {return ri32(add(o, Section_link_o));}
 int ss_link(int o, int v) {wi32(add(o, Section_link_o), v);}
 
