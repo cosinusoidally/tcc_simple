@@ -143,6 +143,10 @@ int sto_index(int o, int v) {wi32(add(o, TCCOption_index_o), v);}
 int gto_flags(int o) {return ri32(add(o, TCCOption_flags_o));}
 int sto_flags(int o, int v) {wi32(add(o, TCCOption_flags_o), v);}
 
+/* Elf32_Rel accessors */
+int ger_r_offset(int o) {return ri32(add(o, Elf32_Rel_r_offset_o));}
+int ser_r_offset(int o, int v) {wi32(add(o, Elf32_Rel_r_offset_o), v);}
+
 /* Elf32_Sym accessors */
 int ges_st_name(int o) {return ri32(add(o, Elf32_Sym_st_name_o));}
 int ses_st_name(int o, int v) {wi32(add(o, Elf32_Sym_st_name_o), v);}
@@ -237,8 +241,8 @@ int init_runtime(){
 
   sizeof_Elf32_Phdr = 32;
 
-  Elf32_Rel_r_offset = 0;
-  Elf32_Rel_r_info = 4;
+  Elf32_Rel_r_offset_o = 0;
+  Elf32_Rel_r_info_o = 4;
   sizeof_Elf32_Rel = 8;
 
   Elf32_Sym_st_name_o = 0;
