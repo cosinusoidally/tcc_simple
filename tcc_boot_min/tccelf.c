@@ -66,7 +66,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     hs = gs_hash(s);
     if (hs) {
         ptr = section_ptr_add(hs, sizeof(int));
-        base = (int *)hs->data;
+        base = gs_data(hs);
         /* only add global or weak symbols. */
         if (neq(ELFW_ST_BIND(info), STB_LOCAL)) {
             /* add another hashing entry */
