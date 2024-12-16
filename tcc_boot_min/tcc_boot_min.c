@@ -956,6 +956,64 @@ int tccelf_begin_file(int s1) {
     ss_hash(s, 0);
 }
 
+/* At the end of compilation, convert any UNDEF syms to global, and merge
+   with previously existing symbols */
+int tccelf_end_file(int s1) {
+    int s;
+    int first_sym;
+    int nb_syms;
+    int tr;
+    int i;
+    int sr;
+    int n;
+    int rel;
+    int rel_end;
+    int sym;
+
+    s = gts_symtab(s1);
+
+    first_sym = div_(gs_sh_offset(s), sizeof_Elf32_Sym);
+    nb_syms = sub(div_(gs_data_offset(s), sizeof_Elf32_Sym), first_sym);
+    ss_data_offset(s, gs_sh_offset(s));
+    ss_data_offset(gs_link(s), gs_sh_offset(gs_link(s)));
+    ss_hash(s, gs_reloc(s));
+    ss_reloc(s, 0);
+    tr = tcc_mallocz(mul(nb_syms, 4));
+
+    i = 0;
+    while(lt(i, nb_syms)) {
+        sym = add(gs_data(s), mul(add(first_sym, i), sizeof_Elf32_Sym));
+        if (and(eq(ges_st_shndx(sym), SHN_UNDEF),
+            eq(ELFW_ST_BIND(ges_st_info(sym)), STB_LOCAL))) {
+            ses_st_info(sym, ELFW_ST_INFO(STB_GLOBAL,
+                             ELFW_ST_TYPE(ges_st_info(sym))));
+        }
+        wi32(add(tr, mul(i, 4)),
+             set_elf_sym(s, ges_st_value(sym), ges_st_size(sym), ges_st_info(sym),
+             ges_st_other(sym), ges_st_shndx(sym), add(gs_data(gs_link(s)),
+                                               ges_st_name(sym))));
+
+        i = add(i, 1);
+    }
+    /* now update relocations */
+    i = 1;
+    while(lt(i, gts_nb_sections(s1))) {
+        sr = add(gts_sections(s1),mul(i, 4));
+        if (and(eq(gs_sh_type(sr), SHT_RELX), eq(gs_link(sr), s))) {
+            rel = add(gs_data(sr), gs_sh_offset(sr));
+            rel_end = add(gs_data(sr), gs_data_offset(sr));
+            while(lt(rel, rel_end)) {
+                n = sub(ELFW_R_SYM(ger_r_info(rel)), first_sym);
+                ser_r_info(rel, ELFW_R_INFO(ri32(add(tr, mul(n, 4))),
+                                            ELFW_R_TYPE(ger_r_info(rel))));
+                rel = add(rel, sizeof_Elf32_Rel);
+            }
+        }
+        i = add(i, 1);
+    }
+    tcc_free(tr);
+}
+
 /* 6 */
 int new_section(int s1, int name, int sh_type, int sh_flags) {
     int sec;
