@@ -143,6 +143,10 @@ int sto_index(int o, int v) {wi32(add(o, TCCOption_index_o), v);}
 int gto_flags(int o) {return ri32(add(o, TCCOption_flags_o));}
 int sto_flags(int o, int v) {wi32(add(o, TCCOption_flags_o), v);}
 
+/* Elf32_Sym accessors */
+
+int ges_st_shndx(int o) {return ri16(add(o, Elf32_Sym_st_shndx_o));}
+
 /* stuff */
 
 int init_runtime(){
