@@ -40,7 +40,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
     int offset;
     offset = section_add(sec, size, 1);
-    return add(sec->data, offset);
+    return add(gs_data(sec), offset);
 }
 
 /* 14 */
