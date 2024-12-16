@@ -53,7 +53,7 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
         nb_buckets = ri32(gs_data(gs_hash(s)));
     }
 
-    s->hash->data_offset = 0;
+    ss_data_offset(gs_hash(s), 0);
     ptr = section_ptr_add(s->hash, mul(add(add(2, nb_buckets), nb_syms),
                                        sizeof(int)));
     wi32(ptr, nb_buckets);
