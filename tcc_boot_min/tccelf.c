@@ -128,7 +128,7 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     memset(hash, 0, mul(add(nb_buckets, 1), sizeof(int)));
     ptr = add(ptr, mul(add(nb_buckets, 1), 4));
 
-    sym = (ElfW(Sym) *)s->data + 1;
+    sym = add(s->data, sizeof_Elf32_Sym);
     sym_index = 1;
     while(lt(sym_index, nb_syms)) {
         if (neq(ELFW_ST_BIND(sym->st_info), STB_LOCAL)) {
