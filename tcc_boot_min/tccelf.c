@@ -56,12 +56,12 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
         name_offset = 0;
     }
     /* XXX: endianness */
-    sym->st_name = name_offset;
-    sym->st_value = value;
-    sym->st_size = size;
-    sym->st_info = info;
-    sym->st_other = other;
-    sym->st_shndx = shndx;
+    ses_st_name(sym, name_offset);
+    ses_st_value(sym, value);
+    ses_st_size(sym, size);
+    ses_st_info(sym, info);
+    ses_st_other(sym, other);
+    ses_st_shndx(sym, shndx);
     sym_index = sym - (ElfW(Sym) *)s->data;
     hs = s->hash;
     if (hs) {
