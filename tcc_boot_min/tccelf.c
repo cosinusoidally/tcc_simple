@@ -73,7 +73,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
             nbuckets = ri32(base);
             h = mod(elf_hash(add(gs_data(gs_link(s)), name_offset)),
                     nbuckets);
-            wi32(ptr, ri32(base,mul(add(2, h), 4)));
+            wi32(ptr, ri32(add(base,mul(add(2, h), 4))));
             wi32(add(base,mul(add(2, h), 4)), sym_index);
             wi32(add(base, 4), add(ri32(add(base, 4)), 1));
             /* we resize the hash table */
