@@ -91,12 +91,11 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
 ST_FUNC Section *new_symtab(TCCState *s1,
                            const char *symtab_name, int sh_type, int sh_flags,
                            const char *strtab_name,
-                           const char *hash_name, int hash_sh_flags)
-{
-    Section *symtab;
-    Section *strtab;
-    Section *hash;
-    int *ptr;
+                           const char *hash_name, int hash_sh_flags) {
+    int symtab;
+    int strtab;
+    int hash;
+    int ptr;
     int nb_buckets;
 
     symtab = new_section(s1, symtab_name, sh_type, sh_flags);
