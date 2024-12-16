@@ -210,6 +210,8 @@ int init_runtime(){
 
   sizeof_Elf32_Phdr = 32;
 
+  sizeof_Elf32_Sym = 16;
+
   sizeof_void = 4;
 
   FUNC_PROLOG_SIZE = 9;
