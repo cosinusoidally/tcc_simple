@@ -38,15 +38,14 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* add an elf symbol : check if it is already defined and patch
    it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
 ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
-                       int info, int other, int shndx, const char *name)
-{
+                       int info, int other, int shndx, const char *name) {
     int sym_bind;
     int sym_index;
     int sym_type;
     int esym_bind;
-    unsigned char sym_vis;
-    unsigned char esym_vis;
-    unsigned char new_vis;
+    int sym_vis;
+    int esym_vis;
+    int new_vis;
 
     sym_bind = ELFW_ST_BIND(info);
     sym_type = ELFW_ST_TYPE(info);
