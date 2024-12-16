@@ -1211,6 +1211,61 @@ int rebuild_hash(int s, int nb_buckets) {
     }
 }
 
+/* 15 */
+/* return the symbol number */
+int put_elf_sym(int s, int value, int size,
+    int info, int other, int shndx, int name) {
+    int name_offset;
+    int sym_index;
+    int nbuckets;
+    int h;
+    int sym;
+    int hs;
+    int ptr;
+    int base;
+
+    sym = section_ptr_add(s, sizeof_Elf32_Sym);
+    if (name) {
+        if(ri8(name)) {
+            name_offset = put_elf_str(gs_link(s), name);
+        }
+    } else {
+        name_offset = 0;
+    }
+    /* XXX: endianness */
+    ses_st_name(sym, name_offset);
+    ses_st_value(sym, value);
+    ses_st_size(sym, size);
+    ses_st_info(sym, info);
+    ses_st_other(sym, other);
+    ses_st_shndx(sym, shndx);
+    sym_index = div_(sub(sym, gs_data(s)), sizeof_Elf32_Sym);
+    hs = gs_hash(s);
+    if (hs) {
+        ptr = section_ptr_add(hs, 4);
+        base = gs_data(hs);
+        /* only add global or weak symbols. */
+        if (neq(ELFW_ST_BIND(info), STB_LOCAL)) {
+            /* add another hashing entry */
+            nbuckets = ri32(base);
+            h = mod(elf_hash(add(gs_data(gs_link(s)), name_offset)),
+                    nbuckets);
+            wi32(ptr, ri32(add(base,mul(add(2, h), 4))));
+            wi32(add(base,mul(add(2, h), 4)), sym_index);
+            wi32(add(base, 4), add(ri32(add(base, 4)), 1));
+            /* we resize the hash table */
+            ss_nb_hashed_syms(hs, add(gs_nb_hashed_syms(hs), 1));
+            if (gt(gs_nb_hashed_syms(hs), mul(2, nbuckets))) {
+                rebuild_hash(s, mul(2, nbuckets));
+            }
+        } else {
+            wi32(ptr, 0);
+            wi32(add(base, 4),add(ri32(add(base, 4)), 1));
+        }
+    }
+    return sym_index;
+}
+
 /* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
