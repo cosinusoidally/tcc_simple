@@ -295,6 +295,7 @@ int init_runtime(){
   SHT_REL = 9; /* Relocation entries, no addends */
 
   STB_LOCAL = 0; /* Local symbol */
+  STB_GLOBAL = 1; /* Global symbol */
 
   O_RDONLY = 0;
   O_BINARY = 0;

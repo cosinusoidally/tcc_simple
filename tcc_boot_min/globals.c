@@ -133,6 +133,7 @@ int SHT_STRTAB;
 int SHT_SYMTAB;
 
 int STB_LOCAL;
+int STB_GLOBAL;
 
 int aglobal_stack;
 int alocal_stack;

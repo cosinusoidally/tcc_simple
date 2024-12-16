@@ -228,7 +228,7 @@ typedef struct
 /* Legal values for ST_BIND subfield of st_info (symbol binding).  */
 
 extern int STB_LOCAL;	/* 0		Local symbol */
-#define STB_GLOBAL	1		/* Global symbol */
+extern int STB_GLOBAL;	/* 1		Global symbol */
 #define STB_WEAK	2		/* Weak symbol */
 #define	STB_NUM		3		/* Number of defined types.  */
 #define STB_LOOS	10		/* Start of OS-specific */
