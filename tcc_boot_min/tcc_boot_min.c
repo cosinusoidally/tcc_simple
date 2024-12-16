@@ -1107,6 +1107,15 @@ int section_add(int sec, int size, int align) {
     return offset;
 }
 
+/* 10 */
+/* reserve at least 'size' bytes in section 'sec' from
+   sec->data_offset. */
+int section_ptr_add(int sec, int size) {
+    int offset;
+    offset = section_add(sec, size, 1);
+    return add(gs_data(sec), offset);
+}
+
 /* 11 */
 /* reserve at least 'size' bytes from section start */
 int section_reserve(int sec, int size) {

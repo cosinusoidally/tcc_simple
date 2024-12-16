@@ -34,15 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 10 */
-/* reserve at least 'size' bytes in section 'sec' from
-   sec->data_offset. */
-ST_FUNC void *section_ptr_add(Section *sec, addr_t size) {
-    int offset;
-    offset = section_add(sec, size, 1);
-    return add(gs_data(sec), offset);
-}
-
 /* 14 */
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */
