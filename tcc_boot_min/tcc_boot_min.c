@@ -916,6 +916,36 @@ int new_section(int s1, int name, int sh_type, int sh_flags) {
     return sec;
 }
 
+/* 7 */
+int new_symtab(int s1, int symtab_name, int sh_type, int sh_flags,
+               int strtab_name, int hash_name, int hash_sh_flags) {
+    int symtab;
+    int strtab;
+    int hash;
+    int ptr;
+    int nb_buckets;
+
+    symtab = new_section(s1, symtab_name, sh_type, sh_flags);
+    ss_sh_entsize(symtab, sizeof_Elf32_Sym);
+    strtab = new_section(s1, strtab_name, SHT_STRTAB, sh_flags);
+    put_elf_str(strtab, mks(""));
+    ss_link(symtab, strtab);
+    put_elf_sym(symtab, 0, 0, 0, 0, 0, 0);
+
+    nb_buckets = 1;
+
+    hash = new_section(s1, hash_name, SHT_HASH, hash_sh_flags);
+    ss_sh_entsize(hash, 4);
+    ss_hash(symtab, hash);
+    ss_link(hash, symtab);
+
+    ptr = section_ptr_add(hash, mul(add(add(2, nb_buckets), 1), 4));
+    wi32(ptr, nb_buckets);
+    wi32(add(ptr, 4), 1);
+    memset(add(ptr, 2), 0, mul(add(nb_buckets, 1), 4));
+    return symtab;
+}
+
 /* 8 */
 /* realloc section and set its content to zero */
 int section_realloc(int sec, int new_size) {
