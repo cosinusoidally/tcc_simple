@@ -148,7 +148,7 @@ typedef struct
 
 /* Special section indices.  */
 
-#define SHN_UNDEF	0		/* Undefined section */
+extern int SHN_UNDEF;	/* 0		Undefined section */
 #define SHN_LORESERVE	0xff00		/* Start of reserved indices */
 #define SHN_LOPROC	0xff00		/* Start of processor-specific */
 #define SHN_BEFORE	0xff00		/* Order section before all others

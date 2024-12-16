@@ -283,6 +283,7 @@ int init_runtime(){
   SHF_EXECINSTR = shl(1, 2); /* Executable */
   SHF_PRIVATE = shl(1, 31);
 
+  SHN_UNDEF = 0;  /* 0 Undefined section */
   SHN_COMMON = 65522;  /* 0xfff2 Associated symbol is common */
 
   SHT_PROGBITS = 1; /* Program data */

@@ -121,6 +121,7 @@ int SHF_EXECINSTR;
 int SHF_PRIVATE;
 int SHF_WRITE;
 
+int SHN_UNDEF;
 int SHN_COMMON;
 
 int SHT_HASH;
