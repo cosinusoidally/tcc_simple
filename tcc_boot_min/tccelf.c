@@ -46,6 +46,10 @@ int ELFW_ST_INFO(int bind, int type) {
    return add(shl(bind, 4), and(type, 15));
 }
 
+int ELFW_R_TYPE(int val) {
+  return and(val,255);
+}
+
 /* 5 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
