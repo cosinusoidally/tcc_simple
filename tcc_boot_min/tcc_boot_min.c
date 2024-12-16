@@ -1266,6 +1266,33 @@ int put_elf_sym(int s, int value, int size,
     return sym_index;
 }
 
+/* 16 */
+int find_elf_sym(int s, int name) {
+    int sym;
+    int hs;
+    int nbuckets;
+    int sym_index;
+    int h;
+    int name1;
+
+    hs = gs_hash(s);
+    if (eq(hs, 0)) {
+        return 0;
+    }
+    nbuckets = ri32(gs_data(hs));
+    h = mod(elf_hash(name), nbuckets);
+    sym_index = ri32(add(gs_data(hs), mul(add(2, h), 4)));
+    while (neq(sym_index, 0)) {
+        sym = add(gs_data(s), mul(sizeof_Elf32_Sym, sym_index));
+        name1 = add(gs_data(gs_link(s)), ges_st_name(sym));
+        if (eq(strcmp(name, name1), 0)) {
+            return sym_index;
+        }
+        sym_index = ri32(add(gs_data(hs), mul(add(add(2, nbuckets), sym_index), 4)));
+    }
+    return 0;
+}
+
 /* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.

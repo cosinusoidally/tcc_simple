@@ -34,33 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 16 */
-ST_FUNC int find_elf_sym(Section *s, const char *name) {
-    int sym;
-    int hs;
-    int nbuckets;
-    int sym_index;
-    int h;
-    int name1;
-
-    hs = gs_hash(s);
-    if (eq(hs, 0)) {
-        return 0;
-    }
-    nbuckets = ri32(gs_data(hs));
-    h = mod(elf_hash(name), nbuckets);
-    sym_index = ri32(add(gs_data(hs), mul(add(2, h), 4)));
-    while (neq(sym_index, 0)) {
-        sym = add(gs_data(s), mul(sizeof_Elf32_Sym, sym_index));
-        name1 = add(gs_data(gs_link(s)), ges_st_name(sym));
-        if (eq(strcmp(name, name1), 0)) {
-            return sym_index;
-        }
-        sym_index = ri32(add(gs_data(hs), mul(add(add(2, nbuckets), sym_index), 4)));
-    }
-    return 0;
-}
-
 /* 17 */
 /* add an elf symbol : check if it is already defined and patch
    it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
