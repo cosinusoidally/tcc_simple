@@ -66,8 +66,9 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
             eq(ELFW_ST_BIND(sym->st_info), STB_LOCAL))) {
             sym->st_info = ELFW_ST_INFO(STB_GLOBAL, ELFW_ST_TYPE(sym->st_info));
         }
-        tr[i] = set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
-            sym->st_other, sym->st_shndx, add(s->link->data, sym->st_name));
+        wi32(add(tr, mul(i, 4)),
+             set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
+             sym->st_other, sym->st_shndx, add(s->link->data, sym->st_name)));
 
         i = add(i, 1);
     }
