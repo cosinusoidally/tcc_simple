@@ -52,11 +52,11 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
 
     first_sym = div_(gs_sh_offset(s), sizeof_Elf32_Sym);
     nb_syms = sub(div_(gs_data_offset(s), sizeof_Elf32_Sym), first_sym);
-    s->data_offset = s->sh_offset;
-    s->link->data_offset = s->link->sh_offset;
-    s->hash = s->reloc;
-    s->reloc = NULL;
-    tr = tcc_mallocz(nb_syms * sizeof *tr);
+    ss_data_offset(s, gs_sh_offset(s));
+    s->link->data_offset = gs_sh_offset(gs_link(s));
+    ss_hash(s, gs_reloc(s));
+    ss_reloc(s, 0);
+    tr = tcc_mallocz(mul(nb_syms, sizeof *tr));
 
     i = 0;
     while(lt(i, nb_syms)) {
