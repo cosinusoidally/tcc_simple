@@ -45,16 +45,17 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     int i;
     Section *sr;
     int n;
-    ElfW_Rel *rel;
-    ElfW_Rel *rel_end;
+    Elf32_Rel *rel;
+    Elf32_Rel *rel_end;
 
     s = gts_symtab(s1);
 
-    first_sym = div_(s->sh_offset, sizeof (ElfSym));
-    nb_syms = sub(div_(s->data_offset, sizeof (ElfSym)), first_sym);
+    first_sym = div_(s->sh_offset, sizeof_Elf32_Sym);
+    nb_syms = sub(div_(s->data_offset, sizeof_Elf32_Sym), first_sym);
     s->data_offset = s->sh_offset;
     s->link->data_offset = s->link->sh_offset;
-    s->hash = s->reloc, s->reloc = NULL;
+    s->hash = s->reloc;
+    s->reloc = NULL;
     tr = tcc_mallocz(nb_syms * sizeof *tr);
 
     i = 0;
