@@ -156,6 +156,9 @@ int ses_st_value(int o, int v) {wi32(add(o, Elf32_Sym_st_value_o), v);}
 int ges_st_info(int o) {return ri8(add(o, Elf32_Sym_st_info_o));}
 int ses_st_info(int o, int v) {wi8(add(o, Elf32_Sym_st_info_o), v);}
 
+int ges_st_other(int o) {return ri8(add(o, Elf32_Sym_st_other_o));}
+int ses_st_other(int o, int v) {wi8(add(o, Elf32_Sym_st_other_o), v);}
+
 int ges_st_shndx(int o) {return ri16(add(o, Elf32_Sym_st_shndx_o));}
 
 /* stuff */
