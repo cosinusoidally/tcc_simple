@@ -144,6 +144,12 @@ int gto_flags(int o) {return ri32(add(o, TCCOption_flags_o));}
 int sto_flags(int o, int v) {wi32(add(o, TCCOption_flags_o), v);}
 
 /* Elf32_Sym accessors */
+int ges_st_name(int o) {return ri32(add(o, Elf32_Sym_st_name_o));}
+int ses_st_name(int o, int v) {wi32(add(o, Elf32_Sym_st_name_o), v);}
+
+int ges_st_size(int o) {return ri32(add(o, Elf32_Sym_st_size_o));}
+int ses_st_size(int o, int v) {wi32(add(o, Elf32_Sym_st_size_o), v);}
+
 int ges_st_value(int o) {return ri32(add(o, Elf32_Sym_st_value_o));}
 int ses_st_value(int o, int v) {wi32(add(o, Elf32_Sym_st_value_o), v);}
 
