@@ -884,6 +884,10 @@ int ELFW_ST_INFO(int bind, int type) {
    return add(shl(bind, 4), and(type, 15));
 }
 
+int ELFW_ST_VISIBILITY(int o) {
+    return and(o, 3);   /* ((o) & 0x03) */
+}
+
 int ELFW_R_INFO(int sym, int type) {
    return add(shl(sym, 8), and(type, 255));
 }

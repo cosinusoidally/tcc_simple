@@ -49,9 +49,9 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
     unsigned char esym_vis;
     unsigned char new_vis;
 
-    sym_bind = ELFW(ST_BIND)(info);
-    sym_type = ELFW(ST_TYPE)(info);
-    sym_vis = ELFW(ST_VISIBILITY)(other);
+    sym_bind = ELFW_ST_BIND(info);
+    sym_type = ELFW_ST_TYPE(info);
+    sym_vis = ELFW_ST_VISIBILITY(other);
 
     if (neq(sym_bind, STB_LOCAL)) {
         /* we search global or weak symbols */
