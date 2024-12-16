@@ -77,7 +77,7 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
             wi32(add(base,mul(add(2, h), 4)), sym_index);
             wi32(add(base, 4), add(ri32(add(base, 4)), 1));
             /* we resize the hash table */
-            hs->nb_hashed_syms++;
+            hs->nb_hashed_syms = add(hs->nb_hashed_syms, 1);
             if (gt(hs->nb_hashed_syms, mul(2, nbuckets))) {
                 rebuild_hash(s, mul(2, nbuckets));
             }
