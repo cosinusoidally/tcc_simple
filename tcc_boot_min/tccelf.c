@@ -34,50 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 14 */
-/* rebuild hash table of section s */
-/* NOTE: we do factorize the hash table code to go faster */
-static void rebuild_hash(Section *s, unsigned int nb_buckets) {
-    int sym;
-    int ptr;
-    int hash;
-    int nb_syms;
-    int sym_index;
-    int h;
-    int strtab;
-
-    strtab = gs_data(gs_link(s));
-    nb_syms = div_(gs_data_offset(s), sizeof_Elf32_Sym);
-
-    if (eq(nb_buckets, 0)) {
-        nb_buckets = ri32(gs_data(gs_hash(s)));
-    }
-
-    ss_data_offset(gs_hash(s), 0);
-    ptr = section_ptr_add(gs_hash(s), mul(add(add(2, nb_buckets), nb_syms), 4));
-    wi32(ptr, nb_buckets);
-    wi32(add(ptr, 4), nb_syms);
-    ptr = add(ptr, 8);
-    hash = ptr;
-    memset(hash, 0, mul(add(nb_buckets, 1), 4));
-    ptr = add(ptr, mul(add(nb_buckets, 1), 4));
-
-    sym = add(gs_data(s), sizeof_Elf32_Sym);
-    sym_index = 1;
-    while(lt(sym_index, nb_syms)) {
-        if (neq(ELFW_ST_BIND(ges_st_info(sym)), STB_LOCAL)) {
-            h = mod(elf_hash(add(strtab, ges_st_name(sym))), nb_buckets);
-            wi32(ptr, ri32(add(hash, mul(h, 4))));
-            wi32(add(hash, mul(h, 4)), sym_index);
-        } else {
-            wi32(ptr, 0);
-        }
-        ptr = add(ptr, 4);
-        sym = add(sym, sizeof_Elf32_Sym);
-        sym_index = add(sym_index, 1);
-    }
-}
-
 /* 15 */
 /* return the symbol number */
 ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
