@@ -202,6 +202,7 @@ int init_runtime(){
   Section_sh_num_o = 16;
   Section_sh_type_o = 20;
   Section_sh_flags_o = 24;
+  Section_sh_info_o = 28;
   Section_sh_addralign_o = 32;
   Section_sh_entsize_o = 36;
   Section_sh_size_o = 40;
