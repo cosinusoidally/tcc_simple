@@ -36,7 +36,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 
 /* 16 */
 ST_FUNC int find_elf_sym(Section *s, const char *name) {
-    Elf32_Sym *sym;
+    int sym;
     Section *hs;
     int nbuckets;
     int sym_index;
@@ -56,7 +56,7 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
         if (eq(strcmp(name, name1), 0)) {
             return sym_index;
         }
-        sym_index = ri32(add(hs->data, mul(add(add(2, nbuckets), sym_index), 4)));
+        sym_index = ri32(add(gs_data(hs), mul(add(add(2, nbuckets), sym_index), 4)));
     }
     return 0;
 }
