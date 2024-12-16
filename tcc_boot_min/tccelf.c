@@ -47,20 +47,21 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     int n;
     Elf32_Rel *rel;
     Elf32_Rel *rel_end;
+    Elf32_Sym *sym;
 
     s = gts_symtab(s1);
 
     first_sym = div_(gs_sh_offset(s), sizeof_Elf32_Sym);
     nb_syms = sub(div_(gs_data_offset(s), sizeof_Elf32_Sym), first_sym);
     ss_data_offset(s, gs_sh_offset(s));
-    s->link->data_offset = gs_sh_offset(gs_link(s));
+    ss_data_offset(gs_link(s), gs_sh_offset(gs_link(s)));
     ss_hash(s, gs_reloc(s));
     ss_reloc(s, 0);
-    tr = tcc_mallocz(mul(nb_syms, sizeof *tr));
+    tr = tcc_mallocz(mul(nb_syms, 4));
 
     i = 0;
     while(lt(i, nb_syms)) {
-        ElfSym *sym = (ElfSym*)s->data + first_sym + i;
+        sym = (ElfSym*)s->data + add(first_sym, i);
         if (and(eq(sym->st_shndx, SHN_UNDEF),
             eq(ELFW(ST_BIND)(sym->st_info), STB_LOCAL))) {
             sym->st_info = ELFW(ST_INFO)(STB_GLOBAL, ELFW(ST_TYPE)(sym->st_info));
