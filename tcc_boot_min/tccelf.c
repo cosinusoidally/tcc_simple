@@ -47,9 +47,9 @@ ST_FUNC int find_elf_sym(Section *s, const char *name) {
     if (eq(hs, 0)) {
         return 0;
     }
-    nbuckets = ri32(hs->data);
+    nbuckets = ri32(gs_data(hs));
     h = mod(elf_hash(name), nbuckets);
-    sym_index = ((int *)hs->data)[2 + h];
+    sym_index = ((int *)gs_data(hs))[2 + h];
     while (neq(sym_index, 0)) {
         sym = &((ElfW(Sym) *)s->data)[sym_index];
         name1 = add((char *) s->link->data, sym->st_name);
