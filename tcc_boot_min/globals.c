@@ -24,6 +24,7 @@ int Section_sh_name_o;
 int Section_sh_num_o;
 int Section_sh_type_o;
 int Section_sh_flags_o;
+int Section_sh_info_o;
 int Section_sh_addralign_o;
 int Section_sh_entsize_o;
 int Section_sh_size_o;
