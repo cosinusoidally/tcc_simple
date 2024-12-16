@@ -52,15 +52,15 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
         snprintf(buf, buf_size, REL_SECTION_FMT, gs_name(s));
         /* if the symtab is allocated, then we consider the relocation
            are also */
-        sr = new_section(tcc_state, buf, SHT_RELX, symtab->sh_flags);
-        sr->sh_entsize = sizeof(ElfW_Rel);
+        sr = new_section(tcc_state, buf, SHT_RELX, gs_sh_flags(symtab));
+        sr->sh_entsize = sizeof_Elf32_Rel;
         sr->link = symtab;
         sr->sh_info = s->sh_num;
         s->reloc = sr;
     }
-    rel = section_ptr_add(sr, sizeof(ElfW_Rel));
+    rel = section_ptr_add(sr, sizeof_Elf32_Rel);
     rel->r_offset = offset;
-    rel->r_info = ELFW(R_INFO)(symbol, type);
+    rel->r_info = ELFW_R_INFO(symbol, type);
 
     tcc_free(buf);
 }
