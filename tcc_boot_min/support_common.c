@@ -8,13 +8,24 @@ int ri32(int o) {
 }
 
 int wi32(int o, int v) {
-  wi8(o, and(v, 0xFF));
+  wi8(o, and(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 1), and(v, 0xFF));
+  wi8(add(o, 1), and(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 2), and(v, 0xFF));
+  wi8(add(o, 2), and(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 3), and(v, 0xFF));
+  wi8(add(o, 3), and(v, 255));
+}
+
+int ri16(int o) {
+        return or(or(and(ri8(o), 255),
+                shl(and(ri8(add(o, 1)), 255), 8)));
+}
+
+int wi16(int o, int v) {
+  wi8(o, and(v, 255));
+  v = shr(v, 8);
+  wi8(add(o, 1), and(v, 255));
 }
 
 int v_esp; int v_ebp; int v_stack_size; int v_stack;
