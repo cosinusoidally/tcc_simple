@@ -63,15 +63,15 @@ ST_FUNC int put_elf_sym(Section *s, addr_t value, unsigned long size,
     ses_st_other(sym, other);
     ses_st_shndx(sym, shndx);
     sym_index = sym - (ElfW(Sym) *)s->data;
-    hs = s->hash;
+    hs = gs_hash(s);
     if (hs) {
         ptr = section_ptr_add(hs, sizeof(int));
         base = (int *)hs->data;
         /* only add global or weak symbols. */
-        if (neq(ELFW(ST_BIND)(info), STB_LOCAL)) {
+        if (neq(ELFW_ST_BIND(info), STB_LOCAL)) {
             /* add another hashing entry */
             nbuckets = ri32(base);
-            h = mod(elf_hash(add((unsigned char *)s->link->data, name_offset)),
+            h = mod(elf_hash(add(s->link->data, name_offset)),
                     nbuckets);
             wi32(ptr, ri32(base,mul(add(2, h), 4)));
             wi32(add(base,mul(add(2, h), 4)), sym_index);
