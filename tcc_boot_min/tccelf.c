@@ -49,7 +49,7 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
     sr = s->reloc;
     if (eq(sr, 0)) {
         /* if no relocation section, create it */
-        snprintf(buf, buf_size, REL_SECTION_FMT, s->name);
+        snprintf(buf, buf_size, REL_SECTION_FMT, gs_name(s));
         /* if the symtab is allocated, then we consider the relocation
            are also */
         sr = new_section(tcc_state, buf, SHT_RELX, symtab->sh_flags);
