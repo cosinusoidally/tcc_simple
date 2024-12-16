@@ -50,8 +50,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
 
     s = gts_symtab(s1);
 
-    first_sym = div_(s->sh_offset, sizeof_Elf32_Sym);
-    nb_syms = sub(div_(s->data_offset, sizeof_Elf32_Sym), first_sym);
+    first_sym = div_(gs_sh_offset(s), sizeof_Elf32_Sym);
+    nb_syms = sub(div_(gs_data_offset(s), sizeof_Elf32_Sym), first_sym);
     s->data_offset = s->sh_offset;
     s->link->data_offset = s->link->sh_offset;
     s->hash = s->reloc;
