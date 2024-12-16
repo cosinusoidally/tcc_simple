@@ -54,27 +54,26 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     }
 
     ss_data_offset(gs_hash(s), 0);
-    ptr = section_ptr_add(s->hash, mul(add(add(2, nb_buckets), nb_syms),
-                                       sizeof(int)));
+    ptr = section_ptr_add(gs_hash(s), mul(add(add(2, nb_buckets), nb_syms), 4));
     wi32(ptr, nb_buckets);
     wi32(add(ptr, 4), nb_syms);
     ptr = add(ptr, 8);
     hash = ptr;
-    memset(hash, 0, mul(add(nb_buckets, 1), sizeof(int)));
+    memset(hash, 0, mul(add(nb_buckets, 1), 4));
     ptr = add(ptr, mul(add(nb_buckets, 1), 4));
 
-    sym = add(s->data, sizeof_Elf32_Sym);
+    sym = add(gs_data(s), sizeof_Elf32_Sym);
     sym_index = 1;
     while(lt(sym_index, nb_syms)) {
-        if (neq(ELFW_ST_BIND(sym->st_info), STB_LOCAL)) {
-            h = mod(elf_hash(add(strtab, sym->st_name)), nb_buckets);
+        if (neq(ELFW_ST_BIND(ges_st_info(sym)), STB_LOCAL)) {
+            h = mod(elf_hash(add(strtab, ges_st_name(sym))), nb_buckets);
             wi32(ptr, ri32(add(hash, mul(h, 4))));
             wi32(add(hash, mul(h, 4)), sym_index);
         } else {
             wi32(ptr, 0);
         }
         ptr = add(ptr, 4);
-        sym++;
+        sym = add(sym, sizeof_Elf32_Sym);
         sym_index = add(sym_index, 1);
     }
 }
