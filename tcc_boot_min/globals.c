@@ -71,6 +71,8 @@ int sizeof_Elf32_Ehdr;
 
 int sizeof_Elf32_Phdr;
 
+int Elf32_Rel_r_offset;
+int Elf32_Rel_r_info;
 int sizeof_Elf32_Rel;
 
 int Elf32_Sym_st_name_o;

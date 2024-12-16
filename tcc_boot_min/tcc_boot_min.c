@@ -237,6 +237,8 @@ int init_runtime(){
 
   sizeof_Elf32_Phdr = 32;
 
+  Elf32_Rel_r_offset = 0;
+  Elf32_Rel_r_info = 4;
   sizeof_Elf32_Rel = 8;
 
   Elf32_Sym_st_name_o = 0;
