@@ -34,6 +34,14 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
+int ELFW_ST_BIND(int x) {
+  return and(shr(x, 4),15);
+}
+
+int ELFW_ST_INFO(int bind, int type) {
+   return add(shl(bind, 4), and(type, 15))
+}
+
 /* 5 */
 /* At the end of compilation, convert any UNDEF syms to global, and merge
    with previously existing symbols */
@@ -63,7 +71,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     while(lt(i, nb_syms)) {
         sym = add(gs_data(s), mul(add(first_sym, i), sizeof_Elf32_Sym));
         if (and(eq(sym->st_shndx, SHN_UNDEF),
-            eq(ELFW(ST_BIND)(sym->st_info), STB_LOCAL))) {
+            eq(ELFW_ST_BIND(sym->st_info), STB_LOCAL))) {
             sym->st_info = ELFW(ST_INFO)(STB_GLOBAL, ELFW(ST_TYPE)(sym->st_info));
         }
         tr[i] = set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
