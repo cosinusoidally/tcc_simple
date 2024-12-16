@@ -40,7 +40,6 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
                        int info, int other, int shndx, const char *name)
 {
-    ElfW(Sym) *esym;
     int sym_bind;
     int sym_index;
     int sym_type;
@@ -58,7 +57,7 @@ ST_FUNC int set_elf_sym(Section *s, addr_t value, unsigned long size,
         sym_index = find_elf_sym(s, name);
     }
     sym_index = put_elf_sym(s, value, size,
-                                ELFW(ST_INFO)(sym_bind, sym_type), other,
+                                ELFW_ST_INFO(sym_bind, sym_type), other,
                                 shndx, name);
     return sym_index;
 }
