@@ -59,8 +59,8 @@ ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
         ss_reloc(s, sr);
     }
     rel = section_ptr_add(sr, sizeof_Elf32_Rel);
-    rel->r_offset = offset;
-    rel->r_info = ELFW_R_INFO(symbol, type);
+    ser_r_offset(rel, offset);
+    ser_r_info(rel, ELFW_R_INFO(symbol, type));
 
     tcc_free(buf);
 }
