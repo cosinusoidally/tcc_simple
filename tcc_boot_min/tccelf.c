@@ -38,7 +38,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */
 static void rebuild_hash(Section *s, unsigned int nb_buckets) {
-    ElfW(Sym) *sym;
+    Elf32_Sym *sym;
     int *ptr;
     int *hash;
     int nb_syms;
@@ -46,8 +46,8 @@ static void rebuild_hash(Section *s, unsigned int nb_buckets) {
     int h;
     unsigned char *strtab;
 
-    strtab = s->link->data;
-    nb_syms = div_(s->data_offset, sizeof(ElfW(Sym)));
+    strtab = gs_data(gs_link(s));
+    nb_syms = div_(gs_data_offset(s), sizeof_Elf32_Sym);
 
     if (eq(nb_buckets, 0)) {
         nb_buckets = ((int*)s->hash->data)[0];
