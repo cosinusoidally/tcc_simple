@@ -293,6 +293,7 @@ int init_runtime(){
   SHT_HASH = 5;  /* Symbol hash table */
   SHT_NOBITS = 8;  /* Program space with no data (bss) */
   SHT_REL = 9; /* Relocation entries, no addends */
+  SHT_RELX = SHT_REL;
 
   STB_LOCAL = 0; /* Local symbol */
   STB_GLOBAL = 1; /* Global symbol */

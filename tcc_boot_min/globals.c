@@ -129,6 +129,7 @@ int SHT_NOBITS;
 int SHT_PROGBITS;
 int SHT_REL;
 int SHT_RELA;
+int SHT_RELX;
 int SHT_STRTAB;
 int SHT_SYMTAB;
 
