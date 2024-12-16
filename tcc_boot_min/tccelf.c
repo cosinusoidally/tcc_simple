@@ -39,7 +39,7 @@ int ELFW_ST_BIND(int x) {
 }
 
 int ELFW_ST_INFO(int bind, int type) {
-   return add(shl(bind, 4), and(type, 15))
+   return add(shl(bind, 4), and(type, 15));
 }
 
 /* 5 */
