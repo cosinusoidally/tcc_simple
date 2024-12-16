@@ -68,8 +68,8 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
                              ELFW_ST_TYPE(ges_st_info(sym))));
         }
         wi32(add(tr, mul(i, 4)),
-             set_elf_sym(s, sym->st_value, sym->st_size, sym->st_info,
-             sym->st_other, sym->st_shndx, add(gs_data(gs_link(s)),
+             set_elf_sym(s, ges_st_value(sym), sym->st_size, sym->st_info,
+             sym->st_other, ges_st_shndx(sym), add(gs_data(gs_link(s)),
                                                sym->st_name)));
 
         i = add(i, 1);
