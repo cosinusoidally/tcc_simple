@@ -47,7 +47,7 @@ ST_FUNC void tccelf_end_file(TCCState *s1) {
     int n;
     Elf32_Rel *rel;
     Elf32_Rel *rel_end;
-    Elf32_Sym *sym;
+    int sym;
 
     s = gts_symtab(s1);
 
