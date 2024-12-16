@@ -71,6 +71,8 @@ int sizeof_Elf32_Ehdr;
 
 int sizeof_Elf32_Phdr;
 
+int sizeof_Elf32_Rel;
+
 int sizeof_Elf32_Sym;
 
 int sizeof_void;

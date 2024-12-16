@@ -219,6 +219,8 @@ int init_runtime(){
 
   sizeof_Elf32_Phdr = 32;
 
+  sizeof_Elf32_Rel = 8;
+
   sizeof_Elf32_Sym = 16;
 
   sizeof_void = 4;
