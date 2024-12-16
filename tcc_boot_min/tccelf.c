@@ -37,11 +37,11 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* 16 */
 ST_FUNC int find_elf_sym(Section *s, const char *name) {
     int sym;
-    Section *hs;
+    int hs;
     int nbuckets;
     int sym_index;
     int h;
-    const char *name1;
+    int name1;
 
     hs = gs_hash(s);
     if (eq(hs, 0)) {
