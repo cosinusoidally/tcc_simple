@@ -94,7 +94,7 @@ enum {
 # define ELFW(type) ELF##32##_##type
 # define ElfW_Rel ElfW(Rel)
 extern int SHT_RELX; /* = SHT_REL */
-# define REL_SECTION_FMT ".rel%s"
+extern int REL_SECTION_FMT; /* ".rel%s" */
 /* target address type */
 #define addr_t ElfW(Addr)
 #define ElfSym ElfW(Sym)
