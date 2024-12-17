@@ -109,8 +109,9 @@ ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
         len = add(add(strlen(str), 1), len);
     }
     size = add(cstr->size, len);
-    if (size > cstr->size_allocated)
+    if (gt(size, cstr->size_allocated)) {
         cstr_realloc(cstr, size);
+    }
     memmove(((unsigned char *)cstr->data) + cstr->size, str, len);
     cstr->size = size;
 }
@@ -141,7 +142,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     int i;
 
     /* expand token table if needed */
-    i = tok_ident - TOK_IDENT;
+    i = sub(tok_ident, TOK_IDENT);
     if ((i % TOK_ALLOC_INCR) == 0) {
         ptable = tcc_realloc(table_ident, (i + TOK_ALLOC_INCR) * sizeof(TokenSym *));
         table_ident = ptable;
