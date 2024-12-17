@@ -105,14 +105,13 @@ ST_FUNC int tccgen_compile(TCCState *s1)
 }
 
 /* ------------------------------------------------------------------------- */
-ST_FUNC Elf32_Sym *elfsym(Sym *s)
-{
+Elf32_Sym *elfsym(Sym *s) {
   if (eq(s, 0)) {
     if(eq(s->c, 0)) {
       return 0;
     }
   }
-  return add(((Elf32_Sym *)symtab_section->data), mul(s->c, sizeof_Elf32_Sym));
+  return add(symtab_section->data, mul(s->c, sizeof_Elf32_Sym));
 }
 
 /* apply storage attributes to Elf symbol */
