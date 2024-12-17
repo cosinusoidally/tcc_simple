@@ -59,6 +59,9 @@ int ss_sh_type(int o, int v) {wi32(add(o, Section_sh_type_o), v);}
 int gs_sh_flags(int o) {return ri32(add(o, Section_sh_flags_o));}
 int ss_sh_flags(int o, int v) {wi32(add(o, Section_sh_flags_o), v);}
 
+int gs_sh_info(int o) {return ri32(add(o, Section_sh_info_o));}
+int ss_sh_info(int o, int v) {wi32(add(o, Section_sh_info_o), v);}
+
 int gs_sh_addralign(int o) {return ri32(add(o, Section_sh_addralign_o));}
 int ss_sh_addralign(int o, int v) {wi32(add(o, Section_sh_addralign_o), v);}
 
