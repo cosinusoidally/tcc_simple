@@ -373,7 +373,8 @@ int init_runtime(){
   SHF_WRITE = shl(1, 0); /* Writable */
   SHF_ALLOC = shl(1, 1);  /* Occupies memory during execution */
   SHF_EXECINSTR = shl(1, 2); /* Executable */
-  SHF_PRIVATE = shl(1, 31);
+/* special flag to indicate that the section should not be linked to the other ones */
+  SHF_PRIVATE = shl(1, 31); /* 0x80000000 */
 
   SHN_UNDEF = 0;  /* 0 Undefined section */
   SHN_COMMON = 65522;  /* 0xfff2 Associated symbol is common */

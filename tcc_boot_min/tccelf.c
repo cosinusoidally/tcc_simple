@@ -30,6 +30,3 @@ extern Section *common_section;
 extern Section *cur_text_section; /* current section where function code is generated */
 /* symbol sections */
 extern Section *symtab_section;
-
-/* special flag to indicate that the section should not be linked to the other ones */
-extern int SHF_PRIVATE; /* 0x80000000 */
