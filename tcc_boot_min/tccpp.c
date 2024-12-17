@@ -553,16 +553,12 @@ static void parse_string(const char *s, int len)
     }
 }
 
-/* we use 64 bit numbers */
-#define BN_SIZE 2
-
 /* parse number in null terminated string 'p' and return it in the
    current token */
 static void parse_number(const char *p)
 {
     int b, t, shift, frac_bits, s, exp_val, ch;
     char *q;
-    unsigned int bn[BN_SIZE];
     double d;
 
     /* number */
