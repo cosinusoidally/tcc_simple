@@ -92,7 +92,7 @@ void sort_syms(TCCState *s1, Section *s) {
     /* now we modify all the relocations */
     i = 1;
     while(lt(i, gts_nb_sections(s1))) {
-        sr = s1->sections[i];
+        sr = ri32(add(gts_sections(s1), mul(i, 4)));
         if (and(eq(gs_sh_type(sr), SHT_RELX), eq(gs_link(sr), s))) {
             rel = gs_data(sr);
             while(lt(rel, add(gs_data(sr), gs_data_offset(sr)))) {
