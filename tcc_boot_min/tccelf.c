@@ -199,7 +199,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
             sh->sh_offset = gs_sh_offset(s);
             sh->sh_size = gs_sh_size(s);
         }
-        fwrite(sh, 1, sizeof(Elf32_Shdr), f);
+        fwrite(sh, 1, sizeof_Elf32_Shdr, f);
         i = add(i, 1);
     }
 

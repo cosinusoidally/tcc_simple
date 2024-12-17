@@ -92,6 +92,16 @@ int Elf32_Rel_r_offset_o;
 int Elf32_Rel_r_info_o;
 int sizeof_Elf32_Rel;
 
+int Elf32_Shdr_sh_name_o;
+int Elf32_Shdr_sh_type_o;
+int Elf32_Shdr_sh_flags_o;
+int Elf32_Shdr_sh_addr_o;
+int Elf32_Shdr_sh_offset_o;
+int Elf32_Shdr_sh_size_o;
+int Elf32_Shdr_sh_link_o;
+int Elf32_Shdr_sh_info_o;
+int Elf32_Shdr_sh_addralign_o;
+int Elf32_Shdr_sh_entsize_o;
 int sizeof_Elf32_Shdr;
 
 int Elf32_Sym_st_name_o;

@@ -209,6 +209,28 @@ int see_e_shnum(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shnum_o), v);}
 /*  Elf32_Half e_shstrndx */
 int see_e_shstrndx(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shstrndx_o), v);}
 
+/* Elf32_Shdr accessors */
+
+int sesh_sh_name(int o, int v) {wi32(add(o, Elf32_Shdr_sh_name_o), v);}
+
+int sesh_sh_type(int o, int v) {wi32(add(o, Elf32_Shdr_sh_type_o), v);}
+
+int sesh_sh_flags(int o, int v) {wi32(add(o, Elf32_Shdr_sh_flags_o), v);}
+
+int sesh_sh_addr(int o, int v) {wi32(add(o, Elf32_Shdr_sh_addr_o), v);}
+
+int sesh_sh_offset(int o, int v) {wi32(add(o, Elf32_Shdr_sh_offset_o), v);}
+
+int sesh_sh_size(int o, int v) {wi32(add(o, Elf32_Shdr_sh_size_o), v);}
+
+int sesh_sh_link(int o, int v) {wi32(add(o, Elf32_Shdr_sh_link_o), v);}
+
+int sesh_sh_info(int o, int v) {wi32(add(o, Elf32_Shdr_sh_info_o), v);}
+
+int sesh_sh_addralign(int o, int v) {wi32(add(o, Elf32_Shdr_sh_addralign_o), v);}
+
+int sesh_sh_entsize(int o, int v) {wi32(add(o, Elf32_Shdr_sh_entsize_o), v);}
+
 /* stuff */
 
 int init_runtime(){
@@ -306,6 +328,16 @@ int init_runtime(){
   Elf32_Rel_r_info_o = 4;
   sizeof_Elf32_Rel = 8;
 
+  Elf32_Shdr_sh_name_o = 0;
+  Elf32_Shdr_sh_type_o = 4;
+  Elf32_Shdr_sh_flags_o = 8;
+  Elf32_Shdr_sh_addr_o = 12;
+  Elf32_Shdr_sh_offset_o = 16;
+  Elf32_Shdr_sh_size_o = 20;
+  Elf32_Shdr_sh_link_o = 24;
+  Elf32_Shdr_sh_info_o = 28;
+  Elf32_Shdr_sh_addralign_o = 32;
+  Elf32_Shdr_sh_entsize_o = 36;
   sizeof_Elf32_Shdr = 40;
 
   Elf32_Sym_st_name_o = 0;
