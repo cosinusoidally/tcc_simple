@@ -96,11 +96,11 @@ void sort_syms(TCCState *s1, Section *s) {
         if (and(eq(gs_sh_type(sr), SHT_RELX), eq(gs_link(sr), s))) {
             rel = gs_data(sr);
             while(lt(rel, add(gs_data(sr), gs_data_offset(sr)))) {
-                sym_index = ELFW_R_SYM(rel->r_info);
-                type = ELFW_R_TYPE(rel->r_info);
+                sym_index = ELFW_R_SYM(ger_r_info(rel));
+                type = ELFW_R_TYPE(ger_r_info(rel));
                 sym_index = old_to_new_syms[sym_index];
                 rel->r_info = ELFW_R_INFO(sym_index, type);
-                rel = rel + 1;
+                rel = add(rel, sizeof_Elf32_Rel);
             }
         }
         i = add(i, 1);
