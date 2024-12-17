@@ -199,6 +199,12 @@ int see_e_ehsize(int o, int v) {wi16(add(o, Elf32_Ehdr_e_ehsize_o), v);}
 /*  Elf32_Half e_shentsize */
 int see_e_shentsize(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shentsize_o), v);}
 
+/*  Elf32_Half e_shnum */
+int see_e_shnum(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shnum_o), v);}
+
+/*  Elf32_Half e_shstrndx */
+int see_e_shstrndx(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shstrndx_o), v);}
+
 /* stuff */
 
 int init_runtime(){
