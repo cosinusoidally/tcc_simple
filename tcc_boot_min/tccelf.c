@@ -91,7 +91,7 @@ void sort_syms(TCCState *s1, Section *s) {
 
     /* now we modify all the relocations */
     i = 1;
-    while(lt(i, s1->nb_sections)) {
+    while(lt(i, gts_nb_sections(s1))) {
         sr = s1->sections[i];
         if (and(eq(gs_sh_type(sr), SHT_RELX), eq(sr->link, s))) {
             rel = gs_data(sr);
