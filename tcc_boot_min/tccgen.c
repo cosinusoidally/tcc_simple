@@ -117,7 +117,7 @@ int elfsym(Sym *s) {
 /* apply storage attributes to Elf symbol */
 ST_FUNC void update_storage(Sym *sym)
 {
-    Elf32_Sym *esym;
+    int esym;
     int sym_bind, old_sym_bind;
 
     esym = elfsym(sym);
