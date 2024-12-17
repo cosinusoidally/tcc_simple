@@ -149,7 +149,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     see_e_version(ehdr, EV_CURRENT);
     see_e_shoff(ehdr, file_offset);
     see_e_ehsize(ehdr, sizeof_Elf32_Ehdr);
-    ehdr->e_shentsize = sizeof(Elf32_Shdr);
+    see_e_shentsize(ehdr, sizeof(Elf32_Shdr));
     ehdr->e_shnum = shnum;
     ehdr->e_shstrndx = sub(shnum, 1);
 
