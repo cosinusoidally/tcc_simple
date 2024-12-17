@@ -105,7 +105,7 @@ ST_FUNC int tccgen_compile(TCCState *s1)
 }
 
 /* ------------------------------------------------------------------------- */
-Elf32_Sym *elfsym(Sym *s) {
+int elfsym(Sym *s) {
   if (eq(s, 0)) {
     if(eq(s->c, 0)) {
       return 0;
