@@ -70,8 +70,6 @@ ST_FUNC void skip(int c)
 
 #define tal_free(al, p) tcc_free(p)
 #define tal_realloc(al, p, size) tcc_realloc(p, size)
-#define tal_new(a,b,c)
-#define tal_delete(a)
 
 /* ------------------------------------------------------------------------- */
 /* CString handling */
@@ -902,14 +900,6 @@ ST_FUNC void tccpp_delete(TCCState *s)
     cstr_free(&cstr_buf);
     cstr_free(&macro_equal_buf);
     tok_str_free_str(tokstr_buf.str);
-
-    /* free allocators */
-    tal_delete(toksym_alloc);
-    toksym_alloc = NULL;
-    tal_delete(tokstr_alloc);
-    tokstr_alloc = NULL;
-    tal_delete(cstr_alloc);
-    cstr_alloc = NULL;
 }
 
 /* ------------------------------------------------------------------------- */
