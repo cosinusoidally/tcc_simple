@@ -162,8 +162,10 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 }
 
 int TOK_HASH_INIT  = 1;
-#define TOK_HASH_FUNC(h, c) ((h) + ((h) << 5) + ((h) >> 27) + (c))
 
+int TOK_HASH_FUNC(int h, int c) {
+  return ((h) + ((h) << 5) + ((h) >> 27) + (c));
+}
 
 /* find a token and add it if not found */
 ST_FUNC TokenSym *tok_alloc(const char *str, int len)
