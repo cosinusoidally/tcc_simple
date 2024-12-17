@@ -62,7 +62,7 @@ void sort_syms(TCCState *s1, Section *s) {
     while(lt(i, nb_syms)) {
         if (eq(ELFW_ST_BIND(ges_st_info(p)), STB_LOCAL)) {
             wi32(add(old_to_new_syms, mul(i, 4)), div_(sub(q, new_syms), sizeof_Elf32_Sym));
-            *q = *p;
+            memcpy(q, p, sizeof_Elf32_Sym);
             q = add(q, sizeof_Elf32_Sym);
         }
         p = add(p, sizeof_Elf32_Sym);
@@ -79,7 +79,7 @@ void sort_syms(TCCState *s1, Section *s) {
     while(lt(i, nb_syms)) {
         if (neq(ELFW_ST_BIND(ges_st_info(p)), STB_LOCAL)) {
             wi32(add(old_to_new_syms, mul(i, 4)), div_(sub(q, new_syms), sizeof_Elf32_Sym));
-            *q = *p;
+            memcpy(q, p, sizeof_Elf32_Sym);
             q = add(q, sizeof_Elf32_Sym);
         }
         p = add(p, sizeof_Elf32_Sym);
