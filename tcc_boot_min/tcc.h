@@ -33,7 +33,7 @@ extern int O_BINARY;
 /* -------------------------------------------- */
 
 #include "libtcc.h"
-#include "elf.h"
+// #include "elf.h"
 
 /* -------------------------------------------- */
 
@@ -642,3 +642,30 @@ extern int sizeof_Elf32_Sym;
 
 extern int aglobal_stack;
 extern int alocal_stack;
+
+extern int SHN_UNDEF;	/* 0		Undefined section */
+extern int SHN_COMMON;	/* 0xfff2	 Associated symbol is common */
+extern int SHT_PROGBITS; /* 1		Program data */
+extern int SHT_SYMTAB;	/*  2		Symbol table */
+extern int SHT_STRTAB;	/*  3		String table */
+extern int SHT_RELA;	/*  4		Relocation entries with addends */
+extern int SHT_HASH;	/*  5		Symbol hash table */
+extern int SHT_NOBITS;/*  8		Program space with no data (bss) */
+extern SHT_REL;		/*  9		Relocation entries, no addends */
+extern int SHF_WRITE;	/*   (1 << 0)	Writable */
+extern int SHF_ALLOC;	/*   (1 << 1)	Occupies memory during execution */
+extern int SHF_EXECINSTR; /* (1 << 2)	Executable */
+extern int STB_LOCAL;	/* 0		Local symbol */
+extern int STB_GLOBAL;	/* 1		Global symbol */
+
+/* #define R_386_32        1            Direct 32 bit  */
+extern int R_386_32;
+
+/* #define R_386_PC32      2             PC relative 32 bit */
+extern int R_386_PC32;
+
+#define STT_OBJECT      1               /* Symbol is a data object */
+#define STT_FUNC        2               /* Symbol is a code object */
+#define STT_FILE        4               /* Symbol's name is file name */
+
+#define SHN_ABS         0xfff1          /* Associated symbol is absolute */
