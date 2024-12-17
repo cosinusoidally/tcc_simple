@@ -267,17 +267,6 @@ static int handle_stray1(uint8_t *p)
 }
 
 /* handle the complicated stray case */
-#define PEEKC(c, p)\
-{\
-    p++;\
-    c = *p;\
-    if (c == '\\') {\
-        c = handle_stray1(p);\
-        p = file->buf_ptr;\
-    }\
-}
-
-/* handle the complicated stray case */
 int PEEKC2(int c1, int p1) {
     int c;
     int p;
