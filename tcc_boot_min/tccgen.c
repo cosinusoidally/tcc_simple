@@ -105,20 +105,20 @@ ST_FUNC int tccgen_compile(TCCState *s1)
 }
 
 /* ------------------------------------------------------------------------- */
-ST_FUNC ElfSym *elfsym(Sym *s)
+ST_FUNC Elf32_Sym *elfsym(Sym *s)
 {
   if (eq(s, 0)) {
     if(eq(s->c, 0)) {
       return 0;
     }
   }
-  return &((ElfSym *)symtab_section->data)[s->c];
+  return &((Elf32_Sym *)symtab_section->data)[s->c];
 }
 
 /* apply storage attributes to Elf symbol */
 ST_FUNC void update_storage(Sym *sym)
 {
-    ElfSym *esym;
+    Elf32_Sym *esym;
     int sym_bind, old_sym_bind;
 
     esym = elfsym(sym);
@@ -141,7 +141,7 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
                             int can_add_underscore)
 {
     int sym_type, sym_bind, info, other, t;
-    ElfSym *esym;
+    Elf32_Sym *esym;
     const char *name;
     char buf1[256];
 
