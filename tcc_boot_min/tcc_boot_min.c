@@ -250,6 +250,20 @@ int init_runtime(){
   TCCOption_flags_o = 8;
   sizeof_TCCOption = 12;
 
+  Elf32_Ehdr_e_ident_o = 0;
+  Elf32_Ehdr_e_type_o = 16;
+  Elf32_Ehdr_e_machine_o = 18;
+  Elf32_Ehdr_e_version_o = 20;
+  Elf32_Ehdr_e_entry_o = 24;
+  Elf32_Ehdr_e_phoff_o = 28;
+  Elf32_Ehdr_e_shoff_o = 32;
+  Elf32_Ehdr_e_flags_o = 36;
+  Elf32_Ehdr_e_ehsize_o = 40;
+  Elf32_Ehdr_e_phentsize_o = 42;
+  Elf32_Ehdr_e_phnum_o = 44;
+  Elf32_Ehdr_e_shentsize_o = 46;
+  Elf32_Ehdr_e_shnum_o = 48;
+  Elf32_Ehdr_e_shstrndx_o = 50;
   sizeof_Elf32_Ehdr = 52;
 
   sizeof_Elf32_Phdr = 32;

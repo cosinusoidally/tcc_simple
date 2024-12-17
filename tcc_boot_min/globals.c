@@ -69,6 +69,20 @@ int TCCOption_index_o;
 int TCCOption_flags_o;
 int sizeof_TCCOption;
 
+int Elf32_Ehdr_e_ident_o;
+int Elf32_Ehdr_e_type_o;
+int Elf32_Ehdr_e_machine_o;
+int Elf32_Ehdr_e_version_o;
+int Elf32_Ehdr_e_entry_o;
+int Elf32_Ehdr_e_phoff_o;
+int Elf32_Ehdr_e_shoff_o;
+int Elf32_Ehdr_e_flags_o;
+int Elf32_Ehdr_e_ehsize_o;
+int Elf32_Ehdr_e_phentsize_o;
+int Elf32_Ehdr_e_phnum_o;
+int Elf32_Ehdr_e_shentsize_o;
+int Elf32_Ehdr_e_shnum_o;
+int Elf32_Ehdr_e_shstrndx_o;
 int sizeof_Elf32_Ehdr;
 
 int sizeof_Elf32_Phdr;
