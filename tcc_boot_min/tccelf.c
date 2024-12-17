@@ -76,7 +76,7 @@ static void sort_syms(TCCState *s1, Section *s) {
     p = gs_data(s);
     i = 0;
     while(lt(i, nb_syms)) {
-        if (neq(ELFW(ST_BIND)(p->st_info), STB_LOCAL)) {
+        if (neq(ELFW_ST_BIND(ges_st_info(p)), STB_LOCAL)) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
         }
