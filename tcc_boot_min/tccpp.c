@@ -557,9 +557,9 @@ static void parse_string(const char *s, int len)
    current token */
 static void parse_number(const char *p)
 {
-    int b, t, shift, frac_bits, s, exp_val, ch;
+    int b, t, shift, s, ch;
     char *q;
-    double d;
+    unsigned long long n, n1;
 
     /* number */
     q = token_buf;
@@ -587,9 +587,6 @@ static void parse_number(const char *p)
         *q++ = ch;
         ch = *p++;
     }
-    unsigned long long n, n1;
-    int lcount, ucount, ov = 0;
-    const char *p1;
 
     /* integer number */
     *q = '\0';
