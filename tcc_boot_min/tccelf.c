@@ -99,7 +99,7 @@ void sort_syms(TCCState *s1, Section *s) {
                 sym_index = ELFW_R_SYM(ger_r_info(rel));
                 type = ELFW_R_TYPE(ger_r_info(rel));
                 sym_index = old_to_new_syms[sym_index];
-                rel->r_info = ELFW_R_INFO(sym_index, type);
+                ser_r_info(rel, ELFW_R_INFO(sym_index, type));
                 rel = add(rel, sizeof_Elf32_Rel);
             }
         }
