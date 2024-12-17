@@ -1269,7 +1269,7 @@ static void gen_function(Sym *sym)
     sym_pop(&local_stack, NULL, 0);
     /* end of function */
     /* patch symbol size */
-    elfsym(sym)->st_size = ind - func_ind;
+    ses_st_size(elfsym(sym), ind - func_ind);
     /* It's better to crash than to generate wrong code */
     cur_text_section = NULL;
     funcname = ""; /* for safety */
