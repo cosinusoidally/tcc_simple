@@ -56,11 +56,11 @@ static void sort_syms(TCCState *s1, Section *s) {
     old_to_new_syms = tcc_malloc(mul(nb_syms, 4));
 
     /* first pass for local symbols */
-    p = (ElfW(Sym) *)s->data;
+    p = gs_data(s);
     q = new_syms;
     i = 0;
     while(lt(i, nb_syms)) {
-        if (ELFW(ST_BIND)(p->st_info) == STB_LOCAL) {
+        if (eq(ELFW_ST_BIND(p->st_info), STB_LOCAL)) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
         }
