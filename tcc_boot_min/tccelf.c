@@ -117,7 +117,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     int shnum;
     int offset;
     int size;
-    Section *s;
+    int s;
     int ehdr;
     int shdr;
     Elf32_Shdr *sh;
