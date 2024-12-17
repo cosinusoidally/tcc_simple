@@ -173,5 +173,7 @@ int cur_text_section; /* current section where function code is generated */
 /* symbol sections */
 int symtab_section;
 
+int REL_SECTION_FMT;
+
 /* =============== end globals.c ========================================== */
 
