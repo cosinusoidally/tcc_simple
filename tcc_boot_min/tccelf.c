@@ -79,7 +79,8 @@ void sort_syms(TCCState *s1, Section *s) {
     while(lt(i, nb_syms)) {
         if (neq(ELFW_ST_BIND(ges_st_info(p)), STB_LOCAL)) {
             old_to_new_syms[i] = q - new_syms;
-            *q++ = *p;
+            *q = *p;
+            q = add(q, sizeof_Elf32_Sym);
         }
         p = add(p, sizeof_Elf32_Sym);
         i = add(i, 1);
