@@ -183,10 +183,12 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     pts = &hash_ident[h];
     while(1) {
         ts = *pts;
-        if (!ts)
+        if (eq(ts, 0)) {
             break;
-        if (ts->len == len && !memcmp(ts->str, str, len))
+        }
+        if (and(eq(ts->len, len), eq(memcmp(ts->str, str, len),0))) {
             return ts;
+        }
         pts = &(ts->hash_next);
     }
     return tok_alloc_new(pts, str, len);
