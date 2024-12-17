@@ -143,19 +143,20 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 
     /* expand token table if needed */
     i = sub(tok_ident, TOK_IDENT);
-    if ((i % TOK_ALLOC_INCR) == 0) {
-        ptable = tcc_realloc(table_ident, (i + TOK_ALLOC_INCR) * sizeof(TokenSym *));
+    if (eq((mod(i, TOK_ALLOC_INCR)), 0)) {
+        ptable = tcc_realloc(table_ident, mul(add(i, TOK_ALLOC_INCR), sizeof(TokenSym *)));
         table_ident = ptable;
     }
 
     ts = tal_realloc(toksym_alloc, 0, sizeof(TokenSym) + len);
     table_ident[i] = ts;
-    ts->tok = tok_ident++;
+    ts->tok = tok_ident;
+    tok_ident = add(tok_ident, 1);
     ts->sym_identifier = NULL;
     ts->len = len;
     ts->hash_next = NULL;
     memcpy(ts->str, str, len);
-    ts->str[len] = '\0';
+    ts->str[len] = 0;
     *pts = ts;
     return ts;
 }
