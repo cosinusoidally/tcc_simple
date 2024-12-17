@@ -34,37 +34,6 @@ extern Section *symtab_section;
 /* special flag to indicate that the section should not be linked to the other ones */
 extern int SHF_PRIVATE; /* 0x80000000 */
 
-/* 18 */
-/* put relocation */
-ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
-                            int type, int symbol, addr_t addend) {
-    int buf;
-    int buf_size;
-    int sr;
-    int rel;
-
-    buf_size=256;
-    buf = tcc_mallocz(buf_size);
-
-    sr = gs_reloc(s);
-    if (eq(sr, 0)) {
-        /* if no relocation section, create it */
-        snprintf(buf, buf_size, REL_SECTION_FMT, gs_name(s));
-        /* if the symtab is allocated, then we consider the relocation
-           are also */
-        sr = new_section(tcc_state, buf, SHT_RELX, gs_sh_flags(symtab));
-        ss_sh_entsize(sr, sizeof_Elf32_Rel);
-        ss_link(sr, symtab);
-        ss_sh_info(sr, gs_sh_num(s));
-        ss_reloc(s, sr);
-    }
-    rel = section_ptr_add(sr, sizeof_Elf32_Rel);
-    ser_r_offset(rel, offset);
-    ser_r_info(rel, ELFW_R_INFO(symbol, type));
-
-    tcc_free(buf);
-}
-
 /* 19 */
 /* In an ELF file symbol table, the local symbols must appear below
    the global and weak ones. Since TCC cannot sort it while generating

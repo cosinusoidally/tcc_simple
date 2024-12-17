@@ -1331,6 +1331,37 @@ int set_elf_sym(int s, int value, int size,
     return sym_index;
 }
 
+/* 18 */
+/* put relocation */
+int put_elf_reloca(int symtab, int s, int offset,
+                            int type, int symbol, int addend) {
+    int buf;
+    int buf_size;
+    int sr;
+    int rel;
+
+    buf_size=256;
+    buf = tcc_mallocz(buf_size);
+
+    sr = gs_reloc(s);
+    if (eq(sr, 0)) {
+        /* if no relocation section, create it */
+        snprintf(buf, buf_size, REL_SECTION_FMT, gs_name(s));
+        /* if the symtab is allocated, then we consider the relocation
+           are also */
+        sr = new_section(tcc_state, buf, SHT_RELX, gs_sh_flags(symtab));
+        ss_sh_entsize(sr, sizeof_Elf32_Rel);
+        ss_link(sr, symtab);
+        ss_sh_info(sr, gs_sh_num(s));
+        ss_reloc(s, sr);
+    }
+    rel = section_ptr_add(sr, sizeof_Elf32_Rel);
+    ser_r_offset(rel, offset);
+    ser_r_info(rel, ELFW_R_INFO(symbol, type));
+
+    tcc_free(buf);
+}
+
 /* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
