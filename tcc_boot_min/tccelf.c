@@ -47,7 +47,7 @@ void sort_syms(TCCState *s1, Section *s) {
     Elf32_Sym *p;
     Elf32_Sym *q;
     int rel;
-    Section *sr;
+    int sr;
     int type;
     int sym_index;
 
