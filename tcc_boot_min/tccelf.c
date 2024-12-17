@@ -73,7 +73,7 @@ static void sort_syms(TCCState *s1, Section *s) {
     }
 
     /* then second pass for non local symbols */
-    p = (ElfW(Sym) *)s->data;
+    p = gs_data(s);
     i = 0;
     while(lt(i, nb_syms)) {
         if (neq(ELFW(ST_BIND)(p->st_info), STB_LOCAL)) {
