@@ -149,7 +149,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     see_e_version(ehdr, EV_CURRENT);
     see_e_shoff(ehdr, file_offset);
     see_e_ehsize(ehdr, sizeof_Elf32_Ehdr);
-    see_e_shentsize(ehdr, sizeof(Elf32_Shdr));
+    see_e_shentsize(ehdr, sizeof_Elf32_Shdr);
     see_e_shnum(ehdr, shnum);
     see_e_shstrndx(ehdr, sub(shnum, 1));
 
@@ -184,7 +184,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     i = 0;
     while(lt(i, gts_nb_sections(s1))) {
         sh = shdr;
-        memset(sh, 0, sizeof(Elf32_Shdr));
+        memset(sh, 0, sizeof_Elf32_Shdr);
         s = s1->sections[i];
         if (s) {
             sh->sh_name = gs_sh_name(s);
