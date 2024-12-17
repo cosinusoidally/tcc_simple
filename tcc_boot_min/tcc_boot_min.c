@@ -991,7 +991,6 @@ int ELFW_R_TYPE(int val) {
 }
 
 /* ------------------------------------------------------------------------- */
-/* 1 */
 int tccelf_new(int s) {
     /* no section zero */
     dynarray_add(ats_sections(s), ats_nb_sections(s), 0);
@@ -1011,12 +1010,10 @@ int tccelf_new(int s) {
 
 }
 
-/* 2 */
 int free_section(int s) {
     tcc_free(gs_data(s));
 }
 
-/* 3 */
 int tccelf_delete(int s1) {
     int i;
 
@@ -1038,7 +1035,6 @@ int tccelf_delete(int s1) {
     symtab_section = 0; /* for tccrun.c:rt_printline() */
 }
 
-/* 4 */
 /* save section data state */
 int tccelf_begin_file(int s1) {
     int s;
@@ -1113,7 +1109,6 @@ int tccelf_end_file(int s1) {
     tcc_free(tr);
 }
 
-/* 6 */
 int new_section(int s1, int name, int sh_type, int sh_flags) {
     int sec;
 
@@ -1138,7 +1133,6 @@ int new_section(int s1, int name, int sh_type, int sh_flags) {
     return sec;
 }
 
-/* 7 */
 int new_symtab(int s1, int symtab_name, int sh_type, int sh_flags,
                int strtab_name, int hash_name, int hash_sh_flags) {
     int symtab;
@@ -1168,7 +1162,6 @@ int new_symtab(int s1, int symtab_name, int sh_type, int sh_flags,
     return symtab;
 }
 
-/* 8 */
 /* realloc section and set its content to zero */
 int section_realloc(int sec, int new_size) {
     int size;
@@ -1187,7 +1180,6 @@ int section_realloc(int sec, int new_size) {
     ss_data_allocated(sec, size);
 }
 
-/* 9 */
 /* reserve at least 'size' bytes aligned per 'align' in section
    'sec' from current offset, and return the aligned offset */
 int section_add(int sec, int size, int align) {
@@ -1206,7 +1198,6 @@ int section_add(int sec, int size, int align) {
     return offset;
 }
 
-/* 10 */
 /* reserve at least 'size' bytes in section 'sec' from
    sec->data_offset. */
 int section_ptr_add(int sec, int size) {
@@ -1215,7 +1206,6 @@ int section_ptr_add(int sec, int size) {
     return add(gs_data(sec), offset);
 }
 
-/* 11 */
 /* reserve at least 'size' bytes from section start */
 int section_reserve(int sec, int size) {
     if (gt(size, gs_data_allocated(sec))) {
@@ -1227,7 +1217,6 @@ int section_reserve(int sec, int size) {
 }
 
 /* ------------------------------------------------------------------------- */
-/* 12 */
 int put_elf_str(int s, int sym) {
     int offset;
     int len;
@@ -1240,7 +1229,6 @@ int put_elf_str(int s, int sym) {
     return offset;
 }
 
-/* 13 */
 /* elf symbol hashing function */
 int elf_hash(int name) {
     int h;
@@ -1261,7 +1249,6 @@ int elf_hash(int name) {
     return h;
 }
 
-/* 14 */
 /* rebuild hash table of section s */
 /* NOTE: we do factorize the hash table code to go faster */
 int rebuild_hash(int s, int nb_buckets) {
@@ -1305,7 +1292,6 @@ int rebuild_hash(int s, int nb_buckets) {
     }
 }
 
-/* 15 */
 /* return the symbol number */
 int put_elf_sym(int s, int value, int size,
     int info, int other, int shndx, int name) {
@@ -1360,7 +1346,6 @@ int put_elf_sym(int s, int value, int size,
     return sym_index;
 }
 
-/* 16 */
 int find_elf_sym(int s, int name) {
     int sym;
     int hs;
@@ -1387,7 +1372,6 @@ int find_elf_sym(int s, int name) {
     return 0;
 }
 
-/* 17 */
 /* add an elf symbol : check if it is already defined and patch
    it. Return symbol index. NOTE that sh_num can be SHN_UNDEF. */
 int set_elf_sym(int s, int value, int size,
@@ -1414,7 +1398,6 @@ int set_elf_sym(int s, int value, int size,
     return sym_index;
 }
 
-/* 18 */
 /* put relocation */
 int put_elf_reloca(int symtab, int s, int offset,
                             int type, int symbol, int addend) {
@@ -1445,7 +1428,6 @@ int put_elf_reloca(int symtab, int s, int offset,
     tcc_free(buf);
 }
 
-/* 19 */
 /* In an ELF file symbol table, the local symbols must appear below
    the global and weak ones. Since TCC cannot sort it while generating
    the code, we must do it after. All the relocation tables are also
@@ -1521,7 +1503,6 @@ int sort_syms(int s1, int s) {
     tcc_free(old_to_new_syms);
 }
 
-/* 20 */
 /* Allocate strings for section names and decide if an unallocated section
    should be output.
    NOTE: the strsec section comes last, so its size is also correct ! */
@@ -1543,7 +1524,6 @@ int alloc_sec_names(int s1, int strsec) {
     return 0;
 }
 
-/* 21 */
 /* Assign sections to segments and decide how are sections laid out when loaded
    in memory. This function also fills corresponding program headers. */
 int layout_sections(int s1, int phdr, int phnum,
@@ -1578,7 +1558,6 @@ int layout_sections(int s1, int phdr, int phnum,
     return file_offset;
 }
 
-/* 22 */
 /* Create an ELF file on disk.
    This function handle ELF specific layout requirements */
 int tcc_output_elf(int s1, int f, int phnum, int phdr,
@@ -1676,7 +1655,6 @@ int tcc_output_elf(int s1, int f, int phnum, int phdr,
     leave(0);
 }
 
-/* 23 */
 /* Write an elf file */
 int tcc_write_elf_file(int s1, int filename, int phnum,
                               int phdr, int file_offset, int sec_order) {
@@ -1693,7 +1671,6 @@ int tcc_write_elf_file(int s1, int filename, int phnum,
     return 0;
 }
 
-/* 24 */
 /* Output an elf file */
 int elf_output_file(int s1, int filename) {
     int i;
@@ -1746,7 +1723,6 @@ int elf_output_file(int s1, int filename) {
     return ret;
 }
 
-/* 25 */
 int tcc_output_file(int s, int filename) {
     int ret;
     ret = elf_output_file(s, filename);
