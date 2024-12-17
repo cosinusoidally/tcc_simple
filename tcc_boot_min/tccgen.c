@@ -112,7 +112,7 @@ ST_FUNC Elf32_Sym *elfsym(Sym *s)
       return 0;
     }
   }
-  return &((Elf32_Sym *)symtab_section->data)[s->c];
+  return add(((Elf32_Sym *)symtab_section->data), mul(s->c, sizeof_Elf32_Sym));
 }
 
 /* apply storage attributes to Elf symbol */
