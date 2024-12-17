@@ -194,10 +194,10 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
             if (gs_link(s)) {
                 sesh_sh_link(sh, gs_sh_num(gs_link(s)));
             }
-            sh->sh_addralign = gs_sh_addralign(s);
-            sh->sh_addr = gs_sh_addr(s);
-            sh->sh_offset = gs_sh_offset(s);
-            sh->sh_size = gs_sh_size(s);
+            sesh_sh_addralign(sh, gs_sh_addralign(s));
+            sesh_sh_addr(sh, gs_sh_addr(s));
+            sesh_sh_offset(sh, gs_sh_offset(s));
+            sesh_sh_size(sh, gs_sh_size(s));
         }
         fwrite(sh, 1, sizeof_Elf32_Shdr, f);
         i = add(i, 1);
