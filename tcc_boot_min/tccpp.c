@@ -289,7 +289,7 @@ int PEEKC2(int c1, int p1) {
         p = file->buf_ptr;
     }
     wi8(c1,c);
-    wi32(p,p1);
+    wi32(p1,p);
 }
 
 /* C comments */
@@ -704,18 +704,18 @@ static inline void next_nomacro1(void)
             cstr_reset(&tokcstr);
             cstr_cat(&tokcstr, (char *) p1, len);
             p--;
-            PEEKC(c, p);
+            PEEKC2(&c, &p);
             while (isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
             {
                 cstr_ccat(&tokcstr, c);
-                PEEKC(c, p);
+                PEEKC2(&c, &p);
             }
             ts = tok_alloc(tokcstr.data, tokcstr.size);
         }
         tok = ts->tok;
     } else if(isnum(c)){
         t = c;
-        PEEKC(c, p);
+        PEEKC2(&c, &p);
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
         cstr_reset(&tokcstr);
@@ -727,7 +727,7 @@ static inline void next_nomacro1(void)
                 break;
             }
             t = c;
-            PEEKC(c, p);
+            PEEKC2(&c, &p);
         }
         /* We add a trailing '\0' to ease parsing */
         cstr_ccat(&tokcstr, '\0');
@@ -745,10 +745,10 @@ static inline void next_nomacro1(void)
         tokc.str.data = tokcstr.data;
         tok = TOK_PPSTR;
     } else if(c == '='){
-        PEEKC(c, p);
+        PEEKC2(&c, &p);
         tok = '=';
     } else if(c == '/'){
-        PEEKC(c, p);
+        PEEKC2(&c, &p);
         if (c == '*') {
             p = parse_comment(p);
             /* comments replaced by a blank */
