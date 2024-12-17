@@ -637,6 +637,7 @@ extern int sizeof_Section;
 extern int sizeof_Elf32_Ehdr;
 extern int sizeof_Elf32_Phdr;
 extern int sizeof_Elf32_Rel;
+extern int sizeof_Elf32_Shdr;
 extern int sizeof_Elf32_Sym;
 
 
