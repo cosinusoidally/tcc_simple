@@ -175,7 +175,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     h = TOK_HASH_INIT;
     i = 0;
     while(lt(i, len)) {
-        h = TOK_HASH_FUNC(h, ((unsigned char *)str)[i]);
+        h = TOK_HASH_FUNC(h, (ri8(add(str, i))));
         i = add(i, 1);
     }
     h = and(h, sub(TOK_HASH_SIZE, 1));
