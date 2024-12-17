@@ -138,11 +138,11 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     /* fill header */
     wi8(gee_e_ident(ehdr), ELFMAG0);
     wi8(add(gee_e_ident(ehdr), 1), mkc('E'));
-    ehdr->e_ident[2] = mkc('L');
-    ehdr->e_ident[3] = mkc('F');
-    ehdr->e_ident[4] = ELFCLASSW;
-    ehdr->e_ident[5] = ELFDATA2LSB;
-    ehdr->e_ident[6] = EV_CURRENT;
+    wi8(add(gee_e_ident(ehdr), 2), mkc('L'));
+    wi8(add(gee_e_ident(ehdr), 3), mkc('F'));
+    wi8(add(gee_e_ident(ehdr), 4), ELFCLASSW);
+    wi8(add(gee_e_ident(ehdr), 5), ELFDATA2LSB);
+    wi8(add(gee_e_ident(ehdr), 6), EV_CURRENT);
 
     ehdr->e_type = ET_REL;
     ehdr->e_machine = EM_TCC_TARGET;
