@@ -92,13 +92,13 @@ static void sort_syms(TCCState *s1, Section *s) {
     i = 1;
     while(lt(i, s1->nb_sections)) {
         sr = s1->sections[i];
-        if (and(eq(sr->sh_type, SHT_RELX), eq(sr->link, s))) {
-            rel = (ElfW_Rel *) sr->data;
-            while(lt(rel, (ElfW_Rel *) (add(sr->data, sr->data_offset)))) {
-                sym_index = ELFW(R_SYM)(rel->r_info);
-                type = ELFW(R_TYPE)(rel->r_info);
+        if (and(eq(gs_sh_type(sr), SHT_RELX), eq(sr->link, s))) {
+            rel = gs_data(sr);
+            while(lt(rel, add(sr->data, sr->data_offset))) {
+                sym_index = ELFW_R_SYM(rel->r_info);
+                type = ELFW_R_TYPE(rel->r_info);
                 sym_index = old_to_new_syms[sym_index];
-                rel->r_info = ELFW(R_INFO)(sym_index, type);
+                rel->r_info = ELFW_R_INFO(sym_index, type);
                 rel = rel + 1;
             }
         }
