@@ -121,14 +121,16 @@ ST_FUNC void update_storage(Sym *sym)
     int sym_bind, old_sym_bind;
 
     esym = elfsym(sym);
-    if (!esym)
+    if (eq(esym, 0)) {
         return;
+    }
 
-    if (sym->type.t & VT_STATIC)
+    if (sym->type.t & VT_STATIC) {
         sym_bind = STB_LOCAL;
-    else
+    } else {
         sym_bind = STB_GLOBAL;
-    old_sym_bind = ELFW(ST_BIND)(esym->st_info);
+    }
+    old_sym_bind = ELFW_ST_BIND(ges_st_info(esym));
 }
 
 /* ------------------------------------------------------------------------- */
