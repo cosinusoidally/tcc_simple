@@ -177,7 +177,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     }
 
     /* output section headers */
-    while (lt(offset, ehdr->e_shoff)) {
+    while (lt(offset, gee_e_shoff(ehdr))) {
         fputc(0, f);
         offset = add(offset, 1);
     }

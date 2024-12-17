@@ -191,6 +191,7 @@ int see_e_machine(int o, int v) {wi16(add(o, Elf32_Ehdr_e_machine_o), v);}
 int see_e_version(int o, int v) {wi32(add(o, Elf32_Ehdr_e_version_o), v);}
 
 /*  Elf32_Off e_shoff */
+int gee_e_shoff(int o) {return ri32(add(o, Elf32_Ehdr_e_shoff_o));}
 int see_e_shoff(int o, int v) {wi32(add(o, Elf32_Ehdr_e_shoff_o), v);}
 
 /*  Elf32_Half e_ehsize */
