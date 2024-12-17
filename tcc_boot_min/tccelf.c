@@ -144,7 +144,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     wi8(add(gee_e_ident(ehdr), 5), ELFDATA2LSB);
     wi8(add(gee_e_ident(ehdr), 6), EV_CURRENT);
 
-    ehdr->e_type = ET_REL;
+    see_e_type(ehdr, ET_REL);
     ehdr->e_machine = EM_TCC_TARGET;
     ehdr->e_version = EV_CURRENT;
     ehdr->e_shoff = file_offset;
