@@ -190,9 +190,9 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
             sesh_sh_type(sh, gs_sh_type(s));
             sesh_sh_flags(sh, gs_sh_flags(s));
             sesh_sh_entsize(sh, gs_sh_entsize(s));
-            sh->sh_info = gs_sh_info(s);
+            sesh_sh_info(sh, gs_sh_info(s));
             if (gs_link(s)) {
-                sh->sh_link = gs_sh_num(gs_link(s));
+                sesh_sh_link(sh, gs_sh_num(gs_link(s)));
             }
             sh->sh_addralign = gs_sh_addralign(s);
             sh->sh_addr = gs_sh_addr(s);
