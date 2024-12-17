@@ -140,11 +140,11 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     wi8(add(gee_e_ident(ehdr), 3), mkc('F'));
     wi8(add(gee_e_ident(ehdr), 4), 1); /* ELFCLASS32 1 32-bit objects */
     wi8(add(gee_e_ident(ehdr), 5), 1); /* ELFDATA2LSB 1 2's complement, little endian */
-    wi8(add(gee_e_ident(ehdr), 6), EV_CURRENT);
+    wi8(add(gee_e_ident(ehdr), 6), 1); /* EV_CURRENT Current version */
 
     see_e_type(ehdr, ET_REL);
     see_e_machine(ehdr, EM_TCC_TARGET);
-    see_e_version(ehdr, EV_CURRENT);
+    see_e_version(ehdr, 1); /* EV_CURRENT Current version */
     see_e_shoff(ehdr, file_offset);
     see_e_ehsize(ehdr, sizeof_Elf32_Ehdr);
     see_e_shentsize(ehdr, sizeof_Elf32_Shdr);
