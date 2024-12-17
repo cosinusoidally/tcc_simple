@@ -528,12 +528,18 @@ ST_FUNC int expr_const(void);
 
 /* ------------ tccelf.c ------------ */
 
-ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
-ST_DATA Section *common_section;
+/* predefined sections */
+extern Section *text_section;
+extern Section *data_section;
+extern Section *bss_section;
+extern Section *common_section;
+
 extern Section *cur_text_section; /* current section where function code is generated */
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
+
 /* symbol sections */
-ST_DATA Section *symtab_section;
+extern Section *symtab_section;
+
 /* debug sections */
 ST_DATA Section *stab_section, *stabstr_section;
 
