@@ -80,10 +80,12 @@ static void cstr_realloc(CString *cstr, int new_size)
     int size;
 
     size = cstr->size_allocated;
-    if (size < 8)
+    if (lt(size, 8)) {
         size = 8; /* no need to allocate a too small first string */
-    while (size < new_size)
-        size = size * 2;
+    }
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
     cstr->data = tal_realloc(cstr_alloc, cstr->data, size);
     cstr->size_allocated = size;
 }
@@ -92,9 +94,10 @@ static void cstr_realloc(CString *cstr, int new_size)
 ST_INLN void cstr_ccat(CString *cstr, int ch)
 {
     int size;
-    size = cstr->size + 1;
-    if (size > cstr->size_allocated)
+    size = add(cstr->size, 1);
+    if (gt(size, cstr->size_allocated)) {
         cstr_realloc(cstr, size);
+    }
     ((unsigned char *)cstr->data)[size - 1] = ch;
     cstr->size = size;
 }
@@ -102,9 +105,10 @@ ST_INLN void cstr_ccat(CString *cstr, int ch)
 ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
 {
     int size;
-    if (len <= 0)
-        len = strlen(str) + 1 + len;
-    size = cstr->size + len;
+    if (lte(len, 0)) {
+        len = add(add(strlen(str), 1), len);
+    }
+    size = add(cstr->size, len);
     if (size > cstr->size_allocated)
         cstr_realloc(cstr, size);
     memmove(((unsigned char *)cstr->data) + cstr->size, str, len);
