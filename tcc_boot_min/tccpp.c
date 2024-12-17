@@ -255,19 +255,7 @@ static int handle_stray1(uint8_t *p)
 }
 
 /* handle just the EOB case, but not stray */
-#define PEEKC_EOB(c, p)\
-{\
-    p++;\
-    c = *p;\
-    if (c == '\\') {\
-        file->buf_ptr = p;\
-        c = handle_eob();\
-        p = file->buf_ptr;\
-    }\
-}
-
-/* handle just the EOB case, but not stray */
-int PEEKC_EOB2(int c1, int p1) {
+int PEEKC_EOB(int c1, int p1) {
     int c;
     int p;
 
@@ -369,7 +357,7 @@ static uint8_t *parse_pp_string(uint8_t *p,
             p = file->buf_ptr;
             if (c == '\\') {
                 /* escape : just skip \[\r]\n */
-                PEEKC_EOB(c, p);
+                PEEKC_EOB(&c, &p);
                 if (str) {
                     cstr_ccat(str, '\\');
                     cstr_ccat(str, c);
