@@ -61,7 +61,7 @@ void sort_syms(TCCState *s1, Section *s) {
     i = 0;
     while(lt(i, nb_syms)) {
         if (eq(ELFW_ST_BIND(ges_st_info(p)), STB_LOCAL)) {
-            wi32(add(old_to_new_syms, mul(i, 4)), q - new_syms);
+            wi32(add(old_to_new_syms, mul(i, 4)), div_(sub(q, new_syms), sizeof_Elf32_Sym));
             *q = *p;
             q = add(q, sizeof_Elf32_Sym);
         }
