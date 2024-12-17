@@ -195,7 +195,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
                 sh->sh_link = gs_sh_num(gs_link(s));
             }
             sh->sh_addralign = gs_sh_addralign(s);
-            sh->sh_addr = s->sh_addr;
+            sh->sh_addr = gs_sh_addr(s);
             sh->sh_offset = gs_sh_offset(s);
             sh->sh_size = gs_sh_size(s);
         }

@@ -28,6 +28,7 @@ int Section_sh_info_o;
 int Section_sh_addralign_o;
 int Section_sh_entsize_o;
 int Section_sh_size_o;
+int Section_sh_addr_o;
 int Section_sh_offset_o;
 int Section_nb_hashed_syms_o;
 int Section_link_o;

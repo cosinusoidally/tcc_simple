@@ -71,6 +71,9 @@ int ss_sh_entsize(int o, int v) {wi32(add(o, Section_sh_entsize_o), v);}
 int gs_sh_size(int o) {return ri32(add(o, Section_sh_size_o));}
 int ss_sh_size(int o, int v) {wi32(add(o, Section_sh_size_o), v);}
 
+int gs_sh_addr(int o) {return ri32(add(o, Section_sh_addr_o));}
+int ss_sh_addr(int o, int v) {wi32(add(o, Section_sh_addr_o), v);}
+
 int gs_sh_offset(int o) {return ri32(add(o, Section_sh_offset_o));}
 int ss_sh_offset(int o, int v) {wi32(add(o, Section_sh_offset_o), v);}
 
@@ -239,6 +242,7 @@ int init_runtime(){
   Section_sh_addralign_o = 32;
   Section_sh_entsize_o = 36;
   Section_sh_size_o = 40;
+  Section_sh_addr_o = 44;
   Section_sh_offset_o = 48;
   Section_nb_hashed_syms_o = 52;
   Section_link_o = 56;
