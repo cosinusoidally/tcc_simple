@@ -136,8 +136,8 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     file_offset = and(add(file_offset, 3), sub(0, 4));
 
     /* fill header */
-    ehdr->e_ident[0] = ELFMAG0;
-    ehdr->e_ident[1] = mkc('E');
+    wi8(gee_e_ident(ehdr), ELFMAG0);
+    wi8(add(gee_e_ident(ehdr), 1), mkc('E'));
     ehdr->e_ident[2] = mkc('L');
     ehdr->e_ident[3] = mkc('F');
     ehdr->e_ident[4] = ELFCLASSW;
