@@ -277,6 +277,17 @@ static int handle_stray1(uint8_t *p)
     }\
 }
 
+/* handle the complicated stray case */
+#define PEEKC2(c, p)\
+{\
+    p = add(p, 1);\
+    c = ri8(p);\
+    if (eq(c, mkc('\\'))) {\
+        c = handle_stray1(p);\
+        p = file->buf_ptr;\
+    }\
+}
+
 /* C comments */
 ST_FUNC uint8_t *parse_comment(uint8_t *p)
 {
