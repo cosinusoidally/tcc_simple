@@ -134,12 +134,12 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     file_offset = and(add(file_offset, 3), sub(0, 4));
 
     /* fill header */
-    wi8(gee_e_ident(ehdr), ELFMAG0);
+    wi8(gee_e_ident(ehdr), 127); /* ELFMAG0 0x7f Magic number byte 0 */
     wi8(add(gee_e_ident(ehdr), 1), mkc('E'));
     wi8(add(gee_e_ident(ehdr), 2), mkc('L'));
     wi8(add(gee_e_ident(ehdr), 3), mkc('F'));
-    wi8(add(gee_e_ident(ehdr), 4), ELFCLASSW);
-    wi8(add(gee_e_ident(ehdr), 5), ELFDATA2LSB);
+    wi8(add(gee_e_ident(ehdr), 4), 1); /* ELFCLASS32 1 32-bit objects */
+    wi8(add(gee_e_ident(ehdr), 5), 1); /* ELFDATA2LSB 1 2's complement, little endian */
     wi8(add(gee_e_ident(ehdr), 6), EV_CURRENT);
 
     see_e_type(ehdr, ET_REL);
