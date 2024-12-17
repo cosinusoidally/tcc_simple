@@ -85,7 +85,7 @@ static void sort_syms(TCCState *s1, Section *s) {
     }
 
     /* we copy the new symbols to the old */
-    memcpy(s->data, new_syms, nb_syms * sizeof(ElfW(Sym)));
+    memcpy(gs_data(s), new_syms, mul(nb_syms, sizeof_Elf32_Sym));
     tcc_free(new_syms);
 
     /* now we modify all the relocations */
