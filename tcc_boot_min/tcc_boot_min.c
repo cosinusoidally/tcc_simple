@@ -193,6 +193,9 @@ int see_e_version(int o, int v) {wi32(add(o, Elf32_Ehdr_e_version_o), v);}
 /*  Elf32_Off e_shoff */
 int see_e_shoff(int o, int v) {wi32(add(o, Elf32_Ehdr_e_shoff_o), v);}
 
+/*  Elf32_Half e_ehsize */
+int see_e_ehsize(int o, int v) {wi16(add(o, Elf32_Ehdr_e_ehsize_o), v);}
+
 /* stuff */
 
 int init_runtime(){
