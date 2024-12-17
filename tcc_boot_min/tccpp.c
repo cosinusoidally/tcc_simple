@@ -282,12 +282,14 @@ int PEEKC2(int c1, int p1) {
     int c;
     int p;
 
-    p = add(p, 1);
+    p = add(ri32(p1), 1);
     c = ri8(p);
     if (eq(c, mkc('\\'))) {
         c = handle_stray1(p);
         p = file->buf_ptr;
     }
+    wi8(c1,c);
+    wi32(p,p1);
 }
 
 /* C comments */
