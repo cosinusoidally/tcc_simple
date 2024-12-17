@@ -98,7 +98,7 @@ void sort_syms(TCCState *s1, Section *s) {
             while(lt(rel, add(gs_data(sr), gs_data_offset(sr)))) {
                 sym_index = ELFW_R_SYM(ger_r_info(rel));
                 type = ELFW_R_TYPE(ger_r_info(rel));
-                sym_index = old_to_new_syms[sym_index];
+                sym_index = ri32(add(old_to_new_syms, mul(sym_index, 4)));
                 ser_r_info(rel, ELFW_R_INFO(sym_index, type));
                 rel = add(rel, sizeof_Elf32_Rel);
             }
