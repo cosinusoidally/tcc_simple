@@ -38,10 +38,10 @@ extern int SHF_PRIVATE; /* 0x80000000 */
 /* put relocation */
 ST_FUNC void put_elf_reloca(Section *symtab, Section *s, unsigned long offset,
                             int type, int symbol, addr_t addend) {
-    char *buf;
+    int buf;
     int buf_size;
-    Section *sr;
-    ElfW_Rel *rel;
+    int sr;
+    int rel;
 
     buf_size=256;
     buf = tcc_mallocz(buf_size);
