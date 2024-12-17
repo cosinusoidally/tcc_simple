@@ -21,7 +21,6 @@
 #include "tcc.h"
 #include "tccpp.c"
 #include "tccgen.c"
-#include "tccelf.c"
 
 int init_globals() {
     aglobal_stack = &global_stack;
