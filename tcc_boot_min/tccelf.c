@@ -119,40 +119,41 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     int size;
     Section *s;
     int aehdr;
-    Elf32_Ehdr ehdr;
+    Elf32_Ehdr *ehdr;
     int shdr;
     Elf32_Shdr *sh;
 
     enter();
     aehdr = v_alloca(sizeof_Elf32_Ehdr);
+    ehdr = aehdr;
     shdr = v_alloca(sizeof(Elf32_Shdr));
 
     shnum = gts_nb_sections(s1);
 
-    memset(&ehdr, 0, sizeof_Elf32_Ehdr);
+    memset(ehdr, 0, sizeof_Elf32_Ehdr);
 
     /* align to 4 */
     file_offset = and(add(file_offset, 3), sub(0, 4));
 
     /* fill header */
-    ehdr.e_ident[0] = ELFMAG0;
-    ehdr.e_ident[1] = mkc('E');
-    ehdr.e_ident[2] = mkc('L');
-    ehdr.e_ident[3] = mkc('F');
-    ehdr.e_ident[4] = ELFCLASSW;
-    ehdr.e_ident[5] = ELFDATA2LSB;
-    ehdr.e_ident[6] = EV_CURRENT;
+    ehdr->e_ident[0] = ELFMAG0;
+    ehdr->e_ident[1] = mkc('E');
+    ehdr->e_ident[2] = mkc('L');
+    ehdr->e_ident[3] = mkc('F');
+    ehdr->e_ident[4] = ELFCLASSW;
+    ehdr->e_ident[5] = ELFDATA2LSB;
+    ehdr->e_ident[6] = EV_CURRENT;
 
-    ehdr.e_type = ET_REL;
-    ehdr.e_machine = EM_TCC_TARGET;
-    ehdr.e_version = EV_CURRENT;
-    ehdr.e_shoff = file_offset;
-    ehdr.e_ehsize = sizeof_Elf32_Ehdr;
-    ehdr.e_shentsize = sizeof(Elf32_Shdr);
-    ehdr.e_shnum = shnum;
-    ehdr.e_shstrndx = sub(shnum, 1);
+    ehdr->e_type = ET_REL;
+    ehdr->e_machine = EM_TCC_TARGET;
+    ehdr->e_version = EV_CURRENT;
+    ehdr->e_shoff = file_offset;
+    ehdr->e_ehsize = sizeof_Elf32_Ehdr;
+    ehdr->e_shentsize = sizeof(Elf32_Shdr);
+    ehdr->e_shnum = shnum;
+    ehdr->e_shstrndx = sub(shnum, 1);
 
-    fwrite(&ehdr, 1, sizeof_Elf32_Ehdr, f);
+    fwrite(ehdr, 1, sizeof_Elf32_Ehdr, f);
     fwrite(phdr, 1, mul(phnum, sizeof_Elf32_Phdr), f);
     offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof_Elf32_Phdr));
 
@@ -175,7 +176,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     }
 
     /* output section headers */
-    while (lt(offset, ehdr.e_shoff)) {
+    while (lt(offset, ehdr->e_shoff)) {
         fputc(0, f);
         offset = add(offset, 1);
     }
