@@ -186,10 +186,10 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
         memset(sh, 0, sizeof_Elf32_Shdr);
         s = ri32(add(gts_sections(s1),mul(i, 4)));
         if (s) {
-            sh->sh_name = gs_sh_name(s);
-            sh->sh_type = gs_sh_type(s);
-            sh->sh_flags = gs_sh_flags(s);
-            sh->sh_entsize = gs_sh_entsize(s);
+            sesh_sh_name(sh, gs_sh_name(s));
+            sesh_sh_type(sh, gs_sh_type(s));
+            sesh_sh_flags(sh, gs_sh_flags(s));
+            sesh_sh_entsize(sh, gs_sh_entsize(s));
             sh->sh_info = gs_sh_info(s);
             if (gs_link(s)) {
                 sh->sh_link = gs_sh_num(gs_link(s));
