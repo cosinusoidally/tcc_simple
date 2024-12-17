@@ -68,7 +68,6 @@ ST_FUNC void skip(int c)
     next();
 }
 
-#define tal_free(al, p) tcc_free(p)
 #define tal_realloc(al, p, size) tcc_realloc(p, size)
 
 /* ------------------------------------------------------------------------- */
@@ -122,7 +121,7 @@ ST_FUNC void cstr_new(CString *cstr)
 /* free string and reset it to NULL */
 ST_FUNC void cstr_free(CString *cstr)
 {
-    tal_free(cstr_alloc, cstr->data);
+    tcc_free(cstr->data);
     cstr_new(cstr);
 }
 
@@ -386,13 +385,13 @@ ST_FUNC TokenString *tok_str_alloc(void)
 
 ST_FUNC void tok_str_free_str(int *str)
 {
-    tal_free(tokstr_alloc, str);
+    tcc_free(str);
 }
 
 ST_FUNC void tok_str_free(TokenString *str)
 {
     tok_str_free_str(str->str);
-    tal_free(tokstr_alloc, str);
+    tcc_free(str);
 }
 
 ST_FUNC int *tok_str_realloc(TokenString *s, int new_size)
@@ -891,7 +890,7 @@ ST_FUNC void tccpp_delete(TCCState *s)
     /* free tokens */
     n = tok_ident - TOK_IDENT;
     for(i = 0; i < n; i++)
-        tal_free(toksym_alloc, table_ident[i]);
+        tcc_free(table_ident[i]);
     tcc_free(table_ident);
     table_ident = NULL;
 
