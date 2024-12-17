@@ -41,12 +41,12 @@ extern int SHF_PRIVATE; /* 0x80000000 */
    modified to take into account the symbol table sorting */
 static void sort_syms(TCCState *s1, Section *s) {
     int *old_to_new_syms;
-    ElfW(Sym) *new_syms;
+    Elf32_Sym *new_syms;
     int nb_syms;
     int i;
-    ElfW(Sym) *p;
-    ElfW(Sym) *q;
-    ElfW_Rel *rel;
+    Elf32_Sym *p;
+    Elf32_Sym *q;
+    Elf32_Rel *rel;
     Section *sr;
     int type;
     int sym_index;
