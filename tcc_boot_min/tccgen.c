@@ -142,7 +142,7 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
                             int can_add_underscore)
 {
     int sym_type, sym_bind, info, other, t;
-    Elf32_Sym *esym;
+    int esym;
     const char *name;
     char buf1[256];
 
@@ -163,9 +163,9 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         sym->c = put_elf_sym(symtab_section, value, size, info, other, sh_num, name);
     } else {
         esym = elfsym(sym);
-        esym->st_value = value;
-        esym->st_size = size;
-        esym->st_shndx = sh_num;
+        ses_st_value(esym, value);
+        ses_st_size(esym, size);
+        ses_st_shndx(esym, sh_num);
     }
     update_storage(sym);
 }
