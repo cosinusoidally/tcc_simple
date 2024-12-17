@@ -161,7 +161,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     return ts;
 }
 
-#define TOK_HASH_INIT 1
+int TOK_HASH_INIT  = 1;
 #define TOK_HASH_FUNC(h, c) ((h) + ((h) << 5) + ((h) >> 27) + (c))
 
 
