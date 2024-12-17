@@ -68,7 +68,7 @@ static void sort_syms(TCCState *s1, Section *s) {
         i = add(i, 1);
     }
     /* save the number of local symbols in section header */
-    if( s->sh_size ) {   /* this 'if' makes IDA happy */
+    if(gs_sh_size(s)) {   /* this 'if' makes IDA happy */
         s->sh_info = q - new_syms;
     }
 
