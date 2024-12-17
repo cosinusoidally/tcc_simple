@@ -275,7 +275,7 @@ int PEEKC_EOB2(int c1, int p1) {
     c = ri8(p);
     if (eq(c, mkc('\\'))) {
         file->buf_ptr = p;\
-        c = handle_stray1(p);
+        c = handle_eob();
         p = file->buf_ptr;
     }
     wi8(c1,c);
