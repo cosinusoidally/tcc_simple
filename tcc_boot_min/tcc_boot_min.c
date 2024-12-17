@@ -1501,6 +1501,104 @@ int layout_sections(int s1, int phdr, int phnum,
     return file_offset;
 }
 
+/* 22 */
+/* Create an ELF file on disk.
+   This function handle ELF specific layout requirements */
+int tcc_output_elf(int s1, int f, int phnum, int phdr,
+                           int file_offset, int sec_order) {
+    int i;
+    int shnum;
+    int offset;
+    int size;
+    int s;
+    int ehdr;
+    int shdr;
+    int sh;
+
+    enter();
+    ehdr = v_alloca(sizeof_Elf32_Ehdr);
+    shdr = v_alloca(sizeof_Elf32_Shdr);
+
+    shnum = gts_nb_sections(s1);
+
+    memset(ehdr, 0, sizeof_Elf32_Ehdr);
+
+    /* align to 4 */
+    file_offset = and(add(file_offset, 3), sub(0, 4));
+
+    /* fill header */
+    wi8(gee_e_ident(ehdr), 127); /* ELFMAG0 0x7f Magic number byte 0 */
+    wi8(add(gee_e_ident(ehdr), 1), mkc('E'));
+    wi8(add(gee_e_ident(ehdr), 2), mkc('L'));
+    wi8(add(gee_e_ident(ehdr), 3), mkc('F'));
+    wi8(add(gee_e_ident(ehdr), 4), 1); /* ELFCLASS32 1 32-bit objects */
+    wi8(add(gee_e_ident(ehdr), 5), 1); /* ELFDATA2LSB 1 2's complement, little endian */
+    wi8(add(gee_e_ident(ehdr), 6), 1); /* EV_CURRENT Current version */
+
+    see_e_type(ehdr, 1); /* ET_REL 1 Relocatable file */
+    see_e_machine(ehdr, 3); /* EM_386 3 Intel 80386 */
+    see_e_version(ehdr, 1); /* EV_CURRENT Current version */
+    see_e_shoff(ehdr, file_offset);
+    see_e_ehsize(ehdr, sizeof_Elf32_Ehdr);
+    see_e_shentsize(ehdr, sizeof_Elf32_Shdr);
+    see_e_shnum(ehdr, shnum);
+    see_e_shstrndx(ehdr, sub(shnum, 1));
+
+    fwrite(ehdr, 1, sizeof_Elf32_Ehdr, f);
+    fwrite(phdr, 1, mul(phnum, sizeof_Elf32_Phdr), f);
+    offset = add(sizeof_Elf32_Ehdr, mul(phnum, sizeof_Elf32_Phdr));
+
+    sort_syms(s1, symtab_section);
+    i = 1;
+    while(lt(i, gts_nb_sections(s1))) {
+        s = ri32(add(gts_sections(s1), mul(ri32(add(sec_order, mul(i, 4))),
+                                           4)));
+        if (neq(gs_sh_type(s), SHT_NOBITS)) {
+            while (lt(offset, gs_sh_offset(s))) {
+                fputc(0, f);
+                offset = add(offset, 1);
+            }
+            size = gs_sh_size(s);
+            if (size) {
+                fwrite(gs_data(s), 1, size, f);
+            }
+            offset = add(offset, size);
+        }
+        i = add(i, 1);
+    }
+
+    /* output section headers */
+    while (lt(offset, gee_e_shoff(ehdr))) {
+        fputc(0, f);
+        offset = add(offset, 1);
+    }
+
+    i = 0;
+    while(lt(i, gts_nb_sections(s1))) {
+        sh = shdr;
+        memset(sh, 0, sizeof_Elf32_Shdr);
+        s = ri32(add(gts_sections(s1),mul(i, 4)));
+        if (s) {
+            sesh_sh_name(sh, gs_sh_name(s));
+            sesh_sh_type(sh, gs_sh_type(s));
+            sesh_sh_flags(sh, gs_sh_flags(s));
+            sesh_sh_entsize(sh, gs_sh_entsize(s));
+            sesh_sh_info(sh, gs_sh_info(s));
+            if (gs_link(s)) {
+                sesh_sh_link(sh, gs_sh_num(gs_link(s)));
+            }
+            sesh_sh_addralign(sh, gs_sh_addralign(s));
+            sesh_sh_addr(sh, gs_sh_addr(s));
+            sesh_sh_offset(sh, gs_sh_offset(s));
+            sesh_sh_size(sh, gs_sh_size(s));
+        }
+        fwrite(sh, 1, sizeof_Elf32_Shdr, f);
+        i = add(i, 1);
+    }
+
+    leave(0);
+}
+
 /* 23 */
 /* Write an elf file */
 int tcc_write_elf_file(int s1, int filename, int phnum,
