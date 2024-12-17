@@ -91,6 +91,8 @@ int Elf32_Rel_r_offset_o;
 int Elf32_Rel_r_info_o;
 int sizeof_Elf32_Rel;
 
+int sizeof_Elf32_Shdr;
+
 int Elf32_Sym_st_name_o;
 int Elf32_Sym_st_value_o;
 int Elf32_Sym_st_size_o;

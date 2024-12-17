@@ -301,6 +301,8 @@ int init_runtime(){
   Elf32_Rel_r_info_o = 4;
   sizeof_Elf32_Rel = 8;
 
+  sizeof_Elf32_Shdr = 40;
+
   Elf32_Sym_st_name_o = 0;
   Elf32_Sym_st_value_o = 4;
   Elf32_Sym_st_size_o = 8;
