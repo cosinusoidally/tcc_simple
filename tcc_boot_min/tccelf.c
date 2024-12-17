@@ -40,7 +40,7 @@ extern int SHF_PRIVATE; /* 0x80000000 */
    the code, we must do it after. All the relocation tables are also
    modified to take into account the symbol table sorting */
 void sort_syms(TCCState *s1, Section *s) {
-    int *old_to_new_syms;
+    int old_to_new_syms;
     Elf32_Sym *new_syms;
     int nb_syms;
     int i;
