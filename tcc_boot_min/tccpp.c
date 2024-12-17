@@ -217,12 +217,14 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
    (but not stray) */
 ST_FUNC int handle_eob(void)
 {
-    BufferedFile *bf = file;
+    BufferedFile *bf;
     int len;
+
+    bf = file;
 
     /* only tries to read if really end of buffer */
     if (gte(bf->buf_ptr, bf->buf_end)) {
-        if (bf->fd >= 0) {
+        if (gte(bf->fd, 0)) {
             len = IO_BUF_SIZE;
             len = read(bf->fd, bf->buffer, len);
             if (len < 0)
@@ -230,12 +232,12 @@ ST_FUNC int handle_eob(void)
         } else {
             len = 0;
         }
-        total_bytes += len;
+        total_bytes = add(total_bytes, len);
         bf->buf_ptr = bf->buffer;
         bf->buf_end = bf->buffer + len;
         *bf->buf_end = CH_EOB;
     }
-    if (bf->buf_ptr < bf->buf_end) {
+    if (lt(bf->buf_ptr, bf->buf_end)) {
         return bf->buf_ptr[0];
     } else {
         bf->buf_ptr = bf->buf_end;
