@@ -118,14 +118,12 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     int offset;
     int size;
     Section *s;
-    int aehdr;
-    Elf32_Ehdr *ehdr;
+    int ehdr;
     int shdr;
     Elf32_Shdr *sh;
 
     enter();
-    aehdr = v_alloca(sizeof_Elf32_Ehdr);
-    ehdr = aehdr;
+    ehdr = v_alloca(sizeof_Elf32_Ehdr);
     shdr = v_alloca(sizeof_Elf32_Shdr);
 
     shnum = gts_nb_sections(s1);
