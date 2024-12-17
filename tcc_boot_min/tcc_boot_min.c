@@ -176,6 +176,10 @@ int ses_st_other(int o, int v) {wi8(add(o, Elf32_Sym_st_other_o), v);}
 int ges_st_shndx(int o) {return ri16(add(o, Elf32_Sym_st_shndx_o));}
 int ses_st_shndx(int o, int v) {wi16(add(o, Elf32_Sym_st_shndx_o), v);}
 
+/* Elf32_Ehdr accessors */
+
+int gee_e_ident(int o) { return add(o, Elf32_Ehdr_e_ident_o);}
+
 /* stuff */
 
 int init_runtime(){
