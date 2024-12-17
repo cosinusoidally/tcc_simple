@@ -178,7 +178,11 @@ int ses_st_shndx(int o, int v) {wi16(add(o, Elf32_Sym_st_shndx_o), v);}
 
 /* Elf32_Ehdr accessors */
 
+/* unsigned char e_ident[16] */
 int gee_e_ident(int o) { return add(o, Elf32_Ehdr_e_ident_o);}
+
+/*  Elf32_Half e_type */
+int see_e_type(int o, int v) {wi16(add(o, Elf32_Ehdr_e_type_o), v);}
 
 /* stuff */
 
