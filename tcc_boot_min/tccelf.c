@@ -64,7 +64,7 @@ void sort_syms(TCCState *s1, Section *s) {
             old_to_new_syms[i] = q - new_syms;
             *q++ = *p;
         }
-        p++;
+        p = add(p, sizeof_Elf32_Sym);
         i = add(i, 1);
     }
     /* save the number of local symbols in section header */
