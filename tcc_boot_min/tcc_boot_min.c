@@ -188,10 +188,10 @@ int see_e_type(int o, int v) {wi16(add(o, Elf32_Ehdr_e_type_o), v);}
 int see_e_machine(int o, int v) {wi16(add(o, Elf32_Ehdr_e_machine_o), v);}
 
 /*  Elf32_Word e_version */
-int see_e_version(int o, int v) {wi16(add(o, Elf32_Ehdr_e_version_o), v);}
+int see_e_version(int o, int v) {wi32(add(o, Elf32_Ehdr_e_version_o), v);}
 
 /*  Elf32_Off e_shoff */
-int see_e_shoff(int o, int v) {wi16(add(o, Elf32_Ehdr_e_shoff_o), v);}
+int see_e_shoff(int o, int v) {wi32(add(o, Elf32_Ehdr_e_shoff_o), v);}
 
 /* stuff */
 
