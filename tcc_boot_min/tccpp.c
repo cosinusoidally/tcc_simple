@@ -204,11 +204,11 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
     cstr_reset(&cstr_buf);
     p = cstr_buf.data;
 
-    if (v < tok_ident) {
-        return table_ident[v - TOK_IDENT]->str;
-    } else if (v >= SYM_FIRST_ANOM) {
+    if (lt(v, tok_ident)) {
+        return table_ident[sub(v, TOK_IDENT)]->str;
+    } else if (gte(v, SYM_FIRST_ANOM)) {
         /* special name for anonymous symbol */
-        sprintf(p, "L.%u", v - SYM_FIRST_ANOM);
+        sprintf(p, "L.%u", sub(v, SYM_FIRST_ANOM));
     }
     return cstr_buf.data;
 }
@@ -221,7 +221,7 @@ ST_FUNC int handle_eob(void)
     int len;
 
     /* only tries to read if really end of buffer */
-    if (bf->buf_ptr >= bf->buf_end) {
+    if (gte(bf->buf_ptr, bf->buf_end)) {
         if (bf->fd >= 0) {
             len = IO_BUF_SIZE;
             len = read(bf->fd, bf->buffer, len);
