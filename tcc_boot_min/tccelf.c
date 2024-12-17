@@ -118,13 +118,18 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
     int offset;
     int size;
     Section *s;
+    int aehdr;
     Elf32_Ehdr ehdr;
-    Elf32_Shdr shdr;
+    int shdr;
     Elf32_Shdr *sh;
+
+    enter();
+    aehdr = v_alloca(sizeof_Elf32_Ehdr);
+    shdr = v_alloca(sizeof(Elf32_Shdr));
 
     shnum = gts_nb_sections(s1);
 
-    memset(&ehdr, 0, sizeof(ehdr));
+    memset(&ehdr, 0, sizeof_Elf32_Ehdr);
 
     /* align to 4 */
     file_offset = and(add(file_offset, 3), sub(0, 4));
@@ -177,7 +182,7 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
 
     i = 0;
     while(lt(i, gts_nb_sections(s1))) {
-        sh = &shdr;
+        sh = shdr;
         memset(sh, 0, sizeof(Elf32_Shdr));
         s = s1->sections[i];
         if (s) {
@@ -197,4 +202,6 @@ void tcc_output_elf(TCCState *s1, FILE *f, int phnum, Elf32_Phdr *phdr,
         fwrite(sh, 1, sizeof(Elf32_Shdr), f);
         i = add(i, 1);
     }
+
+    leave(0);
 }
