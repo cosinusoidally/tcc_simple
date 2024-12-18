@@ -112,6 +112,11 @@ int Elf32_Sym_st_other_o;
 int Elf32_Sym_st_shndx_o;
 int sizeof_Elf32_Sym;
 
+int CString_size_o;
+int CString_data_o;
+int CString_size_allocated_o;
+int sizeof_CString;
+
 int sizeof_void;
 
 int tcc_state;

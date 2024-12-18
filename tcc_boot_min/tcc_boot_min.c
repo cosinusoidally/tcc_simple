@@ -231,6 +231,17 @@ int sesh_sh_addralign(int o, int v) {wi32(add(o, Elf32_Shdr_sh_addralign_o), v);
 
 int sesh_sh_entsize(int o, int v) {wi32(add(o, Elf32_Shdr_sh_entsize_o), v);}
 
+/* CString accessors */
+
+int gcs_size(int o) {return ri32(add(o, CString_size_o));}
+int scs_size(int o, int v) {wi32(add(o, CString_size_o), v);}
+
+int gcs_data(int o) {return ri32(add(o, CString_data_o));}
+int scs_data(int o, int v) {wi32(add(o, CString_data_o), v);}
+
+int gcs_size_allocated(int o) {return ri32(add(o, CString_size_allocated_o));}
+int scs_size_allocated(int o, int v) {wi32(add(o, CString_size_allocated_o), v);}
+
 /* stuff */
 
 int init_runtime(){
@@ -347,6 +358,12 @@ int init_runtime(){
   Elf32_Sym_st_other_o = 13;
   Elf32_Sym_st_shndx_o = 14;
   sizeof_Elf32_Sym = 16;
+
+  CString_size_o = 0;
+  CString_data_o = 4;
+  CString_size_allocated_o = 8;
+  sizeof_CString = 12;
+
 
   sizeof_void = 4;
 
@@ -1730,6 +1747,10 @@ int tcc_output_file(int s, int filename) {
 }
 
 /* end of tccelf.c */
+
+/* start of tccpp.c */
+
+/* end of tccpp.c */
 
 int tcc_new() {
     int s;

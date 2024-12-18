@@ -57,28 +57,31 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
+/* 1 */
 ST_FUNC void skip(int c)
 {
     next();
 }
 
 /* ------------------------------------------------------------------------- */
+
+/* 2 */
 /* CString handling */
-static void cstr_realloc(CString *cstr, int new_size)
-{
+static void cstr_realloc(CString *cstr, int new_size) {
     int size;
 
-    size = cstr->size_allocated;
+    size = gcs_size_allocated(cstr);
     if (lt(size, 8)) {
         size = 8; /* no need to allocate a too small first string */
     }
     while (lt(size, new_size)) {
         size = mul(size, 2);
     }
-    cstr->data = tcc_realloc(cstr->data, size);
-    cstr->size_allocated = size;
+    scs_data(cstr, tcc_realloc(gcs_data(cstr), size));
+    scs_size_allocated(cstr, size);
 }
 
+/* 3 */
 /* add a byte */
 ST_INLN void cstr_ccat(CString *cstr, int ch)
 {
@@ -91,6 +94,7 @@ ST_INLN void cstr_ccat(CString *cstr, int ch)
     cstr->size = size;
 }
 
+/* 4 */
 ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
 {
     int size;
@@ -105,11 +109,13 @@ ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
     cstr->size = size;
 }
 
+/* 5 */
 ST_FUNC void cstr_new(CString *cstr)
 {
     memset(cstr, 0, sizeof(CString));
 }
 
+/* 6 */
 /* free string and reset it to NULL */
 ST_FUNC void cstr_free(CString *cstr)
 {
@@ -117,6 +123,7 @@ ST_FUNC void cstr_free(CString *cstr)
     cstr_new(cstr);
 }
 
+/* 7 */
 /* reset string to empty */
 ST_FUNC void cstr_reset(CString *cstr)
 {
@@ -124,6 +131,8 @@ ST_FUNC void cstr_reset(CString *cstr)
 }
 
 /* ------------------------------------------------------------------------- */
+
+/* 8 */
 /* allocate a new token */
 static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 {
@@ -152,10 +161,12 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 
 int TOK_HASH_INIT  = 1;
 
+/* 9 */
 int TOK_HASH_FUNC(int h, int c) {
   return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
 }
 
+/* 10 */
 /* find a token and add it if not found */
 ST_FUNC TokenSym *tok_alloc(const char *str, int len)
 {
@@ -185,6 +196,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     return tok_alloc_new(pts, str, len);
 }
 
+/* 11 */
 ST_FUNC const char *get_tok_str(int v, CValue *cv)
 {
     char *p;
@@ -202,6 +214,7 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
     return cstr_buf.data;
 }
 
+/* 12 */
 /* return the current character, handling end of block if necessary
    (but not stray) */
 ST_FUNC int handle_eob(void)
@@ -234,6 +247,7 @@ ST_FUNC int handle_eob(void)
     }
 }
 
+/* 13 */
 /* skip the stray and handle the \\n case. Output an error if
    incorrect char after the stray */
 static int handle_stray1(uint8_t *p)
@@ -248,6 +262,7 @@ static int handle_stray1(uint8_t *p)
     }
 }
 
+/* 14 */
 /* handle just the EOB case, but not stray */
 int PEEKC_EOB(int c1, int p1) {
     int c;
@@ -264,6 +279,7 @@ int PEEKC_EOB(int c1, int p1) {
     wi32(p1,p);
 }
 
+/* 15 */
 /* handle the complicated stray case */
 int PEEKC(int c1, int p1) {
     int c;
@@ -279,6 +295,7 @@ int PEEKC(int c1, int p1) {
     wi32(p1,p);
 }
 
+/* 16 */
 /* C comments */
 ST_FUNC uint8_t *parse_comment(uint8_t *p)
 {
@@ -328,6 +345,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
     return p;
 }
 
+/* 17 */
 ST_FUNC int set_idnum(int c, int val)
 {
     int prev = isidnum_table[c - CH_EOF];
@@ -335,6 +353,7 @@ ST_FUNC int set_idnum(int c, int val)
     return prev;
 }
 
+/* 18 */
 /* parse a string without interpreting escapes */
 static uint8_t *parse_pp_string(uint8_t *p,
                                 int sep, CString *str)
@@ -368,6 +387,7 @@ static uint8_t *parse_pp_string(uint8_t *p,
     return p;
 }
 
+/* 19 */
 /* token string handling */
 ST_INLN void tok_str_new(TokenString *s)
 {
@@ -376,6 +396,7 @@ ST_INLN void tok_str_new(TokenString *s)
     s->allocated_len = 0;
 }
 
+/* 20 */
 ST_FUNC TokenString *tok_str_alloc(void)
 {
     TokenString *str = tcc_realloc(0, sizeof *str);
@@ -383,17 +404,20 @@ ST_FUNC TokenString *tok_str_alloc(void)
     return str;
 }
 
+/* 21 */
 ST_FUNC void tok_str_free_str(int *str)
 {
     tcc_free(str);
 }
 
+/* 22 */
 ST_FUNC void tok_str_free(TokenString *str)
 {
     tok_str_free_str(str->str);
     tcc_free(str);
 }
 
+/* 23 */
 ST_FUNC int *tok_str_realloc(TokenString *s, int new_size)
 {
     int *str, size;
@@ -411,6 +435,7 @@ ST_FUNC int *tok_str_realloc(TokenString *s, int new_size)
     return s->str;
 }
 
+/* 24 */
 ST_FUNC void tok_str_add(TokenString *s, int t)
 {
     int len, *str;
@@ -423,6 +448,7 @@ ST_FUNC void tok_str_add(TokenString *s, int t)
     s->len = len;
 }
 
+/* 25 */
 ST_FUNC void begin_macro(TokenString *str, int alloc)
 {
     str->alloc = alloc;
@@ -432,6 +458,7 @@ ST_FUNC void begin_macro(TokenString *str, int alloc)
     macro_stack = str;
 }
 
+/* 26 */
 ST_FUNC void end_macro(void)
 {
     TokenString *str = macro_stack;
@@ -440,6 +467,7 @@ ST_FUNC void end_macro(void)
     tok_str_free(str);
 }
 
+/* 27 */
 static void tok_str_add2(TokenString *s, int t, CValue *cv)
 {
     int len, *str;
@@ -464,12 +492,14 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv)
     s->len = len;
 }
 
+/* 28 */
 /* add the current parse token in token string 's' */
 ST_FUNC void tok_str_add_tok(TokenString *s)
 {
     tok_str_add2(s, tok, &tokc);
 }
 
+/* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
 static inline void TOK_GET(int *t, const int **pp, CValue *cv)
@@ -489,6 +519,7 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv)
     *pp = p;
 }
 
+/* 30 */
 /* evaluate escape codes in a string. */
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long)
 {
@@ -519,6 +550,7 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
     cstr_ccat(outstr, '\0');
 }
 
+/* 31 */
 static void parse_string(const char *s, int len)
 {
     uint8_t *p;
@@ -547,6 +579,7 @@ static void parse_string(const char *s, int len)
     }
 }
 
+/* 32 */
 /* parse number in null terminated string 'p' and return it in the
    current token */
 static void parse_number(const char *p)
@@ -608,6 +641,7 @@ static void parse_number(const char *p)
     tokc.i = n;
 }
 
+/* 33 */
 /* return next token without macro substitution */
 static inline void next_nomacro1(void)
 {
@@ -746,6 +780,7 @@ static inline void next_nomacro1(void)
     file->buf_ptr = p;
 }
 
+/* 34 */
 /* return next token without macro substitution. Can read input from
    macro_ptr buffer */
 static void next_nomacro_spc(void)
@@ -761,13 +796,15 @@ static void next_nomacro_spc(void)
     }
 }
 
+/* 35 */
 ST_FUNC void next_nomacro(void)
 {
     do {
         next_nomacro_spc();
     } while (tok < 256 && (isidnum_table[tok - CH_EOF] & IS_SPC));
 }
- 
+
+/* 36 */
 /* return next token with macro substitution */
 ST_FUNC void next(void)
 {
@@ -800,6 +837,7 @@ ST_FUNC void next(void)
     }
 }
 
+/* 37 */
 /* push back current token and set current token to 'last_tok'. Only
    identifier case handled for labels. */
 ST_INLN void unget_tok(int last_tok)
@@ -812,6 +850,7 @@ ST_INLN void unget_tok(int last_tok)
     tok = last_tok;
 }
 
+/* 38 */
 ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
 {
     CString cstr;
@@ -838,6 +877,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
 }
 
+/* 39 */
 void tccpp_new(TCCState *s)
 {
     int i, c;
@@ -873,6 +913,7 @@ void tccpp_new(TCCState *s)
     TOK_RETURN = tok_ident; tmp="return"; tok_alloc(tmp, strlen(tmp));
 }
 
+/* 40 */
 ST_FUNC void tccpp_delete(TCCState *s)
 {
     int i, n;
