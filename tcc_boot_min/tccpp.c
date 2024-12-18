@@ -70,14 +70,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 17 */
-ST_FUNC int set_idnum(int c, int val) {
-    int prev;
-    prev = ri8(add(aisidnum_table, sub(c, CH_EOF_)));
-    wi8(add(aisidnum_table, sub(c, CH_EOF_)), val);
-    return prev;
-}
-
 /* 18 */
 /* parse a string without interpreting escapes */
 static uint8_t *parse_pp_string(uint8_t *p,
