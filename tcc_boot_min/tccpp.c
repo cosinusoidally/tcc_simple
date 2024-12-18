@@ -107,9 +107,9 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p) {
             }
         } else {
             /* stray, eob or eof */
-            file->buf_ptr = p;
+            sbf_buf_ptr(file, p);
             c = handle_eob();
-            p = file->buf_ptr;
+            p = gbf_buf_ptr(file);
             if (eq(c, mkc('\\'))) {
                 p = add(p, 1);
             }
