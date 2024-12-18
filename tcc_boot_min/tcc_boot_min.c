@@ -257,7 +257,7 @@ int gtks_len(int o) {return ri32(add(o, TokenSym_len_o));}
 int stks_len(int o, int v) {wi32(add(o, TokenSym_len_o), v);}
 
 /* char str[1] */
-int gtks_str(int o) {return add(o, TokenSym_len_o);}
+int gtks_str(int o) {return add(o, TokenSym_str_o);}
 
 /* stuff */
 
