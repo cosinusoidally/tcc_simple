@@ -73,9 +73,15 @@ int init_tccpp_globals(){
 /* 18 */
 /* parse a string without interpreting escapes */
 static uint8_t *parse_pp_string(uint8_t *p,
-                                int sep, CString *str)
-{
+                                int sep, CString *str) {
     int c;
+    int tc;
+    int tp;
+
+    enter();
+    tc = v_alloca(4);
+    tp = v_alloca(4);
+
     p = add(p, 1);
     while(1) {
         c = ri8(p);
@@ -102,7 +108,7 @@ static uint8_t *parse_pp_string(uint8_t *p,
         }
     }
     p = add(p, 1);
-    return p;
+    return leave(p);
 }
 
 /* 19 */
