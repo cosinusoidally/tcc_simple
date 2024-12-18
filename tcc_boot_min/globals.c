@@ -236,5 +236,7 @@ int TOK_ALLOC_INCR;
 int TOK_HASH_SIZE_;
 int hash_ident_;
 
+int acstr_buf;
+
 /* =============== end globals.c ========================================== */
 

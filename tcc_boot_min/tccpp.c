@@ -59,10 +59,12 @@ static void next_nomacro_spc(void);
 
 extern int TOK_HASH_SIZE_;
 extern int hash_ident_;
+extern int acstr_buf;
 
 int init_tccpp_globals(){
   TOK_HASH_SIZE_ = TOK_HASH_SIZE;
   hash_ident_ = hash_ident;
+  acstr_buf = &cstr_buf;
 }
 
 /* 11 */
