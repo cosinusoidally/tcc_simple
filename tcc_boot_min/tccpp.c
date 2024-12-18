@@ -60,17 +60,19 @@ static void next_nomacro_spc(void);
 extern int aTOK_HASH_SIZE;
 extern int ahash_ident;
 extern int acstr_buf;
+extern int CH_EOF_;
 
 int init_tccpp_globals(){
   aTOK_HASH_SIZE = TOK_HASH_SIZE;
   ahash_ident = hash_ident;
   acstr_buf = &cstr_buf;
+  CH_EOF_ = CH_EOF;
 }
 
 /* 12 */
 /* return the current character, handling end of block if necessary
    (but not stray) */
-ST_FUNC int handle_eob(void) {
+ST_FUNC int handle_eob() {
     BufferedFile *bf;
     int len;
 
@@ -89,14 +91,14 @@ ST_FUNC int handle_eob(void) {
         }
         total_bytes = add(total_bytes, len);
         sbf_buf_ptr(bf, gbf_buffer(bf));
-        sbf_buf_end(bf, add(bf->buffer, len));
+        sbf_buf_end(bf, add(gbf_buffer(bf), len));
         wi8(bf->buf_end, CH_EOB);
     }
     if (lt(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
         return bf->buf_ptr[0];
     } else {
-        bf->buf_ptr = bf->buf_end;
-        return CH_EOF;
+        sbf_buf_ptr(bf, gbf_buf_end(bf));
+        return CH_EOF_;
     }
 }
 

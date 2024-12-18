@@ -239,5 +239,7 @@ int ahash_ident;
 
 int acstr_buf;
 
+int CH_EOF_;
+
 /* =============== end globals.c ========================================== */
 
