@@ -80,7 +80,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     stks_len(ts, len);
     stks_hash_next(ts, 0);
     memcpy(gtks_str(ts), str, len);
-    ts->str[len] = 0;
+    wi8(add(gtks_str(ts), len), 0);
     wi32(pts, ts);
     return ts;
 }
