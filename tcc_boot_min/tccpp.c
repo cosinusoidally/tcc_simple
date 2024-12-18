@@ -93,7 +93,10 @@ static uint8_t *parse_pp_string(uint8_t *p,
             p = gbf_buf_ptr(file);
             if (eq(c, mkc('\\'))) {
                 /* escape : just skip \[\r]\n */
-                PEEKC_EOB(&c, &p);
+                /* LJW HACK r and w function to avoid moving c and p to stack */
+                wi8(tc, c); wi32(tp, p);
+                PEEKC_EOB(tc, tp);
+                c = ri32(tc); p = ri32(tp);
                 if (str) {
                     cstr_ccat(str, mkc('\\'));
                     cstr_ccat(str, c);
