@@ -77,10 +77,10 @@ ST_FUNC int handle_eob(void) {
     bf = file;
 
     /* only tries to read if really end of buffer */
-    if (gte(bf->buf_ptr, bf->buf_end)) {
-        if (gte(bf->fd, 0)) {
+    if (gte(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
+        if (gte(gbf_fd(bf), 0)) {
             len = IO_BUF_SIZE;
-            len = read(bf->fd, bf->buffer, len);
+            len = read(gbf_fd(bf), gbf_buffer(bf), len);
             if (len < 0)
                 len = 0;
         } else {
