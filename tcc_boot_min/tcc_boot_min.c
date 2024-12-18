@@ -2011,6 +2011,57 @@ int PEEKC(int c1, int p1) {
     wi32(p1,p);
 }
 
+/* 16 */
+/* C comments */
+int parse_comment(int p) {
+    int c;
+
+    p = add(p, 1);
+    while(1) {
+        /* fast skip loop */
+        while(1) {
+            c = ri8(p);
+            if (or(or(eq(c, mkc('\n')), eq(c, mkc('*'))), eq(c, mkc('\\')))) {
+                break;
+            }
+            p = add(p, 1);
+            c = ri8(p);
+            if (or(or(eq(c, mkc('\n')), eq(c, mkc('*'))), eq(c, mkc('\\')))) {
+                break;
+            }
+            p = add(p, 1);
+        }
+        /* now we can handle all the cases */
+        if (eq(c, mkc('\n'))) {
+            sbf_line_num(file, add(gbf_line_num(file), 1));
+            p = add(p, 1);
+        } else if (eq(c, mkc('*'))) {
+            p = add(p, 1);
+            while(1) {
+                c = ri8(p);
+                if (eq(c, mkc('*'))) {
+                    p = add(p, 1);
+                } else if (eq(c, mkc('/'))) {
+                    p = add(p, 1);
+                    return p;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            /* stray, eob or eof */
+            sbf_buf_ptr(file, p);
+            c = handle_eob();
+            p = gbf_buf_ptr(file);
+            if (eq(c, mkc('\\'))) {
+                p = add(p, 1);
+            }
+        }
+    }
+    p = add(p, 1);
+    return p;
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
