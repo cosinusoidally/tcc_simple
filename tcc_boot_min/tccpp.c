@@ -40,7 +40,6 @@ extern TokenSym **table_ident;
 static TokenSym *hash_ident[TOK_HASH_SIZE];
 static char token_buf[STRING_MAX_SIZE + 1];
 static CString cstr_buf;
-static CString macro_equal_buf;
 static TokenString tokstr_buf;
 static unsigned char isidnum_table[256 - CH_EOF];
 static int pp_debug_tok, pp_debug_symv;
@@ -799,7 +798,6 @@ ST_FUNC void tccpp_delete(TCCState *s)
     /* free static buffers */
     cstr_free(&tokcstr);
     cstr_free(&cstr_buf);
-    cstr_free(&macro_equal_buf);
     tok_str_free_str(tokstr_buf.str);
 }
 
