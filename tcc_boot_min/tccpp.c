@@ -59,9 +59,9 @@ static void next_nomacro_spc(void);
 
 /* 10 */
 /* find a token and add it if not found */
-ST_FUNC TokenSym *tok_alloc(const char *str, int len)
-{
-    TokenSym *ts, **pts;
+ST_FUNC TokenSym *tok_alloc(const char *str, int len) {
+    TokenSym *ts;
+    TokenSym **pts;
     int i;
     unsigned int h;
     
