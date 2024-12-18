@@ -90,7 +90,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p) {
         }
         /* now we can handle all the cases */
         if (eq(c, mkc('\n'))) {
-            file->line_num++;
+            sbf_line_num(file, add(gbf_line_num(file), 1));
             p = add(p, 1);
         } else if (eq(c, mkc('*'))) {
             p = add(p, 1);
