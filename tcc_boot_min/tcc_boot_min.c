@@ -1963,6 +1963,21 @@ int handle_eob() {
     }
 }
 
+/* 13 */
+/* skip the stray and handle the \\n case. Output an error if
+   incorrect char after the stray */
+int handle_stray1(int p) {
+    int c;
+
+    sbf_buf_ptr(file, p);
+    if (gte(p, gbf_buf_end(file))) {
+        c = handle_eob();
+        if (neq(c, mkc('\\'))) {
+            return c;
+        }
+    }
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {

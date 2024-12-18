@@ -68,21 +68,6 @@ int init_tccpp_globals(){
   CH_EOF_ = CH_EOF;
 }
 
-/* 13 */
-/* skip the stray and handle the \\n case. Output an error if
-   incorrect char after the stray */
-static int handle_stray1(uint8_t *p) {
-    int c;
-
-    sbf_buf_ptr(file, p);
-    if (gte(p, gbf_buf_end(file))) {
-        c = handle_eob();
-        if (neq(c, mkc('\\'))) {
-            return c;
-        }
-    }
-}
-
 /* 14 */
 /* handle just the EOB case, but not stray */
 int PEEKC_EOB(int c1, int p1) {
