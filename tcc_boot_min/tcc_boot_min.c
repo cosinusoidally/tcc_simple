@@ -244,6 +244,7 @@ int scs_size_allocated(int o, int v) {wi32(add(o, CString_size_allocated_o), v);
 
 /* TokenSym accessors */
 
+int atks_hash_next(int o) {return add(o, TokenSym_hash_next_o);}
 int gtks_hash_next(int o) {return ri32(add(o, TokenSym_hash_next_o));}
 int stks_hash_next(int o, int v) {wi32(add(o, TokenSym_hash_next_o), v);}
 
