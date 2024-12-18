@@ -456,6 +456,7 @@ int init_runtime(){
   init_globals();
 
   init_options();
+  init_tccpp_globals();
 }
 
 /* i386-gen.c */
