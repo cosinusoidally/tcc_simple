@@ -31,7 +31,6 @@ ST_DATA CString tokcstr; /* current parsed string, if any */
 
 /* display benchmark infos */
 ST_DATA int total_lines;
-ST_DATA int total_bytes;
 extern int tok_ident;
 extern TokenSym **table_ident;
 
@@ -67,39 +66,6 @@ int init_tccpp_globals(){
   ahash_ident = hash_ident;
   acstr_buf = &cstr_buf;
   CH_EOF_ = CH_EOF;
-}
-
-/* 12 */
-/* return the current character, handling end of block if necessary
-   (but not stray) */
-ST_FUNC int handle_eob() {
-    BufferedFile *bf;
-    int len;
-
-    bf = file;
-
-    /* only tries to read if really end of buffer */
-    if (gte(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
-        if (gte(gbf_fd(bf), 0)) {
-            len = IO_BUF_SIZE;
-            len = read(gbf_fd(bf), gbf_buffer(bf), len);
-            if (lt(len, 0)) {
-                len = 0;
-            }
-        } else {
-            len = 0;
-        }
-        total_bytes = add(total_bytes, len);
-        sbf_buf_ptr(bf, gbf_buffer(bf));
-        sbf_buf_end(bf, add(gbf_buffer(bf), len));
-        wi8(gbf_buf_end(bf), CH_EOB);
-    }
-    if (lt(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
-        return ri8(gbf_buf_ptr(bf));
-    } else {
-        sbf_buf_ptr(bf, gbf_buf_end(bf));
-        return CH_EOF_;
-    }
 }
 
 /* 13 */

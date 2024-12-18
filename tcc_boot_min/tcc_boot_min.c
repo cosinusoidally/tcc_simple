@@ -1931,6 +1931,38 @@ int get_tok_str(int v, int cv) {
     return gcs_data(acstr_buf);
 }
 
+/* 12 */
+/* return the current character, handling end of block if necessary
+   (but not stray) */
+int handle_eob() {
+    int bf;
+    int len;
+
+    bf = file;
+
+    /* only tries to read if really end of buffer */
+    if (gte(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
+        if (gte(gbf_fd(bf), 0)) {
+            len = IO_BUF_SIZE;
+            len = read(gbf_fd(bf), gbf_buffer(bf), len);
+            if (lt(len, 0)) {
+                len = 0;
+            }
+        } else {
+            len = 0;
+        }
+        sbf_buf_ptr(bf, gbf_buffer(bf));
+        sbf_buf_end(bf, add(gbf_buffer(bf), len));
+        wi8(gbf_buf_end(bf), CH_EOB);
+    }
+    if (lt(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
+        return ri8(gbf_buf_ptr(bf));
+    } else {
+        sbf_buf_ptr(bf, gbf_buf_end(bf));
+        return CH_EOF_;
+    }
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
