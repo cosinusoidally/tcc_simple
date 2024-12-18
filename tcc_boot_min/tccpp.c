@@ -68,10 +68,10 @@ int init_tccpp_globals(){
 /* 10 */
 /* find a token and add it if not found */
 ST_FUNC TokenSym *tok_alloc(const char *str, int len) {
-    TokenSym *ts;
-    TokenSym **pts;
+    int ts;
+    int pts;
     int i;
-    unsigned int h;
+    int h;
     
     h = 1; /* TOK_HASH_INIT */
     i = 0;
