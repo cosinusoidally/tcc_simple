@@ -57,8 +57,6 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
-int TOK_HASH_INIT  = 1;
-
 /* 9 */
 int TOK_HASH_FUNC(int h, int c) {
   return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
@@ -72,7 +70,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len)
     int i;
     unsigned int h;
     
-    h = TOK_HASH_INIT;
+    h = 1; /* TOK_HASH_INIT */
     i = 0;
     while(lt(i, len)) {
         h = TOK_HASH_FUNC(h, (ri8(add(str, i))));
@@ -584,7 +582,7 @@ static inline void next_nomacro1(void)
     c = *p;
     if(isid(c)) {
         p1 = p;
-        h = TOK_HASH_INIT;
+        h = 1; /* TOK_HASH_INIT */
         h = TOK_HASH_FUNC(h, c);
         while (c = *++p, isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
             h = TOK_HASH_FUNC(h, c);
