@@ -442,6 +442,9 @@ int init_runtime(){
   TOK_FLAG_BOL = 1;
   TOK_FLAG_BOF = 2;
 
+  /* all identifiers and strings have token above that */
+  TOK_IDENT = 256;
+
   REL_SECTION_FMT = mks(".rel%s");
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */

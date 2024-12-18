@@ -306,10 +306,7 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 #define TOK_LINEFEED  10    /* line feed */
 
 /* all identifiers and strings have token above that */
-#define TOK_IDENT 256
-
-/* keywords: tok >= TOK_IDENT && tok < TOK_UIDENT */
-#define TOK_UIDENT TOK_DEFINE
+extern int TOK_IDENT; /* 256 */
 
 /* ------------ libtcc.c ------------ */
 
