@@ -74,7 +74,7 @@ int init_tccpp_globals(){
 ST_FUNC int set_idnum(int c, int val) {
     int prev;
     prev = ri8(add(aisidnum_table, sub(c, CH_EOF_)));
-    isidnum_table[c - CH_EOF_] = val;
+    wi8(add(aisidnum_table, sub(c, CH_EOF_)), val);
     return prev;
 }
 
