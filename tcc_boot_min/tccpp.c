@@ -81,15 +81,16 @@ ST_FUNC int handle_eob(void) {
         if (gte(gbf_fd(bf), 0)) {
             len = IO_BUF_SIZE;
             len = read(gbf_fd(bf), gbf_buffer(bf), len);
-            if (len < 0)
+            if (lt(len, 0)) {
                 len = 0;
+            }
         } else {
             len = 0;
         }
         total_bytes = add(total_bytes, len);
-        bf->buf_ptr = bf->buffer;
-        bf->buf_end = bf->buffer + len;
-        *bf->buf_end = CH_EOB;
+        bf->buf_ptr = gbf_buffer(bf);
+        bf->buf_end = add(bf->buffer, len);
+        wi8(bf->buf_end, CH_EOB);
     }
     if (lt(bf->buf_ptr, bf->buf_end)) {
         return bf->buf_ptr[0];
