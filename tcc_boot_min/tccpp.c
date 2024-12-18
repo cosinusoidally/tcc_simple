@@ -90,7 +90,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len) {
         if (and(eq(gtks_len(ts), len), eq(memcmp(gtks_str(ts), str, len),0))) {
             return ts;
         }
-        pts = &(ts->hash_next);
+        pts = atks_hash_next(ts);
     }
     return tok_alloc_new(pts, str, len);
 }
