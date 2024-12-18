@@ -308,13 +308,6 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 /* all identifiers and strings have token above that */
 #define TOK_IDENT 256
 
-enum tcc_token {
-    TOK_LAST = TOK_IDENT - 1
-#define DEF(id, str) ,id
-#include "tcctok.h"
-#undef DEF
-};
-
 /* keywords: tok >= TOK_IDENT && tok < TOK_UIDENT */
 #define TOK_UIDENT TOK_DEFINE
 
@@ -668,3 +661,10 @@ extern int R_386_PC32;
 #define STT_FILE        4               /* Symbol's name is file name */
 
 #define SHN_ABS         0xfff1          /* Associated symbol is absolute */
+
+extern int TOK_INT;
+extern int TOK_IF;
+extern int TOK_ELSE;
+extern int TOK_WHILE;
+extern int TOK_BREAK;
+extern int TOK_RETURN;

@@ -55,12 +55,6 @@ static struct TinyAlloc *cstr_alloc;
 
 static TokenString *macro_stack;
 
-static const char tcc_keywords[] = 
-#define DEF(id, str) str "\0"
-#include "tcctok.h"
-#undef DEF
-;
-
 static void next_nomacro_spc(void);
 
 ST_FUNC void skip(int c)
@@ -848,6 +842,7 @@ void tccpp_new(TCCState *s)
 {
     int i, c;
     const char *p, *r;
+    int tmp;
 
     /* might be used in error() before preprocess_start() */
 
@@ -867,19 +862,15 @@ void tccpp_new(TCCState *s)
     cstr_realloc(&cstr_buf, STRING_MAX_SIZE);
     tok_str_new(&tokstr_buf);
     tok_str_realloc(&tokstr_buf, TOKSTR_MAX_SIZE);
-    
+
+    /* define keywords, FIXME improve this */
     tok_ident = TOK_IDENT;
-    p = tcc_keywords;
-    while (*p) {
-        r = p;
-        while(1) {
-            c = *r++;
-            if (c == '\0')
-                break;
-        }
-        tok_alloc(p, r - p - 1);
-        p = r;
-    }
+    TOK_INT    = tok_ident; tmp="int";    tok_alloc(tmp, strlen(tmp));
+    TOK_IF     = tok_ident; tmp="if";     tok_alloc(tmp, strlen(tmp));
+    TOK_ELSE   = tok_ident; tmp="else";   tok_alloc(tmp, strlen(tmp));
+    TOK_WHILE  = tok_ident; tmp="while";  tok_alloc(tmp, strlen(tmp));
+    TOK_BREAK  = tok_ident; tmp="break";  tok_alloc(tmp, strlen(tmp));
+    TOK_RETURN = tok_ident; tmp="return"; tok_alloc(tmp, strlen(tmp));
 }
 
 ST_FUNC void tccpp_delete(TCCState *s)

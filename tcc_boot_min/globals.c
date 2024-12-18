@@ -202,5 +202,14 @@ int symtab_section;
 
 int REL_SECTION_FMT;
 
+/* keywords */
+
+int TOK_INT;
+int TOK_IF;
+int TOK_ELSE;
+int TOK_WHILE;
+int TOK_BREAK;
+int TOK_RETURN;
+
 /* =============== end globals.c ========================================== */
 
