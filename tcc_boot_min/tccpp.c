@@ -83,11 +83,11 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len) {
 
     pts = add(hash_ident_, mul(h, 4));
     while(1) {
-        ts = *pts;
+        ts = ri32(pts);
         if (eq(ts, 0)) {
             break;
         }
-        if (and(eq(ts->len, len), eq(memcmp(ts->str, str, len),0))) {
+        if (and(eq(gtks_len(ts), len), eq(memcmp(gtks_str(ts), str, len),0))) {
             return ts;
         }
         pts = &(ts->hash_next);
