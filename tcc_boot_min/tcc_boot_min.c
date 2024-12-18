@@ -1897,9 +1897,9 @@ int tok_alloc(int str, int len) {
         h = TOK_HASH_FUNC(h, (ri8(add(str, i))));
         i = add(i, 1);
     }
-    h = and(h, sub(TOK_HASH_SIZE_, 1));
+    h = and(h, sub(aTOK_HASH_SIZE, 1));
 
-    pts = add(hash_ident_, mul(h, 4));
+    pts = add(ahash_ident, mul(h, 4));
     while(1) {
         ts = ri32(pts);
         if (eq(ts, 0)) {

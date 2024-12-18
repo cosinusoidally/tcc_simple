@@ -56,21 +56,21 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
-extern int TOK_HASH_SIZE_;
-extern int hash_ident_;
+/* addreses of these variables */
+extern int aTOK_HASH_SIZE;
+extern int ahash_ident;
 extern int acstr_buf;
 
 int init_tccpp_globals(){
-  TOK_HASH_SIZE_ = TOK_HASH_SIZE;
-  hash_ident_ = hash_ident;
+  aTOK_HASH_SIZE = TOK_HASH_SIZE;
+  ahash_ident = hash_ident;
   acstr_buf = &cstr_buf;
 }
 
 /* 12 */
 /* return the current character, handling end of block if necessary
    (but not stray) */
-ST_FUNC int handle_eob(void)
-{
+ST_FUNC int handle_eob(void) {
     BufferedFile *bf;
     int len;
 
