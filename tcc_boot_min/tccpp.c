@@ -76,31 +76,32 @@ static uint8_t *parse_pp_string(uint8_t *p,
                                 int sep, CString *str)
 {
     int c;
-    p++;
+    p = add(p, 1);
     while(1) {
-        c = *p;
-        if (c == sep) {
+        c = ri8(p);
+        if (eq(c, sep)) {
             break;
-        } else if (c == '\\') {
-            file->buf_ptr = p;
+        } else if (eq(c, mkc('\\'))) {
+            sbf_buf_ptr(file, p);
             c = handle_eob();
-            p = file->buf_ptr;
-            if (c == '\\') {
+            p = gbf_buf_ptr(file);
+            if (eq(c, mkc('\\'))) {
                 /* escape : just skip \[\r]\n */
                 PEEKC_EOB(&c, &p);
                 if (str) {
-                    cstr_ccat(str, '\\');
+                    cstr_ccat(str, mkc('\\'));
                     cstr_ccat(str, c);
                 }
-                p++;
+                p = add(p, 1);
             }
         } else {
-            if (str)
+            if (str) {
                 cstr_ccat(str, c);
-            p++;
+            }
+            p = add(p, 1);
         }
     }
-    p++;
+    p = add(p, 1);
     return p;
 }
 
