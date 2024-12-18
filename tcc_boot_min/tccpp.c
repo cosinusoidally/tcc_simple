@@ -67,7 +67,7 @@ ST_FUNC void skip(int c)
 
 /* 2 */
 /* CString handling */
-static void cstr_realloc(CString *cstr, int new_size) {
+void cstr_realloc(CString *cstr, int new_size) {
     int size;
 
     size = gcs_size_allocated(cstr);
@@ -83,19 +83,18 @@ static void cstr_realloc(CString *cstr, int new_size) {
 
 /* 3 */
 /* add a byte */
-ST_INLN void cstr_ccat(CString *cstr, int ch)
-{
+void cstr_ccat(CString *cstr, int ch) {
     int size;
-    size = add(cstr->size, 1);
-    if (gt(size, cstr->size_allocated)) {
+    size = add(gcs_size(cstr), 1);
+    if (gt(size, gcs_size_allocated(cstr))) {
         cstr_realloc(cstr, size);
     }
-    ((unsigned char *)cstr->data)[size - 1] = ch;
-    cstr->size = size;
+    ((unsigned char *)gcs_data(cstr))[size - 1] = ch;
+    scs_size(cstr, size);
 }
 
 /* 4 */
-ST_FUNC void cstr_cat(CString *cstr, const char *str, int len)
+void cstr_cat(CString *cstr, const char *str, int len)
 {
     int size;
     if (lte(len, 0)) {
