@@ -71,15 +71,15 @@ int init_tccpp_globals(){
 /* 13 */
 /* skip the stray and handle the \\n case. Output an error if
    incorrect char after the stray */
-static int handle_stray1(uint8_t *p)
-{
+static int handle_stray1(uint8_t *p) {
     int c;
 
-    file->buf_ptr = p;
-    if (p >= file->buf_end) {
+    sbf_buf_ptr(file, p);
+    if (gte(p, gbf_buf_end(file))) {
         c = handle_eob();
-        if (c != '\\')
+        if (neq(c, mkc('\\'))) {
             return c;
+        }
     }
 }
 
