@@ -1882,6 +1882,36 @@ int TOK_HASH_FUNC(int h, int c) {
   return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
 }
 
+/* 10 */
+/* find a token and add it if not found */
+int tok_alloc(int str, int len) {
+    int ts;
+    int pts;
+    int i;
+    int h;
+
+    h = 1; /* TOK_HASH_INIT */
+    i = 0;
+    while(lt(i, len)) {
+        h = TOK_HASH_FUNC(h, (ri8(add(str, i))));
+        i = add(i, 1);
+    }
+    h = and(h, sub(TOK_HASH_SIZE_, 1));
+
+    pts = add(hash_ident_, mul(h, 4));
+    while(1) {
+        ts = ri32(pts);
+        if (eq(ts, 0)) {
+            break;
+        }
+        if (and(eq(gtks_len(ts), len), eq(memcmp(gtks_str(ts), str, len),0))) {
+            return ts;
+        }
+        pts = atks_hash_next(ts);
+    }
+    return tok_alloc_new(pts, str, len);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
