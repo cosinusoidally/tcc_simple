@@ -1978,6 +1978,39 @@ int handle_stray1(int p) {
     }
 }
 
+/* 14 */
+/* handle just the EOB case, but not stray */
+int PEEKC_EOB(int c1, int p1) {
+    int c;
+    int p;
+
+    p = add(ri32(p1), 1);
+    c = ri8(p);
+    if (eq(c, mkc('\\'))) {
+        sbf_buf_ptr(file, p);
+        c = handle_eob();
+        p = gbf_buf_ptr(file);
+    }
+    wi8(c1,c);
+    wi32(p1,p);
+}
+
+/* 15 */
+/* handle the complicated stray case */
+int PEEKC(int c1, int p1) {
+    int c;
+    int p;
+
+    p = add(ri32(p1), 1);
+    c = ri8(p);
+    if (eq(c, mkc('\\'))) {
+        c = handle_stray1(p);
+        p = gbf_buf_ptr(file);
+    }
+    wi8(c1,c);
+    wi32(p1,p);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {

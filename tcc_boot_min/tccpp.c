@@ -68,39 +68,6 @@ int init_tccpp_globals(){
   CH_EOF_ = CH_EOF;
 }
 
-/* 14 */
-/* handle just the EOB case, but not stray */
-int PEEKC_EOB(int c1, int p1) {
-    int c;
-    int p;
-
-    p = add(ri32(p1), 1);
-    c = ri8(p);
-    if (eq(c, mkc('\\'))) {
-        file->buf_ptr = p;\
-        c = handle_eob();
-        p = file->buf_ptr;
-    }
-    wi8(c1,c);
-    wi32(p1,p);
-}
-
-/* 15 */
-/* handle the complicated stray case */
-int PEEKC(int c1, int p1) {
-    int c;
-    int p;
-
-    p = add(ri32(p1), 1);
-    c = ri8(p);
-    if (eq(c, mkc('\\'))) {
-        c = handle_stray1(p);
-        p = file->buf_ptr;
-    }
-    wi8(c1,c);
-    wi32(p1,p);
-}
-
 /* 16 */
 /* C comments */
 ST_FUNC uint8_t *parse_comment(uint8_t *p)
