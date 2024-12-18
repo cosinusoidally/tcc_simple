@@ -89,7 +89,7 @@ void cstr_ccat(CString *cstr, int ch) {
     if (gt(size, gcs_size_allocated(cstr))) {
         cstr_realloc(cstr, size);
     }
-    ((unsigned char *)gcs_data(cstr))[size - 1] = ch;
+    wi32(add(gcs_data(cstr), sub(size, 1)), ch);
     scs_size(cstr, size);
 }
 
