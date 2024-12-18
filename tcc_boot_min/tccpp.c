@@ -94,18 +94,17 @@ void cstr_ccat(CString *cstr, int ch) {
 }
 
 /* 4 */
-void cstr_cat(CString *cstr, const char *str, int len)
-{
+void cstr_cat(CString *cstr, const char *str, int len) {
     int size;
     if (lte(len, 0)) {
         len = add(add(strlen(str), 1), len);
     }
-    size = add(cstr->size, len);
-    if (gt(size, cstr->size_allocated)) {
+    size = add(gcs_size(cstr), len);
+    if (gt(size, gcs_size_allocated(cstr))) {
         cstr_realloc(cstr, size);
     }
     memmove(((unsigned char *)cstr->data) + cstr->size, str, len);
-    cstr->size = size;
+    scs_size(cstr, size);
 }
 
 /* 5 */
