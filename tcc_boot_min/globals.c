@@ -117,6 +117,13 @@ int CString_data_o;
 int CString_size_allocated_o;
 int sizeof_CString;
 
+int TokenSym_hash_next_o;
+int TokenSym_sym_identifier_o;
+int TokenSym_tok_o;
+int TokenSym_len_o;
+int TokenSym_str_o;
+int sizeof_TokenSym;
+
 int sizeof_void;
 
 int tcc_state;

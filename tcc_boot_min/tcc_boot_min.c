@@ -364,6 +364,13 @@ int init_runtime(){
   CString_size_allocated_o = 8;
   sizeof_CString = 12;
 
+  TokenSym_hash_next_o = 0;
+  TokenSym_sym_identifier_o = 4;
+  TokenSym_tok_o = 8;
+  TokenSym_len_o = 12;
+  TokenSym_str_o = 16;
+  sizeof_TokenSym = 20;
+
 
   sizeof_void = 4;
 
