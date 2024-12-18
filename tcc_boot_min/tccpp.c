@@ -70,50 +70,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 18 */
-/* parse a string without interpreting escapes */
-static uint8_t *parse_pp_string(uint8_t *p,
-                                int sep, CString *str) {
-    int c;
-    int tc;
-    int tp;
-
-    enter();
-    tc = v_alloca(4);
-    tp = v_alloca(4);
-
-    p = add(p, 1);
-    while(1) {
-        c = ri8(p);
-        if (eq(c, sep)) {
-            break;
-        } else if (eq(c, mkc('\\'))) {
-            sbf_buf_ptr(file, p);
-            c = handle_eob();
-            p = gbf_buf_ptr(file);
-            if (eq(c, mkc('\\'))) {
-                /* escape : just skip \[\r]\n */
-                /* LJW HACK r and w function to avoid moving c and p to stack */
-                wi8(tc, c); wi32(tp, p);
-                PEEKC_EOB(tc, tp);
-                c = ri32(tc); p = ri32(tp);
-                if (str) {
-                    cstr_ccat(str, mkc('\\'));
-                    cstr_ccat(str, c);
-                }
-                p = add(p, 1);
-            }
-        } else {
-            if (str) {
-                cstr_ccat(str, c);
-            }
-            p = add(p, 1);
-        }
-    }
-    p = add(p, 1);
-    return leave(p);
-}
-
 /* 19 */
 /* token string handling */
 ST_INLN void tok_str_new(TokenString *s)

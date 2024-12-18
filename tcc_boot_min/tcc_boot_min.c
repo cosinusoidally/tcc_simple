@@ -2070,6 +2070,49 @@ int set_idnum(int c, int val) {
     return prev;
 }
 
+/* 18 */
+/* parse a string without interpreting escapes */
+int parse_pp_string(int p, int sep, int str) {
+    int c;
+    int tc;
+    int tp;
+
+    enter();
+    tc = v_alloca(4);
+    tp = v_alloca(4);
+
+    p = add(p, 1);
+    while(1) {
+        c = ri8(p);
+        if (eq(c, sep)) {
+            break;
+        } else if (eq(c, mkc('\\'))) {
+            sbf_buf_ptr(file, p);
+            c = handle_eob();
+            p = gbf_buf_ptr(file);
+            if (eq(c, mkc('\\'))) {
+                /* escape : just skip \[\r]\n */
+                /* LJW HACK r and w function to avoid moving c and p to stack */
+                wi8(tc, c); wi32(tp, p);
+                PEEKC_EOB(tc, tp);
+                c = ri32(tc); p = ri32(tp);
+                if (str) {
+                    cstr_ccat(str, mkc('\\'));
+                    cstr_ccat(str, c);
+                }
+                p = add(p, 1);
+            }
+        } else {
+            if (str) {
+                cstr_ccat(str, c);
+            }
+            p = add(p, 1);
+        }
+    }
+    p = add(p, 1);
+    return leave(p);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
