@@ -83,7 +83,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p) {
             }
             p = add(p, 1);
             c = ri8(p);
-            if (c == '\n' || c == '*' || c == '\\') {
+            if (or(or(eq(c, mkc('\n')), eq(c, mkc('*'))), eq(c, mkc('\\')))) {
                 break;
             }
             p = add(p, 1);
