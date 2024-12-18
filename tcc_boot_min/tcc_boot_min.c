@@ -1846,6 +1846,33 @@ int cstr_reset(int cstr) {
     scs_size(cstr, 0);
 }
 
+/* 8 */
+/* allocate a new token */
+int tok_alloc_new(int pts, int str, int len) {
+    int ts;
+    int ptable;
+    int i;
+
+    /* expand token table if needed */
+    i = sub(tok_ident, TOK_IDENT);
+    if (eq((mod(i, TOK_ALLOC_INCR)), 0)) {
+        ptable = tcc_realloc(table_ident, mul(add(i, TOK_ALLOC_INCR), 4));
+        table_ident = ptable;
+    }
+
+    ts = tcc_realloc(0, add(sizeof_TokenSym, len));
+    wi32(add(table_ident, mul(i, 4)), ts);
+    stks_tok(ts, tok_ident);
+    tok_ident = add(tok_ident, 1);
+    stks_sym_identifier(ts, 0);
+    stks_len(ts, len);
+    stks_hash_next(ts, 0);
+    memcpy(gtks_str(ts), str, len);
+    wi8(add(gtks_str(ts), len), 0);
+    wi32(pts, ts);
+    return ts;
+}
+
 /* ------------------------------------------------------------------------- */
 
 /* end of tccpp.c */
