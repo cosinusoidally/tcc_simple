@@ -58,9 +58,11 @@ static TokenString *macro_stack;
 static void next_nomacro_spc(void);
 
 extern int TOK_HASH_SIZE_;
+extern int hash_ident_;
 
 int init_tccpp_globals(){
   TOK_HASH_SIZE_ = TOK_HASH_SIZE;
+  hash_ident_ = hash_ident;
 }
 
 /* 10 */
@@ -79,7 +81,7 @@ ST_FUNC TokenSym *tok_alloc(const char *str, int len) {
     }
     h = and(h, sub(TOK_HASH_SIZE_, 1));
 
-    pts = &hash_ident[h];
+    pts = add(hash_ident_, mul(h, 4));
     while(1) {
         ts = *pts;
         if (eq(ts, 0)) {
