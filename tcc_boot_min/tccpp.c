@@ -67,13 +67,13 @@ int init_tccpp_globals(){
 }
 
 /* 11 */
-ST_FUNC const char *get_tok_str(int v, CValue *cv)
-{
+ST_FUNC const char *get_tok_str(int v, CValue *cv) {
     char *p;
-    int i, len;
+    int i;
+    int len;
 
-    cstr_reset(&cstr_buf);
-    p = cstr_buf.data;
+    cstr_reset(acstr_buf);
+    p = gcs_data(acstr_buf);
 
     if (lt(v, tok_ident)) {
         return table_ident[sub(v, TOK_IDENT)]->str;
@@ -81,7 +81,7 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv)
         /* special name for anonymous symbol */
         sprintf(p, "L.%u", sub(v, SYM_FIRST_ANOM));
     }
-    return cstr_buf.data;
+    return gcs_data(acstr_buf);
 }
 
 /* 12 */
