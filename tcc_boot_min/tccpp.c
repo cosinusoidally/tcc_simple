@@ -57,42 +57,6 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
-/* 1 */
-ST_FUNC void skip(int c)
-{
-    next();
-}
-
-/* ------------------------------------------------------------------------- */
-
-/* 2 */
-/* CString handling */
-void cstr_realloc(CString *cstr, int new_size) {
-    int size;
-
-    size = gcs_size_allocated(cstr);
-    if (lt(size, 8)) {
-        size = 8; /* no need to allocate a too small first string */
-    }
-    while (lt(size, new_size)) {
-        size = mul(size, 2);
-    }
-    scs_data(cstr, tcc_realloc(gcs_data(cstr), size));
-    scs_size_allocated(cstr, size);
-}
-
-/* 3 */
-/* add a byte */
-void cstr_ccat(CString *cstr, int ch) {
-    int size;
-    size = add(gcs_size(cstr), 1);
-    if (gt(size, gcs_size_allocated(cstr))) {
-        cstr_realloc(cstr, size);
-    }
-    wi32(add(gcs_data(cstr), sub(size, 1)), ch);
-    scs_size(cstr, size);
-}
-
 /* 4 */
 void cstr_cat(CString *cstr, const char *str, int len) {
     int size;

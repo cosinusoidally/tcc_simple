@@ -1750,6 +1750,41 @@ int tcc_output_file(int s, int filename) {
 
 /* start of tccpp.c */
 
+/* 1 */
+int skip(int c) {
+    next();
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* 2 */
+/* CString handling */
+int cstr_realloc(int cstr, int new_size) {
+    int size;
+
+    size = gcs_size_allocated(cstr);
+    if (lt(size, 8)) {
+        size = 8; /* no need to allocate a too small first string */
+    }
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
+    scs_data(cstr, tcc_realloc(gcs_data(cstr), size));
+    scs_size_allocated(cstr, size);
+}
+
+/* 3 */
+/* add a byte */
+int cstr_ccat(int cstr, int ch) {
+    int size;
+    size = add(gcs_size(cstr), 1);
+    if (gt(size, gcs_size_allocated(cstr))) {
+        cstr_realloc(cstr, size);
+    }
+    wi32(add(gcs_data(cstr), sub(size, 1)), ch);
+    scs_size(cstr, size);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
