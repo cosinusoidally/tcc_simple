@@ -74,11 +74,11 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 
     ts = tcc_realloc(0, add(sizeof_TokenSym, len));
     table_ident[i] = ts;
-    ts->tok = tok_ident;
+    stks_tok(ts, tok_ident);
     tok_ident = add(tok_ident, 1);
-    ts->sym_identifier = NULL;
+    stks_sym_identifier(ts, 0);
     ts->len = len;
-    ts->hash_next = NULL;
+    ts->hash_next = 0;
     memcpy(ts->str, str, len);
     ts->str[len] = 0;
     *pts = ts;
