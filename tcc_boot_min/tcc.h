@@ -630,6 +630,7 @@ extern int sizeof_Elf32_Phdr;
 extern int sizeof_Elf32_Rel;
 extern int sizeof_Elf32_Shdr;
 extern int sizeof_Elf32_Sym;
+extern int sizeof_TokenSym;
 
 
 extern int aglobal_stack;

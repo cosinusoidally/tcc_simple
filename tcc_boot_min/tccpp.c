@@ -61,17 +61,18 @@ static void next_nomacro_spc(void);
 /* allocate a new token */
 static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
 {
-    TokenSym *ts, **ptable;
+    TokenSym *ts;
+    TokenSym **ptable;
     int i;
 
     /* expand token table if needed */
     i = sub(tok_ident, TOK_IDENT);
     if (eq((mod(i, TOK_ALLOC_INCR)), 0)) {
-        ptable = tcc_realloc(table_ident, mul(add(i, TOK_ALLOC_INCR), sizeof(TokenSym *)));
+        ptable = tcc_realloc(table_ident, mul(add(i, TOK_ALLOC_INCR), 4));
         table_ident = ptable;
     }
 
-    ts = tcc_realloc(0, sizeof(TokenSym) + len);
+    ts = tcc_realloc(0, add(sizeof_TokenSym, len));
     table_ident[i] = ts;
     ts->tok = tok_ident;
     tok_ident = add(tok_ident, 1);
