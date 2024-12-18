@@ -445,6 +445,8 @@ int init_runtime(){
   /* all identifiers and strings have token above that */
   TOK_IDENT = 256;
 
+  TOK_ALLOC_INCR = 512;  /* must be a power of two */
+
   REL_SECTION_FMT = mks(".rel%s");
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */

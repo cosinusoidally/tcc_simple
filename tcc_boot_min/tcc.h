@@ -100,7 +100,7 @@ extern int REL_SECTION_FMT; /* ".rel%s" */
 #define TOKSTR_MAX_SIZE     256
 
 #define TOK_HASH_SIZE       16384 /* must be a power of two */
-#define TOK_ALLOC_INCR      512  /* must be a power of two */
+extern int TOK_ALLOC_INCR;  /*  512  must be a power of two */
 #define TOK_MAX_SIZE        4 /* token max size in int unit when stored in string */
 
 /* token symbol management */

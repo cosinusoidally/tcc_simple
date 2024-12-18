@@ -227,8 +227,11 @@ int TOK_WHILE;
 int TOK_BREAK;
 int TOK_RETURN;
 
+/* end of keywords */
+
 int TOK_IDENT;
 
+int TOK_ALLOC_INCR;
 
 /* =============== end globals.c ========================================== */
 
