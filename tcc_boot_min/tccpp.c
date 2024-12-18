@@ -469,7 +469,6 @@ static inline void next_nomacro1(void)
 static void next_nomacro_spc(void)
 {
     if (macro_ptr) {
-    redo:
         tok = *macro_ptr;
         if (tok) {
             TOK_GET(&tok, &macro_ptr, &tokc);
