@@ -214,6 +214,10 @@ int symtab_section;
 
 int REL_SECTION_FMT;
 
+int table_ident;
+
+int tok_ident;
+
 /* keywords */
 
 int TOK_INT;

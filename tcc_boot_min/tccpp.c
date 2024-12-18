@@ -32,8 +32,8 @@ ST_DATA CString tokcstr; /* current parsed string, if any */
 /* display benchmark infos */
 ST_DATA int total_lines;
 ST_DATA int total_bytes;
-ST_DATA int tok_ident;
-ST_DATA TokenSym **table_ident;
+extern int tok_ident;
+extern TokenSym **table_ident;
 
 /* ------------------------------------------------------------------------- */
 
