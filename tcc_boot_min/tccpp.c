@@ -89,16 +89,16 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p) {
             p = add(p, 1);
         }
         /* now we can handle all the cases */
-        if (c == '\n') {
+        if (eq(c, mkc('\n'))) {
             file->line_num++;
             p = add(p, 1);
-        } else if (c == '*') {
+        } else if (eq(c, mkc('*'))) {
             p = add(p, 1);
             while(1) {
                 c = ri8(p);
-                if (c == '*') {
+                if (eq(c, mkc('*'))) {
                     p = add(p, 1);
-                } else if (c == '/') {
+                } else if (eq(c, mkc('/'))) {
                     p = add(p, 1);
                     return p;
                 } else {
@@ -110,7 +110,7 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p) {
             file->buf_ptr = p;
             c = handle_eob();
             p = file->buf_ptr;
-            if (c == '\\') {
+            if (eq(c, mkc('\\'))) {
                 p = add(p, 1);
             }
         }
