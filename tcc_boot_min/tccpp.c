@@ -66,24 +66,6 @@ int init_tccpp_globals(){
   acstr_buf = &cstr_buf;
 }
 
-/* 11 */
-ST_FUNC const char *get_tok_str(int v, CValue *cv) {
-    char *p;
-    int i;
-    int len;
-
-    cstr_reset(acstr_buf);
-    p = gcs_data(acstr_buf);
-
-    if (lt(v, tok_ident)) {
-        return gtks_str(ri32(add(table_ident, mul(sub(v, TOK_IDENT), 4))));
-    } else if (gte(v, SYM_FIRST_ANOM)) {
-        /* special name for anonymous symbol */
-        sprintf(p, "L.%u", sub(v, SYM_FIRST_ANOM));
-    }
-    return gcs_data(acstr_buf);
-}
-
 /* 12 */
 /* return the current character, handling end of block if necessary
    (but not stray) */
