@@ -77,7 +77,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     stks_tok(ts, tok_ident);
     tok_ident = add(tok_ident, 1);
     stks_sym_identifier(ts, 0);
-    ts->len = len;
+    stks_len(ts, len);
     ts->hash_next = 0;
     memcpy(ts->str, str, len);
     ts->str[len] = 0;
