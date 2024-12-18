@@ -57,40 +57,6 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
-/* 4 */
-void cstr_cat(CString *cstr, const char *str, int len) {
-    int size;
-    if (lte(len, 0)) {
-        len = add(add(strlen(str), 1), len);
-    }
-    size = add(gcs_size(cstr), len);
-    if (gt(size, gcs_size_allocated(cstr))) {
-        cstr_realloc(cstr, size);
-    }
-    memmove(add(gcs_data(cstr), gcs_size(cstr)), str, len);
-    scs_size(cstr, size);
-}
-
-/* 5 */
-ST_FUNC void cstr_new(CString *cstr) {
-    memset(cstr, 0, sizeof(CString));
-}
-
-/* 6 */
-/* free string and reset it to NULL */
-ST_FUNC void cstr_free(CString *cstr) {
-    tcc_free(gcs_data(cstr));
-    cstr_new(cstr);
-}
-
-/* 7 */
-/* reset string to empty */
-ST_FUNC void cstr_reset(CString *cstr) {
-    scs_size(cstr, 0);
-}
-
-/* ------------------------------------------------------------------------- */
-
 /* 8 */
 /* allocate a new token */
 static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)

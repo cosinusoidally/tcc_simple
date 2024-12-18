@@ -1785,6 +1785,40 @@ int cstr_ccat(int cstr, int ch) {
     scs_size(cstr, size);
 }
 
+/* 4 */
+int cstr_cat(int cstr, int str, int len) {
+    int size;
+    if (lte(len, 0)) {
+        len = add(add(strlen(str), 1), len);
+    }
+    size = add(gcs_size(cstr), len);
+    if (gt(size, gcs_size_allocated(cstr))) {
+        cstr_realloc(cstr, size);
+    }
+    memmove(add(gcs_data(cstr), gcs_size(cstr)), str, len);
+    scs_size(cstr, size);
+}
+
+/* 5 */
+int cstr_new(int cstr) {
+    memset(cstr, 0, sizeof_CString);
+}
+
+/* 6 */
+/* free string and reset it to NULL */
+int cstr_free(int cstr) {
+    tcc_free(gcs_data(cstr));
+    cstr_new(cstr);
+}
+
+/* 7 */
+/* reset string to empty */
+int cstr_reset(int cstr) {
+    scs_size(cstr, 0);
+}
+
+/* ------------------------------------------------------------------------- */
+
 /* end of tccpp.c */
 
 int tcc_new() {
