@@ -76,7 +76,7 @@ ST_FUNC const char *get_tok_str(int v, CValue *cv) {
     p = gcs_data(acstr_buf);
 
     if (lt(v, tok_ident)) {
-        return table_ident[sub(v, TOK_IDENT)]->str;
+        return gtks_str(table_ident[sub(v, TOK_IDENT)]);
     } else if (gte(v, SYM_FIRST_ANOM)) {
         /* special name for anonymous symbol */
         sprintf(p, "L.%u", sub(v, SYM_FIRST_ANOM));
