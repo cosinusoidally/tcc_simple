@@ -70,35 +70,36 @@ int init_tccpp_globals(){
 
 /* 16 */
 /* C comments */
-ST_FUNC uint8_t *parse_comment(uint8_t *p)
-{
+ST_FUNC uint8_t *parse_comment(uint8_t *p) {
     int c;
 
-    p++;
+    p = add(p, 1);
     while(1) {
         /* fast skip loop */
         while(1) {
-            c = *p;
-            if (c == '\n' || c == '*' || c == '\\')
+            c = ri8(p);
+            if (c == '\n' || c == '*' || c == '\\') {
                 break;
-            p++;
+            }
+            p = add(p, 1);
             c = *p;
-            if (c == '\n' || c == '*' || c == '\\')
+            if (c == '\n' || c == '*' || c == '\\') {
                 break;
-            p++;
+            }
+            p = add(p, 1);
         }
         /* now we can handle all the cases */
         if (c == '\n') {
             file->line_num++;
-            p++;
+            p = add(p, 1);
         } else if (c == '*') {
-            p++;
+            p = add(p, 1);
             while(1) {
-                c = *p;
+                c = ri8(p);
                 if (c == '*') {
-                    p++;
+                    p = add(p, 1);
                 } else if (c == '/') {
-                    p++;
+                    p = add(p, 1);
                     return p;
                 } else {
                     break;
@@ -110,11 +111,11 @@ ST_FUNC uint8_t *parse_comment(uint8_t *p)
             c = handle_eob();
             p = file->buf_ptr;
             if (c == '\\') {
-                p++;
+                p = add(p, 1);
             }
         }
     }
-    p++;
+    p = add(p, 1);
     return p;
 }
 
