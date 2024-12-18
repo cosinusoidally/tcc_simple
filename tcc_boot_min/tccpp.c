@@ -88,11 +88,11 @@ ST_FUNC int handle_eob(void) {
             len = 0;
         }
         total_bytes = add(total_bytes, len);
-        bf->buf_ptr = gbf_buffer(bf);
-        bf->buf_end = add(bf->buffer, len);
+        sbf_buf_ptr(bf, gbf_buffer(bf));
+        sbf_buf_end(bf, add(bf->buffer, len));
         wi8(bf->buf_end, CH_EOB);
     }
-    if (lt(bf->buf_ptr, bf->buf_end)) {
+    if (lt(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
         return bf->buf_ptr[0];
     } else {
         bf->buf_ptr = bf->buf_end;
