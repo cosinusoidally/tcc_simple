@@ -73,7 +73,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     }
 
     ts = tcc_realloc(0, add(sizeof_TokenSym, len));
-    table_ident[i] = ts;
+    wi32(add(table_ident, mul(i, 4)), ts);
     stks_tok(ts, tok_ident);
     tok_ident = add(tok_ident, 1);
     stks_sym_identifier(ts, 0);
@@ -81,7 +81,7 @@ static TokenSym *tok_alloc_new(TokenSym **pts, const char *str, int len)
     stks_hash_next(ts, 0);
     memcpy(gtks_str(ts), str, len);
     ts->str[len] = 0;
-    *pts = ts;
+    wi32(pts, ts);
     return ts;
 }
 
