@@ -1875,6 +1875,11 @@ int tok_alloc_new(int pts, int str, int len) {
 
 /* ------------------------------------------------------------------------- */
 
+/* 9 */
+int TOK_HASH_FUNC(int h, int c) {
+  return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {

@@ -57,11 +57,6 @@ static TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
-/* 9 */
-int TOK_HASH_FUNC(int h, int c) {
-  return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
-}
-
 /* 10 */
 /* find a token and add it if not found */
 ST_FUNC TokenSym *tok_alloc(const char *str, int len)
