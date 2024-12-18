@@ -241,5 +241,7 @@ int acstr_buf;
 
 int CH_EOF_;
 
+int aisidnum_table;
+
 /* =============== end globals.c ========================================== */
 

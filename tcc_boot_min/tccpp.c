@@ -60,18 +60,21 @@ extern int aTOK_HASH_SIZE;
 extern int ahash_ident;
 extern int acstr_buf;
 extern int CH_EOF_;
+extern int aisidnum_table;
 
 int init_tccpp_globals(){
   aTOK_HASH_SIZE = TOK_HASH_SIZE;
   ahash_ident = hash_ident;
   acstr_buf = &cstr_buf;
   CH_EOF_ = CH_EOF;
+  aisidnum_table = isidnum_table;
 }
 
 /* 17 */
 ST_FUNC int set_idnum(int c, int val) {
-    int prev = isidnum_table[c - CH_EOF];
-    isidnum_table[c - CH_EOF] = val;
+    int prev;
+    prev = ri8(add(aisidnum_table, sub(c, CH_EOF_)));
+    isidnum_table[c - CH_EOF_] = val;
     return prev;
 }
 
