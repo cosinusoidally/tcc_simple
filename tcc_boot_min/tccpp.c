@@ -92,10 +92,10 @@ ST_FUNC int handle_eob() {
         total_bytes = add(total_bytes, len);
         sbf_buf_ptr(bf, gbf_buffer(bf));
         sbf_buf_end(bf, add(gbf_buffer(bf), len));
-        wi8(bf->buf_end, CH_EOB);
+        wi8(gbf_buf_end(bf), CH_EOB);
     }
     if (lt(gbf_buf_ptr(bf), gbf_buf_end(bf))) {
-        return bf->buf_ptr[0];
+        return ri8(gbf_buf_ptr(bf));
     } else {
         sbf_buf_ptr(bf, gbf_buf_end(bf));
         return CH_EOF_;
