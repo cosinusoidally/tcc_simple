@@ -242,6 +242,23 @@ int scs_data(int o, int v) {wi32(add(o, CString_data_o), v);}
 int gcs_size_allocated(int o) {return ri32(add(o, CString_size_allocated_o));}
 int scs_size_allocated(int o, int v) {wi32(add(o, CString_size_allocated_o), v);}
 
+/* TokenSym accessors */
+
+int gtks_hash_next(int o) {return ri32(add(o, TokenSym_hash_next_o));}
+int stks_hash_next(int o, int v) {wi32(add(o, TokenSym_hash_next_o), v);}
+
+int gtks_sym_identifier(int o) {return ri32(add(o, TokenSym_sym_identifier_o));}
+int stks_sym_identifier(int o, int v) {wi32(add(o, TokenSym_sym_identifier_o), v);}
+
+int gtks_tok(int o) {return ri32(add(o, TokenSym_tok_o));}
+int stks_tok(int o, int v) {wi32(add(o, TokenSym_tok_o), v);}
+
+int gtks_len(int o) {return ri32(add(o, TokenSym_len_o));}
+int stks_len(int o, int v) {wi32(add(o, TokenSym_len_o), v);}
+
+/* char str[1] */
+int gtks_str(int o) {return add(o, TokenSym_len_o);}
+
 /* stuff */
 
 int init_runtime(){
