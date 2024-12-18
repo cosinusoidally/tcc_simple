@@ -410,7 +410,8 @@ int init_runtime(){
   RC_ECX = 16;
   RC_IRET = RC_EAX;
 
-  SYM_FIELD = 536870912; /* 0x20000000 */
+  SYM_FIELD = 536870912; /*  0x20000000 struct/union field symbol space */
+  SYM_FIRST_ANOM = 268435456; /* 0x10000000 first anonymous sym */
 
   SHF_WRITE = shl(1, 0); /* Writable */
   SHF_ALLOC = shl(1, 1);  /* Occupies memory during execution */

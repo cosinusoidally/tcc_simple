@@ -156,6 +156,7 @@ int RC_ECX;
 int RC_IRET;
 
 int SYM_FIELD;
+int SYM_FIRST_ANOM;
 
 int SHF_ALLOC;
 int SHF_EXECINSTR;
