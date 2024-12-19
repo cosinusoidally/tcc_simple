@@ -368,7 +368,7 @@ ST_DATA int ch;
 extern int tok;
 ST_DATA CValue tokc;
 extern int *macro_ptr;
-ST_DATA int parse_flags;
+extern int parse_flags;
 extern int tok_flags;
 ST_DATA CString tokcstr; /* current parsed string, if any */
 

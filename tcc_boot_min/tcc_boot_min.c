@@ -2475,6 +2475,41 @@ int next_nomacro() {
      }
 }
 
+/* 36 */
+/* return next token with macro substitution */
+int next() {
+    int redo;
+    while(1) {
+        redo = 0;
+        if (and(parse_flags, PARSE_FLAG_SPACES)) {
+            next_nomacro_spc();
+        } else {
+            next_nomacro();
+        }
+
+        if (macro_ptr) {
+            if (eq(tok, 0)) {
+                /* end of macro or unget token string */
+                end_macro();
+                redo = 1;
+            }
+        }
+        if(eq(redo, 0)) {
+            break;
+        }
+    }
+    /* convert preprocessor tokens into C tokens */
+    if (eq(tok, TOK_PPNUM)) {
+        if(and(parse_flags, PARSE_FLAG_TOK_NUM)) {
+            parse_number(gcv_str_data(atokc));
+        }
+    } else if(eq(tok, TOK_PPSTR)) {
+        if (and(parse_flags, PARSE_FLAG_TOK_STR)) {
+            parse_string(gcv_str_data(atokc), sub(gcv_str_size(atokc), 1));
+        }
+    }
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
