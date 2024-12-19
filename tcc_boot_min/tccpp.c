@@ -75,12 +75,12 @@ int init_tccpp_globals(){
    accordingly. we code it as a macro to avoid pointer aliasing. */
 static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
     int n;
-    const int *p;
-    p = *pp;
+    int p;
+    p = ri32(pp);
 
-    *t = *p;
+    wi32(t, ri32(p));
     p = add(p, 4);
-    if((t == TOK_STR) || (t == TOK_PPNUM) || (t == TOK_PPSTR)) {
+    if(or(or(eq(t, TOK_STR), eq(t, TOK_PPNUM))), eq(t, TOK_PPSTR)) {
         scv_str_size(cv, wi32(p));
         p = add(p, 4);
         wi32(gcv_str_data(cv), p);
