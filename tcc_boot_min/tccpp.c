@@ -80,11 +80,11 @@ ST_FUNC void begin_macro(TokenString *str, int alloc) {
 }
 
 /* 26 */
-ST_FUNC void end_macro(void)
-{
-    TokenString *str = macro_stack;
-    macro_stack = str->prev;
-    macro_ptr = str->prev_ptr;
+ST_FUNC void end_macro() {
+    int str;
+    str = macro_stack;
+    macro_stack = gtkst_prev(str);
+    macro_ptr = gtkst_prev_ptr(str);
     tok_str_free(str);
 }
 
