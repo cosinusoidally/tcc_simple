@@ -242,33 +242,6 @@ ST_INLN void unget_tok(int last_tok)
     tok = last_tok;
 }
 
-/* 38 */
-ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
-    int acstr;
-    int i;
-
-    enter();
-    acstr = v_alloca(sizeof_CString);
-
-    vtop = sub(avstack, sizeof_SValue);
-
-    set_idnum(mkc('$'), 0);
-    set_idnum(mkc('.'), 0);
-
-    cstr_new(acstr);
-    cstr_cat(acstr, mks("\""), sub(0,1));
-    cstr_cat(acstr, gbf_filename(file), sub(0,1));
-    cstr_cat(acstr, mks("\""), 0);
-
-    cstr_reset(acstr);
-    cstr_free(acstr);
-
-    parse_flags = 0;
-    tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
-
-    leave(0);
-}
-
 /* 39 */
 void tccpp_new(TCCState *s)
 {
