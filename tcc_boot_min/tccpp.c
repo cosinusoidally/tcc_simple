@@ -74,7 +74,8 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     int len;
     int *str;
 
-    len = s->lastlen = s->len;
+    s->lastlen = s->len;
+    len = s->len;
     str = s->str;
 
     /* allocate space for worst case */
