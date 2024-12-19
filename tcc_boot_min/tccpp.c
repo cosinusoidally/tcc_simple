@@ -97,6 +97,7 @@ static void parse_string(const char *s, int len) {
     uint8_t *p;
     int is_long;
     int sep;
+    int c;
 
     is_long=0;
     sep = *s;
@@ -106,15 +107,14 @@ static void parse_string(const char *s, int len) {
     memcpy(p, s, len);
     wi8(add(p, len), 0);
 
-    cstr_reset(&tokcstr);
-    parse_escape_string(&tokcstr, p, is_long);
+    cstr_reset(atokcstr);
+    parse_escape_string(atokcstr, p, is_long);
     tcc_free(p);
 
     if (sep == '\'') {
-        int c;
         tok = TOK_CCHAR;
-        c = ((char *)tokcstr.data)[0];
-        tokc.i = c;
+        c = ri8((tokcstr.data));
+        scv_i(atokc, c);
     } else {
         tokc.str.size = tokcstr.size;
         tokc.str.data = tokcstr.data;
