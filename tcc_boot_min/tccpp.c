@@ -71,15 +71,17 @@ int init_tccpp_globals(){
 }
 
 /* 24 */
-ST_FUNC void tok_str_add(TokenString *s, int t)
-{
-    int len, *str;
+ST_FUNC void tok_str_add(TokenString *s, int t) {
+    int len;
+    int *str;
 
-    len = s->len;
-    str = s->str;
-    if (len >= s->allocated_len)
-        str = tok_str_realloc(s, len + 1);
-    str[len++] = t;
+    len = gtkst_len(s);
+    str = gtkst_str(s);
+    if (gte(len, gtkst_allocated_len(s))) {
+        str = tok_str_realloc(s, add(len, 1));
+    }
+    wi32(add(str, mul(len, 4)),t);
+    len = add(len, 1);
     s->len = len;
 }
 
