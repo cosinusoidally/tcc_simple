@@ -233,8 +233,6 @@ void next_nomacro1(void)
 void tccpp_new(TCCState *s) {
     int i;
     int c;
-    const char *p;
-    const char *r;
     int tmp;
 
     /* might be used in error() before preprocess_start() */
@@ -267,12 +265,12 @@ void tccpp_new(TCCState *s) {
 
     /* define keywords, FIXME improve this */
     tok_ident = TOK_IDENT;
-    TOK_INT    = tok_ident; tmp="int";    tok_alloc(tmp, strlen(tmp));
-    TOK_IF     = tok_ident; tmp="if";     tok_alloc(tmp, strlen(tmp));
-    TOK_ELSE   = tok_ident; tmp="else";   tok_alloc(tmp, strlen(tmp));
-    TOK_WHILE  = tok_ident; tmp="while";  tok_alloc(tmp, strlen(tmp));
-    TOK_BREAK  = tok_ident; tmp="break";  tok_alloc(tmp, strlen(tmp));
-    TOK_RETURN = tok_ident; tmp="return"; tok_alloc(tmp, strlen(tmp));
+    TOK_INT    = tok_ident; tmp=mks("int");    tok_alloc(tmp, strlen(tmp));
+    TOK_IF     = tok_ident; tmp=mks("if");     tok_alloc(tmp, strlen(tmp));
+    TOK_ELSE   = tok_ident; tmp=mks("else");   tok_alloc(tmp, strlen(tmp));
+    TOK_WHILE  = tok_ident; tmp=mks("while");  tok_alloc(tmp, strlen(tmp));
+    TOK_BREAK  = tok_ident; tmp=mks("break");  tok_alloc(tmp, strlen(tmp));
+    TOK_RETURN = tok_ident; tmp=mks("return"); tok_alloc(tmp, strlen(tmp));
 }
 
 /* 40 */
