@@ -246,6 +246,7 @@ int TOK_RETURN;
 int TOK_IDENT;
 
 int TOK_ALLOC_INCR;
+int TOK_MAX_SIZE;
 
 int aTOK_HASH_SIZE;
 int ahash_ident;

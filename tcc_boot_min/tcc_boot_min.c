@@ -488,6 +488,7 @@ int init_runtime(){
   TOK_IDENT = 256;
 
   TOK_ALLOC_INCR = 512;  /* must be a power of two */
+  TOK_MAX_SIZE = 4;  /* token max size in int unit when stored in string */
 
   TOK_STR = 185; /* 0xb9 pointer to string in tokc */
 
