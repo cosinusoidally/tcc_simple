@@ -111,11 +111,12 @@ static void parse_number(const char *p) {
     t = ch;
     ch = ri8(p);
     p = add(p, 1);
-    *q++ = t;
+    wi8(q, t);
+    q = add(q, 1);
     b = 10;
-    if (t == '0') {
+    if (eq(t, mkc('0'))) {
         if (ch == 'x' || ch == 'X') {
-            q--;
+            q = sub(q, 1);
             ch = *p++;
             b = 16;
         }
