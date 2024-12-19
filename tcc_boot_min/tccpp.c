@@ -259,11 +259,11 @@ ST_FUNC void next() {
     /* convert preprocessor tokens into C tokens */
     if (eq(tok, TOK_PPNUM)) {
         if(and(parse_flags, PARSE_FLAG_TOK_NUM)) {
-            parse_number(tokc.str.data);
+            parse_number(gcv_str_data(atokc));
         }
     } else if(eq(tok, TOK_PPSTR)) {
         if (and(parse_flags, PARSE_FLAG_TOK_STR)) {
-            parse_string(tokc.str.data, sub(tokc.str.size, 1));
+            parse_string(gcv_str_data(atokc), sub(gcv_str_size(atokc), 1));
         }
     }
 }
