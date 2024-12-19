@@ -273,5 +273,7 @@ int atoken_buf;
 
 int tok;
 
+int IS_SPC;
+
 /* =============== end globals.c ========================================== */
 

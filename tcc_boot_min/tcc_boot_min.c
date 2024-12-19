@@ -508,6 +508,9 @@ int init_runtime(){
 
   tok = 0;
 
+  /* isidnum_table flags: */
+  IS_SPC = 1;
+
   init_c();
   init_reg_classes();
   init_globals();
@@ -2445,6 +2448,25 @@ int next_nomacro_spc() {
     }
 
     leave(0);
+}
+
+/* 35 */
+/* LJW FIXME why was the re-write so complex */
+int next_nomacro() {
+    int t;
+    int t2;
+     while(1) {
+         next_nomacro_spc();
+        t = neq(0, lt(tok, 256));
+        if(t) {
+            t2 = neq(0, and(ri8(add(aisidnum_table, sub(tok, CH_EOF_))), IS_SPC));
+        } else {
+            t2 = 0;
+        }
+        if(eq(0, and(t, t2))) {
+             break;
+         }
+     }
 }
 
 /* end of tccpp.c */

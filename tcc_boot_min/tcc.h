@@ -389,7 +389,7 @@ extern int TOK_FLAG_BOF; /*  0x0002 beginning of file before */
 #define PARSE_FLAG_TOK_STR    0x0040 /* return parsed strings instead of TOK_PPSTR */
 
 /* isidnum_table flags: */
-#define IS_SPC 1
+extern int IS_SPC; /* 1 */
 #define IS_ID  2
 #define IS_NUM 4
 
