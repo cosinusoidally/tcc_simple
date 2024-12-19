@@ -242,7 +242,7 @@ void next_nomacro1(void)
          next_nomacro_spc();
         t = neq(0, lt(tok, 256));
         if(t) {
-            t2 = neq(0, and(isidnum_table[tok - CH_EOF], IS_SPC));
+            t2 = neq(0, and(ri8(add(aisidnum_table, sub(tok, CH_EOF_))), IS_SPC));
         } else {
             t2 = 0;
         }
