@@ -236,16 +236,28 @@ static inline void next_nomacro1(void)
 /* 34 */
 /* return next token without macro substitution. Can read input from
    macro_ptr buffer */
-static void next_nomacro_spc(void)
-{
+static void next_nomacro_spc(void) {
+    int ttok;
+    int tmacro_ptr;
+    enter();
+
+    ttok = v_alloca(4);
+    tmacro_ptr = v_alloca(4);
+
     if (macro_ptr) {
         tok = *macro_ptr;
         if (tok) {
-            TOK_GET(&tok, &macro_ptr, &tokc);
+            wi32(ttok, tok);
+            wi32(tmacro_ptr, macro_ptr);
+            TOK_GET(ttok, tmacro_ptr, atokc);
+            tok = ri32(ttok);
+            macro_ptr = ri32(tmacro_ptr);
         }
     } else {
         next_nomacro1();
     }
+
+    leave(0);
 }
 
 /* 35 */
