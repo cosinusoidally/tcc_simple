@@ -424,16 +424,16 @@ ST_FUNC int tcc_preprocess(TCCState *s1);
 ST_FUNC void skip(int c);
 
 /* space excluding newline */
-static inline int is_space(int ch) {
+int is_space(int ch) {
     return ch == ' ' || ch == '\t' || ch == '\v' || ch == '\f' || ch == '\r';
 }
-static inline int isid(int c) {
+int isid(int c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 }
 int isnum(int c) {
     return c >= '0' && c <= '9';
 }
-static inline int toup(int c) {
+int toup(int c) {
     return (c >= 'a' && c <= 'z') ? c - 'a' + 'A' : c;
 }
 
@@ -634,6 +634,7 @@ extern int sizeof_CString;
 
 extern int aglobal_stack;
 extern int alocal_stack;
+extern int aSTRING_MAX_SIZE;
 
 extern int SHN_UNDEF;	/* 0		Undefined section */
 extern int SHN_COMMON;	/* 0xfff2	 Associated symbol is common */

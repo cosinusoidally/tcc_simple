@@ -285,5 +285,7 @@ int parse_flags;
 
 int avstack;
 
+int aSTRING_MAX_SIZE;
+
 /* =============== end globals.c ========================================== */
 

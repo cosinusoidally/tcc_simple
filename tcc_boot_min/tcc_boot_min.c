@@ -2551,6 +2551,50 @@ int preprocess_start(int s1, int is_asm) {
     leave(0);
 }
 
+/* 39 */
+int tccpp_new(int s) {
+    int i;
+    int c;
+    int tmp;
+
+    /* might be used in error() before preprocess_start() */
+
+    /* init isid table */
+    i = CH_EOF_;
+    while(lt(i, 128)) {
+        if(is_space(i)) {
+            c = IS_SPC;
+        } else if(isid(i)) {
+            c = IS_ID;
+        } else if(isnum(i)) {
+            c = IS_NUM;
+        } else {
+            c = 0;
+        }
+        set_idnum(i, c);
+        i = add(i, 1);
+    }
+
+    i = 128;
+    while(lt(i, 256)) {
+        set_idnum(i, IS_ID);
+        i = add(i, 1);
+    }
+
+    memset(ahash_ident, 0, mul(aTOK_HASH_SIZE, sizeof_void));
+    cstr_new(acstr_buf);
+    cstr_realloc(acstr_buf, aSTRING_MAX_SIZE);
+
+    /* define keywords, FIXME improve this */
+    tok_ident = TOK_IDENT;
+    TOK_INT    = tok_ident; tmp=mks("int");    tok_alloc(tmp, strlen(tmp));
+    TOK_IF     = tok_ident; tmp=mks("if");     tok_alloc(tmp, strlen(tmp));
+    TOK_ELSE   = tok_ident; tmp=mks("else");   tok_alloc(tmp, strlen(tmp));
+    TOK_WHILE  = tok_ident; tmp=mks("while");  tok_alloc(tmp, strlen(tmp));
+    TOK_BREAK  = tok_ident; tmp=mks("break");  tok_alloc(tmp, strlen(tmp));
+    TOK_RETURN = tok_ident; tmp=mks("return"); tok_alloc(tmp, strlen(tmp));
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
