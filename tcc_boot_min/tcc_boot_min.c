@@ -2510,6 +2510,18 @@ int next() {
     }
 }
 
+/* 37 */
+/* push back current token and set current token to 'last_tok'. Only
+   identifier case handled for labels. */
+int unget_tok(int last_tok) {
+    int str;
+    str = tok_str_alloc();
+    tok_str_add2(str, tok, atokc);
+    tok_str_add(str, 0);
+    begin_macro(str, 1);
+    tok = last_tok;
+}
+
 /* 38 */
 int preprocess_start(int s1, int is_asm) {
     int acstr;
