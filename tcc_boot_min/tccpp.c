@@ -57,26 +57,6 @@ int init_tccpp_globals(){
   aSTRING_MAX_SIZE = STRING_MAX_SIZE;
 }
 
-/* 29 */
-/* get a token from an integer array and increment pointer
-   accordingly. we code it as a macro to avoid pointer aliasing. */
-int TOK_GET(int t, int pp, int cv) {
-    int n;
-    int p;
-    p = ri32(pp);
-
-    wi32(t, ri32(p));
-    p = add(p, 4);
-    if(or(or(eq(t, TOK_STR), eq(t, TOK_PPNUM)), eq(t, TOK_PPSTR))) {
-        scv_str_size(cv, ri32(p));
-        p = add(p, 4);
-        wi32(gcv_str_data(cv), p);
-        p = add(p, mul(div_(sub(add(gcv_str_size(cv), sizeof_int), 1), sizeof_int), 4));
-    }
-
-    wi32(pp, p);
-}
-
 /* 33 */
 /* return next token without macro substitution */
 void next_nomacro1(void)

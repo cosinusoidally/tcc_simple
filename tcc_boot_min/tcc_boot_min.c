@@ -2295,6 +2295,26 @@ int tok_str_add_tok(int s) {
     tok_str_add2(s, tok, atokc);
 }
 
+/* 29 */
+/* get a token from an integer array and increment pointer
+   accordingly. we code it as a macro to avoid pointer aliasing. */
+int TOK_GET(int t, int pp, int cv) {
+    int n;
+    int p;
+    p = ri32(pp);
+
+    wi32(t, ri32(p));
+    p = add(p, 4);
+    if(or(or(eq(t, TOK_STR), eq(t, TOK_PPNUM)), eq(t, TOK_PPSTR))) {
+        scv_str_size(cv, ri32(p));
+        p = add(p, 4);
+        wi32(gcv_str_data(cv), p);
+        p = add(p, mul(div_(sub(add(gcv_str_size(cv), sizeof_int), 1), sizeof_int), 4));
+    }
+
+    wi32(pp, p);
+}
+
 /* 30 */
 /* evaluate escape codes in a string. */
 int parse_escape_string(int outstr, int buf, int is_long) {
