@@ -84,7 +84,7 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
         scv_str_size(cv, wi32(p));
         p = add(p, 4);
         wi32(gcv_str_data(cv), p);
-        p += div_(sub(add(gcv_str_size(cv), sizeof_int), 1), sizeof_int);
+        p = add(p, mul(div_(sub(add(gcv_str_size(cv), sizeof_int), 1), sizeof_int), 4));
     }
 
     wi32(pp, p);
