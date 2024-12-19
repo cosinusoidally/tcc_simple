@@ -105,6 +105,9 @@ int gsv_sym(int o) { return ri32(add(o, SValue_sym_o));} /* struct Sym *sym */
 int gcv_i(int o) {return ri32(add(o, CValue_i_o));}
 int scv_i(int o, int v) {wi32(add(o, CValue_i_o), v);}
 
+int gcv_str_size(int o) {return ri32(add(o, CValue_str_size_o));}
+int scv_str_size(int o, int v) {wi32(add(o, CValue_str_size_o), v);}
+
 /* CType accessors */
 
 int gct_t(int o) {return ri32(add(o, CType_t_o));}
