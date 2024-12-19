@@ -204,6 +204,8 @@ int IO_BUF_SIZE;
 int TOK_FLAG_BOL;
 int TOK_FLAG_BOF;
 
+int TOK_STR;
+
 int tok_flags;
 
 int TCC_OPTION_c;

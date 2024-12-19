@@ -489,6 +489,8 @@ int init_runtime(){
 
   TOK_ALLOC_INCR = 512;  /* must be a power of two */
 
+  TOK_STR = 185; /* 0xb9 pointer to string in tokc */
+
   REL_SECTION_FMT = mks(".rel%s");
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
