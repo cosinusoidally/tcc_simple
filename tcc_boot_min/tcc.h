@@ -295,7 +295,7 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 
 /* tokens that carry values (in additional token string space / tokc) --> */
 extern int TOK_CCHAR; /*  0xb3 char constant in tokc */
-#define TOK_CINT    0xb5 /* number in tokc */
+extern int TOK_CINT;  /*  0xb5 number in tokc */
 #define TOK_CUINT   0xb6 /* unsigned int constant */
 extern int TOK_STR; /*  0xb9 pointer to string in tokc */
 extern int TOK_PPNUM; /*  0xbe preprocessor number */

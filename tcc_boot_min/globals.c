@@ -210,6 +210,7 @@ int TOK_STR;
 int TOK_PPNUM;
 int TOK_PPSTR;
 int TOK_CCHAR;
+int TOK_CINT;
 
 int tok_flags;
 

@@ -500,6 +500,7 @@ int init_runtime(){
   TOK_PPSTR = 191; /* 0xbf preprocessor string */
 
   TOK_CCHAR = 179; /* 0xb3 char constant in tokc */
+  TOK_CINT = 181; /* 0xb5 number in tokc */
 
   REL_SECTION_FMT = mks(".rel%s");
 
