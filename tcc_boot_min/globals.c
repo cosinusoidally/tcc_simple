@@ -275,5 +275,9 @@ int tok;
 
 int IS_SPC;
 
+int PARSE_FLAG_TOK_NUM;
+int PARSE_FLAG_SPACES;
+int PARSE_FLAG_TOK_STR;
+
 /* =============== end globals.c ========================================== */
 

@@ -381,12 +381,12 @@ extern int TOK_FLAG_BOL; /*  0x0001 beginning of line before */
 extern int TOK_FLAG_BOF; /*  0x0002 beginning of file before */
 
 #define PARSE_FLAG_PREPROCESS 0x0001 /* activate preprocessing */
-#define PARSE_FLAG_TOK_NUM    0x0002 /* return numbers instead of TOK_PPNUM */
+extern int PARSE_FLAG_TOK_NUM; /*   0x0002 return numbers instead of TOK_PPNUM */
 #define PARSE_FLAG_LINEFEED   0x0004 /* line feed is returned as a
                                         token. line feed is also
                                         returned at eof */
-#define PARSE_FLAG_SPACES     0x0010 /* next() returns space tokens (for -E) */
-#define PARSE_FLAG_TOK_STR    0x0040 /* return parsed strings instead of TOK_PPSTR */
+extern int PARSE_FLAG_SPACES; /*    0x0010 next() returns space tokens (for -E) */
+extern int PARSE_FLAG_TOK_STR; /*   0x0040 return parsed strings instead of TOK_PPSTR */
 
 /* isidnum_table flags: */
 extern int IS_SPC; /* 1 */
