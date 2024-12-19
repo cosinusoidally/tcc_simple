@@ -364,7 +364,8 @@ PUB_FUNC void tcc_print_stats(TCCState *s, unsigned total_time);
 /* ------------ tccpp.c ------------ */
 
 ST_DATA struct BufferedFile *file;
-ST_DATA int ch, tok;
+ST_DATA int ch;
+extern int tok;
 ST_DATA CValue tokc;
 extern int *macro_ptr;
 ST_DATA int parse_flags;

@@ -500,6 +500,8 @@ int init_runtime(){
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
 
+  tok = 0;
+
   init_c();
   init_reg_classes();
   init_globals();
@@ -2268,6 +2270,12 @@ int tok_str_add2(int s, int t, int cv) {
         len = add(len, nb_words);
     }
     stkst_len(s, len);
+}
+
+/* 28 */
+/* add the current parse token in token string 's' */
+int tok_str_add_tok(int s) {
+    tok_str_add2(s, tok, atokc);
 }
 
 /* end of tccpp.c */

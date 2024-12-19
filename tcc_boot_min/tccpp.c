@@ -70,13 +70,6 @@ int init_tccpp_globals(){
   atokc = &tokc;
 }
 
-/* 28 */
-/* add the current parse token in token string 's' */
-ST_FUNC void tok_str_add_tok(TokenString *s)
-{
-    tok_str_add2(s, tok, &tokc);
-}
-
 /* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
