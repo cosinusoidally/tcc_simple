@@ -37,10 +37,6 @@ static char token_buf[STRING_MAX_SIZE + 1];
 static CString cstr_buf;
 static TokenString tokstr_buf;
 static unsigned char isidnum_table[256 - CH_EOF];
-static int pp_debug_tok, pp_debug_symv;
-static int pp_once;
-static int pp_expr;
-static int pp_counter;
 static void tok_print(const char *msg, const int *str);
 
 static struct TinyAlloc *toksym_alloc;
@@ -245,15 +241,10 @@ ST_INLN void unget_tok(int last_tok)
 }
 
 /* 38 */
-ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
-{
+ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     CString cstr;
     int i;
 
-    pp_expr = 0;
-    pp_counter = 0;
-    pp_debug_tok = pp_debug_symv = 0;
-    pp_once++;
     pvtop = vtop = vstack - 1;
 
     set_idnum('$', 0);
@@ -268,7 +259,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm)
     cstr_free(&cstr);
 
     parse_flags = 0;
-    tok_flags = TOK_FLAG_BOL | TOK_FLAG_BOF;
+    tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
 }
 
 /* 39 */
