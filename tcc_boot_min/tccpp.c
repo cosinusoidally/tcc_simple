@@ -70,9 +70,9 @@ int init_tccpp_globals(){
 }
 
 /* 27 */
-static void tok_str_add2(TokenString *s, int t, CValue *cv)
-{
-    int len, *str;
+static void tok_str_add2(TokenString *s, int t, CValue *cv) {
+    int len;
+    int *str;
 
     len = s->lastlen = s->len;
     str = s->str;
