@@ -147,14 +147,16 @@ static void parse_number(const char *p) {
     }
     n = 0;
     while(1) {
-        t = *q++;
+        t = ri8(q);
+        q = add(q, 1);
         /* no need for checks except for base 10 / 8 errors */
-        if (t == '\0')
+        if (eq(t, 0)) {
             break;
-        else if (t >= 'A')
+        } else if (t >= 'A') {
             t = t - 'A' + 10;
-        else
+        } else {
             t = t - '0';
+        }
         n1 = n;
         n = n * b + t;
     }
