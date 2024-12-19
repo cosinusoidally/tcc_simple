@@ -333,6 +333,8 @@ int init_runtime(){
   sizeof_SValue = 24;
 
   CValue_i_o = 0;
+  CValue_str_size_o = 0;
+  CValue_str_data_o = 4;
   sizeof_CValue = 8;
 
   CType_t_o = 0;

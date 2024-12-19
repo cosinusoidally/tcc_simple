@@ -44,6 +44,8 @@ int SValue_sym_o;
 int sizeof_SValue;
 
 int CValue_i_o;
+int CValue_str_size_o;
+int CValue_str_data_o;
 int sizeof_CValue;
 
 int CType_t_o;
