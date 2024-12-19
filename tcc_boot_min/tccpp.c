@@ -95,17 +95,22 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
 /* 32 */
 /* parse number in null terminated string 'p' and return it in the
    current token */
-static void parse_number(const char *p)
-{
-    int b, t, shift, s, ch;
+static void parse_number(const char *p) {
+    int b;
+    int t;
+    int s;
+    int ch;
     char *q;
-    unsigned long long n, n1;
+    int n;
+    int n1;
 
     /* number */
     q = token_buf;
-    ch = *p++;
+    ch = ri8(p);
+    p = add(p, 1);
     t = ch;
-    ch = *p++;
+    ch = ri8(p);
+    p = add(p, 1);
     *q++ = t;
     b = 10;
     if (t == '0') {
