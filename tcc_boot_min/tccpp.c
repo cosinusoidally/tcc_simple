@@ -107,7 +107,7 @@ static void parse_number(const char *p) {
     int n1;
 
     /* number */
-    q = token_buf;
+    q = atoken_buf;
     ch = ri8(p);
     p = add(p, 1);
     t = ch;
@@ -128,7 +128,7 @@ static void parse_number(const char *p) {
        because of floating point constants */
     while (1) {
         if (and(gte(ch, mkc('A')), lte(ch, mkc( 'F')))) {
-            t = add(sub(ch - mkc('A')), 10);
+            t = add(sub(ch, mkc('A')), 10);
         } else if (isnum(ch)) {
             t = sub(ch, mkc('0'));
         } else {
@@ -142,7 +142,7 @@ static void parse_number(const char *p) {
 
     /* integer number */
     wi8(q, 0);
-    q = token_buf;
+    q = atoken_buf;
     if (and(eq(b, 10), (eq(ri8(q), mkc('0'))))) {
         b = 8;
         q = add(q, 1);
