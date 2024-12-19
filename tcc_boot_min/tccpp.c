@@ -94,18 +94,20 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
 /* evaluate escape codes in a string. */
 static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long)
 {
-    int c, n;
+    int c;
+    int n;
     const uint8_t *p;
 
     p = buf;
     while(1) {
-        c = *p;
-        if (c == '\0')
+        c = ri8(p);
+        if (eq(c, 0)) {
             break;
-        if (c == '\\') {
-            p++;
+        }
+        if (eq(c, mkc('\\'))) {
+            p = add(p, 1);
             /* escape */
-            c = *p;
+            c = ri8(p);
             if(c == 'n') {
                 c = '\n';
             } else if(c == 'r') {
