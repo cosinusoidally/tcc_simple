@@ -124,6 +124,15 @@ int TokenSym_len_o;
 int TokenSym_str_o;
 int sizeof_TokenSym;
 
+int TokenString_str_o;
+int TokenString_len_o;
+int TokenString_lastlen_o;
+int TokenString_allocated_len_o;
+int TokenString_prev_o;
+int TokenString_prev_ptr_o;
+int TokenString_alloc_o;
+int sizeof_TokenString;
+
 int sizeof_void;
 
 int tcc_state;

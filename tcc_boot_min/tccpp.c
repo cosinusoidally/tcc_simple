@@ -72,17 +72,17 @@ int init_tccpp_globals(){
 
 /* 19 */
 /* token string handling */
-ST_INLN void tok_str_new(TokenString *s)
-{
-    s->str = NULL;
-    s->len = s->lastlen = 0;
-    s->allocated_len = 0;
+ST_INLN void tok_str_new(TokenString *s) {
+    stkst_str(s, 0);
+    stkst_len(s, 0);
+    stkst_lastlen(s, 0);
+    stkst_allocated_len(s, 0);
 }
 
 /* 20 */
-ST_FUNC TokenString *tok_str_alloc(void)
-{
-    TokenString *str = tcc_realloc(0, sizeof *str);
+ST_FUNC TokenString *tok_str_alloc(void) {
+    int str;
+    str = tcc_realloc(0, sizeof_TokenString);
     tok_str_new(str);
     return str;
 }

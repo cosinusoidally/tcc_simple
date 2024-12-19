@@ -260,6 +260,30 @@ int stks_len(int o, int v) {wi32(add(o, TokenSym_len_o), v);}
 /* char str[1] */
 int gtks_str(int o) {return add(o, TokenSym_str_o);}
 
+/* TokenString accessors */
+
+int gtkst_str(int o) {return ri32(add(o, TokenString_str_o));}
+int stkst_str(int o, int v) {wi32(add(o, TokenString_str_o), v);}
+
+int gtkst_len(int o) {return ri32(add(o, TokenString_len_o));}
+int stkst_len(int o, int v) {wi32(add(o, TokenString_len_o), v);}
+
+int gtkst_lastlen(int o) {return ri32(add(o, TokenString_lastlen_o));}
+int stkst_lastlen(int o, int v) {wi32(add(o, TokenString_lastlen_o), v);}
+
+int gtkst_allocated_len(int o) {return ri32(add(o, TokenString_allocated_len_o));}
+int stkst_allocated_len(int o, int v) {wi32(add(o, TokenString_allocated_len_o), v);}
+
+int gtkst_prev(int o) {return ri32(add(o, TokenString_prev_o));}
+int stkst_prev(int o, int v) {wi32(add(o, TokenString_prev_o), v);}
+
+int gtkst_prev_ptr(int o) {return ri32(add(o, TokenString_prev_ptr_o));}
+int stkst_prev_ptr(int o, int v) {wi32(add(o, TokenString_prev_ptr_o), v);}
+
+/* char alloc */
+int gtkst_alloc(int o) {return ri32(add(o, TokenString_alloc_o));}
+int stkst_alloc(int o, int v) {wi32(add(o, TokenString_alloc_o), v);}
+
 /* stuff */
 
 int init_runtime(){
@@ -389,6 +413,14 @@ int init_runtime(){
   TokenSym_str_o = 16;
   sizeof_TokenSym = 20;
 
+  TokenString_str_o = 0;
+  TokenString_len_o = 4;
+  TokenString_lastlen_o = 8;
+  TokenString_allocated_len_o = 12;
+  TokenString_prev_o = 16;
+  TokenString_prev_ptr_o = 20;
+  TokenString_alloc_o = 24;
+  sizeof_TokenString = 28;
 
   sizeof_void = 4;
 

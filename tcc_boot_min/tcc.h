@@ -628,7 +628,7 @@ extern int sizeof_Elf32_Rel;
 extern int sizeof_Elf32_Shdr;
 extern int sizeof_Elf32_Sym;
 extern int sizeof_TokenSym;
-
+extern int sizeof_TokenString;
 
 extern int aglobal_stack;
 extern int alocal_stack;
