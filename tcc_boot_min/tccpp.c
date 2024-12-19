@@ -87,11 +87,11 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     if(eq(t, TOK_STR)) {
         /* Insert the string into the int array. */
         size_t nb_words =
-            add(1, div_(sub(add(cv->str.size, 4) ,1), 4));
+            add(1, div_(sub(add(gcv_str_size(cv), 4) ,1), 4));
         if (gte(add(len, nb_words), s->allocated_len)) {
             str = tok_str_realloc(s, add(add(len, nb_words), 1));
         }
-        wi32(add(str, mul(len, 4)), cv->str.size);
+        wi32(add(str, mul(len, 4)), gcv_str_size(cv));
         memcpy(add(str, mul(add(len, 1), 4)), cv->str.data, cv->str.size);
         len = add(len, nb_words);
     }
