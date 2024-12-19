@@ -261,5 +261,7 @@ int aisidnum_table;
 int macro_ptr;
 int macro_stack;
 
+int atokc;
+
 /* =============== end globals.c ========================================== */
 
