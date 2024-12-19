@@ -79,7 +79,7 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     str = gtkst_str(s);
 
     /* allocate space for worst case */
-    if (len + TOK_MAX_SIZE >= s->allocated_len) {
+    if (gte(add(len, TOK_MAX_SIZE), gtkst_allocated_len(s))) {
         str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
     }
     str[len] = t;
