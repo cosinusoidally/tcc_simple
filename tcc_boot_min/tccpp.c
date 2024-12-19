@@ -100,7 +100,7 @@ static void parse_number(const char *p) {
     int t;
     int s;
     int ch;
-    char *q;
+    int q;
     int n;
     int n1;
 
@@ -163,7 +163,7 @@ static void parse_number(const char *p) {
 
     tok = TOK_CINT;
     tok = add(tok, 1); /* TOK_CU... */
-    tokc.i = n;
+    scv_i(atokc, n);
 }
 
 /* 33 */
