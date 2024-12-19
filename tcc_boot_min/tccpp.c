@@ -261,11 +261,9 @@ void tccpp_new(TCCState *s) {
         i = add(i, 1);
     }
 
-    memset(hash_ident, 0, TOK_HASH_SIZE * sizeof(TokenSym *));
-    cstr_new(&cstr_buf);
-    cstr_realloc(&cstr_buf, STRING_MAX_SIZE);
-    tok_str_new(&tokstr_buf);
-    tok_str_realloc(&tokstr_buf, TOKSTR_MAX_SIZE);
+    memset(ahash_ident, 0, mul(aTOK_HASH_SIZE, sizeof_void));
+    cstr_new(acstr_buf);
+    cstr_realloc(acstr_buf, STRING_MAX_SIZE);
 
     /* define keywords, FIXME improve this */
     tok_ident = TOK_IDENT;
@@ -292,7 +290,6 @@ ST_FUNC void tccpp_delete(TCCState *s)
     /* free static buffers */
     cstr_free(&tokcstr);
     cstr_free(&cstr_buf);
-    tok_str_free_str(tokstr_buf.str);
 }
 
 /* ------------------------------------------------------------------------- */
