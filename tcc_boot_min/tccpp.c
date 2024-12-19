@@ -254,13 +254,13 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     set_idnum(mkc('$'), 0);
     set_idnum(mkc('.'), 0);
 
-    cstr_new(&cstr);
-    cstr_cat(&cstr, mks("\""), sub(0,1));
-    cstr_cat(&cstr, gbf_filename(file), sub(0,1));
-    cstr_cat(&cstr, mks("\""), 0);
+    cstr_new(acstr);
+    cstr_cat(acstr, mks("\""), sub(0,1));
+    cstr_cat(acstr, gbf_filename(file), sub(0,1));
+    cstr_cat(acstr, mks("\""), 0);
 
-    cstr_reset(&cstr);
-    cstr_free(&cstr);
+    cstr_reset(acstr);
+    cstr_free(acstr);
 
     parse_flags = 0;
     tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
