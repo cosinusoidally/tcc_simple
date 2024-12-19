@@ -77,7 +77,7 @@ int init_tccpp_globals(){
 /* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
-static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
+void TOK_GET(int *t, const int **pp, CValue *cv) {
     int n;
     int p;
     p = ri32(pp);
@@ -96,7 +96,7 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
 
 /* 33 */
 /* return next token without macro substitution */
-static inline void next_nomacro1(void)
+void next_nomacro1(void)
 {
     int t, c, is_long, len;
     TokenSym *ts;
@@ -231,33 +231,6 @@ static inline void next_nomacro1(void)
     }
     tok_flags = 0;
     file->buf_ptr = p;
-}
-
-/* 34 */
-/* return next token without macro substitution. Can read input from
-   macro_ptr buffer */
-static void next_nomacro_spc(void) {
-    int ttok;
-    int tmacro_ptr;
-    enter();
-
-    ttok = v_alloca(4);
-    tmacro_ptr = v_alloca(4);
-
-    if (macro_ptr) {
-        tok = *macro_ptr;
-        if (tok) {
-            wi32(ttok, tok);
-            wi32(tmacro_ptr, macro_ptr);
-            TOK_GET(ttok, tmacro_ptr, atokc);
-            tok = ri32(ttok);
-            macro_ptr = ri32(tmacro_ptr);
-        }
-    } else {
-        next_nomacro1();
-    }
-
-    leave(0);
 }
 
 /* 35 */

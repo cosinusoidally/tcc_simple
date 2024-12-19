@@ -2420,6 +2420,33 @@ int parse_number(int p) {
     scv_i(atokc, n);
 }
 
+/* 34 */
+/* return next token without macro substitution. Can read input from
+   macro_ptr buffer */
+int next_nomacro_spc() {
+    int ttok;
+    int tmacro_ptr;
+    enter();
+
+    ttok = v_alloca(4);
+    tmacro_ptr = v_alloca(4);
+
+    if (macro_ptr) {
+        tok = ri32(macro_ptr);
+        if (tok) {
+            wi32(ttok, tok);
+            wi32(tmacro_ptr, macro_ptr);
+            TOK_GET(ttok, tmacro_ptr, atokc);
+            tok = ri32(ttok);
+            macro_ptr = ri32(tmacro_ptr);
+        }
+    } else {
+        next_nomacro1();
+    }
+
+    leave(0);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
