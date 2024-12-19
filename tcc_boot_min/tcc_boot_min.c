@@ -2281,6 +2281,38 @@ int tok_str_add_tok(int s) {
     tok_str_add2(s, tok, atokc);
 }
 
+/* 30 */
+/* evaluate escape codes in a string. */
+int parse_escape_string(int outstr, int buf, int is_long) {
+    int c;
+    int n;
+    int p;
+
+    p = buf;
+    while(1) {
+        c = ri8(p);
+        if (eq(c, 0)) {
+            break;
+        }
+        if (eq(c, mkc('\\'))) {
+            p = add(p, 1);
+            /* escape */
+            c = ri8(p);
+            if(eq(c, mkc('n'))) {
+                c = mkc('\n');
+            } else if(eq(c, mkc('r'))) {
+                c = mkc('\r');
+            } else if(eq(c, mkc('t'))) {
+                c = mkc('\t');
+            }
+        }
+        p = add(p, 1);
+        cstr_ccat(outstr, c);
+    }
+    /* add a trailing '\0' */
+    cstr_ccat(outstr, 0);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
