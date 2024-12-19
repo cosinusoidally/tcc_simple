@@ -70,29 +70,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 19 */
-/* token string handling */
-ST_INLN void tok_str_new(TokenString *s) {
-    stkst_str(s, 0);
-    stkst_len(s, 0);
-    stkst_lastlen(s, 0);
-    stkst_allocated_len(s, 0);
-}
-
-/* 20 */
-ST_FUNC TokenString *tok_str_alloc(void) {
-    int str;
-    str = tcc_realloc(0, sizeof_TokenString);
-    tok_str_new(str);
-    return str;
-}
-
-/* 21 */
-ST_FUNC void tok_str_free_str(int *str)
-{
-    tcc_free(str);
-}
-
 /* 22 */
 ST_FUNC void tok_str_free(TokenString *str)
 {

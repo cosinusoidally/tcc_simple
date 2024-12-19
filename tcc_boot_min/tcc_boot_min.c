@@ -2145,6 +2145,28 @@ int parse_pp_string(int p, int sep, int str) {
     return leave(p);
 }
 
+/* 19 */
+/* token string handling */
+int tok_str_new(int s) {
+    stkst_str(s, 0);
+    stkst_len(s, 0);
+    stkst_lastlen(s, 0);
+    stkst_allocated_len(s, 0);
+}
+
+/* 20 */
+int tok_str_alloc() {
+    int str;
+    str = tcc_realloc(0, sizeof_TokenString);
+    tok_str_new(str);
+    return str;
+}
+
+/* 21 */
+int tok_str_free_str(int str) {
+    tcc_free(str);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
