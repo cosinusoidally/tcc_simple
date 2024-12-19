@@ -97,9 +97,10 @@ static void parse_string(const char *s, int len) {
     int sep;
 
     is_long=0;
-    sep = *s++;
-    len -= 2;
-    p = tcc_malloc(len + 1);
+    sep = *s;
+    s = add(s, 1);
+    len = sub(len, 2);
+    p = tcc_malloc(add(len, 1));
     memcpy(p, s, len);
     p[len] = 0;
 
