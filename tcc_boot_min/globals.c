@@ -281,5 +281,7 @@ int PARSE_FLAG_TOK_STR;
 
 int parse_flags;
 
+int avstack;
+
 /* =============== end globals.c ========================================== */
 

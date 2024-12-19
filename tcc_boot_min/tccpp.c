@@ -56,6 +56,7 @@ extern int aisidnum_table;
 extern int atokc;
 extern int atokcstr;
 extern int atoken_buf;
+extern int avstack;
 
 int init_tccpp_globals(){
   aTOK_HASH_SIZE = TOK_HASH_SIZE;
@@ -66,6 +67,7 @@ int init_tccpp_globals(){
   atokc = &tokc;
   atokcstr = &tokcstr;
   atoken_buf = &token_buf;
+  avstack = vstack;
 }
 
 /* 29 */
@@ -242,7 +244,6 @@ ST_INLN void unget_tok(int last_tok)
 
 /* 38 */
 ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
-    CString cstr;
     int acstr;
     int i;
 
