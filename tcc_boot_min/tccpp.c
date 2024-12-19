@@ -73,24 +73,19 @@ int init_tccpp_globals(){
 /* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
-static inline void TOK_GET(int *t, const int **pp, CValue *cv)
-{
+static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
     int n;
-    int *tab;
-    int tmp;
     const int *p;
     p = *pp;
 
-    tab = cv->tab;
-
-    tmp = (*t = *p++);
-    if((tmp == TOK_STR) || (tmp == TOK_PPNUM) || (tmp == TOK_PPSTR)) {
+    *t = *p++;
+    if((t == TOK_STR) || (t == TOK_PPNUM) || (t == TOK_PPSTR)) {
         cv->str.size = *p++;
         cv->str.data = p;
-        p += (cv->str.size + sizeof(int) - 1) / sizeof(int);
+        p += (cv->str.size + sizeof(int) - 1) / 4;
     }
 
-    *pp = p;
+    wi32(pp, p);
 }
 
 /* 30 */
