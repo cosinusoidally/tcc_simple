@@ -510,6 +510,8 @@ int init_runtime(){
 
   /* isidnum_table flags: */
   IS_SPC = 1;
+  IS_ID = 2;
+  IS_NUM = 4;
 
   PARSE_FLAG_TOK_NUM = 2;  /*  0x0002 return numbers instead of TOK_PPNUM */
   PARSE_FLAG_SPACES = 16;  /*  0x0010 next() returns space tokens (for -E) */

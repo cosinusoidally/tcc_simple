@@ -274,6 +274,8 @@ int atoken_buf;
 int tok;
 
 int IS_SPC;
+int IS_ID;
+int IS_NUM;
 
 int PARSE_FLAG_TOK_NUM;
 int PARSE_FLAG_SPACES;

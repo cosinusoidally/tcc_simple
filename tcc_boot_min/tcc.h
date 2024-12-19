@@ -390,8 +390,8 @@ extern int PARSE_FLAG_TOK_STR; /*   0x0040 return parsed strings instead of TOK_
 
 /* isidnum_table flags: */
 extern int IS_SPC; /* 1 */
-#define IS_ID  2
-#define IS_NUM 4
+extern int IS_ID; /* 2 */
+extern int IS_NUM; /* 4 */
 
 ST_FUNC TokenSym *tok_alloc(const char *str, int len);
 ST_FUNC const char *get_tok_str(int v, CValue *cv);
