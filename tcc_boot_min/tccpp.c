@@ -84,10 +84,10 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     }
     wi32(add(str, mul(len, 4)), t);
     len = add(len, 1);
-    if(t == TOK_STR) {
+    if(eq(t, TOK_STR)) {
         /* Insert the string into the int array. */
         size_t nb_words =
-            1 + (cv->str.size + sizeof(int) - 1) / sizeof(int);
+            add(1, div_(sub(add(cv->str.size, 4) ,1), 4));
         if (len + nb_words >= s->allocated_len)
             str = tok_str_realloc(s, len + nb_words + 1);
         str[len] = cv->str.size;
