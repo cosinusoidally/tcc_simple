@@ -269,6 +269,8 @@ int macro_stack;
 int atokc;
 int atokcstr;
 
+int atoken_buf;
+
 int tok;
 
 /* =============== end globals.c ========================================== */

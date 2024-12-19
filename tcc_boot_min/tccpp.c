@@ -61,6 +61,7 @@ extern int CH_EOF_;
 extern int aisidnum_table;
 extern int atokc;
 extern int atokcstr;
+extern int atoken_buf;
 
 int init_tccpp_globals(){
   aTOK_HASH_SIZE = TOK_HASH_SIZE;
@@ -70,6 +71,7 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
   atokc = &tokc;
   atokcstr = &tokcstr;
+  atoken_buf = &token_buf;
 }
 
 /* 29 */

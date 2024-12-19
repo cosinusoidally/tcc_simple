@@ -430,7 +430,7 @@ static inline int is_space(int ch) {
 static inline int isid(int c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 }
-static inline int isnum(int c) {
+int isnum(int c) {
     return c >= '0' && c <= '9';
 }
 static inline int toup(int c) {
