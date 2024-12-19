@@ -18,11 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/********************************************************/
-/* global variables */
-
-extern TokenSym **table_ident;
-
 /* ------------------------------------------------------------------------- */
 
 static TokenSym *hash_ident[TOK_HASH_SIZE];
@@ -65,7 +60,7 @@ int init_tccpp_globals(){
 /* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
-void TOK_GET(int *t, const int **pp, CValue *cv) {
+int TOK_GET(int t, int pp, int cv) {
     int n;
     int p;
     p = ri32(pp);

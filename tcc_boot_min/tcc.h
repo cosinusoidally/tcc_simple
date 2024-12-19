@@ -375,7 +375,7 @@ ST_DATA CString tokcstr; /* current parsed string, if any */
 /* display benchmark infos */
 ST_DATA int total_bytes;
 extern int tok_ident;
-ST_DATA TokenSym **table_ident;
+extern TokenSym **table_ident;
 
 extern int TOK_FLAG_BOL; /*  0x0001 beginning of line before */
 extern int TOK_FLAG_BOF; /*  0x0002 beginning of file before */
