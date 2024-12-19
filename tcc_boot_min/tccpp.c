@@ -72,7 +72,7 @@ int init_tccpp_globals(){
 /* 27 */
 static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     int len;
-    int *str;
+    int str;
 
     stkst_lastlen(s, gtkst_len(s));
     len = gtkst_len(s);
@@ -95,7 +95,7 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
         memcpy(add(str, mul(add(len, 1), 4)), cv->str.data, cv->str.size);
         len = add(len, nb_words);
     }
-    s->len = len;
+    stkst_len(s, len);
 }
 
 /* 28 */
