@@ -250,7 +250,7 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     enter();
     acstr = v_alloca(sizeof_CString);
 
-    vtop = sub(vstack, sizeof_SValue);
+    vtop = sub(avstack, sizeof_SValue);
 
     set_idnum(mkc('$'), 0);
     set_idnum(mkc('.'), 0);
