@@ -71,28 +71,29 @@ int init_tccpp_globals(){
 }
 
 /* 22 */
-ST_FUNC void tok_str_free(TokenString *str)
-{
-    tok_str_free_str(str->str);
+ST_FUNC void tok_str_free(TokenString *str) {
+    tok_str_free_str(gtkst_str(str));
     tcc_free(str);
 }
 
 /* 23 */
-ST_FUNC int *tok_str_realloc(TokenString *s, int new_size)
-{
-    int *str, size;
+ST_FUNC int *tok_str_realloc(TokenString *s, int new_size) {
+    int *str;
+    int size;
 
-    size = s->allocated_len;
-    if (size < 16)
+    size = gtkst_allocated_len(s);
+    if (lt(size, 16)) {
         size = 16;
-    while (size < new_size)
-        size = size * 2;
-    if (size > s->allocated_len) {
-        str = tcc_realloc(s->str, size * sizeof(int));
-        s->allocated_len = size;
-        s->str = str;
     }
-    return s->str;
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
+    if (gt(size, gtkst_allocated_len(s))) {
+        str = tcc_realloc(gtkst_str(s), mul(size, 4));
+        stkst_allocated_len(s, size);
+        stkst_str(s, str);
+    }
+    return gtkst_str(s);
 }
 
 /* 24 */
