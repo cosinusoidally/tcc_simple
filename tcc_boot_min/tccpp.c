@@ -70,21 +70,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 24 */
-ST_FUNC void tok_str_add(TokenString *s, int t) {
-    int len;
-    int *str;
-
-    len = gtkst_len(s);
-    str = gtkst_str(s);
-    if (gte(len, gtkst_allocated_len(s))) {
-        str = tok_str_realloc(s, add(len, 1));
-    }
-    wi32(add(str, mul(len, 4)),t);
-    len = add(len, 1);
-    s->len = len;
-}
-
 /* 25 */
 ST_FUNC void begin_macro(TokenString *str, int alloc)
 {

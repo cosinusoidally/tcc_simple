@@ -2193,6 +2193,21 @@ int tok_str_realloc(int s, int new_size) {
     return gtkst_str(s);
 }
 
+/* 24 */
+int tok_str_add(int s, int t) {
+    int len;
+    int str;
+
+    len = gtkst_len(s);
+    str = gtkst_str(s);
+    if (gte(len, gtkst_allocated_len(s))) {
+        str = tok_str_realloc(s, add(len, 1));
+    }
+    wi32(add(str, mul(len, 4)),t);
+    len = add(len, 1);
+    stkst_len(s, len);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
