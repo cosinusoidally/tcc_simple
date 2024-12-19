@@ -435,6 +435,7 @@ int init_runtime(){
   sizeof_TokenString = 28;
 
   sizeof_void = 4;
+  sizeof_int = sizeof_void;
 
   FUNC_PROLOG_SIZE = 9;
 

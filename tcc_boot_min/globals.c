@@ -137,6 +137,7 @@ int TokenString_alloc_o;
 int sizeof_TokenString;
 
 int sizeof_void;
+int sizeof_int;
 
 int tcc_state;
 
