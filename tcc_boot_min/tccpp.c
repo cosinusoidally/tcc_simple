@@ -141,9 +141,9 @@ static void parse_number(const char *p) {
     /* integer number */
     wi8(q, 0);
     q = token_buf;
-    if (b == 10 && *q == '0') {
+    if (and(eq(b, 10), (eq(ri8(q), mkc('0'))))) {
         b = 8;
-        q++;
+        q = add(q, 1);
     }
     n = 0;
     while(1) {
