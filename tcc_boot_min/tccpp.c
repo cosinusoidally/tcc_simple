@@ -247,8 +247,10 @@ void tccpp_new(TCCState *s) {
             : isnum(i) ? IS_NUM
             : 0);
 
-    for(i = 128; i<256; i++) {
+    i = 128;
+    while(lt(i, 256)) {
         set_idnum(i, IS_ID);
+        i = add(i, 1);
     }
 
     memset(hash_ident, 0, TOK_HASH_SIZE * sizeof(TokenSym *));
