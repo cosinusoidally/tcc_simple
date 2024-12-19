@@ -235,34 +235,36 @@ void next_nomacro1(void)
 
 /* 36 */
 /* return next token with macro substitution */
-ST_FUNC void next(void)
-{
+ST_FUNC void next() {
     int redo;
     while(1) {
         redo = 0;
-        if (parse_flags & PARSE_FLAG_SPACES)
+        if (and(parse_flags, PARSE_FLAG_SPACES)) {
             next_nomacro_spc();
-        else
+        } else {
             next_nomacro();
+        }
 
         if (macro_ptr) {
-            if (tok == 0) {
+            if (eq(tok, 0)) {
                 /* end of macro or unget token string */
                 end_macro();
                 redo = 1;
             }
         }
-        if(redo == 0) {
+        if(eq(redo, 0)) {
             break;
         }
     }
     /* convert preprocessor tokens into C tokens */
-    if (tok == TOK_PPNUM) {
-        if  (parse_flags & PARSE_FLAG_TOK_NUM)
+    if (eq(tok, TOK_PPNUM)) {
+        if(and(parse_flags, PARSE_FLAG_TOK_NUM)) {
             parse_number((char *)tokc.str.data);
-    } else if (tok == TOK_PPSTR) {
-        if (parse_flags & PARSE_FLAG_TOK_STR)
-            parse_string((char *)tokc.str.data, tokc.str.size - 1);
+        }
+    } else if(eq(tok, TOK_PPSTR)) {
+        if (and(parse_flags, PARSE_FLAG_TOK_STR)) {
+            parse_string((char *)tokc.str.data, sub(tokc.str.size, 1));
+        }
     }
 }
 
