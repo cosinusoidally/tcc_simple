@@ -96,7 +96,7 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
 {
     int c;
     int n;
-    const uint8_t *p;
+    int p;
 
     p = buf;
     while(1) {
@@ -108,19 +108,19 @@ static void parse_escape_string(CString *outstr, const uint8_t *buf, int is_long
             p = add(p, 1);
             /* escape */
             c = ri8(p);
-            if(c == 'n') {
-                c = '\n';
-            } else if(c == 'r') {
-                c = '\r';
-            } else if(c == 't') {
-                c = '\t';
+            if(eq(c, mkc('n'))) {
+                c = mkc('\n');
+            } else if(eq(c, mkc('r'))) {
+                c = mkc('\r');
+            } else if(eq(c, mkc('t'))) {
+                c = mkc('\t');
             }
         }
-        p++;
+        p = add(p, 1);
         cstr_ccat(outstr, c);
     }
     /* add a trailing '\0' */
-    cstr_ccat(outstr, '\0');
+    cstr_ccat(outstr, 0);
 }
 
 /* 31 */
