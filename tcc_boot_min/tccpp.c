@@ -26,7 +26,6 @@ ST_DATA int parse_flags;
 extern struct BufferedFile *file;
 ST_DATA int ch, tok;
 ST_DATA CValue tokc;
-ST_DATA const int *macro_ptr;
 ST_DATA CString tokcstr; /* current parsed string, if any */
 
 /* display benchmark infos */
@@ -51,7 +50,7 @@ static struct TinyAlloc *toksym_alloc;
 static struct TinyAlloc *tokstr_alloc;
 static struct TinyAlloc *cstr_alloc;
 
-static TokenString *macro_stack;
+extern TokenString *macro_stack;
 
 static void next_nomacro_spc(void);
 
@@ -68,24 +67,6 @@ int init_tccpp_globals(){
   acstr_buf = &cstr_buf;
   CH_EOF_ = CH_EOF;
   aisidnum_table = isidnum_table;
-}
-
-/* 25 */
-ST_FUNC void begin_macro(TokenString *str, int alloc) {
-    stkst_alloc(str, alloc);
-    stkst_prev(str, macro_stack);
-    stkst_prev_ptr(str, macro_ptr);
-    macro_ptr = gtkst_str(str);
-    macro_stack = str;
-}
-
-/* 26 */
-ST_FUNC void end_macro() {
-    int str;
-    str = macro_stack;
-    macro_stack = gtkst_prev(str);
-    macro_ptr = gtkst_prev_ptr(str);
-    tok_str_free(str);
 }
 
 /* 27 */

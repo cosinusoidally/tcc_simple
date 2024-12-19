@@ -252,5 +252,8 @@ int CH_EOF_;
 
 int aisidnum_table;
 
+int macro_ptr;
+int macro_stack;
+
 /* =============== end globals.c ========================================== */
 

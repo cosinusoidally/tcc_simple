@@ -2208,6 +2208,24 @@ int tok_str_add(int s, int t) {
     stkst_len(s, len);
 }
 
+/* 25 */
+int begin_macro(int str, int alloc) {
+    stkst_alloc(str, alloc);
+    stkst_prev(str, macro_stack);
+    stkst_prev_ptr(str, macro_ptr);
+    macro_ptr = gtkst_str(str);
+    macro_stack = str;
+}
+
+/* 26 */
+int end_macro() {
+    int str;
+    str = macro_stack;
+    macro_stack = gtkst_prev(str);
+    macro_ptr = gtkst_prev_ptr(str);
+    tok_str_free(str);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {
