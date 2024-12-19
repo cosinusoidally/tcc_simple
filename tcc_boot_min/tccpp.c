@@ -232,10 +232,9 @@ void next_nomacro1(void)
 /* 37 */
 /* push back current token and set current token to 'last_tok'. Only
    identifier case handled for labels. */
-ST_INLN void unget_tok(int last_tok)
-{
-
-    TokenString *str = tok_str_alloc();
+void unget_tok(int last_tok) {
+    TokenString *str;
+    str = tok_str_alloc();
     tok_str_add2(str, tok, &tokc);
     tok_str_add(str, 0);
     begin_macro(str, 1);
