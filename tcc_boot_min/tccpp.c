@@ -231,20 +231,23 @@ void next_nomacro1(void)
 }
 
 /* 40 */
-ST_FUNC void tccpp_delete(TCCState *s)
-{
-    int i, n;
+ST_FUNC void tccpp_delete(TCCState *s) {
+    int i;
+    int n;
 
     /* free tokens */
-    n = tok_ident - TOK_IDENT;
-    for(i = 0; i < n; i++)
-        tcc_free(table_ident[i]);
+    n = sub(tok_ident, TOK_IDENT);
+    i = 0;
+    while(lt(i, n)) {
+        tcc_free(ri32(add(table_ident, mul(i, 4))));
+        i = add(i, 1);
+    }
     tcc_free(table_ident);
-    table_ident = NULL;
+    table_ident = 0;
 
     /* free static buffers */
-    cstr_free(&tokcstr);
-    cstr_free(&cstr_buf);
+    cstr_free(atokcstr);
+    cstr_free(acstr_buf);
 }
 
 /* ------------------------------------------------------------------------- */
