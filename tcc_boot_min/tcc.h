@@ -363,7 +363,7 @@ PUB_FUNC void tcc_print_stats(TCCState *s, unsigned total_time);
 
 /* ------------ tccpp.c ------------ */
 
-ST_DATA struct BufferedFile *file;
+extern struct BufferedFile *file;
 ST_DATA int ch;
 extern int tok;
 ST_DATA CValue tokc;
@@ -374,7 +374,7 @@ ST_DATA CString tokcstr; /* current parsed string, if any */
 
 /* display benchmark infos */
 ST_DATA int total_bytes;
-ST_DATA int tok_ident;
+extern int tok_ident;
 ST_DATA TokenSym **table_ident;
 
 extern int TOK_FLAG_BOL; /*  0x0001 beginning of line before */

@@ -21,13 +21,6 @@
 /********************************************************/
 /* global variables */
 
-extern struct BufferedFile *file;
-ST_DATA int ch, tok;
-ST_DATA CString tokcstr; /* current parsed string, if any */
-
-/* display benchmark infos */
-ST_DATA int total_lines;
-extern int tok_ident;
 extern TokenSym **table_ident;
 
 /* ------------------------------------------------------------------------- */
@@ -35,9 +28,7 @@ extern TokenSym **table_ident;
 static TokenSym *hash_ident[TOK_HASH_SIZE];
 static char token_buf[STRING_MAX_SIZE + 1];
 static CString cstr_buf;
-static TokenString tokstr_buf;
 static unsigned char isidnum_table[256 - CH_EOF];
-static void tok_print(const char *msg, const int *str);
 
 static struct TinyAlloc *toksym_alloc;
 static struct TinyAlloc *tokstr_alloc;
