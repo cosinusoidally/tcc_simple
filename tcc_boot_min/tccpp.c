@@ -71,12 +71,11 @@ int init_tccpp_globals(){
 }
 
 /* 25 */
-ST_FUNC void begin_macro(TokenString *str, int alloc)
-{
-    str->alloc = alloc;
-    str->prev = macro_stack;
-    str->prev_ptr = macro_ptr;
-    macro_ptr = str->str;
+ST_FUNC void begin_macro(TokenString *str, int alloc) {
+    stkst_alloc(str, alloc);
+    stkst_prev(str, macro_stack);
+    stkst_prev_ptr(str, macro_ptr);
+    macro_ptr = gtkst_str(str);
     macro_stack = str;
 }
 
