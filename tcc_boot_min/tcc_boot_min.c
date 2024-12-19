@@ -2167,6 +2167,32 @@ int tok_str_free_str(int str) {
     tcc_free(str);
 }
 
+/* 22 */
+int tok_str_free(int str) {
+    tok_str_free_str(gtkst_str(str));
+    tcc_free(str);
+}
+
+/* 23 */
+int tok_str_realloc(int s, int new_size) {
+    int str;
+    int size;
+
+    size = gtkst_allocated_len(s);
+    if (lt(size, 16)) {
+        size = 16;
+    }
+    while (lt(size, new_size)) {
+        size = mul(size, 2);
+    }
+    if (gt(size, gtkst_allocated_len(s))) {
+        str = tcc_realloc(gtkst_str(s), mul(size, 4));
+        stkst_allocated_len(s, size);
+        stkst_str(s, str);
+    }
+    return gtkst_str(s);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {

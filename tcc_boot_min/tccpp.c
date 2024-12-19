@@ -70,32 +70,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 22 */
-ST_FUNC void tok_str_free(TokenString *str) {
-    tok_str_free_str(gtkst_str(str));
-    tcc_free(str);
-}
-
-/* 23 */
-ST_FUNC int *tok_str_realloc(TokenString *s, int new_size) {
-    int *str;
-    int size;
-
-    size = gtkst_allocated_len(s);
-    if (lt(size, 16)) {
-        size = 16;
-    }
-    while (lt(size, new_size)) {
-        size = mul(size, 2);
-    }
-    if (gt(size, gtkst_allocated_len(s))) {
-        str = tcc_realloc(gtkst_str(s), mul(size, 4));
-        stkst_allocated_len(s, size);
-        stkst_str(s, str);
-    }
-    return gtkst_str(s);
-}
-
 /* 24 */
 ST_FUNC void tok_str_add(TokenString *s, int t)
 {
