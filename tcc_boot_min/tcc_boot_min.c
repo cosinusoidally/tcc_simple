@@ -108,6 +108,9 @@ int scv_i(int o, int v) {wi32(add(o, CValue_i_o), v);}
 int gcv_str_size(int o) {return ri32(add(o, CValue_str_size_o));}
 int scv_str_size(int o, int v) {wi32(add(o, CValue_str_size_o), v);}
 
+int gcv_str_data(int o) {return ri32(add(o, CValue_str_data_o));}
+int scv_str_data(int o, int v) {wi32(add(o, CValue_str_data_o), v);}
+
 /* CType accessors */
 
 int gct_t(int o) {return ri32(add(o, CType_t_o));}
