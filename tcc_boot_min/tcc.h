@@ -298,8 +298,8 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 #define TOK_CINT    0xb5 /* number in tokc */
 #define TOK_CUINT   0xb6 /* unsigned int constant */
 extern int TOK_STR; /*  0xb9 pointer to string in tokc */
-#define TOK_PPNUM   0xbe /* preprocessor number */
-#define TOK_PPSTR   0xbf /* preprocessor string */
+extern int TOK_PPNUM; /*  0xbe preprocessor number */
+extern int TOK_PPSTR; /*  0xbf preprocessor string */
 /* <-- */
 
 #define TOK_EOF       (-1)  /* end of file */

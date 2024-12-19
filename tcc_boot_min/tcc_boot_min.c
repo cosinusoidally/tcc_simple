@@ -496,6 +496,8 @@ int init_runtime(){
   TOK_MAX_SIZE = 4;  /* token max size in int unit when stored in string */
 
   TOK_STR = 185; /* 0xb9 pointer to string in tokc */
+  TOK_PPNUM = 190; /* 0xbe preprocessor number */
+  TOK_PPSTR = 191; /* 0xbf preprocessor string */
 
   REL_SECTION_FMT = mks(".rel%s");
 
