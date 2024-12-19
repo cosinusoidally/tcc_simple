@@ -2237,6 +2237,35 @@ int end_macro() {
     tok_str_free(str);
 }
 
+/* 27 */
+int tok_str_add2(int s, int t, int cv) {
+    int len;
+    int str;
+    int nb_words;
+
+    stkst_lastlen(s, gtkst_len(s));
+    len = gtkst_len(s);
+    str = gtkst_str(s);
+
+    /* allocate space for worst case */
+    if (gte(add(len, TOK_MAX_SIZE), gtkst_allocated_len(s))) {
+        str = tok_str_realloc(s, add(add(len, TOK_MAX_SIZE), 1));
+    }
+    wi32(add(str, mul(len, 4)), t);
+    len = add(len, 1);
+    if(eq(t, TOK_STR)) {
+        /* Insert the string into the int array. */
+        nb_words = add(1, div_(sub(add(gcv_str_size(cv), 4) ,1), 4));
+        if (gte(add(len, nb_words), gtkst_allocated_len(s))) {
+            str = tok_str_realloc(s, add(add(len, nb_words), 1));
+        }
+        wi32(add(str, mul(len, 4)), gcv_str_size(cv));
+        memcpy(add(str, mul(add(len, 1), 4)), gcv_str_data(cv), gcv_str_size(cv));
+        len = add(len, nb_words);
+    }
+    stkst_len(s, len);
+}
+
 /* end of tccpp.c */
 
 int tcc_new() {

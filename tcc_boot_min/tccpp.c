@@ -69,35 +69,6 @@ int init_tccpp_globals(){
   aisidnum_table = isidnum_table;
 }
 
-/* 27 */
-static void tok_str_add2(TokenString *s, int t, CValue *cv) {
-    int len;
-    int str;
-
-    stkst_lastlen(s, gtkst_len(s));
-    len = gtkst_len(s);
-    str = gtkst_str(s);
-
-    /* allocate space for worst case */
-    if (gte(add(len, TOK_MAX_SIZE), gtkst_allocated_len(s))) {
-        str = tok_str_realloc(s, add(add(len, TOK_MAX_SIZE), 1));
-    }
-    wi32(add(str, mul(len, 4)), t);
-    len = add(len, 1);
-    if(eq(t, TOK_STR)) {
-        /* Insert the string into the int array. */
-        size_t nb_words =
-            add(1, div_(sub(add(gcv_str_size(cv), 4) ,1), 4));
-        if (gte(add(len, nb_words), gtkst_allocated_len(s))) {
-            str = tok_str_realloc(s, add(add(len, nb_words), 1));
-        }
-        wi32(add(str, mul(len, 4)), gcv_str_size(cv));
-        memcpy(add(str, mul(add(len, 1), 4)), gcv_str_data(cv), gcv_str_size(cv));
-        len = add(len, nb_words);
-    }
-    stkst_len(s, len);
-}
-
 /* 28 */
 /* add the current parse token in token string 's' */
 ST_FUNC void tok_str_add_tok(TokenString *s)
