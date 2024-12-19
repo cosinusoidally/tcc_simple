@@ -152,17 +152,17 @@ static void parse_number(const char *p) {
         /* no need for checks except for base 10 / 8 errors */
         if (eq(t, 0)) {
             break;
-        } else if (t >= 'A') {
-            t = t - 'A' + 10;
+        } else if (gte(t, mkc('A'))) {
+            t = add(sub(t, mkc('A')), 10);
         } else {
-            t = t - '0';
+            t = sub(t, mkc('0'));
         }
         n1 = n;
-        n = n * b + t;
+        n = add(mul(n, b), t);
     }
 
     tok = TOK_CINT;
-    ++tok; /* TOK_CU... */
+    tok = add(tok, 1); /* TOK_CU... */
     tokc.i = n;
 }
 
