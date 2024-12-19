@@ -81,9 +81,10 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
     *t = *p;
     p = add(p, 4);
     if((t == TOK_STR) || (t == TOK_PPNUM) || (t == TOK_PPSTR)) {
-        cv->str.size = *p++;
+        cv->str.size = *p;
+        p = add(p, 4);
         cv->str.data = p;
-        p += (cv->str.size + sizeof_int - 1) / sizeof_int;
+        p += div_(sub(add(cv->str.size, sizeof_int), 1), sizeof_int);
     }
 
     wi32(pp, p);
