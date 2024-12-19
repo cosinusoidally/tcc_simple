@@ -93,7 +93,7 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
         }
         wi32(add(str, mul(len, 4)), cv->str.size);
         memcpy(&str[len + 1], cv->str.data, cv->str.size);
-        len += nb_words;
+        len = add(len, nb_words);
     }
     s->len = len;
 }
