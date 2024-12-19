@@ -242,11 +242,16 @@ void tccpp_new(TCCState *s) {
     /* init isid table */
     i = CH_EOF_;
     while(lt(i, 128)) {
-        set_idnum(i,
-            is_space(i) ? IS_SPC
-            : isid(i) ? IS_ID
-            : isnum(i) ? IS_NUM
-            : 0);
+        if(is_space(i)) {
+            c = IS_SPC;
+        } else if(isid(i)) {
+            c = IS_ID;
+        } else if(isnum(i)) {
+            c = IS_NUM;
+        } else {
+            c = 0;
+        }
+        set_idnum(i, c);
         i = add(i, 1);
     }
 
