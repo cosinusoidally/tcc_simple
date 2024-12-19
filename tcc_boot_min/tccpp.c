@@ -234,13 +234,22 @@ void next_nomacro1(void)
 }
 
 /* 35 */
-ST_FUNC void next_nomacro(void) {
-    while(1) {
-        next_nomacro_spc();
-        if(eq(0, lt(tok, 256) && (and(isidnum_table[tok - CH_EOF], IS_SPC)))) {
-            break;
+/* LJW FIXME why was the re-write so complex */
+ ST_FUNC void next_nomacro(void) {
+    int t;
+    int t2;
+     while(1) {
+         next_nomacro_spc();
+        t = neq(0, lt(tok, 256));
+        if(t) {
+            t2 = neq(0, and(isidnum_table[tok - CH_EOF], IS_SPC));
+        } else {
+            t2 = 0;
         }
-    }
+        if(eq(0, and(t, t2))) {
+             break;
+         }
+     }
 }
 
 /* 36 */
