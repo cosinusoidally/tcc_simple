@@ -132,12 +132,14 @@ static void parse_number(const char *p) {
         } else {
             break;
         }
-        *q++ = ch;
-        ch = *p++;
+        wi8(q, ch);
+        q = add(q, 1);
+        ch = ri8(p);
+        p = add(p, 1);
     }
 
     /* integer number */
-    *q = '\0';
+    wi8(q, 0);
     q = token_buf;
     if (b == 10 && *q == '0') {
         b = 8;
