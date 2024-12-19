@@ -92,36 +92,6 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
     wi32(pp, p);
 }
 
-/* 31 */
-static void parse_string(const char *s, int len) {
-    int p;
-    int is_long;
-    int sep;
-    int c;
-
-    is_long=0;
-    sep = ri8(s);
-    s = add(s, 1);
-    len = sub(len, 2);
-    p = tcc_malloc(add(len, 1));
-    memcpy(p, s, len);
-    wi8(add(p, len), 0);
-
-    cstr_reset(atokcstr);
-    parse_escape_string(atokcstr, p, is_long);
-    tcc_free(p);
-
-    if (eq(sep, mkc('\''))) {
-        tok = TOK_CCHAR;
-        c = ri8(gcs_data(atokcstr));
-        scv_i(atokc, c);
-    } else {
-        scv_str_size(atokc, gcs_size(atokcstr));
-        scv_str_data(atokc, gcs_data(atokcstr));
-        tok = TOK_STR;
-    }
-}
-
 /* 32 */
 /* parse number in null terminated string 'p' and return it in the
    current token */
