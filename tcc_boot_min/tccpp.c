@@ -94,7 +94,7 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
 
 /* 31 */
 static void parse_string(const char *s, int len) {
-    uint8_t *p;
+    int p;
     int is_long;
     int sep;
     int c;
@@ -116,8 +116,8 @@ static void parse_string(const char *s, int len) {
         c = ri8(gcs_data(atokcstr));
         scv_i(atokc, c);
     } else {
-        tokc.str.size = gcs_size(atokcstr);
-        tokc.str.data = gcs_data(atokcstr);
+        scv_str_size(atokc, gcs_size(atokcstr));
+        scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_STR;
     }
 }
