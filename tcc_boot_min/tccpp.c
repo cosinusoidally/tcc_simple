@@ -80,9 +80,9 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
 
     /* allocate space for worst case */
     if (gte(add(len, TOK_MAX_SIZE), gtkst_allocated_len(s))) {
-        str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
+        str = tok_str_realloc(s, add(add(len, TOK_MAX_SIZE), 1));
     }
-    str[len] = t;
+    wi32(add(str, mul(len, 4)), t);
     len = add(len, 1);
     if(t == TOK_STR) {
         /* Insert the string into the int array. */
