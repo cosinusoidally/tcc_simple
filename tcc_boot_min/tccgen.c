@@ -41,8 +41,6 @@ static int local_scope;
 static int in_sizeof;
 static int section_sym;
 
-ST_DATA SValue __vstack[1+VSTACK_SIZE], *vtop, *pvtop;
-
 ST_DATA int const_wanted; /* true if constant wanted */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */

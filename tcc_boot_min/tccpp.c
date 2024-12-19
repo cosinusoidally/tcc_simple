@@ -245,10 +245,10 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     CString cstr;
     int i;
 
-    pvtop = vtop = vstack - 1;
+    vtop = vstack - 1;
 
     set_idnum('$', 0);
-    set_idnum('.', is_asm ? IS_ID : 0);
+    set_idnum('.', 0);
 
     cstr_new(&cstr);
     cstr_cat(&cstr, "\"", -1);
