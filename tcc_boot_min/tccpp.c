@@ -74,14 +74,16 @@ static void tok_str_add2(TokenString *s, int t, CValue *cv) {
     int len;
     int *str;
 
-    s->lastlen = s->len;
-    len = s->len;
-    str = s->str;
+    stkst_lastlen(s, gtkst_len(s));
+    len = gtkst_len(s);
+    str = gtkst_str(s);
 
     /* allocate space for worst case */
-    if (len + TOK_MAX_SIZE >= s->allocated_len)
+    if (len + TOK_MAX_SIZE >= s->allocated_len) {
         str = tok_str_realloc(s, len + TOK_MAX_SIZE + 1);
-    str[len++] = t;
+    }
+    str[len] = t;
+    len = add(len, 1);
     if(t == TOK_STR) {
         /* Insert the string into the int array. */
         size_t nb_words =
