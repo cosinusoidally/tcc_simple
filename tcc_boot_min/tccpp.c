@@ -91,10 +91,10 @@ static inline void TOK_GET(int *t, const int **pp, CValue *cv) {
 }
 
 /* 31 */
-static void parse_string(const char *s, int len)
-{
+static void parse_string(const char *s, int len) {
     uint8_t *p;
-    int is_long, sep;
+    int is_long;
+    int sep;
 
     is_long=0;
     sep = *s++;
