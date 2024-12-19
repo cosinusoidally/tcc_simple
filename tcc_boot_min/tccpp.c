@@ -245,15 +245,15 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     CString cstr;
     int i;
 
-    vtop = vstack - 1;
+    vtop = sub(vstack, sizeof_SValue);
 
-    set_idnum('$', 0);
-    set_idnum('.', 0);
+    set_idnum(mkc('$'), 0);
+    set_idnum(mkc('.'), 0);
 
     cstr_new(&cstr);
-    cstr_cat(&cstr, "\"", -1);
-    cstr_cat(&cstr, file->filename, -1);
-    cstr_cat(&cstr, "\"", 0);
+    cstr_cat(&cstr, mks("\""), sub(0,1));
+    cstr_cat(&cstr, gbf_filename(file), sub(0,1));
+    cstr_cat(&cstr, mks("\""), 0);
 
     cstr_reset(&cstr);
     cstr_free(&cstr);
