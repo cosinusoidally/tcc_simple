@@ -115,9 +115,10 @@ static void parse_number(const char *p) {
     q = add(q, 1);
     b = 10;
     if (eq(t, mkc('0'))) {
-        if (ch == 'x' || ch == 'X') {
+        if (or(eq(ch, mkc('x')), eq(ch, mkc('X')))) {
             q = sub(q, 1);
-            ch = *p++;
+            ch = ri8(p);
+            p = add(p, 1);
             b = 16;
         }
     }
