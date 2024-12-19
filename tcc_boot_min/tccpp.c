@@ -230,10 +230,11 @@ void next_nomacro1(void)
 }
 
 /* 39 */
-void tccpp_new(TCCState *s)
-{
-    int i, c;
-    const char *p, *r;
+void tccpp_new(TCCState *s) {
+    int i;
+    int c;
+    const char *p;
+    const char *r;
     int tmp;
 
     /* might be used in error() before preprocess_start() */
@@ -246,8 +247,9 @@ void tccpp_new(TCCState *s)
             : isnum(i) ? IS_NUM
             : 0);
 
-    for(i = 128; i<256; i++)
+    for(i = 128; i<256; i++) {
         set_idnum(i, IS_ID);
+    }
 
     memset(hash_ident, 0, TOK_HASH_SIZE * sizeof(TokenSym *));
     cstr_new(&cstr_buf);
