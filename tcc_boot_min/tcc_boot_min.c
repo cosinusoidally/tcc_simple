@@ -499,6 +499,8 @@ int init_runtime(){
   TOK_PPNUM = 190; /* 0xbe preprocessor number */
   TOK_PPSTR = 191; /* 0xbf preprocessor string */
 
+  TOK_CCHAR = 179; /* 0xb3 char constant in tokc */
+
   REL_SECTION_FMT = mks(".rel%s");
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */

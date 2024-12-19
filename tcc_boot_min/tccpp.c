@@ -105,7 +105,7 @@ static void parse_string(const char *s, int len) {
     len = sub(len, 2);
     p = tcc_malloc(add(len, 1));
     memcpy(p, s, len);
-    wi8(add(p,len), 0);
+    wi8(add(p, len), 0);
 
     cstr_reset(atokcstr);
     parse_escape_string(atokcstr, p, is_long);

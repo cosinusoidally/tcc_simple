@@ -209,6 +209,7 @@ int TOK_FLAG_BOF;
 int TOK_STR;
 int TOK_PPNUM;
 int TOK_PPSTR;
+int TOK_CCHAR;
 
 int tok_flags;
 
