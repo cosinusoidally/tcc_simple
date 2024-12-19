@@ -265,6 +265,7 @@ int macro_ptr;
 int macro_stack;
 
 int atokc;
+int atokcstr;
 
 int tok;
 

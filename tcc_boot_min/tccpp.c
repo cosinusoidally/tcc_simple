@@ -60,6 +60,7 @@ extern int acstr_buf;
 extern int CH_EOF_;
 extern int aisidnum_table;
 extern int atokc;
+extern int atokcstr;
 
 int init_tccpp_globals(){
   aTOK_HASH_SIZE = TOK_HASH_SIZE;
@@ -68,6 +69,7 @@ int init_tccpp_globals(){
   CH_EOF_ = CH_EOF;
   aisidnum_table = isidnum_table;
   atokc = &tokc;
+  atokcstr = &tokcstr;
 }
 
 /* 29 */
@@ -102,7 +104,7 @@ static void parse_string(const char *s, int len) {
     len = sub(len, 2);
     p = tcc_malloc(add(len, 1));
     memcpy(p, s, len);
-    p[len] = 0;
+    wi8(add(p, len), 0);
 
     cstr_reset(&tokcstr);
     parse_escape_string(&tokcstr, p, is_long);
