@@ -243,7 +243,11 @@ ST_INLN void unget_tok(int last_tok)
 /* 38 */
 ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
     CString cstr;
+    int acstr;
     int i;
+
+    enter();
+    acstr = v_alloca(sizeof_CString);
 
     vtop = sub(vstack, sizeof_SValue);
 
@@ -260,6 +264,8 @@ ST_FUNC void preprocess_start(TCCState *s1, int is_asm) {
 
     parse_flags = 0;
     tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
+
+    leave(0);
 }
 
 /* 39 */
