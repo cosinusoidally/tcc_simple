@@ -234,11 +234,13 @@ void next_nomacro1(void)
 }
 
 /* 35 */
-ST_FUNC void next_nomacro(void)
-{
-    do {
+ST_FUNC void next_nomacro(void) {
+    while(1) {
         next_nomacro_spc();
-    } while (tok < 256 && (isidnum_table[tok - CH_EOF] & IS_SPC));
+        if(eq(0, tok < 256 && (isidnum_table[tok - CH_EOF] & IS_SPC))) {
+            break;
+        }
+    }
 }
 
 /* 36 */
