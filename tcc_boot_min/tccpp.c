@@ -113,11 +113,11 @@ static void parse_string(const char *s, int len) {
 
     if (eq(sep, mkc('\''))) {
         tok = TOK_CCHAR;
-        c = ri8((tokcstr.data));
+        c = ri8(gcs_data(atokcstr));
         scv_i(atokc, c);
     } else {
-        tokc.str.size = tokcstr.size;
-        tokc.str.data = tokcstr.data;
+        tokc.str.size = gcs_size(atokcstr);
+        tokc.str.data = gcs_data(atokcstr);
         tok = TOK_STR;
     }
 }
