@@ -125,12 +125,13 @@ static void parse_number(const char *p) {
     /* parse all digits. cannot check octal numbers at this stage
        because of floating point constants */
     while (1) {
-        if (ch >= 'A' && ch <= 'F')
-            t = ch - 'A' + 10;
-        else if (isnum(ch))
-            t = ch - '0';
-        else
+        if (and(gte(ch, mkc('A')), lte(ch, mkc( 'F')))) {
+            t = add(sub(ch - mkc('A')), 10);
+        } else if (isnum(ch)) {
+            t = sub(ch, mkc('0'));
+        } else {
             break;
+        }
         *q++ = ch;
         ch = *p++;
     }
