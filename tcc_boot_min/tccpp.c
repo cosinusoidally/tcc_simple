@@ -100,7 +100,7 @@ static void parse_string(const char *s, int len) {
     int c;
 
     is_long=0;
-    sep = *s;
+    sep = ri8(s);
     s = add(s, 1);
     len = sub(len, 2);
     p = tcc_malloc(add(len, 1));
