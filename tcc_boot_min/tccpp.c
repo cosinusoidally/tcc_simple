@@ -240,12 +240,15 @@ void tccpp_new(TCCState *s) {
     /* might be used in error() before preprocess_start() */
 
     /* init isid table */
-    for(i = CH_EOF; i<128; i++)
+    i = CH_EOF_;
+    while(lt(i, 128)) {
         set_idnum(i,
             is_space(i) ? IS_SPC
             : isid(i) ? IS_ID
             : isnum(i) ? IS_NUM
             : 0);
+        i = add(i, 1);
+    }
 
     i = 128;
     while(lt(i, 256)) {
