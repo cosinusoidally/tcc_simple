@@ -49,7 +49,7 @@ ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc 
 ST_DATA const char *funcname;
 ST_DATA int g_debug;
 
-ST_DATA CType func_old_type, int_type, size_type;
+ST_DATA CType func_old_type, int_type;
 
 /* ------------------------------------------------------------------------- */
 
@@ -82,7 +82,6 @@ ST_FUNC int tccgen_compile(TCCState *s1)
 
     /* define some often used types */
     int_type.t = VT_INT;
-    size_type.t = VT_INT | VT_UNSIGNED;
     func_old_type.t = VT_FUNC;
     func_old_type.ref = sym_push(SYM_FIELD, &int_type, 0, 0);
     func_old_type.ref->f.func_type = FUNC_OLD;
