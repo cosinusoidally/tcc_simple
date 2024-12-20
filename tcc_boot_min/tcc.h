@@ -586,7 +586,9 @@ int o(int c);
 
 /* some functions in header: */
 int isid(int c) {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+    return or(or(and(gte(c, mkc('a')), lte(c, mkc('z'))),
+                 and(gte(c, mkc('A')), lte(c, mkc('Z')))),
+              eq(c, mkc('_')));
 }
 int isnum(int c) {
     return c >= '0' && c <= '9';
