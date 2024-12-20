@@ -195,9 +195,9 @@ int next_nomacro1() {
             sbf_buf_ptr(file, p);
             return;
         }
-    } else if((c == '(') || (c == ')') ||
-              (c == '{') || (c == '}') ||
-              (c == ',') || (c == ';')){
+    } else if(eq(c, mkc('(')) || eq(c, mkc(')')) ||
+              eq(c, mkc('{')) || eq(c, mkc('}')) ||
+              eq(c, mkc(',')) || eq(c, mkc(';'))){
         tok = c;
         p++;
     }
