@@ -591,7 +591,7 @@ int isid(int c) {
               eq(c, mkc('_')));
 }
 int isnum(int c) {
-    return c >= '0' && c <= '9';
+    return and(gte(c, mkc('0')), lte(c, mkc('9')));
 }
 
 uint16_t read16le(unsigned char *p) {
