@@ -585,11 +585,12 @@ int o(int c);
 
 
 /* some functions in header: */
-uint32_t read32le(unsigned char *p) {
-  return read16le(p) | (uint32_t)read16le(p + 2) << 16;
+int read32le(int p) {
+  return ri32(p);
 }
-void write32le(unsigned char *p, uint32_t x) {
-    write16le(p, x);  write16le(p + 2, x >> 16);
+
+int write32le(int p, int x) {
+    wi32(p, x);
 }
 
 /********************************************************/
