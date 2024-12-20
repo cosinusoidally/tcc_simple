@@ -156,7 +156,7 @@ int next_nomacro1() {
             PEEKC(tc, tp);
             c = ri32(tc); p = ri32(tp);
             while (and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID, IS_NUM))) {
-                cstr_ccat(&tokcstr, c);
+                cstr_ccat(atokcstr, c);
                 wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
                 PEEKC(tc, tp);
                 c = ri32(tc); p = ri32(tp);
@@ -166,7 +166,9 @@ int next_nomacro1() {
         tok = gtks_tok(ts);
     } else if(isnum(c)){
         t = c;
-        PEEKC(&c, &p);
+        wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+        PEEKC(tc, tp);
+        c = ri32(tc); p = ri32(tp);
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
         cstr_reset(atokcstr);
@@ -178,7 +180,9 @@ int next_nomacro1() {
                 break;
             }
             t = c;
-            PEEKC(&c, &p);
+            wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+            PEEKC(tc, tp);
+            c = ri32(tc); p = ri32(tp);
         }
         /* We add a trailing '\0' to ease parsing */
         cstr_ccat(atokcstr, 0);
@@ -195,10 +199,14 @@ int next_nomacro1() {
         scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPSTR;
     } else if(eq(c, mkc('='))){
-        PEEKC(&c, &p);
+        wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+        PEEKC(tc, tp);
+        c = ri32(tc); p = ri32(tp);
         tok = mkc('=');
     } else if(eq(c, mkc('/'))){
-        PEEKC(&c, &p);
+        wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+        PEEKC(tc, tp);
+        c = ri32(tc); p = ri32(tp);
         if (eq(c, mkc('*'))) {
             p = parse_comment(p);
             /* comments replaced by a blank */
