@@ -54,11 +54,13 @@ int init_tccpp_globals(){
 
 /* 33 */
 /* return next token without macro substitution */
-void next_nomacro1(void)
-{
-    int t, c, is_long, len;
+int next_nomacro1() {
+    int t;
+    int c;
+    int len;
     TokenSym *ts;
-    uint8_t *p, *p1;
+    uint8_t *p;
+    uint8_t *p1;
     unsigned int h;
     int redo_no_start;
 
@@ -160,7 +162,6 @@ void next_nomacro1(void)
         tokc.str.data = tokcstr.data;
         tok = TOK_PPNUM;
     } else if((c == '\'') || (c == '\"')){
-        is_long = 0;
         cstr_reset(&tokcstr);
         cstr_ccat(&tokcstr, c);
         p = parse_pp_string(p, c, &tokcstr);
