@@ -185,14 +185,14 @@ int next_nomacro1() {
         tok = TOK_PPSTR;
     } else if(eq(c, mkc('='))){
         PEEKC(&c, &p);
-        tok = '=';
-    } else if(c == '/'){
+        tok = mkc('=');
+    } else if(eq(c, mkc('/'))){
         PEEKC(&c, &p);
-        if (c == '*') {
+        if (eq(c, mkc('*'))) {
             p = parse_comment(p);
             /* comments replaced by a blank */
-            tok = ' ';
-            file->buf_ptr = p;
+            tok = mkc(' ');
+            sbf_buf_ptr(file, p);
             return;
         }
     } else if((c == '(') || (c == ')') ||
