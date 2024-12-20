@@ -199,8 +199,8 @@ int next_nomacro1() {
               eq(c, mkc('{')) || eq(c, mkc('}')) ||
               eq(c, mkc(',')) || eq(c, mkc(';'))){
         tok = c;
-        p++;
+        p = add(p, 1);
     }
     tok_flags = 0;
-    file->buf_ptr = p;
+    sbf_buf_ptr(file, p);
 }
