@@ -137,8 +137,8 @@ int next_nomacro1() {
                 }
                 pts = atks_hash_next(ts);
             }
-            if(token_found == 0) {
-                ts = tok_alloc_new(pts, (char *) p1, len);
+            if(eq(token_found, 0)) {
+                ts = tok_alloc_new(pts, p1, len);
             }
         } else {
             /* slower case */
