@@ -585,15 +585,6 @@ int o(int c);
 
 
 /* some functions in header: */
-int isid(int c) {
-    return or(or(and(gte(c, mkc('a')), lte(c, mkc('z'))),
-                 and(gte(c, mkc('A')), lte(c, mkc('Z')))),
-              eq(c, mkc('_')));
-}
-int isnum(int c) {
-    return and(gte(c, mkc('0')), lte(c, mkc('9')));
-}
-
 uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;
 }

@@ -2825,6 +2825,16 @@ int is_space(int ch) {
     return or(or(eq(ch, mkc(' ')), eq(ch, mkc('\t'))), eq(ch, mkc('\r')));
 }
 
+int isid(int c) {
+    return or(or(and(gte(c, mkc('a')), lte(c, mkc('z'))),
+                 and(gte(c, mkc('A')), lte(c, mkc('Z')))),
+              eq(c, mkc('_')));
+}
+
+int isnum(int c) {
+    return and(gte(c, mkc('0')), lte(c, mkc('9')));
+}
+
 /* end of tcc.h functions */
 
 int tcc_new() {
