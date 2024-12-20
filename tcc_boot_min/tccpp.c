@@ -63,6 +63,7 @@ int next_nomacro1() {
     uint8_t *p1;
     unsigned int h;
     int redo_no_start;
+    TokenSym **pts;
 
     p = gbf_buf_ptr(file);
     while(1) {
@@ -114,20 +115,20 @@ int next_nomacro1() {
             }
             h = TOK_HASH_FUNC(h, c);
         }
-        len = p - p1;
-        if (c != '\\') {
-            TokenSym **pts;
+        len = sub(p, p1);
+        if (neq(c, mkc('\\'))) {
 
             /* fast case : no stray found, so we have the full token
                and we have already hashed it */
-            h &= (TOK_HASH_SIZE - 1);
+            h = and(h, sub(aTOK_HASH_SIZE, 1));
             pts = &hash_ident[h];
             int token_found;
             while(1) {
                 token_found = 0;
-                ts = *pts;
-                if (!ts)
+                ts = ri32(pts);
+                if (eq(ts, 0)) {
                     break;
+                }
                 if (ts->len == len && !memcmp(ts->str, p1, len)) {
                     token_found = 1;
                     break;
