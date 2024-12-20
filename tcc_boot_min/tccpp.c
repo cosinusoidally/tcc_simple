@@ -75,17 +75,17 @@ int next_nomacro1() {
                 p = add(p, 1);
             }
             redo_no_start = 1;
-        } else if(c == '\\'){
+        } else if(eq(c, mkc('\\'))){
             /* first look if it is in fact an end of buffer */
             c = handle_stray1(p);
-            p = file->buf_ptr;
-            if (c != CH_EOF) {
+            p = gbf_buf_ptr(file);
+            if (neq(c, CH_EOF_)) {
                 redo_no_start = 1;
             } else {
                 tok = TOK_EOF;
             }
-        } else if(c == '\n'){
-            file->line_num++;
+        } else if(eq(c, mkc('\n'))){
+            file->line_num = add(file->line_num, 1);
             tok_flags |= TOK_FLAG_BOL;
             p++;
             if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
