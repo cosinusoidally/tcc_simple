@@ -162,8 +162,8 @@ int next_nomacro1() {
         while(1) {
             cstr_ccat(atokcstr, t);
             if (!((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
-                  || c == '.'
-                  || (c == '+' || c == '-'))) {
+                  || eq(c, mkc('.'))
+                  || or(eq(c, mkc('+')), eq(c, mkc('-'))))) {
                 break;
             }
             t = c;
