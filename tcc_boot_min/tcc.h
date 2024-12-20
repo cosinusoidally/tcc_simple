@@ -381,7 +381,7 @@ extern int TOK_FLAG_BOF; /*  0x0002 beginning of file before */
 
 #define PARSE_FLAG_PREPROCESS 0x0001 /* activate preprocessing */
 extern int PARSE_FLAG_TOK_NUM; /*   0x0002 return numbers instead of TOK_PPNUM */
-#define PARSE_FLAG_LINEFEED   0x0004 /* line feed is returned as a
+extern int PARSE_FLAG_LINEFEED; /*  0x0004 line feed is returned as a
                                         token. line feed is also
                                         returned at eof */
 extern int PARSE_FLAG_SPACES; /*    0x0010 next() returns space tokens (for -E) */

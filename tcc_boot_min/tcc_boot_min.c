@@ -514,6 +514,9 @@ int init_runtime(){
   IS_NUM = 4;
 
   PARSE_FLAG_TOK_NUM = 2;  /*  0x0002 return numbers instead of TOK_PPNUM */
+  PARSE_FLAG_LINEFEED = 4;  /*  0x0004 line feed is returned as a
+                                        token. line feed is also
+                                        returned at eof */
   PARSE_FLAG_SPACES = 16;  /*  0x0010 next() returns space tokens (for -E) */
   PARSE_FLAG_TOK_STR = 64; /*  0x0040 return parsed strings instead of TOK_PPSTR */
 
