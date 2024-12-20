@@ -85,7 +85,7 @@ int next_nomacro1() {
                 tok = TOK_EOF;
             }
         } else if(eq(c, mkc('\n'))){
-            file->line_num = add(file->line_num, 1);
+            sbf_line_num(file, add(gbf_line_num(file), 1));
             tok_flags = or(tok_flags, TOK_FLAG_BOL);
             p = add(p, 1);
             if (eq(0, and(parse_flags, PARSE_FLAG_LINEFEED))) {
