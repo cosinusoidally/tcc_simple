@@ -175,13 +175,13 @@ int next_nomacro1() {
         scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPNUM;
     } else if((c == '\'') || (c == '\"')){
-        cstr_reset(&tokcstr);
-        cstr_ccat(&tokcstr, c);
-        p = parse_pp_string(p, c, &tokcstr);
-        cstr_ccat(&tokcstr, c);
-        cstr_ccat(&tokcstr, '\0');
-        tokc.str.size = tokcstr.size;
-        tokc.str.data = tokcstr.data;
+        cstr_reset(atokcstr);
+        cstr_ccat(atokcstr, c);
+        p = parse_pp_string(p, c, atokcstr);
+        cstr_ccat(atokcstr, c);
+        cstr_ccat(atokcstr, 0);
+        scv_str_size(atokc, gcs_size(atokcstr));
+        scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPSTR;
     } else if(c == '='){
         PEEKC(&c, &p);
