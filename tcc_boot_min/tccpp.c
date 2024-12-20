@@ -170,9 +170,9 @@ int next_nomacro1() {
             PEEKC(&c, &p);
         }
         /* We add a trailing '\0' to ease parsing */
-        cstr_ccat(&tokcstr, '\0');
-        tokc.str.size = tokcstr.size;
-        tokc.str.data = tokcstr.data;
+        cstr_ccat(atokcstr, 0);
+        scv_str_size(atokc, gcs_size(atokcstr));
+        scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPNUM;
     } else if((c == '\'') || (c == '\"')){
         cstr_reset(&tokcstr);
