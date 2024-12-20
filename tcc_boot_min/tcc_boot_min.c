@@ -2818,6 +2818,11 @@ int tccpp_delete(int s) {
 
 /* end of tccpp.c */
 
+/* start of tcc.h functions */
+
+
+/* end of tcc.h functions */
+
 int tcc_new() {
     int s;
 
