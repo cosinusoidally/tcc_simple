@@ -58,12 +58,12 @@ int next_nomacro1() {
     int t;
     int c;
     int len;
-    TokenSym *ts;
-    uint8_t *p;
-    uint8_t *p1;
-    unsigned int h;
+    int ts;
+    int p;
+    int p1;
+    int h;
     int redo_no_start;
-    TokenSym **pts;
+    int pts;
 
     p = gbf_buf_ptr(file);
     while(1) {
