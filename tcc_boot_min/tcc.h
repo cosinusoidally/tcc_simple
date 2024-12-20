@@ -301,7 +301,7 @@ extern int TOK_PPNUM; /*  0xbe preprocessor number */
 extern int TOK_PPSTR; /*  0xbf preprocessor string */
 /* <-- */
 
-#define TOK_EOF       (-1)  /* end of file */
+extern int TOK_EOF;  /*     (-1)  end of file */
 #define TOK_LINEFEED  10    /* line feed */
 
 /* all identifiers and strings have token above that */

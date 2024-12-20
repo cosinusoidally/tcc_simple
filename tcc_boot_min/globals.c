@@ -206,6 +206,8 @@ int IO_BUF_SIZE;
 int TOK_FLAG_BOL;
 int TOK_FLAG_BOF;
 
+int TOK_EOF;
+
 int TOK_STR;
 int TOK_PPNUM;
 int TOK_PPSTR;
