@@ -155,7 +155,7 @@ int next_nomacro1() {
             wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
             PEEKC(tc, tp);
             c = ri32(tc); p = ri32(tp);
-            while (and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID, IS_NUM))) {
+            while (and(ri8(add(aisidnum_table, sub(c, CH_EOF_))), or(IS_ID, IS_NUM))) {
                 cstr_ccat(atokcstr, c);
                 wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
                 PEEKC(tc, tp);
@@ -189,7 +189,7 @@ int next_nomacro1() {
         scv_str_size(atokc, gcs_size(atokcstr));
         scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPNUM;
-    } else if((c == '\'') || (c == '\"')){
+    } else if(or(eq(c, mkc('\'')), eq(c, mkc('\"')))){
         cstr_reset(atokcstr);
         cstr_ccat(atokcstr, c);
         p = parse_pp_string(p, c, atokcstr);
