@@ -121,7 +121,7 @@ int next_nomacro1() {
             /* fast case : no stray found, so we have the full token
                and we have already hashed it */
             h = and(h, sub(aTOK_HASH_SIZE, 1));
-            pts = &hash_ident[h];
+            pts = add(ahash_ident, mul(h, 4));
             int token_found;
             while(1) {
                 token_found = 0;
@@ -129,9 +129,11 @@ int next_nomacro1() {
                 if (eq(ts, 0)) {
                     break;
                 }
-                if (ts->len == len && !memcmp(ts->str, p1, len)) {
-                    token_found = 1;
-                    break;
+                if (eq(gtks_len(ts), len)) {
+                    if(eq(0, memcmp(ts->str, p1, len))) {
+                        token_found = 1;
+                        break;
+                    }
                 }
                 pts = &(ts->hash_next);
             }
