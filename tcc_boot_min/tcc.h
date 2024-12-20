@@ -422,17 +422,6 @@ ST_FUNC void tccpp_delete(TCCState *s);
 ST_FUNC int tcc_preprocess(TCCState *s1);
 ST_FUNC void skip(int c);
 
-/* space excluding newline */
-int is_space(int ch) {
-    return ch == ' ' || ch == '\t' || ch == '\v' || ch == '\f' || ch == '\r';
-}
-int isid(int c) {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
-}
-int isnum(int c) {
-    return c >= '0' && c <= '9';
-}
-
 /* ------------ tccgen.c ------------ */
 
 #define SYM_POOL_NB (8192 / sizeof(Sym))
@@ -593,6 +582,19 @@ int gtst(int inv, int t);
 int gtst_addr(int inv, int a);
 int gen_opi(int op);
 int o(int c);
+
+
+/* some functions in header: */
+/* space excluding newline */
+int is_space(int ch) {
+    return ch == ' ' || ch == '\t' || ch == '\v' || ch == '\f' || ch == '\r';
+}
+int isid(int c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+int isnum(int c) {
+    return c >= '0' && c <= '9';
+}
 
 uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;
