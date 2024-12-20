@@ -1853,14 +1853,12 @@ int tcc_output_file(int s, int filename) {
 
 /* start of tccpp.c */
 
-/* 1 */
 int skip(int c) {
     next();
 }
 
 /* ------------------------------------------------------------------------- */
 
-/* 2 */
 /* CString handling */
 int cstr_realloc(int cstr, int new_size) {
     int size;
@@ -1876,7 +1874,6 @@ int cstr_realloc(int cstr, int new_size) {
     scs_size_allocated(cstr, size);
 }
 
-/* 3 */
 /* add a byte */
 int cstr_ccat(int cstr, int ch) {
     int size;
@@ -1888,7 +1885,6 @@ int cstr_ccat(int cstr, int ch) {
     scs_size(cstr, size);
 }
 
-/* 4 */
 int cstr_cat(int cstr, int str, int len) {
     int size;
     if (lte(len, 0)) {
@@ -1902,25 +1898,21 @@ int cstr_cat(int cstr, int str, int len) {
     scs_size(cstr, size);
 }
 
-/* 5 */
 int cstr_new(int cstr) {
     memset(cstr, 0, sizeof_CString);
 }
 
-/* 6 */
 /* free string and reset it to NULL */
 int cstr_free(int cstr) {
     tcc_free(gcs_data(cstr));
     cstr_new(cstr);
 }
 
-/* 7 */
 /* reset string to empty */
 int cstr_reset(int cstr) {
     scs_size(cstr, 0);
 }
 
-/* 8 */
 /* allocate a new token */
 int tok_alloc_new(int pts, int str, int len) {
     int ts;
@@ -1949,12 +1941,10 @@ int tok_alloc_new(int pts, int str, int len) {
 
 /* ------------------------------------------------------------------------- */
 
-/* 9 */
 int TOK_HASH_FUNC(int h, int c) {
   return add(add(h, shl(h, 5)), add(and(shr(h, 27), 31), c));
 }
 
-/* 10 */
 /* find a token and add it if not found */
 int tok_alloc(int str, int len) {
     int ts;
@@ -1984,7 +1974,6 @@ int tok_alloc(int str, int len) {
     return tok_alloc_new(pts, str, len);
 }
 
-/* 11 */
 int get_tok_str(int v, int cv) {
     int p;
     int i;
@@ -2002,7 +1991,6 @@ int get_tok_str(int v, int cv) {
     return gcs_data(acstr_buf);
 }
 
-/* 12 */
 /* return the current character, handling end of block if necessary
    (but not stray) */
 int handle_eob() {
@@ -2034,7 +2022,6 @@ int handle_eob() {
     }
 }
 
-/* 13 */
 /* skip the stray and handle the \\n case. Output an error if
    incorrect char after the stray */
 int handle_stray1(int p) {
@@ -2049,7 +2036,6 @@ int handle_stray1(int p) {
     }
 }
 
-/* 14 */
 /* handle just the EOB case, but not stray */
 int PEEKC_EOB(int c1, int p1) {
     int c;
@@ -2066,7 +2052,6 @@ int PEEKC_EOB(int c1, int p1) {
     wi32(p1,p);
 }
 
-/* 15 */
 /* handle the complicated stray case */
 int PEEKC(int c1, int p1) {
     int c;
@@ -2082,7 +2067,6 @@ int PEEKC(int c1, int p1) {
     wi32(p1,p);
 }
 
-/* 16 */
 /* C comments */
 int parse_comment(int p) {
     int c;
@@ -2133,7 +2117,6 @@ int parse_comment(int p) {
     return p;
 }
 
-/* 17 */
 int set_idnum(int c, int val) {
     int prev;
     prev = ri8(add(aisidnum_table, sub(c, CH_EOF_)));
@@ -2141,7 +2124,6 @@ int set_idnum(int c, int val) {
     return prev;
 }
 
-/* 18 */
 /* parse a string without interpreting escapes */
 int parse_pp_string(int p, int sep, int str) {
     int c;
@@ -2184,7 +2166,6 @@ int parse_pp_string(int p, int sep, int str) {
     return leave(p);
 }
 
-/* 19 */
 /* token string handling */
 int tok_str_new(int s) {
     stkst_str(s, 0);
@@ -2193,7 +2174,6 @@ int tok_str_new(int s) {
     stkst_allocated_len(s, 0);
 }
 
-/* 20 */
 int tok_str_alloc() {
     int str;
     str = tcc_realloc(0, sizeof_TokenString);
@@ -2201,18 +2181,15 @@ int tok_str_alloc() {
     return str;
 }
 
-/* 21 */
 int tok_str_free_str(int str) {
     tcc_free(str);
 }
 
-/* 22 */
 int tok_str_free(int str) {
     tok_str_free_str(gtkst_str(str));
     tcc_free(str);
 }
 
-/* 23 */
 int tok_str_realloc(int s, int new_size) {
     int str;
     int size;
@@ -2232,7 +2209,6 @@ int tok_str_realloc(int s, int new_size) {
     return gtkst_str(s);
 }
 
-/* 24 */
 int tok_str_add(int s, int t) {
     int len;
     int str;
@@ -2247,7 +2223,6 @@ int tok_str_add(int s, int t) {
     stkst_len(s, len);
 }
 
-/* 25 */
 int begin_macro(int str, int alloc) {
     stkst_alloc(str, alloc);
     stkst_prev(str, macro_stack);
@@ -2256,7 +2231,6 @@ int begin_macro(int str, int alloc) {
     macro_stack = str;
 }
 
-/* 26 */
 int end_macro() {
     int str;
     str = macro_stack;
@@ -2265,7 +2239,6 @@ int end_macro() {
     tok_str_free(str);
 }
 
-/* 27 */
 int tok_str_add2(int s, int t, int cv) {
     int len;
     int str;
@@ -2294,13 +2267,11 @@ int tok_str_add2(int s, int t, int cv) {
     stkst_len(s, len);
 }
 
-/* 28 */
 /* add the current parse token in token string 's' */
 int tok_str_add_tok(int s) {
     tok_str_add2(s, tok, atokc);
 }
 
-/* 29 */
 /* get a token from an integer array and increment pointer
    accordingly. we code it as a macro to avoid pointer aliasing. */
 int TOK_GET(int t, int pp, int cv) {
@@ -2320,7 +2291,6 @@ int TOK_GET(int t, int pp, int cv) {
     wi32(pp, p);
 }
 
-/* 30 */
 /* evaluate escape codes in a string. */
 int parse_escape_string(int outstr, int buf, int is_long) {
     int c;
@@ -2352,7 +2322,6 @@ int parse_escape_string(int outstr, int buf, int is_long) {
     cstr_ccat(outstr, 0);
 }
 
-/* 31 */
 int parse_string(int s, int len) {
     int p;
     int is_long;
@@ -2382,7 +2351,6 @@ int parse_string(int s, int len) {
     }
 }
 
-/* 32 */
 /* parse number in null terminated string 'p' and return it in the
    current token */
 int parse_number(int p) {
@@ -2456,7 +2424,6 @@ int parse_number(int p) {
     scv_i(atokc, n);
 }
 
-/* 33 */
 /* return next token without macro substitution */
 int next_nomacro1() {
     int t;
@@ -2630,7 +2597,6 @@ int next_nomacro1() {
     return leave(0);
 }
 
-/* 34 */
 /* return next token without macro substitution. Can read input from
    macro_ptr buffer */
 int next_nomacro_spc() {
@@ -2657,7 +2623,6 @@ int next_nomacro_spc() {
     leave(0);
 }
 
-/* 35 */
 /* LJW FIXME why was the re-write so complex */
 int next_nomacro() {
     int t;
@@ -2676,7 +2641,6 @@ int next_nomacro() {
      }
 }
 
-/* 36 */
 /* return next token with macro substitution */
 int next() {
     int redo;
@@ -2711,7 +2675,6 @@ int next() {
     }
 }
 
-/* 37 */
 /* push back current token and set current token to 'last_tok'. Only
    identifier case handled for labels. */
 int unget_tok(int last_tok) {
@@ -2723,7 +2686,6 @@ int unget_tok(int last_tok) {
     tok = last_tok;
 }
 
-/* 38 */
 int preprocess_start(int s1, int is_asm) {
     int acstr;
     int i;
@@ -2750,7 +2712,6 @@ int preprocess_start(int s1, int is_asm) {
     leave(0);
 }
 
-/* 39 */
 int tccpp_new(int s) {
     int i;
     int c;
@@ -2794,7 +2755,6 @@ int tccpp_new(int s) {
     TOK_RETURN = tok_ident; tmp=mks("return"); tok_alloc(tmp, strlen(tmp));
 }
 
-/* 40 */
 int tccpp_delete(int s) {
     int i;
     int n;
