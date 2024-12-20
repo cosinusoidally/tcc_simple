@@ -587,7 +587,7 @@ int o(int c);
 /* some functions in header: */
 /* space excluding newline */
 int is_space(int ch) {
-    return ch == ' ' || ch == '\t' || ch == '\v' || ch == '\f' || ch == '\r';
+    return eq(ch, mkc(' ')) || eq(ch, mkc('\t')) || eq(ch, mkc('\v')) || eq(ch, mkc('\f')) || eq(ch, mkc('\r'));
 }
 int isid(int c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
