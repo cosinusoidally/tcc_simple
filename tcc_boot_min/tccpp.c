@@ -65,6 +65,13 @@ int next_nomacro1() {
     int redo_no_start;
     int pts;
 
+    int tc;
+    int tp;
+
+    enter();
+    tc = v_alloca(4);
+    tp = v_alloca(4);
+
     p = gbf_buf_ptr(file);
     while(1) {
         redo_no_start = 0;
@@ -193,7 +200,7 @@ int next_nomacro1() {
             /* comments replaced by a blank */
             tok = mkc(' ');
             sbf_buf_ptr(file, p);
-            return;
+            return leave(0);
         }
     } else if(or(or(eq(c, mkc('(')), eq(c, mkc(')'))),
               or(or(eq(c, mkc('{')), eq(c, mkc('}'))),
@@ -203,4 +210,6 @@ int next_nomacro1() {
     }
     tok_flags = 0;
     sbf_buf_ptr(file, p);
+
+    return leave(0);
 }
