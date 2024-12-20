@@ -97,7 +97,7 @@ int next_nomacro1() {
         }
     }
 
-    c = *p;
+    c = ri8(p);
     if(isid(c)) {
         p1 = p;
         h = 1; /* TOK_HASH_INIT */
