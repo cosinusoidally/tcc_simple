@@ -183,7 +183,7 @@ int next_nomacro1() {
         scv_str_size(atokc, gcs_size(atokcstr));
         scv_str_data(atokc, gcs_data(atokcstr));
         tok = TOK_PPSTR;
-    } else if(c == '='){
+    } else if(eq(c, mkc('='))){
         PEEKC(&c, &p);
         tok = '=';
     } else if(c == '/'){
