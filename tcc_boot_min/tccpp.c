@@ -109,7 +109,7 @@ int next_nomacro1() {
             if(eq(p, 0)) {
                 break;
             } else {
-                if(eq(0, and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID,IS_NUM)))) {
+                if(eq(0, and(ri8(add(aisidnum_table, sub(c, CH_EOF_))), or(IS_ID,IS_NUM)))) {
                     break;
                 }
             }
@@ -142,12 +142,11 @@ int next_nomacro1() {
             }
         } else {
             /* slower case */
-            cstr_reset(&tokcstr);
-            cstr_cat(&tokcstr, (char *) p1, len);
-            p--;
+            cstr_reset(atokcstr);
+            cstr_cat(atokcstr, p1, len);
+            p = sub(p, 1);
             PEEKC(&c, &p);
-            while (isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
-            {
+            while (and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID, IS_NUM))) {
                 cstr_ccat(&tokcstr, c);
                 PEEKC(&c, &p);
             }
@@ -159,7 +158,7 @@ int next_nomacro1() {
         PEEKC(&c, &p);
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
-        cstr_reset(&tokcstr);
+        cstr_reset(atokcstr);
         while(1) {
             cstr_ccat(&tokcstr, t);
             if (!((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
