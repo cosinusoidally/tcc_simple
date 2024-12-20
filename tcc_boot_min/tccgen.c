@@ -73,10 +73,9 @@ static void skip_or_save_block(TokenString **str);
 static void gv_dup(void);
 
 /* ------------------------------------------------------------------------- */
-ST_FUNC int tccgen_compile(TCCState *s1)
-{
-    cur_text_section = NULL;
-    funcname = "";
+ST_FUNC int tccgen_compile(TCCState *s1) {
+    cur_text_section = 0;
+    funcname = mks("");
     anon_sym = SYM_FIRST_ANOM;
     section_sym = 0;
 
@@ -90,9 +89,9 @@ ST_FUNC int tccgen_compile(TCCState *s1)
        symbols can be safely used */
     put_elf_sym(symtab_section, 0, 0,
                 ELFW_ST_INFO(STB_LOCAL, STT_FILE), 0,
-                SHN_ABS, file->filename);
+                SHN_ABS, gbf_filename(file));
 
-    parse_flags = PARSE_FLAG_PREPROCESS | PARSE_FLAG_TOK_NUM | PARSE_FLAG_TOK_STR;
+    parse_flags = or(or(PARSE_FLAG_PREPROCESS, PARSE_FLAG_TOK_NUM), PARSE_FLAG_TOK_STR);
     next();
     decl(VT_CONST);
     return 0;
