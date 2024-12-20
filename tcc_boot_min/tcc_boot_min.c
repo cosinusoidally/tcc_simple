@@ -2843,6 +2843,14 @@ int write16le(int p, int x) {
     wi16(p, x);
 }
 
+int read32le(int p) {
+  return ri32(p);
+}
+
+int write32le(int p, int x) {
+    wi32(p, x);
+}
+
 /* end of tcc.h functions */
 
 int tcc_new() {

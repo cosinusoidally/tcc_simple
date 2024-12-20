@@ -584,15 +584,6 @@ int gen_opi(int op);
 int o(int c);
 
 
-/* some functions in header: */
-int read32le(int p) {
-  return ri32(p);
-}
-
-int write32le(int p, int x) {
-    wi32(p, x);
-}
-
 /********************************************************/
 
 extern int sizeof_TCCState;
