@@ -585,12 +585,6 @@ int o(int c);
 
 
 /* some functions in header: */
-int read16le(int p) {
-    return ri16(p);
-}
-int write16le(int p, int x) {
-    wi16(p, x);
-}
 uint32_t read32le(unsigned char *p) {
   return read16le(p) | (uint32_t)read16le(p + 2) << 16;
 }

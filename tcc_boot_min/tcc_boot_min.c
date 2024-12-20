@@ -2835,6 +2835,14 @@ int isnum(int c) {
     return and(gte(c, mkc('0')), lte(c, mkc('9')));
 }
 
+int read16le(int p) {
+    return ri16(p);
+}
+
+int write16le(int p, int x) {
+    wi16(p, x);
+}
+
 /* end of tcc.h functions */
 
 int tcc_new() {
