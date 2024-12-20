@@ -108,7 +108,7 @@ int next_nomacro1() {
             if(eq(p, 0)) {
                 break;
             } else {
-                if(eq(0, isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))) {
+                if(eq(0, and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID,IS_NUM)))) {
                     break;
                 }
             }
