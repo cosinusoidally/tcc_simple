@@ -594,10 +594,10 @@ int gtst_addr(int inv, int a);
 int gen_opi(int op);
 int o(int c);
 
-static inline uint16_t read16le(unsigned char *p) {
+uint16_t read16le(unsigned char *p) {
     return p[0] | (uint16_t)p[1] << 8;
 }
-static inline void write16le(unsigned char *p, uint16_t x) {
+void write16le(unsigned char *p, uint16_t x) {
     p[0] = x & 255;  p[1] = x >> 8 & 255;
 }
 uint32_t read32le(unsigned char *p) {
