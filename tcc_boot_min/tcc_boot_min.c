@@ -2820,6 +2820,10 @@ int tccpp_delete(int s) {
 
 /* start of tcc.h functions */
 
+/* space excluding newline */
+int is_space(int ch) {
+    return or(or(eq(ch, mkc(' ')), eq(ch, mkc('\t'))), eq(ch, mkc('\r')));
+}
 
 /* end of tcc.h functions */
 

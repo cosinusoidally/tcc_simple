@@ -585,10 +585,6 @@ int o(int c);
 
 
 /* some functions in header: */
-/* space excluding newline */
-int is_space(int ch) {
-    return or(or(eq(ch, mkc(' ')), eq(ch, mkc('\t'))), eq(ch, mkc('\r')));
-}
 int isid(int c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
 }
