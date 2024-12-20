@@ -130,12 +130,12 @@ int next_nomacro1() {
                     break;
                 }
                 if (eq(gtks_len(ts), len)) {
-                    if(eq(0, memcmp(ts->str, p1, len))) {
+                    if(eq(0, memcmp(gtks_str(ts), p1, len))) {
                         token_found = 1;
                         break;
                     }
                 }
-                pts = &(ts->hash_next);
+                pts = atks_hash_next(ts);
             }
             if(token_found == 0) {
                 ts = tok_alloc_new(pts, (char *) p1, len);
