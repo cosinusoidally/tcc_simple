@@ -71,7 +71,7 @@ int next_nomacro1() {
         if(or(eq(c, mkc(' ')), (eq(c, mkc('\t'))))) {
             tok = c;
             p = add(p, 1);
-            while (and(isidnum_table[sub(ri8(p), CH_EOF_)], IS_SPC)) {
+            while (and(ri8(add(aisidnum_table, sub(ri8(p), CH_EOF_))), IS_SPC)) {
                 p = add(p, 1);
             }
             redo_no_start = 1;
