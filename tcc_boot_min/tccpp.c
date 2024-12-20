@@ -102,8 +102,18 @@ int next_nomacro1() {
         p1 = p;
         h = 1; /* TOK_HASH_INIT */
         h = TOK_HASH_FUNC(h, c);
-        while (c = *++p, isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
+        while (1) {
+            p = add(p, 1);
+            c = ri8(p);
+            if(eq(p, 0)) {
+                break;
+            } else {
+                if(eq(0, isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))) {
+                    break;
+                }
+            }
             h = TOK_HASH_FUNC(h, c);
+        }
         len = p - p1;
         if (c != '\\') {
             TokenSym **pts;
