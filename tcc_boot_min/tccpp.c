@@ -25,15 +25,10 @@ static char token_buf[STRING_MAX_SIZE + 1];
 static CString cstr_buf;
 static unsigned char isidnum_table[256 - CH_EOF];
 
-static struct TinyAlloc *toksym_alloc;
-static struct TinyAlloc *tokstr_alloc;
-static struct TinyAlloc *cstr_alloc;
-
 extern TokenString *macro_stack;
 
-static void next_nomacro_spc(void);
-
-/* addreses of these variables */
+/* LJW HACK addreses of these variables */
+/* actually one or two are not addreses */
 extern int aTOK_HASH_SIZE;
 extern int ahash_ident;
 extern int acstr_buf;
