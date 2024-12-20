@@ -432,9 +432,6 @@ int isid(int c) {
 int isnum(int c) {
     return c >= '0' && c <= '9';
 }
-int toup(int c) {
-    return (c >= 'a' && c <= 'z') ? c - 'a' + 'A' : c;
-}
 
 /* ------------ tccgen.c ------------ */
 
