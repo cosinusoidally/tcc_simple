@@ -161,9 +161,9 @@ int next_nomacro1() {
         cstr_reset(atokcstr);
         while(1) {
             cstr_ccat(atokcstr, t);
-            if (!((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM))
-                  || eq(c, mkc('.'))
-                  || or(eq(c, mkc('+')), eq(c, mkc('-'))))) {
+            if (!(or((isidnum_table[c - CH_EOF] & (IS_ID|IS_NUM)),
+                  or(eq(c, mkc('.')),
+                  or(eq(c, mkc('+')), eq(c, mkc('-'))))))) {
                 break;
             }
             t = c;
