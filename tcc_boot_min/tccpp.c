@@ -64,15 +64,16 @@ int next_nomacro1() {
     unsigned int h;
     int redo_no_start;
 
-    p = file->buf_ptr;
+    p = gbf_buf_ptr(file);
     while(1) {
         redo_no_start = 0;
-        c = *p;
-        if((c == ' ') || (c == '\t')) {
+        c = ri8(p);
+        if(or(eq(c, mkc(' ')), (eq(c, mkc('\t'))))) {
             tok = c;
-            p++;
-            while (isidnum_table[*p - CH_EOF] & IS_SPC)
-                ++p;
+            p = add(p, 1);
+            while (and(isidnum_table[sub(ri8(p), CH_EOF_)], IS_SPC)) {
+                p = add(p, 1);
+            }
             redo_no_start = 1;
         } else if(c == '\\'){
             /* first look if it is in fact an end of buffer */
