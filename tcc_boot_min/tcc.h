@@ -439,7 +439,6 @@ extern SValue *vtop;
 ST_DATA int rsym, anon_sym;
 extern int loc;
 
-ST_DATA int const_wanted; /* true if constant wanted */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_var; /* true if current function is variadic */

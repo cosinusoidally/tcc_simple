@@ -41,7 +41,6 @@ static int local_scope;
 static int in_sizeof;
 static int section_sym;
 
-ST_DATA int const_wanted; /* true if constant wanted */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_var; /* true if current function is variadic (used by return instruction) */
@@ -50,7 +49,7 @@ ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc 
 ST_DATA const char *funcname;
 ST_DATA int g_debug;
 
-ST_DATA CType func_old_type, int_type, size_type, ptrdiff_type;
+ST_DATA CType func_old_type, int_type, size_type;
 
 /* ------------------------------------------------------------------------- */
 
@@ -80,12 +79,10 @@ ST_FUNC int tccgen_compile(TCCState *s1)
     funcname = "";
     anon_sym = SYM_FIRST_ANOM;
     section_sym = 0;
-    const_wanted = 0;
 
     /* define some often used types */
     int_type.t = VT_INT;
     size_type.t = VT_INT | VT_UNSIGNED;
-    ptrdiff_type.t = VT_INT;
     func_old_type.t = VT_FUNC;
     func_old_type.ref = sym_push(SYM_FIELD, &int_type, 0, 0);
     func_old_type.ref->f.func_type = FUNC_OLD;
