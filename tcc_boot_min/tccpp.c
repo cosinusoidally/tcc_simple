@@ -152,10 +152,14 @@ int next_nomacro1() {
             cstr_reset(atokcstr);
             cstr_cat(atokcstr, p1, len);
             p = sub(p, 1);
-            PEEKC(&c, &p);
+            wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+            PEEKC(tc, tp);
+            c = ri32(tc); p = ri32(tp);
             while (and(ri8(add(aisidnum_table, sub(c, CH_EOF))), or(IS_ID, IS_NUM))) {
                 cstr_ccat(&tokcstr, c);
-                PEEKC(&c, &p);
+                wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
+                PEEKC(tc, tp);
+                c = ri32(tc); p = ri32(tp);
             }
             ts = tok_alloc(gcs_data(atokcstr), gcs_size(atokcstr));
         }
