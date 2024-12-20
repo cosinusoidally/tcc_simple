@@ -86,13 +86,13 @@ int next_nomacro1() {
             }
         } else if(eq(c, mkc('\n'))){
             file->line_num = add(file->line_num, 1);
-            tok_flags |= TOK_FLAG_BOL;
-            p++;
-            if (0 == (parse_flags & PARSE_FLAG_LINEFEED)) {
+            tok_flags = or(tok_flags, TOK_FLAG_BOL);
+            p = add(p, 1);
+            if (eq(0, and(parse_flags, PARSE_FLAG_LINEFEED))) {
                 redo_no_start = 1;
             }
         }
-        if(redo_no_start == 0) {
+        if(eq(redo_no_start, 0)) {
             break;
         }
     }
