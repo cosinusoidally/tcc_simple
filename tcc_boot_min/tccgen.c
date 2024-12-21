@@ -610,8 +610,8 @@ static void gen_opic(int op) {
 
     v1 = vtop - 1;
     v2 = vtop;
-    int c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
-    int c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
+    int c1 = eq(and(v1->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+    int c2 = eq(and(v2->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
 
     if (and(c1, c2)) {
         v1->c.i = 1;
