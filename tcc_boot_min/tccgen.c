@@ -1321,21 +1321,22 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     AttributeDef ad;
 
     while (1) {
-        if (!parse_btype(&btype, &ad)) {
+        if (eq(0, parse_btype(&btype, &ad))) {
                 break;
         }
         while (1) { /* iterate thru each declaration */
             type = btype;
             type_decl(&type, &ad, &v);
-            if ((type.t & VT_BTYPE) == VT_FUNC) {
+            if (eq(and(type.t, VT_BTYPE), VT_FUNC)) {
                 /* if old style function prototype, we accept a
                    declaration list */
                 sym = type.ref;
-                if (sym->f.func_type == FUNC_OLD && l == VT_CONST)
+                if (and(eq(sym->f.func_type, FUNC_OLD), eq(l, VT_CONST))) {
                     decl0(VT_CMP, 0, sym);
+                }
             }
 
-            if (tok == '{') {
+            if (eq(tok, mkc('{'))) {
                 /* put function symbol */
                 sym = external_global_sym(v, &type, 0);
                 type.t &= ~VT_EXTERN;
