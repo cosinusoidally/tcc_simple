@@ -642,11 +642,14 @@ ST_FUNC void gen_op(int op) {
 }
 
 void gen_cast(CType *type) {
-    int sbt, dbt, c, p;
+    int sbt;
+    int dbt;
+    int c;
+    int p;
     int m;
 
-    dbt = type->t & (VT_BTYPE | VT_UNSIGNED);
-    sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
+    dbt = and(type->t, or(VT_BTYPE, VT_UNSIGNED));
+    sbt = and(vtop->type.t, or(VT_BTYPE, VT_UNSIGNED));
 
     if (neq(sbt, dbt)) {
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
