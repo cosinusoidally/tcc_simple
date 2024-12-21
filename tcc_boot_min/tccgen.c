@@ -604,10 +604,12 @@ ST_FUNC int gvtst(int inv, int t) {
 
 /* handle integer constant optimizations and various machine
    independent opt */
-static void gen_opic(int op)
-{
-    SValue *v1 = vtop - 1;
-    SValue *v2 = vtop;
+static void gen_opic(int op) {
+    SValue *v1;
+    SValue *v2;
+
+    v1 = vtop - 1;
+    v2 = vtop;
     int c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     int c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
 
