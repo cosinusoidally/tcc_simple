@@ -992,7 +992,10 @@ void gfunc_return(CType *func_type) {
 }
 
 void block(int *bsym, int *csym, int is_expr) {
-    int a, b, c, d;
+    int a;
+    int b;
+    int c;
+    int d;
     Sym *s;
 
     if (tok == TOK_IF) {
