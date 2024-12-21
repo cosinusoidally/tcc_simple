@@ -781,14 +781,13 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
             parse_btype(&pt, &ad1);
             l = FUNC_NEW;
         }
-        first = NULL;
+        first = 0;
         plast = &first;
-        arg_size = 0;
         if (l) {
             while(1) {
                 /* read param name and compute offset */
                 type_decl(&pt, &ad1, &n);
-                arg_size += (type_size(&pt, &align) + PTR_SIZE - 1) / PTR_SIZE;
+                type_size(&pt, &align);
                 convert_parameter_type(&pt);
                 s = sym_push(n | SYM_FIELD, &pt, 0, 0);
                 *plast = s;
@@ -798,9 +797,10 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
                 skip(',');
                 parse_btype(&pt, &ad1);
             }
-        } else
+        } else {
             /* if no parameters, then old type prototype */
             l = FUNC_OLD;
+        }
         skip(')');
         /* NOTE: const is ignored in returned type as it has a special
            meaning in gcc / C++ */
