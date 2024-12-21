@@ -625,17 +625,14 @@ static void gen_opic(int op) {
 
 /* generic gen_op: handles types problems */
 ST_FUNC void gen_op(int op) {
-    int u, t1, t2, t;
+    int t;
     CType type1;
-
-    t1 = vtop[-1].type.t;
-    t2 = vtop[0].type.t;
 
     /* integer operations */
     t = VT_INT;
     vswap();
     type1.t = t;
-    type1.ref = NULL;
+    type1.ref = 0;
     gen_cast(&type1);
     vswap();
     gen_cast(&type1);
