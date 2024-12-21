@@ -38,7 +38,6 @@ ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
 ST_DATA Sym *local_label_stack;
 static int local_scope;
-static int in_sizeof;
 static int section_sym;
 
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
@@ -866,7 +865,11 @@ void gfunc_param_typed(Sym *func, Sym *arg) {
 }
 
 void unary() {
-    int n, t, align, size, r;
+    int n;
+    int t;
+    int align;
+    int size;
+    int r;
     CType type;
     Sym *s;
     AttributeDef ad;
@@ -877,7 +880,6 @@ void unary() {
     int ret_nregs;
     int regsize;
 
-    in_sizeof = 0;
     type.ref = 0;
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
