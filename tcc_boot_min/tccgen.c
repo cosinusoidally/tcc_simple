@@ -71,6 +71,7 @@ static int gvtst(int inv, int t);
 static void skip_or_save_block(TokenString **str);
 static void gv_dup(void);
 
+/* 1 */
 /* ------------------------------------------------------------------------- */
 ST_FUNC int tccgen_compile(TCCState *s1) {
     cur_text_section = 0;
@@ -96,6 +97,7 @@ ST_FUNC int tccgen_compile(TCCState *s1) {
     return 0;
 }
 
+/* 2 */
 /* ------------------------------------------------------------------------- */
 int elfsym(Sym *s) {
   if (eq(s, 0)) {
@@ -125,10 +127,10 @@ ST_FUNC void update_storage(Sym *sym) {
     old_sym_bind = ELFW_ST_BIND(ges_st_info(esym));
 }
 
+/* 3 */
 /* ------------------------------------------------------------------------- */
 /* update sym->c so that it points to an external symbol in section
    'section' with value 'value' */
-
 ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
                             addr_t value, unsigned long size,
                             int can_add_underscore) {
@@ -166,6 +168,7 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
     update_storage(sym);
 }
 
+/* 4 */
 ST_FUNC void put_extern_sym(Sym *sym, Section *section,
                            addr_t value, unsigned long size) {
     int sh_num;
@@ -177,6 +180,7 @@ ST_FUNC void put_extern_sym(Sym *sym, Section *section,
     put_extern_sym2(sym, sh_num, value, size, 1);
 }
 
+/* 5 */
 /* add a new relocation entry to symbol 'sym' in section 's' */
 ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
                      addr_t addend) {
@@ -195,10 +199,12 @@ ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
     put_elf_reloca(symtab_section, s, offset, type, c, addend);
 }
 
+/* 6 */
 ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type) {
     greloca(s, sym, offset, type, 0);
 }
 
+/* 7 */
 /* ------------------------------------------------------------------------- */
 /* symbol allocator */
 Sym *__sym_malloc() {
@@ -223,6 +229,7 @@ Sym *__sym_malloc() {
     return last_sym;
 }
 
+/* 8 */
 Sym *sym_malloc(void) {
     Sym *sym;
     sym = sym_free_first;
@@ -233,11 +240,13 @@ Sym *sym_malloc(void) {
     return sym;
 }
 
+/* 9 */
 void sym_free(Sym *sym) {
     sym->next = sym_free_first;
     sym_free_first = sym;
 }
 
+/* 10 */
 /* push, without hashing */
 ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
     Sym *s;
@@ -253,6 +262,7 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
     return s;
 }
 
+/* 11 */
 /* find an identifier */
 ST_INLN Sym *sym_find(int v) {
     v = sub(v, TOK_IDENT);
@@ -262,6 +272,7 @@ ST_INLN Sym *sym_find(int v) {
     return table_ident[v]->sym_identifier;
 }
 
+/* 12 */
 /* push a given symbol on the symbol stack */
 ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     Sym *s;
@@ -289,6 +300,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     return s;
 }
 
+/* 13 */
 /* push a global identifier */
 ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
     Sym *s;
@@ -311,6 +323,7 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
     return s;
 }
 
+/* 14 */
 /* pop symbols until top reaches 'b'.  If KEEP is non-zero don't really
    pop them yet from the list, but do remove them from the token array.  */
 ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
@@ -343,6 +356,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
 
 /* ------------------------------------------------------------------------- */
 
+/* 15 */
 static void vsetc(CType *type, int r, CValue *vc) {
     vtop = vtop + 1;
     vtop->type = *type;
@@ -351,6 +365,7 @@ static void vsetc(CType *type, int r, CValue *vc) {
     vtop->sym = 0;
 }
 
+/* 16 */
 ST_FUNC void vswap() {
     SValue tmp;
     tmp = vtop[0];
@@ -358,6 +373,7 @@ ST_FUNC void vswap() {
     vtop[sub(0, 1)] = tmp;
 }
 
+/* 17 */
 /* pop stack value */
 ST_FUNC void vpop() {
     int v;
