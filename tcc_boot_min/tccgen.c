@@ -998,23 +998,24 @@ void block(int *bsym, int *csym, int is_expr) {
     int d;
     Sym *s;
 
-    if (tok == TOK_IF) {
+    if (eq(tok, TOK_IF)) {
         /* if test */
         next();
-        skip('(');
+        skip(mkc('('));
         gexpr();
-        skip(')');
+        skip(mkc(')'));
         a = gvtst(1, 0);
         block(bsym, csym, 0);
         c = tok;
-        if (c == TOK_ELSE) {
+        if (eq(c, TOK_ELSE)) {
             next();
             d = gjmp(0);
             gsym(a);
             block(bsym, csym, 0);
             gsym(d); /* patch else jmp */
-        } else
+        } else {
             gsym(a);
+        }
     } else if (tok == TOK_WHILE) {
         next();
         d = ind;
