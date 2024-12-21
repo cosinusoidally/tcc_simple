@@ -1037,16 +1037,16 @@ void block(int *bsym, int *csym, int is_expr) {
         /* record local declaration stack position */
         s = local_stack;
         llabel = local_label_stack;
-        ++local_scope;
+        local_scope = local_scope + 1;
         
-        while (tok != '}') {
+        while (neq(tok, mkc('}'))) {
 	    decl(VT_LOCAL);
-            if (tok != '}') {
+            if (neq(tok, mkc('}'))) {
                 block(bsym, csym, is_expr);
             }
         }
         /* pop locally defined symbols */
-        --local_scope;
+        local_scope = local_scope - 1;
 	/* In the is_expr case (a statement expression is finished here),
 	   vtop might refer to symbols on the local_stack.  Either via the
 	   type or via vtop->sym.  We can't pop those nor any that in turn
@@ -1057,7 +1057,7 @@ void block(int *bsym, int *csym, int is_expr) {
 	sym_pop(&local_stack, s, is_expr);
 
         next();
-    } else if (tok == TOK_RETURN) {
+    } else if(eq(tok, TOK_RETURN)) {
         next();
         if (tok != ';') {
             gexpr();
