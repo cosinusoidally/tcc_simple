@@ -873,14 +873,14 @@ void unary() {
     AttributeDef ad;
 
     in_sizeof = 0;
-    type.ref = NULL;
-    if((tok == TOK_CINT) || (tok == TOK_CCHAR)) {
+    type.ref = 0;
+    if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-    } else if(tok == TOK_CUINT) {
-        t = VT_INT | VT_UNSIGNED;
+    } else if(eq(tok, TOK_CUINT)) {
+        t = or(VT_INT, VT_UNSIGNED);
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
