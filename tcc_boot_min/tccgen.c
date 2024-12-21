@@ -108,10 +108,10 @@ int elfsym(Sym *s) {
 }
 
 /* apply storage attributes to Elf symbol */
-ST_FUNC void update_storage(Sym *sym)
-{
+ST_FUNC void update_storage(Sym *sym) {
     int esym;
-    int sym_bind, old_sym_bind;
+    int sym_bind;
+    int old_sym_bind;
 
     esym = elfsym(sym);
     if (eq(esym, 0)) {
@@ -132,9 +132,12 @@ ST_FUNC void update_storage(Sym *sym)
 
 ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
                             addr_t value, unsigned long size,
-                            int can_add_underscore)
-{
-    int sym_type, sym_bind, info, other, t;
+                            int can_add_underscore) {
+    int sym_type;
+    int sym_bind;
+    int info;
+    int other;
+    int t;
     int esym;
     const char *name;
     char buf1[256];
