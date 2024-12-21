@@ -1369,17 +1369,18 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                         /* NOTE: as GCC, uninitialized global static
                            arrays of null size are considered as
                            extern */
-                        type.t |= VT_EXTERN;
+                        type.t = or(type.t, VT_EXTERN);
                         sym = external_sym(v, &type, r, &ad);
                     } else {
-                        r |= l;
-                        if (l == VT_CONST)
+                        r = or(r, l);
+                        if (eq(l, VT_CONST)) {
                             /* uninitialized global variables may be overridden */
-                            type.t |= VT_EXTERN;
+                            type.t = or(type.t, VT_EXTERN);
+                        }
                         decl_initializer_alloc(&type, &ad, r, has_init, v, l);
                     }
-                if (tok != ',') {
-                    skip(';');
+                if (neq(tok, mkc(','))) {
+                    skip(mkc(';'));
                     break;
                 }
             }
@@ -1388,9 +1389,8 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     return 0;
 }
 
-static void decl(int l)
-{
-    decl0(l, 0, NULL);
+static void decl(int l) {
+    decl0(l, 0, 0);
 }
 
 /* ------------------------------------------------------------------------- */
