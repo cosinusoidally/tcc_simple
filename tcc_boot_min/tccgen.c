@@ -708,8 +708,7 @@ ST_FUNC void mk_pointer(CType *type) {
 
 /* verify type compatibility to store vtop in 'dt' type, and generate
    casts if needed. */
-static void gen_assign_cast(CType *dt)
-{
+static void gen_assign_cast(CType *dt) {
     gen_cast(dt);
 }
 
