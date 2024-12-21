@@ -699,11 +699,10 @@ static inline CType *pointed_type(CType *type) {
 }
 
 /* modify type so that its it is a pointer to type. */
-ST_FUNC void mk_pointer(CType *type)
-{
+ST_FUNC void mk_pointer(CType *type) {
     Sym *s;
     s = sym_push(SYM_FIELD, type, 0, sub(0, 1));
-    type->t = VT_PTR | and(type->t, VT_STORAGE);
+    type->t = or(VT_PTR, and(type->t, VT_STORAGE));
     type->ref = s;
 }
 
