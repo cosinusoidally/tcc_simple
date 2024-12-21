@@ -1177,16 +1177,18 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
    are parsed. If 'v' is zero, then a reference to the new object
    is put in the value stack. If 'has_init' is 2, a special parsing
    is done to handle string constants. */
-static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, 
-                                   int has_init, int v, int scope)
-{
-    int size, align, addr;
-    TokenString *init_str = NULL;
-
+void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
+                                   int has_init, int v, int scope) {
+    int size;
+    int align;
+    int addr;
+    TokenString *init_str;
     Section *sec;
     Sym *flexible_array;
-    Sym *sym = NULL;
+    Sym *sym;
 
+    init_str = NULL;
+    sym = NULL;
     flexible_array = NULL;
 
     size = type_size(type, &align);
