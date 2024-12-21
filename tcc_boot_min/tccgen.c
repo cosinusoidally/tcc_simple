@@ -462,14 +462,17 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
 ST_FUNC void save_regs(int n) {
     SValue *p;
     SValue *p1;
-    for(p = vstack, p1 = vtop - n; p <= p1; p++) {
+
+    p = vstack;
+    p1 = vtop - n;
+    while(lte(p, p1)) {
         save_reg(p->r);
+        p = p + 1;
     }
 }
 
 /* save r to the memory stack, and mark it as being free */
-ST_FUNC void save_reg(int r)
-{
+ST_FUNC void save_reg(int r) {
     save_reg_upstack(r, 0);
 }
 
