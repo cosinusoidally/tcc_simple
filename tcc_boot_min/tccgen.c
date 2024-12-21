@@ -761,13 +761,12 @@ int parse_btype(CType *type, AttributeDef *ad) {
 void convert_parameter_type(CType *pt) {
     /* remove const qualifiers (XXX: const could be used
        to indicate a const function parameter */
-    pt->t &= ~(VT_CONSTANT);
+    pt->t = and(pt->t, not(VT_CONSTANT));
     /* array must be transformed to pointer according to ANSI C */
-    pt->t &= ~VT_ARRAY;
+    pt->t = and(pt->t, not(VT_ARRAY));
 }
 
-static int post_type(CType *type, AttributeDef *ad, int storage)
-{
+int post_type(CType *type, AttributeDef *ad, int storage) {
     int n, l, t1, arg_size, align;
     Sym **plast, *s, *first;
     AttributeDef ad1;
