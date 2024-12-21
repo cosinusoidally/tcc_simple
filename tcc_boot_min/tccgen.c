@@ -641,9 +641,9 @@ ST_FUNC void gen_op(int op) {
     vtop->type.t = VT_INT;
 }
 
-static void gen_cast(CType *type) {
+void gen_cast(CType *type) {
     int sbt, dbt, c, p;
-    uint32_t m;
+    int m;
 
     dbt = type->t & (VT_BTYPE | VT_UNSIGNED);
     sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
