@@ -300,7 +300,10 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
         ps = &table_ident[sub(v, TOK_IDENT)]->sym_identifier;
         /* modify the top most local identifier, so that
            sym_identifier will point to 's' when popped */
-        while (neq(*ps, 0) && (*ps)->sym_scope) {
+        while (neq(*ps, 0)) {
+            if(eq(0, (*ps)->sym_scope)) {
+                break;
+            }
             ps = &(*ps)->prev_tok;
         }
         s->prev_tok = *ps;
