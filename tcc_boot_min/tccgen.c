@@ -595,7 +595,7 @@ ST_FUNC int gvtst(int inv, int t) {
     v = and(vtop->r, VT_VALMASK);
     vpushi(0);
     gen_op(TOK_NE);
-    if ((vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST) {
+    if (and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)) == VT_CONST) {
         vtop--;
         return t;
     }
