@@ -1312,8 +1312,11 @@ void gen_function(Sym *sym) {
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
    if parsing old style parameter decl list (and FUNC_SYM is set then) */
 int decl0(int l, int is_for_loop_init, Sym *func_sym) {
-    int v, has_init, r;
-    CType type, btype;
+    int v;
+    int has_init;
+    int r;
+    CType type;
+    CType btype;
     Sym *sym;
     AttributeDef ad;
 
