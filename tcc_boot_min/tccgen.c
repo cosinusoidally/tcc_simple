@@ -381,6 +381,7 @@ ST_FUNC void vpop() {
     vtop = vtop - 1;
 }
 
+/* 18 */
 /* push integer constant */
 ST_FUNC void vpushi(int v) {
     CValue cval;
@@ -388,6 +389,7 @@ ST_FUNC void vpushi(int v) {
     vsetc(&int_type, VT_CONST, &cval);
 }
 
+/* 19 */
 ST_FUNC void vset(CType *type, int r, int v) {
     CValue cval;
 
@@ -395,6 +397,7 @@ ST_FUNC void vset(CType *type, int r, int v) {
     vsetc(type, r, &cval);
 }
 
+/* 20 */
 /* push a symbol value of TYPE */
 void vpushsym(CType *type, Sym *sym) {
     CValue cval;
@@ -403,6 +406,7 @@ void vpushsym(CType *type, Sym *sym) {
     vtop->sym = sym;
 }
 
+/* 21 */
 /* Return a static symbol pointing to a section */
 ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size) {
     int v;
@@ -417,6 +421,7 @@ ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsign
     return sym;
 }
 
+/* 22 */
 /* define a new external reference to a symbol 'v' of type 'u' */
 ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
     Sym *s;
@@ -431,6 +436,7 @@ ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
     return s;
 }
 
+/* 23 */
 /* Merge some type attributes.  */
 static void patch_type(Sym *sym, CType *type) {
     if (eq(0, and(type->t, VT_EXTERN))) {
@@ -448,6 +454,7 @@ static void patch_type(Sym *sym, CType *type) {
     }
 }
 
+/* 24 */
 /* Merge some storage attributes.  */
 static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
     if (type) {
@@ -456,6 +463,7 @@ static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
     update_storage(sym);
 }
 
+/* 25 */
 /* define a new external reference to a symbol 'v' */
 static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
     Sym *s;
@@ -471,6 +479,7 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
     return s;
 }
 
+/* 26 */
 /* save registers up to (vtop - n) stack entry */
 ST_FUNC void save_regs(int n) {
     SValue *p;
@@ -484,11 +493,13 @@ ST_FUNC void save_regs(int n) {
     }
 }
 
+/* 27 */
 /* save r to the memory stack, and mark it as being free */
 ST_FUNC void save_reg(int r) {
     save_reg_upstack(r, 0);
 }
 
+/* 28 */
 /* save r to the memory stack, and mark it as being free,
    if seen up to (vtop - n) stack entry */
 ST_FUNC void save_reg_upstack(int r, int n) {
@@ -538,6 +549,7 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     }
 }
 
+/* 29 */
 /* find a free register of class 'rc'. If none, save one register */
 ST_FUNC int get_reg(int rc) {
     int r;
@@ -565,6 +577,7 @@ ST_FUNC int get_reg(int rc) {
     }
 }
 
+/* 30 */
 /* store vtop a register belonging to class 'rc'. lvalues are
    converted to values. Cannot be used if cannot be converted to
    register value (such as structures). */
@@ -600,6 +613,7 @@ ST_FUNC int gv(int rc) {
     return r;
 }
 
+/* 31 */
 /* Generate value test
  *
  * Generate a test for any value (jump, comparison and integers) */
@@ -616,6 +630,7 @@ ST_FUNC int gvtst(int inv, int t) {
     return gtst(inv, t);
 }
 
+/* 33 */
 /* handle integer constant optimizations and various machine
    independent opt */
 static void gen_opic(int op) {
@@ -637,6 +652,7 @@ static void gen_opic(int op) {
     }
 }
 
+/* 34 */
 /* generic gen_op: handles types problems */
 ST_FUNC void gen_op(int op) {
     int t;
@@ -655,6 +671,7 @@ ST_FUNC void gen_op(int op) {
     vtop->type.t = VT_INT;
 }
 
+/* 35 */
 void gen_cast(CType *type) {
     int sbt;
     int dbt;
@@ -684,6 +701,7 @@ void gen_cast(CType *type) {
     vtop->type = *type;
 }
 
+/* 36 */
 /* return type size as known at compile time. Put alignment at 'a' */
 ST_FUNC int type_size(CType *type, int *a) {
     Sym *s;
@@ -707,11 +725,13 @@ ST_FUNC int type_size(CType *type, int *a) {
     }
 }
 
+/* 37 */
 /* return the pointed type of t */
 static inline CType *pointed_type(CType *type) {
     return &type->ref->type;
 }
 
+/* 38 */
 /* modify type so that its it is a pointer to type. */
 ST_FUNC void mk_pointer(CType *type) {
     Sym *s;
@@ -720,12 +740,14 @@ ST_FUNC void mk_pointer(CType *type) {
     type->ref = s;
 }
 
+/* 39 */
 /* verify type compatibility to store vtop in 'dt' type, and generate
    casts if needed. */
 static void gen_assign_cast(CType *dt) {
     gen_cast(dt);
 }
 
+/* 40 */
 /* store vtop in lvalue pushed on stack */
 ST_FUNC void vstore(void) {
     int r;
@@ -739,6 +761,7 @@ ST_FUNC void vstore(void) {
     vtop = vtop - 1;
 }
 
+/* 41 */
 /* return 0 if no type declaration. otherwise, return the basic type
    and skip it. 
  */
@@ -770,6 +793,7 @@ int parse_btype(CType *type, AttributeDef *ad) {
     return type_found;
 }
 
+/* 42 */
 /* convert a function parameter type (array to pointer and function to
    function pointer) */
 void convert_parameter_type(CType *pt) {
