@@ -804,6 +804,7 @@ void convert_parameter_type(CType *pt) {
     pt->t = and(pt->t, not(VT_ARRAY));
 }
 
+/* 43 */
 int post_type(CType *type, AttributeDef *ad, int storage) {
     int n;
     int l;
@@ -859,6 +860,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     return 1;
 }
 
+/* 44 */
 /* Parse a type declarator (except basic type), and return the type
    in 'type'.
    'type' should contain the basic type. 'ad' is the
@@ -885,11 +887,13 @@ CType *type_decl(CType *type, AttributeDef *ad, int *v) {
     return ret;
 }
 
+/* 45 */
 /* compute the lvalue VT_LVAL_xxx needed to match type t. */
 ST_FUNC int lvalue_type(int t) {
     return VT_LVAL;
 }
 
+/* 46 */
 /* pass a parameter to a function and do type checking and casting */
 void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
@@ -904,6 +908,7 @@ void gfunc_param_typed(Sym *func, Sym *arg) {
     }
 }
 
+/* 47 */
 void unary() {
     int n;
     int t;
@@ -1010,6 +1015,7 @@ void unary() {
     }
 }
 
+/* 48 */
 void expr_eq() {
     int t;
     
@@ -1022,16 +1028,19 @@ void expr_eq() {
     }
 }
 
+/* 49 */
 void gexpr() {
     expr_eq();
 }
 
+/* 50 */
 void gfunc_return(CType *func_type) {
     gv(RC_IRET);
     /* NOT vpop() because on x86 it would flush the fp stack */
     vtop = vtop - 1;
 }
 
+/* 51 */
 void block(int *bsym, int *csym, int is_expr) {
     int a;
     int b;
@@ -1124,6 +1133,7 @@ void block(int *bsym, int *csym, int is_expr) {
     }
 }
 
+/* 52 */
 /* store a value or an expression directly in global data or in local array */
 static void init_putv(CType *type, Section *sec, unsigned long c) {
     int bt;
@@ -1149,6 +1159,7 @@ static void init_putv(CType *type, Section *sec, unsigned long c) {
     vtop = vtop - 1;
 }
 
+/* 53 */
 /* 't' contains the type and storage info. 'c' is the offset of the
    object in section 'sec'. If 'sec' is NULL, it means stack based
    allocation. 'first' is true if array '{' must be read (multi
@@ -1211,6 +1222,7 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
     }
 }
 
+/* 54 */
 /* parse an initializer for type 't' if 'has_init' is non zero, and
    allocate space in local or global data space ('r' is either
    VT_LOCAL or VT_CONST). If 'v' is non zero, then an associated
@@ -1319,6 +1331,7 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
 }
 
+/* 55 */
 /* parse a function defined by symbol 'sym' and generate its code in
    'cur_text_section' */
 void gen_function(Sym *sym) {
@@ -1350,6 +1363,7 @@ void gen_function(Sym *sym) {
     ind = 0; /* for safety */
 }
 
+/* 56 */
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
    if parsing old style parameter decl list (and FUNC_SYM is set then) */
 int decl0(int l, int is_for_loop_init, Sym *func_sym) {
@@ -1430,6 +1444,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     return 0;
 }
 
+/* 57 */
 static void decl(int l) {
     decl0(l, 0, 0);
 }
