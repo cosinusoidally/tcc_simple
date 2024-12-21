@@ -1187,9 +1187,9 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Sym *flexible_array;
     Sym *sym;
 
-    init_str = NULL;
-    sym = NULL;
-    flexible_array = NULL;
+    init_str = 0;
+    sym = 0;
+    flexible_array = 0;
 
     size = type_size(type, &align);
     /* If unknown size, we must evaluate it before
@@ -1198,22 +1198,22 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
        (e.g. string pointers or ISOC99 compound
        literals). It also simplifies local
        initializers handling */
-    if (size < 0 || (flexible_array && has_init)) {
+    if (or(lt(size, 0), and(flexible_array, has_init))) {
         /* get all init string */
         init_str = tok_str_alloc();
         /* only get strings */
-        while (tok == TOK_STR) {
+        while (eq(tok, TOK_STR)) {
             tok_str_add_tok(init_str);
             next();
         }
-        tok_str_add(init_str, -1);
+        tok_str_add(init_str, sub(0, 1));
         tok_str_add(init_str, 0);
         unget_tok(0);
 
         /* compute size */
         begin_macro(init_str, 1);
         next();
-        decl_initializer(type, NULL, 0, 1, 1);
+        decl_initializer(type, 0, 0, 1, 1);
         /* prepare second initializer parsing */
         macro_ptr = init_str->str;
         next();
@@ -1222,7 +1222,7 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         size = type_size(type, &align);
     }
 
-    if ((r & VT_VALMASK) == VT_LOCAL) {
+    if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         sec = NULL;
         loc = (loc - size) & -align;
         addr = loc;
