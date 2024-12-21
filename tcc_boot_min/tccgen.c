@@ -871,6 +871,7 @@ void unary() {
     CType type;
     Sym *s;
     AttributeDef ad;
+    char *name;
 
     in_sizeof = 0;
     type.ref = 0;
@@ -902,7 +903,7 @@ void unary() {
         next();
         s = sym_find(t);
         if (eq(0, s)) {
-            const char *name = get_tok_str(t, NULL);
+            name = get_tok_str(t, 0);
             s = external_global_sym(t, &func_old_type, 0); 
         }
 
@@ -913,14 +914,14 @@ void unary() {
 	   regvars.  */
 	vtop->sym = s;
 
-        if (r & VT_SYM) {
+        if (and(r, VT_SYM)) {
             vtop->c.i = 0;
         }
     }
     
     /* post operations */
     while (1) {
-        if (tok == '(') {
+        if (eq(tok, mkc('('))) {
             SValue ret;
             Sym *sa;
             int nb_args, ret_nregs, regsize;
