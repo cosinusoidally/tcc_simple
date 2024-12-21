@@ -1124,6 +1124,8 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
     Sym *s;
     Sym  *f;
     CType *t1;
+    int cstr_len;
+    int ch;
 
     s = type->ref;
     n = s->c;
@@ -1135,28 +1137,27 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
     if (or(eq(and(t1->t, VT_BTYPE), VT_INT),
         and(eq(tok, TOK_STR), eq(and(t1->t, VT_BTYPE), VT_BYTE)))) {
         len = 0;
-        while (tok == TOK_STR) {
-            int cstr_len, ch;
+        while (eq(tok, TOK_STR)) {
 
             cstr_len = tokc.str.size;
-            cstr_len--;
+            cstr_len = sub(cstr_len, 1);
             nb = cstr_len;
-            if (!size_only) {
+            if (eq(0, size_only)) {
                 memcpy(sec->data + c + len, tokc.str.data, nb);
             }
-            len += nb;
+            len = add(len, nb);
             next();
         }
         /* only add trailing zero if enough storage (no
            warning in this case since it is standard) */
         if (n < 0 || len < n) {
-            if (!size_only) {
+            if (eq(0, size_only)) {
                 vpushi(0);
-                init_putv(t1, sec, c + (len * size1));
+                init_putv(t1, sec, add(c, mul(len, size1)));
             }
-            len++;
+            len = add(len, 1);
         }
-        len *= size1;
+        len = mul(len, size1);
     }
 
     /* patch type size if needed, which happens only for array types */
