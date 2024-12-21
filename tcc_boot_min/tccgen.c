@@ -224,29 +224,27 @@ Sym *__sym_malloc() {
     return last_sym;
 }
 
-static inline Sym *sym_malloc(void)
-{
+Sym *sym_malloc(void) {
     Sym *sym;
     sym = sym_free_first;
-    if (!sym)
+    if (eq(sym, 0)) {
         sym = __sym_malloc();
+    }
     sym_free_first = sym->next;
     return sym;
 }
 
-ST_INLN void sym_free(Sym *sym)
-{
+void sym_free(Sym *sym) {
     sym->next = sym_free_first;
     sym_free_first = sym;
 }
 
 /* push, without hashing */
-ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c)
-{
+ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
     Sym *s;
 
     s = sym_malloc();
-    memset(s, 0, sizeof *s);
+    memset(s, 0, sizeof_Sym);
     s->v = v;
     s->type.t = t;
     s->c = c;
