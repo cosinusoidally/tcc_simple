@@ -495,8 +495,10 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     /* modify all stack values */
     saved = 0;
     l = 0;
-    for(p = vstack, p1 = vtop - n; p <= p1; p++) {
-        if ((p->r & VT_VALMASK) == r) {
+    p = vstack;
+    p1 = vtop - n;
+    while(lte(p, p1)) {
+        if (eq((p->r & VT_VALMASK), r)) {
             /* must save value on stack if not already done */
             if (!saved) {
                 r = p->r & VT_VALMASK;
@@ -518,6 +520,7 @@ ST_FUNC void save_reg_upstack(int r, int n) {
             p->r = lvalue_type(p->type.t) | VT_LOCAL;
             p->c.i = l;
         }
+        p = p + 1;
     }
 }
 
