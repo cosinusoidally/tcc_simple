@@ -1284,7 +1284,7 @@ void gen_function(Sym *sym) {
     ind = cur_text_section->data_offset;
     /* NOTE: we patch the symbol size later */
     put_extern_sym(sym, cur_text_section, ind, 0);
-    funcname = get_tok_str(sym->v, NULL);
+    funcname = get_tok_str(sym->v, 0);
     func_ind = ind;
     /* push a dummy symbol to enable local sym storage */
     sym_push2(&local_stack, SYM_FIELD, 0, 0);
@@ -1292,19 +1292,18 @@ void gen_function(Sym *sym) {
     gfunc_prolog(&sym->type);
     local_scope = 0;
     rsym = 0;
-    block(NULL, NULL, 0);
+    block(0, 0, 0);
     gsym(rsym);
     gfunc_epilog();
     cur_text_section->data_offset = ind;
     /* reset local stack */
     local_scope = 0;
-    sym_pop(&local_stack, NULL, 0);
+    sym_pop(&local_stack, 0, 0);
     /* end of function */
     /* patch symbol size */
-    ses_st_size(elfsym(sym), ind - func_ind);
-    /* It's better to crash than to generate wrong code */
-    cur_text_section = NULL;
-    funcname = ""; /* for safety */
+    ses_st_size(elfsym(sym), sub(ind, func_ind));
+    cur_text_section = 0;
+    funcname = mks(""); /* for safety */
     func_vt.t = 0; /* for safety */
     func_var = 0; /* for safety */
     ind = 0; /* for safety */
@@ -1312,8 +1311,7 @@ void gen_function(Sym *sym) {
 
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
    if parsing old style parameter decl list (and FUNC_SYM is set then) */
-static int decl0(int l, int is_for_loop_init, Sym *func_sym)
-{
+int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     int v, has_init, r;
     CType type, btype;
     Sym *sym;
