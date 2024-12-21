@@ -1339,13 +1339,14 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
             if (eq(tok, mkc('{'))) {
                 /* put function symbol */
                 sym = external_global_sym(v, &type, 0);
-                type.t &= ~VT_EXTERN;
+                type.t = and(type.t, not(VT_EXTERN));
                 patch_storage(sym, &ad, &type);
 
                 /* compute text section */
                 cur_text_section = ad.section;
-                if (!cur_text_section)
+                if (eq(0, cur_text_section)) {
                     cur_text_section = text_section;
+                }
                 gen_function(sym);
                 break;
             } else {
