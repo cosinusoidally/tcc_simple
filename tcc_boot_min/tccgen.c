@@ -884,24 +884,24 @@ void unary() {
 	type.t = t;
 	vsetc(&type, VT_CONST, &tokc);
         next();
-    } else if(tok == TOK_STR) {
+    } else if(eq(tok, TOK_STR)) {
         /* string parsing */
         t = VT_BYTE;
         type.t = t;
         mk_pointer(&type);
-        type.t |= VT_ARRAY;
+        type.t = or(type.t, VT_ARRAY);
         memset(&ad, 0, sizeof(AttributeDef));
         decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
-    } else if(tok == '(') {
+    } else if(eq(tok, mkc('('))) {
         next();
         parse_btype(&type, &ad);
         gexpr();
-        skip(')');
+        skip(mkc(')'));
     } else {
         t = tok;
         next();
         s = sym_find(t);
-        if (!s) {
+        if (eq(0, s)) {
             const char *name = get_tok_str(t, NULL);
             s = external_global_sym(t, &func_old_type, 0); 
         }
