@@ -858,15 +858,15 @@ static void gfunc_param_typed(Sym *func, Sym *arg) {
     CType type;
 
     func_type = func->f.func_type;
-    if (func_type != FUNC_OLD) {
+    if (neq(func_type, FUNC_OLD)) {
         type = arg->type;
-        type.t &= ~VT_CONSTANT; /* need to do that to avoid false warning */
+        /* need to do that to avoid false warning */
+        type.t = and(type.t, not(VT_CONSTANT));
         gen_assign_cast(&type);
     }
 }
 
-ST_FUNC void unary(void)
-{
+ST_FUNC void unary(void) {
     int n, t, align, size, r, sizeof_caller;
     CType type;
     Sym *s;
