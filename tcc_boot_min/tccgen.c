@@ -835,7 +835,7 @@ CType *type_decl(CType *type, AttributeDef *ad, int *v) {
 
     /* recursive type, remove storage bits first, apply them later again */
     storage = and(type->t, VT_STORAGE);
-    type->t &= ~VT_STORAGE;
+    type->t = and(type->t, not(VT_STORAGE));
     post = type;
     ret = type;
 
@@ -843,19 +843,17 @@ CType *type_decl(CType *type, AttributeDef *ad, int *v) {
     *v = tok;
     next();
     post_type(post, ad, storage);
-    type->t |= storage;
+    type->t = or(type->t, storage);
     return ret;
 }
 
 /* compute the lvalue VT_LVAL_xxx needed to match type t. */
-ST_FUNC int lvalue_type(int t)
-{
+ST_FUNC int lvalue_type(int t) {
     return VT_LVAL;
 }
 
 /* pass a parameter to a function and do type checking and casting */
-static void gfunc_param_typed(Sym *func, Sym *arg)
-{
+static void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
     CType type;
 
