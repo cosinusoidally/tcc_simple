@@ -498,18 +498,19 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     p = vstack;
     p1 = vtop - n;
     while(lte(p, p1)) {
-        if (eq((p->r & VT_VALMASK), r)) {
+        if (eq(and(p->r, VT_VALMASK), r)) {
             /* must save value on stack if not already done */
-            if (!saved) {
-                r = p->r & VT_VALMASK;
+            if (eq(0, saved)) {
+                r = and(p->r, VT_VALMASK);
                 /* store register in the stack */
                 type = &p->type;
-                if ((p->r & VT_LVAL))
+                if (and(p->r, VT_LVAL)) {
                     type = &int_type;
+                }
                 size = type_size(type, &align);
-                loc = (loc - size) & -align;
+                loc = and(sub(loc, size), sub(0, align));
                 sv.type.t = type->t;
-                sv.r = VT_LOCAL | VT_LVAL;
+                sv.r = or(VT_LOCAL, VT_LVAL);
                 sv.c.i = loc;
                 store(r, &sv);
 
@@ -517,7 +518,7 @@ ST_FUNC void save_reg_upstack(int r, int n) {
                 saved = 1;
             }
             /* mark that stack entry as being saved on the stack */
-            p->r = lvalue_type(p->type.t) | VT_LOCAL;
+            p->r = or(lvalue_type(p->type.t), VT_LOCAL);
             p->c.i = l;
         }
         p = p + 1;
@@ -525,9 +526,9 @@ ST_FUNC void save_reg_upstack(int r, int n) {
 }
 
 /* find a free register of class 'rc'. If none, save one register */
-ST_FUNC int get_reg(int rc)
-{
-    int r, notfound;
+ST_FUNC int get_reg(int rc) {
+    int r;
+    int notfound;
     SValue *p;
 
     /* find a free register */
