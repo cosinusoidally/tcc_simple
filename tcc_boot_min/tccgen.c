@@ -1361,11 +1361,13 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                     }
                     has_init = eq(tok, mkc('='));
                     if (or(or(and(and(type.t, VT_EXTERN),
-                          or(eq(0,has_init), neq(l, VT_CONST))),
-			eq(and(type.t, VT_BTYPE), VT_FUNC)),
-                        (and(and(type.t, VT_ARRAY), and(type.t, VT_STATIC)) &&
-                         and(eq(0,has_init), and(eq(l, VT_CONST),
-                        lt(type.ref->c, 0)))))) {
+                                  or(eq(0,has_init), neq(l, VT_CONST))),
+			          eq(and(type.t, VT_BTYPE), VT_FUNC)),
+                             (and(and(type.t, VT_ARRAY),
+                                      and(type.t, VT_STATIC)) &&
+                                  and(eq(0,has_init),
+                                     and(eq(l, VT_CONST),
+                                         lt(type.ref->c, 0)))))) {
                         /* external variable or function */
                         /* NOTE: as GCC, uninitialized global static
                            arrays of null size are considered as
