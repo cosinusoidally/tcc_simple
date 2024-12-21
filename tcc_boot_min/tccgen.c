@@ -928,7 +928,7 @@ void unary() {
     while (1) {
         if (eq(tok, mkc('('))) {
 
-            vtop->r &= not(VT_LVAL); /* no lvalue */
+            vtop->r = and(vtop->r, not(VT_LVAL)); /* no lvalue */
             /* get return type */
             s = vtop->type.ref;
             next();
@@ -940,19 +940,21 @@ void unary() {
 
             ret.r = REG_IRET;
             ret.c.i = 0;
-            if (tok != ')') {
+            if (neq(tok, mkc(')'))) {
                 while(1) {
                     expr_eq();
                     gfunc_param_typed(s, sa);
-                    nb_args++;
-                    if (sa)
+                    nb_args = add(nb_args, 1);
+                    if (sa) {
                         sa = sa->next;
-                    if (tok == ')')
+                    }
+                    if (eq(tok, mkc(')'))) {
                         break;
-                    skip(',');
+                    }
+                    skip(mkc(','));
                 }
             }
-            skip(')');
+            skip(mkc(')'));
             gfunc_call(nb_args);
 
             /* return value */
