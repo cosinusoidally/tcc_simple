@@ -1059,32 +1059,32 @@ void block(int *bsym, int *csym, int is_expr) {
         next();
     } else if(eq(tok, TOK_RETURN)) {
         next();
-        if (tok != ';') {
+        if (neq(tok, mkc(';'))) {
             gexpr();
             gen_assign_cast(&func_vt);
             gfunc_return(&func_vt);
         }
-        skip(';');
+        skip(mkc(';'));
         /* jump unless last stmt in top-level block */
-        if (tok != '}' || local_scope != 1)
+        if(or(neq(tok, mkc('}')), neq(local_scope, 1))) {
             rsym = gjmp(rsym);
-    } else if (tok == TOK_BREAK) {
+        }
+    } else if(eq(tok, TOK_BREAK)) {
         /* compute jump */
         *bsym = gjmp(*bsym);
         next();
         skip(';');
     } else {
-        if (tok != ';') {
+        if (neq(tok, mkc(';'))) {
                 gexpr();
                 vpop();
         }
-        skip(';');
+        skip(mkc(';'));
     }
 }
 
 /* store a value or an expression directly in global data or in local array */
-static void init_putv(CType *type, Section *sec, unsigned long c)
-{
+static void init_putv(CType *type, Section *sec, unsigned long c) {
     int bt;
     void *ptr;
     CType dtype;
