@@ -613,9 +613,9 @@ static void gen_opic(int op) {
     int c1 = (v1->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
     int c2 = (v2->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
 
-    if (c1 && c2) {
+    if (and(c1, c2)) {
         v1->c.i = 1;
-        vtop--;
+        vtop = vtop - 1;
     } else {
         gen_opi(op);
     }
