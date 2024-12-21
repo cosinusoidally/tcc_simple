@@ -958,7 +958,9 @@ void unary() {
             gfunc_call(nb_args);
 
             /* return value */
-            for (r = ret.r + ret_nregs + !ret_nregs; r-- > ret.r;) {
+            r = ret.r + ret_nregs;
+            while(gt(r, ret.r)) {
+                r = r - 1;
                 vsetc(&ret.type, r, &ret.c);
             }
         } else {
