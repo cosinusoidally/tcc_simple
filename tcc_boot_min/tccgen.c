@@ -662,7 +662,8 @@ void gen_cast(CType *type) {
             }
             vtop->c.i = and(vtop->c.i, m);
             if (eq(0, and(dbt, VT_UNSIGNED))) {
-                vtop->c.i = or(vtop->c.i, sub(0, and(vtop->c.i, add((m >> 1), 1))));
+                /* LJW FIXME shr might go wrong because of sign extension */
+                vtop->c.i = or(vtop->c.i, sub(0, and(vtop->c.i, add(shr(m, 1), 1))));
             }
         }
     }
