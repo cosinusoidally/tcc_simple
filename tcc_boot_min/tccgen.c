@@ -557,6 +557,8 @@ ST_FUNC int get_reg(int rc) {
    register value (such as structures). */
 ST_FUNC int gv(int rc) {
     int r;
+    int t1;
+    int t;
 
     r = and(vtop->r, VT_VALMASK);
     /* need to reload if:
@@ -568,7 +570,6 @@ ST_FUNC int gv(int rc) {
               eq(0, and(ri32(add(reg_classes, mul(r, 4))), rc)))) {
         r = get_reg(rc);
         if (and(vtop->r, VT_LVAL)) {
-            int t1, t;
             /* lvalue of scalar type : need to use lvalue type
                because of possible cast */
             t = vtop->type.t;
