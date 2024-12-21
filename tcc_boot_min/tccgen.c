@@ -671,20 +671,19 @@ void gen_cast(CType *type) {
 }
 
 /* return type size as known at compile time. Put alignment at 'a' */
-ST_FUNC int type_size(CType *type, int *a)
-{
+ST_FUNC int type_size(CType *type, int *a) {
     Sym *s;
     int bt;
+    int ts;
 
-    bt = type->t & VT_BTYPE;
-    if (bt == VT_PTR) {
-        int ts;
+    bt = and(type->t, VT_BTYPE);
+    if (eq(bt, VT_PTR)) {
 
         s = type->ref;
         ts = type_size(&s->type, a);
 
         return ts * s->c;
-    } else if (bt == VT_INT) {
+    } else if(eq(bt, VT_INT)) {
         *a = 4;
         return 4;
     } else {
