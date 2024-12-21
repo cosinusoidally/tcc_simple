@@ -1113,22 +1113,22 @@ static void init_putv(CType *type, Section *sec, unsigned long c) {
    allocation. 'first' is true if array '{' must be read (multi
    dimension implicit array init handling). 'size_only' is true if
    size only evaluation is wanted (only for arrays). */
-static void decl_initializer(CType *type, Section *sec, unsigned long c, 
-                             int first, int size_only)
-{
-    int len, n, no_oblock, nb, i;
-    int size1, align1;
-    int have_elem;
-    Sym *s, *f;
-    Sym indexsym;
+void decl_initializer(CType *type, Section *sec, unsigned long c,
+                             int first, int size_only) {
+    int len;
+    int n;
+    int nb;
+    int i;
+    int size1;
+    int align1;
+    Sym *s;
+    Sym  *f;
     CType *t1;
 
     s = type->ref;
     n = s->c;
     t1 = pointed_type(type);
     size1 = type_size(t1, &align1);
-
-    no_oblock = 1;
 
     /* only parse strings here if correct type (otherwise: handle
        them as ((w)char *) expressions */
