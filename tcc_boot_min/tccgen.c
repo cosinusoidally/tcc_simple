@@ -1150,7 +1150,7 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
         }
         /* only add trailing zero if enough storage (no
            warning in this case since it is standard) */
-        if (n < 0 || len < n) {
+        if (or(lt(n, 0), lt(len, n))) {
             if (eq(0, size_only)) {
                 vpushi(0);
                 init_putv(t1, sec, add(c, mul(len, size1)));
@@ -1161,8 +1161,13 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
     }
 
     /* patch type size if needed, which happens only for array types */
-    if (n < 0)
-        s->c = size1 == 1 ? len : ((len + size1 - 1)/size1);
+    if (lt(n, 0)) {
+        if(eq(size1, 1)) {
+            s->c = len;
+        } else {
+            s->c = div_(sub(add(len, size1), 1), size1);
+        }
+    }
 }
 
 /* parse an initializer for type 't' if 'has_init' is non zero, and
