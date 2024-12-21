@@ -661,8 +661,9 @@ void gen_cast(CType *type) {
                 m = sub(0, 1); /* 0xffffffff */
             }
             vtop->c.i = and(vtop->c.i, m);
-            if (!(dbt & VT_UNSIGNED))
+            if (eq(0, and(dbt, VT_UNSIGNED))) {
                 vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
+            }
         }
     }
     vtop->type = *type;
