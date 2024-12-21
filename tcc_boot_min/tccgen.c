@@ -728,16 +728,15 @@ ST_FUNC void vstore(void) {
 /* return 0 if no type declaration. otherwise, return the basic type
    and skip it. 
  */
-static int parse_btype(CType *type, AttributeDef *ad)
-{
-    int type_found, typespec_found;
+int parse_btype(CType *type, AttributeDef *ad) {
+    int type_found;
+    int typespec_found;
     Sym *s;
-    CType type1;
 
     memset(ad, 0, sizeof(AttributeDef));
     type_found = 0;
     typespec_found = 0;
-    type->ref = NULL;
+    type->ref = 0;
 
     while(1) {
         if(tok == TOK_INT) {
