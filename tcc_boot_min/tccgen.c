@@ -327,7 +327,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
         v = s->v;
         /* remove symbol in token array */
         /* XXX: simplify */
-        if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
+        if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
             ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
             ps = &ts->sym_identifier;
             *ps = s->prev_tok;
