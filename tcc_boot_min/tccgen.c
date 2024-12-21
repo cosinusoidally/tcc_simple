@@ -1351,13 +1351,13 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 break;
             } else {
                     r = 0;
-                    if ((type.t & VT_BTYPE) == VT_FUNC) {
+                    if (eq(and(type.t, VT_BTYPE), VT_FUNC)) {
                         /* external function definition */
                         /* specific case for func_call attribute */
                         type.ref->f = ad.f;
-                    } else if (!(type.t & VT_ARRAY)) {
+                    } else if (eq(0, and(type.t, VT_ARRAY))) {
                         /* not lvalue if array */
-                        r |= lvalue_type(type.t);
+                        r = or(r, lvalue_type(type.t));
                     }
                     has_init = (tok == '=');
                     if (((type.t & VT_EXTERN) && (!has_init || l != VT_CONST)) ||
