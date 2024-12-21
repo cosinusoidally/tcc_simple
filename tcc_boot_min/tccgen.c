@@ -969,12 +969,11 @@ void unary() {
     }
 }
 
-static void expr_eq(void)
-{
+void expr_eq() {
     int t;
     
     unary();
-    if (tok == '=') {
+    if (eq(tok, mkc('='))) {
         t = tok;
         next();
         expr_eq();
@@ -982,19 +981,17 @@ static void expr_eq(void)
     }
 }
 
-ST_FUNC void gexpr(void)
-{
+void gexpr() {
     expr_eq();
 }
 
-static void gfunc_return(CType *func_type)
-{
+void gfunc_return(CType *func_type) {
     gv(RC_IRET);
-    vtop--; /* NOT vpop() because on x86 it would flush the fp stack */
+    /* NOT vpop() because on x86 it would flush the fp stack */
+    vtop = vtop - 1;
 }
 
-static void block(int *bsym, int *csym, int is_expr)
-{
+void block(int *bsym, int *csym, int is_expr) {
     int a, b, c, d;
     Sym *s;
 
