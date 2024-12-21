@@ -145,15 +145,16 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
     if (eq(sym->c, 0)) {
         name = get_tok_str(sym->v, 0);
         t = sym->type.t;
-        if (and(t, VT_BTYPE) == VT_FUNC) {
+        if (eq(and(t, VT_BTYPE), VT_FUNC)) {
             sym_type = STT_FUNC;
         } else {
             sym_type = STT_OBJECT;
         }
-        if (t & VT_STATIC)
+        if (and(t, VT_STATIC)) {
             sym_bind = STB_LOCAL;
-        else
+        } else {
             sym_bind = STB_GLOBAL;
+        }
         other = 0;
         info = ELFW_ST_INFO(sym_bind, sym_type);
         sym->c = put_elf_sym(symtab_section, value, size, info, other, sh_num, name);
@@ -167,21 +168,27 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
 }
 
 ST_FUNC void put_extern_sym(Sym *sym, Section *section,
-                           addr_t value, unsigned long size)
-{
-    int sh_num = section ? section->sh_num : SHN_UNDEF;
+                           addr_t value, unsigned long size) {
+    int sh_num;
+    if(section) {
+        sh_num = section->sh_num;
+    } else {
+        sh_num = SHN_UNDEF;
+    }
     put_extern_sym2(sym, sh_num, value, size, 1);
 }
 
 /* add a new relocation entry to symbol 'sym' in section 's' */
 ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
-                     addr_t addend)
-{
-    int c = 0;
+                     addr_t addend) {
+    int c;
+
+    c = 0;
 
     if (sym) {
-        if (0 == sym->c)
-            put_extern_sym(sym, NULL, 0, 0);
+        if (eq(0, sym->c)) {
+            put_extern_sym(sym, 0, 0, 0);
+        }
         c = sym->c;
     }
 
@@ -189,16 +196,16 @@ ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
     put_elf_reloca(symtab_section, s, offset, type, c, addend);
 }
 
-ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type)
-{
+ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type) {
     greloca(s, sym, offset, type, 0);
 }
 
 /* ------------------------------------------------------------------------- */
 /* symbol allocator */
-static Sym *__sym_malloc(void)
-{
-    Sym *sym_pool, *sym, *last_sym;
+Sym *__sym_malloc() {
+    Sym *sym_pool;
+    Sym *sym;
+    Sym *last_sym;
     int i;
 
     sym_pool = tcc_malloc(SYM_POOL_NB * sizeof(Sym));
