@@ -478,14 +478,19 @@ ST_FUNC void save_reg(int r) {
 
 /* save r to the memory stack, and mark it as being free,
    if seen up to (vtop - n) stack entry */
-ST_FUNC void save_reg_upstack(int r, int n)
-{
-    int l, saved, size, align;
-    SValue *p, *p1, sv;
+ST_FUNC void save_reg_upstack(int r, int n) {
+    int l;
+    int saved;
+    int size;
+    int align;
+    SValue *p;
+    SValue *p1;
+    SValue sv;
     CType *type;
 
-    if ((r &= VT_VALMASK) >= VT_CONST)
+    if (gte((r &= VT_VALMASK), VT_CONST)) {
         return;
+    }
 
     /* modify all stack values */
     saved = 0;
