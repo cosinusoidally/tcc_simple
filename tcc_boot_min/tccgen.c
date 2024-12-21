@@ -872,6 +872,11 @@ void unary() {
     Sym *s;
     AttributeDef ad;
     char *name;
+    SValue ret;
+    Sym *sa;
+    int nb_args;
+    int ret_nregs;
+    int regsize;
 
     in_sizeof = 0;
     type.ref = 0;
@@ -922,16 +927,14 @@ void unary() {
     /* post operations */
     while (1) {
         if (eq(tok, mkc('('))) {
-            SValue ret;
-            Sym *sa;
-            int nb_args, ret_nregs, regsize;
 
-            vtop->r &= ~VT_LVAL; /* no lvalue */
+            vtop->r &= not(VT_LVAL); /* no lvalue */
             /* get return type */
             s = vtop->type.ref;
             next();
             sa = s->next; /* first parameter */
-            nb_args = regsize = 0;
+            nb_args = 0;
+            regsize = 0;
             ret_nregs = 1;
             ret.type = s->type;
 
