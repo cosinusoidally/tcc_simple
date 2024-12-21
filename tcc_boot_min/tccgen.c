@@ -255,11 +255,11 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
 }
 
 /* find an identifier */
-ST_INLN Sym *sym_find(int v)
-{
-    v -= TOK_IDENT;
-    if ((unsigned)v >= (unsigned)(tok_ident - TOK_IDENT))
+ST_INLN Sym *sym_find(int v) {
+    v = sub(v, TOK_IDENT);
+    if (or(lt(v, 0), gte(v, sub(tok_ident, TOK_IDENT)))) {
         return NULL;
+    }
     return table_ident[v]->sym_identifier;
 }
 
