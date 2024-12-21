@@ -264,15 +264,15 @@ ST_INLN Sym *sym_find(int v) {
 }
 
 /* push a given symbol on the symbol stack */
-ST_FUNC Sym *sym_push(int v, CType *type, int r, int c)
-{
+ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     Sym *s, **ps;
     TokenSym *ts;
 
-    if (local_stack)
-        ps = &local_stack;
-    else
-        ps = &global_stack;
+    if (local_stack) {
+        ps = alocal_stack;
+    } else {
+        ps = aglobal_stack;
+    }
     s = sym_push2(ps, v, type->t, c);
     s->type.ref = type->ref;
     s->r = r;
