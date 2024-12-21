@@ -652,14 +652,18 @@ void gen_cast(CType *type) {
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
-            if (sbt & VT_UNSIGNED)
+            if (sbt & VT_UNSIGNED) {
                 vtop->c.i = (uint32_t)vtop->c.i;
-            else
+            } else {
                 vtop->c.i = ((uint32_t)vtop->c.i |
                               -(vtop->c.i & 0x80000000));
+            }
 
-            m = ((dbt & VT_BTYPE) == VT_BYTE ? 255 :
-                              0xffffffff);
+            if((dbt & VT_BTYPE) == VT_BYTE) {
+                m = 255;
+            } else {
+                m = 0xffffffff;
+            }
             vtop->c.i &= m;
             if (!(dbt & VT_UNSIGNED))
                 vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
