@@ -328,7 +328,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
         /* remove symbol in token array */
         /* XXX: simplify */
         if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
-            ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
+            ts = table_ident[sub(and(v, not(SYM_STRUCT)), TOK_IDENT)];
             ps = &ts->sym_identifier;
             *ps = s->prev_tok;
         }
@@ -344,28 +344,25 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
 
 /* ------------------------------------------------------------------------- */
 
-static void vsetc(CType *type, int r, CValue *vc)
-{
-    vtop++;
+static void vsetc(CType *type, int r, CValue *vc) {
+    vtop = vtop + 1;
     vtop->type = *type;
     vtop->r = r;
     vtop->c = *vc;
     vtop->sym = NULL;
 }
 
-ST_FUNC void vswap(void)
-{
+ST_FUNC void vswap(void) {
     SValue tmp;
     tmp = vtop[0];
-    vtop[0] = vtop[-1];
-    vtop[-1] = tmp;
+    vtop[0] = vtop[sub(0, 1)];
+    vtop[sub(0, 1)] = tmp;
 }
 
 /* pop stack value */
-ST_FUNC void vpop(void)
-{
+ST_FUNC void vpop(void) {
     int v;
-    v = vtop->r & VT_VALMASK;
+    v = and(vtop->r, VT_VALMASK);
     vtop--;
 }
 
