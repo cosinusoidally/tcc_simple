@@ -395,41 +395,39 @@ ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsign
 
     v = anon_sym;
     anon_sym = add(anon_sym, 1);
-    sym = global_identifier_push(v, type->t | VT_STATIC, 0);
+    sym = global_identifier_push(v, or(type->t, VT_STATIC), 0);
     sym->type.ref = type->ref;
-    sym->r = VT_CONST | VT_SYM;
+    sym->r = or(VT_CONST, VT_SYM);
     put_extern_sym(sym, sec, offset, size);
     return sym;
 }
 
 /* define a new external reference to a symbol 'v' of type 'u' */
-ST_FUNC Sym *external_global_sym(int v, CType *type, int r)
-{
+ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
     Sym *s;
 
     s = sym_find(v);
-    if (!s) {
+    if (eq(0, s)) {
         /* push forward reference */
-        s = global_identifier_push(v, type->t | VT_EXTERN, 0);
+        s = global_identifier_push(v, or(type->t, VT_EXTERN), 0);
         s->type.ref = type->ref;
-        s->r = r | VT_CONST | VT_SYM;
+        s->r = or(or(r, VT_CONST), VT_SYM);
     }
     return s;
 }
 
 /* Merge some type attributes.  */
-static void patch_type(Sym *sym, CType *type)
-{
-    if (!(type->t & VT_EXTERN)) {
-        sym->type.t &= ~VT_EXTERN;
+static void patch_type(Sym *sym, CType *type) {
+    if (eq(0, and(type->t, VT_EXTERN))) {
+        sym->type.t = and(sym->type.t, not(VT_EXTERN));
     }
 
-    if ((sym->type.t & VT_BTYPE) == VT_FUNC) {
-        int static_proto = sym->type.t & VT_STATIC;
+    if (eq(and(sym->type.t, VT_BTYPE), VT_FUNC)) {
+        int static_proto = and(sym->type.t, VT_STATIC);
 
-        if (0 == (type->t & VT_EXTERN)) {
+        if (eq(0, and(type->t, VT_EXTERN))) {
             /* put complete type, use static from prototype */
-            sym->type.t = (type->t & ~VT_STATIC) | static_proto;
+            sym->type.t = or(and(type->t, not(VT_STATIC)), static_proto);
             sym->type.ref = type->ref;
         }
     }
@@ -437,11 +435,10 @@ static void patch_type(Sym *sym, CType *type)
 
 
 /* Merge some storage attributes.  */
-static void patch_storage(Sym *sym, AttributeDef *ad, CType *type)
-{
-    if (type)
+static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
+    if (type) {
         patch_type(sym, type);
-
+    }
     update_storage(sym);
 }
 
