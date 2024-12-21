@@ -26,7 +26,8 @@
    rsym: return symbol
    anon_sym: anonymous symbol index
 */
-ST_DATA int rsym, anon_sym, loc;
+int rsym;
+int anon_sym;
 extern int ind;
 
 ST_DATA Sym *sym_free_first;
@@ -35,7 +36,6 @@ ST_DATA int nb_sym_pools;
 
 ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
-ST_DATA Sym *global_label_stack;
 ST_DATA Sym *local_label_stack;
 static int local_scope;
 static int in_sizeof;
