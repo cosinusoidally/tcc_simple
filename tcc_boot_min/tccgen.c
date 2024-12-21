@@ -443,14 +443,13 @@ static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
 }
 
 /* define a new external reference to a symbol 'v' */
-static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad)
-{
+static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
     Sym *s;
     s = sym_find(v);
-    if (!s) {
+    if (eq(0, s)) {
         /* push forward reference */
-        s = sym_push(v, type, r | VT_CONST | VT_SYM, 0);
-        s->type.t |= VT_EXTERN;
+        s = sym_push(v, type, or(or(r, VT_CONST), VT_SYM), 0);
+        s->type.t = or(s->type.t, VT_EXTERN);
         s->sym_scope = 0;
     } else {
         patch_storage(s, ad, type);
