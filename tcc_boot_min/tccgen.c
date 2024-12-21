@@ -1088,22 +1088,24 @@ static void init_putv(CType *type, Section *sec, unsigned long c) {
     int bt;
     void *ptr;
     CType dtype;
+    int size;
+    int align;
 
     dtype = *type;
-    dtype.t &= ~VT_CONSTANT; /* need to do that to avoid false warning */
+    /* need to do that to avoid false warning */
+    dtype.t = and(dtype.t, not(VT_CONSTANT));
 
-    int size, align;
     /* XXX: not portable */
     /* XXX: generate error if incorrect relocation */
-       gen_assign_cast(&dtype);
-    bt = type->t & VT_BTYPE;
+    gen_assign_cast(&dtype);
+    bt = and(type->t, VT_BTYPE);
 
     size = type_size(type, &align);
-    section_reserve(sec, c + size);
-    ptr = sec->data + c;
+    section_reserve(sec, add(c, size));
+    ptr = add(sec->data, c);
 
-    *(char *)ptr |= vtop->c.i;
-    vtop--;
+    wi8(ptr, or(ri8(ptr), vtop->c.i));
+    vtop = vtop - 1;
 }
 
 /* 't' contains the type and storage info. 'c' is the offset of the
