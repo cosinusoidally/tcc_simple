@@ -641,9 +641,9 @@ ST_FUNC void gen_op(int op) {
     vtop->type.t = VT_INT;
 }
 
-static void gen_cast(CType *type)
-{
+static void gen_cast(CType *type) {
     int sbt, dbt, c, p;
+    uint32_t m;
 
     dbt = type->t & (VT_BTYPE | VT_UNSIGNED);
     sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
@@ -658,7 +658,7 @@ static void gen_cast(CType *type)
                 vtop->c.i = ((uint32_t)vtop->c.i |
                               -(vtop->c.i & 0x80000000));
 
-            uint32_t m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
+            m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
                               0xffffffff);
             vtop->c.i &= m;
             if (!(dbt & VT_UNSIGNED))
