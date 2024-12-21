@@ -655,12 +655,12 @@ void gen_cast(CType *type) {
         c = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
         p = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
         if (c) {
-            if((dbt & VT_BTYPE) == VT_BYTE) {
+            if(eq(and(dbt, VT_BTYPE), VT_BYTE)) {
                 m = 255;
             } else {
                 m = sub(0, 1); /* 0xffffffff */
             }
-            vtop->c.i &= m;
+            vtop->c.i = and(vtop->c.i, m);
             if (!(dbt & VT_UNSIGNED))
                 vtop->c.i |= -(vtop->c.i & ((m >> 1) + 1));
         }
