@@ -281,7 +281,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     /* XXX: simplify */
     if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
         /* record symbol in token array */
-        ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
+        ts = table_ident[sub(and(v, not(SYM_STRUCT)), TOK_IDENT)];
         ps = &ts->sym_identifier;
         s->prev_tok = *ps;
         *ps = s;
@@ -291,12 +291,12 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
 }
 
 /* push a global identifier */
-ST_FUNC Sym *global_identifier_push(int v, int t, int c)
-{
-    Sym *s, **ps;
-    s = sym_push2(&global_stack, v, t, c);
+ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
+    Sym *s;
+    Sym **ps;
+    s = sym_push2(aglobal_stack, v, t, c);
     /* don't record anonymous symbol */
-    if (v < SYM_FIRST_ANOM) {
+    if(lt(v, SYM_FIRST_ANOM)) {
         ps = &table_ident[v - TOK_IDENT]->sym_identifier;
         /* modify the top most local identifier, so that
            sym_identifier will point to 's' when popped */
