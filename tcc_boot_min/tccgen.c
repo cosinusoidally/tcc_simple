@@ -648,11 +648,11 @@ void gen_cast(CType *type) {
     dbt = type->t & (VT_BTYPE | VT_UNSIGNED);
     sbt = vtop->type.t & (VT_BTYPE | VT_UNSIGNED);
 
-    if (sbt != dbt) {
+    if (neq(sbt, dbt)) {
         c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
-            if (sbt & VT_UNSIGNED) {
+            if (and(sbt, VT_UNSIGNED)) {
                 vtop->c.i = (uint32_t)vtop->c.i;
             } else {
                 /* 0x80000000 = mul(128, 16777216) without need uint32_t */
