@@ -1223,8 +1223,8 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     }
 
     if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
-        sec = NULL;
-        loc = (loc - size) & -align;
+        sec = 0;
+        loc = and(sub(loc, size), sub(0, align));
         addr = loc;
         if (v) {
             sym = sym_push(v, type, r, addr);
@@ -1236,19 +1236,20 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
         /* allocate symbol in corresponding section */
         sec = ad->section;
-        if (!sec) {
-            if (has_init)
+        if (eq(0, sec)) {
+            if (has_init) {
                 sec = data_section;
-            else
+            } else {
                 sec = bss_section;
+            }
         }
 
         addr = section_add(sec, size, align);
 
         if (v) {
-            if (!sym) {
-                sym = sym_push(v, type, r | VT_SYM, 0);
-                patch_storage(sym, ad, NULL);
+            if (eq(0, sym)) {
+                sym = sym_push(v, type, or(r, VT_SYM), 0);
+                patch_storage(sym, ad, 0);
             }
             /* Local statics have a scope until now (for
                warnings), remove it here.  */
@@ -1259,7 +1260,7 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             /* push global reference */
             sym = get_sym_ref(type, sec, addr, size);
 	    vpushsym(type, sym);
-	    vtop->r |= r;
+	    vtop->r = or(vtop->r, r);
         }
 
     }
@@ -1269,7 +1270,6 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         decl_initializer(type, sec, addr, 1, 0);
     }
 
- no_alloc:
     /* restore parse state if needed */
     if (init_str) {
         end_macro();
@@ -1280,8 +1280,7 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 
 /* parse a function defined by symbol 'sym' and generate its code in
    'cur_text_section' */
-static void gen_function(Sym *sym)
-{
+void gen_function(Sym *sym) {
     ind = cur_text_section->data_offset;
     /* NOTE: we patch the symbol size later */
     put_extern_sym(sym, cur_text_section, ind, 0);
