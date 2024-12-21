@@ -265,7 +265,8 @@ ST_INLN Sym *sym_find(int v) {
 
 /* push a given symbol on the symbol stack */
 ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
-    Sym *s, **ps;
+    Sym *s;
+    Sym **ps;
     TokenSym *ts;
 
     if (local_stack) {
@@ -278,7 +279,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     s->r = r;
     /* don't record fields or anonymous symbols */
     /* XXX: simplify */
-    if (!(v & SYM_FIELD) && (v & ~SYM_STRUCT) < SYM_FIRST_ANOM) {
+    if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
         /* record symbol in token array */
         ts = table_ident[(v & ~SYM_STRUCT) - TOK_IDENT];
         ps = &ts->sym_identifier;
