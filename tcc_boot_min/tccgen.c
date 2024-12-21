@@ -658,7 +658,7 @@ void gen_cast(CType *type) {
                 vtop->c.i = ((uint32_t)vtop->c.i |
                               -(vtop->c.i & 0x80000000));
 
-            m = ((dbt & VT_BTYPE) == VT_BYTE ? 0xff :
+            m = ((dbt & VT_BTYPE) == VT_BYTE ? 255 :
                               0xffffffff);
             vtop->c.i &= m;
             if (!(dbt & VT_UNSIGNED))
