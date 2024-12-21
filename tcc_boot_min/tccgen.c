@@ -314,14 +314,15 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
 
 /* pop symbols until top reaches 'b'.  If KEEP is non-zero don't really
    pop them yet from the list, but do remove them from the token array.  */
-ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep)
-{
-    Sym *s, *ss, **ps;
+ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
+    Sym *s;
+    Sym *ss;
+    Sym **ps;
     TokenSym *ts;
     int v;
 
     s = *ptop;
-    while(s != b) {
+    while(neq(s, b)) {
         ss = s->prev;
         v = s->v;
         /* remove symbol in token array */
@@ -331,12 +332,14 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep)
             ps = &ts->sym_identifier;
             *ps = s->prev_tok;
         }
-	if (!keep)
+	if (eq(0, keep)) {
 	    sym_free(s);
+        }
         s = ss;
     }
-    if (!keep)
+    if (eq(0, keep)) {
 	*ptop = b;
+    }
 }
 
 /* ------------------------------------------------------------------------- */
