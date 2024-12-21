@@ -853,7 +853,7 @@ ST_FUNC int lvalue_type(int t) {
 }
 
 /* pass a parameter to a function and do type checking and casting */
-static void gfunc_param_typed(Sym *func, Sym *arg) {
+void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
     CType type;
 
@@ -866,13 +866,12 @@ static void gfunc_param_typed(Sym *func, Sym *arg) {
     }
 }
 
-ST_FUNC void unary(void) {
-    int n, t, align, size, r, sizeof_caller;
+void unary() {
+    int n, t, align, size, r;
     CType type;
     Sym *s;
     AttributeDef ad;
 
-    sizeof_caller = in_sizeof;
     in_sizeof = 0;
     type.ref = NULL;
     if((tok == TOK_CINT) || (tok == TOK_CCHAR)) {
