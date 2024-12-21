@@ -806,10 +806,10 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
             /* if no parameters, then old type prototype */
             l = FUNC_OLD;
         }
-        skip(')');
+        skip(mkc(')'));
         /* NOTE: const is ignored in returned type as it has a special
            meaning in gcc / C++ */
-        type->t &= ~VT_CONSTANT; 
+        type->t = and(type->t, not(VT_CONSTANT));
         /* we push a anonymous symbol which will contain the function prototype */
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
@@ -828,8 +828,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
    type_decl().  If this (possibly abstract) declarator is a pointer chain
    it returns the innermost pointed to type (equals *type, but is a different
    pointer), otherwise returns type itself, that's used for recursive calls.  */
-static CType *type_decl(CType *type, AttributeDef *ad, int *v)
-{
+CType *type_decl(CType *type, AttributeDef *ad, int *v) {
     CType *post, *ret;
     int qualifiers, storage;
 
