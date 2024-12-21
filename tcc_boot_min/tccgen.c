@@ -535,7 +535,7 @@ ST_FUNC int get_reg(int rc) {
     r = 0;
     while(lt(r, NB_REGS)) {
         notfound = 0;
-        if (ri32(add(reg_classes, mul(r,4))) & rc) {
+        if (and(ri32(add(reg_classes, mul(r,4))), rc)) {
             p = vstack;
             while(lte(p, vtop)) {
                 if (eq(and(p->r, VT_VALMASK), r)) {
@@ -555,8 +555,7 @@ ST_FUNC int get_reg(int rc) {
 /* store vtop a register belonging to class 'rc'. lvalues are
    converted to values. Cannot be used if cannot be converted to
    register value (such as structures). */
-ST_FUNC int gv(int rc)
-{
+ST_FUNC int gv(int rc) {
     int r;
 
     r = vtop->r & VT_VALMASK;
