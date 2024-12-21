@@ -739,7 +739,7 @@ int parse_btype(CType *type, AttributeDef *ad) {
     type->ref = 0;
 
     while(1) {
-        if(tok == TOK_INT) {
+        if(eq(tok, TOK_INT)) {
             next();
             typespec_found = 1;
         } else {
@@ -758,8 +758,7 @@ int parse_btype(CType *type, AttributeDef *ad) {
 
 /* convert a function parameter type (array to pointer and function to
    function pointer) */
-static inline void convert_parameter_type(CType *pt)
-{
+void convert_parameter_type(CType *pt) {
     /* remove const qualifiers (XXX: const could be used
        to indicate a const function parameter */
     pt->t &= ~(VT_CONSTANT);
