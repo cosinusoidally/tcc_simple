@@ -767,15 +767,19 @@ void convert_parameter_type(CType *pt) {
 }
 
 int post_type(CType *type, AttributeDef *ad, int storage) {
-    int n, l, t1, arg_size, align;
-    Sym **plast, *s, *first;
+    int n;
+    int l;
+    int align;
+    Sym **plast;
+    Sym *s;
+    Sym *first;
     AttributeDef ad1;
     CType pt;
 
-    if (tok == '(') {
+    if (eq(tok, mkc('('))) {
         /* function type, or recursive declarator (return if so) */
         next();
-	if (tok == ')') {
+	if (eq(tok, mkc(')'))) {
 	  l = 0;
 	} else {
             parse_btype(&pt, &ad1);
@@ -789,11 +793,12 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
                 type_decl(&pt, &ad1, &n);
                 type_size(&pt, &align);
                 convert_parameter_type(&pt);
-                s = sym_push(n | SYM_FIELD, &pt, 0, 0);
+                s = sym_push(or(n, SYM_FIELD), &pt, 0, 0);
                 *plast = s;
                 plast = &s->next;
-                if (tok == ')')
+                if (eq(tok, mkc(')'))) {
                     break;
+                }
                 skip(',');
                 parse_btype(&pt, &ad1);
             }
