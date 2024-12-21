@@ -607,11 +607,13 @@ ST_FUNC int gvtst(int inv, int t) {
 static void gen_opic(int op) {
     SValue *v1;
     SValue *v2;
+    int c1;
+    int c2;
 
     v1 = vtop - 1;
     v2 = vtop;
-    int c1 = eq(and(v1->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-    int c2 = eq(and(v2->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+    c1 = eq(and(v1->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+    c2 = eq(and(v2->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
 
     if (and(c1, c2)) {
         v1->c.i = 1;
@@ -622,8 +624,7 @@ static void gen_opic(int op) {
 }
 
 /* generic gen_op: handles types problems */
-ST_FUNC void gen_op(int op)
-{
+ST_FUNC void gen_op(int op) {
     int u, t1, t2, t;
     CType type1;
 
