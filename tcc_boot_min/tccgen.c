@@ -208,7 +208,7 @@ Sym *__sym_malloc() {
     Sym *last_sym;
     int i;
 
-    sym_pool = tcc_malloc(SYM_POOL_NB * sizeof(Sym));
+    sym_pool = tcc_malloc(mul(SYM_POOL_NB, sizeof_Sym));
     dynarray_add(&sym_pools, &nb_sym_pools, sym_pool);
 
     last_sym = sym_free_first;
@@ -349,10 +349,10 @@ static void vsetc(CType *type, int r, CValue *vc) {
     vtop->type = *type;
     vtop->r = r;
     vtop->c = *vc;
-    vtop->sym = NULL;
+    vtop->sym = 0;
 }
 
-ST_FUNC void vswap(void) {
+ST_FUNC void vswap() {
     SValue tmp;
     tmp = vtop[0];
     vtop[0] = vtop[sub(0, 1)];
@@ -360,7 +360,7 @@ ST_FUNC void vswap(void) {
 }
 
 /* pop stack value */
-ST_FUNC void vpop(void) {
+ST_FUNC void vpop() {
     int v;
     v = and(vtop->r, VT_VALMASK);
     vtop = vtop - 1;
@@ -432,7 +432,6 @@ static void patch_type(Sym *sym, CType *type) {
         }
     }
 }
-
 
 /* Merge some storage attributes.  */
 static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
