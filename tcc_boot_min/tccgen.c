@@ -653,7 +653,7 @@ void gen_cast(CType *type) {
 
     if (neq(sbt, dbt)) {
         c = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-        p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
+        p = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
         if (c) {
             if((dbt & VT_BTYPE) == VT_BYTE) {
                 m = 255;
