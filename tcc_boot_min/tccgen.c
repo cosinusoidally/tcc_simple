@@ -535,13 +535,15 @@ ST_FUNC int get_reg(int rc) {
     for(r=0;r<NB_REGS;r++) {
         notfound = 0;
         if (ri32(add(reg_classes, mul(r,4))) & rc) {
-            for(p=vstack;p<=vtop;p++) {
-                if ((p->r & VT_VALMASK) == r) {
+            p = vstack;
+            while(lte(p, vtop)) {
+                if (eq(and(p->r, VT_VALMASK), r)) {
                     notfound = 1;
                     break;
                 }
+                p = p + 1;
             }
-            if(notfound == 0) {
+            if(eq(notfound, 0)) {
                 return r;
             }
         }
