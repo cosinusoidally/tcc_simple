@@ -662,7 +662,7 @@ void gen_cast(CType *type) {
             if((dbt & VT_BTYPE) == VT_BYTE) {
                 m = 255;
             } else {
-                m = 0xffffffff;
+                m = sub(0, 1); /* 0xffffffff */
             }
             vtop->c.i &= m;
             if (!(dbt & VT_UNSIGNED))
