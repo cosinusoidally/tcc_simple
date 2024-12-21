@@ -213,10 +213,12 @@ Sym *__sym_malloc() {
 
     last_sym = sym_free_first;
     sym = sym_pool;
-    for(i = 0; i < SYM_POOL_NB; i++) {
+    i = 0;
+    while(lt(i, SYM_POOL_NB)) {
         sym->next = last_sym;
         last_sym = sym;
-        sym++;
+        sym = add(sym, sizeof_Sym);
+        i = add(i, 1);
     }
     sym_free_first = last_sym;
     return last_sym;

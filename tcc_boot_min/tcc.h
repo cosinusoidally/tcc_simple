@@ -603,6 +603,7 @@ extern int sizeof_Elf32_Sym;
 extern int sizeof_TokenSym;
 extern int sizeof_TokenString;
 extern int sizeof_CString;
+extern int sizeof_Sym;
 
 extern int aglobal_stack;
 extern int alocal_stack;
