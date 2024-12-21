@@ -652,17 +652,9 @@ void gen_cast(CType *type) {
     sbt = and(vtop->type.t, or(VT_BTYPE, VT_UNSIGNED));
 
     if (neq(sbt, dbt)) {
-        c = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == VT_CONST;
+        c = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
         p = (vtop->r & (VT_VALMASK | VT_LVAL | VT_SYM)) == (VT_CONST | VT_SYM);
         if (c) {
-            if (and(sbt, VT_UNSIGNED)) {
-                vtop->c.i = (uint32_t)vtop->c.i;
-            } else {
-                /* 0x80000000 = mul(128, 16777216) without need uint32_t */
-                vtop->c.i = or(vtop->c.i,
-                            sub(0, and(vtop->c.i, mul(128, 16777216))));
-            }
-
             if((dbt & VT_BTYPE) == VT_BYTE) {
                 m = 255;
             } else {
