@@ -532,7 +532,8 @@ ST_FUNC int get_reg(int rc) {
     SValue *p;
 
     /* find a free register */
-    for(r=0;r<NB_REGS;r++) {
+    r = 0;
+    while(lt(r, NB_REGS)) {
         notfound = 0;
         if (ri32(add(reg_classes, mul(r,4))) & rc) {
             p = vstack;
@@ -547,6 +548,7 @@ ST_FUNC int get_reg(int rc) {
                 return r;
             }
         }
+        r = add(r, 1);
     }
 }
 
