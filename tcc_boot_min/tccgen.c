@@ -118,7 +118,7 @@ ST_FUNC void update_storage(Sym *sym)
         return;
     }
 
-    if (sym->type.t & VT_STATIC) {
+    if (and(sym->type.t, VT_STATIC)) {
         sym_bind = STB_LOCAL;
     } else {
         sym_bind = STB_GLOBAL;
@@ -139,10 +139,10 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
     const char *name;
     char buf1[256];
 
-    if (!sym->c) {
-        name = get_tok_str(sym->v, NULL);
+    if (eq(sym->c, 0)) {
+        name = get_tok_str(sym->v, 0);
         t = sym->type.t;
-        if ((t & VT_BTYPE) == VT_FUNC) {
+        if (and(t, VT_BTYPE) == VT_FUNC) {
             sym_type = STT_FUNC;
         } else {
             sym_type = STT_OBJECT;
