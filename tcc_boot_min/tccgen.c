@@ -997,6 +997,7 @@ void block(int *bsym, int *csym, int is_expr) {
     int c;
     int d;
     Sym *s;
+    Sym *llabel;
 
     if (eq(tok, TOK_IF)) {
         /* if test */
@@ -1016,22 +1017,21 @@ void block(int *bsym, int *csym, int is_expr) {
         } else {
             gsym(a);
         }
-    } else if (tok == TOK_WHILE) {
+    } else if(eq(tok, TOK_WHILE)) {
         next();
         d = ind;
-        skip('(');
+        skip(mkc('('));
         gexpr();
-        skip(')');
+        skip(mkc(')'));
         a = gvtst(1, 0);
         b = 0;
-        ++local_scope;
+        local_scope = local_scope + 1;
         block(&a, &b, 0);
-        --local_scope;
+        local_scope = local_scope - 1;
         gjmp_addr(d);
         gsym(a);
         gsym_addr(b, d);
-    } else if (tok == '{') {
-        Sym *llabel;
+    } else if (eq(tok, mkc('{'))) {
 
         next();
         /* record local declaration stack position */
