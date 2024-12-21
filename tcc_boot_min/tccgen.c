@@ -297,11 +297,12 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
     s = sym_push2(aglobal_stack, v, t, c);
     /* don't record anonymous symbol */
     if(lt(v, SYM_FIRST_ANOM)) {
-        ps = &table_ident[v - TOK_IDENT]->sym_identifier;
+        ps = &table_ident[sub(v, TOK_IDENT)]->sym_identifier;
         /* modify the top most local identifier, so that
            sym_identifier will point to 's' when popped */
-        while (*ps != NULL && (*ps)->sym_scope)
+        while (*ps != NULL && (*ps)->sym_scope) {
             ps = &(*ps)->prev_tok;
+        }
         s->prev_tok = *ps;
         *ps = s;
     }
