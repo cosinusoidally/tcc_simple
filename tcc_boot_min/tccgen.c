@@ -363,19 +363,17 @@ ST_FUNC void vswap(void) {
 ST_FUNC void vpop(void) {
     int v;
     v = and(vtop->r, VT_VALMASK);
-    vtop--;
+    vtop = vtop - 1;
 }
 
 /* push integer constant */
-ST_FUNC void vpushi(int v)
-{
+ST_FUNC void vpushi(int v) {
     CValue cval;
     cval.i = v;
     vsetc(&int_type, VT_CONST, &cval);
 }
 
-ST_FUNC void vset(CType *type, int r, int v)
-{
+ST_FUNC void vset(CType *type, int r, int v) {
     CValue cval;
 
     cval.i = v;
@@ -383,21 +381,20 @@ ST_FUNC void vset(CType *type, int r, int v)
 }
 
 /* push a symbol value of TYPE */
-static inline void vpushsym(CType *type, Sym *sym)
-{
+void vpushsym(CType *type, Sym *sym) {
     CValue cval;
     cval.i = 0;
-    vsetc(type, VT_CONST | VT_SYM, &cval);
+    vsetc(type, or(VT_CONST, VT_SYM), &cval);
     vtop->sym = sym;
 }
 
 /* Return a static symbol pointing to a section */
-ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size)
-{
+ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size) {
     int v;
     Sym *sym;
 
-    v = anon_sym++;
+    v = anon_sym;
+    anon_sym = add(anon_sym, 1);
     sym = global_identifier_push(v, type->t | VT_STATIC, 0);
     sym->type.ref = type->ref;
     sym->r = VT_CONST | VT_SYM;
