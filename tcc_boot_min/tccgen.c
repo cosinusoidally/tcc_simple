@@ -1132,8 +1132,8 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
 
     /* only parse strings here if correct type (otherwise: handle
        them as ((w)char *) expressions */
-    if (((t1->t & VT_BTYPE) == VT_INT) ||
-        (tok == TOK_STR && (t1->t & VT_BTYPE) == VT_BYTE)) {
+    if (or(eq(and(t1->t, VT_BTYPE), VT_INT),
+        and(eq(tok, TOK_STR), eq(and(t1->t, VT_BTYPE), VT_BYTE)))) {
         len = 0;
         while (tok == TOK_STR) {
             int cstr_len, ch;
