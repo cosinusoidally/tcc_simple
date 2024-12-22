@@ -89,7 +89,7 @@ int unary() {
     int r;
     int type;
     Sym *s;
-    AttributeDef ad;
+    int ad;
     char *name;
     SValue ret;
     Sym *sa;
@@ -106,7 +106,7 @@ int unary() {
     v_alloca(16);
     v_alloca(sizeof_SValue);
     type = v_alloca(sizeof_CType);
-    v_alloca(mul(2, sizeof_AttributeDef));
+    ad = v_alloca(mul(2, sizeof_AttributeDef));
 
     sct_ref(type, 0);
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
@@ -125,11 +125,11 @@ int unary() {
         sct_t(type, t);
         mk_pointer(type);
         sct_t(type, or(gct_t(type), VT_ARRAY));
-        memset(&ad, 0, sizeof_AttributeDef);
-        decl_initializer_alloc(type, &ad, VT_CONST, 2, 0, 0);
+        memset(ad, 0, sizeof_AttributeDef);
+        decl_initializer_alloc(type, ad, VT_CONST, 2, 0, 0);
     } else if(eq(tok, mkc('('))) {
         next();
-        parse_btype(type, &ad);
+        parse_btype(type, ad);
         gexpr();
         skip(mkc(')'));
     } else {
