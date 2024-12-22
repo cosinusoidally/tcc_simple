@@ -101,6 +101,7 @@ int ssv_r(int o, int v) {wi32(add(o, SValue_r_o), v);}
 int gsv_c(int o) { return add(o, SValue_c_o);} /* CValue c */
 
 int gsv_sym(int o) { return ri32(add(o, SValue_sym_o));} /* struct Sym *sym */
+int ssv_sym(int o, int v) {wi32(add(o, SValue_sym_o), v);}
 
 /* CValue accessors */
 
