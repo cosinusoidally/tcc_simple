@@ -2872,6 +2872,25 @@ int elfsym(int s) {
   return add(gs_data(symtab_section), mul(gsym_c(s), sizeof_Elf32_Sym));
 }
 
+/* apply storage attributes to Elf symbol */
+int update_storage(int sym) {
+    int esym;
+    int sym_bind;
+    int old_sym_bind;
+
+    esym = elfsym(sym);
+    if (eq(esym, 0)) {
+        return;
+    }
+
+    if (and(gct_t(gsym_type(sym)), VT_STATIC)) {
+        sym_bind = STB_LOCAL;
+    } else {
+        sym_bind = STB_GLOBAL;
+    }
+    old_sym_bind = ELFW_ST_BIND(ges_st_info(esym));
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
