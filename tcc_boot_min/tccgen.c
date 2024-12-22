@@ -347,7 +347,7 @@ void block(int *bsym, int *csym, int is_expr) {
 /* store a value or an expression directly in global data or in local array */
 static void init_putv(CType *type, Section *sec, unsigned long c) {
     int bt;
-    void *ptr;
+    int ptr;
     CType dtype;
     int size;
     int align;
