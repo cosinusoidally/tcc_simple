@@ -436,7 +436,8 @@ ST_DATA Sym *global_label_stack;
 ST_DATA CType char_pointer_type, func_old_type, int_type, size_type;
 ST_DATA SValue vstack[VSTACK_SIZE], *pvtop;
 extern SValue *vtop;
-ST_DATA int rsym, anon_sym;
+ST_DATA int rsym;
+extern int anon_sym;
 extern int loc;
 
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
@@ -444,7 +445,7 @@ ST_DATA CType func_vt; /* current function return type (used by return instructi
 ST_DATA int func_var; /* true if current function is variadic */
 ST_DATA int func_vc;
 ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc */
-ST_DATA const char *funcname;
+extern char *funcname;
 ST_DATA int g_debug;
 
 ST_FUNC void tcc_debug_start(TCCState *s1);
@@ -634,7 +635,7 @@ extern int R_386_PC32;
 #define STT_FUNC        2               /* Symbol is a code object */
 extern int STT_FILE; /*    4               Symbol's name is file name */
 
-#define SHN_ABS         0xfff1          /* Associated symbol is absolute */
+extern int SHN_ABS;   /*      0xfff1       Associated symbol is absolute */
 
 extern int TOK_INT;
 extern int TOK_IF;

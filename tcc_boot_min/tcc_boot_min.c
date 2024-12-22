@@ -476,6 +476,7 @@ int init_runtime(){
   SHF_PRIVATE = shl(1, 31); /* 0x80000000 */
 
   SHN_UNDEF = 0;  /* 0 Undefined section */
+  SHN_ABS = 65521;     /* 0xfff1 Associated symbol is absolute */
   SHN_COMMON = 65522;  /* 0xfff2 Associated symbol is common */
 
   SHT_PROGBITS = 1; /* Program data */
@@ -2830,7 +2831,31 @@ int write32le(int p, int x) {
 
 /* start of tccgen.c */
 
+/* 1 */
+/* ------------------------------------------------------------------------- */
+int tccgen_compile(int s1) {
+    cur_text_section = 0;
+    funcname = mks("");
+    anon_sym = SYM_FIRST_ANOM;
+    section_sym = 0;
 
+    /* define some often used types */
+    sct_t(aint_type, VT_INT);
+    sct_t(afunc_old_type, VT_FUNC);
+    sct_ref(afunc_old_type, sym_push(SYM_FIELD, aint_type, 0, 0));
+    ssym_f_func_type(gct_ref(afunc_old_type), FUNC_OLD);
+
+    /* an elf symbol of type STT_FILE must be put so that STB_LOCAL
+       symbols can be safely used */
+    put_elf_sym(symtab_section, 0, 0,
+                ELFW_ST_INFO(STB_LOCAL, STT_FILE), 0,
+                SHN_ABS, gbf_filename(file));
+
+    parse_flags = or(or(PARSE_FLAG_PREPROCESS, PARSE_FLAG_TOK_NUM), PARSE_FLAG_TOK_STR);
+    next();
+    decl(VT_CONST);
+    return 0;
+}
 
 /* end of tccgen.c */
 

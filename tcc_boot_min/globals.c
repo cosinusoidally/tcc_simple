@@ -145,8 +145,11 @@ int tcc_state;
 int FUNC_OLD;
 int FUNC_PROLOG_SIZE;
 
+int anon_sym;
 int ind;
 int loc;
+
+int section_sym;
 
 int VT_VALMASK;
 int VT_SYM;
@@ -180,6 +183,7 @@ int SHF_EXECINSTR;
 int SHF_PRIVATE;
 int SHF_WRITE;
 
+int SHN_ABS;
 int SHN_UNDEF;
 int SHN_COMMON;
 
@@ -299,5 +303,7 @@ int aSTRING_MAX_SIZE;
 
 int aint_type;
 int afunc_old_type;
+
+int funcname;
 
 /* =============== end globals.c ========================================== */

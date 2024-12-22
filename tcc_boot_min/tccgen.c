@@ -26,8 +26,6 @@
    rsym: return symbol
    anon_sym: anonymous symbol index
 */
-int rsym;
-int anon_sym;
 extern int ind;
 
 ST_DATA Sym *sym_free_first;
@@ -38,13 +36,12 @@ ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
 ST_DATA Sym *local_label_stack;
 static int local_scope;
-static int section_sym;
+extern int section_sym;
 
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_vc;
 ST_DATA int func_ind;
-ST_DATA const char *funcname;
 
 ST_DATA CType func_old_type;
 ST_DATA CType int_type;
@@ -61,7 +58,7 @@ static void init_putv(CType *type, Section *sec, unsigned long c);
 static void decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
 static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
-static void decl(int l);
+void decl(int l);
 static int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
@@ -76,32 +73,6 @@ extern int afunc_old_type;
 int init_tccgen_globals(){
   aint_type = &int_type;
   afunc_old_type = &func_old_type;
-}
-
-/* 1 */
-/* ------------------------------------------------------------------------- */
-ST_FUNC int tccgen_compile(TCCState *s1) {
-    cur_text_section = 0;
-    funcname = mks("");
-    anon_sym = SYM_FIRST_ANOM;
-    section_sym = 0;
-
-    /* define some often used types */
-    sct_t(aint_type, VT_INT);
-    sct_t(afunc_old_type, VT_FUNC);
-    sct_ref(afunc_old_type, sym_push(SYM_FIELD, aint_type, 0, 0));
-    ssym_f_func_type(gct_ref(afunc_old_type), FUNC_OLD);
-
-    /* an elf symbol of type STT_FILE must be put so that STB_LOCAL
-       symbols can be safely used */
-    put_elf_sym(symtab_section, 0, 0,
-                ELFW_ST_INFO(STB_LOCAL, STT_FILE), 0,
-                SHN_ABS, gbf_filename(file));
-
-    parse_flags = or(or(PARSE_FLAG_PREPROCESS, PARSE_FLAG_TOK_NUM), PARSE_FLAG_TOK_STR);
-    next();
-    decl(VT_CONST);
-    return 0;
 }
 
 /* 2 */
@@ -1451,7 +1422,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
 }
 
 /* 57 */
-static void decl(int l) {
+void decl(int l) {
     decl0(l, 0, 0);
 }
 
