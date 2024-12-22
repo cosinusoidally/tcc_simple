@@ -3727,6 +3727,38 @@ int gfunc_return(int func_type) {
     vtop = sub(vtop, sizeof_SValue);
 }
 
+/* 52 */
+/* store a value or an expression directly in global data or in local array */
+int init_putv(int type, int sec, int c) {
+    int bt;
+    int ptr;
+    int dtype;
+    int size;
+    int align;
+
+    enter();
+    dtype = v_alloca(sizeof_CType);
+    align = v_alloca(4);
+
+    memmove(dtype, type, sizeof_CType);
+    /* need to do that to avoid false warning */
+    sct_t(dtype, and(gct_t(dtype), not(VT_CONSTANT)));
+
+    /* XXX: not portable */
+    /* XXX: generate error if incorrect relocation */
+    gen_assign_cast(dtype);
+    bt = and(gct_t(type), VT_BTYPE);
+
+    size = type_size(type, align);
+    section_reserve(sec, add(c, size));
+    ptr = add(gs_data(sec), c);
+
+    wi8(ptr, or(ri8(ptr), gcv_i(gsv_c(vtop))));
+    vtop = sub(vtop, sizeof_SValue);
+
+    leave(0);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
