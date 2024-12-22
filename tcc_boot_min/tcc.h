@@ -472,7 +472,7 @@ ST_FUNC void vrott(int n);
 ST_FUNC void vrotb(int n);
 ST_FUNC void vpushv(SValue *v);
 ST_FUNC void save_reg(int r);
-ST_FUNC void save_reg_upstack(int r, int n);
+int save_reg_upstack(int r, int n);
 ST_FUNC int get_reg(int rc);
 ST_FUNC void save_regs(int n);
 ST_FUNC void gaddrof(void);

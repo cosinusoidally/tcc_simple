@@ -82,7 +82,7 @@ int init_tccgen_globals(){
 /* 28 */
 /* save r to the memory stack, and mark it as being free,
    if seen up to (vtop - n) stack entry */
-ST_FUNC void save_reg_upstack(int r, int n) {
+int save_reg_upstack(int r, int n) {
     int l;
     int saved;
     int size;
@@ -92,9 +92,12 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     SValue sv;
     CType *type;
 
+    enter();
+//    sv = v_alloca(sizeof_SValue);
+
     r = and(r, VT_VALMASK);
     if (gte(r, VT_CONST)) {
-        return;
+        return leave(0);
     }
 
     /* modify all stack values */
@@ -128,6 +131,8 @@ ST_FUNC void save_reg_upstack(int r, int n) {
         }
         p = add(p, sizeof_SValue);
     }
+
+    leave(0);
 }
 
 /* 29 */
