@@ -354,6 +354,7 @@ int init_runtime(){
   sizeof_CType = 8;
 
   Sym_v_o = 0;
+  Sym_f_func_type_o = 16;
   Sym_type_o = 20;
   Sym_next_o = 28;
   sizeof_Sym = 40;
