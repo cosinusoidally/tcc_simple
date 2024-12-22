@@ -99,9 +99,9 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
         /* record symbol in token array */
         ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
-        ps = &ts->sym_identifier;
-        s->prev_tok = *ps;
-        *ps = s;
+        ps = atks_sym_identifier(ts);
+        s->prev_tok = ri32(ps);
+        wi32(ps, s);
         s->sym_scope = local_scope;
     }
     return s;
