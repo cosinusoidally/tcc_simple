@@ -90,8 +90,8 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
         ps = atks_sym_identifier(ri32(add(table_ident, mul(sub(v, TOK_IDENT), 4))));
         /* modify the top most local identifier, so that
            sym_identifier will point to 's' when popped */
-        while (neq(*ps, 0)) {
-            if(eq(0, (*ps)->sym_scope)) {
+        while (neq(ri32(ps), 0)) {
+            if(eq(0, gsym_sym_scope(ri32(ps)))) {
                 break;
             }
             ps = &(*ps)->prev_tok;
