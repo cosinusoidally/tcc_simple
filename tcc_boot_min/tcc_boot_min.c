@@ -3776,6 +3776,124 @@ int gfunc_param_typed(int func, int arg) {
     leave(0);
 }
 
+/* 47 */
+int unary() {
+    int n;
+    int t;
+    int align;
+    int size;
+    int r;
+    int type;
+    int s;
+    int ad;
+    int name;
+    int ret;
+    int sa;
+    int nb_args;
+    int ret_nregs;
+    int regsize;
+
+/* FIXME there is some bug with the virtual stack */
+    enter();
+    /* definitely something weird going on */
+    /* 64 bytes of padding seems to fix */
+    v_alloca(64);
+    ret = v_alloca(sizeof_SValue);
+    type = v_alloca(sizeof_CType);
+    ad = v_alloca(mul(2, sizeof_AttributeDef));
+
+    sct_ref(type, 0);
+    if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
+        t = VT_INT;
+        sct_t(type, t);
+        vsetc(type, VT_CONST, atokc);
+        next();
+    } else if(eq(tok, 182)) { /* TOK_CUINT = 182 bodge, maybe hash issue */
+        t = or(VT_INT, VT_UNSIGNED);
+        sct_t(type, t);
+        vsetc(type, VT_CONST, atokc);
+        next();
+    } else if(eq(tok, TOK_STR)) {
+        /* string parsing */
+        t = VT_BYTE;
+        sct_t(type, t);
+        mk_pointer(type);
+        sct_t(type, or(gct_t(type), VT_ARRAY));
+        memset(ad, 0, sizeof_AttributeDef);
+        decl_initializer_alloc(type, ad, VT_CONST, 2, 0, 0);
+    } else if(eq(tok, mkc('('))) {
+        next();
+        parse_btype(type, ad);
+        gexpr();
+        skip(mkc(')'));
+    } else {
+        t = tok;
+        next();
+        s = sym_find(t);
+        if (eq(0, s)) {
+            name = get_tok_str(t, 0);
+            s = external_global_sym(t, afunc_old_type, 0);
+        }
+
+        r = gsym_r(s);
+        vset(gsym_type(s), r, gsym_c(s));
+        /* Point to s as backpointer (even without r&VT_SYM).
+           Will be used by at least the x86 inline asm parser for
+           regvars.  */
+        ssv_sym(vtop, s);
+
+        if (and(r, VT_SYM)) {
+            scv_i(gsv_c(vtop), 0);
+        }
+    }
+
+    /* post operations */
+    while (1) {
+        if (eq(tok, mkc('('))) {
+
+            ssv_r(vtop, and(gsv_r(vtop), not(VT_LVAL))); /* no lvalue */
+            /* get return type */
+            s = gct_ref(gsv_type(vtop));
+            next();
+            sa = gsym_next(s); /* first parameter */
+            nb_args = 0;
+            regsize = 0;
+            ret_nregs = 1;
+            memmove(gsv_type(ret), gsym_type(s), sizeof_CType);
+
+            ssv_r(ret, REG_IRET);
+            scv_i(gsv_c(ret), 0);
+            if (neq(tok, mkc(')'))) {
+                while(1) {
+                    expr_eq();
+                    gfunc_param_typed(s, sa);
+                    nb_args = add(nb_args, 1);
+                    if (sa) {
+                        sa = gsym_next(sa);
+                    }
+                    if (eq(tok, mkc(')'))) {
+                        break;
+                    }
+                    skip(mkc(','));
+                }
+            }
+            skip(mkc(')'));
+            gfunc_call(nb_args);
+
+            /* return value */
+            r = add(gsv_r(ret), ret_nregs);
+            while(gt(r, gsv_r(ret))) {
+                r = sub(r, 1);
+                vsetc(gsv_type(ret), r, gsv_c(ret));
+            }
+        } else {
+            break;
+        }
+    }
+
+    return leave(0);
+}
+
 /* 48 */
 int expr_eq() {
     int t;
