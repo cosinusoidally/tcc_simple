@@ -488,7 +488,10 @@ int init_runtime(){
   sizeof_void = 4;
   sizeof_int = sizeof_void;
 
-  FUNC_OLD = 2;  /* old function prototype */
+  /* stored in 'Sym->f.func_type' field */
+  FUNC_NEW = 1; /*  1  ansi function prototype */
+  FUNC_OLD = 2; /*  2  old function prototype */
+
   FUNC_PROLOG_SIZE = 9;
 
 
@@ -3651,6 +3654,70 @@ int convert_parameter_type(int pt) {
     sct_t(pt, and(gct_t(pt), not(VT_CONSTANT)));
     /* array must be transformed to pointer according to ANSI C */
     sct_t(pt, and(gct_t(pt), not(VT_ARRAY)));
+}
+
+/* 43 */
+int post_type(int type, int ad, int storage) {
+    int n;
+    int l;
+    int align;
+    int plast;
+    int s;
+    int first;
+    int ad1;
+    int pt;
+
+    enter();
+    /* FIXME there is some bug with the v_alloca function should be 4 */
+    ad1 = v_alloca(16);
+    align = v_alloca(16);
+    first = v_alloca(16);
+    n = v_alloca(16);
+    pt = v_alloca(sizeof_CType);
+
+    if (eq(tok, mkc('('))) {
+        /* function type, or recursive declarator (return if so) */
+        next();
+        if (eq(tok, mkc(')'))) {
+          l = 0;
+        } else {
+            parse_btype(pt, ad1);
+            l = FUNC_NEW;
+        }
+        wi32(first, 0);
+        plast = first;
+        if (l) {
+            while(1) {
+                /* read param name and compute offset */
+                type_decl(pt, ad1, n);
+                type_size(pt, align);
+                convert_parameter_type(pt);
+                s = sym_push(or(ri32(n), SYM_FIELD), pt, 0, 0);
+                wi32(plast, s);
+                plast = asym_next(s);
+                if (eq(tok, mkc(')'))) {
+                    break;
+                }
+                skip(mkc(','));
+                parse_btype(pt, ad1);
+            }
+        } else {
+            /* if no parameters, then old type prototype */
+            l = FUNC_OLD;
+        }
+        skip(mkc(')'));
+        /* NOTE: const is ignored in returned type as it has a special
+           meaning in gcc / C++ */
+        sct_t(type, and(gct_t(type), not(VT_CONSTANT)));
+        /* we push a anonymous symbol which will contain the function prototype */
+        sad_f_func_type(ad, l);
+        s = sym_push(SYM_FIELD, type, 0, 0);
+        ssym_f_func_type(s, gad_f_func_type(ad));
+        ssym_next(s, ri32(first));
+        sct_t(type, VT_FUNC);
+        sct_ref(type, s);
+    }
+    return leave(1);
 }
 
 /* 44 */

@@ -151,6 +151,7 @@ int sizeof_int;
 
 int tcc_state;
 
+int FUNC_NEW;
 int FUNC_OLD;
 int FUNC_PROLOG_SIZE;
 

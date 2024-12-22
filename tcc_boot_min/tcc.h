@@ -196,7 +196,7 @@ extern int SYM_FIELD;  /*    0x20000000 struct/union field symbol space */
 extern int SYM_FIRST_ANOM; /* 0x10000000 first anonymous sym */
 
 /* stored in 'Sym->f.func_type' field */
-#define FUNC_NEW       1 /* ansi function prototype */
+extern int FUNC_NEW; /*  1  ansi function prototype */
 extern int FUNC_OLD; /*  2  old function prototype */
 
 extern int IO_BUF_SIZE; /* 8192 */
