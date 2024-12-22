@@ -473,6 +473,7 @@ int init_runtime(){
   TokenString_alloc_o = 24;
   sizeof_TokenString = 28;
 
+  AttributeDef_f_func_type_o = 0;
   sizeof_AttributeDef = 8;
 
   sizeof_void = 4;
