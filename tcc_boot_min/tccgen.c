@@ -99,9 +99,9 @@ ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsign
 
     v = anon_sym;
     anon_sym = add(anon_sym, 1);
-    sym = global_identifier_push(v, or(type->t, VT_STATIC), 0);
-    sym->type.ref = type->ref;
-    sym->r = or(VT_CONST, VT_SYM);
+    sym = global_identifier_push(v, or(gct_t(type), VT_STATIC), 0);
+    sct_ref(gsym_type(sym), gct_ref(type));
+    ssym_r(sym, or(VT_CONST, VT_SYM));
     put_extern_sym(sym, sec, offset, size);
     return sym;
 }
