@@ -96,6 +96,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     ad1 = v_alloca(16);
     align = v_alloca(16);
     first = v_alloca(16);
+    n = v_alloca(16);
     pt = v_alloca(sizeof_CType);
 
     if (eq(tok, mkc('('))) {
@@ -112,10 +113,10 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
         if (l) {
             while(1) {
                 /* read param name and compute offset */
-                type_decl(pt, ad1, &n);
+                type_decl(pt, ad1, n);
                 type_size(pt, align);
                 convert_parameter_type(pt);
-                s = sym_push(or(n, SYM_FIELD), pt, 0, 0);
+                s = sym_push(or(ri32(n), SYM_FIELD), pt, 0, 0);
                 wi32(plast, s);
                 plast = asym_next(s);
                 if (eq(tok, mkc(')'))) {

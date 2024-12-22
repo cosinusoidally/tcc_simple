@@ -330,6 +330,7 @@ int stkst_alloc(int o, int v) {wi32(add(o, TokenString_alloc_o), v);}
 
 /* f->func_type */
 int gad_f_func_type(int o) {return ri32(add(o, AttributeDef_f_func_type_o));}
+int sad_f_func_type(int o, int v) {wi32(add(o, AttributeDef_f_func_type_o), v);}
 
 int gad_section(int o) {return ri32(add(o, AttributeDef_section_o));}
 
