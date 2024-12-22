@@ -475,7 +475,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     type = v_alloca(sizeof_CType);
     btype = v_alloca(sizeof_CType);
     ad = v_alloca(2*sizeof_AttributeDef); /* FIXME shouldn't have to double */
-    v_alloca(4);
+    v = v_alloca(4);
 
     while (1) {
         if (eq(0, parse_btype(btype, ad))) {
@@ -483,7 +483,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
         }
         while (1) { /* iterate thru each declaration */
             memmove(type, btype, sizeof_CType);
-            type_decl(type, ad, &v);
+            type_decl(type, ad, v);
             if (eq(and(gct_t(type), VT_BTYPE), VT_FUNC)) {
                 /* if old style function prototype, we accept a
                    declaration list */
@@ -495,7 +495,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
 
             if (eq(tok, mkc('{'))) {
                 /* put function symbol */
-                sym = external_global_sym(v, type, 0);
+                sym = external_global_sym(ri32(v), type, 0);
                 sct_t(type, and(gct_t(type), not(VT_EXTERN)));
                 patch_storage(sym, ad, type);
 
@@ -527,14 +527,14 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                            arrays of null size are considered as
                            extern */
                         sct_t(type, or(gct_t(type), VT_EXTERN));
-                        sym = external_sym(v, type, r, ad);
+                        sym = external_sym(ri32(v), type, r, ad);
                     } else {
                         r = or(r, l);
                         if (eq(l, VT_CONST)) {
                             /* uninitialized global variables may be overridden */
                             sct_t(type, or(gct_t(type), VT_EXTERN));
                         }
-                        decl_initializer_alloc(type, ad, r, has_init, v, l);
+                        decl_initializer_alloc(type, ad, r, has_init, ri32(v), l);
                     }
                 if (neq(tok, mkc(','))) {
                     skip(mkc(';'));
