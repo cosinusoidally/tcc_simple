@@ -86,7 +86,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     Sym **ps;
     TokenSym *ts;
 
-    if (local_stack) {
+    if (ri32(alocal_stack)) {
         ps = alocal_stack;
     } else {
         ps = aglobal_stack;
@@ -98,7 +98,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     /* XXX: simplify */
     if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
         /* record symbol in token array */
-        ts = table_ident[sub(and(v, not(SYM_STRUCT)), TOK_IDENT)];
+        ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
         ps = &ts->sym_identifier;
         s->prev_tok = *ps;
         *ps = s;

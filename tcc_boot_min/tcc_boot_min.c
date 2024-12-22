@@ -276,6 +276,7 @@ int atks_hash_next(int o) {return add(o, TokenSym_hash_next_o);}
 int gtks_hash_next(int o) {return ri32(add(o, TokenSym_hash_next_o));}
 int stks_hash_next(int o, int v) {wi32(add(o, TokenSym_hash_next_o), v);}
 
+int atks_sym_identifier(int o) {return add(o, TokenSym_sym_identifier_o);}
 int gtks_sym_identifier(int o) {return ri32(add(o, TokenSym_sym_identifier_o));}
 int stks_sym_identifier(int o, int v) {wi32(add(o, TokenSym_sym_identifier_o), v);}
 
