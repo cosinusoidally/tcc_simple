@@ -32,7 +32,7 @@ int v_esp; int v_ebp; int v_stack_size; int v_stack;
 
 int init_c(){
   puts("init_c called");
-  v_stack_size=mul(64,1024);
+  v_stack_size=mul(128,1024);
   v_stack=calloc(1,v_stack_size);
   v_esp=sub(add(v_stack,v_stack_size),4);
   v_ebp=v_esp;

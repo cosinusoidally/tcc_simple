@@ -488,7 +488,7 @@ ST_FUNC void parse_mult_str (CString *astr, const char *msg);
 ST_FUNC void parse_asm_str(CString *astr);
 ST_FUNC int lvalue_type(int t);
 ST_FUNC void indir(void);
-ST_FUNC void unary(void);
+int unary();
 ST_FUNC void expr_prod(void);
 ST_FUNC void expr_sum(void);
 ST_FUNC void gexpr(void);

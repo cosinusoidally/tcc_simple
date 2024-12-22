@@ -139,7 +139,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
 }
 
 /* 47 */
-void unary() {
+int unary() {
     int n;
     int t;
     int align;
@@ -154,6 +154,9 @@ void unary() {
     int nb_args;
     int ret_nregs;
     int regsize;
+
+/* FIXME there is some bug with the virtual stack */
+//    enter();
 
     type.ref = 0;
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
@@ -243,6 +246,8 @@ void unary() {
             break;
         }
     }
+
+//    return leave(0);
 }
 
 /* 48 */
