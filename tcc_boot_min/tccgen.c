@@ -56,7 +56,7 @@ static CType *type_decl(CType *type, AttributeDef *ad, int *v);
 static void init_putv(CType *type, Section *sec, unsigned long c);
 int decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
-static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
+int decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
 void decl(int l);
 int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
@@ -351,7 +351,7 @@ void block(int *bsym, int *csym, int is_expr) {
    are parsed. If 'v' is zero, then a reference to the new object
    is put in the value stack. If 'has_init' is 2, a special parsing
    is done to handle string constants. */
-void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
+int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
                                    int has_init, int v, int scope) {
     int size;
     int align;
@@ -360,6 +360,10 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Section *sec;
     Sym *flexible_array;
     Sym *sym;
+
+/* FIXME there is a stack allocation bug somewhere causing crashes */
+//    enter();
+//    align = v_alloca(4);
 
     init_str = 0;
     sym = 0;
@@ -450,6 +454,7 @@ void decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         next();
     }
 
+//    return leave(0);
 }
 
 /* 55 */
