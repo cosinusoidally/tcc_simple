@@ -471,6 +471,11 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     Sym *sym;
     AttributeDef ad;
 
+    enter();
+    v_alloca(sizeof_CType);
+    v_alloca(sizeof_CType);
+    v_alloca(2*sizeof_AttributeDef); /* FIXME shouldn't have to double */
+
     while (1) {
         if (eq(0, parse_btype(&btype, &ad))) {
                 break;
@@ -537,5 +542,5 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
             }
         }
     }
-    return 0;
+    return leave(0);
 }
