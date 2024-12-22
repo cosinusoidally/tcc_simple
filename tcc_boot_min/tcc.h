@@ -290,7 +290,7 @@ extern int VT_TYPE;     /* (~(VT_STORAGE)) */
 /* token values */
 
 /* warning: the following compare tokens depend on i386 asm code */
-#define TOK_NE  0x95
+extern int TOK_NE; /* 0x95 */
 
 /* tokens that carry values (in additional token string space / tokc) --> */
 extern int TOK_CCHAR; /*  0xb3 char constant in tokc */

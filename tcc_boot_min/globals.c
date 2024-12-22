@@ -240,6 +240,8 @@ int TOK_PPSTR;
 int TOK_CCHAR;
 int TOK_CINT;
 
+int TOK_NE;
+
 int tok_flags;
 
 int TCC_OPTION_c;

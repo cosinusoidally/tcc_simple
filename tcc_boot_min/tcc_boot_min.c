@@ -560,6 +560,10 @@ int init_runtime(){
 
   TOK_EOF = sub(0, 1); /* (-1)  end of file */
 
+  /* warning: the following compare tokens depend on i386 asm code */
+  TOK_NE = 149; /* 0x95 */
+
+
   REL_SECTION_FMT = mks(".rel%s");
 
   reg_classes=calloc(1,mul(4, 5)); /* NB_REGS is 5 (sort of) */
