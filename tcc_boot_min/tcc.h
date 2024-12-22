@@ -424,7 +424,7 @@ ST_FUNC void skip(int c);
 
 /* ------------ tccgen.c ------------ */
 
-#define SYM_POOL_NB (8192 / sizeof(Sym))
+extern int SYM_POOL_NB; /* (8192 / sizeof(Sym)) */
 ST_DATA Sym *sym_free_first;
 ST_DATA void **sym_pools;
 ST_DATA int nb_sym_pools;

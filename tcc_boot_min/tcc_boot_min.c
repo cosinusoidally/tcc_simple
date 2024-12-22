@@ -475,6 +475,8 @@ int init_runtime(){
   SYM_FIELD = 536870912; /*  0x20000000 struct/union field symbol space */
   SYM_FIRST_ANOM = 268435456; /* 0x10000000 first anonymous sym */
 
+  SYM_POOL_NB = div_(8192, sizeof_Sym);
+
   SHF_WRITE = shl(1, 0); /* Writable */
   SHF_ALLOC = shl(1, 1);  /* Occupies memory during execution */
   SHF_EXECINSTR = shl(1, 2); /* Executable */

@@ -181,6 +181,8 @@ int RC_IRET;
 int SYM_FIELD;
 int SYM_FIRST_ANOM;
 
+int SYM_POOL_NB;
+
 int SHF_ALLOC;
 int SHF_EXECINSTR;
 int SHF_PRIVATE;
