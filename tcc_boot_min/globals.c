@@ -143,6 +143,7 @@ int TokenString_alloc_o;
 int sizeof_TokenString;
 
 int AttributeDef_f_func_type_o;
+int AttributeDef_section_o;
 int sizeof_AttributeDef;
 
 int sizeof_void;

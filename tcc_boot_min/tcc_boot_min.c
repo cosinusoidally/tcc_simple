@@ -331,6 +331,8 @@ int stkst_alloc(int o, int v) {wi32(add(o, TokenString_alloc_o), v);}
 /* f->func_type */
 int gad_f_func_type(int o) {return ri32(add(o, AttributeDef_f_func_type_o));}
 
+int gad_section(int o) {return ri32(add(o, AttributeDef_section_o));}
+
 /* stuff */
 
 int init_runtime(){
@@ -479,6 +481,7 @@ int init_runtime(){
   sizeof_TokenString = 28;
 
   AttributeDef_f_func_type_o = 0;
+  AttributeDef_section_o = 4;
   sizeof_AttributeDef = 8;
 
   sizeof_void = 4;
