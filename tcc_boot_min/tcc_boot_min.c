@@ -3759,6 +3759,73 @@ int init_putv(int type, int sec, int c) {
     leave(0);
 }
 
+/* 53 */
+/* 't' contains the type and storage info. 'c' is the offset of the
+   object in section 'sec'. If 'sec' is NULL, it means stack based
+   allocation. 'first' is true if array '{' must be read (multi
+   dimension implicit array init handling). 'size_only' is true if
+   size only evaluation is wanted (only for arrays). */
+int decl_initializer(int type, int sec, int c, int first, int size_only) {
+    int len;
+    int n;
+    int nb;
+    int i;
+    int size1;
+    int align1;
+    int s;
+    int f;
+    int t1;
+    int cstr_len;
+    int ch;
+
+    enter();
+    align1 = v_alloca(4);
+
+    s = gct_ref(type);
+    n = gsym_c(s);
+    t1 = pointed_type(type);
+    size1 = type_size(t1, align1);
+
+    /* only parse strings here if correct type (otherwise: handle
+       them as ((w)char *) expressions */
+    if (or(eq(and(gct_t(t1), VT_BTYPE), VT_INT),
+        and(eq(tok, TOK_STR), eq(and(gct_t(t1), VT_BTYPE), VT_BYTE)))) {
+        len = 0;
+        while (eq(tok, TOK_STR)) {
+
+            cstr_len = gcv_str_size(atokc);
+            cstr_len = sub(cstr_len, 1);
+            nb = cstr_len;
+            if (eq(0, size_only)) {
+                memcpy(add(add(gs_data(sec), c), len), gcv_str_data(atokc), nb);
+            }
+            len = add(len, nb);
+            next();
+        }
+        /* only add trailing zero if enough storage (no
+           warning in this case since it is standard) */
+        if (or(lt(n, 0), lt(len, n))) {
+            if (eq(0, size_only)) {
+                vpushi(0);
+                init_putv(t1, sec, add(c, mul(len, size1)));
+            }
+            len = add(len, 1);
+        }
+        len = mul(len, size1);
+    }
+
+    /* patch type size if needed, which happens only for array types */
+    if (lt(n, 0)) {
+        if(eq(size1, 1)) {
+            ssym_c(s, len);
+        } else {
+            ssym_c(s, div_(sub(add(len, size1), 1), size1));
+        }
+    }
+
+    return leave(0);
+}
+
 /* 57 */
 int decl(int l) {
     decl0(l, 0, 0);
