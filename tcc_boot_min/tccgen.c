@@ -87,10 +87,10 @@ static void patch_type(Sym *sym, CType *type) {
         sct_t(gsym_type(sym), and(gct_t(gsym_type(sym)), not(VT_EXTERN)));
     }
 
-    if (eq(and(sym->type.t, VT_BTYPE), VT_FUNC)) {
-        static_proto = and(sym->type.t, VT_STATIC);
+    if (eq(and(gct_t(gsym_type(sym)), VT_BTYPE), VT_FUNC)) {
+        static_proto = and(gct_t(gsym_type(sym)), VT_STATIC);
 
-        if (eq(0, and(type->t, VT_EXTERN))) {
+        if (eq(0, and(gct_t(type), VT_EXTERN))) {
             /* put complete type, use static from prototype */
             sct_t(gsym_type(sym), or(and(gct_t(type), not(VT_STATIC)), static_proto));
             sct_ref(gsym_type(sym), gct_ref(type));
