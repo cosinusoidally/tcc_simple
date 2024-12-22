@@ -110,19 +110,22 @@ ST_FUNC void vpop() {
 /* 18 */
 /* push integer constant */
 ST_FUNC void vpushi(int v) {
-    CValue cval;
+    int cval;
     enter();
-    scv_i(acv_i(&cval), v);
-    vsetc(aint_type, VT_CONST, &cval);
+    cval = v_alloca(sizeof_CValue);
+    scv_i(acv_i(cval), v);
+    vsetc(aint_type, VT_CONST, cval);
     leave(0);
 }
 
 /* 19 */
 ST_FUNC void vset(CType *type, int r, int v) {
-    CValue cval;
-
-    cval.i = v;
-    vsetc(type, r, &cval);
+    int cval;
+    enter();
+    cval = v_alloca(sizeof_CValue);
+    scv_i(cval, v);
+    vsetc(type, r, cval);
+    leave(0);
 }
 
 /* 20 */
