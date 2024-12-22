@@ -136,45 +136,6 @@ int save_reg_upstack(int r, int n) {
     leave(0);
 }
 
-/* 31 */
-/* Generate value test
- *
- * Generate a test for any value (jump, comparison and integers) */
-ST_FUNC int gvtst(int inv, int t) {
-    int v;
-
-    v = and(gsv_r(vtop), VT_VALMASK);
-    vpushi(0);
-    gen_op(TOK_NE);
-    if (eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST)) {
-        vtop = sub(vtop, sizeof_SValue);
-        return t;
-    }
-    return gtst(inv, t);
-}
-
-/* 33 */
-/* handle integer constant optimizations and various machine
-   independent opt */
-static void gen_opic(int op) {
-    int v1;
-    int v2;
-    int c1;
-    int c2;
-
-    v1 = sub(vtop, sizeof_SValue);
-    v2 = vtop;
-    c1 = eq(and(gsv_r(v1), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-    c2 = eq(and(gsv_r(v2), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-
-    if (and(c1, c2)) {
-        scv_i(gsv_c(v1), 1);
-        vtop = sub(vtop, sizeof_SValue);
-    } else {
-        gen_opi(op);
-    }
-}
-
 /* 34 */
 /* generic gen_op: handles types problems */
 ST_FUNC void gen_op(int op) {
