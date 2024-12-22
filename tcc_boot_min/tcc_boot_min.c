@@ -117,8 +117,10 @@ int gcv_tab(int o) {return add(o, CValue_tab_o);}
 /* CType accessors */
 
 int gct_t(int o) {return ri32(add(o, CType_t_o));}
+int sct_t(int o, int v) {wi32(add(o, CType_t_o), v);}
 
 int gct_ref(int o) {return ri32(add(o, CType_ref_o));}
+int sct_ref(int o, int v) {wi32(add(o, CType_ref_o), v);}
 
 /* Sym accessors */
 
