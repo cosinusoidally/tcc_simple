@@ -3826,6 +3826,37 @@ int decl_initializer(int type, int sec, int c, int first, int size_only) {
     return leave(0);
 }
 
+/* 55 */
+/* parse a function defined by symbol 'sym' and generate its code in
+   'cur_text_section' */
+int gen_function(int sym) {
+    ind = gs_data_offset(cur_text_section);
+    /* NOTE: we patch the symbol size later */
+    put_extern_sym(sym, cur_text_section, ind, 0);
+    funcname = get_tok_str(gsym_v(sym), 0);
+    func_ind = ind;
+    /* push a dummy symbol to enable local sym storage */
+    sym_push2(alocal_stack, SYM_FIELD, 0, 0);
+    local_scope = 1; /* for function parameters */
+    gfunc_prolog(gsym_type(sym));
+    local_scope = 0;
+    rsym = 0;
+    block(0, 0, 0);
+    gsym(rsym);
+    gfunc_epilog();
+    ss_data_offset(cur_text_section, ind);
+    /* reset local stack */
+    local_scope = 0;
+    sym_pop(alocal_stack, 0, 0);
+    /* end of function */
+    /* patch symbol size */
+    ses_st_size(elfsym(sym), sub(ind, func_ind));
+    cur_text_section = 0;
+    funcname = mks(""); /* for safety */
+    sct_t(afunc_vt, 0); /* for safety */
+    ind = 0; /* for safety */
+}
+
 /* 57 */
 int decl(int l) {
     decl0(l, 0, 0);

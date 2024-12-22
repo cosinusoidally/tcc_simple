@@ -436,7 +436,7 @@ ST_DATA Sym *global_label_stack;
 ST_DATA CType char_pointer_type, func_old_type, int_type, size_type;
 ST_DATA SValue vstack[VSTACK_SIZE], *pvtop;
 extern SValue *vtop;
-ST_DATA int rsym;
+extern int rsym;
 extern int anon_sym;
 extern int loc;
 
@@ -444,7 +444,8 @@ ST_DATA int global_expr;  /* true if compound literals must be allocated globall
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_var; /* true if current function is variadic */
 ST_DATA int func_vc;
-ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc */
+ST_DATA int last_line_num, last_ind; /* debug last line number and pc */
+extern int func_ind;
 extern char *funcname;
 ST_DATA int g_debug;
 

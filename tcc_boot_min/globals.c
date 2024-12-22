@@ -156,6 +156,7 @@ int FUNC_PROLOG_SIZE;
 int anon_sym;
 int ind;
 int loc;
+int rsym;
 
 int section_sym;
 
@@ -338,5 +339,7 @@ int anb_sym_pools;
 int sym_free_first;
 
 int local_scope;
+
+int func_ind;
 
 /* =============== end globals.c ========================================== */
