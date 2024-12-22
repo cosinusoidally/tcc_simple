@@ -87,7 +87,7 @@ int unary() {
     int align;
     int size;
     int r;
-    CType type;
+    int type;
     Sym *s;
     AttributeDef ad;
     char *name;
@@ -105,30 +105,30 @@ int unary() {
     v_alloca(16);
     v_alloca(16);
     v_alloca(sizeof_SValue);
-    v_alloca(sizeof_CType);
+    type = v_alloca(sizeof_CType);
 
-    sct_ref(&type, 0);
+    sct_ref(type, 0);
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
-	sct_t(&type, t);
-	vsetc(&type, VT_CONST, atokc);
+	sct_t(type, t);
+	vsetc(type, VT_CONST, atokc);
         next();
     } else if(eq(tok, TOK_CUINT)) {
         t = or(VT_INT, VT_UNSIGNED);
-	sct_t(&type, t);
-	vsetc(&type, VT_CONST, atokc);
+	sct_t(type, t);
+	vsetc(type, VT_CONST, atokc);
         next();
     } else if(eq(tok, TOK_STR)) {
         /* string parsing */
         t = VT_BYTE;
-        sct_t(&type, t);
-        mk_pointer(&type);
-        sct_t(&type, or(gct_t(&type), VT_ARRAY));
+        sct_t(type, t);
+        mk_pointer(type);
+        sct_t(type, or(gct_t(type), VT_ARRAY));
         memset(&ad, 0, sizeof_AttributeDef);
-        decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
+        decl_initializer_alloc(type, &ad, VT_CONST, 2, 0, 0);
     } else if(eq(tok, mkc('('))) {
         next();
-        parse_btype(&type, &ad);
+        parse_btype(type, &ad);
         gexpr();
         skip(mkc(')'));
     } else {
