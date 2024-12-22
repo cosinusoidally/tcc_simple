@@ -3860,6 +3860,121 @@ int gen_function(int sym) {
     ind = 0; /* for safety */
 }
 
+/* 54 */
+/* parse an initializer for type 't' if 'has_init' is non zero, and
+   allocate space in local or global data space ('r' is either
+   VT_LOCAL or VT_CONST). If 'v' is non zero, then an associated
+   variable 'v' of scope 'scope' is declared before initializers
+   are parsed. If 'v' is zero, then a reference to the new object
+   is put in the value stack. If 'has_init' is 2, a special parsing
+   is done to handle string constants. */
+int decl_initializer_alloc(int type, int ad, int r,
+                                   int has_init, int v, int scope) {
+    int size;
+    int align;
+    int addr;
+    int init_str;
+    int sec;
+    int flexible_array;
+    int sym;
+
+/* FIXME there is a stack allocation bug somewhere causing crashes */
+    enter();
+    align = v_alloca(16); /* in theory 4 should work but there is a bug */
+
+    init_str = 0;
+    sym = 0;
+    flexible_array = 0;
+    int oldreloc_offset;
+
+    size = type_size(type, align);
+    /* If unknown size, we must evaluate it before
+       evaluating initializers because
+       initializers can generate global data too
+       (e.g. string pointers or ISOC99 compound
+       literals). It also simplifies local
+       initializers handling */
+    if (or(lt(size, 0), and(flexible_array, has_init))) {
+        /* get all init string */
+        init_str = tok_str_alloc();
+        /* only get strings */
+        while (eq(tok, TOK_STR)) {
+            tok_str_add_tok(init_str);
+            next();
+        }
+        tok_str_add(init_str, sub(0, 1));
+        tok_str_add(init_str, 0);
+        unget_tok(0);
+
+        /* compute size */
+        begin_macro(init_str, 1);
+        next();
+        decl_initializer(type, 0, 0, 1, 1);
+        /* prepare second initializer parsing */
+        macro_ptr = gtkst_str(init_str);
+        next();
+
+        /* if still unknown size, error */
+        size = type_size(type, align);
+    }
+
+    if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
+        sec = 0;
+        loc = and(sub(loc, size), sub(0, ri32(align)));
+        addr = loc;
+        if (v) {
+            sym = sym_push(v, type, r, addr);
+        } else {
+            /* push local reference */
+            vset(type, r, addr);
+        }
+    } else {
+
+        /* allocate symbol in corresponding section */
+        sec = gad_section(ad);
+        if (eq(0, sec)) {
+            if (has_init) {
+                sec = data_section;
+            } else {
+                sec = bss_section;
+            }
+        }
+
+        addr = section_add(sec, size, ri32(align));
+
+        if (v) {
+            if (eq(0, sym)) {
+                sym = sym_push(v, type, or(r, VT_SYM), 0);
+                patch_storage(sym, ad, 0);
+            }
+            /* Local statics have a scope until now (for
+               warnings), remove it here.  */
+            ssym_sym_scope(sym, 0);
+            /* update symbol definition */
+            put_extern_sym(sym, sec, addr, size);
+        } else {
+            /* push global reference */
+            sym = get_sym_ref(type, sec, addr, size);
+            vpushsym(type, sym);
+            ssv_r(vtop, or(gsv_r(vtop), r));
+        }
+
+    }
+
+    if (has_init) {
+        oldreloc_offset = 0;
+        decl_initializer(type, sec, addr, 1, 0);
+    }
+
+    /* restore parse state if needed */
+    if (init_str) {
+        end_macro();
+        next();
+    }
+
+    return leave(0);
+}
+
 /* 56 */
 /* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
    if parsing old style parameter decl list (and FUNC_SYM is set then) */
