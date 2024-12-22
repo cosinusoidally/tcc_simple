@@ -467,26 +467,26 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     int has_init;
     int r;
     CType type;
-    CType btype;
+    int btype;
     Sym *sym;
     AttributeDef ad;
 
     enter();
     v_alloca(sizeof_CType);
-    v_alloca(sizeof_CType);
+    btype = v_alloca(sizeof_CType);
     v_alloca(2*sizeof_AttributeDef); /* FIXME shouldn't have to double */
 
     while (1) {
-        if (eq(0, parse_btype(&btype, &ad))) {
+        if (eq(0, parse_btype(btype, &ad))) {
                 break;
         }
         while (1) { /* iterate thru each declaration */
-            memmove(&type, &btype, sizeof_CType);
+            memmove(&type, btype, sizeof_CType);
             type_decl(&type, &ad, &v);
-            if (eq(and(type.t, VT_BTYPE), VT_FUNC)) {
+            if (eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)) {
                 /* if old style function prototype, we accept a
                    declaration list */
-                sym = type.ref;
+                sym = gct_ref(&type);
                 if (and(eq(sym->f.func_type, FUNC_OLD), eq(l, VT_CONST))) {
                     decl0(VT_CMP, 0, sym);
                 }
@@ -495,7 +495,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
             if (eq(tok, mkc('{'))) {
                 /* put function symbol */
                 sym = external_global_sym(v, &type, 0);
-                type.t = and(type.t, not(VT_EXTERN));
+                sct_t(&type, and(gct_t(&type), not(VT_EXTERN)));
                 patch_storage(sym, &ad, &type);
 
                 /* compute text section */
@@ -507,7 +507,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 break;
             } else {
                     r = 0;
-                    if (eq(and(type.t, VT_BTYPE), VT_FUNC)) {
+                    if (eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)) {
                         /* external function definition */
                         /* specific case for func_call attribute */
                         type.ref->f = ad.f;
