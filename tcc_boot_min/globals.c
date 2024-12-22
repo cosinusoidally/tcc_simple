@@ -328,6 +328,7 @@ int aSTRING_MAX_SIZE;
 
 int aint_type;
 int afunc_old_type;
+int afunc_vt;
 
 int funcname;
 

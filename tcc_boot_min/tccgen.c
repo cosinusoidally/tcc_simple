@@ -68,12 +68,14 @@ static void gv_dup(void);
 
 extern int aint_type;
 extern int afunc_old_type;
+extern int afunc_vt;
 extern int asym_pools;
 extern int anb_sym_pools;
 
 int init_tccgen_globals(){
   aint_type = &int_type;
   afunc_old_type = &func_old_type;
+  afunc_vt = &func_vt;
   asym_pools = &sym_pools;
   anb_sym_pools = &nb_sym_pools;
 }
@@ -461,15 +463,15 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
 /* parse a function defined by symbol 'sym' and generate its code in
    'cur_text_section' */
 void gen_function(Sym *sym) {
-    ind = cur_text_section->data_offset;
+    ind = gs_data_offset(cur_text_section);
     /* NOTE: we patch the symbol size later */
     put_extern_sym(sym, cur_text_section, ind, 0);
-    funcname = get_tok_str(sym->v, 0);
+    funcname = get_tok_str(gsym_v(sym), 0);
     func_ind = ind;
     /* push a dummy symbol to enable local sym storage */
-    sym_push2(&local_stack, SYM_FIELD, 0, 0);
+    sym_push2(alocal_stack, SYM_FIELD, 0, 0);
     local_scope = 1; /* for function parameters */
-    gfunc_prolog(&sym->type);
+    gfunc_prolog(gsym_type(sym));
     local_scope = 0;
     rsym = 0;
     block(0, 0, 0);
@@ -478,13 +480,13 @@ void gen_function(Sym *sym) {
     cur_text_section->data_offset = ind;
     /* reset local stack */
     local_scope = 0;
-    sym_pop(&local_stack, 0, 0);
+    sym_pop(alocal_stack, 0, 0);
     /* end of function */
     /* patch symbol size */
     ses_st_size(elfsym(sym), sub(ind, func_ind));
     cur_text_section = 0;
     funcname = mks(""); /* for safety */
-    func_vt.t = 0; /* for safety */
+    sct_t(afunc_vt, 0); /* for safety */
     ind = 0; /* for safety */
 }
 
