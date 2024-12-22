@@ -497,6 +497,8 @@ int init_runtime(){
   STB_LOCAL = 0; /* Local symbol */
   STB_GLOBAL = 1; /* Global symbol */
 
+  STT_OBJECT = 1; /*     1            Symbol is a data object */
+  STT_FUNC = 2;   /*     2            Symbol is a code object */
   STT_FILE = 4; /* Symbol's name is file name */
 
   O_RDONLY = 0;

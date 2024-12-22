@@ -203,6 +203,8 @@ int STB_LOCAL;
 int STB_GLOBAL;
 
 int STT_FILE;
+int STT_FUNC;
+int STT_OBJECT;
 
 int aglobal_stack;
 int alocal_stack;

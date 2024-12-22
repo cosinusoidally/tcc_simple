@@ -631,8 +631,8 @@ extern int R_386_32;
 /* #define R_386_PC32      2             PC relative 32 bit */
 extern int R_386_PC32;
 
-#define STT_OBJECT      1               /* Symbol is a data object */
-#define STT_FUNC        2               /* Symbol is a code object */
+extern int STT_OBJECT; /*     1            Symbol is a data object */
+extern int STT_FUNC;   /*     2            Symbol is a code object */
 extern int STT_FILE; /*    4               Symbol's name is file name */
 
 extern int SHN_ABS;   /*      0xfff1       Associated symbol is absolute */
