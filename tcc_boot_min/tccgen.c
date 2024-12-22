@@ -87,7 +87,7 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
     s = sym_push2(aglobal_stack, v, t, c);
     /* don't record anonymous symbol */
     if(lt(v, SYM_FIRST_ANOM)) {
-        ps = &table_ident[sub(v, TOK_IDENT)]->sym_identifier;
+        ps = atks_sym_identifier(ri32(add(table_ident, mul(sub(v, TOK_IDENT), 4))));
         /* modify the top most local identifier, so that
            sym_identifier will point to 's' when popped */
         while (neq(*ps, 0)) {
