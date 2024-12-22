@@ -108,13 +108,13 @@ ST_FUNC void save_reg_upstack(int r, int n) {
             if (eq(0, saved)) {
                 r = and(gsv_r(p), VT_VALMASK);
                 /* store register in the stack */
-                type = asv_type(p);
+                type = gsv_type(p);
                 if (and(gsv_r(p), VT_LVAL)) {
                     type = aint_type;
                 }
                 size = type_size(type, &align);
                 loc = and(sub(loc, size), sub(0, align));
-                sv.type.t = type->t;
+                sct_t(gsv_type(&sv), gct_t(type));
                 ssv_r(&sv, or(VT_LOCAL, VT_LVAL));
                 scv_i(gsv_c(&sv), loc);
                 store(r, &sv);

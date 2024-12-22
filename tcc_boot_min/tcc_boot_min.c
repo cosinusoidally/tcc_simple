@@ -93,7 +93,9 @@ int gs_name(int o) {return add(o, Section_name_o);}
 
 /* SValue accessors */
 
-int asv_type(int o) {return add(o, SValue_type_o);}
+
+/* CType type */
+int gsv_type(int o) {return add(o, SValue_type_o);}
 
 int gsv_r(int o) {return ri32(add(o, SValue_r_o));} /* int r */
 int ssv_r(int o, int v) {wi32(add(o, SValue_r_o), v);}
@@ -3162,7 +3164,7 @@ int sym_pop(int ptop, int b, int keep) {
 
 int vsetc(int type, int r, int vc) {
     vtop = add(vtop, sizeof_SValue);
-    memmove(asv_type(vtop), type, sizeof_CType);
+    memmove(gsv_type(vtop), type, sizeof_CType);
     ssv_r(vtop, r);
     memmove(gsv_c(vtop), vc, sizeof_CValue);
     ssv_sym(vtop, 0);
