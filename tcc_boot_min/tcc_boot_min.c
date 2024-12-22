@@ -3702,6 +3702,24 @@ int gfunc_param_typed(int func, int arg) {
     leave(0);
 }
 
+/* 48 */
+int expr_eq() {
+    int t;
+
+    unary();
+    if (eq(tok, mkc('='))) {
+        t = tok;
+        next();
+        expr_eq();
+        vstore();
+    }
+}
+
+/* 49 */
+int gexpr() {
+    expr_eq();
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {

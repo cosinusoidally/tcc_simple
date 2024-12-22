@@ -250,24 +250,6 @@ int unary() {
 //    return leave(0);
 }
 
-/* 48 */
-void expr_eq() {
-    int t;
-    
-    unary();
-    if (eq(tok, mkc('='))) {
-        t = tok;
-        next();
-        expr_eq();
-        vstore();
-    }
-}
-
-/* 49 */
-void gexpr() {
-    expr_eq();
-}
-
 /* 50 */
 void gfunc_return(CType *func_type) {
     gv(RC_IRET);
