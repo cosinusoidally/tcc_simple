@@ -142,15 +142,20 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
 /* pass a parameter to a function and do type checking and casting */
 void gfunc_param_typed(Sym *func, Sym *arg) {
     int func_type;
-    CType type;
+    int type;
+
+    enter();
+    type = v_alloca(sizeof_CType);
 
     func_type = func->f.func_type;
     if (neq(func_type, FUNC_OLD)) {
-        memmove(&type, gsym_type(arg), sizeof_CType);
+        memmove(type, gsym_type(arg), sizeof_CType);
         /* need to do that to avoid false warning */
-        sct_t(&type, and(gct_t(&type), not(VT_CONSTANT)));
-        gen_assign_cast(&type);
+        sct_t(type, and(gct_t(type), not(VT_CONSTANT)));
+        gen_assign_cast(type);
     }
+
+    leave(0);
 }
 
 /* 47 */
