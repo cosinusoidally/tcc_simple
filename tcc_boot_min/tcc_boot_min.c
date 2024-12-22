@@ -3759,6 +3759,13 @@ int init_putv(int type, int sec, int c) {
     leave(0);
 }
 
+/* 57 */
+int decl(int l) {
+    decl0(l, 0, 0);
+}
+
+/* ------------------------------------------------------------------------- */
+
 /* end of tccgen.c */
 
 int tcc_new() {

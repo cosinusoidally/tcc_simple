@@ -58,7 +58,7 @@ static void decl_initializer(CType *type, Section *sec, unsigned long c, int fir
 static void block(int *bsym, int *csym, int is_expr);
 static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
 void decl(int l);
-static int decl0(int l, int is_for_loop_init, Sym *);
+int decl0(int l, int is_for_loop_init, Sym *);
 static void expr_eq(void);
 static int is_compatible_unqualified_types(CType *type1, CType *type2);
 static void vpush(CType *type);
@@ -626,10 +626,3 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     }
     return 0;
 }
-
-/* 57 */
-void decl(int l) {
-    decl0(l, 0, 0);
-}
-
-/* ------------------------------------------------------------------------- */
