@@ -75,25 +75,6 @@ int init_tccgen_globals(){
   afunc_old_type = &func_old_type;
 }
 
-/* 5 */
-/* add a new relocation entry to symbol 'sym' in section 's' */
-ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
-                     addr_t addend) {
-    int c;
-
-    c = 0;
-
-    if (sym) {
-        if (eq(0, sym->c)) {
-            put_extern_sym(sym, 0, 0, 0);
-        }
-        c = sym->c;
-    }
-
-    /* now we can add ELF relocation info */
-    put_elf_reloca(symtab_section, s, offset, type, c, addend);
-}
-
 /* 6 */
 ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type) {
     greloca(s, sym, offset, type, 0);

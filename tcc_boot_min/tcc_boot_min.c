@@ -2952,6 +2952,24 @@ int put_extern_sym(int sym, int section, int value, int size) {
     put_extern_sym2(sym, sh_num, value, size, 1);
 }
 
+/* 5 */
+/* add a new relocation entry to symbol 'sym' in section 's' */
+int greloca(int s, int sym, int offset, int type, int addend) {
+    int c;
+
+    c = 0;
+
+    if (sym) {
+        if (eq(0, gsym_c(sym))) {
+            put_extern_sym(sym, 0, 0, 0);
+        }
+        c = gsym_c(sym);
+    }
+
+    /* now we can add ELF relocation info */
+    put_elf_reloca(symtab_section, s, offset, type, c, addend);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
