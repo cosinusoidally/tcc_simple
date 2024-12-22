@@ -142,6 +142,8 @@ int TokenString_prev_ptr_o;
 int TokenString_alloc_o;
 int sizeof_TokenString;
 
+int sizeof_AttributeDef;
+
 int sizeof_void;
 int sizeof_int;
 

@@ -607,6 +607,7 @@ extern int sizeof_CString;
 extern int sizeof_Sym;
 extern int sizeof_CType;
 extern int sizeof_CValue;
+extern int sizeof_AttributeDef;
 
 extern int aglobal_stack;
 extern int alocal_stack;
