@@ -3043,6 +3043,16 @@ int sym_push2(int ps, int v, int t, int c) {
     return s;
 }
 
+/* 11 */
+/* find an identifier */
+int sym_find(int v) {
+    v = sub(v, TOK_IDENT);
+    if (or(lt(v, 0), gte(v, sub(tok_ident, TOK_IDENT)))) {
+        return 0;
+    }
+    return gtks_sym_identifier(ri32(add(table_ident, mul(v, 4))));
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
