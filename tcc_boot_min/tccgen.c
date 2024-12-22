@@ -79,16 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 19 */
-ST_FUNC void vset(CType *type, int r, int v) {
-    int cval;
-    enter();
-    cval = v_alloca(sizeof_CValue);
-    scv_i(cval, v);
-    vsetc(type, r, cval);
-    leave(0);
-}
-
 /* 20 */
 /* push a symbol value of TYPE */
 void vpushsym(CType *type, Sym *sym) {

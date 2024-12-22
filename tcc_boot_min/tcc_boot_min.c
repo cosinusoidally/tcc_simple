@@ -3195,6 +3195,16 @@ int vpushi(int v) {
     leave(0);
 }
 
+/* 19 */
+int vset(int type, int r, int v) {
+    int cval;
+    enter();
+    cval = v_alloca(sizeof_CValue);
+    scv_i(cval, v);
+    vsetc(type, r, cval);
+    leave(0);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
