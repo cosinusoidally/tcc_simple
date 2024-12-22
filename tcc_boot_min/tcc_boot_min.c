@@ -125,6 +125,7 @@ int sct_ref(int o, int v) {wi32(add(o, CType_ref_o), v);}
 /* Sym accessors */
 
 int gsym_v(int o) {return ri32(add(o, Sym_v_o));} /* int v */
+int ssym_v(int o, int v) {wi32(add(o, Sym_v_o), v);}
 
 int gsym_c(int o) {return ri32(add(o, Sym_c_o));}
 int ssym_c(int o, int v) {wi32(add(o, Sym_c_o), v);}

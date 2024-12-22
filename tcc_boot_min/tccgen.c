@@ -86,7 +86,7 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
 
     s = sym_malloc();
     memset(s, 0, sizeof_Sym);
-    s->v = v;
+    ssym_v(s, v);
     s->type.t = t;
     s->c = c;
     /* add in stack */
