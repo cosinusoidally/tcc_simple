@@ -84,18 +84,21 @@ int init_tccgen_globals(){
 int gen_op(int op) {
     int t;
     CType type1;
+//    enter();
+//    type1 = v_alloca(sizeof_CType);
 
     /* integer operations */
     t = VT_INT;
     vswap();
-    type1.t = t;
-    type1.ref = 0;
+    sct_t(&type1, t);
+    sct_ref(&type1, 0);
     gen_cast(&type1);
     vswap();
     gen_cast(&type1);
     gen_opic(op);
     /* relational op: the result is an int */
-    vtop->type.t = VT_INT;
+    sct_t(gsv_type(vtop), VT_INT);
+//    return leave(0);
 }
 
 /* 35 */
