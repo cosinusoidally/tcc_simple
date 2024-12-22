@@ -188,7 +188,7 @@ int unary() {
 
             /* return value */
             r = add(gsv_r(&ret), ret_nregs);
-            while(gt(r, ret.r)) {
+            while(gt(r, gsv_r(&ret))) {
                 r = sub(r, 1);
                 vsetc(gsv_type(&ret), r, gsv_c(&ret));
             }
