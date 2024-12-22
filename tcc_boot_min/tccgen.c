@@ -91,15 +91,15 @@ void gen_cast(CType *type) {
     sbt = and(gct_t(gsv_type(vtop)), or(VT_BTYPE, VT_UNSIGNED));
 
     if (neq(sbt, dbt)) {
-        c = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-        p = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
+        c = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+        p = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
         if (c) {
             if(eq(and(dbt, VT_BTYPE), VT_BYTE)) {
                 m = 255;
             } else {
                 m = sub(0, 1); /* 0xffffffff */
             }
-            vtop->c.i = and(vtop->c.i, m);
+            vtop->c.i = and(gcv_i(gsv_c(vtop)), m);
             if (eq(0, and(dbt, VT_UNSIGNED))) {
                 /* LJW FIXME shr might go wrong because of sign extension */
                 vtop->c.i = or(vtop->c.i, sub(0, and(vtop->c.i, add(shr(m, 1), 1))));
