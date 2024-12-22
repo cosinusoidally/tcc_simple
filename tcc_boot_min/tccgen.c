@@ -516,16 +516,16 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                         r = or(r, lvalue_type(type.t));
                     }
                     has_init = eq(tok, mkc('='));
-                    if (or(or(and(and(type.t, VT_EXTERN),
+                    if (or(or(and(and(gct_t(&type), VT_EXTERN),
                                   or(eq(0,has_init), neq(l, VT_CONST))),
-			          eq(and(type.t, VT_BTYPE), VT_FUNC)),
-                             ((and(and(type.t, VT_ARRAY),
-                                      and(type.t, VT_STATIC)))))) {
+			          eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)),
+                             ((and(and(gct_t(&type), VT_ARRAY),
+                                      and(gct_t(&type), VT_STATIC)))))) {
                         /* external variable or function */
                         /* NOTE: as GCC, uninitialized global static
                            arrays of null size are considered as
                            extern */
-                        type.t = or(type.t, VT_EXTERN);
+                        type.t = or(gct_t(&type), VT_EXTERN);
                         sym = external_sym(v, &type, r, &ad);
                     } else {
                         r = or(r, l);
