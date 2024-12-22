@@ -107,7 +107,7 @@ int unary() {
     v_alloca(sizeof_SValue);
     v_alloca(sizeof_CType);
 
-    type.ref = 0;
+    sct_ref(&type, 0);
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
 	sct_t(&type, t);
@@ -124,7 +124,7 @@ int unary() {
         sct_t(&type, t);
         mk_pointer(&type);
         sct_t(&type, or(gct_t(&type), VT_ARRAY));
-        memset(&ad, 0, sizeof(AttributeDef));
+        memset(&ad, 0, sizeof_AttributeDef);
         decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
     } else if(eq(tok, mkc('('))) {
         next();
@@ -158,13 +158,13 @@ int unary() {
 
             ssv_r(vtop, and(gsv_r(vtop), not(VT_LVAL))); /* no lvalue */
             /* get return type */
-            s = vtop->type.ref;
+            s = gct_ref(gsv_type(vtop));
             next();
             sa = gsym_next(s); /* first parameter */
             nb_args = 0;
             regsize = 0;
             ret_nregs = 1;
-            ret.type = s->type;
+            memmove(&ret.type, gsym_type(s), sizeof_CType);
 
             ret.r = REG_IRET;
             ret.c.i = 0;
