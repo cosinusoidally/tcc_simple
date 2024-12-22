@@ -3205,6 +3205,33 @@ int vset(int type, int r, int v) {
     leave(0);
 }
 
+/* 20 */
+/* push a symbol value of TYPE */
+int vpushsym(int type, int sym) {
+    int cval;
+    enter();
+    cval = v_alloca(sizeof_CValue);
+    scv_i(cval, 0);
+    vsetc(type, or(VT_CONST, VT_SYM), cval);
+    ssv_sym(vtop, sym);
+    leave(0);
+}
+
+/* 21 */
+/* Return a static symbol pointing to a section */
+int get_sym_ref(int type, int sec, int offset, int size) {
+    int v;
+    int sym;
+
+    v = anon_sym;
+    anon_sym = add(anon_sym, 1);
+    sym = global_identifier_push(v, or(gct_t(type), VT_STATIC), 0);
+    sct_ref(gsym_type(sym), gct_ref(type));
+    ssym_r(sym, or(VT_CONST, VT_SYM));
+    put_extern_sym(sym, sec, offset, size);
+    return sym;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {

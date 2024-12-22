@@ -79,33 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 20 */
-/* push a symbol value of TYPE */
-void vpushsym(CType *type, Sym *sym) {
-    int cval;
-    enter();
-    cval = v_alloca(sizeof_CValue);
-    scv_i(cval, 0);
-    vsetc(type, or(VT_CONST, VT_SYM), cval);
-    ssv_sym(vtop, sym);
-    leave(0);
-}
-
-/* 21 */
-/* Return a static symbol pointing to a section */
-ST_FUNC Sym *get_sym_ref(CType *type, Section *sec, unsigned long offset, unsigned long size) {
-    int v;
-    Sym *sym;
-
-    v = anon_sym;
-    anon_sym = add(anon_sym, 1);
-    sym = global_identifier_push(v, or(gct_t(type), VT_STATIC), 0);
-    sct_ref(gsym_type(sym), gct_ref(type));
-    ssym_r(sym, or(VT_CONST, VT_SYM));
-    put_extern_sym(sym, sec, offset, size);
-    return sym;
-}
-
 /* 22 */
 /* define a new external reference to a symbol 'v' of type 'u' */
 ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
