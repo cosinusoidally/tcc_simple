@@ -2895,6 +2895,52 @@ int update_storage(int sym) {
     old_sym_bind = ELFW_ST_BIND(ges_st_info(esym));
 }
 
+/* 3 */
+/* ------------------------------------------------------------------------- */
+/* update sym->c so that it points to an external symbol in section
+   'section' with value 'value' */
+int put_extern_sym2(int sym, int sh_num,
+                            int value, int size,
+                            int can_add_underscore) {
+    int sym_type;
+    int sym_bind;
+    int info;
+    int other;
+    int t;
+    int esym;
+    int name;
+    int buf1;
+
+    enter();
+    buf1 = v_alloca(256);
+
+    if (eq(gsym_c(sym), 0)) {
+        name = get_tok_str(gsym_v(sym), 0);
+        t = gct_t(gsym_type(sym));
+        if (eq(and(t, VT_BTYPE), VT_FUNC)) {
+            sym_type = STT_FUNC;
+        } else {
+            sym_type = STT_OBJECT;
+        }
+        if (and(t, VT_STATIC)) {
+            sym_bind = STB_LOCAL;
+        } else {
+            sym_bind = STB_GLOBAL;
+        }
+        other = 0;
+        info = ELFW_ST_INFO(sym_bind, sym_type);
+        ssym_c(sym, put_elf_sym(symtab_section, value, size, info, other, sh_num, name));
+    } else { 
+        esym = elfsym(sym);
+        ses_st_value(esym, value);
+        ses_st_size(esym, size);
+        ses_st_shndx(esym, sh_num);
+    }
+    update_storage(sym);
+
+    leave(0);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
