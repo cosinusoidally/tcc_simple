@@ -112,7 +112,7 @@ CType *pointed_type(CType *type) {
 /* 38 */
 /* modify type so that its it is a pointer to type. */
 ST_FUNC void mk_pointer(CType *type) {
-    Sym *s;
+    int s;
     s = sym_push(SYM_FIELD, type, 0, sub(0, 1));
     sct_t(type, or(VT_PTR, and(gct_t(type), VT_STORAGE)));
     sct_ref(type, s);
