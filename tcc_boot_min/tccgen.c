@@ -364,11 +364,12 @@ int decl_initializer(CType *type, Section *sec, unsigned long c,
     int ch;
 
     enter();
+    align1 = v_alloca(4);
 
     s = type->ref;
     n = s->c;
     t1 = pointed_type(type);
-    size1 = type_size(t1, &align1);
+    size1 = type_size(t1, align1);
 
     /* only parse strings here if correct type (otherwise: handle
        them as ((w)char *) expressions */
