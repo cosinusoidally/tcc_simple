@@ -605,6 +605,8 @@ extern int sizeof_TokenSym;
 extern int sizeof_TokenString;
 extern int sizeof_CString;
 extern int sizeof_Sym;
+extern int sizeof_CType;
+extern int sizeof_CValue;
 
 extern int aglobal_stack;
 extern int alocal_stack;

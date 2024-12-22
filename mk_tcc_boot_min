@@ -15,8 +15,8 @@ gcc -g3 -O0 -m32 support_gcc.o tcc_boot_min_full_gcc.o tcc_boot_min_gcc.o -o tcc
 # build tcc_boot_min with tcc
 tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_tcc.o
 tcc -nostdinc -c ../tcc_boot_min/support.c -o support_tcc.o
-tcc -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc.o
-tcc support_tcc.o tcc_boot_min_full_tcc.o tcc_boot_min_tcc.o -o tcc_boot_min_tcc
+tcc -g -O0 -m32 -I ../tcc_boot_min/ -I ../tcc_boot_min/include/ -c ../tcc_boot_min/tcc.c -o tcc_boot_min_tcc.o
+tcc -g support_tcc.o tcc_boot_min_full_tcc.o tcc_boot_min_tcc.o -o tcc_boot_min_tcc
 
 # build some test files
 

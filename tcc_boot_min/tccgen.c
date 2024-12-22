@@ -82,9 +82,9 @@ int init_tccgen_globals(){
 /* 15 */
 static void vsetc(CType *type, int r, CValue *vc) {
     vtop = add(vtop, sizeof_SValue);
-    vtop->type = *type;
+    memmove(&vtop->type, type, sizeof_CType);
     vtop->r = r;
-    vtop->c = *vc;
+    memmove(&vtop->c, vc, sizeof_CValue);
     vtop->sym = 0;
 }
 
