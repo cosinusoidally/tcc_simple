@@ -271,7 +271,7 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 extern int VT_BTYPE;  /*    0x000f   mask for basic type */
 extern int VT_BYTE;   /*    1  signed byte type */
 extern int VT_INT;    /*    3  integer type */
-#define VT_PTR              5  /* pointer */
+extern int VT_PTR;    /*    5  pointer */
 extern int VT_FUNC;   /*    6  function type */
 
 extern int VT_UNSIGNED;  /*  0x0010  unsigned type */

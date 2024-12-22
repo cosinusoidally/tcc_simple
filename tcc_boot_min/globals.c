@@ -171,6 +171,7 @@ int VT_STORAGE;
 int VT_TYPE;
 int VT_BYTE;
 int VT_UNSIGNED;
+int VT_PTR;
 
 
 int R_386_32;

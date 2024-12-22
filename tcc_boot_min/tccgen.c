@@ -79,45 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 36 */
-/* return type size as known at compile time. Put alignment at 'a' */
-ST_FUNC int type_size(CType *type, int *a) {
-    int s;
-    int bt;
-    int ts;
-
-    bt = and(gct_t(type), VT_BTYPE);
-    if (eq(bt, VT_PTR)) {
-
-        s = gct_ref(type);
-        ts = type_size(gsym_type(s), a);
-
-        return mul(ts, gsym_c(s));
-    } else if(eq(bt, VT_INT)) {
-        wi32(a, 4);
-        return 4;
-    } else {
-        /* char, void, function, _Bool */
-        wi32(a, 1);
-        return 1;
-    }
-}
-
-/* 37 */
-/* return the pointed type of t */
-CType *pointed_type(CType *type) {
-    return gsym_type(gct_ref(type));
-}
-
-/* 38 */
-/* modify type so that its it is a pointer to type. */
-ST_FUNC void mk_pointer(CType *type) {
-    int s;
-    s = sym_push(SYM_FIELD, type, 0, sub(0, 1));
-    sct_t(type, or(VT_PTR, and(gct_t(type), VT_STORAGE)));
-    sct_ref(type, s);
-}
-
 /* 39 */
 /* verify type compatibility to store vtop in 'dt' type, and generate
    casts if needed. */
