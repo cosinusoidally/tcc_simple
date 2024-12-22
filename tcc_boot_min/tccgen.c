@@ -87,8 +87,8 @@ void gen_cast(CType *type) {
     int p;
     int m;
 
-    dbt = and(type->t, or(VT_BTYPE, VT_UNSIGNED));
-    sbt = and(vtop->type.t, or(VT_BTYPE, VT_UNSIGNED));
+    dbt = and(gct_t(type), or(VT_BTYPE, VT_UNSIGNED));
+    sbt = and(gct_t(gsv_type(vtop)), or(VT_BTYPE, VT_UNSIGNED));
 
     if (neq(sbt, dbt)) {
         c = eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
