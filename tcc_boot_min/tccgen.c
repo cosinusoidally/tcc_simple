@@ -158,20 +158,20 @@ void unary() {
     type.ref = 0;
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
-	type.t = t;
+	sct_t(&type, t);
 	vsetc(&type, VT_CONST, &tokc);
         next();
     } else if(eq(tok, TOK_CUINT)) {
         t = or(VT_INT, VT_UNSIGNED);
-	type.t = t;
+	sct_t(&type, t);
 	vsetc(&type, VT_CONST, &tokc);
         next();
     } else if(eq(tok, TOK_STR)) {
         /* string parsing */
         t = VT_BYTE;
-        type.t = t;
+        sct_t(&type, t);
         mk_pointer(&type);
-        type.t = or(type.t, VT_ARRAY);
+        sct_t(&type, or(gct_t(&type), VT_ARRAY));
         memset(&ad, 0, sizeof(AttributeDef));
         decl_initializer_alloc(&type, &ad, VT_CONST, 2, 0, 0);
     } else if(eq(tok, mkc('('))) {
@@ -188,12 +188,12 @@ void unary() {
             s = external_global_sym(t, &func_old_type, 0); 
         }
 
-        r = s->r;
-        vset(&s->type, r, s->c);
+        r = gsym_r(s);
+        vset(gsym_type(s), r, gsym_c(s));
         /* Point to s as backpointer (even without r&VT_SYM).
 	   Will be used by at least the x86 inline asm parser for
 	   regvars.  */
-	vtop->sym = s;
+	ssv_sym(vtop, s);
 
         if (and(r, VT_SYM)) {
             vtop->c.i = 0;
