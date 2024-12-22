@@ -122,9 +122,9 @@ int block(int *bsym, int *csym, int is_expr) {
         skip(mkc(')'));
         wi32(a, gvtst(1, 0));
         wi32(b, 0);
-        local_scope = local_scope + 1;
+        local_scope = add(local_scope, 1);
         block(a, b, 0);
-        local_scope = local_scope - 1;
+        local_scope = sub(local_scope, 1);
         gjmp_addr(d);
         gsym(ri32(a));
         gsym_addr(ri32(b), d);
@@ -134,7 +134,7 @@ int block(int *bsym, int *csym, int is_expr) {
         /* record local declaration stack position */
         s = local_stack;
         llabel = local_label_stack;
-        local_scope = local_scope + 1;
+        local_scope = add(local_scope, 1);
         
         while (neq(tok, mkc('}'))) {
 	    decl(VT_LOCAL);
@@ -143,7 +143,7 @@ int block(int *bsym, int *csym, int is_expr) {
             }
         }
         /* pop locally defined symbols */
-        local_scope = local_scope - 1;
+        local_scope = sub(local_scope, 1);
 	/* In the is_expr case (a statement expression is finished here),
 	   vtop might refer to symbols on the local_stack.  Either via the
 	   type or via vtop->sym.  We can't pop those nor any that in turn
