@@ -358,7 +358,7 @@ static void init_putv(CType *type, Section *sec, unsigned long c) {
 
     memmove(&dtype, type, sizeof_CType);
     /* need to do that to avoid false warning */
-    dtype.t = and(dtype.t, not(VT_CONSTANT));
+    sct_t(&dtype, and(gct_t(&dtype), not(VT_CONSTANT)));
 
     /* XXX: not portable */
     /* XXX: generate error if incorrect relocation */
