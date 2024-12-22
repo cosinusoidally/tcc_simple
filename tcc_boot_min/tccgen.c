@@ -94,10 +94,10 @@ ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
             if(eq(0, gsym_sym_scope(ri32(ps)))) {
                 break;
             }
-            ps = &(*ps)->prev_tok;
+            ps = asym_prev_tok(ri32(ps));
         }
-        s->prev_tok = *ps;
-        *ps = s;
+        ssym_prev_tok(s, ri32(ps));
+        wi32(ps, s);
     }
     return s;
 }
