@@ -91,9 +91,9 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
     } else {
         ps = aglobal_stack;
     }
-    s = sym_push2(ps, v, type->t, c);
-    s->type.ref = type->ref;
-    s->r = r;
+    s = sym_push2(ps, v, gct_t(type), c);
+    sct_ref(gsym_type(s), gct_ref(type));
+    ssym_r(s, r);
     /* don't record fields or anonymous symbols */
     /* XXX: simplify */
     if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {

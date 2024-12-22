@@ -54,6 +54,7 @@ int CType_ref_o;
 int sizeof_CType;
 
 int Sym_v_o;
+int Sym_r_o;
 int Sym_c_o;
 int Sym_f_func_type_o;
 int Sym_type_o;
