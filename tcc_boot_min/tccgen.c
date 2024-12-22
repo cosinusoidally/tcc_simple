@@ -106,6 +106,7 @@ int unary() {
     v_alloca(16);
     v_alloca(sizeof_SValue);
     type = v_alloca(sizeof_CType);
+    v_alloca(mul(2, sizeof_AttributeDef));
 
     sct_ref(type, 0);
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
