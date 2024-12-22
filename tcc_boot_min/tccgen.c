@@ -98,7 +98,14 @@ int unary() {
     int regsize;
 
 /* FIXME there is some bug with the virtual stack */
-//    enter();
+    enter();
+    /* definitely something weird going on */
+    /* 64 bytes of padding seems to fix */
+    v_alloca(64);
+    v_alloca(16);
+    v_alloca(16);
+    v_alloca(sizeof_SValue);
+    v_alloca(sizeof_CType);
 
     type.ref = 0;
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
@@ -130,7 +137,7 @@ int unary() {
         s = sym_find(t);
         if (eq(0, s)) {
             name = get_tok_str(t, 0);
-            s = external_global_sym(t, &func_old_type, 0); 
+            s = external_global_sym(t, afunc_old_type, 0);
         }
 
         r = gsym_r(s);
@@ -189,7 +196,7 @@ int unary() {
         }
     }
 
-//    return leave(0);
+    return leave(0);
 }
 
 /* 51 */
