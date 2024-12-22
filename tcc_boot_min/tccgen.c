@@ -84,9 +84,9 @@ int init_tccgen_globals(){
 void convert_parameter_type(CType *pt) {
     /* remove const qualifiers (XXX: const could be used
        to indicate a const function parameter */
-    pt->t = and(pt->t, not(VT_CONSTANT));
+    sct_t(pt, and(gct_t(pt), not(VT_CONSTANT)));
     /* array must be transformed to pointer according to ANSI C */
-    pt->t = and(pt->t, not(VT_ARRAY));
+    sct_t(pt, and(gct_t(pt), not(VT_ARRAY)));
 }
 
 /* 43 */
