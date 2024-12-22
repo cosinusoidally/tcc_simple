@@ -364,14 +364,14 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     Sym *sym;
 
 /* FIXME there is a stack allocation bug somewhere causing crashes */
-//    enter();
-//    align = v_alloca(4);
+    enter();
+    align = v_alloca(16); /* in theory 4 should work but there is a bug */
 
     init_str = 0;
     sym = 0;
     flexible_array = 0;
 
-    size = type_size(type, &align);
+    size = type_size(type, align);
     /* If unknown size, we must evaluate it before
        evaluating initializers because
        initializers can generate global data too
@@ -399,12 +399,12 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         next();
         
         /* if still unknown size, error */
-        size = type_size(type, &align);
+        size = type_size(type, align);
     }
 
     if (eq(and(r, VT_VALMASK), VT_LOCAL)) {
         sec = 0;
-        loc = and(sub(loc, size), sub(0, align));
+        loc = and(sub(loc, size), sub(0, ri32(align)));
         addr = loc;
         if (v) {
             sym = sym_push(v, type, r, addr);
@@ -424,7 +424,7 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             }
         }
 
-        addr = section_add(sec, size, align);
+        addr = section_add(sec, size, ri32(align));
 
         if (v) {
             if (eq(0, sym)) {
@@ -456,5 +456,5 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         next();
     }
 
-//    return leave(0);
+    return leave(0);
 }
