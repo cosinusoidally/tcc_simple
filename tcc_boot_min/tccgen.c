@@ -186,9 +186,9 @@ int unary() {
             gfunc_call(nb_args);
 
             /* return value */
-            r = ret.r + ret_nregs;
+            r = add(gsv_r(&ret), ret_nregs);
             while(gt(r, ret.r)) {
-                r = r - 1;
+                r = sub(r, 1);
                 vsetc(&ret.type, r, &ret.c);
             }
         } else {
