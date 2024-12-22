@@ -82,7 +82,7 @@ ST_FUNC int tccgen_compile(TCCState *s1) {
     sct_t(&int_type, VT_INT);
     sct_t(&func_old_type, VT_FUNC);
     sct_ref(&func_old_type, sym_push(SYM_FIELD, &int_type, 0, 0));
-    func_old_type.ref->f.func_type = FUNC_OLD;
+    ssym_f_func_type(gct_ref(&func_old_type), FUNC_OLD);
 
     /* an elf symbol of type STT_FILE must be put so that STB_LOCAL
        symbols can be safely used */
