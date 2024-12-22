@@ -481,7 +481,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 break;
         }
         while (1) { /* iterate thru each declaration */
-            type = btype;
+            memmove(&type, &btype, sizeof_CType);
             type_decl(&type, &ad, &v);
             if (eq(and(type.t, VT_BTYPE), VT_FUNC)) {
                 /* if old style function prototype, we accept a
