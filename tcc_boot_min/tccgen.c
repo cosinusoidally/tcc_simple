@@ -82,10 +82,13 @@ int init_tccgen_globals(){
 /* 20 */
 /* push a symbol value of TYPE */
 void vpushsym(CType *type, Sym *sym) {
-    CValue cval;
-    cval.i = 0;
-    vsetc(type, or(VT_CONST, VT_SYM), &cval);
-    vtop->sym = sym;
+    int cval;
+    enter();
+    cval = v_alloca(sizeof_CValue);
+    scv_i(cval, 0);
+    vsetc(type, or(VT_CONST, VT_SYM), cval);
+    ssv_sym(vtop, sym);
+    leave(0);
 }
 
 /* 21 */
