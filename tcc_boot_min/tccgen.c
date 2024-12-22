@@ -146,9 +146,9 @@ void gfunc_param_typed(Sym *func, Sym *arg) {
 
     func_type = func->f.func_type;
     if (neq(func_type, FUNC_OLD)) {
-        type = arg->type;
+        memmove(&type, gsym_type(arg), sizeof_CType);
         /* need to do that to avoid false warning */
-        type.t = and(type.t, not(VT_CONSTANT));
+        sct_t(&type, and(gct_t(&type), not(VT_CONSTANT)));
         gen_assign_cast(&type);
     }
 }
