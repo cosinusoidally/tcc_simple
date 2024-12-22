@@ -313,4 +313,7 @@ int afunc_old_type;
 
 int funcname;
 
+int asym_pools;
+int anb_sym_pools;
+
 /* =============== end globals.c ========================================== */

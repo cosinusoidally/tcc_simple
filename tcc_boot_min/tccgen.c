@@ -69,10 +69,14 @@ static void gv_dup(void);
 
 extern int aint_type;
 extern int afunc_old_type;
+extern int asym_pools;
+extern int anb_sym_pools;
 
 int init_tccgen_globals(){
   aint_type = &int_type;
   afunc_old_type = &func_old_type;
+  asym_pools = &sym_pools;
+  anb_sym_pools = &nb_sym_pools;
 }
 
 /* 7 */
@@ -85,7 +89,7 @@ Sym *__sym_malloc() {
     int i;
 
     sym_pool = tcc_malloc(mul(SYM_POOL_NB, sizeof_Sym));
-    dynarray_add(&sym_pools, &nb_sym_pools, sym_pool);
+    dynarray_add(asym_pools, anb_sym_pools, sym_pool);
 
     last_sym = sym_free_first;
     sym = sym_pool;
