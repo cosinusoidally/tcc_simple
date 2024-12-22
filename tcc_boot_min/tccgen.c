@@ -82,14 +82,14 @@ int init_tccgen_globals(){
 /* 22 */
 /* define a new external reference to a symbol 'v' of type 'u' */
 ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
-    Sym *s;
+    int s;
 
     s = sym_find(v);
     if (eq(0, s)) {
         /* push forward reference */
-        s = global_identifier_push(v, or(type->t, VT_EXTERN), 0);
-        s->type.ref = type->ref;
-        s->r = or(or(r, VT_CONST), VT_SYM);
+        s = global_identifier_push(v, or(gct_t(type), VT_EXTERN), 0);
+        sct_ref(gsym_type(s), gct_ref(type));
+        ssym_r(s, or(or(r, VT_CONST), VT_SYM));
     }
     return s;
 }
@@ -97,12 +97,13 @@ ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
 /* 23 */
 /* Merge some type attributes.  */
 static void patch_type(Sym *sym, CType *type) {
-    if (eq(0, and(type->t, VT_EXTERN))) {
-        sym->type.t = and(sym->type.t, not(VT_EXTERN));
+    int static_proto;
+    if (eq(0, and(gct_t(type), VT_EXTERN))) {
+        sym->type.t = and(gct_t(gsym_type(sym)), not(VT_EXTERN));
     }
 
     if (eq(and(sym->type.t, VT_BTYPE), VT_FUNC)) {
-        int static_proto = and(sym->type.t, VT_STATIC);
+        static_proto = and(sym->type.t, VT_STATIC);
 
         if (eq(0, and(type->t, VT_EXTERN))) {
             /* put complete type, use static from prototype */
