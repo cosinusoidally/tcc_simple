@@ -82,8 +82,8 @@ int init_tccgen_globals(){
 /* 13 */
 /* push a global identifier */
 ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
-    Sym *s;
-    Sym **ps;
+    int s;
+    int ps;
     s = sym_push2(aglobal_stack, v, t, c);
     /* don't record anonymous symbol */
     if(lt(v, SYM_FIRST_ANOM)) {
