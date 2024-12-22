@@ -39,6 +39,8 @@ int init_c(){
 }
 
 int v_alloca(int x) {
+  /* round allocations to nearest 16 to avoid weird crashes */
+  x = add(16, and(x,not(15)));
   v_esp=sub(v_esp, x);
   return v_esp;
 }
