@@ -380,7 +380,7 @@ int init_runtime(){
   Sym_v_o = 0;
   Sym_r_o = 4;
   Sym_c_o = 8;
-  Sym_sym_scope_o = 8;
+  Sym_sym_scope_o = 12;
   Sym_f_func_type_o = 16;
   Sym_type_o = 20;
   Sym_next_o = 28;

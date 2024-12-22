@@ -102,7 +102,7 @@ ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
         ps = atks_sym_identifier(ts);
         ssym_prev_tok(s, ri32(ps));
         wi32(ps, s);
-        s->sym_scope = local_scope;
+        ssym_sym_scope(s, local_scope);
     }
     return s;
 }
