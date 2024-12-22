@@ -147,6 +147,9 @@ int ssym_next(int o, int v) {wi32(add(o, Sym_next_o), v);}
 int gsym_prev(int o) {return ri32(add(o, Sym_prev_o));}
 int ssym_prev(int o, int v) {wi32(add(o, Sym_prev_o), v);}
 
+int gsym_prev_tok(int o) {return ri32(add(o, Sym_prev_tok_o));}
+int ssym_prev_tok(int o, int v) {wi32(add(o, Sym_prev_tok_o), v);}
+
 /* BufferedFile accessors */
 
 int gbf_buf_ptr(int o) {return ri32(add(o, BufferedFile_buf_ptr_o));}
@@ -374,10 +377,12 @@ int init_runtime(){
   Sym_v_o = 0;
   Sym_r_o = 4;
   Sym_c_o = 8;
+  Sym_sym_scope_o = 8;
   Sym_f_func_type_o = 16;
   Sym_type_o = 20;
   Sym_next_o = 28;
   Sym_prev_o = 32;
+  Sym_prev_tok_o = 36;
   sizeof_Sym = 40;
 
   BufferedFile_buf_ptr_o = 0;

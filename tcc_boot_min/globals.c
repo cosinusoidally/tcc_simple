@@ -56,10 +56,12 @@ int sizeof_CType;
 int Sym_v_o;
 int Sym_r_o;
 int Sym_c_o;
+int Sym_sym_scope_o;
 int Sym_f_func_type_o;
 int Sym_type_o;
 int Sym_next_o;
 int Sym_prev_o;
+int Sym_prev_tok_o;
 int sizeof_Sym;
 
 int BufferedFile_buf_ptr_o;
