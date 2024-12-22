@@ -79,21 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 22 */
-/* define a new external reference to a symbol 'v' of type 'u' */
-ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
-    int s;
-
-    s = sym_find(v);
-    if (eq(0, s)) {
-        /* push forward reference */
-        s = global_identifier_push(v, or(gct_t(type), VT_EXTERN), 0);
-        sct_ref(gsym_type(s), gct_ref(type));
-        ssym_r(s, or(or(r, VT_CONST), VT_SYM));
-    }
-    return s;
-}
-
 /* 23 */
 /* Merge some type attributes.  */
 static void patch_type(Sym *sym, CType *type) {

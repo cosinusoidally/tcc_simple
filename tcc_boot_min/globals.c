@@ -165,7 +165,11 @@ int VT_CMP;
 int VT_INT;
 int VT_FUNC;
 int VT_STATIC;
+int VT_EXTERN;
 int VT_BTYPE;
+int VT_STORAGE;
+int VT_TYPE;
+
 
 int R_386_32;
 int R_386_PC32;

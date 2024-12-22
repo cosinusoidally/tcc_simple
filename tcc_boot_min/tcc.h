@@ -279,13 +279,13 @@ extern int VT_FUNC;   /*    6  function type */
 #define VT_CONSTANT    0x0100  /* const modifier */
 
 /* storage */
-#define VT_EXTERN  0x00001000  /* extern definition */
+extern int VT_EXTERN; /*  0x00001000  extern definition */
 extern int VT_STATIC; /*  0x00002000  static variable */
 /* currently unused: 0x000[1248]0000  */
 
 /* type mask (except storage) */
-#define VT_STORAGE (VT_EXTERN | VT_STATIC)
-#define VT_TYPE (~(VT_STORAGE))
+extern int VT_STORAGE;  /* (VT_EXTERN | VT_STATIC) */
+extern int VT_TYPE;     /* (~(VT_STORAGE)) */
 
 /* token values */
 

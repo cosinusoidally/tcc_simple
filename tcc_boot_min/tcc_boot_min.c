@@ -487,7 +487,10 @@ int init_runtime(){
   VT_CMP = 51;
   VT_LVAL = 256;
   VT_SYM = 512;
+  VT_EXTERN = 4096; /*  0x00001000  extern definition */
   VT_STATIC = 8192; /*  0x00002000  static variable */
+  VT_STORAGE = or(VT_EXTERN, VT_STATIC);
+  VT_TYPE = not(VT_STORAGE);
 
   R_386_32 = 1;
   R_386_PC32 = 2;
@@ -3230,6 +3233,21 @@ int get_sym_ref(int type, int sec, int offset, int size) {
     ssym_r(sym, or(VT_CONST, VT_SYM));
     put_extern_sym(sym, sec, offset, size);
     return sym;
+}
+
+/* 22 */
+/* define a new external reference to a symbol 'v' of type 'u' */
+int external_global_sym(int v, int type, int r) {
+    int s;
+
+    s = sym_find(v);
+    if (eq(0, s)) {
+        /* push forward reference */
+        s = global_identifier_push(v, or(gct_t(type), VT_EXTERN), 0);
+        sct_ref(gsym_type(s), gct_ref(type));
+        ssym_r(s, or(or(r, VT_CONST), VT_SYM));
+    }
+    return s;
 }
 
 /* end of tccgen.c */
