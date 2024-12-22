@@ -3096,6 +3096,29 @@ int sym_push(int v, int type, int r, int c) {
     return s;
 }
 
+/* 13 */
+/* push a global identifier */
+int global_identifier_push(int v, int t, int c) {
+    int s;
+    int ps;
+    s = sym_push2(aglobal_stack, v, t, c);
+    /* don't record anonymous symbol */
+    if(lt(v, SYM_FIRST_ANOM)) {
+        ps = atks_sym_identifier(ri32(add(table_ident, mul(sub(v, TOK_IDENT), 4))));
+        /* modify the top most local identifier, so that
+           sym_identifier will point to 's' when popped */
+        while (neq(ri32(ps), 0)) {
+            if(eq(0, gsym_sym_scope(ri32(ps)))) {
+                break;
+            }
+            ps = asym_prev_tok(ri32(ps));
+        }
+        ssym_prev_tok(s, ri32(ps));
+        wi32(ps, s);
+    }
+    return s;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
