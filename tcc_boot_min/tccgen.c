@@ -84,9 +84,9 @@ int init_tccgen_globals(){
 ST_INLN Sym *sym_find(int v) {
     v = sub(v, TOK_IDENT);
     if (or(lt(v, 0), gte(v, sub(tok_ident, TOK_IDENT)))) {
-        return NULL;
+        return 0;
     }
-    return table_ident[v]->sym_identifier;
+    return gtks_sym_identifier(ri32(add(table_ident, mul(v, 4))));
 }
 
 /* 12 */
