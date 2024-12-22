@@ -382,7 +382,7 @@ int decl_initializer(CType *type, Section *sec, unsigned long c,
             cstr_len = sub(cstr_len, 1);
             nb = cstr_len;
             if (eq(0, size_only)) {
-                memcpy(sec->data + c + len, gcv_str_data(atokc), nb);
+                memcpy(add(add(gs_data(sec), c), len), gcv_str_data(atokc), nb);
             }
             len = add(len, nb);
             next();
@@ -402,9 +402,9 @@ int decl_initializer(CType *type, Section *sec, unsigned long c,
     /* patch type size if needed, which happens only for array types */
     if (lt(n, 0)) {
         if(eq(size1, 1)) {
-            s->c = len;
+            ssym_c(s, len);
         } else {
-            s->c = div_(sub(add(len, size1), 1), size1);
+            ssym_c(s, div_(sub(add(len, size1), 1), size1));
         }
     }
 
