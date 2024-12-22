@@ -99,10 +99,10 @@ void gen_cast(CType *type) {
             } else {
                 m = sub(0, 1); /* 0xffffffff */
             }
-            vtop->c.i = and(gcv_i(gsv_c(vtop)), m);
+            scv_i(gsv_c(vtop), and(gcv_i(gsv_c(vtop)), m));
             if (eq(0, and(dbt, VT_UNSIGNED))) {
                 /* LJW FIXME shr might go wrong because of sign extension */
-                vtop->c.i = or(vtop->c.i, sub(0, and(vtop->c.i, add(shr(m, 1), 1))));
+                vtop->c.i = or(gcv_i(gsv_c(vtop)), sub(0, and(gcv_i(gsv_c(vtop)), add(shr(m, 1), 1))));
             }
         }
     }
