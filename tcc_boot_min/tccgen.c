@@ -138,7 +138,7 @@ int save_reg_upstack(int r, int n) {
 
 /* 34 */
 /* generic gen_op: handles types problems */
-ST_FUNC void gen_op(int op) {
+int gen_op(int op) {
     int t;
     CType type1;
 

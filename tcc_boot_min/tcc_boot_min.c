@@ -788,7 +788,7 @@ int gfunc_prolog(int func_type) {
         sym_push(and(gsym_v(sym) , not(SYM_FIELD)), type,
                  or(VT_LOCAL, lvalue_type(gct_t(type))), param_addr);
     }
-    leave(0);
+    return leave(0);
 }
 
 /* generate function epilog */
@@ -1834,7 +1834,7 @@ int tcc_output_elf(int s1, int f, int phnum, int phdr,
         i = add(i, 1);
     }
 
-    leave(0);
+    return leave(0);
 }
 
 /* Write an elf file */
@@ -2682,7 +2682,7 @@ int next_nomacro_spc() {
         next_nomacro1();
     }
 
-    leave(0);
+    return leave(0);
 }
 
 /* LJW FIXME why was the re-write so complex */
@@ -2771,7 +2771,7 @@ int preprocess_start(int s1, int is_asm) {
     parse_flags = 0;
     tok_flags = or(TOK_FLAG_BOL, TOK_FLAG_BOF);
 
-    leave(0);
+    return leave(0);
 }
 
 int tccpp_new(int s) {
@@ -2976,7 +2976,7 @@ int put_extern_sym2(int sym, int sh_num,
     }
     update_storage(sym);
 
-    leave(0);
+    return leave(0);
 }
 
 /* 4 */
@@ -3182,7 +3182,7 @@ int vswap() {
     memmove(tmp, vtop, sizeof_SValue);
     memmove(vtop, sub(vtop, sizeof_SValue), sizeof_SValue);
     memmove(sub(vtop, sizeof_SValue), tmp, sizeof_SValue);
-    leave(0);
+    return leave(0);
 }
 
 /* 17 */
@@ -3201,7 +3201,7 @@ int vpushi(int v) {
     cval = v_alloca(sizeof_CValue);
     scv_i(acv_i(cval), v);
     vsetc(aint_type, VT_CONST, cval);
-    leave(0);
+    return leave(0);
 }
 
 /* 19 */
@@ -3211,7 +3211,7 @@ int vset(int type, int r, int v) {
     cval = v_alloca(sizeof_CValue);
     scv_i(cval, v);
     vsetc(type, r, cval);
-    leave(0);
+    return leave(0);
 }
 
 /* 20 */
@@ -3223,7 +3223,7 @@ int vpushsym(int type, int sym) {
     scv_i(cval, 0);
     vsetc(type, or(VT_CONST, VT_SYM), cval);
     ssv_sym(vtop, sym);
-    leave(0);
+    return leave(0);
 }
 
 /* 21 */
