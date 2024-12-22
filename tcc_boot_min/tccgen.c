@@ -88,11 +88,11 @@ int unary() {
     int size;
     int r;
     int type;
-    Sym *s;
+    int s;
     int ad;
-    char *name;
+    int name;
     int ret;
-    Sym *sa;
+    int sa;
     int nb_args;
     int ret_nregs;
     int regsize;
