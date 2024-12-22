@@ -466,13 +466,13 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     int v;
     int has_init;
     int r;
-    CType type;
+    int type;
     int btype;
     Sym *sym;
     AttributeDef ad;
 
     enter();
-    v_alloca(sizeof_CType);
+    type = v_alloca(sizeof_CType);
     btype = v_alloca(sizeof_CType);
     v_alloca(2*sizeof_AttributeDef); /* FIXME shouldn't have to double */
 
@@ -481,12 +481,12 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 break;
         }
         while (1) { /* iterate thru each declaration */
-            memmove(&type, btype, sizeof_CType);
-            type_decl(&type, &ad, &v);
-            if (eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)) {
+            memmove(type, btype, sizeof_CType);
+            type_decl(type, &ad, &v);
+            if (eq(and(gct_t(type), VT_BTYPE), VT_FUNC)) {
                 /* if old style function prototype, we accept a
                    declaration list */
-                sym = gct_ref(&type);
+                sym = gct_ref(type);
                 if (and(eq(sym->f.func_type, FUNC_OLD), eq(l, VT_CONST))) {
                     decl0(VT_CMP, 0, sym);
                 }
@@ -494,9 +494,9 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
 
             if (eq(tok, mkc('{'))) {
                 /* put function symbol */
-                sym = external_global_sym(v, &type, 0);
-                sct_t(&type, and(gct_t(&type), not(VT_EXTERN)));
-                patch_storage(sym, &ad, &type);
+                sym = external_global_sym(v, type, 0);
+                sct_t(type, and(gct_t(type), not(VT_EXTERN)));
+                patch_storage(sym, &ad, type);
 
                 /* compute text section */
                 cur_text_section = ad.section;
@@ -507,33 +507,33 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 break;
             } else {
                     r = 0;
-                    if (eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)) {
+                    if (eq(and(gct_t(type), VT_BTYPE), VT_FUNC)) {
                         /* external function definition */
                         /* specific case for func_call attribute */
-                        ssym_f_func_type(gct_ref(&type), gad_f_func_type(&ad));
-                    } else if (eq(0, and(type.t, VT_ARRAY))) {
+                        ssym_f_func_type(gct_ref(type), gad_f_func_type(&ad));
+                    } else if (eq(0, and(gct_t(type), VT_ARRAY))) {
                         /* not lvalue if array */
-                        r = or(r, lvalue_type(type.t));
+                        r = or(r, lvalue_type(gct_t(type)));
                     }
                     has_init = eq(tok, mkc('='));
-                    if (or(or(and(and(gct_t(&type), VT_EXTERN),
+                    if (or(or(and(and(gct_t(type), VT_EXTERN),
                                   or(eq(0,has_init), neq(l, VT_CONST))),
-			          eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)),
-                             ((and(and(gct_t(&type), VT_ARRAY),
-                                      and(gct_t(&type), VT_STATIC)))))) {
+			          eq(and(gct_t(type), VT_BTYPE), VT_FUNC)),
+                             ((and(and(gct_t(type), VT_ARRAY),
+                                      and(gct_t(type), VT_STATIC)))))) {
                         /* external variable or function */
                         /* NOTE: as GCC, uninitialized global static
                            arrays of null size are considered as
                            extern */
-                        sct_t(&type, or(gct_t(&type), VT_EXTERN));
-                        sym = external_sym(v, &type, r, &ad);
+                        sct_t(type, or(gct_t(type), VT_EXTERN));
+                        sym = external_sym(v, type, r, &ad);
                     } else {
                         r = or(r, l);
                         if (eq(l, VT_CONST)) {
                             /* uninitialized global variables may be overridden */
-                            sct_t(&type, or(gct_t(&type), VT_EXTERN));
+                            sct_t(type, or(gct_t(type), VT_EXTERN));
                         }
-                        decl_initializer_alloc(&type, &ad, r, has_init, v, l);
+                        decl_initializer_alloc(type, &ad, r, has_init, v, l);
                     }
                 if (neq(tok, mkc(','))) {
                     skip(mkc(';'));
