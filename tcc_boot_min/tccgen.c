@@ -87,11 +87,11 @@ ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
     s = sym_malloc();
     memset(s, 0, sizeof_Sym);
     ssym_v(s, v);
-    s->type.t = t;
-    s->c = c;
+    sct_t(gsym_type(s), t);
+    ssym_c(s, c);
     /* add in stack */
-    s->prev = *ps;
-    *ps = s;
+    ssym_prev(s, ri32(ps));
+    wi32(ps, s);
     return s;
 }
 

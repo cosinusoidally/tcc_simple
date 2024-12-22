@@ -140,6 +140,10 @@ int gsym_type(int o) {return add(o, Sym_type_o);} /* CType type */
 int gsym_next(int o) {return ri32(add(o, Sym_next_o));}
 int ssym_next(int o, int v) {wi32(add(o, Sym_next_o), v);}
 
+/* struct Sym *prev */
+int gsym_prev(int o) {return ri32(add(o, Sym_prev_o));}
+int ssym_prev(int o, int v) {wi32(add(o, Sym_prev_o), v);}
+
 /* BufferedFile accessors */
 
 int gbf_buf_ptr(int o) {return ri32(add(o, BufferedFile_buf_ptr_o));}
@@ -368,6 +372,7 @@ int init_runtime(){
   Sym_f_func_type_o = 16;
   Sym_type_o = 20;
   Sym_next_o = 28;
+  Sym_prev_o = 32;
   sizeof_Sym = 40;
 
   BufferedFile_buf_ptr_o = 0;

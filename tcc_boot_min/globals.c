@@ -58,6 +58,7 @@ int Sym_c_o;
 int Sym_f_func_type_o;
 int Sym_type_o;
 int Sym_next_o;
+int Sym_prev_o;
 int sizeof_Sym;
 
 int BufferedFile_buf_ptr_o;
