@@ -510,7 +510,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                     if (eq(and(gct_t(&type), VT_BTYPE), VT_FUNC)) {
                         /* external function definition */
                         /* specific case for func_call attribute */
-                        type.ref->f = ad.f;
+                        ssym_f_func_type(gct_ref(&type), gad_f_func_type(&ad));
                     } else if (eq(0, and(type.t, VT_ARRAY))) {
                         /* not lvalue if array */
                         r = or(r, lvalue_type(type.t));
