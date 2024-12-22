@@ -55,7 +55,7 @@ static int is_compatible_types(CType *type1, CType *type2);
 static CType *type_decl(CType *type, AttributeDef *ad, int *v);
 static void init_putv(CType *type, Section *sec, unsigned long c);
 int decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
-void block(int *bsym, int *csym, int is_expr);
+int block(int *bsym, int *csym, int is_expr);
 int decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
 void decl(int l);
 int decl0(int l, int is_for_loop_init, Sym *);
@@ -81,13 +81,19 @@ int init_tccgen_globals(){
 }
 
 /* 51 */
-void block(int *bsym, int *csym, int is_expr) {
+int block(int *bsym, int *csym, int is_expr) {
     int a;
     int b;
     int c;
     int d;
     Sym *s;
     Sym *llabel;
+
+    enter();
+
+    /* FIXME something is definitely wrong */
+    v_alloca(1024);
+    v_alloca(16);
 
     if (eq(tok, TOK_IF)) {
         /* if test */
@@ -151,8 +157,8 @@ void block(int *bsym, int *csym, int is_expr) {
         next();
         if (neq(tok, mkc(';'))) {
             gexpr();
-            gen_assign_cast(&func_vt);
-            gfunc_return(&func_vt);
+            gen_assign_cast(afunc_vt);
+            gfunc_return(afunc_vt);
         }
         skip(mkc(';'));
         /* jump unless last stmt in top-level block */
@@ -171,4 +177,6 @@ void block(int *bsym, int *csym, int is_expr) {
         }
         skip(mkc(';'));
     }
+
+    return leave(0);
 }
