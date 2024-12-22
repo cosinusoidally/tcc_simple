@@ -126,7 +126,7 @@ int save_reg_upstack(int r, int n) {
                 saved = 1;
             }
             /* mark that stack entry as being saved on the stack */
-            ssv_r(p, or(lvalue_type(p->type.t), VT_LOCAL));
+            ssv_r(p, or(lvalue_type(gct_t(gsv_type(p))), VT_LOCAL));
             scv_i(gsv_c(p), l);
         }
         p = add(p, sizeof_SValue);
