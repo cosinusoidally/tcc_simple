@@ -3860,6 +3860,94 @@ int gen_function(int sym) {
     ind = 0; /* for safety */
 }
 
+/* 56 */
+/* 'l' is VT_LOCAL or VT_CONST to define default storage type, or VT_CMP
+   if parsing old style parameter decl list (and FUNC_SYM is set then) */
+int decl0(int l, int is_for_loop_init, int func_sym) {
+    int v;
+    int has_init;
+    int r;
+    int type;
+    int btype;
+    int sym;
+    int ad;
+
+    enter();
+    type = v_alloca(sizeof_CType);
+    btype = v_alloca(sizeof_CType);
+    ad = v_alloca(mul(2,sizeof_AttributeDef)); /* FIXME shouldn't have to double */
+    v = v_alloca(4);
+
+    while (1) {
+        if (eq(0, parse_btype(btype, ad))) {
+                break;
+        }
+        while (1) { /* iterate thru each declaration */
+            memmove(type, btype, sizeof_CType);
+            type_decl(type, ad, v);
+            if (eq(and(gct_t(type), VT_BTYPE), VT_FUNC)) {
+                /* if old style function prototype, we accept a
+                   declaration list */
+                sym = gct_ref(type);
+                if (and(eq(gsym_f_func_type(sym), FUNC_OLD), eq(l, VT_CONST))) {
+                    decl0(VT_CMP, 0, sym);
+                }
+            }
+
+            if (eq(tok, mkc('{'))) {
+                /* put function symbol */
+                sym = external_global_sym(ri32(v), type, 0);
+                sct_t(type, and(gct_t(type), not(VT_EXTERN)));
+                patch_storage(sym, ad, type);
+
+                /* compute text section */
+                cur_text_section = gad_section(ad);
+                if (eq(0, cur_text_section)) {
+                    cur_text_section = text_section;
+                }
+                gen_function(sym);
+                break;
+            } else {
+                    r = 0;
+                    if (eq(and(gct_t(type), VT_BTYPE), VT_FUNC)) {
+                        /* external function definition */
+                        /* specific case for func_call attribute */
+                        ssym_f_func_type(gct_ref(type), gad_f_func_type(ad));
+                    } else if (eq(0, and(gct_t(type), VT_ARRAY))) {
+                        /* not lvalue if array */
+                        r = or(r, lvalue_type(gct_t(type)));
+                    }
+                    has_init = eq(tok, mkc('='));
+                    if (or(or(and(and(gct_t(type), VT_EXTERN),
+                                  or(eq(0,has_init), neq(l, VT_CONST))),
+                                  eq(and(gct_t(type), VT_BTYPE), VT_FUNC)),
+                             ((and(and(gct_t(type), VT_ARRAY),
+                                      and(gct_t(type), VT_STATIC)))))) {
+                        /* external variable or function */
+                        /* NOTE: as GCC, uninitialized global static
+                           arrays of null size are considered as
+                           extern */
+                        sct_t(type, or(gct_t(type), VT_EXTERN));
+                        sym = external_sym(ri32(v), type, r, ad);
+                    } else {
+                        r = or(r, l);
+                        if (eq(l, VT_CONST)) {
+                            /* uninitialized global variables may be overridden */
+                            sct_t(type, or(gct_t(type), VT_EXTERN));
+                        }
+                        decl_initializer_alloc(type, ad, r, has_init, ri32(v), l);
+                    }
+                if (neq(tok, mkc(','))) {
+                    skip(mkc(';'));
+                    break;
+                }
+            }
+        }
+    }
+    return leave(0);
+}
+
+
 /* 57 */
 int decl(int l) {
     decl0(l, 0, 0);
