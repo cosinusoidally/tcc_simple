@@ -3344,6 +3344,42 @@ int get_reg(int rc) {
     }
 }
 
+/* 30 */
+/* store vtop a register belonging to class 'rc'. lvalues are
+   converted to values. Cannot be used if cannot be converted to
+   register value (such as structures). */
+int gv(int rc) {
+    int r;
+    int t1;
+    int t;
+
+    r = and(gsv_r(vtop), VT_VALMASK);
+    /* need to reload if:
+       - constant
+       - lvalue (need to dereference pointer)
+       - already a register, but not in the right class */
+    if (or(or(gte(r, VT_CONST),
+              and(gsv_r(vtop), VT_LVAL)),
+              eq(0, and(ri32(add(reg_classes, mul(r, 4))), rc)))) {
+        r = get_reg(rc);
+        if (and(gsv_r(vtop), VT_LVAL)) {
+            /* lvalue of scalar type : need to use lvalue type
+               because of possible cast */
+            t = gct_t(gsv_type(vtop));
+            t1 = t;
+            sct_t(gsv_type(vtop), t);
+            load(r, vtop);
+            /* restore wanted type */
+            sct_t(gsv_type(vtop), t1);
+        } else {
+            /* one register type load */
+            load(r, vtop);
+        }
+    }
+    ssv_r(vtop, r);
+    return r;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
