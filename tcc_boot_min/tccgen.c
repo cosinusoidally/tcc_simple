@@ -107,8 +107,8 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
                 type_size(&pt, &align);
                 convert_parameter_type(&pt);
                 s = sym_push(or(n, SYM_FIELD), &pt, 0, 0);
-                *plast = s;
-                plast = &s->next;
+                wi32(plast, s);
+                plast = asym_next(s);
                 if (eq(tok, mkc(')'))) {
                     break;
                 }
