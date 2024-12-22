@@ -79,45 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 15 */
-static void vsetc(CType *type, int r, CValue *vc) {
-    vtop = add(vtop, sizeof_SValue);
-    memmove(asv_type(vtop), type, sizeof_CType);
-    ssv_r(vtop, r);
-    memmove(gsv_c(vtop), vc, sizeof_CValue);
-    ssv_sym(vtop, 0);
-}
-
-/* 16 */
-ST_FUNC void vswap() {
-    int tmp;
-    enter();
-    tmp = v_alloca(sizeof_SValue);
-    memmove(tmp, vtop, sizeof_SValue);
-    memmove(vtop, sub(vtop, sizeof_SValue), sizeof_SValue);
-    memmove(sub(vtop, sizeof_SValue), tmp, sizeof_SValue);
-    leave(0);
-}
-
-/* 17 */
-/* pop stack value */
-ST_FUNC void vpop() {
-    int v;
-    v = and(gsv_r(vtop), VT_VALMASK);
-    vtop = sub(vtop, sizeof_SValue);
-}
-
-/* 18 */
-/* push integer constant */
-ST_FUNC void vpushi(int v) {
-    int cval;
-    enter();
-    cval = v_alloca(sizeof_CValue);
-    scv_i(acv_i(cval), v);
-    vsetc(aint_type, VT_CONST, cval);
-    leave(0);
-}
-
 /* 19 */
 ST_FUNC void vset(CType *type, int r, int v) {
     int cval;
