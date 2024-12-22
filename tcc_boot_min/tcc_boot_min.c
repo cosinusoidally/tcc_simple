@@ -2941,6 +2941,17 @@ int put_extern_sym2(int sym, int sh_num,
     leave(0);
 }
 
+/* 4 */
+int put_extern_sym(int sym, int section, int value, int size) {
+    int sh_num;
+    if(section) {
+        sh_num = gs_sh_num(section);
+    } else {
+        sh_num = SHN_UNDEF;
+    }
+    put_extern_sym2(sym, sh_num, value, size, 1);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {

@@ -75,18 +75,6 @@ int init_tccgen_globals(){
   afunc_old_type = &func_old_type;
 }
 
-/* 4 */
-ST_FUNC void put_extern_sym(Sym *sym, Section *section,
-                           addr_t value, unsigned long size) {
-    int sh_num;
-    if(section) {
-        sh_num = section->sh_num;
-    } else {
-        sh_num = SHN_UNDEF;
-    }
-    put_extern_sym2(sym, sh_num, value, size, 1);
-}
-
 /* 5 */
 /* add a new relocation entry to symbol 'sym' in section 's' */
 ST_FUNC void greloca(Section *s, Sym *sym, unsigned long offset, int type,
