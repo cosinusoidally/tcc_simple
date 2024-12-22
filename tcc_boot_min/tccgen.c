@@ -34,7 +34,6 @@ ST_DATA int nb_sym_pools;
 
 ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
-ST_DATA Sym *local_label_stack;
 extern int local_scope;
 extern int section_sym;
 
@@ -78,106 +77,4 @@ int init_tccgen_globals(){
   afunc_vt = &func_vt;
   asym_pools = &sym_pools;
   anb_sym_pools = &nb_sym_pools;
-}
-
-/* 51 */
-int block(int *bsym, int *csym, int is_expr) {
-    int a;
-    int b;
-    int c;
-    int d;
-    Sym *s;
-    Sym *llabel;
-
-    enter();
-
-    /* FIXME something is definitely wrong */
-    v_alloca(1024);
-    a = v_alloca(16);
-    b = v_alloca(16);
-
-    if (eq(tok, TOK_IF)) {
-        /* if test */
-        next();
-        skip(mkc('('));
-        gexpr();
-        skip(mkc(')'));
-        wi32(a, gvtst(1, 0));
-        block(bsym, csym, 0);
-        c = tok;
-        if (eq(c, TOK_ELSE)) {
-            next();
-            d = gjmp(0);
-            gsym(ri32(a));
-            block(bsym, csym, 0);
-            gsym(d); /* patch else jmp */
-        } else {
-            gsym(ri32(a));
-        }
-    } else if(eq(tok, TOK_WHILE)) {
-        next();
-        d = ind;
-        skip(mkc('('));
-        gexpr();
-        skip(mkc(')'));
-        wi32(a, gvtst(1, 0));
-        wi32(b, 0);
-        local_scope = add(local_scope, 1);
-        block(a, b, 0);
-        local_scope = sub(local_scope, 1);
-        gjmp_addr(d);
-        gsym(ri32(a));
-        gsym_addr(ri32(b), d);
-    } else if (eq(tok, mkc('{'))) {
-
-        next();
-        /* record local declaration stack position */
-        s = local_stack;
-        llabel = local_label_stack;
-        local_scope = add(local_scope, 1);
-        
-        while (neq(tok, mkc('}'))) {
-	    decl(VT_LOCAL);
-            if (neq(tok, mkc('}'))) {
-                block(bsym, csym, is_expr);
-            }
-        }
-        /* pop locally defined symbols */
-        local_scope = sub(local_scope, 1);
-	/* In the is_expr case (a statement expression is finished here),
-	   vtop might refer to symbols on the local_stack.  Either via the
-	   type or via vtop->sym.  We can't pop those nor any that in turn
-	   might be referred to.  To make it easier we don't roll back
-	   any symbols in that case; some upper level call to block() will
-	   do that.  We do have to remove such symbols from the lookup
-	   tables, though.  sym_pop will do that.  */
-	sym_pop(alocal_stack, s, is_expr);
-
-        next();
-    } else if(eq(tok, TOK_RETURN)) {
-        next();
-        if (neq(tok, mkc(';'))) {
-            gexpr();
-            gen_assign_cast(afunc_vt);
-            gfunc_return(afunc_vt);
-        }
-        skip(mkc(';'));
-        /* jump unless last stmt in top-level block */
-        if(or(neq(tok, mkc('}')), neq(local_scope, 1))) {
-            rsym = gjmp(rsym);
-        }
-    } else if(eq(tok, TOK_BREAK)) {
-        /* compute jump */
-        wi32(bsym, gjmp(ri32(bsym)));
-        next();
-        skip(';');
-    } else {
-        if (neq(tok, mkc(';'))) {
-                gexpr();
-                vpop();
-        }
-        skip(mkc(';'));
-    }
-
-    return leave(0);
 }

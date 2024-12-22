@@ -233,6 +233,8 @@ int STT_OBJECT;
 int aglobal_stack;
 int alocal_stack;
 
+int local_label_stack;
+
 int O_RDONLY;
 int O_BINARY;
 

@@ -431,7 +431,7 @@ ST_DATA int nb_sym_pools;
 
 ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
-ST_DATA Sym *local_label_stack;
+extern Sym *local_label_stack;
 ST_DATA Sym *global_label_stack;
 ST_DATA CType char_pointer_type, func_old_type, int_type, size_type;
 ST_DATA SValue vstack[VSTACK_SIZE], *pvtop;
