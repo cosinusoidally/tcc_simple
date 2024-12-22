@@ -111,13 +111,13 @@ Sym *sym_malloc(void) {
     if (eq(sym, 0)) {
         sym = __sym_malloc();
     }
-    sym_free_first = sym->next;
+    sym_free_first = gsym_next(sym);
     return sym;
 }
 
 /* 9 */
 void sym_free(Sym *sym) {
-    sym->next = sym_free_first;
+    ssym_next(sym, sym_free_first);
     sym_free_first = sym;
 }
 
