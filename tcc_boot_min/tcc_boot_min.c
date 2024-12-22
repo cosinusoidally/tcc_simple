@@ -3574,6 +3574,26 @@ int mk_pointer(int type) {
     sct_ref(type, s);
 }
 
+/* 39 */
+/* verify type compatibility to store vtop in 'dt' type, and generate
+   casts if needed. */
+int gen_assign_cast(int dt) {
+    gen_cast(dt);
+}
+
+/* 40 */
+/* store vtop in lvalue pushed on stack */
+int vstore() {
+    int r;
+
+    gen_assign_cast(gsv_type(sub(vtop, sizeof_SValue)));
+    r = gv(RC_INT);  /* generate value */
+    store(r, sub(vtop, sizeof_SValue));
+    vswap();
+
+    /* NOT vpop() because on x86 it would flush the fp stack */
+    vtop = sub(vtop, sizeof_SValue);
+}
 
 /* end of tccgen.c */
 

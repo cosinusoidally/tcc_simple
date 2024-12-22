@@ -79,27 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 39 */
-/* verify type compatibility to store vtop in 'dt' type, and generate
-   casts if needed. */
-static void gen_assign_cast(CType *dt) {
-    gen_cast(dt);
-}
-
-/* 40 */
-/* store vtop in lvalue pushed on stack */
-ST_FUNC void vstore(void) {
-    int r;
-
-    gen_assign_cast(gsv_type(sub(vtop, sizeof_SValue)));
-    r = gv(RC_INT);  /* generate value */
-    store(r, sub(vtop, sizeof_SValue));
-    vswap();
-
-    /* NOT vpop() because on x86 it would flush the fp stack */
-    vtop = sub(vtop, sizeof_SValue);
-}
-
 /* 41 */
 /* return 0 if no type declaration. otherwise, return the basic type
    and skip it. 
