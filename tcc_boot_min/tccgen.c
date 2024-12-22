@@ -92,7 +92,8 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     SValue sv;
     CType *type;
 
-    if (gte((r &= VT_VALMASK), VT_CONST)) {
+    r = and(r, VT_VALMASK);
+    if (gte(r, VT_CONST)) {
         return;
     }
 
@@ -100,7 +101,7 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     saved = 0;
     l = 0;
     p = vstack;
-    p1 = vtop - n;
+    p1 = sub(vtop, mul(n, sizeof_SValue));
     while(lte(p, p1)) {
         if (eq(and(p->r, VT_VALMASK), r)) {
             /* must save value on stack if not already done */
