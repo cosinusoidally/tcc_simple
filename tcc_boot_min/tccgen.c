@@ -196,7 +196,7 @@ void unary() {
 	ssv_sym(vtop, s);
 
         if (and(r, VT_SYM)) {
-            vtop->c.i = 0;
+            scv_i(gsv_c(vtop), 0);
         }
     }
     
@@ -204,11 +204,11 @@ void unary() {
     while (1) {
         if (eq(tok, mkc('('))) {
 
-            vtop->r = and(vtop->r, not(VT_LVAL)); /* no lvalue */
+            ssv_r(vtop, and(gsv_r(vtop), not(VT_LVAL))); /* no lvalue */
             /* get return type */
             s = vtop->type.ref;
             next();
-            sa = s->next; /* first parameter */
+            sa = gsym_next(s); /* first parameter */
             nb_args = 0;
             regsize = 0;
             ret_nregs = 1;
