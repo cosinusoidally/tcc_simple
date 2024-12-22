@@ -366,23 +366,23 @@ int decl_initializer(CType *type, Section *sec, unsigned long c,
     enter();
     align1 = v_alloca(4);
 
-    s = type->ref;
-    n = s->c;
+    s = gct_ref(type);
+    n = gsym_c(s);
     t1 = pointed_type(type);
     size1 = type_size(t1, align1);
 
     /* only parse strings here if correct type (otherwise: handle
        them as ((w)char *) expressions */
-    if (or(eq(and(t1->t, VT_BTYPE), VT_INT),
-        and(eq(tok, TOK_STR), eq(and(t1->t, VT_BTYPE), VT_BYTE)))) {
+    if (or(eq(and(gct_t(t1), VT_BTYPE), VT_INT),
+        and(eq(tok, TOK_STR), eq(and(gct_t(t1), VT_BTYPE), VT_BYTE)))) {
         len = 0;
         while (eq(tok, TOK_STR)) {
 
-            cstr_len = tokc.str.size;
+            cstr_len = gcv_str_size(atokc);
             cstr_len = sub(cstr_len, 1);
             nb = cstr_len;
             if (eq(0, size_only)) {
-                memcpy(sec->data + c + len, tokc.str.data, nb);
+                memcpy(sec->data + c + len, gcv_str_data(atokc), nb);
             }
             len = add(len, nb);
             next();
