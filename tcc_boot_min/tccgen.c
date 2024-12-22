@@ -79,36 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 35 */
-void gen_cast(CType *type) {
-    int sbt;
-    int dbt;
-    int c;
-    int p;
-    int m;
-
-    dbt = and(gct_t(type), or(VT_BTYPE, VT_UNSIGNED));
-    sbt = and(gct_t(gsv_type(vtop)), or(VT_BTYPE, VT_UNSIGNED));
-
-    if (neq(sbt, dbt)) {
-        c = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-        p = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
-        if (c) {
-            if(eq(and(dbt, VT_BTYPE), VT_BYTE)) {
-                m = 255;
-            } else {
-                m = sub(0, 1); /* 0xffffffff */
-            }
-            scv_i(gsv_c(vtop), and(gcv_i(gsv_c(vtop)), m));
-            if (eq(0, and(dbt, VT_UNSIGNED))) {
-                /* LJW FIXME shr might go wrong because of sign extension */
-                scv_i(gsv_c(vtop), or(gcv_i(gsv_c(vtop)), sub(0, and(gcv_i(gsv_c(vtop)), add(shr(m, 1), 1)))));
-            }
-        }
-    }
-    memmove(gsv_type(vtop), type, sizeof_CType);
-}
-
 /* 36 */
 /* return type size as known at compile time. Put alignment at 'a' */
 ST_FUNC int type_size(CType *type, int *a) {

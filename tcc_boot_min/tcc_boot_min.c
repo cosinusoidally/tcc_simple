@@ -480,9 +480,11 @@ int init_runtime(){
   FUNC_PROLOG_SIZE = 9;
 
 
+  VT_BYTE = 1;    /*   signed byte type */
   VT_INT = 3;    /*    3  integer type */
   VT_FUNC = 6;   /*    6 function type */
   VT_BTYPE = 15; /*    0x000f  mask for basic type */
+  VT_UNSIGNED = 16; /* 0x0010  unsigned type */
   VT_VALMASK = 63;
   VT_CONST = 48;
   VT_LOCAL = 50;
@@ -3500,6 +3502,36 @@ int gen_op(int op) {
     /* relational op: the result is an int */
     sct_t(gsv_type(vtop), VT_INT);
     return leave(0);
+}
+
+/* 35 */
+int gen_cast(int type) {
+    int sbt;
+    int dbt;
+    int c;
+    int p;
+    int m;
+
+    dbt = and(gct_t(type), or(VT_BTYPE, VT_UNSIGNED));
+    sbt = and(gct_t(gsv_type(vtop)), or(VT_BTYPE, VT_UNSIGNED));
+
+    if (neq(sbt, dbt)) {
+        c = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+        p = eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), or(VT_CONST, VT_SYM));
+        if (c) {
+            if(eq(and(dbt, VT_BTYPE), VT_BYTE)) {
+                m = 255;
+            } else {
+                m = sub(0, 1); /* 0xffffffff */
+            }
+            scv_i(gsv_c(vtop), and(gcv_i(gsv_c(vtop)), m));
+            if (eq(0, and(dbt, VT_UNSIGNED))) {
+                /* LJW FIXME shr might go wrong because of sign extension */
+                scv_i(gsv_c(vtop), or(gcv_i(gsv_c(vtop)), sub(0, and(gcv_i(gsv_c(vtop)), add(shr(m, 1), 1)))));
+            }
+        }
+    }
+    memmove(gsv_type(vtop), type, sizeof_CType);
 }
 
 /* end of tccgen.c */

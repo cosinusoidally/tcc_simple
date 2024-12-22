@@ -169,6 +169,8 @@ int VT_EXTERN;
 int VT_BTYPE;
 int VT_STORAGE;
 int VT_TYPE;
+int VT_BYTE;
+int VT_UNSIGNED;
 
 
 int R_386_32;

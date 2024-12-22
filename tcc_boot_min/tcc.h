@@ -269,12 +269,12 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 
 /* types */
 extern int VT_BTYPE;  /*    0x000f   mask for basic type */
-#define VT_BYTE             1  /* signed byte type */
+extern int VT_BYTE;   /*    1  signed byte type */
 extern int VT_INT;    /*    3  integer type */
 #define VT_PTR              5  /* pointer */
 extern int VT_FUNC;   /*    6  function type */
 
-#define VT_UNSIGNED    0x0010  /* unsigned type */
+extern int VT_UNSIGNED;  /*  0x0010  unsigned type */
 #define VT_ARRAY       0x0040  /* array type (also has VT_PTR) */
 #define VT_CONSTANT    0x0100  /* const modifier */
 
