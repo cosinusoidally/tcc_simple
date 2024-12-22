@@ -93,6 +93,8 @@ int gs_name(int o) {return add(o, Section_name_o);}
 
 /* SValue accessors */
 
+int asv_type(int o) {return add(o, SValue_type_o);}
+
 int gsv_r(int o) {return ri32(add(o, SValue_r_o));} /* int r */
 int ssv_r(int o, int v) {wi32(add(o, SValue_r_o), v);}
 
