@@ -143,11 +143,11 @@ int save_reg_upstack(int r, int n) {
 ST_FUNC int gvtst(int inv, int t) {
     int v;
 
-    v = and(vtop->r, VT_VALMASK);
+    v = and(gsv_r(vtop), VT_VALMASK);
     vpushi(0);
     gen_op(TOK_NE);
-    if (eq(and(vtop->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST)) {
-        vtop = vtop - 1;
+    if (eq(and(gsv_r(vtop), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST)) {
+        vtop = sub(vtop, sizeof_SValue);
         return t;
     }
     return gtst(inv, t);
@@ -162,14 +162,14 @@ static void gen_opic(int op) {
     int c1;
     int c2;
 
-    v1 = vtop - 1;
+    v1 = sub(vtop, sizeof_SValue);
     v2 = vtop;
-    c1 = eq(and(v1->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
-    c2 = eq(and(v2->r, or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+    c1 = eq(and(gsv_r(v1), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
+    c2 = eq(and(gsv_r(v2), or(or(VT_VALMASK, VT_LVAL), VT_SYM)), VT_CONST);
 
     if (and(c1, c2)) {
-        v1->c.i = 1;
-        vtop = vtop - 1;
+        scv_i(gsv_c(v1), 1);
+        vtop = sub(vtop, sizeof_SValue);
     } else {
         gen_opi(op);
     }
