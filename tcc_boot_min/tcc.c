@@ -19,7 +19,6 @@
  */
 
 #include "tcc.h"
-#include "tccgen.c"
 
 static TokenSym *hash_ident[TOK_HASH_SIZE];
 static char token_buf[STRING_MAX_SIZE + 1];
@@ -57,3 +56,5 @@ int init_globals() {
     aglobal_stack = &global_stack;
     alocal_stack = &local_stack;
 }
+
+#include "tccgen.c"
