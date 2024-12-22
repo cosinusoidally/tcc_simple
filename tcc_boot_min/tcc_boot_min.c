@@ -150,6 +150,7 @@ int ssym_next(int o, int v) {wi32(add(o, Sym_next_o), v);}
 int gsym_prev(int o) {return ri32(add(o, Sym_prev_o));}
 int ssym_prev(int o, int v) {wi32(add(o, Sym_prev_o), v);}
 
+int asym_prev_tok(int o) {return add(o, Sym_prev_tok_o);}
 int gsym_prev_tok(int o) {return ri32(add(o, Sym_prev_tok_o));}
 int ssym_prev_tok(int o, int v) {wi32(add(o, Sym_prev_tok_o), v);}
 
