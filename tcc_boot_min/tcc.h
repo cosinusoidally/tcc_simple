@@ -280,7 +280,7 @@ extern int VT_FUNC;   /*    6  function type */
 
 /* storage */
 #define VT_EXTERN  0x00001000  /* extern definition */
-#define VT_STATIC  0x00002000  /* static variable */
+extern int VT_STATIC; /*  0x00002000  static variable */
 /* currently unused: 0x000[1248]0000  */
 
 /* type mask (except storage) */

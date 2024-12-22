@@ -459,6 +459,7 @@ int init_runtime(){
   VT_CMP = 51;
   VT_LVAL = 256;
   VT_SYM = 512;
+  VT_STATIC = 8192; /*  0x00002000  static variable */
 
   R_386_32 = 1;
   R_386_PC32 = 2;
