@@ -3316,6 +3316,34 @@ int save_reg(int r) {
     save_reg_upstack(r, 0);
 }
 
+/* 29 */
+/* find a free register of class 'rc'. If none, save one register */
+int get_reg(int rc) {
+    int r;
+    int notfound;
+    int p;
+
+    /* find a free register */
+    r = 0;
+    while(lt(r, 5)) { /* NB_REGS is 5 (sort of) */
+        notfound = 0;
+        if (and(ri32(add(reg_classes, mul(r,4))), rc)) {
+            p = avstack;
+            while(lte(p, vtop)) {
+                if (eq(and(gsv_r(p), VT_VALMASK), r)) {
+                    notfound = 1;
+                    break;
+                }
+                p = add(p, sizeof_SValue);
+            }
+            if(eq(notfound, 0)) {
+                return r;
+            }
+        }
+        r = add(r, 1);
+    }
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
