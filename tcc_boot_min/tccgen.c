@@ -87,7 +87,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     int align;
     Sym **plast;
     Sym *s;
-    Sym *first;
+    int first;
     int ad1;
     int pt;
 
@@ -95,6 +95,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     /* FIXME there is some bug with the v_alloca function should be 4 */
     ad1 = v_alloca(16);
     align = v_alloca(16);
+    first = v_alloca(16);
     pt = v_alloca(sizeof_CType);
 
     if (eq(tok, mkc('('))) {
@@ -106,8 +107,8 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
             parse_btype(pt, ad1);
             l = FUNC_NEW;
         }
-        first = 0;
-        plast = &first;
+        wi32(first, 0);
+        plast = first;
         if (l) {
             while(1) {
                 /* read param name and compute offset */
@@ -135,7 +136,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
         ssym_f_func_type(s, ad->f);
-        ssym_next(s, first);
+        ssym_next(s, ri32(first));
         sct_t(type, VT_FUNC);
         sct_ref(type, s);
     }
