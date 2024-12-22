@@ -159,12 +159,12 @@ void unary() {
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
 	t = VT_INT;
 	sct_t(&type, t);
-	vsetc(&type, VT_CONST, &tokc);
+	vsetc(&type, VT_CONST, atokc);
         next();
     } else if(eq(tok, TOK_CUINT)) {
         t = or(VT_INT, VT_UNSIGNED);
 	sct_t(&type, t);
-	vsetc(&type, VT_CONST, &tokc);
+	vsetc(&type, VT_CONST, atokc);
         next();
     } else if(eq(tok, TOK_STR)) {
         /* string parsing */
