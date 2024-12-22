@@ -35,7 +35,7 @@ ST_DATA int nb_sym_pools;
 ST_DATA Sym *global_stack;
 ST_DATA Sym *local_stack;
 ST_DATA Sym *local_label_stack;
-static int local_scope;
+extern int local_scope;
 extern int section_sym;
 
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */

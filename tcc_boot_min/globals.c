@@ -322,4 +322,6 @@ int anb_sym_pools;
 
 int sym_free_first;
 
+int local_scope;
+
 /* =============== end globals.c ========================================== */
