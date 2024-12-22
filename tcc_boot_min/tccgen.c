@@ -161,7 +161,7 @@ void block(int *bsym, int *csym, int is_expr) {
         }
     } else if(eq(tok, TOK_BREAK)) {
         /* compute jump */
-        *bsym = gjmp(*bsym);
+        wi32(bsym, gjmp(ri32(bsym)));
         next();
         skip(';');
     } else {
