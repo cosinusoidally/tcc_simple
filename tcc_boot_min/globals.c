@@ -142,6 +142,7 @@ int sizeof_int;
 
 int tcc_state;
 
+int FUNC_OLD;
 int FUNC_PROLOG_SIZE;
 
 int ind;
@@ -153,6 +154,8 @@ int VT_CONST;
 int VT_LOCAL;
 int VT_LVAL;
 int VT_CMP;
+int VT_INT;
+int VT_FUNC;
 
 int R_386_32;
 int R_386_PC32;
@@ -191,6 +194,8 @@ int SHT_SYMTAB;
 
 int STB_LOCAL;
 int STB_GLOBAL;
+
+int STT_FILE;
 
 int aglobal_stack;
 int alocal_stack;
@@ -284,6 +289,7 @@ int PARSE_FLAG_TOK_NUM;
 int PARSE_FLAG_LINEFEED;
 int PARSE_FLAG_SPACES;
 int PARSE_FLAG_TOK_STR;
+int PARSE_FLAG_PREPROCESS;
 
 int parse_flags;
 

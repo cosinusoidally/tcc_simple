@@ -197,7 +197,7 @@ extern int SYM_FIRST_ANOM; /* 0x10000000 first anonymous sym */
 
 /* stored in 'Sym->f.func_type' field */
 #define FUNC_NEW       1 /* ansi function prototype */
-#define FUNC_OLD       2 /* old function prototype */
+extern int FUNC_OLD; /*  2  old function prototype */
 
 extern int IO_BUF_SIZE; /* 8192 */
 
@@ -270,9 +270,9 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 /* types */
 #define VT_BTYPE       0x000f  /* mask for basic type */
 #define VT_BYTE             1  /* signed byte type */
-#define VT_INT              3  /* integer type */
+extern int VT_INT;    /*    3  integer type */
 #define VT_PTR              5  /* pointer */
-#define VT_FUNC             6  /* function type */
+extern int VT_FUNC;   /*    6  function type */
 
 #define VT_UNSIGNED    0x0010  /* unsigned type */
 #define VT_ARRAY       0x0040  /* array type (also has VT_PTR) */
@@ -379,7 +379,7 @@ extern TokenSym **table_ident;
 extern int TOK_FLAG_BOL; /*  0x0001 beginning of line before */
 extern int TOK_FLAG_BOF; /*  0x0002 beginning of file before */
 
-#define PARSE_FLAG_PREPROCESS 0x0001 /* activate preprocessing */
+extern int PARSE_FLAG_PREPROCESS; /* 0x0001 activate preprocessing */
 extern int PARSE_FLAG_TOK_NUM; /*   0x0002 return numbers instead of TOK_PPNUM */
 extern int PARSE_FLAG_LINEFEED; /*  0x0004 line feed is returned as a
                                         token. line feed is also
@@ -632,7 +632,7 @@ extern int R_386_PC32;
 
 #define STT_OBJECT      1               /* Symbol is a data object */
 #define STT_FUNC        2               /* Symbol is a code object */
-#define STT_FILE        4               /* Symbol's name is file name */
+extern int STT_FILE; /*    4               Symbol's name is file name */
 
 #define SHN_ABS         0xfff1          /* Associated symbol is absolute */
 

@@ -444,8 +444,12 @@ int init_runtime(){
   sizeof_void = 4;
   sizeof_int = sizeof_void;
 
+  FUNC_OLD = 2;  /* old function prototype */
   FUNC_PROLOG_SIZE = 9;
 
+
+  VT_INT = 3;    /*    3  integer type */
+  VT_FUNC = 6;   /*    6 function type */
   VT_VALMASK = 63;
   VT_CONST = 48;
   VT_LOCAL = 50;
@@ -486,6 +490,8 @@ int init_runtime(){
   STB_LOCAL = 0; /* Local symbol */
   STB_GLOBAL = 1; /* Global symbol */
 
+  STT_FILE = 4; /* Symbol's name is file name */
+
   O_RDONLY = 0;
   O_BINARY = 0;
 
@@ -522,6 +528,7 @@ int init_runtime(){
   IS_ID = 2;
   IS_NUM = 4;
 
+  PARSE_FLAG_PREPROCESS = 1; /* 0x0001 activate preprocessing */
   PARSE_FLAG_TOK_NUM = 2;  /*  0x0002 return numbers instead of TOK_PPNUM */
   PARSE_FLAG_LINEFEED = 4;  /*  0x0004 line feed is returned as a
                                         token. line feed is also
