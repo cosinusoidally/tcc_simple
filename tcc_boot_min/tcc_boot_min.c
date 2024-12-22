@@ -3682,6 +3682,26 @@ int lvalue_type(int t) {
     return VT_LVAL;
 }
 
+/* 46 */
+/* pass a parameter to a function and do type checking and casting */
+int gfunc_param_typed(int func, int arg) {
+    int func_type;
+    int type;
+
+    enter();
+    type = v_alloca(sizeof_CType);
+
+    func_type = gsym_f_func_type(func);
+    if (neq(func_type, FUNC_OLD)) {
+        memmove(type, gsym_type(arg), sizeof_CType);
+        /* need to do that to avoid false warning */
+        sct_t(type, and(gct_t(type), not(VT_CONSTANT)));
+        gen_assign_cast(type);
+    }
+
+    leave(0);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
