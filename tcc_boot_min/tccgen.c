@@ -99,7 +99,7 @@ ST_FUNC Sym *external_global_sym(int v, CType *type, int r) {
 static void patch_type(Sym *sym, CType *type) {
     int static_proto;
     if (eq(0, and(gct_t(type), VT_EXTERN))) {
-        sym->type.t = and(gct_t(gsym_type(sym)), not(VT_EXTERN));
+        sct_t(gsym_type(sym), and(gct_t(gsym_type(sym)), not(VT_EXTERN)));
     }
 
     if (eq(and(sym->type.t, VT_BTYPE), VT_FUNC)) {
@@ -107,8 +107,8 @@ static void patch_type(Sym *sym, CType *type) {
 
         if (eq(0, and(type->t, VT_EXTERN))) {
             /* put complete type, use static from prototype */
-            sym->type.t = or(and(type->t, not(VT_STATIC)), static_proto);
-            sym->type.ref = type->ref;
+            sct_t(gsym_type(sym), or(and(gct_t(type), not(VT_STATIC)), static_proto));
+            sct_ref(gsym_type(sym), gct_ref(type));
         }
     }
 }
