@@ -157,8 +157,8 @@ ST_FUNC int gvtst(int inv, int t) {
 /* handle integer constant optimizations and various machine
    independent opt */
 static void gen_opic(int op) {
-    SValue *v1;
-    SValue *v2;
+    int v1;
+    int v2;
     int c1;
     int c2;
 
