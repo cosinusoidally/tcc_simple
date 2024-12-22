@@ -357,9 +357,9 @@ int decl_initializer(CType *type, Section *sec, unsigned long c,
     int i;
     int size1;
     int align1;
-    Sym *s;
-    Sym  *f;
-    CType *t1;
+    int s;
+    int f;
+    int t1;
     int cstr_len;
     int ch;
 
