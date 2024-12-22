@@ -105,8 +105,8 @@ ST_FUNC int type_size(CType *type, int *a) {
 
 /* 37 */
 /* return the pointed type of t */
-static inline CType *pointed_type(CType *type) {
-    return &type->ref->type;
+CType *pointed_type(CType *type) {
+    return gsym_type(gct_ref(type));
 }
 
 /* 38 */
@@ -114,8 +114,8 @@ static inline CType *pointed_type(CType *type) {
 ST_FUNC void mk_pointer(CType *type) {
     Sym *s;
     s = sym_push(SYM_FIELD, type, 0, sub(0, 1));
-    type->t = or(VT_PTR, and(type->t, VT_STORAGE));
-    type->ref = s;
+    sct_t(type, or(VT_PTR, and(gct_t(type), VT_STORAGE)));
+    sct_ref(type, s);
 }
 
 /* 39 */
