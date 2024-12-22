@@ -79,11 +79,11 @@ int init_tccgen_globals(){
 /* ------------------------------------------------------------------------- */
 int elfsym(Sym *s) {
   if (eq(s, 0)) {
-    if(eq(s->c, 0)) {
+    if(eq(gsym_c(s), 0)) {
       return 0;
     }
   }
-  return add(symtab_section->data, mul(s->c, sizeof_Elf32_Sym));
+  return add(gs_data(symtab_section), mul(gsym_c(s), sizeof_Elf32_Sym));
 }
 
 /* apply storage attributes to Elf symbol */
