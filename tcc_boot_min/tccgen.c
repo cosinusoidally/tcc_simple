@@ -254,7 +254,7 @@ int unary() {
 void gfunc_return(CType *func_type) {
     gv(RC_IRET);
     /* NOT vpop() because on x86 it would flush the fp stack */
-    vtop = vtop - 1;
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 51 */
