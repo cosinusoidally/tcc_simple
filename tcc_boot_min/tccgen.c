@@ -94,7 +94,7 @@ int block(int *bsym, int *csym, int is_expr) {
     /* FIXME something is definitely wrong */
     v_alloca(1024);
     v_alloca(16);
-    v_alloca(16);
+    a = v_alloca(16);
 
     if (eq(tok, TOK_IF)) {
         /* if test */
@@ -102,17 +102,17 @@ int block(int *bsym, int *csym, int is_expr) {
         skip(mkc('('));
         gexpr();
         skip(mkc(')'));
-        a = gvtst(1, 0);
+        wi32(a, gvtst(1, 0));
         block(bsym, csym, 0);
         c = tok;
         if (eq(c, TOK_ELSE)) {
             next();
             d = gjmp(0);
-            gsym(a);
+            gsym(ri32(a));
             block(bsym, csym, 0);
             gsym(d); /* patch else jmp */
         } else {
-            gsym(a);
+            gsym(ri32(a));
         }
     } else if(eq(tok, TOK_WHILE)) {
         next();
@@ -120,13 +120,13 @@ int block(int *bsym, int *csym, int is_expr) {
         skip(mkc('('));
         gexpr();
         skip(mkc(')'));
-        a = gvtst(1, 0);
+        wi32(a, gvtst(1, 0));
         b = 0;
         local_scope = local_scope + 1;
-        block(&a, &b, 0);
+        block(a, &b, 0);
         local_scope = local_scope - 1;
         gjmp_addr(d);
-        gsym(a);
+        gsym(ri32(a));
         gsym_addr(b, d);
     } else if (eq(tok, mkc('{'))) {
 
