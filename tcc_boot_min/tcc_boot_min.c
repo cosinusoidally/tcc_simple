@@ -105,6 +105,7 @@ int ssv_sym(int o, int v) {wi32(add(o, SValue_sym_o), v);}
 
 /* CValue accessors */
 
+int acv_i(int o) {return add(o, CValue_i_o);}
 int gcv_i(int o) {return ri32(add(o, CValue_i_o));}
 int scv_i(int o, int v) {wi32(add(o, CValue_i_o), v);}
 

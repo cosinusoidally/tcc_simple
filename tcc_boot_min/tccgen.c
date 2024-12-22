@@ -103,16 +103,18 @@ ST_FUNC void vswap() {
 /* pop stack value */
 ST_FUNC void vpop() {
     int v;
-    v = and(vtop->r, VT_VALMASK);
-    vtop = vtop - 1;
+    v = and(gsv_r(vtop), VT_VALMASK);
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 18 */
 /* push integer constant */
 ST_FUNC void vpushi(int v) {
     CValue cval;
-    cval.i = v;
-    vsetc(&int_type, VT_CONST, &cval);
+    enter();
+    scv_i(acv_i(&cval), v);
+    vsetc(aint_type, VT_CONST, &cval);
+    leave(0);
 }
 
 /* 19 */
