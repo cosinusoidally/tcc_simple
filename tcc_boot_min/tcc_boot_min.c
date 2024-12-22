@@ -3720,6 +3720,13 @@ int gexpr() {
     expr_eq();
 }
 
+/* 50 */
+int gfunc_return(int func_type) {
+    gv(RC_IRET);
+    /* NOT vpop() because on x86 it would flush the fp stack */
+    vtop = sub(vtop, sizeof_SValue);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {

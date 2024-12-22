@@ -250,13 +250,6 @@ int unary() {
 //    return leave(0);
 }
 
-/* 50 */
-void gfunc_return(CType *func_type) {
-    gv(RC_IRET);
-    /* NOT vpop() because on x86 it would flush the fp stack */
-    vtop = sub(vtop, sizeof_SValue);
-}
-
 /* 51 */
 void block(int *bsym, int *csym, int is_expr) {
     int a;
