@@ -348,21 +348,21 @@ void block(int *bsym, int *csym, int is_expr) {
 static void init_putv(CType *type, Section *sec, unsigned long c) {
     int bt;
     int ptr;
-    CType dtype;
+    int dtype;
     int size;
     int align;
 
     enter();
-    v_alloca(sizeof_CType);
+    dtype = v_alloca(sizeof_CType);
     align = v_alloca(4);
 
-    memmove(&dtype, type, sizeof_CType);
+    memmove(dtype, type, sizeof_CType);
     /* need to do that to avoid false warning */
-    sct_t(&dtype, and(gct_t(&dtype), not(VT_CONSTANT)));
+    sct_t(dtype, and(gct_t(dtype), not(VT_CONSTANT)));
 
     /* XXX: not portable */
     /* XXX: generate error if incorrect relocation */
-    gen_assign_cast(&dtype);
+    gen_assign_cast(dtype);
     bt = and(gct_t(type), VT_BTYPE);
 
     size = type_size(type, align);
