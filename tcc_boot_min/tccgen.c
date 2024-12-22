@@ -87,7 +87,7 @@ ST_FUNC void update_storage(Sym *sym) {
         return;
     }
 
-    if (and(sym->type.t, VT_STATIC)) {
+    if (and(gct_t(gsym_type(sym)), VT_STATIC)) {
         sym_bind = STB_LOCAL;
     } else {
         sym_bind = STB_GLOBAL;
