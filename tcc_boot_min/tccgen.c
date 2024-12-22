@@ -147,21 +147,21 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
    it returns the innermost pointed to type (equals *type, but is a different
    pointer), otherwise returns type itself, that's used for recursive calls.  */
 CType *type_decl(CType *type, AttributeDef *ad, int *v) {
-    CType *post;
-    CType *ret;
+    int post;
+    int ret;
     int storage;
 
     /* recursive type, remove storage bits first, apply them later again */
-    storage = and(type->t, VT_STORAGE);
-    type->t = and(type->t, not(VT_STORAGE));
+    storage = and(gct_t(type), VT_STORAGE);
+    sct_t(type, and(gct_t(type), not(VT_STORAGE)));
     post = type;
     ret = type;
 
     /* type identifier */
-    *v = tok;
+    wi32(v, tok);
     next();
     post_type(post, ad, storage);
-    type->t = or(type->t, storage);
+    sct_t(type, or(gct_t(type), storage));
     return ret;
 }
 
