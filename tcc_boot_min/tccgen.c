@@ -79,42 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 25 */
-/* define a new external reference to a symbol 'v' */
-static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
-    Sym *s;
-    s = sym_find(v);
-    if (eq(0, s)) {
-        /* push forward reference */
-        s = sym_push(v, type, or(or(r, VT_CONST), VT_SYM), 0);
-        sct_t(gsym_type(s), or(gct_t(gsym_type(s)), VT_EXTERN));
-        ssym_sym_scope(s, 0);
-    } else {
-        patch_storage(s, ad, type);
-    }
-    return s;
-}
-
-/* 26 */
-/* save registers up to (vtop - n) stack entry */
-ST_FUNC void save_regs(int n) {
-    SValue *p;
-    SValue *p1;
-
-    p = vstack;
-    p1 = sub(vtop, mul(n, sizeof_SValue));
-    while(lte(p, p1)) {
-        save_reg(gsv_r(p));
-        p = add(p, sizeof_SValue);
-    }
-}
-
-/* 27 */
-/* save r to the memory stack, and mark it as being free */
-ST_FUNC void save_reg(int r) {
-    save_reg_upstack(r, 0);
-}
-
 /* 28 */
 /* save r to the memory stack, and mark it as being free,
    if seen up to (vtop - n) stack entry */
