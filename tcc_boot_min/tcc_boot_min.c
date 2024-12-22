@@ -454,6 +454,7 @@ int init_runtime(){
 
   VT_INT = 3;    /*    3  integer type */
   VT_FUNC = 6;   /*    6 function type */
+  VT_BTYPE = 15; /*    0x000f  mask for basic type */
   VT_VALMASK = 63;
   VT_CONST = 48;
   VT_LOCAL = 50;

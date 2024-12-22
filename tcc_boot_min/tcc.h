@@ -268,7 +268,7 @@ extern int VT_LVAL;  /*    0x0100  var is an lvalue */
 #define VT_SYM       0x0200  /* a symbol value is added */
 
 /* types */
-#define VT_BTYPE       0x000f  /* mask for basic type */
+extern int VT_BTYPE;  /*    0x000f   mask for basic type */
 #define VT_BYTE             1  /* signed byte type */
 extern int VT_INT;    /*    3  integer type */
 #define VT_PTR              5  /* pointer */
