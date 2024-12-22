@@ -79,34 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 23 */
-/* Merge some type attributes.  */
-static void patch_type(Sym *sym, CType *type) {
-    int static_proto;
-    if (eq(0, and(gct_t(type), VT_EXTERN))) {
-        sct_t(gsym_type(sym), and(gct_t(gsym_type(sym)), not(VT_EXTERN)));
-    }
-
-    if (eq(and(gct_t(gsym_type(sym)), VT_BTYPE), VT_FUNC)) {
-        static_proto = and(gct_t(gsym_type(sym)), VT_STATIC);
-
-        if (eq(0, and(gct_t(type), VT_EXTERN))) {
-            /* put complete type, use static from prototype */
-            sct_t(gsym_type(sym), or(and(gct_t(type), not(VT_STATIC)), static_proto));
-            sct_ref(gsym_type(sym), gct_ref(type));
-        }
-    }
-}
-
-/* 24 */
-/* Merge some storage attributes.  */
-static void patch_storage(Sym *sym, AttributeDef *ad, CType *type) {
-    if (type) {
-        patch_type(sym, type);
-    }
-    update_storage(sym);
-}
-
 /* 25 */
 /* define a new external reference to a symbol 'v' */
 static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {

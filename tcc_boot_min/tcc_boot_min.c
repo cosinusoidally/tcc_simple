@@ -3250,6 +3250,34 @@ int external_global_sym(int v, int type, int r) {
     return s;
 }
 
+/* 23 */
+/* Merge some type attributes.  */
+int patch_type(int sym, int type) {
+    int static_proto;
+    if (eq(0, and(gct_t(type), VT_EXTERN))) {
+        sct_t(gsym_type(sym), and(gct_t(gsym_type(sym)), not(VT_EXTERN)));
+    }
+
+    if (eq(and(gct_t(gsym_type(sym)), VT_BTYPE), VT_FUNC)) {
+        static_proto = and(gct_t(gsym_type(sym)), VT_STATIC);
+
+        if (eq(0, and(gct_t(type), VT_EXTERN))) {
+            /* put complete type, use static from prototype */
+            sct_t(gsym_type(sym), or(and(gct_t(type), not(VT_STATIC)), static_proto));
+            sct_ref(gsym_type(sym), gct_ref(type));
+        }
+    }
+}
+
+/* 24 */
+/* Merge some storage attributes.  */
+int patch_storage(int sym, int ad, int type) {
+    if (type) {
+        patch_type(sym, type);
+    }
+    update_storage(sym);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
