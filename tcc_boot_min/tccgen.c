@@ -91,13 +91,13 @@ static void gen_assign_cast(CType *dt) {
 ST_FUNC void vstore(void) {
     int r;
 
-    gen_assign_cast(&vtop[sub(0, 1)].type);
+    gen_assign_cast(gsv_type(sub(vtop, sizeof_SValue)));
     r = gv(RC_INT);  /* generate value */
-    store(r, vtop - 1);
+    store(r, sub(vtop, sizeof_SValue));
     vswap();
 
     /* NOT vpop() because on x86 it would flush the fp stack */
-    vtop = vtop - 1;
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 41 */
