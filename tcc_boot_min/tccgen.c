@@ -87,8 +87,8 @@ static Sym *external_sym(int v, CType *type, int r, AttributeDef *ad) {
     if (eq(0, s)) {
         /* push forward reference */
         s = sym_push(v, type, or(or(r, VT_CONST), VT_SYM), 0);
-        s->type.t = or(s->type.t, VT_EXTERN);
-        s->sym_scope = 0;
+        sct_t(gsym_type(s), or(gct_t(gsym_type(s)), VT_EXTERN));
+        ssym_sym_scope(s, 0);
     } else {
         patch_storage(s, ad, type);
     }
@@ -102,10 +102,10 @@ ST_FUNC void save_regs(int n) {
     SValue *p1;
 
     p = vstack;
-    p1 = vtop - n;
+    p1 = sub(vtop, mul(n, sizeof_SValue));
     while(lte(p, p1)) {
-        save_reg(p->r);
-        p = p + 1;
+        save_reg(gsv_r(p));
+        p = add(p, sizeof_SValue);
     }
 }
 
