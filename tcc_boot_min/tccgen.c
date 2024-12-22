@@ -75,11 +75,6 @@ int init_tccgen_globals(){
   afunc_old_type = &func_old_type;
 }
 
-/* 6 */
-ST_FUNC void greloc(Section *s, Sym *sym, unsigned long offset, int type) {
-    greloca(s, sym, offset, type, 0);
-}
-
 /* 7 */
 /* ------------------------------------------------------------------------- */
 /* symbol allocator */

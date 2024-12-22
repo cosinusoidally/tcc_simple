@@ -2970,6 +2970,11 @@ int greloca(int s, int sym, int offset, int type, int addend) {
     put_elf_reloca(symtab_section, s, offset, type, c, addend);
 }
 
+/* 6 */
+int greloc(int s, int sym, int offset, int type) {
+    greloca(s, sym, offset, type, 0);
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
