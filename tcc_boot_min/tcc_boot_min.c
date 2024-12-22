@@ -486,7 +486,10 @@ int init_runtime(){
   VT_PTR = 5;    /*    5  pointer */
   VT_FUNC = 6;   /*    6 function type */
   VT_BTYPE = 15; /*    0x000f  mask for basic type */
-  VT_UNSIGNED = 16; /* 0x0010  unsigned type */
+  VT_UNSIGNED = 16;    /*  0x0010  unsigned type */
+  VT_ARRAY = 64;       /*  0x0040  array type (also has VT_PTR) */
+  VT_CONSTANT = 256;   /*  0x0100  const modifier */
+
   VT_VALMASK = 63;
   VT_CONST = 48;
   VT_LOCAL = 50;
@@ -3626,6 +3629,17 @@ int parse_btype(int type, int ad) {
 
     sct_t(type, VT_INT);
     return type_found;
+}
+
+/* 42 */
+/* convert a function parameter type (array to pointer and function to
+   function pointer) */
+int convert_parameter_type(int pt) {
+    /* remove const qualifiers (XXX: const could be used
+       to indicate a const function parameter */
+    sct_t(pt, and(gct_t(pt), not(VT_CONSTANT)));
+    /* array must be transformed to pointer according to ANSI C */
+    sct_t(pt, and(gct_t(pt), not(VT_ARRAY)));
 }
 
 /* end of tccgen.c */

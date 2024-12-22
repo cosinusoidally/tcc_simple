@@ -174,7 +174,8 @@ int VT_TYPE;
 int VT_BYTE;
 int VT_UNSIGNED;
 int VT_PTR;
-
+int VT_ARRAY;
+int VT_CONSTANT;
 
 int R_386_32;
 int R_386_PC32;
