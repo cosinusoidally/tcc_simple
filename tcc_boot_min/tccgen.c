@@ -89,6 +89,8 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     AttributeDef ad1;
     CType pt;
 
+    enter();
+
     if (eq(tok, mkc('('))) {
         /* function type, or recursive declarator (return if so) */
         next();
@@ -126,12 +128,12 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
         /* we push a anonymous symbol which will contain the function prototype */
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
-        s->f = ad->f;
-        s->next = first;
-        type->t = VT_FUNC;
-        type->ref = s;
+        ssym_f_func_type(s, ad->f);
+        ssym_next(s, first);
+        sct_t(type, VT_FUNC);
+        sct_ref(type, s);
     }
-    return 1;
+    return leave(1);
 }
 
 /* 44 */
