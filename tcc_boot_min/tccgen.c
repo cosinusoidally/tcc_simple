@@ -89,11 +89,14 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
     int t;
     int esym;
     const char *name;
-    char buf1[256];
+    char *buf1;
 
-    if (eq(sym->c, 0)) {
-        name = get_tok_str(sym->v, 0);
-        t = sym->type.t;
+    enter();
+    buf1 = v_alloca(256);
+
+    if (eq(gsym_c(sym), 0)) {
+        name = get_tok_str(gsym_v(sym), 0);
+        t = gct_t(gsym_type(sym));
         if (eq(and(t, VT_BTYPE), VT_FUNC)) {
             sym_type = STT_FUNC;
         } else {
@@ -106,7 +109,7 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         }
         other = 0;
         info = ELFW_ST_INFO(sym_bind, sym_type);
-        sym->c = put_elf_sym(symtab_section, value, size, info, other, sh_num, name);
+        ssym_c(sym, put_elf_sym(symtab_section, value, size, info, other, sh_num, name));
     } else {
         esym = elfsym(sym);
         ses_st_value(esym, value);
@@ -114,6 +117,8 @@ ST_FUNC void put_extern_sym2(Sym *sym, int sh_num,
         ses_st_shndx(esym, sh_num);
     }
     update_storage(sym);
+
+    leave(0);
 }
 
 /* 4 */

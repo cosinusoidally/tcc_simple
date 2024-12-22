@@ -127,6 +127,7 @@ int sct_ref(int o, int v) {wi32(add(o, CType_ref_o), v);}
 int gsym_v(int o) {return ri32(add(o, Sym_v_o));} /* int v */
 
 int gsym_c(int o) {return ri32(add(o, Sym_c_o));}
+int ssym_c(int o, int v) {wi32(add(o, Sym_c_o), v);}
 
 /* struct FuncAttr->func_type */
 int gsym_f_func_type(int o) {return ri32(add(o, Sym_f_func_type_o));}
