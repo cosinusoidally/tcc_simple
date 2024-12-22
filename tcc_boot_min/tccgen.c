@@ -75,16 +75,6 @@ int init_tccgen_globals(){
   afunc_old_type = &func_old_type;
 }
 
-/* 2 */
-/* ------------------------------------------------------------------------- */
-int elfsym(Sym *s) {
-  if (eq(s, 0)) {
-    if(eq(gsym_c(s), 0)) {
-      return 0;
-    }
-  }
-  return add(gs_data(symtab_section), mul(gsym_c(s), sizeof_Elf32_Sym));
-}
 
 /* apply storage attributes to Elf symbol */
 ST_FUNC void update_storage(Sym *sym) {

@@ -2860,6 +2860,17 @@ int tccgen_compile(int s1) {
     return 0;
 }
 
+/* 2 */
+/* ------------------------------------------------------------------------- */
+int elfsym(int s) {
+  if (eq(s, 0)) {
+    if(eq(gsym_c(s), 0)) {
+      return 0;
+    }
+  }
+  return add(gs_data(symtab_section), mul(gsym_c(s), sizeof_Elf32_Sym));
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
