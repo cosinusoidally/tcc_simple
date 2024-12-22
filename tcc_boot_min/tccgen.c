@@ -90,10 +90,13 @@ static void vsetc(CType *type, int r, CValue *vc) {
 
 /* 16 */
 ST_FUNC void vswap() {
-    SValue tmp;
-    tmp = vtop[0];
-    vtop[0] = vtop[sub(0, 1)];
-    vtop[sub(0, 1)] = tmp;
+    int tmp;
+    enter();
+    tmp = v_alloca(sizeof_SValue);
+    memmove(tmp, vtop, sizeof_SValue);
+    memmove(vtop, sub(vtop, sizeof_SValue), sizeof_SValue);
+    memmove(sub(vtop, sizeof_SValue), tmp, sizeof_SValue);
+    leave(0);
 }
 
 /* 17 */
