@@ -79,22 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 10 */
-/* push, without hashing */
-ST_FUNC Sym *sym_push2(Sym **ps, int v, int t, int c) {
-    Sym *s;
-
-    s = sym_malloc();
-    memset(s, 0, sizeof_Sym);
-    ssym_v(s, v);
-    sct_t(gsym_type(s), t);
-    ssym_c(s, c);
-    /* add in stack */
-    ssym_prev(s, ri32(ps));
-    wi32(ps, s);
-    return s;
-}
-
 /* 11 */
 /* find an identifier */
 ST_INLN Sym *sym_find(int v) {

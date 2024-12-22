@@ -3027,6 +3027,22 @@ int sym_free(int sym) {
     sym_free_first = sym;
 }
 
+/* 10 */
+/* push, without hashing */
+int sym_push2(int ps, int v, int t, int c) {
+    int s;
+
+    s = sym_malloc();
+    memset(s, 0, sizeof_Sym);
+    ssym_v(s, v);
+    sct_t(gsym_type(s), t);
+    ssym_c(s, c);
+    /* add in stack */
+    ssym_prev(s, ri32(ps));
+    wi32(ps, s);
+    return s;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
