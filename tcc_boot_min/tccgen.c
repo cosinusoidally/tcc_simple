@@ -88,11 +88,13 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     Sym **plast;
     Sym *s;
     Sym *first;
-    AttributeDef ad1;
+    int ad1;
     int pt;
 
     enter();
-    align = v_alloca(4);
+    /* FIXME there is some bug with the v_alloca function should be 4 */
+    ad1 = v_alloca(16);
+    align = v_alloca(16);
     pt = v_alloca(sizeof_CType);
 
     if (eq(tok, mkc('('))) {
@@ -101,7 +103,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
 	if (eq(tok, mkc(')'))) {
 	  l = 0;
 	} else {
-            parse_btype(pt, &ad1);
+            parse_btype(pt, ad1);
             l = FUNC_NEW;
         }
         first = 0;
@@ -109,7 +111,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
         if (l) {
             while(1) {
                 /* read param name and compute offset */
-                type_decl(pt, &ad1, &n);
+                type_decl(pt, ad1, &n);
                 type_size(pt, align);
                 convert_parameter_type(pt);
                 s = sym_push(or(n, SYM_FIELD), pt, 0, 0);
@@ -119,7 +121,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
                     break;
                 }
                 skip(mkc(','));
-                parse_btype(pt, &ad1);
+                parse_btype(pt, ad1);
             }
         } else {
             /* if no parameters, then old type prototype */
