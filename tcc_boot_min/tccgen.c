@@ -79,39 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 14 */
-/* pop symbols until top reaches 'b'.  If KEEP is non-zero don't really
-   pop them yet from the list, but do remove them from the token array.  */
-ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
-    int s;
-    int ss;
-    int ps;
-    int ts;
-    int v;
-
-    s = ri32(ptop);
-    while(neq(s, b)) {
-        ss = gsym_prev(s);
-        v = gsym_v(s);
-        /* remove symbol in token array */
-        /* XXX: simplify */
-        if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
-            ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
-            ps = atks_sym_identifier(ts);
-            wi32(ps, gsym_prev_tok(s));
-        }
-	if (eq(0, keep)) {
-	    sym_free(s);
-        }
-        s = ss;
-    }
-    if (eq(0, keep)) {
-	wi32(ptop, b);
-    }
-}
-
-/* ------------------------------------------------------------------------- */
-
 /* 15 */
 static void vsetc(CType *type, int r, CValue *vc) {
     vtop = vtop + 1;
