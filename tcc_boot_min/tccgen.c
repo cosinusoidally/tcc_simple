@@ -95,7 +95,7 @@ Sym *__sym_malloc() {
     sym = sym_pool;
     i = 0;
     while(lt(i, SYM_POOL_NB)) {
-        sym->next = last_sym;
+        ssym_next(sym, last_sym);
         last_sym = sym;
         sym = add(sym, sizeof_Sym);
         i = add(i, 1);

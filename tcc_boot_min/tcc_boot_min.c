@@ -135,7 +135,9 @@ int ssym_f_func_type(int o, int v) {wi32(add(o, Sym_f_func_type_o), v);}
 
 int gsym_type(int o) {return add(o, Sym_type_o);} /* CType type */
 
-int gsym_next(int o) {return ri32(add(o, Sym_next_o));} /* struct Sym *next */
+/* struct Sym *next */
+int gsym_next(int o) {return ri32(add(o, Sym_next_o));}
+int ssym_next(int o, int v) {wi32(add(o, Sym_next_o), v);}
 
 /* BufferedFile accessors */
 
