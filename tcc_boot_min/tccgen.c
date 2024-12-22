@@ -123,10 +123,10 @@ ST_FUNC void save_reg_upstack(int r, int n) {
                 saved = 1;
             }
             /* mark that stack entry as being saved on the stack */
-            p->r = or(lvalue_type(p->type.t), VT_LOCAL);
-            p->c.i = l;
+            ssv_r(p, or(lvalue_type(p->type.t), VT_LOCAL));
+            scv_i(gsv_c(p), l);
         }
-        p = p + 1;
+        p = add(p, sizeof_SValue);
     }
 }
 
