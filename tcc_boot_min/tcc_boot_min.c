@@ -3643,6 +3643,39 @@ int convert_parameter_type(int pt) {
     sct_t(pt, and(gct_t(pt), not(VT_ARRAY)));
 }
 
+/* 44 */
+/* Parse a type declarator (except basic type), and return the type
+   in 'type'.
+   'type' should contain the basic type. 'ad' is the
+   attribute definition of the basic type. It can be modified by
+   type_decl().  If this (possibly abstract) declarator is a pointer chain
+   it returns the innermost pointed to type (equals *type, but is a different
+   pointer), otherwise returns type itself, that's used for recursive calls.  */
+int type_decl(int type, int ad, int v) {
+    int post;
+    int ret;
+    int storage;
+
+    /* recursive type, remove storage bits first, apply them later again */
+    storage = and(gct_t(type), VT_STORAGE);
+    sct_t(type, and(gct_t(type), not(VT_STORAGE)));
+    post = type;
+    ret = type;
+
+    /* type identifier */
+    wi32(v, tok);
+    next();
+    post_type(post, ad, storage);
+    sct_t(type, or(gct_t(type), storage));
+    return ret;
+}
+
+/* 45 */
+/* compute the lvalue VT_LVAL_xxx needed to match type t. */
+int lvalue_type(int t) {
+    return VT_LVAL;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
