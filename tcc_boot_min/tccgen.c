@@ -358,7 +358,7 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     int size;
     int align;
     int addr;
-    TokenString *init_str;
+    int init_str;
     Section *sec;
     Sym *flexible_array;
     Sym *sym;
@@ -395,7 +395,7 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
         next();
         decl_initializer(type, 0, 0, 1, 1);
         /* prepare second initializer parsing */
-        macro_ptr = init_str->str;
+        macro_ptr = gtkst_str(init_str);
         next();
         
         /* if still unknown size, error */
