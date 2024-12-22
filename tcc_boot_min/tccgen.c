@@ -165,17 +165,17 @@ int unary() {
             nb_args = 0;
             regsize = 0;
             ret_nregs = 1;
-            memmove(&ret.type, gsym_type(s), sizeof_CType);
+            memmove(gsv_type(&ret), gsym_type(s), sizeof_CType);
 
-            ret.r = REG_IRET;
-            ret.c.i = 0;
+            ssv_r(&ret, REG_IRET);
+            scv_i(gsv_c(&ret), 0);
             if (neq(tok, mkc(')'))) {
                 while(1) {
                     expr_eq();
                     gfunc_param_typed(s, sa);
                     nb_args = add(nb_args, 1);
                     if (sa) {
-                        sa = sa->next;
+                        sa = gsym_next(sa);
                     }
                     if (eq(tok, mkc(')'))) {
                         break;
@@ -190,7 +190,7 @@ int unary() {
             r = add(gsv_r(&ret), ret_nregs);
             while(gt(r, ret.r)) {
                 r = sub(r, 1);
-                vsetc(&ret.type, r, &ret.c);
+                vsetc(gsv_type(&ret), r, gsv_c(&ret));
             }
         } else {
             break;
