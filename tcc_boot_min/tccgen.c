@@ -91,7 +91,7 @@ int unary() {
     Sym *s;
     int ad;
     char *name;
-    SValue ret;
+    int ret;
     Sym *sa;
     int nb_args;
     int ret_nregs;
@@ -104,7 +104,7 @@ int unary() {
     v_alloca(64);
     v_alloca(16);
     v_alloca(16);
-    v_alloca(sizeof_SValue);
+    ret = v_alloca(sizeof_SValue);
     type = v_alloca(sizeof_CType);
     ad = v_alloca(mul(2, sizeof_AttributeDef));
 
@@ -165,10 +165,10 @@ int unary() {
             nb_args = 0;
             regsize = 0;
             ret_nregs = 1;
-            memmove(gsv_type(&ret), gsym_type(s), sizeof_CType);
+            memmove(gsv_type(ret), gsym_type(s), sizeof_CType);
 
-            ssv_r(&ret, REG_IRET);
-            scv_i(gsv_c(&ret), 0);
+            ssv_r(ret, REG_IRET);
+            scv_i(gsv_c(ret), 0);
             if (neq(tok, mkc(')'))) {
                 while(1) {
                     expr_eq();
@@ -187,10 +187,10 @@ int unary() {
             gfunc_call(nb_args);
 
             /* return value */
-            r = add(gsv_r(&ret), ret_nregs);
-            while(gt(r, gsv_r(&ret))) {
+            r = add(gsv_r(ret), ret_nregs);
+            while(gt(r, gsv_r(ret))) {
                 r = sub(r, 1);
-                vsetc(gsv_type(&ret), r, gsv_c(&ret));
+                vsetc(gsv_type(ret), r, gsv_c(ret));
             }
         } else {
             break;
