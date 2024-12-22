@@ -326,6 +326,11 @@ int stkst_prev_ptr(int o, int v) {wi32(add(o, TokenString_prev_ptr_o), v);}
 int gtkst_alloc(int o) {return ri32(add(o, TokenString_alloc_o));}
 int stkst_alloc(int o, int v) {wi32(add(o, TokenString_alloc_o), v);}
 
+/* AttributeDef accesors */
+
+/* f->func_type */
+int gad_f_func_type(int o) {return ri32(add(o, AttributeDef_f_func_type_o));}
+
 /* stuff */
 
 int init_runtime(){
