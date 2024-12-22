@@ -54,7 +54,7 @@ static inline CType *pointed_type(CType *type);
 static int is_compatible_types(CType *type1, CType *type2);
 static CType *type_decl(CType *type, AttributeDef *ad, int *v);
 static void init_putv(CType *type, Section *sec, unsigned long c);
-static void decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
+int decl_initializer(CType *type, Section *sec, unsigned long c, int first, int size_only);
 static void block(int *bsym, int *csym, int is_expr);
 static void decl_initializer_alloc(CType *type, AttributeDef *ad, int r, int has_init, int v, int scope);
 void decl(int l);
@@ -349,7 +349,7 @@ void block(int *bsym, int *csym, int is_expr) {
    allocation. 'first' is true if array '{' must be read (multi
    dimension implicit array init handling). 'size_only' is true if
    size only evaluation is wanted (only for arrays). */
-void decl_initializer(CType *type, Section *sec, unsigned long c,
+int decl_initializer(CType *type, Section *sec, unsigned long c,
                              int first, int size_only) {
     int len;
     int n;
@@ -362,6 +362,8 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
     CType *t1;
     int cstr_len;
     int ch;
+
+    enter();
 
     s = type->ref;
     n = s->c;
@@ -404,6 +406,8 @@ void decl_initializer(CType *type, Section *sec, unsigned long c,
             s->c = div_(sub(add(len, size1), 1), size1);
         }
     }
+
+    return leave(0);
 }
 
 /* 54 */
