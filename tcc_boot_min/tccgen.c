@@ -42,13 +42,12 @@ static int section_sym;
 
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
-ST_DATA int func_var; /* true if current function is variadic (used by return instruction) */
 ST_DATA int func_vc;
-ST_DATA int last_line_num, last_ind, func_ind; /* debug last line number and pc */
+ST_DATA int func_ind;
 ST_DATA const char *funcname;
-ST_DATA int g_debug;
 
-ST_DATA CType func_old_type, int_type;
+ST_DATA CType func_old_type;
+ST_DATA CType int_type;
 
 /* ------------------------------------------------------------------------- */
 
@@ -1359,7 +1358,6 @@ void gen_function(Sym *sym) {
     cur_text_section = 0;
     funcname = mks(""); /* for safety */
     func_vt.t = 0; /* for safety */
-    func_var = 0; /* for safety */
     ind = 0; /* for safety */
 }
 
