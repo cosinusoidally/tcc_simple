@@ -79,38 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 41 */
-/* return 0 if no type declaration. otherwise, return the basic type
-   and skip it. 
- */
-int parse_btype(CType *type, AttributeDef *ad) {
-    int type_found;
-    int typespec_found;
-    int s;
-
-    memset(ad, 0, sizeof_AttributeDef);
-    type_found = 0;
-    typespec_found = 0;
-    sct_ref(type, 0);
-
-    while(1) {
-        if(eq(tok, TOK_INT)) {
-            next();
-            typespec_found = 1;
-        } else {
-            if (typespec_found) {
-                break;
-            }
-            s = sym_find(tok);
-            break;
-        }
-        type_found = 1;
-    }
-
-    sct_t(type, VT_INT);
-    return type_found;
-}
-
 /* 42 */
 /* convert a function parameter type (array to pointer and function to
    function pointer) */

@@ -3596,6 +3596,38 @@ int vstore() {
     vtop = sub(vtop, sizeof_SValue);
 }
 
+/* 41 */
+/* return 0 if no type declaration. otherwise, return the basic type
+   and skip it.
+ */
+int parse_btype(int type, int ad) {
+    int type_found;
+    int typespec_found;
+    int s;
+
+    memset(ad, 0, sizeof_AttributeDef);
+    type_found = 0;
+    typespec_found = 0;
+    sct_ref(type, 0);
+
+    while(1) {
+        if(eq(tok, TOK_INT)) {
+            next();
+            typespec_found = 1;
+        } else {
+            if (typespec_found) {
+                break;
+            }
+            s = sym_find(tok);
+            break;
+        }
+        type_found = 1;
+    }
+
+    sct_t(type, VT_INT);
+    return type_found;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
