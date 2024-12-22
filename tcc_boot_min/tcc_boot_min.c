@@ -2828,6 +2828,12 @@ int write32le(int p, int x) {
 
 /* end of tcc.h functions */
 
+/* start of tccgen.c */
+
+
+
+/* end of tccgen.c */
+
 int tcc_new() {
     int s;
 
