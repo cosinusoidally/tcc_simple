@@ -112,7 +112,7 @@ int unary() {
 	sct_t(type, t);
 	vsetc(type, VT_CONST, atokc);
         next();
-    } else if(eq(tok, TOK_CUINT)) {
+    } else if(eq(tok, 182)) { /* TOK_CUINT = 182 bodge, maybe hash issue */
         t = or(VT_INT, VT_UNSIGNED);
 	sct_t(type, t);
 	vsetc(type, VT_CONST, atokc);
