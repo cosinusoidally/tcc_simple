@@ -83,10 +83,10 @@ int init_tccgen_globals(){
 /* pop symbols until top reaches 'b'.  If KEEP is non-zero don't really
    pop them yet from the list, but do remove them from the token array.  */
 ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
-    Sym *s;
-    Sym *ss;
-    Sym **ps;
-    TokenSym *ts;
+    int s;
+    int ss;
+    int ps;
+    int ts;
     int v;
 
     s = ri32(ptop);
@@ -96,7 +96,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
         /* remove symbol in token array */
         /* XXX: simplify */
         if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
-            ts = table_ident[sub(and(v, not(SYM_STRUCT)), TOK_IDENT)];
+            ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
             ps = atks_sym_identifier(ts);
             wi32(ps, gsym_prev_tok(s));
         }
