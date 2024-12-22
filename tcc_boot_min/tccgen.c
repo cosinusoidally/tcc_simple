@@ -144,7 +144,7 @@ void block(int *bsym, int *csym, int is_expr) {
 	   any symbols in that case; some upper level call to block() will
 	   do that.  We do have to remove such symbols from the lookup
 	   tables, though.  sym_pop will do that.  */
-	sym_pop(&local_stack, s, is_expr);
+	sym_pop(alocal_stack, s, is_expr);
 
         next();
     } else if(eq(tok, TOK_RETURN)) {
