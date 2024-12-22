@@ -102,8 +102,6 @@ int unary() {
     /* definitely something weird going on */
     /* 64 bytes of padding seems to fix */
     v_alloca(64);
-    v_alloca(16);
-    v_alloca(16);
     ret = v_alloca(sizeof_SValue);
     type = v_alloca(sizeof_CType);
     ad = v_alloca(mul(2, sizeof_AttributeDef));
