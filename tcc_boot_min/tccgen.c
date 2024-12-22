@@ -525,13 +525,13 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                         /* NOTE: as GCC, uninitialized global static
                            arrays of null size are considered as
                            extern */
-                        type.t = or(gct_t(&type), VT_EXTERN);
+                        sct_t(&type, or(gct_t(&type), VT_EXTERN));
                         sym = external_sym(v, &type, r, &ad);
                     } else {
                         r = or(r, l);
                         if (eq(l, VT_CONST)) {
                             /* uninitialized global variables may be overridden */
-                            type.t = or(type.t, VT_EXTERN);
+                            sct_t(&type, or(gct_t(&type), VT_EXTERN));
                         }
                         decl_initializer_alloc(&type, &ad, r, has_init, v, l);
                     }
