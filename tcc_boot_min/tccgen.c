@@ -28,7 +28,7 @@
 */
 extern int ind;
 
-ST_DATA Sym *sym_free_first;
+extern Sym *sym_free_first;
 ST_DATA void **sym_pools;
 ST_DATA int nb_sym_pools;
 
@@ -77,48 +77,6 @@ int init_tccgen_globals(){
   afunc_old_type = &func_old_type;
   asym_pools = &sym_pools;
   anb_sym_pools = &nb_sym_pools;
-}
-
-/* 7 */
-/* ------------------------------------------------------------------------- */
-/* symbol allocator */
-Sym *__sym_malloc() {
-    Sym *sym_pool;
-    Sym *sym;
-    Sym *last_sym;
-    int i;
-
-    sym_pool = tcc_malloc(mul(SYM_POOL_NB, sizeof_Sym));
-    dynarray_add(asym_pools, anb_sym_pools, sym_pool);
-
-    last_sym = sym_free_first;
-    sym = sym_pool;
-    i = 0;
-    while(lt(i, SYM_POOL_NB)) {
-        ssym_next(sym, last_sym);
-        last_sym = sym;
-        sym = add(sym, sizeof_Sym);
-        i = add(i, 1);
-    }
-    sym_free_first = last_sym;
-    return last_sym;
-}
-
-/* 8 */
-Sym *sym_malloc(void) {
-    Sym *sym;
-    sym = sym_free_first;
-    if (eq(sym, 0)) {
-        sym = __sym_malloc();
-    }
-    sym_free_first = gsym_next(sym);
-    return sym;
-}
-
-/* 9 */
-void sym_free(Sym *sym) {
-    ssym_next(sym, sym_free_first);
-    sym_free_first = sym;
 }
 
 /* 10 */

@@ -316,4 +316,6 @@ int funcname;
 int asym_pools;
 int anb_sym_pools;
 
+int sym_free_first;
+
 /* =============== end globals.c ========================================== */

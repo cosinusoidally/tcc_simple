@@ -2979,6 +2979,48 @@ int greloc(int s, int sym, int offset, int type) {
     greloca(s, sym, offset, type, 0);
 }
 
+/* 7 */
+/* ------------------------------------------------------------------------- */
+/* symbol allocator */
+int __sym_malloc() {
+    int sym_pool;
+    int sym;
+    int last_sym;
+    int i;
+
+    sym_pool = tcc_malloc(mul(SYM_POOL_NB, sizeof_Sym));
+    dynarray_add(asym_pools, anb_sym_pools, sym_pool);
+
+    last_sym = sym_free_first;
+    sym = sym_pool;
+    i = 0;
+    while(lt(i, SYM_POOL_NB)) {
+        ssym_next(sym, last_sym);
+        last_sym = sym;
+        sym = add(sym, sizeof_Sym);
+        i = add(i, 1);
+    }
+    sym_free_first = last_sym;
+    return last_sym;
+}
+
+/* 8 */
+int sym_malloc() {
+    int sym;
+    sym = sym_free_first;
+    if (eq(sym, 0)) {
+        sym = __sym_malloc();
+    }
+    sym_free_first = gsym_next(sym);
+    return sym;
+}
+
+/* 9 */
+int sym_free(int sym) {
+    ssym_next(sym, sym_free_first);
+    sym_free_first = sym;
+}
+
 /* end of tccgen.c */
 
 int tcc_new() {
