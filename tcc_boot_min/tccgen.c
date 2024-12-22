@@ -106,7 +106,7 @@ void gen_cast(CType *type) {
             }
         }
     }
-    vtop->type = *type;
+    memmove(&vtop->type, type, sizeof_CType);
 }
 
 /* 36 */
