@@ -93,8 +93,8 @@ int block(int *bsym, int *csym, int is_expr) {
 
     /* FIXME something is definitely wrong */
     v_alloca(1024);
-    v_alloca(16);
     a = v_alloca(16);
+    b = v_alloca(16);
 
     if (eq(tok, TOK_IF)) {
         /* if test */
@@ -121,13 +121,13 @@ int block(int *bsym, int *csym, int is_expr) {
         gexpr();
         skip(mkc(')'));
         wi32(a, gvtst(1, 0));
-        b = 0;
+        wi32(b, 0);
         local_scope = local_scope + 1;
-        block(a, &b, 0);
+        block(a, b, 0);
         local_scope = local_scope - 1;
         gjmp_addr(d);
         gsym(ri32(a));
-        gsym_addr(b, d);
+        gsym_addr(ri32(b), d);
     } else if (eq(tok, mkc('{'))) {
 
         next();
