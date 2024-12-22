@@ -468,7 +468,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
     int r;
     int type;
     int btype;
-    Sym *sym;
+    int sym;
     int ad;
 
     enter();
@@ -488,7 +488,7 @@ int decl0(int l, int is_for_loop_init, Sym *func_sym) {
                 /* if old style function prototype, we accept a
                    declaration list */
                 sym = gct_ref(type);
-                if (and(eq(sym->f.func_type, FUNC_OLD), eq(l, VT_CONST))) {
+                if (and(eq(gsym_f_func_type(sym), FUNC_OLD), eq(l, VT_CONST))) {
                     decl0(VT_CMP, 0, sym);
                 }
             }
