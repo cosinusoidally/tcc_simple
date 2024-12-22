@@ -141,20 +141,20 @@ int save_reg_upstack(int r, int n) {
 ST_FUNC int get_reg(int rc) {
     int r;
     int notfound;
-    SValue *p;
+    int p;
 
     /* find a free register */
     r = 0;
-    while(lt(r, NB_REGS)) {
+    while(lt(r, 5)) { /* NB_REGS is 5 (sort of) */
         notfound = 0;
         if (and(ri32(add(reg_classes, mul(r,4))), rc)) {
             p = vstack;
             while(lte(p, vtop)) {
-                if (eq(and(p->r, VT_VALMASK), r)) {
+                if (eq(and(gsv_r(p), VT_VALMASK), r)) {
                     notfound = 1;
                     break;
                 }
-                p = p + 1;
+                p = add(p, sizeof_SValue);
             }
             if(eq(notfound, 0)) {
                 return r;
