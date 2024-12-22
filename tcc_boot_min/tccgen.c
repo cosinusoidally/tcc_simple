@@ -147,7 +147,7 @@ void gfunc_param_typed(Sym *func, Sym *arg) {
     enter();
     type = v_alloca(sizeof_CType);
 
-    func_type = func->f.func_type;
+    func_type = gsym_f_func_type(func);
     if (neq(func_type, FUNC_OLD)) {
         memmove(type, gsym_type(arg), sizeof_CType);
         /* need to do that to avoid false warning */
