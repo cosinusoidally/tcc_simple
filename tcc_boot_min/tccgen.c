@@ -112,7 +112,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
                 if (eq(tok, mkc(')'))) {
                     break;
                 }
-                skip(',');
+                skip(mkc(','));
                 parse_btype(&pt, &ad1);
             }
         } else {
@@ -122,7 +122,7 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
         skip(mkc(')'));
         /* NOTE: const is ignored in returned type as it has a special
            meaning in gcc / C++ */
-        type->t = and(type->t, not(VT_CONSTANT));
+        sct_t(type, and(gct_t(type), not(VT_CONSTANT)));
         /* we push a anonymous symbol which will contain the function prototype */
         ad->f.func_type = l;
         s = sym_push(SYM_FIELD, type, 0, 0);
