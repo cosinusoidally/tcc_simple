@@ -87,10 +87,10 @@ int save_reg_upstack(int r, int n) {
     int saved;
     int size;
     int align;
-    SValue *p;
-    SValue *p1;
+    int p;
+    int p1;
     SValue sv;
-    CType *type;
+    int type;
 
     enter();
 //    sv = v_alloca(sizeof_SValue);
