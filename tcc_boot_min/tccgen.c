@@ -82,9 +82,9 @@ int init_tccgen_globals(){
 /* 12 */
 /* push a given symbol on the symbol stack */
 ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
-    Sym *s;
-    Sym **ps;
-    TokenSym *ts;
+    int s;
+    int ps;
+    int ts;
 
     if (ri32(alocal_stack)) {
         ps = alocal_stack;
