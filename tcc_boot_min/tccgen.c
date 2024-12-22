@@ -94,6 +94,7 @@ int block(int *bsym, int *csym, int is_expr) {
     /* FIXME something is definitely wrong */
     v_alloca(1024);
     v_alloca(16);
+    v_alloca(16);
 
     if (eq(tok, TOK_IF)) {
         /* if test */
