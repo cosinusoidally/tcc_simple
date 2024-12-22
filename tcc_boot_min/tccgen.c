@@ -85,8 +85,8 @@ int post_type(CType *type, AttributeDef *ad, int storage) {
     int n;
     int l;
     int align;
-    Sym **plast;
-    Sym *s;
+    int plast;
+    int s;
     int first;
     int ad1;
     int pt;
