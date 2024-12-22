@@ -352,21 +352,21 @@ static void init_putv(CType *type, Section *sec, unsigned long c) {
     int size;
     int align;
 
-    dtype = *type;
+    memmove(&dtype, type, sizeof_CType);
     /* need to do that to avoid false warning */
     dtype.t = and(dtype.t, not(VT_CONSTANT));
 
     /* XXX: not portable */
     /* XXX: generate error if incorrect relocation */
     gen_assign_cast(&dtype);
-    bt = and(type->t, VT_BTYPE);
+    bt = and(gct_t(type), VT_BTYPE);
 
     size = type_size(type, &align);
     section_reserve(sec, add(c, size));
-    ptr = add(sec->data, c);
+    ptr = add(gs_data(sec), c);
 
-    wi8(ptr, or(ri8(ptr), vtop->c.i));
-    vtop = vtop - 1;
+    wi8(ptr, or(ri8(ptr), gcv_i(gsv_c(vtop))));
+    vtop = sub(vtop, sizeof_SValue);
 }
 
 /* 53 */
