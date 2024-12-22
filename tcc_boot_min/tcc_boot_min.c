@@ -3320,6 +3320,63 @@ int save_reg(int r) {
     save_reg_upstack(r, 0);
 }
 
+/* 28 */
+/* save r to the memory stack, and mark it as being free,
+   if seen up to (vtop - n) stack entry */
+int save_reg_upstack(int r, int n) {
+    int l;
+    int saved;
+    int size;
+    int align;
+    int p;
+    int p1;
+    int sv;
+    int type;
+
+    enter();
+    sv = v_alloca(sizeof_SValue);
+    align= v_alloca(4);
+
+    r = and(r, VT_VALMASK);
+    if (gte(r, VT_CONST)) {
+        return leave(0);
+    }
+
+    /* modify all stack values */
+    saved = 0;
+    l = 0;
+    p = avstack;
+    p1 = sub(vtop, mul(n, sizeof_SValue));
+    while(lte(p, p1)) {
+        if (eq(and(gsv_r(p), VT_VALMASK), r)) {
+            /* must save value on stack if not already done */
+            if (eq(0, saved)) {
+                r = and(gsv_r(p), VT_VALMASK);
+                /* store register in the stack */
+                type = gsv_type(p);
+                if (and(gsv_r(p), VT_LVAL)) {
+                    type = aint_type;
+                }
+                size = type_size(type, align);
+                loc = and(sub(loc, size), sub(0, ri32(align)));
+                sct_t(gsv_type(sv), gct_t(type));
+                ssv_r(sv, or(VT_LOCAL, VT_LVAL));
+                scv_i(gsv_c(sv), loc);
+                store(r, sv);
+
+                l = loc;
+                saved = 1;
+            }
+            /* mark that stack entry as being saved on the stack */
+            ssv_r(p, or(lvalue_type(gct_t(gsv_type(p))), VT_LOCAL));
+            scv_i(gsv_c(p), l);
+        }
+        p = add(p, sizeof_SValue);
+    }
+
+    leave(0);
+}
+
 /* 29 */
 /* find a free register of class 'rc'. If none, save one register */
 int get_reg(int rc) {
