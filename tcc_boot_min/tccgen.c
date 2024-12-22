@@ -103,20 +103,20 @@ ST_FUNC void save_reg_upstack(int r, int n) {
     p = vstack;
     p1 = sub(vtop, mul(n, sizeof_SValue));
     while(lte(p, p1)) {
-        if (eq(and(p->r, VT_VALMASK), r)) {
+        if (eq(and(gsv_r(p), VT_VALMASK), r)) {
             /* must save value on stack if not already done */
             if (eq(0, saved)) {
-                r = and(p->r, VT_VALMASK);
+                r = and(gsv_r(p), VT_VALMASK);
                 /* store register in the stack */
-                type = &p->type;
-                if (and(p->r, VT_LVAL)) {
-                    type = &int_type;
+                type = asv_type(p);
+                if (and(gsv_r(p), VT_LVAL)) {
+                    type = aint_type;
                 }
                 size = type_size(type, &align);
                 loc = and(sub(loc, size), sub(0, align));
                 sv.type.t = type->t;
-                sv.r = or(VT_LOCAL, VT_LVAL);
-                sv.c.i = loc;
+                ssv_r(&sv, or(VT_LOCAL, VT_LVAL));
+                scv_i(gsv_c(&sv), loc);
                 store(r, &sv);
 
                 l = loc;
