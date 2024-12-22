@@ -291,5 +291,7 @@ int avstack;
 
 int aSTRING_MAX_SIZE;
 
-/* =============== end globals.c ========================================== */
+int aint_type;
+int afunc_old_type;
 
+/* =============== end globals.c ========================================== */

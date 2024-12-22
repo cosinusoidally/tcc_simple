@@ -70,6 +70,14 @@ static int gvtst(int inv, int t);
 static void skip_or_save_block(TokenString **str);
 static void gv_dup(void);
 
+extern int aint_type;
+extern int afunc_old_type;
+
+int init_tccgen_globals(){
+  aint_type = &int_type;
+  afunc_old_type = &func_old_type;
+}
+
 /* 1 */
 /* ------------------------------------------------------------------------- */
 ST_FUNC int tccgen_compile(TCCState *s1) {
