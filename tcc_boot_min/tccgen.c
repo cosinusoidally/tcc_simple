@@ -82,23 +82,23 @@ int init_tccgen_globals(){
 /* 36 */
 /* return type size as known at compile time. Put alignment at 'a' */
 ST_FUNC int type_size(CType *type, int *a) {
-    Sym *s;
+    int s;
     int bt;
     int ts;
 
-    bt = and(type->t, VT_BTYPE);
+    bt = and(gct_t(type), VT_BTYPE);
     if (eq(bt, VT_PTR)) {
 
-        s = type->ref;
-        ts = type_size(&s->type, a);
+        s = gct_ref(type);
+        ts = type_size(gsym_type(s), a);
 
-        return ts * s->c;
+        return mul(ts, gsym_c(s));
     } else if(eq(bt, VT_INT)) {
-        *a = 4;
+        wi32(a, 4);
         return 4;
     } else {
         /* char, void, function, _Bool */
-        *a = 1;
+        wi32(a, 1);
         return 1;
     }
 }
