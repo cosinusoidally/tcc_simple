@@ -93,7 +93,6 @@ int gs_name(int o) {return add(o, Section_name_o);}
 
 /* SValue accessors */
 
-
 /* CType type */
 int gsv_type(int o) {return add(o, SValue_type_o);}
 

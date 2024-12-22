@@ -86,12 +86,12 @@ int init_tccgen_globals(){
 int parse_btype(CType *type, AttributeDef *ad) {
     int type_found;
     int typespec_found;
-    Sym *s;
+    int s;
 
-    memset(ad, 0, sizeof(AttributeDef));
+    memset(ad, 0, sizeof_AttributeDef);
     type_found = 0;
     typespec_found = 0;
-    type->ref = 0;
+    sct_ref(type, 0);
 
     while(1) {
         if(eq(tok, TOK_INT)) {
@@ -107,7 +107,7 @@ int parse_btype(CType *type, AttributeDef *ad) {
         type_found = 1;
     }
 
-    type->t = VT_INT;
+    sct_t(type, VT_INT);
     return type_found;
 }
 
