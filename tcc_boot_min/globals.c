@@ -182,6 +182,7 @@ int RC_EAX;
 int RC_ECX;
 int RC_IRET;
 
+int SYM_STRUCT;
 int SYM_FIELD;
 int SYM_FIRST_ANOM;
 

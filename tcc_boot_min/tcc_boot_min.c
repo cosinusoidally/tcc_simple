@@ -493,6 +493,7 @@ int init_runtime(){
   RC_ECX = 16;
   RC_IRET = RC_EAX;
 
+  SYM_STRUCT = 1073741824; /* 0x40000000 struct/union/enum symbol space */
   SYM_FIELD = 536870912; /*  0x20000000 struct/union field symbol space */
   SYM_FIRST_ANOM = 268435456; /* 0x10000000 first anonymous sym */
 
@@ -3064,6 +3065,34 @@ int sym_find(int v) {
         return 0;
     }
     return gtks_sym_identifier(ri32(add(table_ident, mul(v, 4))));
+}
+
+/* 12 */
+/* push a given symbol on the symbol stack */
+int sym_push(int v, int type, int r, int c) {
+    int s;
+    int ps;
+    int ts;
+
+    if (ri32(alocal_stack)) {
+        ps = alocal_stack;
+    } else {
+        ps = aglobal_stack;
+    }
+    s = sym_push2(ps, v, gct_t(type), c);
+    sct_ref(gsym_type(s), gct_ref(type));
+    ssym_r(s, r);
+    /* don't record fields or anonymous symbols */
+    /* XXX: simplify */
+    if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
+        /* record symbol in token array */
+        ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
+        ps = atks_sym_identifier(ts);
+        ssym_prev_tok(s, ri32(ps));
+        wi32(ps, s);
+        ssym_sym_scope(s, local_scope);
+    }
+    return s;
 }
 
 /* end of tccgen.c */

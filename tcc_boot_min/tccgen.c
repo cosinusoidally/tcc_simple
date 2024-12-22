@@ -79,34 +79,6 @@ int init_tccgen_globals(){
   anb_sym_pools = &nb_sym_pools;
 }
 
-/* 12 */
-/* push a given symbol on the symbol stack */
-ST_FUNC Sym *sym_push(int v, CType *type, int r, int c) {
-    int s;
-    int ps;
-    int ts;
-
-    if (ri32(alocal_stack)) {
-        ps = alocal_stack;
-    } else {
-        ps = aglobal_stack;
-    }
-    s = sym_push2(ps, v, gct_t(type), c);
-    sct_ref(gsym_type(s), gct_ref(type));
-    ssym_r(s, r);
-    /* don't record fields or anonymous symbols */
-    /* XXX: simplify */
-    if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
-        /* record symbol in token array */
-        ts = ri32(add(table_ident, mul(sub(and(v, not(SYM_STRUCT)), TOK_IDENT), 4)));
-        ps = atks_sym_identifier(ts);
-        ssym_prev_tok(s, ri32(ps));
-        wi32(ps, s);
-        ssym_sym_scope(s, local_scope);
-    }
-    return s;
-}
-
 /* 13 */
 /* push a global identifier */
 ST_FUNC Sym *global_identifier_push(int v, int t, int c) {
