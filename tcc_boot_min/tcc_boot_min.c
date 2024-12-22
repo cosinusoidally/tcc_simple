@@ -524,6 +524,9 @@ int init_runtime(){
   RC_ECX = 16;
   RC_IRET = RC_EAX;
 
+  TREG_EAX = 0;
+  REG_IRET = TREG_EAX;
+
   SYM_STRUCT = 1073741824; /* 0x40000000 struct/union/enum symbol space */
   SYM_FIELD = 536870912; /*  0x20000000 struct/union field symbol space */
   SYM_FIRST_ANOM = 268435456; /* 0x10000000 first anonymous sym */

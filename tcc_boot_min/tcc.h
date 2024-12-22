@@ -57,9 +57,9 @@ extern int RC_ECX;   /*  0x0010 */
 extern int RC_IRET;    /* RC_EAX function return: integer register */
 
 /* pretty names for the registers */
+extern int TREG_EAX; /* 0, */
 enum {
-    TREG_EAX = 0,
-    TREG_ECX,
+    TREG_ECX = 1,
     TREG_EDX,
     TREG_EBX,
     TREG_ST0,
@@ -67,7 +67,7 @@ enum {
 };
 
 /* return registers for function */
-#define REG_IRET TREG_EAX /* single word int return register */
+extern int REG_IRET; /* TREG_EAX single word int return register */
 
 /* pointer size, in bytes */
 #define PTR_SIZE 4
