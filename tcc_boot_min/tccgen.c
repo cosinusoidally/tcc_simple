@@ -89,11 +89,11 @@ int save_reg_upstack(int r, int n) {
     int align;
     int p;
     int p1;
-    SValue sv;
+    int sv;
     int type;
 
     enter();
-//    sv = v_alloca(sizeof_SValue);
+    sv = v_alloca(sizeof_SValue);
     align= v_alloca(4);
 
     r = and(r, VT_VALMASK);
@@ -118,10 +118,10 @@ int save_reg_upstack(int r, int n) {
                 }
                 size = type_size(type, align);
                 loc = and(sub(loc, size), sub(0, ri32(align)));
-                sct_t(gsv_type(&sv), gct_t(type));
-                ssv_r(&sv, or(VT_LOCAL, VT_LVAL));
-                scv_i(gsv_c(&sv), loc);
-                store(r, &sv);
+                sct_t(gsv_type(sv), gct_t(type));
+                ssv_r(sv, or(VT_LOCAL, VT_LVAL));
+                scv_i(gsv_c(sv), loc);
+                store(r, sv);
 
                 l = loc;
                 saved = 1;
