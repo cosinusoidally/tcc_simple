@@ -133,6 +133,9 @@ int ssym_r(int o, int v) {wi32(add(o, Sym_r_o), v);}
 int gsym_c(int o) {return ri32(add(o, Sym_c_o));}
 int ssym_c(int o, int v) {wi32(add(o, Sym_c_o), v);}
 
+int gsym_sym_scope(int o) {return ri32(add(o, Sym_sym_scope_o));}
+int ssym_sym_scope(int o, int v) {wi32(add(o, Sym_sym_scope_o), v);}
+
 /* struct FuncAttr->func_type */
 int gsym_f_func_type(int o) {return ri32(add(o, Sym_f_func_type_o));}
 int ssym_f_func_type(int o, int v) {wi32(add(o, Sym_f_func_type_o), v);}
