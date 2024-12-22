@@ -359,9 +359,9 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     int align;
     int addr;
     int init_str;
-    Section *sec;
-    Sym *flexible_array;
-    Sym *sym;
+    int sec;
+    int flexible_array;
+    int sym;
 
 /* FIXME there is a stack allocation bug somewhere causing crashes */
     enter();
@@ -415,7 +415,7 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
     } else {
 
         /* allocate symbol in corresponding section */
-        sec = ad->section;
+        sec = gad_section(ad);
         if (eq(0, sec)) {
             if (has_init) {
                 sec = data_section;
@@ -433,14 +433,14 @@ int decl_initializer_alloc(CType *type, AttributeDef *ad, int r,
             }
             /* Local statics have a scope until now (for
                warnings), remove it here.  */
-            sym->sym_scope = 0;
+            ssym_sym_scope(sym, 0);
             /* update symbol definition */
 	    put_extern_sym(sym, sec, addr, size);
         } else {
             /* push global reference */
             sym = get_sym_ref(type, sec, addr, size);
 	    vpushsym(type, sym);
-	    vtop->r = or(vtop->r, r);
+	    ssv_r(vtop, or(gsv_r(vtop), r));
         }
 
     }
