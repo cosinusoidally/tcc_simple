@@ -89,16 +89,16 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
     TokenSym *ts;
     int v;
 
-    s = *ptop;
+    s = ri32(ptop);
     while(neq(s, b)) {
-        ss = s->prev;
-        v = s->v;
+        ss = gsym_prev(s);
+        v = gsym_v(s);
         /* remove symbol in token array */
         /* XXX: simplify */
         if (and(eq(0, and(v, SYM_FIELD)), lt(and(v, not(SYM_STRUCT)), SYM_FIRST_ANOM))) {
             ts = table_ident[sub(and(v, not(SYM_STRUCT)), TOK_IDENT)];
-            ps = &ts->sym_identifier;
-            *ps = s->prev_tok;
+            ps = atks_sym_identifier(ts);
+            wi32(ps, gsym_prev_tok(s));
         }
 	if (eq(0, keep)) {
 	    sym_free(s);
@@ -106,7 +106,7 @@ ST_FUNC void sym_pop(Sym **ptop, Sym *b, int keep) {
         s = ss;
     }
     if (eq(0, keep)) {
-	*ptop = b;
+	wi32(ptop, b);
     }
 }
 
