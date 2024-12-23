@@ -1,0 +1,3 @@
+./mk_tcc_boot_min
+cat ./tcc_boot_min/m2_proto.c ./artifacts/tcc_boot_min_full.c > artifacts/out.c
+~/stage0-posix/x86/bin/M2-Planet --architecture x86 -f ./artifacts/out.c -o ./artifacts/out.M1

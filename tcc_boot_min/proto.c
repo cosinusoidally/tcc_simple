@@ -174,7 +174,7 @@ int is_space(int ch);
 int leave(int x);
 int load(int r, int sv);
 int lvalue_type(int t);
-int main(argc0, argv0);
+int main(int argc0, int argv0);
 int mk_pointer(int type);
 int new_section(int s1, int name, int sh_type, int sh_flags);
 int next();
@@ -382,3 +382,12 @@ int ri8(int o);
 int wi8(int o,int v);
 int mks(int s);
 int mkc(int c);
+
+int new_symtab(int s1, int symtab_name, int sh_type, int sh_flags,
+               int strtab_name, int hash_name, int hash_sh_flags);
+int set_elf_sym(int s, int value, int size,
+                       int info, int other, int shndx, int name);
+int put_elf_sym(int s, int value, int size,
+    int info, int other, int shndx, int name);
+int decl_initializer_alloc(int type, int ad, int r,
+                                   int has_init, int v, int scope);

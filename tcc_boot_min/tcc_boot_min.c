@@ -372,7 +372,6 @@ int init_globals() {
 int init_runtime(){
   foo=mks("hello world");
   puts(foo);
-  printf(mks("blah: %d\n"),add(1,2));
 
   TCCState_sections_o = 12;
   TCCState_nb_sections_o = 16;
