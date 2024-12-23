@@ -18,8 +18,10 @@ int init_globals() {
 
   /* TokenSym *hash_ident[TOK_HASH_SIZE] */
   ahash_ident = tcc_mallocz(mul(aTOK_HASH_SIZE, 4));
-  acstr_buf = &cstr_buf;
-  aisidnum_table = isidnum_table;
+  acstr_buf = tcc_mallocz(sizeof_CString);
+
+  /* unsigned char isidnum_table[256 - CH_EOF] */
+  aisidnum_table = tcc_mallocz(sub(256, CH_EOF_));
   atokc = &tokc;
   atokcstr = &tokcstr;
   atoken_buf = &token_buf;
