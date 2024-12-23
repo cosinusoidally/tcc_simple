@@ -1,11 +1,11 @@
 #include "tcc.h"
 
 int init_globals() {
-  aTOK_HASH_SIZE = TOK_HASH_SIZE;
+  aTOK_HASH_SIZE = 16384;     /* must be a power of two */
 
   CH_EOF_ = sub(0, 1);
 
-  aSTRING_MAX_SIZE = STRING_MAX_SIZE;
+  aSTRING_MAX_SIZE = 1024;
 
   aglobal_stack = tcc_mallocz(sizeof_void); /* Sym *global_stack */
   alocal_stack = tcc_mallocz(sizeof_void); /* Sym *local_stack */
@@ -17,7 +17,7 @@ int init_globals() {
   anb_sym_pools = tcc_mallocz(sizeof_int); /* int nb_sym_pools */
 
   /* TokenSym *hash_ident[TOK_HASH_SIZE] */
-  ahash_ident = hash_ident;
+  ahash_ident = tcc_mallocz(mul(aTOK_HASH_SIZE, 4));
   acstr_buf = &cstr_buf;
   aisidnum_table = isidnum_table;
   atokc = &tokc;
