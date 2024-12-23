@@ -28,6 +28,7 @@ int init_globals() {
   /* char token_buf[STRING_MAX_SIZE + 1] */
   atoken_buf = tcc_mallocz(add(aSTRING_MAX_SIZE, 1));
 
-
-  avstack = vstack;
+  /* VSTACK_SIZE 256 */
+  /* SValue vstack[VSTACK_SIZE] */
+  avstack = tcc_mallocz(mul(256, sizeof_SValue));
 }
