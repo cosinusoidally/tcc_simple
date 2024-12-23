@@ -32,7 +32,7 @@ int sts_outfile(int o,int v) {wi32(add(o, TCCState_outfile_o), v);}
 /* struct filespec accessors */
 
 int gfs_type(int o) {return ri8(add(o,filespec_type_o));}
-int sfs_type(int o, int v) {wi8(add(o,filespec_type_o, v));}
+int sfs_type(int o, int v) {wi8(add(o,filespec_type_o), v);}
 
 int gfs_name(int o) {return add(o,filespec_name_o);}
 
@@ -4406,7 +4406,7 @@ int tcc_new() {
     return s;
 }
 
-int main(argc0, argv0){
+int main(int argc0, int argv0){
     int s;
     int argc;
     int argv;

@@ -18,8 +18,8 @@ int wi32(int o, int v) {
 }
 
 int ri16(int o) {
-        return or(or(and(ri8(o), 255),
-                shl(and(ri8(add(o, 1)), 255), 8)));
+        return or(and(ri8(o), 255),
+                shl(and(ri8(add(o, 1)), 255), 8));
 }
 
 int wi16(int o, int v) {
