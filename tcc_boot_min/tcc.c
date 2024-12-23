@@ -24,6 +24,10 @@ int init_globals() {
   aisidnum_table = tcc_mallocz(sub(256, CH_EOF_));
   atokc = tcc_mallocz(sizeof_CValue);
   atokcstr = tcc_mallocz(sizeof_CString);
-  atoken_buf = &token_buf;
+
+  /* char token_buf[STRING_MAX_SIZE + 1] */
+  atoken_buf = tcc_mallocz(add(aSTRING_MAX_SIZE, 1));
+
+
   avstack = vstack;
 }
