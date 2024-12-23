@@ -22,8 +22,8 @@ int init_globals() {
 
   /* unsigned char isidnum_table[256 - CH_EOF] */
   aisidnum_table = tcc_mallocz(sub(256, CH_EOF_));
-  atokc = &tokc;
-  atokcstr = &tokcstr;
+  atokc = tcc_mallocz(sizeof_CValue);
+  atokcstr = tcc_mallocz(sizeof_CString);
   atoken_buf = &token_buf;
   avstack = vstack;
 }
