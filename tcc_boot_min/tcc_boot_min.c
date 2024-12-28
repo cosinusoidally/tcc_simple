@@ -2264,7 +2264,7 @@ int parse_pp_string(int p, int sep, int str) {
                 /* LJW HACK r and w function to avoid moving c and p to stack */
                 wi8(tc, c); wi32(tp, p);
                 PEEKC_EOB(tc, tp);
-                c = ri32(tc); p = ri32(tp);
+                c = ri8(tc); p = ri32(tp);
                 if (str) {
                     cstr_ccat(str, mkc('\\'));
                     cstr_ccat(str, c);
@@ -2641,12 +2641,12 @@ int next_nomacro1() {
             p = sub(p, 1);
             wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
             PEEKC(tc, tp);
-            c = ri32(tc); p = ri32(tp);
+            c = ri8(tc); p = ri32(tp);
             while (and(ri8(add(aisidnum_table, sub(c, CH_EOF_))), or(IS_ID, IS_NUM))) {
                 cstr_ccat(atokcstr, c);
                 wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
                 PEEKC(tc, tp);
-                c = ri32(tc); p = ri32(tp);
+                c = ri8(tc); p = ri32(tp);
             }
             ts = tok_alloc(gcs_data(atokcstr), gcs_size(atokcstr));
         }
@@ -2655,7 +2655,7 @@ int next_nomacro1() {
         t = c;
         wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
         PEEKC(tc, tp);
-        c = ri32(tc); p = ri32(tp);
+        c = ri8(tc); p = ri32(tp);
         /* after the first digit, accept digits, alpha, '.' or sign if
            prefixed by 'eEpP' */
         cstr_reset(atokcstr);
@@ -2669,7 +2669,7 @@ int next_nomacro1() {
             t = c;
             wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
             PEEKC(tc, tp);
-            c = ri32(tc); p = ri32(tp);
+            c = ri8(tc); p = ri32(tp);
         }
         /* We add a trailing '\0' to ease parsing */
         cstr_ccat(atokcstr, 0);
@@ -2688,12 +2688,12 @@ int next_nomacro1() {
     } else if(eq(c, mkc('='))){
         wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
         PEEKC(tc, tp);
-        c = ri32(tc); p = ri32(tp);
+        c = ri8(tc); p = ri32(tp);
         tok = mkc('=');
     } else if(eq(c, mkc('/'))){
         wi8(tc, c); wi32(tp, p); /* LJW hack to avoid using & */
         PEEKC(tc, tp);
-        c = ri32(tc); p = ri32(tp);
+        c = ri8(tc); p = ri32(tp);
         if (eq(c, mkc('*'))) {
             p = parse_comment(p);
             /* comments replaced by a blank */
