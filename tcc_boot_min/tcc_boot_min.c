@@ -4192,9 +4192,8 @@ int decl_initializer_alloc(int type, int ad, int r,
     int flexible_array;
     int sym;
 
-/* FIXME there is a stack allocation bug somewhere causing crashes */
     enter();
-    align = v_alloca(16); /* in theory 4 should work but there is a bug */
+    align = v_alloca(4);
 
     init_str = 0;
     sym = 0;
@@ -4304,7 +4303,7 @@ int decl0(int l, int is_for_loop_init, int func_sym) {
     enter();
     type = v_alloca(sizeof_CType);
     btype = v_alloca(sizeof_CType);
-    ad = v_alloca(mul(2,sizeof_AttributeDef)); /* FIXME shouldn't have to double */
+    ad = v_alloca(sizeof_AttributeDef);
     v = v_alloca(4);
 
     while (1) {
