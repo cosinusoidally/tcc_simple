@@ -301,6 +301,7 @@ int TOK_ALLOC_INCR;
 int TOK_MAX_SIZE;
 
 int aTOK_HASH_SIZE;
+int TOK_HASH_INIT;
 int ahash_ident;
 
 int acstr_buf;

@@ -338,6 +338,7 @@ int gad_section(int o) {return ri32(add(o, AttributeDef_section_o));}
 
 int init_globals() {
   aTOK_HASH_SIZE = 16384;     /* must be a power of two */
+  TOK_HASH_INIT = 1;
 
   CH_EOF_ = sub(0, 1);
 
@@ -2069,7 +2070,7 @@ int tok_alloc(int str, int len) {
     int i;
     int h;
 
-    h = 1; /* TOK_HASH_INIT */
+    h = TOK_HASH_INIT;
     i = 0;
     while(lt(i, len)) {
         h = TOK_HASH_FUNC(h, (ri8(add(str, i))));
@@ -2596,7 +2597,7 @@ int next_nomacro1() {
     c = ri8(p);
     if(isid(c)) {
         p1 = p;
-        h = 1; /* TOK_HASH_INIT */
+        h = TOK_HASH_INIT;
         h = TOK_HASH_FUNC(h, c);
         while (1) {
             p = add(p, 1);
