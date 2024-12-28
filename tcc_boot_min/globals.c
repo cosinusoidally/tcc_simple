@@ -254,6 +254,7 @@ int TOK_PPNUM;
 int TOK_PPSTR;
 int TOK_CCHAR;
 int TOK_CINT;
+int TOK_CUINT;
 
 int TOK_NE;
 

@@ -613,6 +613,7 @@ int init_runtime(){
 
   TOK_CCHAR = 179; /* 0xb3 char constant in tokc */
   TOK_CINT = 181; /* 0xb5 number in tokc */
+  TOK_CUINT = 182; /* 0xb6 unsigned int constant */
 
   TOK_EOF = sub(0, 1); /* (-1)  end of file */
 
@@ -3833,7 +3834,7 @@ int unary() {
         sct_t(type, t);
         vsetc(type, VT_CONST, atokc);
         next();
-    } else if(eq(tok, 182)) { /* TOK_CUINT = 182 bodge, maybe hash issue */
+    } else if(eq(tok, TOK_CUINT)) {
         t = or(VT_INT, VT_UNSIGNED);
         sct_t(type, t);
         vsetc(type, VT_CONST, atokc);
