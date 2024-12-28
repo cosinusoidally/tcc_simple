@@ -3955,10 +3955,8 @@ int block(int bsym, int csym, int is_expr) {
 
     enter();
 
-    /* FIXME something is definitely wrong */
-    v_alloca(1024);
-    a = v_alloca(16);
-    b = v_alloca(16);
+    a = v_alloca(4);
+    b = v_alloca(4);
 
     if (eq(tok, TOK_IF)) {
         /* if test */
