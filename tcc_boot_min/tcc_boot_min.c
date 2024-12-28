@@ -4191,7 +4191,6 @@ int decl_initializer_alloc(int type, int ad, int r,
     int addr;
     int init_str;
     int sec;
-    int flexible_array;
     int sym;
 
     enter();
@@ -4199,7 +4198,6 @@ int decl_initializer_alloc(int type, int ad, int r,
 
     init_str = 0;
     sym = 0;
-    flexible_array = 0;
     int oldreloc_offset;
 
     size = type_size(type, align);
@@ -4209,7 +4207,7 @@ int decl_initializer_alloc(int type, int ad, int r,
        (e.g. string pointers or ISOC99 compound
        literals). It also simplifies local
        initializers handling */
-    if (or(lt(size, 0), and(flexible_array, has_init))) {
+    if (lt(size, 0)) {
         /* get all init string */
         init_str = tok_str_alloc();
         /* only get strings */
