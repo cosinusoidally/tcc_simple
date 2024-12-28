@@ -1,3 +1,15 @@
 ./mk_tcc_boot_min
-cat ./tcc_boot_min/m2_proto.c ./artifacts/tcc_boot_min_full.c > artifacts/out.c
-~/stage0-posix/x86/bin/M2-Planet --architecture x86 -f ./artifacts/out.c -o ./artifacts/out.M1
+
+set -xe
+
+cd artifacts
+
+cat ../tcc_boot_min/m2_proto.c ../tcc_boot_min/proto.c ../tcc_boot_min/globals.c ../tcc_boot_min/support_common.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
+
+cd ..
+
+~/stage0-posix/x86/bin/M2-Planet --architecture x86 -f ./artifacts/tcc_boot_min_full.c -o ./artifacts/out.M1
+echo $?
+wc ./artifacts/out.M1
+
+echo "Not yet running under M2-Planet, but can compile."

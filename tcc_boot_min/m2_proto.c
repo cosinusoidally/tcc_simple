@@ -4,7 +4,7 @@ int free(int a);
 int malloc(int a);
 int memset(int a, int b, int c);
 int realloc(int a, int b);
-int strlen(int a, int b);
+int strlen(int a);
 int strcpy(int a, int b);
 int close(int a);
 int open(int a, int b);
