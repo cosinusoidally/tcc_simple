@@ -3701,11 +3701,10 @@ int post_type(int type, int ad, int storage) {
     int pt;
 
     enter();
-    /* FIXME there is some bug with the v_alloca function should be 4 */
-    ad1 = v_alloca(16);
-    align = v_alloca(16);
-    first = v_alloca(16);
-    n = v_alloca(16);
+    ad1 = v_alloca(sizeof_AttributeDef);
+    align = v_alloca(4);
+    first = v_alloca(4);
+    n = v_alloca(4);
     pt = v_alloca(sizeof_CType);
 
     if (eq(tok, mkc('('))) {
