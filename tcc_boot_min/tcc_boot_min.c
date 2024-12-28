@@ -3822,14 +3822,10 @@ int unary() {
     int ret_nregs;
     int regsize;
 
-/* FIXME there is some bug with the virtual stack */
     enter();
-    /* definitely something weird going on */
-    /* 64 bytes of padding seems to fix */
-    v_alloca(64);
     ret = v_alloca(sizeof_SValue);
     type = v_alloca(sizeof_CType);
-    ad = v_alloca(mul(2, sizeof_AttributeDef));
+    ad = v_alloca(sizeof_AttributeDef);
 
     sct_ref(type, 0);
     if(or(eq(tok, TOK_CINT), eq(tok, TOK_CCHAR))) {
