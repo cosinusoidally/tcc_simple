@@ -1,6 +1,14 @@
 /* ================= start support_common.c =============================== */
 
+int v_esp; int v_ebp; int v_stack_size; int v_stack;
+
 int ri32(int o) {
+/* temp debug code  for out of bound stack read */
+/*
+    if(and(gte(o,v_stack),lt(o,v_esp))){
+        puts("OOB stack read");
+    }
+*/
         return or(or(and(ri8(o), 255),
                 shl(and(ri8(add(o, 1)), 255), 8)),
                 or(shl(and(ri8(add(o, 2)), 255), 16),
@@ -27,8 +35,6 @@ int wi16(int o, int v) {
   v = shr(v, 8);
   wi8(add(o, 1), and(v, 255));
 }
-
-int v_esp; int v_ebp; int v_stack_size; int v_stack;
 
 int init_c(){
   puts("init_c called");
