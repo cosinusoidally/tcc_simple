@@ -3469,15 +3469,27 @@ int gv(int rc) {
     int r;
     int t1;
     int t;
+    int cond;
 
     r = and(gsv_r(vtop), VT_VALMASK);
     /* need to reload if:
        - constant
        - lvalue (need to dereference pointer)
        - already a register, but not in the right class */
-    if (or(or(gte(r, VT_CONST),
-              and(gsv_r(vtop), VT_LVAL)),
-              eq(0, and(ri32(add(reg_classes, mul(r, 4))), rc)))) {
+
+    /* this is a work around for lack of short-circuit evaluation */
+    cond = 0;
+    if (gte(r, VT_CONST)) {
+        cond = 1;
+    } else if (and(gsv_r(vtop), VT_LVAL)) {
+        cond = 1;
+    } else if (eq(0, and(ri32(add(reg_classes, mul(r, 4))), rc))) {
+        cond = 1;
+    } else {
+        cond = 0;
+    }
+
+    if (cond) {
         r = get_reg(rc);
         if (and(gsv_r(vtop), VT_LVAL)) {
             /* lvalue of scalar type : need to use lvalue type

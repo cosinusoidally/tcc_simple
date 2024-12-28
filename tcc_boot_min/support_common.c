@@ -3,7 +3,7 @@
 int v_esp; int v_ebp; int v_stack_size; int v_stack;
 
 int ri32(int o) {
-/* temp debug code  for out of bound stack read */
+/* temp debug code for out of bound stack read */
 /*
     if(and(gte(o,v_stack),lt(o,v_esp))){
         puts("OOB stack read");
