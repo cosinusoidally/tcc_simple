@@ -1,3 +1,33 @@
+/*
+ *  This is a heavily cut down and simplified version of the Tiny C Compiler
+ *  Changes are:
+ *  Copyright (c) 2024-2025 Liam Wilson under the same license as below
+ *
+ *  Original license notice below, note this is a cut down version of
+ *  tcc-0.9.27 from 2017, but the current maintainer never bothered updating
+ *  the copyright notices on any of the files I've incorporated into
+ *  tcc_boot_min.c . A more accurate notice would probably be something like
+ *  2001-2006 Fabrice Bellard, 2006-2017 various:
+ *
+ *  TCC - Tiny C Compiler
+ *
+ *  Copyright (c) 2001-2004 Fabrice Bellard
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 
 /* TCCState accessors */
 
