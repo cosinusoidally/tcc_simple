@@ -827,7 +827,7 @@ int gfunc_call(int nb_args) {
     i = 0;
     while(lt(i, nb_args)) {
         r = gv(RC_INT);
-        o(add(0x50, r)); /* push r */
+        o(add(80, r)); /* 0x50 push r */
         args_size = add(args_size, 4);
         vtop = sub(vtop, sizeof_SValue);
         i = add(i, 1);
