@@ -16,7 +16,6 @@ tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_tcc.o
 tcc -nostdinc -c ../tcc_boot_min/support.c -o support_tcc.o
 tcc -g support_tcc.o tcc_boot_min_full_tcc.o -o tcc_boot_min_tcc
 
-# build some test files
 
 echo "now we build tcc_boot_max"
 
@@ -25,25 +24,21 @@ cat ../tcc_boot_max/globals.c ../tcc_boot_max/support_common.c ../tcc_boot_max/t
 # build tcc_boot_min with gcc
 gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_gcc.o
 gcc -g3 -O0 -m32 -nostdinc -c ../tcc_boot_max/support.c -o support_max_gcc.o
-gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_gcc.o -o tcc_boot_max_gcc
+gcc -g3 -O0 -m32 -I ../tcc_boot_max/ -I ../tcc_boot_max/include/ -c ../tcc_boot_max/tcc.c -DONE_SOURCE -o tcc_boot_max_gcc.o
+gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_gcc.o tcc_boot_max_gcc.o -o tcc_boot_max_gcc
+
+# build some test files
 
 # we have to symlink since tcc will include the file name in the object code
 # file which then causes hashes not to match
+ln -s ../tcc_27/libc_boot4.c libc_boot4.c
+ln -s ../tcc_27/libc_static.c libc_static.c
+ln -s ../tcc_27/tcc.c tcc.c
 ln -s ../M2_simple_asm.c M2_simple_asm.c
 ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
-
-# do the test file builds
-
-./tcc_boot_min_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
-./tcc_boot_min_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
-./tcc_boot_min_tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self2.o
-./tcc_boot_min_tcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_self2.o
-
-./tcc_boot_min_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
-./tcc_boot_min_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
-./tcc_boot_min_gcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self.o
-./tcc_boot_min_gcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_self.o
-
+mkdir lib
+cd lib
+ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
 cd ..
 
 # show total lines
