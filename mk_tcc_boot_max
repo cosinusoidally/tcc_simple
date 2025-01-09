@@ -22,6 +22,11 @@ echo "now we build tcc_boot_max"
 
 cat ../tcc_boot_max/globals.c ../tcc_boot_max/support_common.c ../tcc_boot_max/tcc_boot_max.c > tcc_boot_max_full.c
 
+# build tcc_boot_min with gcc
+gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_gcc.o
+gcc -g3 -O0 -m32 -nostdinc -c ../tcc_boot_max/support.c -o support_max_gcc.o
+gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_gcc.o -o tcc_boot_max_gcc
+
 # we have to symlink since tcc will include the file name in the object code
 # file which then causes hashes not to match
 ln -s ../M2_simple_asm.c M2_simple_asm.c
