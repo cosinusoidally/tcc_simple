@@ -55,6 +55,23 @@ cd ..
 
 diff -u -s tcc_boot_max_full_tcc.o tcc_boot_max_full_tcc2.o
 
+# link self hosted version of tcc_boot_max
+gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_tcc.o tcc_boot_max_gcc.o -o tcc_boot_max_self -ldl
+
+./tcc_boot_max_self -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_self.o
+./tcc_boot_max_self -nostdinc -c ../tcc_boot_max/support.c -o support_max_self.o
+./tcc_boot_max_self -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_boot_max/include -I ../tcc_boot_max/ -c ../tcc_boot_max/tcc.c -U__linux__ -DONE_SOURCE -o tcc_boot_max_self.o
+gcc -g3 -O0 -m32 support_max_self.o tcc_boot_max_full_self.o tcc_boot_max_self.o -o tcc_boot_max_self2 -ldl
+
+./tcc_boot_max_self2 -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_tcc3.o
+
+diff -u -s tcc_boot_max_full_tcc2.o tcc_boot_max_full_tcc3.o
+
+# check with stock tcc
+tcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_tcc4.o
+
+diff -u -s tcc_boot_max_full_tcc3.o tcc_boot_max_full_tcc4.o
+
 cd ..
 # show total lines
 wc tcc_boot_max/*c tcc_boot_max/*h |sort -h
