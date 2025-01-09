@@ -72,6 +72,17 @@ tcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_tcc4.o
 
 diff -u -s tcc_boot_max_full_tcc3.o tcc_boot_max_full_tcc4.o
 
+# building tcc_27 with self hosted version
+
+./tcc_boot_max_self -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc_2.o
+
+./tcc_boot_max_self -c ./lib/libtcc1.c -o libtcc1_2.o
+
+./tcc_boot_max_self -c libc_boot4.c -o libc_boot4_2.o
+./tcc_boot_max_self -c libc_static.c -o libc_static_2.o
+./tcc_boot_max_self -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc_2.o
+./tcc_boot_max_self -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple_2.o
+
 cd ..
 # show total lines
 wc tcc_boot_max/*c tcc_boot_max/*h |sort -h
