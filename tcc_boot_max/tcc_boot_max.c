@@ -22,4 +22,18 @@ int init_runtime(){
 
 /* start of i386-gen.c */
 
+/* XXX: make it faster ? */
+int g(int c) {
+    int ind1;
+    if (nocode_wanted) {
+        return;
+    }
+    ind1 = add(ind, 1);
+    if (gt(ind1, gs_data_allocated(cur_text_section))) {
+        section_realloc(cur_text_section, ind1);
+    }
+    wi8(add(gs_data(cur_text_section), ind), c);
+    ind = ind1;
+}
+
 /* end of i386-gen.c */

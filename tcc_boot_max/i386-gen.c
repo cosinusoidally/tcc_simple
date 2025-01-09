@@ -32,20 +32,6 @@ ST_DATA const int reg_classes[NB_REGS] = {
 static unsigned long func_sub_sp_offset;
 static int func_ret_sub;
 
-/* XXX: make it faster ? */
-int g(int c) {
-    int ind1;
-    if (nocode_wanted) {
-        return;
-    }
-    ind1 = add(ind, 1);
-    if (gt(ind1, gs_data_allocated(cur_text_section))) {
-        section_realloc(cur_text_section, ind1);
-    }
-    wi8(add(gs_data(cur_text_section), ind), c);
-    ind = ind1;
-}
-
 ST_FUNC void o(unsigned int c)
 {
     while (c) {
