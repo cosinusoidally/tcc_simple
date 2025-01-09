@@ -19,3 +19,7 @@ int init_runtime(){
 
   init_globals();
 }
+
+/* start of i386-gen.c */
+
+/* end of i386-gen.c */

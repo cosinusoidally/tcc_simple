@@ -47,7 +47,6 @@ ST_DATA int vla_sp_loc; /* Pointer to variable holding location to store stack p
 ST_DATA SValue __vstack[1+VSTACK_SIZE], *vtop, *pvtop;
 
 ST_DATA int const_wanted; /* true if constant wanted */
-ST_DATA int nocode_wanted; /* no code generation wanted */
 #define NODATA_WANTED (nocode_wanted > 0) /* no static data output wanted either */
 #define STATIC_DATA_WANTED (nocode_wanted & 0xC0000000) /* only static data output */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */

@@ -208,7 +208,7 @@ ST_FUNC Section *new_symtab(TCCState *s1,
 }
 
 /* realloc section and set its content to zero */
-ST_FUNC void section_realloc(Section *sec, unsigned long new_size)
+void section_realloc(Section *sec, unsigned long new_size)
 {
     unsigned long size;
     unsigned char *data;

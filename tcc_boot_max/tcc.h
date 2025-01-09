@@ -1006,7 +1006,7 @@ ST_DATA int rsym, anon_sym, loc;
 extern int ind;
 
 ST_DATA int const_wanted; /* true if constant wanted */
-ST_DATA int nocode_wanted; /* true if no code generation wanted for an expression */
+extern int nocode_wanted; /* true if no code generation wanted for an expression */
 ST_DATA int global_expr;  /* true if compound literals must be allocated globally (used during initializers parsing */
 ST_DATA CType func_vt; /* current function return type (used by return instruction) */
 ST_DATA int func_var; /* true if current function is variadic */
@@ -1092,7 +1092,7 @@ ST_FUNC void tccelf_begin_file(TCCState *s1);
 ST_FUNC void tccelf_end_file(TCCState *s1);
 
 ST_FUNC Section *new_section(TCCState *s1, const char *name, int sh_type, int sh_flags);
-ST_FUNC void section_realloc(Section *sec, unsigned long new_size);
+void section_realloc(Section *sec, unsigned long new_size);
 ST_FUNC size_t section_add(Section *sec, addr_t size, int align);
 ST_FUNC void *section_ptr_add(Section *sec, addr_t size);
 ST_FUNC void section_reserve(Section *sec, unsigned long size);
