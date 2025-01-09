@@ -33,15 +33,16 @@ static unsigned long func_sub_sp_offset;
 static int func_ret_sub;
 
 /* XXX: make it faster ? */
-ST_FUNC void g(int c)
-{
+int g(int c) {
     int ind1;
-    if (nocode_wanted)
+    if (nocode_wanted) {
         return;
-    ind1 = ind + 1;
-    if (ind1 > cur_text_section->data_allocated)
+    }
+    ind1 = add(ind, 1);
+    if (gt(ind1, cur_text_section->data_allocated)) {
         section_realloc(cur_text_section, ind1);
-    cur_text_section->data[ind] = c;
+    }
+    wi8(add(cur_text_section->data, ind), c);
     ind = ind1;
 }
 
