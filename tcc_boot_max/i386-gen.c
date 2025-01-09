@@ -39,7 +39,7 @@ int g(int c) {
         return;
     }
     ind1 = add(ind, 1);
-    if (gt(ind1, cur_text_section->data_allocated)) {
+    if (gt(ind1, gs_data_allocated(cur_text_section))) {
         section_realloc(cur_text_section, ind1);
     }
     wi8(add(cur_text_section->data, ind), c);
