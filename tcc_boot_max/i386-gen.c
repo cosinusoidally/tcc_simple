@@ -42,7 +42,7 @@ int g(int c) {
     if (gt(ind1, gs_data_allocated(cur_text_section))) {
         section_realloc(cur_text_section, ind1);
     }
-    wi8(add(cur_text_section->data, ind), c);
+    wi8(add(gs_data(cur_text_section), ind), c);
     ind = ind1;
 }
 
