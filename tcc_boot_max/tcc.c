@@ -46,6 +46,9 @@ int main(int argc0, char **argv0)
     FILE *ppfp = stdout;
 
     argc = argc0, argv = argv0;
+
+    init_runtime();
+
     s = tcc_new();
     opt = tcc_parse_args(s, &argc, &argv, 1);
 
