@@ -26,7 +26,6 @@
    rsym: return symbol
    anon_sym: anonymous symbol index
 */
-ST_DATA int rsym, anon_sym, ind, loc;
 
 ST_DATA Sym *sym_free_first;
 ST_DATA void **sym_pools;
