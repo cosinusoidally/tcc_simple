@@ -21,11 +21,11 @@ echo "now we build tcc_boot_max"
 
 cat ../tcc_boot_max/globals.c ../tcc_boot_max/support_common.c ../tcc_boot_max/tcc_boot_max.c > tcc_boot_max_full.c
 
-# build tcc_boot_min with gcc
+# build tcc_boot_max with gcc
 gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_gcc.o
 gcc -g3 -O0 -m32 -nostdinc -c ../tcc_boot_max/support.c -o support_max_gcc.o
 gcc -g3 -O0 -m32 -I ../tcc_boot_max/ -I ../tcc_boot_max/include/ -c ../tcc_boot_max/tcc.c -DONE_SOURCE -o tcc_boot_max_gcc.o
-gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_gcc.o tcc_boot_max_gcc.o -o tcc_boot_max_gcc
+gcc -g3 -O0 -m32 support_max_gcc.o tcc_boot_max_full_gcc.o tcc_boot_max_gcc.o -o tcc_boot_max_gcc -ldl
 
 # build some test files
 
@@ -42,6 +42,18 @@ ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
 cd ..
 
 ./tcc_boot_max_gcc -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
+
+./tcc_boot_max_gcc -c ./lib/libtcc1.c -o libtcc1.o
+
+./tcc_boot_max_gcc -c libc_boot4.c -o libc_boot4.o
+./tcc_boot_max_gcc -c libc_static.c -o libc_static.o
+./tcc_boot_max_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./tcc_boot_max_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+
+./tcc_boot_min_gcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_tcc.o
+./tcc_boot_max_gcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_tcc2.o
+
+diff -u -s tcc_boot_max_full_tcc.o tcc_boot_max_full_tcc2.o
 
 cd ..
 # show total lines
