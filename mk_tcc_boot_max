@@ -41,14 +41,10 @@ cd lib
 ln -s ../../tcc_27/lib/libtcc1.c libtcc1.c
 cd ..
 
+./tcc_boot_max_gcc -I ../../tcc_bootstrap_alt/woody/usr/include/ -I ../tcc_27/include -I ../tcc_27/ -c tcc.c -U__linux__ -DONE_SOURCE -o tcc.o
+
+cd ..
 # show total lines
 wc tcc_boot_max/*c tcc_boot_max/*h |sort -h
 
-# check files match
-diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
-diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
-diff -u -s artifacts/tcc_boot_min_full_self.o artifacts/tcc_boot_min_full_self2.o
-diff -u -s artifacts/tcc_boot_min_full_tcc.o artifacts/tcc_boot_min_full_self.o
-
-# check the hashes of the test files
-sha256sum -c sums_simple_c
+sha256sum -c sums_tcc_27
