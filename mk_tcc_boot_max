@@ -1,0 +1,54 @@
+./mk_clean
+
+cd artifacts
+
+set -xe
+
+cat ../tcc_boot_min/m2_proto.c ../tcc_boot_min/proto.c ../tcc_boot_min/globals.c ../tcc_boot_min/support_common.c ../tcc_boot_min/tcc_boot_min.c > tcc_boot_min_full.c
+
+# build tcc_boot_min with gcc
+gcc -g3 -O0 -m32 -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_gcc.o
+gcc -g3 -O0 -m32 -nostdinc -c ../tcc_boot_min/support.c -o support_gcc.o
+gcc -g3 -O0 -m32 support_gcc.o tcc_boot_min_full_gcc.o -o tcc_boot_min_gcc
+
+# build tcc_boot_min with tcc
+tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_tcc.o
+tcc -nostdinc -c ../tcc_boot_min/support.c -o support_tcc.o
+tcc -g support_tcc.o tcc_boot_min_full_tcc.o -o tcc_boot_min_tcc
+
+# build some test files
+
+echo "now we build tcc_boot_max"
+
+cat ../tcc_boot_max/globals.c ../tcc_boot_max/support_common.c ../tcc_boot_max/tcc_boot_max.c > tcc_boot_max_full.c
+
+# we have to symlink since tcc will include the file name in the object code
+# file which then causes hashes not to match
+ln -s ../M2_simple_asm.c M2_simple_asm.c
+ln -s ../M2_tcc_js_simple.c M2_tcc_js_simple.c
+
+# do the test file builds
+
+./tcc_boot_min_tcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc2.o
+./tcc_boot_min_tcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple2.o
+./tcc_boot_min_tcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self2.o
+./tcc_boot_min_tcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_self2.o
+
+./tcc_boot_min_gcc -nostdinc -c M2_simple_asm.c -o M2_simple_asm_tcc.o
+./tcc_boot_min_gcc -nostdinc -c M2_tcc_js_simple.c -o M2_tcc_js_simple.o
+./tcc_boot_min_gcc -nostdinc -c tcc_boot_min_full.c -o tcc_boot_min_full_self.o
+./tcc_boot_min_gcc -nostdinc -c tcc_boot_max_full.c -o tcc_boot_max_full_self.o
+
+cd ..
+
+# show total lines
+wc tcc_boot_max/*c tcc_boot_max/*h |sort -h
+
+# check files match
+diff -u -s artifacts/M2_simple_asm_tcc.o artifacts/M2_simple_asm_tcc2.o
+diff -u -s artifacts/M2_tcc_js_simple.o artifacts/M2_tcc_js_simple2.o
+diff -u -s artifacts/tcc_boot_min_full_self.o artifacts/tcc_boot_min_full_self2.o
+diff -u -s artifacts/tcc_boot_min_full_tcc.o artifacts/tcc_boot_min_full_self.o
+
+# check the hashes of the test files
+sha256sum -c sums_simple_c
