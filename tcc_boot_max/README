@@ -1,2 +1,7 @@
-The idea here is to heavily refactor and tidy up tcc-0.9.27. Resulting compiler
-will be i386 Linux only.
+WIP cutdown simplified version of tcc-0.9.27 implemented in simple c dialect
+and capable of building tcc_27. See also ../tcc_boot_min as tcc_boot_max will
+follow a similer approach (see also commit history for tcc_boot_min).
+
+tbh progress will probably be slow with tcc_boot_max as I'm currently
+investigating an alternative path where I use a cutdown and simplified version
+of chibicc in order to compile tcc_27.
