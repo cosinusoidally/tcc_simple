@@ -1078,7 +1078,7 @@ typedef struct {
 
 ST_DATA Section *text_section, *data_section, *bss_section; /* predefined sections */
 ST_DATA Section *common_section;
-ST_DATA Section *cur_text_section; /* current section where function code is generated */
+extern Section *cur_text_section; /* current section where function code is generated */
 ST_DATA Section *last_text_section; /* to handle .previous asm directive */
 /* symbol sections */
 ST_DATA Section *symtab_section;
