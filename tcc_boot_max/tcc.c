@@ -36,6 +36,18 @@ static const char version[] =
     ")\n"
     ;
 
+/* this is tcc_boot_max support code. It is used to allow us to take addresses
+   of global variables that are delared in the code that has not yet been
+   ported to the simplified dialect of C. */
+int init_globals() {
+  puts("init_globals");
+  /* stub atm , will eventually include stuff like:
+     aglobal_stack = &global_stack;
+     which is useful support code while we incrementally port to the simple c
+     dialect.
+  */
+}
+
 int main(int argc0, char **argv0)
 {
     TCCState *s;
