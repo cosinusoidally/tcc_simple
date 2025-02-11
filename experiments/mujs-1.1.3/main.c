@@ -225,6 +225,17 @@ static void jsB_add(js_State *J)
 	js_pushnumber(J,(double)r);
 }
 
+static void jsB_sub(js_State *J)
+{
+	int a;
+	int b;
+	int r;
+	a=js_toint32(J,1);
+	b=js_toint32(J,2);
+	r=a-b;
+	js_pushnumber(J,(double)r);
+}
+
 static void jsB_wi8(js_State *J)
 {
 	int o;
@@ -404,6 +415,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_add, "add", 2);
 	js_setglobal(J, "add");
+
+	js_newcfunction(J, jsB_sub, "sub", 2);
+	js_setglobal(J, "_sub");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
