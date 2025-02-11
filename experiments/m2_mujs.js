@@ -22,6 +22,9 @@ read = function(x, y) {
 load("simple_support_js_m2.js");
 load("M2_simple_asm.js");
 
+/* override with builtins for memory read-write */
+ri32 = _ri32;
+
 var dbg;
 
 function sub(a, b){
