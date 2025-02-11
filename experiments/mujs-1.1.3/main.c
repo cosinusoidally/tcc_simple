@@ -383,6 +383,17 @@ static void jsB_div(js_State *J)
 	js_pushnumber(J,(double)r);
 }
 
+static void jsB_mod(js_State *J)
+{
+	int a;
+	int b;
+	int r;
+	a=js_toint32(J,1);
+	b=js_toint32(J,2);
+	r = (a % b);
+	js_pushnumber(J,(double)r);
+}
+
 /* virtual heap functions */
 
 static void jsB_wi8(js_State *J)
@@ -606,6 +617,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_div, "div", 2);
 	js_setglobal(J, "div");
+
+	js_newcfunction(J, jsB_mod, "_mod", 2);
+	js_setglobal(J, "_mod");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
