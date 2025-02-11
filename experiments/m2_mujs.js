@@ -28,12 +28,6 @@ wi32 = _wi32;
 
 var dbg;
 
-function div(a, b){
-  a = a | 0;
-  b = b | 0;
-  return (a / b) | 0;
-}
-
 function mod(a, b){
   a = a | 0;
   b = b | 0;
