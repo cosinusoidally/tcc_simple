@@ -28,12 +28,6 @@ wi32 = _wi32;
 
 var dbg;
 
-function or(a, b){
-  a = a | 0;
-  b = b | 0;
-  return a | b;
-}
-
 function eq(a, b){
   a = a | 0;
   b = b | 0;
