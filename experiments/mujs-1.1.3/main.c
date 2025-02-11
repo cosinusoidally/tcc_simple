@@ -208,6 +208,19 @@ static void jsB_repr(js_State *J)
 	js_repr(J, 1);
 }
 
+/* simple_c dialect builtins */
+
+static void jsB_add(js_State *J)
+{
+	int a;
+	int b;
+	int r;
+	a=js_toint32(J,1);
+	b=js_toint32(J,2);
+	r=a+b;
+	js_pushnumber(J,(double)r);
+}
+
 static const char *require_js =
 	"function require(name) {\n"
 	"var cache = require.cache;\n"
@@ -334,6 +347,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_quit, "quit", 1);
 	js_setglobal(J, "quit");
+
+	js_newcfunction(J, jsB_add, "_add", 2);
+	js_setglobal(J, "_add");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
