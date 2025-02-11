@@ -24,12 +24,6 @@ load("M2_simple_asm.js");
 
 var dbg;
 
-function add(a, b){
-  a = a | 0;
-  b = b | 0;
-  return a + b;
-}
-
 function sub(a, b){
   a = a | 0;
   b = b | 0;

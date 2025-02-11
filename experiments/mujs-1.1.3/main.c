@@ -348,8 +348,10 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_quit, "quit", 1);
 	js_setglobal(J, "quit");
 
-	js_newcfunction(J, jsB_add, "_add", 2);
-	js_setglobal(J, "_add");
+/* define simple_c builtins */
+
+	js_newcfunction(J, jsB_add, "add", 2);
+	js_setglobal(J, "add");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
