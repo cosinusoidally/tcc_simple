@@ -486,8 +486,8 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_lt, "lt", 2);
 	js_setglobal(J, "lt");
 
-	js_newcfunction(J, jsB_gt, "_gt", 2);
-	js_setglobal(J, "_gt");
+	js_newcfunction(J, jsB_gt, "gt", 2);
+	js_setglobal(J, "gt");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
