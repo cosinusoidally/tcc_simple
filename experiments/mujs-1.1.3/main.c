@@ -532,8 +532,8 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_gte, "gte", 2);
 	js_setglobal(J, "gte");
 
-	js_newcfunction(J, jsB_and, "_and", 2);
-	js_setglobal(J, "_and");
+	js_newcfunction(J, jsB_and, "and", 2);
+	js_setglobal(J, "and");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
