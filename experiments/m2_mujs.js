@@ -1,3 +1,24 @@
+/* HACK split this read function off into a separate mujs specific file */
+
+_read = read;
+
+read = function(x, y) {
+  var t;
+  var f;
+  var i;
+  t = _read(x);
+  if(y==="binary") {
+    f = [];
+    for(i = 0; i<t.length;i++) {
+      f.push(t.charCodeAt(i));
+    }
+  } else {
+    f = t;
+  }
+  return f;
+}
+
+
 load("simple_support_js_m2.js");
 load("M2_simple_asm.js");
 
@@ -248,7 +269,8 @@ function mk_args(s){
 }
 
 var heap_size=16*1024*1024;
-var heap=new Uint8Array(heap_size);
+/* HACK mujs doesn't support typed arrays */
+var heap=new Array(heap_size);
 
 function wi8(o,v){
   if(v===undefined){

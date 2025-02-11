@@ -1,3 +1,7 @@
 ./mk_clean
+echo "building mujs"
 cd mujs-1.1.3/
 gcc -m32 -O0 -g one.c main.c -lm -o ../artifacts/mujs
+echo "running mujs"
+cd ../../../tcc_bootstrap_alt/m2min/
+../../tcc_simple/experiments/artifacts/mujs ../../tcc_simple/experiments/m2_mujs.js
