@@ -231,6 +231,7 @@ static void jsB_wi8(js_State *J)
 	int v;
 	o=js_toint32(J,1);
 	v=js_toint32(J,2);
+	heap[o]=v;
 	printf("wi8 o: %d v: %d\n",o,v);
 	js_pushundefined(J);
 }
@@ -240,7 +241,7 @@ static void jsB_ri8(js_State *J)
 	int o;
 	int v;
 	o=js_toint32(J,1);
-	v=100;
+	v=heap[o];
 	printf("ri8 o: %d is v: %d\n",o,v);
 	js_pushnumber(J,(double)v);
 }
