@@ -10,6 +10,10 @@
 
 #include "mujs.h"
 
+#include <stdint.h>
+
+uint8_t* heap;
+
 static char *xoptarg; /* Global argument pointer. */
 static int xoptind = 0; /* Global argv index. */
 static int xgetopt(int argc, char *argv[], char *optstring)
@@ -221,6 +225,26 @@ static void jsB_add(js_State *J)
 	js_pushnumber(J,(double)r);
 }
 
+static void jsB_wi8(js_State *J)
+{
+	int o;
+	int v;
+	o=js_toint32(J,1);
+	v=js_toint32(J,2);
+	printf("wi8 o: %d v: %d\n",o,v);
+	js_pushundefined(J);
+}
+
+static void jsB_ri8(js_State *J)
+{
+	int o;
+	int v;
+	o=js_toint32(J,1);
+	v=100;
+	printf("ri8 o: %d is v: %d\n",o,v);
+	js_pushnumber(J,(double)v);
+}
+
 static const char *require_js =
 	"function require(name) {\n"
 	"var cache = require.cache;\n"
@@ -352,6 +376,15 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_add, "add", 2);
 	js_setglobal(J, "add");
+
+/* FIXME this should be set from JS */
+	heap = calloc(16*1024*1024, 1);
+
+	js_newcfunction(J, jsB_wi8, "_wi8", 2);
+	js_setglobal(J, "_wi8");
+
+	js_newcfunction(J, jsB_ri8, "_ri8", 1);
+	js_setglobal(J, "_ri8");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
