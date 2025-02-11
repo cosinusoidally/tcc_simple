@@ -618,8 +618,8 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_div, "div", 2);
 	js_setglobal(J, "div");
 
-	js_newcfunction(J, jsB_mod, "_mod", 2);
-	js_setglobal(J, "_mod");
+	js_newcfunction(J, jsB_mod, "mod", 2);
+	js_setglobal(J, "mod");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
