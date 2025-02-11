@@ -417,7 +417,7 @@ main(int argc, char **argv)
 	js_setglobal(J, "add");
 
 	js_newcfunction(J, jsB_sub, "sub", 2);
-	js_setglobal(J, "_sub");
+	js_setglobal(J, "sub");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
