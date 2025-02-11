@@ -262,26 +262,6 @@ function mk_args(s){
   return [argc, argv];
 }
 
-var heap_size=16*1024*1024;
-/* HACK mujs doesn't support typed arrays */
-var heap=new Array(heap_size);
-
-function wi8(o,v){
-  if(v===undefined){
-    print("wrong use of wi8");
-    err();
-  }
-  heap[o]=v & 0xFF;
-};
-
-function ri8(o,dummy){
-  if(dummy!==undefined){
-    print("wrong use of ri8");
-    err();
-  }
-  return heap[o] & 0xFF;
-};
-
 function gen_out(){
   if(out_file[out_file.length-1]=== mkc("\n")){
    out_file.pop();

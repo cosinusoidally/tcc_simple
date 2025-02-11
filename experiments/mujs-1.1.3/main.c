@@ -232,7 +232,7 @@ static void jsB_wi8(js_State *J)
 	o=js_toint32(J,1);
 	v=js_toint32(J,2);
 	heap[o]=v;
-	printf("wi8 o: %d v: %d\n",o,v);
+//	printf("wi8 o: %d v: %d\n",o,v);
 	js_pushundefined(J);
 }
 
@@ -242,7 +242,7 @@ static void jsB_ri8(js_State *J)
 	int v;
 	o=js_toint32(J,1);
 	v=heap[o];
-	printf("ri8 o: %d is v: %d\n",o,v);
+//	printf("ri8 o: %d is v: %d\n",o,v);
 	js_pushnumber(J,(double)v);
 }
 
@@ -381,11 +381,11 @@ main(int argc, char **argv)
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
 
-	js_newcfunction(J, jsB_wi8, "_wi8", 2);
-	js_setglobal(J, "_wi8");
+	js_newcfunction(J, jsB_wi8, "wi8", 2);
+	js_setglobal(J, "wi8");
 
-	js_newcfunction(J, jsB_ri8, "_ri8", 1);
-	js_setglobal(J, "_ri8");
+	js_newcfunction(J, jsB_ri8, "ri8", 1);
+	js_setglobal(J, "ri8");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
