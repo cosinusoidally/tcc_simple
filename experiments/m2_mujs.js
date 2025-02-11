@@ -28,12 +28,6 @@ wi32 = _wi32;
 
 var dbg;
 
-function mul(a, b){
-  a = a | 0;
-  b = b | 0;
-  return a * b;
-}
-
 function shl(a, b){
   a = a | 0;
   b = b | 0;
