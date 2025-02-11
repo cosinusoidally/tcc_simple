@@ -560,8 +560,8 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_or, "or", 2);
 	js_setglobal(J, "or");
 
-	js_newcfunction(J, jsB_eq, "_eq", 2);
-	js_setglobal(J, "_eq");
+	js_newcfunction(J, jsB_eq, "eq", 2);
+	js_setglobal(J, "eq");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
