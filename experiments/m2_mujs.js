@@ -28,12 +28,6 @@ wi32 = _wi32;
 
 var dbg;
 
-function gte(a, b){
-  a = a | 0;
-  b = b | 0;
-  return (a >= b) | 0;
-}
-
 function and(a, b){
   a = a | 0;
   b = b | 0;

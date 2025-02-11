@@ -300,7 +300,7 @@ static void jsB_lte(js_State *J)
 	b=js_toint32(J,2);
 puts("lte not impl");
 exit(1);
-	r = a >= b;
+	r = a <= b;
 	js_pushnumber(J,(double)r);
 }
 
@@ -311,7 +311,7 @@ static void jsB_gte(js_State *J)
 	int r;
 	a=js_toint32(J,1);
 	b=js_toint32(J,2);
-	r = a <= b;
+	r = a >= b;
 	js_pushnumber(J,(double)r);
 }
 
@@ -516,8 +516,8 @@ main(int argc, char **argv)
 	js_newcfunction(J, jsB_lte, "lte", 2);
 	js_setglobal(J, "lte");
 
-	js_newcfunction(J, jsB_gte, "_gte", 2);
-	js_setglobal(J, "_gte");
+	js_newcfunction(J, jsB_gte, "gte", 2);
+	js_setglobal(J, "gte");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
