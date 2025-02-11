@@ -246,6 +246,17 @@ static void jsB_ri8(js_State *J)
 	js_pushnumber(J,(double)v);
 }
 
+static void jsB_ri32(js_State *J)
+{
+	int o;
+	int v;
+	o=js_toint32(J,1);
+/* FIXME make cleaner */
+	v=(int32_t *)(heap + o);
+//	printf("ri8 o: %d is v: %d\n",o,v);
+	js_pushnumber(J,(double)v);
+}
+
 static const char *require_js =
 	"function require(name) {\n"
 	"var cache = require.cache;\n"
@@ -386,6 +397,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_ri8, "ri8", 1);
 	js_setglobal(J, "ri8");
+
+	js_newcfunction(J, jsB_ri32, "_ri32", 1);
+	js_setglobal(J, "_ri32");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
