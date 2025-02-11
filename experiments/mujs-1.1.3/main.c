@@ -250,9 +250,11 @@ static void jsB_ri32(js_State *J)
 {
 	int o;
 	int v;
+	int *p;
 	o=js_toint32(J,1);
 /* FIXME make cleaner */
-	v=(int32_t *)(heap + o);
+	p = (int)heap + o;
+	v=p[0];
 //	printf("ri8 o: %d is v: %d\n",o,v);
 	js_pushnumber(J,(double)v);
 }
