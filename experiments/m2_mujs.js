@@ -24,6 +24,7 @@ load("M2_simple_asm.js");
 
 /* override with builtins for memory read-write */
 ri32 = _ri32;
+wi32 = _wi32;
 
 var dbg;
 
