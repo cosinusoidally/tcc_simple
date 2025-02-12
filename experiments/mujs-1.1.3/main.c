@@ -444,6 +444,24 @@ static void jsB_ri32(js_State *J)
 	js_pushnumber(J,(double)v);
 }
 
+typedef uint32_t (* my_ffi_stub)(uint32_t a1,uint32_t a2,uint32_t a3,uint32_t a4,uint32_t a5,uint32_t a6,uint32_t a7,uint32_t a8);
+
+int my_ffi_call(js_State *J) {
+	int i;
+	int ptr;
+        uint32_t args[8];
+	for(i = 0; i<8; i = i + 1) {
+		args[i]=js_toint32(J,2+i);
+	}
+	ptr = js_toint32(J,1);
+	printf("ptr: %x arg: %x\n", ptr, args[0]);
+/*
+        __asm__("and $0xfffffff0,%esp");
+        double ret=(double)(((my_ffi_stub)ptr)(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
+*/
+        return 1;  /* one return value */
+}
+
 static const char *require_js =
 	"function require(name) {\n"
 	"var cache = require.cache;\n"
@@ -635,6 +653,14 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_ri32, "_ri32", 1);
 	js_setglobal(J, "_ri32");
+
+/* ffi function */
+	js_newcfunction(J, my_ffi_call, "ffi", 1);
+	js_setglobal(J, "ffi");
+
+/* tmp test */
+	js_pushnumber(J, (double)((int)exit));
+	js_setglobal(J, "_exit");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
