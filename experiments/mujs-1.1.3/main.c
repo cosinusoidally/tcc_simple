@@ -446,9 +446,10 @@ static void jsB_ri32(js_State *J)
 
 typedef uint32_t (* my_ffi_stub)(uint32_t a1,uint32_t a2,uint32_t a3,uint32_t a4,uint32_t a5,uint32_t a6,uint32_t a7,uint32_t a8);
 
-int my_ffi_call(js_State *J) {
+void my_ffi_call(js_State *J) {
 	int i;
 	int ptr;
+	double ret;
         uint32_t args[8];
 	for(i = 0; i<8; i = i + 1) {
 		args[i]=js_toint32(J,2+i);
@@ -459,7 +460,7 @@ int my_ffi_call(js_State *J) {
         __asm__("and $0xfffffff0,%esp");
         double ret=(double)(((my_ffi_stub)ptr)(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
 */
-        return 1;  /* one return value */
+	js_pushnumber(J,ret);
 }
 
 static const char *require_js =
