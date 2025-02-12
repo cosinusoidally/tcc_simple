@@ -444,26 +444,25 @@ static void jsB_ri32(js_State *J)
 	js_pushnumber(J,(double)v);
 }
 
-typedef uint32_t (* my_ffi_stub)(uint32_t a1,uint32_t a2,uint32_t a3,uint32_t a4,uint32_t a5,uint32_t a6,uint32_t a7,uint32_t a8);
+typedef int (* my_ffi_stub)(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8);
 
 void my_ffi_call(js_State *J) {
 	int i;
 	int ptr;
 	double ret;
-        uint32_t args[8];
+        int args[8];
 	for(i = 0; i<8; i = i + 1) {
 		args[i]=js_toint32(J,2+i);
 	}
 	ptr = js_toint32(J,1);
-	printf("ptr: %x arg: %x\n", ptr, args[0]);
+//	printf("ptr: %x arg: %x\n", ptr, args[0]);
 	__asm__("and $0xfffffff0,%esp");
 	ret=(double)(((my_ffi_stub)ptr)(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
 	js_pushnumber(J,ret);
 }
 
-int hello_world(int a){
-	printf("Hello world %d\n",a);
-	return 62;
+int _add(int a, int b){
+	return a+b;
 }
 
 static const char *require_js =
@@ -663,8 +662,8 @@ main(int argc, char **argv)
 	js_setglobal(J, "ffi");
 
 /* tmp test */
-	js_pushnumber(J, (double)((int)hello_world));
-	js_setglobal(J, "_hello");
+	js_pushnumber(J, (double)((int)_add));
+	js_setglobal(J, "_add");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
