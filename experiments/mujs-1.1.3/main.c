@@ -655,7 +655,7 @@ main(int argc, char **argv)
 	js_setglobal(J, "_ri32");
 
 /* ffi function */
-	js_newcfunction(J, my_ffi_call, "ffi", 1);
+	js_newcfunction(J, my_ffi_call, "ffi", 9);
 	js_setglobal(J, "ffi");
 
 /* tmp test */
