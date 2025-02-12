@@ -456,11 +456,14 @@ void my_ffi_call(js_State *J) {
 	}
 	ptr = js_toint32(J,1);
 	printf("ptr: %x arg: %x\n", ptr, args[0]);
-/*
-        __asm__("and $0xfffffff0,%esp");
-        double ret=(double)(((my_ffi_stub)ptr)(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
-*/
+	__asm__("and $0xfffffff0,%esp");
+	ret=(double)(((my_ffi_stub)ptr)(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
 	js_pushnumber(J,ret);
+}
+
+int hello_world(int a){
+	printf("Hello world %d\n",a);
+	return 62;
 }
 
 static const char *require_js =
@@ -660,8 +663,8 @@ main(int argc, char **argv)
 	js_setglobal(J, "ffi");
 
 /* tmp test */
-	js_pushnumber(J, (double)((int)exit));
-	js_setglobal(J, "_exit");
+	js_pushnumber(J, (double)((int)hello_world));
+	js_setglobal(J, "_hello");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
