@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+#include <dlfcn.h>
+
 uint8_t* heap;
 
 static char *xoptarg; /* Global argument pointer. */
@@ -672,12 +674,18 @@ main(int argc, char **argv)
 	js_newcfunction(J, str_adr, "str_adr", 1);
 	js_setglobal(J, "str_adr");
 
+	js_pushnumber(J, (double)((int)dlopen));
+	js_setglobal(J, "_dlopen");
+
+	js_pushnumber(J, (double)((int)dlsym));
+	js_setglobal(J, "_dlsym");
+
+	js_pushnumber(J, (double)(RTLD_LAZY));
+	js_setglobal(J, "RTLD_LAZY");
+
 /* tmp test */
 	js_pushnumber(J, (double)((int)_add));
 	js_setglobal(J, "_add");
-
-	js_pushnumber(J, (double)((int)puts));
-	js_setglobal(J, "_puts");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
