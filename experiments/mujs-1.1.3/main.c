@@ -461,6 +461,14 @@ void my_ffi_call(js_State *J) {
 	js_pushnumber(J,ret);
 }
 
+static void str_adr(js_State *J)
+{
+	int str;
+	str=js_tostring(J,1);
+//	printf("str_adr 0x%x is str: %s\n",str,str);
+	js_pushnumber(J,(double)str);
+}
+
 int _add(int a, int b){
 	return a+b;
 }
@@ -661,9 +669,15 @@ main(int argc, char **argv)
 	js_newcfunction(J, my_ffi_call, "ffi", 9);
 	js_setglobal(J, "ffi");
 
+	js_newcfunction(J, str_adr, "str_adr", 1);
+	js_setglobal(J, "str_adr");
+
 /* tmp test */
 	js_pushnumber(J, (double)((int)_add));
 	js_setglobal(J, "_add");
+
+	js_pushnumber(J, (double)((int)puts));
+	js_setglobal(J, "_puts");
 
 	js_dostring(J, require_js);
 	js_dostring(J, stacktrace_js);
