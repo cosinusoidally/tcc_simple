@@ -89,11 +89,7 @@ function open(pathname, flags, mode) {
   }
   if((flags ===0 ) && (mode === 0)){
     if(in_file === undefined) {
-      if(pathname.split(":")[0]==="vfs") {
-        in_file = [vfs_open(pathname), 0];
-      } else {
-        in_file=[read(pathname, "binary"), 0];
-      }
+      in_file=[read(pathname, "binary"), 0];
       return in_file_num;
     } else {
       print("in_file already loaded");
