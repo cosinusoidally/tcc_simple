@@ -654,6 +654,8 @@ main(int argc, char **argv)
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
+	js_pushnumber(J, (double)((int)heap));
+	js_setglobal(J, "heap");
 
 	js_newcfunction(J, jsB_wi8, "wi8", 2);
 	js_setglobal(J, "wi8");

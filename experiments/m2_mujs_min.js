@@ -24,7 +24,7 @@ libc=dlopen("libc.so.6", RTLD_LAZY);
 libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
-  pathname = mk_js_string(pathname);
+  pathname = real_addr(pathname);
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
   if((flags == 0) && (mode == 0)) {
     mode = "rb";
@@ -105,6 +105,10 @@ function mk_js_string(o){
     i=i+1;
   }
   return s.join("");
+}
+
+function real_addr(o) {
+  return heap+o;
 }
 
 open = libc_open;
