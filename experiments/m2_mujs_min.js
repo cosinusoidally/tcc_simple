@@ -25,9 +25,9 @@ libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
-  if((flags == 0) && (mode == 0)) {
+  if(and(eq(flags, 0), eq(mode, 0))) {
     mode = "rb";
-  } else if((flags == 577) && (mode == 384)) {
+  } else if(and(eq(flags, 577), eq(mode, 384))) {
     mode = "wb";
   } else {
     print("invalid mode");
