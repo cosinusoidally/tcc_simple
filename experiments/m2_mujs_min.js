@@ -134,10 +134,11 @@ fgetc = libc_fgetc;
 fputc = libc_fputc;
 
 try {
-  argc_argv = mk_args("./artifacts/M2_simple_asm_m2.exe ./artifacts/M2_simple_asm_m2.c ../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1")
-
-  argv = argc_argv[1];
-  argc = argc_argv[0];
+  argc = 3;
+  argv = malloc(mul(argc, 4));
+  wi32(argv, mk_c_string("./artifacts/M2_simple_asm_m2.exe"));
+  wi32(add(argv, 4), mk_c_string("./artifacts/M2_simple_asm_m2.c"));
+  wi32(add(argv, 8), mk_c_string("../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1"));
   main(argc, argv);
 } catch (e){
   print(e.stack);
