@@ -181,12 +181,7 @@ function gen_out(){
   return out_file.map(function(x){return String.fromCharCode(x)}).join("");
 }
 
-var fname;
-
 try {
-  if(!fname) {
-    fname = "vfs://dummy.c";
-  }
   argc_argv = mk_args("./artifacts/M2_simple_asm_m2.exe ./artifacts/M2_simple_asm_m2.c artifacts/out.M1")
 
   argv = argc_argv[1];
