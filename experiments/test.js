@@ -37,18 +37,34 @@ puts("Hello world again");
 libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
-  return ffi_wrap(libc_open_ptr, pathname, flags, mode);
+  var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
+  if(mode == 0 && flags == 0) {
+    mode = "rb";
+  } else {
+    print("invalid mode");
+    exit(1);
+  }
+  f=libc_fdopen(f, "rb");
+  return f;
 }
 
-/* note were are aliasing fgetc to getc since we are using open */
+libc_fdopen_ptr=dlsym(libc, "fdopen");
+
+function libc_fdopen(fd, mode) {
+  return ffi_wrap(libc_fdopen_ptr, fd, mode);
+}
+
+
 libc_fgetc_ptr=dlsym(libc, "fgetc");
 
-function libc_fgetc(fd) {
-  return ffi_wrap(libc_fgetc_ptr, fd);
+function libc_fgetc(f) {
+  return ffi_wrap(libc_fgetc_ptr, f);
 }
 
 f=libc_open("README", 0, 0);
 
 print("file: "+f);
 
-print("fgetc: "+ libc_fgetc(f));
+while((c = libc_fgetc(f)) >= 0) {
+  print("fgetc: "+ String.fromCharCode(c));
+}
