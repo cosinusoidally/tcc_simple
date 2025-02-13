@@ -64,13 +64,13 @@ function libc_close(f) {
   return ffi_wrap(libc_fclose_ptr, f);
 }
 
-var dbg;
+var brk_ptr;
 
-var brk_ptr = 128*1024;
+brk_ptr = mul(128, 1024);
 
 function brk(addr) {
-  addr = addr |0;
-  if(addr===0){
+  addr = or(addr,0);
+  if(eq(addr, 0)){
     return brk_ptr;
   } else {
     brk_ptr = addr;
