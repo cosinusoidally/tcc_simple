@@ -511,28 +511,6 @@ int _add(int a, int b){
 	return a+b;
 }
 
-static const char *require_js =
-	"function require(name) {\n"
-	"var cache = require.cache;\n"
-	"if (name in cache) return cache[name];\n"
-	"var exports = {};\n"
-	"cache[name] = exports;\n"
-	"Function('exports', read(name+'.js'))(exports);\n"
-	"return exports;\n"
-	"}\n"
-	"require.cache = Object.create(null);\n"
-;
-
-
-static const char *stacktrace_js =
-	"Error.prototype.toString = function() {\n"
-	"var s = this.name;\n"
-	"if ('message' in this) s += ': ' + this.message;\n"
-	"if ('stackTrace' in this) s += this.stackTrace;\n"
-	"return s;\n"
-	"};\n"
-;
-
 static int eval_print(js_State *J, const char *source)
 {
 	if (js_ploadstring(J, "[stdin]", source)) {
@@ -736,9 +714,6 @@ main(int argc, char **argv)
 /* tmp test */
 	js_pushnumber(J, (double)((int)_add));
 	js_setglobal(J, "_add");
-
-	js_dostring(J, require_js);
-	js_dostring(J, stacktrace_js);
 
 	if (xoptind == argc) {
 		interactive = 1;
