@@ -55,27 +55,6 @@ function fputc(c, stream) {
   out_file.push(c);
 }
 
-function vfs_open(pathname) {
-  var t = [];
-  var t1;
-  if(pathname==="vfs://dummy.c") {
-    t1 = read("M2_simple_asm.c", "binary");
-    for(var i=0;i<t1.length;i++) {
-      t.push(t1[i]);
-    }
-
-    t1 = read("simple_support_m2.c", "binary");
-    for(var i=0;i<t1.length;i++) {
-      t.push(t1[i]);
-    }
-
-    return t;
-  } else {
-    print("unsupported virtual file");
-    err();
-  }
-}
-
 var in_file;
 in_file_num = 5;
 
