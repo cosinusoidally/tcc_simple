@@ -65,13 +65,6 @@ function libc_close(f) {
   return ffi_wrap(libc_fclose_ptr, f);
 }
 
-load("simple_support_js_m2.js");
-load("M2_simple_asm.js");
-
-/* override with builtins for memory read-write */
-ri32 = _ri32;
-wi32 = _wi32;
-
 var dbg;
 
 var brk_ptr = 128*1024;
@@ -119,14 +112,17 @@ close = libc_close;
 fgetc = libc_fgetc;
 fputc = libc_fputc;
 
-try {
-  argc = 3;
-  argv = malloc(mul(argc, 4));
-  wi32(argv, mks("./artifacts/M2_simple_asm_m2.exe"));
-  wi32(add(argv, 4), mks("./artifacts/M2_simple_asm_m2.c"));
-  wi32(add(argv, 8), mks("../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1"));
-  main(argc, argv);
-} catch (e){
-  print(e.stack);
-  print(e.message);
-}
+load("simple_support_js_m2.js");
+load("M2_simple_asm.js");
+
+/* override with builtins for memory read-write */
+ri32 = _ri32;
+wi32 = _wi32;
+
+argc = 3;
+argv = malloc(mul(argc, 4));
+wi32(argv, mks("./artifacts/M2_simple_asm_m2.exe"));
+wi32(add(argv, 4), mks("./artifacts/M2_simple_asm_m2.c"));
+wi32(add(argv, 8), mks("../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1"));
+
+main(argc, argv);
