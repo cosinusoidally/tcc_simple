@@ -65,27 +65,6 @@ function libc_close(f) {
   return ffi_wrap(libc_fclose_ptr, f);
 }
 
-/* HACK split this read function off into a separate mujs specific file */
-
-_read = read;
-
-read = function(x, y) {
-  var t;
-  var f;
-  var i;
-  t = _read(x);
-  if(y==="binary") {
-    f = [];
-    for(i = 0; i<t.length;i++) {
-      f.push(t.charCodeAt(i));
-    }
-  } else {
-    f = t;
-  }
-  return f;
-}
-
-
 load("simple_support_js_m2.js");
 load("M2_simple_asm.js");
 
@@ -94,73 +73,6 @@ ri32 = _ri32;
 wi32 = _wi32;
 
 var dbg;
-
-function fgetc(f) {
-  var eax;
-  if(f === in_file_num) {
-    if(in_file[1] < in_file[0].length) {
-      eax = in_file[0][in_file[1]];
-      if(dbg) {
-        print("fgetc: "+String.fromCharCode(eax));
-      }
-      in_file[1]=in_file[1]+1;
-    } else {
-      if(dbg) {
-        print("fgetc: EOF");
-      }
-      eax = -1;
-    }
-  } else {
-    print("fgetc wrong file descriptor");
-    throw "fgetc";
-  }
-  return eax;
-}
-
-function fputc(c, stream) {
-//  print("fputc(" +c+", "+stream+")");
-  out_file.push(c);
-}
-
-var in_file;
-in_file_num = 5;
-
-var out_file;
-out_file_num = 6;
-
-function open(pathname, flags, mode) {
-  pathname = mk_js_string(pathname);
-  if(dbg) {
-    print("open name:" + pathname + " flag: "+flags+" mode: "+mode);
-  }
-  if((flags ===0 ) && (mode === 0)){
-    if(in_file === undefined) {
-      in_file=[read(pathname, "binary"), 0];
-      return in_file_num;
-    } else {
-      print("in_file already loaded");
-      throw "open";
-    }
-  } else if((flags === 577 ) && (mode === 384)){
-    if(out_file === undefined) {
-      out_file = [];
-      return out_file_num;
-    } else {
-      print("out_file already loaded");
-      throw "open";
-    }
-  } else {
-    throw "open";
-  }
-  err();
-}
-
-function close(fd) {
-  if(dbg) {
-    print("close("+fd+")");
-  }
-  return 0;
-}
 
 var brk_ptr = 128*1024;
 
@@ -216,13 +128,6 @@ function mk_args(s){
   return [argc, argv];
 }
 
-function gen_out(){
-  if(out_file[out_file.length-1]=== mkc("\n")){
-   out_file.pop();
-  }
-  return out_file.map(function(x){return String.fromCharCode(x)}).join("");
-}
-
 open = libc_open;
 close = libc_close;
 fgetc = libc_fgetc;
@@ -234,7 +139,6 @@ try {
   argv = argc_argv[1];
   argc = argc_argv[0];
   main(argc, argv);
-  print(gen_out());
 } catch (e){
   print(e.stack);
   print(e.message);
