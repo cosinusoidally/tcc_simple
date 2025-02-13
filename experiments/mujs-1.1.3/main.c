@@ -401,6 +401,11 @@ static void jsB_is_string(js_State *J)
 	js_pushboolean(J, js_isstring(J, 1));
 }
 
+static void jsB_str_len(js_State *J)
+{
+	js_pushnumber(J, (double)js_getlength(J, 1));
+}
+
 /* real heap functions */
 
 static void jsB_wm8(js_State *J)
@@ -685,6 +690,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_is_string, "is_string", 1);
 	js_setglobal(J, "is_string");
+
+	js_newcfunction(J, jsB_str_len, "str_len", 1);
+	js_setglobal(J, "str_len");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
