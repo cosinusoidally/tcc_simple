@@ -12,14 +12,14 @@ function mks(s){
 }
 
 function ffi_wrap(a0,a1,a2,a3,a4,a5,a6,a7,a8) {
-  if(typeof a1 === "string") { a1 = str_adr(a1); }
-  if(typeof a2 === "string") { a2 = str_adr(a2); }
-  if(typeof a3 === "string") { a3 = str_adr(a3); }
-  if(typeof a4 === "string") { a4 = str_adr(a4); }
-  if(typeof a5 === "string") { a5 = str_adr(a5); }
-  if(typeof a6 === "string") { a6 = str_adr(a6); }
-  if(typeof a7 === "string") { a7 = str_adr(a7); }
-  if(typeof a8 === "string") { a8 = str_adr(a8); }
+  if(is_string(a1)) { a1 = str_adr(a1); }
+  if(is_string(a2)) { a2 = str_adr(a2); }
+  if(is_string(a3)) { a3 = str_adr(a3); }
+  if(is_string(a4)) { a4 = str_adr(a4); }
+  if(is_string(a5)) { a5 = str_adr(a5); }
+  if(is_string(a6)) { a6 = str_adr(a6); }
+  if(is_string(a7)) { a7 = str_adr(a7); }
+  if(is_string(a8)) { a8 = str_adr(a8); }
 
   return ffi(a0, a1, a2, a3, a4, a5, a6, a7, a8);
 }
