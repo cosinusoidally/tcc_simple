@@ -96,17 +96,6 @@ function mks(s){
   return r;
 }
 
-function mk_js_string(o){
-  var c;
-  var s = [];
-  var i=0;
-  while((c=ri8(o+i)) !==0){
-    s.push(String.fromCharCode(c));
-    i=i+1;
-  }
-  return s.join("");
-}
-
 function real_addr(o) {
   return heap+o;
 }
