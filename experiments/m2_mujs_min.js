@@ -7,7 +7,7 @@ function mks(s){
   var r;
   var len;
   var p;
-  len = s.length;
+  len = str_len(s);
   p = str_adr(s);
   r = malloc(add(len, 1));
   for(i =0; lt(i, len); i = add(i, 1)){
