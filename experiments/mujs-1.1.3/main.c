@@ -396,6 +396,11 @@ static void jsB_mod(js_State *J)
 	js_pushnumber(J,(double)r);
 }
 
+static void jsB_is_string(js_State *J)
+{
+	js_pushboolean(J, js_isstring(J, 1));
+}
+
 /* virtual heap functions */
 
 static void jsB_wi8(js_State *J)
@@ -651,6 +656,9 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_mod, "mod", 2);
 	js_setglobal(J, "mod");
+
+	js_newcfunction(J, jsB_is_string, "is_string", 1);
+	js_setglobal(J, "is_string");
 
 /* FIXME this should be set from JS */
 	heap = calloc(16*1024*1024, 1);
