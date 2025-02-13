@@ -117,17 +117,6 @@ function mk_js_string(o){
 mks = mk_c_string;
 
 
-function mk_args(s){
-  var argc;
-  s=s.split(" ");
-  argc = s.length;
-  argv = malloc(argc * 4);
-  for(var i = 0; i < argc ; i++){
-    wi32(argv+(4*i), mk_c_string(s[i]));
-  }
-  return [argc, argv];
-}
-
 open = libc_open;
 close = libc_close;
 fgetc = libc_fgetc;
