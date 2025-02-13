@@ -24,7 +24,6 @@ libc=dlopen("libc.so.6", RTLD_LAZY);
 libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
-  pathname = real_addr(pathname);
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
   if((flags == 0) && (mode == 0)) {
     mode = "rb";
@@ -101,6 +100,7 @@ function real_addr(o) {
 }
 
 function open(pathname, flags, mode) {
+  pathname = real_addr(pathname);
   return libc_open(pathname, flags, mode);
 }
 
