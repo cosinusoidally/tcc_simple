@@ -38,13 +38,15 @@ libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
-  if((mode == 0) && (flags == 0)) {
+  if((flags == 0) && (mode == 0)) {
     mode = "rb";
+  } else if((flags == 577) && (mode == 384)) {
+    mode = "wb";
   } else {
     print("invalid mode");
     exit(1);
   }
-  f=libc_fdopen(f, "rb");
+  f=libc_fdopen(f, mode);
   return f;
 }
 
@@ -61,6 +63,12 @@ function libc_fgetc(f) {
   return ffi_wrap(libc_fgetc_ptr, f);
 }
 
+libc_fputc_ptr=dlsym(libc, "fputc");
+
+function libc_fputc(c, f) {
+  return ffi_wrap(libc_fputc_ptr, c, f);
+}
+
 libc_fclose_ptr=dlsym(libc, "fclose");
 
 /* note we are calling it close rather than fclose */
@@ -69,12 +77,14 @@ function libc_close(f) {
 }
 
 f=libc_open("README", 0, 0);
-//f2=libc_open("artifacts/out.M1", 577, 384);
+f2=libc_open("artifacts/out.M1", 577, 384);
 
 print("file: "+f);
 
 while((c = libc_fgetc(f)) >= 0) {
   print("fgetc: "+ String.fromCharCode(c));
+  libc_fputc(c, f2);
 }
 
 libc_close(f);
+libc_close(f2);
