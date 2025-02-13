@@ -6,12 +6,12 @@ function mks(s){
   var i;
   var r;
   var len;
-  var sp;
+  var p;
   len = s.length;
-  sp = str_adr(s);
+  p = str_adr(s);
   r = malloc(add(len, 1));
   for(i =0; lt(i, len); i = add(i, 1)){
-    wi8(add(r, i), s.charCodeAt(i));
+    wi8(add(r, i), rm8(add(p, i)));
   }
   wi8(add(r, i), 0);
   return r;
