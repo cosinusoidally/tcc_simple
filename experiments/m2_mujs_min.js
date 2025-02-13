@@ -1,5 +1,5 @@
 function mkc(c) {
-  return c.charCodeAt(0) & 0xFF;
+  return rm8(str_adr(c));
 }
 
 function mks(s){
