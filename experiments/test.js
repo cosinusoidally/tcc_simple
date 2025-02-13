@@ -38,7 +38,7 @@ libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
-  if(mode == 0 && flags == 0) {
+  if((mode == 0) && (flags == 0)) {
     mode = "rb";
   } else {
     print("invalid mode");
@@ -61,10 +61,20 @@ function libc_fgetc(f) {
   return ffi_wrap(libc_fgetc_ptr, f);
 }
 
+libc_fclose_ptr=dlsym(libc, "fclose");
+
+/* note we are calling it close rather than fclose */
+function libc_close(f) {
+  return ffi_wrap(libc_fclose_ptr, f);
+}
+
 f=libc_open("README", 0, 0);
+//f2=libc_open("artifacts/out.M1", 577, 384);
 
 print("file: "+f);
 
 while((c = libc_fgetc(f)) >= 0) {
   print("fgetc: "+ String.fromCharCode(c));
 }
+
+libc_close(f);
