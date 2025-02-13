@@ -88,3 +88,5 @@ while((c = libc_fgetc(f)) >= 0) {
 
 libc_close(f);
 libc_close(f2);
+
+print(rm8(str_adr("m")));

@@ -401,6 +401,32 @@ static void jsB_is_string(js_State *J)
 	js_pushboolean(J, js_isstring(J, 1));
 }
 
+/* real heap functions */
+
+static void jsB_wm8(js_State *J)
+{
+	int o;
+	int v;
+	uint8_t *h = 0;
+	o=js_toint32(J,1);
+	v=js_toint32(J,2);
+	h[o]=v;
+//	printf("wi8 o: %d v: %d\n",o,v);
+	js_pushundefined(J);
+}
+
+static void jsB_rm8(js_State *J)
+{
+	int o;
+	int v;
+	uint8_t *h = 0;
+	o=js_toint32(J,1);
+	v=h[o];
+//	printf("ri8 o: %d is v: %d\n",o,v);
+	js_pushnumber(J,(double)v);
+}
+
+
 /* virtual heap functions */
 
 static void jsB_wi8(js_State *J)
@@ -676,6 +702,12 @@ main(int argc, char **argv)
 
 	js_newcfunction(J, jsB_ri32, "_ri32", 1);
 	js_setglobal(J, "_ri32");
+
+	js_newcfunction(J, jsB_wm8, "wm8", 2);
+	js_setglobal(J, "wm8");
+
+	js_newcfunction(J, jsB_rm8, "rm8", 1);
+	js_setglobal(J, "rm8");
 
 /* ffi function */
 	js_newcfunction(J, my_ffi_call, "ffi", 9);
