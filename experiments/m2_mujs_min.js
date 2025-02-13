@@ -100,7 +100,10 @@ function real_addr(o) {
   return heap+o;
 }
 
-open = libc_open;
+function open(pathname, flags, mode) {
+  return libc_open(pathname, flags, mode);
+}
+
 close = libc_close;
 fgetc = libc_fgetc;
 fputc = libc_fputc;
