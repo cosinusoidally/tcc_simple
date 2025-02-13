@@ -1,9 +1,14 @@
-function dlopen(x,y) {
-  return ffi(_dlopen, str_adr(x), y);
+function mkc(c) {
+  return c.charCodeAt(0) & 0xFF;
 }
 
-function dlsym(x,y) {
-  return ffi(_dlsym, x, str_adr(y));
+function mks(s){
+  var r;
+  r = malloc(s.length + 1);
+  for(var i =0; i<s.length; i++){
+    wi8(r + i, s.charCodeAt(i));
+  }
+  return r;
 }
 
 function ffi_wrap(a0,a1,a2,a3,a4,a5,a6,a7,a8) {
@@ -17,6 +22,14 @@ function ffi_wrap(a0,a1,a2,a3,a4,a5,a6,a7,a8) {
   if(typeof a8 === "string") { a8 = str_adr(a8); }
 
   return ffi(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+}
+
+function dlopen(x,y) {
+  return ffi(_dlopen, str_adr(x), y);
+}
+
+function dlsym(x,y) {
+  return ffi(_dlsym, x, str_adr(y));
 }
 
 libc=dlopen("libc.so.6", RTLD_LAZY);
@@ -82,21 +95,8 @@ function exit(value) {
   err();
 }
 
-function mkc(c) {
-  return c.charCodeAt(0) & 0xFF;
-}
-
-function mks(s){
-  var r;
-  r = malloc(s.length + 1);
-  for(var i =0; i<s.length; i++){
-    wi8(r + i, s.charCodeAt(i));
-  }
-  return r;
-}
-
 function real_addr(o) {
-  return heap+o;
+  return add(heap, o);
 }
 
 function open(pathname, flags, mode) {
