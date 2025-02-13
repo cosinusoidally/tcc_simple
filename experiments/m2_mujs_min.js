@@ -3,11 +3,17 @@ function mkc(c) {
 }
 
 function mks(s){
+  var i;
   var r;
-  r = malloc(s.length + 1);
-  for(var i =0; i<s.length; i++){
-    wi8(r + i, s.charCodeAt(i));
+  var len;
+  var sp;
+  len = s.length;
+  sp = str_adr(s);
+  r = malloc(add(len, 1));
+  for(i =0; lt(i, len); i = add(i, 1)){
+    wi8(add(r, i), s.charCodeAt(i));
   }
+  wi8(add(r, i), 0);
   return r;
 }
 
