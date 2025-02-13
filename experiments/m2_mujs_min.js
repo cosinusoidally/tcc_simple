@@ -24,6 +24,7 @@ libc=dlopen("libc.so.6", RTLD_LAZY);
 libc_open_ptr=dlsym(libc, "open");
 
 function libc_open(pathname, flags, mode) {
+  pathname = mk_js_string(pathname);
   var f = ffi_wrap(libc_open_ptr, pathname, flags, mode);
   if((flags == 0) && (mode == 0)) {
     mode = "rb";
@@ -47,7 +48,8 @@ function libc_fdopen(fd, mode) {
 libc_fgetc_ptr=dlsym(libc, "fgetc");
 
 function libc_fgetc(f) {
-  return ffi_wrap(libc_fgetc_ptr, f);
+  var r = ffi_wrap(libc_fgetc_ptr, f);
+  return r;
 }
 
 libc_fputc_ptr=dlsym(libc, "fputc");
@@ -221,8 +223,13 @@ function gen_out(){
   return out_file.map(function(x){return String.fromCharCode(x)}).join("");
 }
 
+open = libc_open;
+close = libc_close;
+fgetc = libc_fgetc;
+fputc = libc_fputc;
+
 try {
-  argc_argv = mk_args("./artifacts/M2_simple_asm_m2.exe ./artifacts/M2_simple_asm_m2.c artifacts/out.M1")
+  argc_argv = mk_args("./artifacts/M2_simple_asm_m2.exe ./artifacts/M2_simple_asm_m2.c ../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1")
 
   argv = argc_argv[1];
   argc = argc_argv[0];
