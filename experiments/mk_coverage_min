@@ -1,7 +1,7 @@
 set -xe
 ./mk_clean
 echo "building mujs"
-cd mujs-1.1.3/
+cd mujs_min/
 time gcc -m32 --coverage -g one.c main.c -lm -ldl -o ../artifacts/mujs
 cd ..
 pushd .
@@ -12,5 +12,5 @@ cat M2_simple_asm.c simple_support_m2.c > ./artifacts/M2_simple_asm_m2.c
 time ../../tcc_simple/experiments/artifacts/mujs ../../tcc_simple/experiments/m2_mujs_min.js
 popd
 sha256sum -c sums_mujs
-gcovr -r mujs-1.1.3 artifacts --html-details -o artifacts/example.html
+gcovr -r mujs_min artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox artifacts/example.html
