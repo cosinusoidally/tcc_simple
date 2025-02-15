@@ -12,5 +12,6 @@ cat M2_simple_asm.c simple_support_m2.c > ./artifacts/M2_simple_asm_m2.c
 time ../../tcc_simple/experiments/artifacts/mujs ../../tcc_simple/experiments/m2_mujs_min.js
 popd
 sha256sum -c sums_mujs
+./artifacts/mujs coverage_test.js
 gcovr -r mujs_min artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox artifacts/example.html
