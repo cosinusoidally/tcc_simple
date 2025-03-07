@@ -38,5 +38,5 @@ for i in *\.c ; do
   ./chibicc_self -S $j.c -o asm2/$j.s
 done
 
-cd asm
+cd asm2
 sha256sum -c ../../../sums_orig
