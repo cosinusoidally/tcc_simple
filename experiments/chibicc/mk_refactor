@@ -26,45 +26,25 @@ mk_chibicc() {
 check_sums() {
   cd $dest
   sha256sum -c ../../../sums_orig
+  cd ..
 }
 
-gcc -g -O0 *c -o ../orig/chibicc64
-gcc -m32 -g -O0 *c -o ../orig/chibicc32
+gcc -g -O0 *c -o chibicc64
+gcc -m32 -g -O0 *c -o chibicc32
+
+cp chibicc64 ../orig
+cp chibicc32 ../orig
 
 cd ../orig
 
-mkdir asm
-mkdir asm2
-
-for i in *\.c ; do 
-  j=$(basename $i .c)
-  ./chibicc64 -S $j.c -o asm/$j.s
-done
-
-cd asm
-sha256sum -c ../../../sums_orig
-
-for i in *\.s ; do
-  ../chibicc64 -c $i
-done
-
-../chibicc64 *o -o ../chibicc_self
-
-cd ..
-
-for i in *\.c ; do
-  j=$(basename $i .c)
-  ./chibicc_self -S $j.c -o asm2/$j.s
-done
-
-cd asm2
-sha256sum -c ../../../sums_orig
-
-cd ..
-pwd
-
 MY_CC=chibicc32
-dest=self1
+dest=self32_1
+
+mk_chibicc
+check_sums
+
+MY_CC=chibicc64
+dest=self64_1
 
 mk_chibicc
 check_sums
