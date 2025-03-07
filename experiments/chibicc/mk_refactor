@@ -7,7 +7,24 @@ cd refactor
 
 set -xe
 
-gcc -g -O0 *c -o chibicc
+mk_chibcc() {
+  mkdir $dest
+  for i in *\.c ; do
+    j=$(basename $i .c)
+    ./$MY_CC -S $j.c -o $dest/$j.s
+  done
+
+  cd $dest
+  for i in *\.s ; do
+    ../$MY_CC -c $i
+  done
+
+  ../$MY_CC *o -o ../chibicc_self
+
+  mv chibicc ../chibicc_$dest
+}
+
+gcc -g -O0 *c -o chibicc64
 
 export PATH=$PWD:$PATH
 
@@ -18,24 +35,19 @@ mkdir asm2
 
 for i in *\.c ; do 
   j=$(basename $i .c)
-  chibicc -S $j.c -o asm/$j.s
+  chibicc64 -S $j.c -o asm/$j.s
 done
 
 cd asm
 sha256sum -c ../../../sums_orig
 
 for i in *\.s ; do
-  chibicc -c $i
+  chibicc64 -c $i
 done
 
-chibicc *o -o ../chibicc_self
+chibicc64 *o -o ../chibicc_self
 
 cd ..
-
-# belt and braces so previously built chibicc doesn't get called
-# FIXME is this an issue?
-
-chmod -x $(which chibicc)
 
 for i in *\.c ; do
   j=$(basename $i .c)

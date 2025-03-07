@@ -40,3 +40,7 @@ done
 
 cd asm2
 sha256sum -c ../../../sums_orig
+
+
+cd ..
+pwd
