@@ -7,7 +7,7 @@ cd refactor
 
 set -xe
 
-mk_chibcc() {
+mk_chibicc() {
   mkdir $dest
   for i in *\.c ; do
     j=$(basename $i .c)
@@ -19,9 +19,13 @@ mk_chibcc() {
     ../$MY_CC -c $i
   done
 
-  ../$MY_CC *o -o ../chibicc_self
+  ../$MY_CC *o -o ../chibicc_$dest
+  cd ..
+}
 
-  mv chibicc ../chibicc_$dest
+check_sums() {
+  cd $dest
+  sha256sum -c ../../../sums_orig
 }
 
 gcc -g -O0 *c -o ../orig/chibicc64
@@ -55,3 +59,12 @@ done
 
 cd asm2
 sha256sum -c ../../../sums_orig
+
+cd ..
+pwd
+
+MY_CC=chibicc32
+dest=self1
+
+mk_chibicc
+check_sums
