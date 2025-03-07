@@ -24,9 +24,8 @@ mk_chibcc() {
   mv chibicc ../chibicc_$dest
 }
 
-gcc -g -O0 *c -o chibicc64
-
-export PATH=$PWD:$PATH
+gcc -g -O0 *c -o ../orig/chibicc64
+gcc -m32 -g -O0 *c -o ../orig/chibicc32
 
 cd ../orig
 
@@ -35,17 +34,17 @@ mkdir asm2
 
 for i in *\.c ; do 
   j=$(basename $i .c)
-  chibicc64 -S $j.c -o asm/$j.s
+  ./chibicc64 -S $j.c -o asm/$j.s
 done
 
 cd asm
 sha256sum -c ../../../sums_orig
 
 for i in *\.s ; do
-  chibicc64 -c $i
+  ../chibicc64 -c $i
 done
 
-chibicc64 *o -o ../chibicc_self
+../chibicc64 *o -o ../chibicc_self
 
 cd ..
 
