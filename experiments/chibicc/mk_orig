@@ -7,4 +7,13 @@ cd orig
 set -xe
 
 make
-make test
+
+mkdir asm
+
+for i in *\.c ; do 
+  j=$(basename $i .c)
+  ./chibicc -S $j.c -o asm/$j.s
+done
+
+cd asm
+sha256sum -c ../../../sums_orig
