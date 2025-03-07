@@ -6,3 +6,5 @@
 !artifacts/placeholder
 /experiments/artifacts/*
 !experiments/artifacts/placeholder
+/experiments/chibicc/artifacts/*
+!experiments/chibicc/artifacts/placeholder
