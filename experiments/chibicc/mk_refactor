@@ -7,12 +7,12 @@ cd refactor
 
 set -xe
 
-mkdir asm
-mkdir asm2
-
 gcc -g -O0 *c -o chibicc
 
 export PATH=$PWD:$PATH
+
+mkdir asm
+mkdir asm2
 
 for i in *\.c ; do 
   j=$(basename $i .c)
