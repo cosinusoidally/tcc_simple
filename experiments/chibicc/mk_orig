@@ -1,0 +1,10 @@
+./mk_clean
+cd artifacts
+cd artifacts
+cp -r ../orig .
+cd orig
+
+set -xe
+
+make
+make test
