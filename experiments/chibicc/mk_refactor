@@ -11,6 +11,8 @@ gcc -g -O0 *c -o chibicc
 
 export PATH=$PWD:$PATH
 
+cd ../orig
+
 mkdir asm
 mkdir asm2
 
@@ -30,11 +32,10 @@ chibicc *o -o ../chibicc_self
 
 cd ..
 
+# belt and braces so previously built chibicc doesn't get called
+# FIXME is this an issue?
 
-# belt and brances just to make sure chibicc can't call the wrong binary
-# FIXME is this needed?
-
-rm chibicc
+chmod -x $(which chibicc)
 
 for i in *\.c ; do
   j=$(basename $i .c)
