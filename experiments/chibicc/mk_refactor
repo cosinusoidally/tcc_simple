@@ -99,4 +99,14 @@ dest=self64_1
 mk_chibicc
 check_sums
 
+MY_CC=chibicc_refactor32
+dest=ref32_1
+mk_chibicc
+check_sums
+
+MY_CC=chibicc_refactor64
+dest=ref64_1
+mk_chibicc
+check_sums
+
 pwd
