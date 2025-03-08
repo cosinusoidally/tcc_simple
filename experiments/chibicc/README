@@ -1,6 +1,15 @@
 Note for now the builds are not deterministic unless you are on a Ubuntu 22.04
 system with build essentials installed.
 
+The current lack of determinism is to do with the different include paths and
+files that will vary between distributions. These paths find their way into the
+assembly code. The assembly diffs are larger still because the differening
+headers also cause differrences in the debug info (which is spread through the
+whole assembly files).
+
+The longer term fix to this issue is to ship headers (eg like I did with
+tcc_bootstrap_alt).
+
 To set up a chroot:
 
 sudo debootstrap --variant=buildd --arch=amd64 jammy jammy
