@@ -21,4 +21,8 @@ inside the chroot navigate to this directory.
 ./mk_refactor should build the refactored version. Note this needs 32 bit
 support libs and headers.
 
-Watch out for errors.
+Watch out for errors. If the build is successful you will see:
+
+mk_orig OK
+or
+mk_refactor OK
