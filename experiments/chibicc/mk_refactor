@@ -47,6 +47,17 @@ MY_CC=chibicc_self32_2
 dest=self32_3
 mk_chibicc
 
+cd self32_1
+sha256sum *\.s |sort > ../self32_1.sums
+cd ../self32_2
+sha256sum *\.s |sort > ../self32_2.sums
+cd ../self32_3
+sha256sum *\.s |sort > ../self32_3.sums
+
+cd ..
+diff -u -s  self32_1.sums self32_2.sums
+diff -u -s  self32_2.sums self32_3.sums
+
 cp chibicc_self32_3 ../orig
 
 cd ../orig
@@ -60,3 +71,5 @@ MY_CC=chibicc64
 dest=self64_1
 mk_chibicc
 check_sums
+
+pwd
