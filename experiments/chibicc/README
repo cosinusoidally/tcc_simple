@@ -8,6 +8,7 @@ sudo debootstrap --variant=buildd --arch=amd64 jammy jammy
 cd jammy
 sudo mount --bind /proc proc
 sudo chroot .
+apt-get install gcc-multilib (if this fails run "apt-get update" and try again)
 adduser foo
 su foo
 cd
