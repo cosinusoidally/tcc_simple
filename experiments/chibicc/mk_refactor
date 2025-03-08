@@ -35,16 +35,22 @@ gcc -m32 -g -O0 *c -o chibicc32
 cp chibicc64 ../orig
 cp chibicc32 ../orig
 
+MY_CC=chibicc32
+dest=self32_1
+mk_chibicc
+
+MY_CC=chibicc_self32_1
+dest=self32_2
+mk_chibicc
+
 cd ../orig
 
 MY_CC=chibicc32
 dest=self32_1
-
 mk_chibicc
 check_sums
 
 MY_CC=chibicc64
 dest=self64_1
-
 mk_chibicc
 check_sums
