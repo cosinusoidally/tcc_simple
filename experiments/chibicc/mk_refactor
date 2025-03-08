@@ -83,6 +83,8 @@ cd ..
 diff -u -s  self64_1.sums self64_2.sums
 diff -u -s  self64_2.sums self64_3.sums
 
+diff -u -s  self32_1.sums self64_1.sums
+
 cp chibicc_self64_3 ../orig/chibicc_refactor64
 
 cd ../orig
