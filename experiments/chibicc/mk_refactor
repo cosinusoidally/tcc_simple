@@ -43,6 +43,12 @@ MY_CC=chibicc_self32_1
 dest=self32_2
 mk_chibicc
 
+MY_CC=chibicc_self32_2
+dest=self32_3
+mk_chibicc
+
+cp chibicc_self32_3 ../orig
+
 cd ../orig
 
 MY_CC=chibicc32
