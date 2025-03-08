@@ -1,6 +1,5 @@
 ./mk_clean
 cd artifacts
-cd artifacts
 cp -r ../orig .
 cp -r ../refactor .
 cd refactor
@@ -29,7 +28,7 @@ check_sums() {
   cd ..
 }
 
-gcc -g -O0 *c -o chibicc64
+gcc -m64 -g -O0 *c -o chibicc64
 gcc -m32 -g -O0 *c -o chibicc32
 
 cp chibicc64 ../orig
@@ -110,3 +109,4 @@ mk_chibicc
 check_sums
 
 pwd
+echo "mk_refactor OK"
