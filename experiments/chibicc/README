@@ -1,0 +1,24 @@
+Note for now the builds are not deterministic unless you are on a Ubuntu 22.04
+system with build essentials installed.
+
+To set up a chroot:
+
+sudo debootstrap --variant=buildd --arch=amd64 jammy jammy
+
+cd jammy
+sudo mount --bind /proc proc
+sudo chroot .
+adduser foo
+su foo
+cd
+
+From outside the chroot place tcc_simple in foo's home directory inside the
+chroot.
+
+inside the chroot navigate to this directory.
+
+./mk_orig should build the original version of chibicc
+./mk_refactor should build the refactored version. Note this needs 32 bit
+support libs and headers.
+
+Watch out for errors.

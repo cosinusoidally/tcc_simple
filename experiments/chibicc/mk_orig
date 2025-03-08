@@ -44,3 +44,5 @@ sha256sum -c ../../../sums_orig
 
 cd ..
 pwd
+
+echo "mk_orig OK"
