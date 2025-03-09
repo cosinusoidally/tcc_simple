@@ -411,6 +411,10 @@ void add_type(Node *node);
 void codegen(Obj *prog, FILE *out);
 int align_to(int n, int align);
 
+/* codegen_alt.c */
+
+void codegen_alt(Obj *prog, FILE *out);
+
 //
 // unicode.c
 //

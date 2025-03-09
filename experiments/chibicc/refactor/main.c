@@ -21,6 +21,7 @@ static bool opt_cc1;
 static bool opt_hash_hash_hash;
 static bool opt_static;
 static bool opt_shared;
+static bool opt_codegen_alt;
 static char *opt_MF;
 static char *opt_MT;
 static char *opt_o;
@@ -124,6 +125,12 @@ static void parse_args(int argc, char **argv) {
   for (int i = 1; i < argc; i++) {
     if (!strcmp(argv[i], "-###")) {
       opt_hash_hash_hash = true;
+      continue;
+    }
+
+/* LJW to allow selection of alt code generator */
+    if (!strcmp(argv[i], "-alt")) {
+      opt_codegen_alt = true;
       continue;
     }
 
@@ -558,7 +565,14 @@ static void cc1(void) {
   FILE *output_buf = open_memstream(&buf, &buflen);
 
   // Traverse the AST to emit assembly.
-  codegen(prog, output_buf);
+
+  if(!opt_codegen_alt) {
+    codegen(prog, output_buf);
+  } else {
+    puts("use codegen alt");
+    codegen_alt(prog, output_buf);
+  }
+
   fclose(output_buf);
 
   // Write the asembly text to a file.
