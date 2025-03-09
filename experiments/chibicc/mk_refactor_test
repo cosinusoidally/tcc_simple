@@ -1,9 +1,12 @@
 set -xe
+
 pushd .
 cd artifacts/refactor
-cp chibicc32 chibicc
 export PATH=$PWD:$PATH
 popd
+
+run_test() {
+pushd .
 cd ../../../tcc_bootstrap_alt/m2min/
 pwd
 ./mk_simple_asm_js_chibicc
@@ -29,3 +32,19 @@ gcc -m32 libtcc1.o tcc.o -ldl
 
 cd ..
 sha256sum -c sum
+
+popd
+pwd
+}
+
+cp artifacts/refactor/chibicc32 artifacts/refactor/chibicc
+run_test
+
+cp artifacts/refactor/chibicc64 artifacts/refactor/chibicc
+run_test
+
+cp artifacts/refactor/chibicc_self32_3 artifacts/refactor/chibicc
+run_test
+
+cp artifacts/refactor/chibicc_self64_3 artifacts/refactor/chibicc
+run_test
