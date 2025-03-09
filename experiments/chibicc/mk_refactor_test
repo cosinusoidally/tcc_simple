@@ -1,0 +1,31 @@
+set -xe
+pushd .
+cd artifacts/refactor
+cp chibicc32 chibicc
+export PATH=$PWD:$PATH
+popd
+cd ../../../tcc_bootstrap_alt/m2min/
+pwd
+./mk_simple_asm_js_chibicc
+cd ../tcc_27
+pwd
+set +xe
+rm a.out tcc.o libtcc1.o
+set -xe
+echo "here"
+CC=$(which chibicc)
+$CC -DTCC_TARGET_I386 tcc.c -DONE_SOURCE 
+./a.out -v
+
+./a.out -c ./lib/libtcc1.c -o libtcc1.o
+./a.out -U__linux__ -I ../woody/usr/include/ -I include -c tcc.c -DONE_SOURCE -o tcc.o
+
+rm a.out
+
+gcc -m32 libtcc1.o tcc.o -ldl
+
+./a.out -c ./lib/libtcc1.c -o libtcc1.o
+./a.out -I ../woody/usr/include/ -I include -c tcc.c -DONE_SOURCE -o tcc.o
+
+cd ..
+sha256sum -c sum
