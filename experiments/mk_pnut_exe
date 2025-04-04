@@ -1,7 +1,27 @@
 ./mk_clean
 
+set -xe
+
 TEMP_DIR=../artifacts/
+
+PNUT_FLAGS="-DBOOTSTRAP_LONG -Dtarget_i386_linux -DUNDEFINED_LABELS_ARE_RUNTIME_ERRORS"
 
 cd pnut_refactor
 
 gcc -m32 -Og -g -Dtarget_i386_linux pnut.c -o $TEMP_DIR/pnut_exe_gcc.exe
+$TEMP_DIR/pnut_exe_gcc.exe $PNUT_FLAGS pnut.c -o $TEMP_DIR/pnut_exe_pnut0.exe
+chmod +x $TEMP_DIR/pnut_exe_pnut0.exe
+$TEMP_DIR/pnut_exe_pnut0.exe $PNUT_FLAGS pnut.c -o $TEMP_DIR/pnut_exe_pnut1.exe
+chmod +x $TEMP_DIR/pnut_exe_pnut1.exe
+
+diff -u -s $TEMP_DIR/pnut_exe_pnut0.exe $TEMP_DIR/pnut_exe_pnut1.exe
+
+tcc -Dtarget_i386_linux pnut.c -o $TEMP_DIR/pnut_exe_tcc.exe
+$TEMP_DIR/pnut_exe_tcc.exe $PNUT_FLAGS pnut.c -o $TEMP_DIR/pnut_exe_pnut0_tcc.exe
+chmod +x $TEMP_DIR/pnut_exe_pnut0_tcc.exe
+$TEMP_DIR/pnut_exe_pnut0_tcc.exe $PNUT_FLAGS pnut.c -o $TEMP_DIR/pnut_exe_pnut1_tcc.exe
+chmod +x $TEMP_DIR/pnut_exe_pnut1_tcc.exe
+
+diff -u -s $TEMP_DIR/pnut_exe_pnut0_tcc.exe $TEMP_DIR/pnut_exe_pnut1_tcc.exe
+
+echo "done"
