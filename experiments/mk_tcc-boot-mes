@@ -143,18 +143,6 @@ catm() { # Like cat, but takes the output file as the first argument, a path pre
   cat $args > "$output"
 }
 
-# Prepare Mes lib
-mkdir -p $MES_DIR/include/arch
-cp $MES_DIR/include/linux/${MES_ARCH}/kernel-stat.h $MES_DIR/include/arch/kernel-stat.h
-cp $MES_DIR/include/linux/${MES_ARCH}/signal.h $MES_DIR/include/arch/signal.h
-cp $MES_DIR/include/linux/${MES_ARCH}/syscall.h $MES_DIR/include/arch/syscall.h
-
-# Create config.h
-touch ${MES_DIR}/include/mes/config.h
-touch ${TCC_DIR}/config.h
-
-cp mes-config.h $MES_DIR/include/mes/config.h
-
 # Compile the mes C library for tcc-boot0
 
 # Create unified libc file
