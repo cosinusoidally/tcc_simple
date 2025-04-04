@@ -141,7 +141,7 @@
 #endif
 
 /* only native compiler supports -run */
-#if defined _WIN32 == defined TCC_TARGET_PE
+#if defined _WIN32 == defined TCC_TARGET_PE && !defined PNUT_CC
 # if (defined __i386__ || defined _X86_) && defined TCC_TARGET_I386
 #  define TCC_IS_NATIVE
 # elif (defined __x86_64__ || defined _AMD64_) && defined TCC_TARGET_X86_64
