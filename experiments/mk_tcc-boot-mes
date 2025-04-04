@@ -4,7 +4,7 @@ set -xe
 cd pnut_refactor
 
 TEMP_DIR=../artifacts
-TCC_DIR=../tcc-0.9.26
+TCC_DIR=../tcc-0.9.26-lb
 MES_DIR=../mes-0.27
 
 MES_ARCH=x86
