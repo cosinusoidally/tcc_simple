@@ -1,4 +1,9 @@
 #! /bin/sh
+
+./mk_clean
+
+./mk_pnut_exe
+
 set -xe
 
 cd pnut_refactor
@@ -34,26 +39,6 @@ while [ $# -gt 0 ]; do
     *) echo "Unknown option: $1"; exit 1;;
   esac
 done
-
-# Check that --gcc and --shell are not used together
-if [ $use_gcc -eq 1 ] && [ -n "$shell" ]; then
-  echo "Cannot use --gcc and --shell at the same time"
-  exit 1
-fi
-
-if [ $safe -eq 1 ]; then
-  # Safe mode adds checks at run time to make sure the AST is well constructed
-  # and no out-of-bounds access are done. This is mainly useful for debugging.
-  PNUT_EXE_OPTIONS="$PNUT_EXE_OPTIONS -DSAFE_MODE";
-  PNUT_SH_OPTIONS="$PNUT_SH_OPTIONS -DSAFE_MODE";
-  PNUT_SH_OPTIONS_FAST="$PNUT_SH_OPTIONS_FAST -DSAFE_MODE";
-fi
-
-if [ $fast -eq 1 ]; then
-  # Fast mode disables some checks at run time to make the code run faster.
-  # This is mainly useful for production code.
-  PNUT_SH_OPTIONS="$PNUT_SH_OPTIONS_FAST"
-fi
 
 if [ $use_gcc -eq 0 ]; then
 
@@ -373,3 +358,6 @@ $TEMP_DIR/tcc-boot3 \
   $TCC_DIR/tcc.c
 
 sha256sum $TEMP_DIR/tcc-boot-mes
+
+cd ..
+sha256sum -c sums_tcc-boot-mes
