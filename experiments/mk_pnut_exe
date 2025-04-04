@@ -1,4 +1,7 @@
 ./mk_clean
+
+TEMP_DIR=../artifacts/
+
 cd pnut_refactor
 
-gcc -m32 -Og -g -Dtarget_i386_linux pnut.c -o ../artifacts/pnut_exe_gcc.exe
+gcc -m32 -Og -g -Dtarget_i386_linux pnut.c -o $TEMP_DIR/pnut_exe_gcc.exe
