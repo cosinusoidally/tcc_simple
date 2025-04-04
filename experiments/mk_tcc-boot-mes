@@ -1,9 +1,5 @@
 #! /bin/sh
 
-./mk_clean
-
-./mk_pnut_exe
-
 set -xe
 
 cd pnut_refactor
@@ -11,6 +7,9 @@ cd pnut_refactor
 TEMP_DIR=../artifacts
 TCC_DIR=../tcc-0.9.26-lb
 MES_DIR=../mes-0.27
+
+echo "If it fails here you need first run ./mk_pnut_exe"
+ls -l ./$TEMP_DIR/pnut-exe
 
 MES_ARCH=x86
 TCC_TARGET_ARCH=I386
