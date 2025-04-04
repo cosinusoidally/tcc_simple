@@ -781,7 +781,11 @@ LIBTCCAPI TCCState *tcc_new(void)
     {
         /* define __TINYC__ 92X  */
         char buffer[32]; int a,b,c;
+#ifdef PNUT_CC
+        a = 0; b = 9; c = 26;
+#else
         sscanf(TCC_VERSION, "%d.%d.%d", &a, &b, &c);
+#endif
         sprintf(buffer, "%d", a*10000 + b*100 + c);
         tcc_define_symbol(s, "__TINYC__", buffer);
     }
