@@ -24,4 +24,8 @@ chmod +x $TEMP_DIR/pnut_exe_pnut1_tcc.exe
 
 diff -u -s $TEMP_DIR/pnut_exe_pnut0_tcc.exe $TEMP_DIR/pnut_exe_pnut1_tcc.exe
 
+diff -u -s $TEMP_DIR/pnut_exe_pnut0.exe $TEMP_DIR/pnut_exe_pnut0_tcc.exe
+
+cp $TEMP_DIR/pnut_exe_pnut0.exe $TEMP_DIR/pnut_exe.exe
+
 echo "done"
