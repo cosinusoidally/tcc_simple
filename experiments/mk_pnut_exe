@@ -1,0 +1,4 @@
+./mk_clean
+cd pnut_refactor
+
+gcc -m32 -Og -g -Dtarget_i386_linux pnut.c -o ../artifacts/pnut_exe_gcc.exe
