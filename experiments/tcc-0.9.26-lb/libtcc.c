@@ -640,7 +640,9 @@ static int tcc_compile(TCCState *s1)
     if (1) {
 #endif
         s1->nb_errors = 0;
-        s1->error_set_jmp_enabled = 1;
+#ifdef PNUT_CC
+        s1->error_set_jmp_enabled = 0;
+#endif
 
         preprocess_start(s1);
         tccgen_start(s1);
