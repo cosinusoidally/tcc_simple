@@ -1,0 +1,94 @@
+#! /bin/sh
+set -ex
+
+export V
+export MES
+export MESCC
+export MES_DEBUG
+export MES_PREFIX
+export MES_LIB
+export MES_SOURCE
+export ONE_SOURCE
+export PREPROCESS
+export REBUILD_LIBC
+
+export cpu
+export cross_prefix
+export mes_cpu
+export prefix
+export tcc_cpu
+export triplet
+
+prefix=usr
+MES=${MES-mes-source/bin/mes}
+MES_ARENA=70000000
+MES_MAX_ARENA=70000000
+export MES_ARENA MES_MAX_ARENA
+
+MES=guile
+MES=${MES-mes-source/bin/mes}
+MESCC=${MESCC-mes-source/pre-inst-env mescc}
+
+MES_PREFIX=${MES_PREFIX-mes-source}
+
+REBUILD_LIBC=${REBUILD_LIBC-true}
+
+rm -f mes
+ln -sf $MES_PREFIX mes
+
+sh build-gcc.sh
+
+PREPROCESS=${PREPROCESS-true}
+ONE_SOURCE=${ONE_SOURCE-false}
+
+arch=$(uname -m)
+case $arch in
+     aarch*)
+         cpu=arm
+         mes_cpu=arm
+         tcc_cpu=arm
+         triplet=arm-linux-gnueabihf
+         cross_prefix=${triplet}-
+         have_float=${have_float-true}
+         have_long_long=${have_long_long-true}
+         have_setjmp=${have_setjmp-false}
+         ;;
+     arm*|aarch*)
+         cpu=arm
+         mes_cpu=arm
+         tcc_cpu=arm
+         triplet=arm-unknown-linux-gnueabihf
+         cross_prefix=${triplet}-
+         have_float=${have_float-true}
+         have_long_long=${have_long_long-true}
+         have_setjmp=${have_setjmp-false}
+         ;;
+     *)
+         cpu=x86
+         mes_cpu=x86
+         tcc_cpu=i386
+         triplet=i686-unknown-linux-gnu
+         cross_prefix=${triplet}-
+         have_float=${have_float-true}
+         have_long_long=${have_long_long-true}
+         have_setjmp=${have_setjmp-true}
+         ;;
+esac
+export cpu
+export cross_prefix
+export tcc_cpu
+export triplet
+export have_float
+export have_long_long
+export have_setjmp
+
+MES_LIB=${MES_LIB-$MES_PREFIX/lib}
+MES_LIB=$MES_SOURCE/gcc-lib/${mes_cpu}-mes
+
+sh build-32.sh
+sh build.sh
+sh compile.sh
+sh link.sh ||:
+sh check.sh
+rm -rf usr
+sh install.sh

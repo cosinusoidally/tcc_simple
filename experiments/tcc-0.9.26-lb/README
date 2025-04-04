@@ -1,0 +1,180 @@
+Bootstrappable TCC/TinyCC -- Tiny C Compiler's bootstrappable fork
+------------------------------------------------------------------
+
+Bootstrappable TCC is a fork from mainline TCC development, that
+started spring 2017 from
+
+    commit 307b7b183d4ee56e74090b0e525d6a587840e31f
+    Author: Aron BARATH <baratharon@caesar.elte.hu>
+    Date:   Tue May 16 07:03:26 2017 +0200
+
+        the R_X86_64_GOTOFF64 relocation was missing
+
+and can be compiled by MesCC (https://gnu.org/s/mes).
+
+Initially the plan was to make TinyCC itself "bootstrappable"
+(https://bootstrappable.org).
+
+The best way to do so would be to gradually simplify the
+implementation of TinyCC by restricting the use of language constructs
+to a well-defined subset of C.  In bootstrapping each stage or
+compiler adds functionality; a compiler that is written in itself --a
+so-called `self-hosting' compiler--is not considered to be
+bootstrappable.
+
+At the time this vision was not received with much enthousiasm
+
+    https://lists.nongnu.org/archive/html/tinycc-devel/2017-09/msg00019.html
+
+so I decided to fork TinyCC and instead grow MesCC (a bootstrappable
+sub-C compiler in a subset of Guile Scheme) into a full C99 compiler.
+
+Currently, the Reduced Binary Seed Bootstrap of the GNU Guix System
+uses bootstrappable-tinycc.  See
+    https://guix.gnu.org/en/blog/2020/guix-further-reduces-bootstrap-seed-to-25/
+    https://guix.gnu.org/blog/2019/guix-reduces-bootstrap-seed-by-50/
+
+The fork consists of about 30 patches
+
+    ff2210b3 build: Add support for ARM.
+    f8c8caaf ARM: allow fake asm in functions.
+    d9ecdebc bootstrappable: ARM: Force eabi header.
+    82b822c3 bootstrappable: HAVE_LONG_LONG, part 3.
+    77ae03e8 bootstrappable: ARM: HAVE_FLOAT?
+    82678555 bootstrappable: ARM: generate __memcpy, __memmove, __memset.
+    0688c1f5 bootstrappable: ARM: HAVE_SETJMP.
+    35c9c246 bootstrappable: HAVE_LONG_LONG_STUB.
+    bdec98dd bootstrappable: HAVE_LONG_LONG, part 2.
+    2556e105 bootstrappable: ARM: HAVE_FLOAT.
+    fcb48635 bootstrappable: ARM: Avoid ternary.
+    d0608d0d bootstrappable: ARM: Avoid ternary in argument.
+    f7e98b52 bootstrappable: ARM: HAVE_FLOAT.
+    e23023ec bootstrappable: HAVE_FLOAT, part 2.
+    907479d7 bootstrappable: Avoid function modulo.
+    33403a40 bootstrappable: Avoid using __clear_cache.
+    94fa1710 bootstrappable: Use tmp initialization instead of for struct assigment.
+    35ccd609 bootstrappable: Support libtcc1-mes.a.
+    cee58e09 build: Support building from bootstrap-mes.
+    39de3568 bootstrappable: Force static link.
+    2b6271d1 bootstrappable: Work around MesCC bug.
+    379c62d6 bootstrappable: add tcc.h include guards to include location.
+    6ae9aa40 bootstrappable: Skip tidy_section_headers.
+    a130ce17 bootstrappable: HAVE_FLOAT.
+    de906df4 bootstrappable: HAVE_BITFIELD.
+    540ba0b4 bootstrappable: HAVE_LONG_LONG.
+    306f6779 bootstrappable: Work around Nyacc-0.80.42 bug.
+    9c97705c build: bootstrap build scripts.
+    584478fc bootstrappable: Remove non-free grep test.
+
+that work around bugs and missing C language features in MesCC.  Only
+three of these are really interesting: the HAVE_* patches that allow
+for stepwise introduction of bitfields, doubles/floats and long longs.
+
+In time, I hope we can remove the need for this fork; either by
+upstreaming some bootstrappable work or else by maturing MesCC.
+
+At the time of writing, mainline (non-bootstrappable) tinycc lives
+here
+
+    https://repo.or.cz/tinycc.git
+    https://lists.nongnu.org/mailman/listinfo/tinycc-devel
+
+-- 
+janneke
+
+
+Tiny C Compiler - C Scripting Everywhere - The Smallest ANSI C compiler
+-----------------------------------------------------------------------
+
+Features:
+--------
+
+- SMALL! You can compile and execute C code everywhere, for example on
+  rescue disks.
+
+- FAST! tcc generates optimized x86 code. No byte code
+  overhead. Compile, assemble and link about 7 times faster than 'gcc
+  -O0'.
+
+- UNLIMITED! Any C dynamic library can be used directly. TCC is
+  heading torward full ISOC99 compliance. TCC can of course compile
+  itself.
+
+- SAFE! tcc includes an optional memory and bound checker. Bound
+  checked code can be mixed freely with standard code.
+
+- Compile and execute C source directly. No linking or assembly
+  necessary. Full C preprocessor included. 
+
+- C script supported : just add '#!/usr/local/bin/tcc -run' at the first
+  line of your C source, and execute it directly from the command
+  line.
+
+Documentation:
+-------------
+
+1) Installation on a i386/x86_64/arm Linux/OSX/FreeBSD host
+
+   ./configure
+   make
+   make test
+   make install
+
+   Notes: For OSX and FreeBSD, gmake should be used instead of make.
+   For Windows read tcc-win32.txt.
+
+makeinfo must be installed to compile the doc.  By default, tcc is
+installed in /usr/local/bin.  ./configure --help  shows configuration
+options.
+
+
+2) Introduction
+
+We assume here that you know ANSI C. Look at the example ex1.c to know
+what the programs look like.
+
+The include file <tcclib.h> can be used if you want a small basic libc
+include support (especially useful for floppy disks). Of course, you
+can also use standard headers, although they are slower to compile.
+
+You can begin your C script with '#!/usr/local/bin/tcc -run' on the first
+line and set its execute bits (chmod a+x your_script). Then, you can
+launch the C code as a shell or perl script :-) The command line
+arguments are put in 'argc' and 'argv' of the main functions, as in
+ANSI C.
+
+3) Examples
+
+ex1.c: simplest example (hello world). Can also be launched directly
+as a script: './ex1.c'.
+
+ex2.c: more complicated example: find a number with the four
+operations given a list of numbers (benchmark).
+
+ex3.c: compute fibonacci numbers (benchmark).
+
+ex4.c: more complicated: X11 program. Very complicated test in fact
+because standard headers are being used ! As for ex1.c, can also be launched
+directly as a script: './ex4.c'.
+
+ex5.c: 'hello world' with standard glibc headers.
+
+tcc.c: TCC can of course compile itself. Used to check the code
+generator.
+
+tcctest.c: auto test for TCC which tests many subtle possible bugs. Used
+when doing 'make test'.
+
+4) Full Documentation
+
+Please read tcc-doc.html to have all the features of TCC.
+
+Additional information is available for the Windows port in tcc-win32.txt.
+
+License:
+-------
+
+TCC is distributed under the GNU Lesser General Public License (see
+COPYING file).
+
+Fabrice Bellard.
