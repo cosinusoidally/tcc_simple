@@ -1,0 +1,488 @@
+# GNU Mes --- Maxwell Equations of Software
+# Copyright © 2018,2019,2021,2022,2023 Janneke Nieuwenhuizen <janneke@gnu.org>
+# Copyright © 2023 Vagrant Cascadian <vagrant@debian.org>
+#
+# This file is part of GNU Mes.
+#
+# GNU Mes is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or (at
+# your option) any later version.
+#
+# GNU Mes is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mes.  If not, see <http://www.gnu.org/licenses/>.
+
+SHELL=@BASH@
+srcdest=@srcdest@
+srcdir=@srcdir@
+abs_top_srcdir=@abs_top_srcdir@
+abs_top_builddir=@abs_top_builddir@
+
+GUILE_FLAGS:=--no-auto-compile -L . -L module -C . -C module
+
+cleaning-p:=$(filter clean%, $(MAKECMDGOALS))$(filter %clean, $(MAKECMDGOALS))
+
+ifndef cleaning-p
+include .config.make
+ifneq ($(prefix),)
+prefix-arg=--prefix=$(prefix)
+endif
+ifneq ($(build),)
+build-arg=--build=$(build)
+endif
+ifneq ($(host),)
+host-arg=--host=$(host)
+endif
+ifeq ($(mes_libc),system)
+--with-system-libc=system
+endif
+.config.make:
+	${srcdir}/configure $(prefix_arg) $(host-arg) $(build-arg) $(with-system-libc)
+endif
+
+PHONY_TARGETS:=\
+ TAGS\
+ all-go\
+ all\
+ build\
+ check\
+ clean-go\
+ clean\
+ default\
+ dist\
+ distclean\
+ doc\
+ dvi\
+ gcc\
+ generate-ChangeLog\
+ help\
+ html\
+ info\
+ install-dvi\
+ install-html\
+ install-pdf\
+ install-ps\
+ install-strip\
+ install\
+ installcheck\
+ installdirs\
+ maintainer-clean\
+ man\
+ mes-gcc\
+ mes-tcc\
+ mes\
+ mostlyclean\
+ pdf\
+ ps\
+ sign-dist\
+ uninstall\
+ web\
+#
+
+.PHONY: $(PHONY_TARGETS)
+
+X86_ARCH_HEADERS = $(wildcard $(srcdest)include/linux/x86/*.h)
+ARCH_HEADERS = $(X86_ARCH_HEADERS:$(srcdest)include/linux/x86/%=include/arch/%)
+
+default: all
+
+all: doc
+
+doc: build
+
+build: | $(ARCH_HEADERS)
+	$(SHELL) build.sh
+
+src/${program_prefix}mes: build
+
+include/arch/%.h: $(srcdest)include/$(mes_kernel)/$(mes_cpu)/%.h | arch-dir
+	cp -f $< $@
+
+arch-dir:
+	mkdir -p include/arch
+
+clean:
+	rm -f *.o *.s bin/mes bin/mes-gcc bin/mes-m2 bin/mes-mescc
+	rm -f .log build.log
+	rm -f 0exit-42 0hello-mes exit-42 body-exit-42 body-hello-mes hello-mes
+	rm -f build-aux/mes-snarf.go
+	rm -f module/mescc.go
+	rm -f module/mes/*.go module/mescc/*.go
+	rm -f module/mescc/armv4/*.go
+	rm -f module/mescc/i386/*.go
+	rm -f module/mescc/riscv64/*.go
+	rm -f module/mescc/x86_64/*.go
+	rm -rf m2/
+	rm -rf gcc-lib/
+	rm -rf mescc-lib/
+	rm -rf tcc-lib/
+	rm -f scaffold/{argv,hello,main,read}.{M1,blood-elf-M1,hex2}
+	rm -f scaffold/{argv,hello,main,read}-m2
+	rm -f scaffold/boot/*.log scaffold/boot/*.trs
+	rm -f test-suite.log tests/*.log tests/*.trs
+	rm -f scaffold/*.s scaffold/*.o
+	rm -f doc/images/gcc-mesboot-graph.{eps,pdf,png}
+	rm -f doc/mes.1 doc/mesar.1 doc/mescc.1
+	rm -f doc/mes.{aux,cp,cps,fls,fn,info,log,tmp,toc,vr,vrs}
+	rm -f doc/mes.{dvi,pdf,ps}
+	rm -f doc/version.texi
+	rm -rf doc/web/
+
+distclean: clean
+	rm -f GNUmakefile bootstrap.sh build.sh check.sh install.sh uninstall.sh
+	rm -f .config .config.E .config.make .config.o
+	rm -f pre-inst-env
+	rm -rf include/arch/
+	rm -f include/mes/config.h
+	rm -f .config.make config.sh
+	rm -f scripts/mesar scripts/mescc scripts/mescc.scm
+	rm -f TAGS
+
+mostlyclean: clean
+
+maintainer-clean: distclean
+
+TAGS:
+	etags ${srcdest}lib/*.c ${srcdest}lib/*/*.c ${srcdest}src/*.c ${srcdest}include/*.h ${srcdest}include/*/*.h ${srcdest}include/sys/*.h
+
+all-go:
+	${srcdest}build-aux/build-guile.sh
+
+clean-go:
+	rm -f $(shell find . -name '*.go')
+
+check:
+	$(SHELL) check.sh
+
+check-mescc:
+	$(SHELL) pre-inst-env build-aux/check-mescc.sh
+
+# Mes does not feature post-install checks yet, so we're great!
+installcheck:
+	true
+
+install:
+	$(SHELL) install.sh
+
+uninstall:
+	$(SHELL) uninstall.sh
+
+doc/version.texi: ${srcdest}doc/mes.texi GNUmakefile
+	@mkdir -p $(@D)
+	timestamp=$$({ git log --pretty=format:%ct -- $<	\
+		       || date +%s -r $<; }			\
+	               | sort -n -r | head -n 1);		\
+	dmy=$$(date --date="@$$timestamp" "+%-d %B %Y");	\
+	(echo "@set UPDATED $$dmy";				\
+	echo "@set UPDATED-MONTH $$my";				\
+	echo "@set EDITION $(VERSION)";				\
+	echo "@set VERSION $(VERSION)") > $@
+
+doc: doc/version.texi
+ifdef MAKEINFO
+doc: info
+else
+$(warning skipping info: no makeinfo)
+endif
+
+ifdef HELP2MAN
+doc: man
+else
+$(warning skipping man: no help2man)
+endif
+
+info: doc/mes.info
+
+doc/mes.info: ${srcdest}doc/mes.texi doc/version.texi doc/images/gcc-mesboot-graph.png GNUmakefile
+	$(MAKEINFO) -o $@ -I doc -I doc $<
+
+doc/images/%.eps: ${srcdest}doc/images/%.dot
+ifdef DOT
+	@mkdir -p $(@D)
+	$(DOT) -T eps $< > $@
+else
+	touch $@
+endif
+
+doc/images/%.pdf: ${srcdest}doc/images/%.dot
+ifdef DOT
+	@mkdir -p $(@D)
+	$(DOT) -T pdf $< > $@
+else
+	touch $@
+endif
+
+doc/images/%.png: ${srcdest}doc/images/%.dot
+ifdef DOT
+	@mkdir -p $(@D)
+	$(DOT) -T png $< > $@
+else
+	touch $@
+$(warning info: graphvis missing: no images)
+endif
+
+man: doc/mes.1 doc/mescc.1 doc/mesar.1
+
+# disable builtin-rules
+%.o: %.s
+%.s: %.S
+%.o: %.S
+%.o: %.c
+%: %.S
+%: %.o
+%: %.c
+
+# help2man reproducibility
+SOURCE_DATE_EPOCH=$(shell git show HEAD --format=%ct --no-patch 2>/dev/null || echo 0)
+export SOURCE_DATE_EPOCH
+
+doc/mes.1: src/${program_prefix}mes | build
+	MES_ARENA=10000000 ./pre-inst-env $(HELP2MAN)				\
+	    --name="Scheme interpreter for bootstrapping the GNU system"	\
+	    $(<F) > $@
+
+doc/mescc.1: scripts/mescc src/${program_prefix}mes | build
+	MES_ARENA=10000000 ./pre-inst-env $(HELP2MAN)				\
+	    --name="C99 compiler in Scheme for bootstrapping the GNU system"	\
+	    $(<F) > $@
+
+doc/mesar.1: scripts/mescc src/${program_prefix}mes | build
+	MES_ARENA=10000000 ./pre-inst-env $(HELP2MAN)	\
+	    --name="Archiver for MesCC"			\
+	    $(<F) > $@
+
+html: doc/html/index.html
+
+doc/html/index.html: ${srcdest}doc/mes.texi doc/version.texi doc/images/gcc-mesboot-graph.png
+	$(MAKEINFO) --html -o $(@D) -I ${srcdest}doc -I doc $<
+
+dvi: doc/mes.dvi
+
+doc/mes.dvi: ${srcdest}doc/mes.texi doc/version.texi doc/images/gcc-mesboot-graph.eps | doc-dir
+	cd doc && $(MAKEINFO) --dvi -I ${srcdest}../doc -o mes.dvi $(<F)
+
+pdf: doc/mes.pdf
+
+doc/mes.pdf: ${srcdest}doc/mes.texi doc/version.texi doc/images/gcc-mesboot-graph.eps | doc-dir
+	cd doc && $(MAKEINFO) --pdf -I ${srcdest}../doc -o mes.pdf $(<F)
+
+ps: doc/mes.ps
+
+doc/mes.ps: ${srcdest}doc/mes.texi doc/version.texi doc/images/gcc-mesboot-graph.eps | doc-dir
+	cd doc && $(MAKEINFO) --ps -I ${srcdest}../doc -o mes.ps $(<F)
+
+WEB_IMAGES:=					\
+ doc/images/gcc-mesboot-graph.eps		\
+ doc/images/gcc-mesboot-graph.pdf		\
+ doc/images/gcc-mesboot-graph.png
+
+web: info $(WEB_IMAGES) | doc-dir
+	cd doc && GENDOCS_TEMPLATE_DIR=${srcdir}/../doc	\
+	    ${srcdest}../build-aux/gendocs.sh		\
+		-I ${srcdir}/../doc			\
+		-s $(srcdest)../doc/mes.texi		\
+		-o web/manual				\
+		--email bug-mes@gnu.org			\
+		mes "GNU Mes manual"
+
+doc-dir:
+	mkdir -p doc
+
+SITE = /srv/mes.org
+publish: web
+	rsync -P -v . $(SITE)/
+	rsync -P -v . $(SITE)/manual/
+	rsync -P -rvz doc/web/manual/ $(SITE)/manual/
+
+LOCAL_SITE = $(HOME)/src/web/mes
+publish-local: web
+	$(MAKE) publish SITE=$(LOCAL_SITE)
+
+###  dist
+COMMIT=$(shell test -e ${srcdest}.git && (cd ${srcdir} && git describe --dirty 2>/dev/null) || cat ${srcdest}.tarball-version)
+TARBALL_VERSION=$(COMMIT:v%=%)
+TARBALL_DIR:=$(PACKAGE)-$(TARBALL_VERSION)
+TARBALL:=$(TARBALL_DIR).tar.gz
+# Be friendly to Debian; avoid using EPOCH
+MTIME=$(SOURCE_DATE_EPOCH)
+# Reproducible tarball
+TAR_FLAGS=--sort=name --mtime=@$(MTIME) --owner=0 --group=0 --numeric-owner --mode=go=rX,u+rw,a-s
+
+.tarball-version:
+	echo $(COMMIT) > $@
+
+GIT_ARCHIVE_HEAD:=git archive HEAD --
+GIT_LS_FILES:=git ls-files
+ifeq ($(wildcard .git),)
+GIT_ARCHIVE_HEAD:=tar -cf-
+GIT_LS_FILES:=find
+MTIME:=0
+endif
+
+check-signature:
+	git show HEAD --show-signature |grep 'gpg: Good signature'
+
+dist: check-signature $(TARBALL)
+
+sign-dist: $(TARBALL)
+	gpg -a --output $(TARBALL).sig --detach-sig $(TARBALL)
+	git checkout ChangeLog
+
+tree-clean-p:
+	test ! -d .git || git diff --exit-code > /dev/null
+	test ! -d .git || git diff --cached --exit-code > /dev/null
+	@echo commit:$(COMMIT)
+
+generate-ChangeLog:
+	$(PERL) ${srcdest}build-aux/gitlog-to-changelog --srcdir=${srcdir} > $@
+	cat ChangeLog >> generate-ChangeLog
+	mv generate-ChangeLog ChangeLog
+
+$(TARBALL): .tarball-version | generate-ChangeLog
+	($(GIT_LS_FILES)				\
+	    --exclude=$(TARBALL_DIR);			\
+	    echo $^ | tr ' ' '\n')			\
+	    | tar $(TAR_FLAGS)				\
+	    --transform=s,^,$(TARBALL_DIR)/,S -T- -cf-	\
+	    | gzip -c --no-name > $@
+	git checkout ChangeLog
+
+ifdef GUIX
+update-hash: $(TARBALL)
+	$(GUIX) download file://$(PWD)/$<
+	sed -i 											\
+		-e 's,version #!mes!# "[^"]*"),version #!mes!# "$(VERSION)"),'			\
+		-e 's,(base32 #!mes!# "[^"]*"),(base32 #!mes!# "$(shell $(GUIX) hash $<)"),' 	\
+		guix/git/mes.scm
+else
+$(warning update-hash: no guix)
+endif
+
+tag:
+	git tag -s v$(VERSION) -m "GNU Mes $(VERSION)."
+
+# Release process
+#  0. Prepare git, see history:
+#     - doc: Release update (NEWS, etc.)
+#     - Generate announcement
+#       + touch mes-0.23.tar.gz
+#       + make gen-announce VERSION=0.23
+#       + Update and commit doc/announce/ANNOUNCE-0.23,
+#         using xxx (32,40) for checksums
+#     - create "Release 0.23" commit (see Release 0.22).
+#       + configure
+#       + configure.sh
+#  1. Tag for release
+#     make tag VERSION=0.23
+#  2. Create signed tarball
+#     ./configure
+#     make sign-dist
+#  3. Update Guix package description
+#     make release
+#  4. Finish announcement
+#     - make sum-announce
+#     - doc: Post-release update.
+#     - build-aux/GNUMakefile.in: gen-announce: update previous-version
+#  5. Verify
+#     - Update package in Guix master.
+#     - If applicable, verify bootstrap.
+#  6. Upload to ftp.gnu.org
+#  7. Update web
+#     - make publish-local
+#     - Update ~/src/web/mes/index.html
+#     - Upload: cvs ci
+#  8. Create blog post
+#     cp doc/announce/ANNOUNCE-0.23 ~/src/web/joyofsource.com/posts/announce-0.23.md
+#     fix urls and all
+#  9. Send mail
+#     To: info-gnu@gnu.org
+#     Cc: bug-mes@gnu.org
+#     Cc: guix-devel@gnu.org
+#     Cc: bootstrappable@freelists.org
+#     Cc: rb-general@lists.reproducible-builds.org
+
+guix-build:
+	./pre-inst-env $(GUIX) build mes@$(VERSION) --with-source=$(TARBALL)
+
+release: check-signature update-hash
+	git commit -m 'guix: mes: Update to $(VERSION).'			\
+	    -m '* guix/git/mes.scm (mes)[source]: Update to $(VERSION).'	\
+	    guix/git/mes.scm
+	git checkout ChangeLog
+
+GPG_KEY_ID:=1A858392E331EAFDB8C27FFBF3C1A0D9C1D65273
+GEN_ANNOUNCE=$(GNULIB)/build-aux/announce-gen
+GNULIB=../../gnulib
+gen-announce:
+	$(GEN_ANNOUNCE)					\
+	    --release-type=beta				\
+	    --package-name=mes				\
+	    --previous-version='0.26.2'			\
+            --current-version=$(VERSION)		\
+	    --gpg-key-id=$(GPG_KEY_ID)			\
+	    --url-directory=https://ftp.gnu.org/gnu/mes	\
+	    --news=NEWS					\
+            > doc/announce/ANNOUNCE-$(VERSION)
+
+sum-announce:
+	sed -i																				\
+	    -e "s,  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  $(PACKAGE)-$(VERSION).tar.gz,  $(shell sha256sum $(PACKAGE)-$(VERSION).tar.gz),"	\
+	    -e "s,  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  $(PACKAGE)-$(VERSION).tar.gz,  $(shell sha1sum $(PACKAGE)-$(VERSION).tar.gz),"				\
+	    -e "s,  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  $(PACKAGE)-$(VERSION).tar.gz,  $(shell md5sum $(PACKAGE)-$(VERSION).tar.gz),"					\
+	doc/announce/ANNOUNCE-$(VERSION)
+
+installdirs: mkinstalldirs
+	mkdir -p\
+	    $(DESTDIR)$(bindir)\
+	    $(DESTDIR)$(datadir)\
+	    $(DESTDIR)$(libdir)\
+	    $(DESTDIR)$(infodir)\
+	    $(DESTDIR)$(mandir)
+
+install-dvi: dvi
+	mkdir -p $(DESTDIR)${docdir}
+	cp doc/mes.dvi $(DESTDIR)${docdir}
+
+install-html: html
+	mkdir -p $(DESTDIR)${docdir}
+	tar -cf- -C doc html | tar -xf- -C $(DESTDIR)${docdir}
+
+install-pdf: pdf
+	mkdir -p $(DESTDIR)${docdir}
+	cp doc/mes.pdf $(DESTDIR)${docdir}
+
+install-ps: ps
+	mkdir -p $(DESTDIR)${docdir}
+	cp doc/mes.ps $(DESTDIR)${docdir}
+
+# We do not strip binaries, binutils' strip corrupts M1+hex2-generated ELFs
+install-strip: install
+
+
+define HELP_TOP
+Usage: make [OPTION]... [TARGET]...
+
+Main and non-standard targets:
+  all             update everything
+  all-go          update .go files
+  dist            update $(TARBALL)
+  doc             update documentation
+  check           run unit tests
+  clean           run git clean -dfx
+  clean-go        clean .go files
+  info            update info documentation
+  install         install in $(prefix)
+  install-info    install info docs in $(prefix)/share/info
+  release         dist and tag
+  uninstall       uninstall from $(prefix)
+endef
+export HELP_TOP
+help:
+	@echo "$$HELP_TOP"
+
+include ${srcdest}build-aux/export.make

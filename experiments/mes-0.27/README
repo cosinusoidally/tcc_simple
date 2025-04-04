@@ -1,0 +1,90 @@
+#+COMMENT:                                                            -*- org -*-
+#+TITLE: About GNU Mes
+
+#+SUBTITLE: Maxwell Equations of Software
+
+[[https://www.gnu.org/software/mes][GNU Mes]] is a Scheme interpreter and C compiler for bootstrapping the GNU
+System.  It has helped to decimate the number and size of binary seeds
+that were used in the bootstrap of [[https://www.gnu.org/software/guix][GNU Guix]] 1.0.  Recently, version
+0.24.2 has realized the first [[https://guix.gnu.org/en/blog/2023/the-full-source-bootstrap-building-from-source-all-the-way-down/][Full Source Bootstrap]] for Guix.  The final
+goal is to help create a full source bootstrap as part of the
+[[https://bootstrappable.org][bootstrappable builds]] effort for any UNIX-like operating system.
+
+The Scheme interpreter is written in ~5,000 LOC of simple C, and the C
+compiler written in Scheme and these are mutual self-hosting.  Mes can
+now be bootstrapped from [[https://github.com/oriansj/m2-planet][M2-Planet]] and [[https://savannah.nongnu.org/projects/mescc-tools][Mescc-Tools]].
+
+Mes has a Garbage Collector, a library of loadable Scheme modules--
+notably Dominique Boucher's [[https://github.com/schemeway/lalr-scm][LALR]], Pre-R6RS [[https://www.cs.indiana.edu/chezscheme/syntax-case/old-psyntax.html][portable syntax-case]] with
+R7RS ellipsis, Matt Wette's [[https://www.nongnu.org/nyacc][Nyacc]] --and test suite, just enough to
+support a REPL and a C99 compiler: mescc.
+
+Mes + MesCC + Mes C Library can build a [[https://gitlab.com/janneke/tinycc][bootstrappable TinyCC]] that is
+self-hosting.  Using this bootstrappable-tcc and the Mes C library we
+can build an ancient version of the GNU tools triplet: glibc-2.2.5,
+binutils-2.20.1, gcc-2.95.3.  This is enough to bootstrap Guix for
+i686-linux, x86_64-linux, armhf-linux and aarch64-linux.
+
+Mes was inspired by The Maxwell Equations of Software: [[https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf][LISP-1.5]] -- John
+McCarthy page 13, Guix's source/binary packaging transparency and
+Jeremiah Orians's [[https://github.com/oriansj/stage0][stage0]], a ~500-byte self-hosting hex assembler.
+
+We are very grateful to NLNet for sponsoring the [[https://nlnet.nl/project/GNUMes][Reduced Binary Seed
+bootstrap]], the [[https://nlnet.nl/project/GNUMes-arm][ARM port]], and the [[https://nlnet.nl/project/GNUMes-ARM_RISC-V][Full Source Bootstrap.]]
+
+GNU Mes is free software, it is distributed under the terms of the GNU
+General Public Licence version 3 or later.  See the file [[file:COPYING][COPYING]].
+
+* Get it
+
+   #+BEGIN_SRC bash
+   git clone git://git.savannah.gnu.org/mes.git
+   #+END_SRC
+
+* Build it (see [[file:INSTALL][INSTALL]] for full instructions)
+
+   #+BEGIN_SRC bash
+   ./configure
+   make all
+   make check
+   #+END_SRC
+
+* REPL it
+
+   #+BEGIN_SRC bash
+   ./pre-inst-env mes
+   #+END_SRC
+
+* MesCC compiler
+
+   #+BEGIN_SRC bash
+   ./pre-inst-env mescc -c scaffold/main.c
+   #+END_SRC
+
+* Bugs
+
+    Please send Mes bug reports to [[mailto:bug-mes@gnu.org][bug-mes@gnu.org]].
+
+* Links
+  [0] https://www.gnu.org/software/mes
+  [1] https://www.gnu.org/software/guix
+  [2] https://guix.gnu.org/en/blog/2023/the-full-source-bootstrap-building-from-source-all-the-way-down/
+  [3] https://bootstrappable.org
+  [4] https://github.com/oriansj/m2-planet
+  [5] https://savannah.nongnu.org/projects/mescc-tools
+  [6] https://github.com/schemeway/lalr-scm
+  [7] https://www.cs.indiana.edu/chezscheme/syntax-case/old-psyntax.html
+  [8] https://www.nongnu.org/nyacc
+  [9] https://gitlab.com/janneke/tinycc
+  [10] [[https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf]]
+  [11] https://savannah.nongnu.org/projects/stage0
+  [12] https://nlnet.nl/project/GNUMes
+  [13] https://nlnet.nl/project/GNUMes-arm
+  [14] https://nlnet.nl/project/GNUMes-ARM_RISC-V
+
+* Legalese
+Copyright © 2016,2017,2018,2019,2020,2021,2022,2023 Janneke Nieuwenhuizen <[[mailto:janneke@gnu.org][janneke@gnu.org]]>
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.

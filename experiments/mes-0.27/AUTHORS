@@ -1,0 +1,128 @@
+                                                              -*- org -*-
+#+TITLE: GNU Mes Authors
+
+Janneke Nieuwenhuizen <janneke@gnu.org>
+Main author
+All files except the imported files listed below
+
+Danny Milosavljevic <dannym@scratchpost.org>
+ARM port
+lib/mes/div.c
+Additions and fixes throughout
+
+Timothy Sample <samplet@ngyro.com>
+Co-author of Guile-compatible variable lookup
+Co-author of Guile-compatible hash-table, record interface
+Co-author of Guile Module support
+Gash Support
+Additions and fixes throughout
+
+Jeremiah Orians <jeremiah@pdp10.guru>
+lib/stdio/fopen.c (first simple version of fopen)
+scaffold/tests/98-fopen.c
+Initial work on elf headers:
+lib/linux/x86-mes/elf32-header.hex2 and similar
+
+Han-Wen Nienhuys <hanwen@xs4all.nl>
+lib/string/memmem.c (_memmem, memmem)
+
+Peter de Wachter
+Small fixes and additions to
+lib/x86-mes/x86.M1
+lib/x86_64-mes/x86_64.M1
+include/stdint.h
+module/mescc/compile.scm
+
+rain1
+scaffold/tests/90-goto-var.c
+scaffold/tests/91-goto-array.c
+
+Nathalie Kopaczewski <natkopa@gmail.com>
+Fast long devision
+lib/div.c (__mesabi_log2i)
+
+W. J. van der Laan <laanwj@protonmail.com>
+Bugfixes for logand, 64bit build, and va_arg
+RISC-V port
+
+Andrius Štikonas <andrius@stikonas.eu>
+Rewrite the RISC-V port to use new word-based macros.
+Make the x86_64 port emit position independent code.
+
+Ekaitz Zarraga <ekaitz@elenq.tech>
+Fixes for RISC-V port and bootstrap.
+
+List of imported files
+
+D A Gwyn
+lib/alloca.c
+
+Included verbatim from gnulib
+build-aux/gitlog-to-changelog
+
+Portable hygienic pattern matcher
+mes/module/mes/match.scm
+
+Portable LALR(1) parser generator
+mes/module/mes/lalr.scm
+
+Portable syntax-case from Chez Scheme; patches from Guile
+mes/module/mes/psyntax.ss
+mes/module/mes/psyntax.pp [generated]
+
+File Tree Walk partially from Guile
+mes/module/ice-9/ftw.scm
+
+The pregexp regular expression system
+mes/module/mes/ice-9/pregexp.upstream.scm
+
+Getopt-long from Guile
+module/mes/getopt-long.scm
+
+Optargs from Guile
+mes/module/mes/optargs.scm
+
+Pmatch from Guile
+mes/module/system/base/pmatch.scm
+
+Pretty-print from Guile
+mes/module/ice-9/pretty-print.scm
+
+Srfi-1 bits from Guile
+mes/module/srfi/srfi-1-guile.scm
+
+Srfi-11 from Guile
+mes/module/srfi/srfi-11.scm
+
+Srfi-16 from Guile
+mes/module/srfi/srfi-16.scm
+
+Srfi-26 from Guile
+mes/module/srfi/srfi-26.scm
+
+Srfi-37 from Guile
+mes/module/srfi/srfi-37.scm
+
+Srfi-39 from Guile
+mes/module/srfi/srfi-39.scm
+
+GNU FDL in texinfo from GNU
+doc/fdl-1.3.texi
+
+Hurd and Mach support from GNU C Library
+include/gnu/hurd-types.h
+include/mach/mach-init.h
+lib/mach/msg.c
+lib/mach/mach-init.c
+lib/mach/*.S
+
+M2-Planet dependencies
+lib/m2/x86/x86_defs.M1
+lib/m2/x86/ELF-x86.hex2
+
+* legalese
+Copyright © 2016,2017,2018,2019,2020,2023 Janneke Nieuwenhuizen <janneke@gnu.org>
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
