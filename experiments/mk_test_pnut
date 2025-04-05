@@ -6,3 +6,4 @@ set -xe
 ./mk_tcc-boot-mes
 
 wc pnut_refactor/*c |sort -h
+sha256sum -c sums_tcc-boot-mes

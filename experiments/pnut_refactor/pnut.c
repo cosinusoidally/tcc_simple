@@ -185,9 +185,6 @@ void syntax_error(char *msg) {
 // tokenizer
 
 int ch;
-#ifdef DEBUG_EXPAND_INCLUDES
-int prev_ch = EOF;
-#endif
 int tok;
 int val;
 
@@ -990,16 +987,6 @@ void handle_define() {
 
 }
 
-#ifdef sh
-// Remove PARENS node from an expression, useful when we want to check what's
-// the top level operator of an expression without considering the parenthesis.
-ast non_parenthesized_operand(ast node) {
-  while (get_op(node) == PARENS) node = get_child_(PARENS, node, 0);
-
-  return node;
-}
-#endif
-
 int eval_constant(ast expr, bool if_macro) {
   int op = get_op(expr);
   int op1;
@@ -1163,10 +1150,6 @@ void handle_include() {
   }
 }
 
-#ifdef sh
-void handle_shell_include();
-#endif
-
 void handle_preprocessor_directive() {
   int temp;
 #ifdef SH_INCLUDE_C_CODE
@@ -1207,13 +1190,6 @@ void handle_preprocessor_directive() {
       get_tok_macro(); // Get the STRING token
       handle_include();
     }
-#ifdef sh
-    // Not standard C, but serves to mix existing shell code with compiled C code
-    else if (tok == IDENTIFIER && val == INCLUDE_SHELL_ID) {
-      get_tok_macro(); // Get the STRING token
-      handle_shell_include();
-    }
-#endif
     else if (tok == IDENTIFIER && val == UNDEF_ID) {
       get_tok_macro(); // Get the macro name
       if (tok == IDENTIFIER || tok == MACRO) {
@@ -1228,7 +1204,6 @@ void handle_preprocessor_directive() {
       get_tok_macro(); // Get the macro name
       handle_define();
     } else if (tok == IDENTIFIER && (val == WARNING_ID || val == ERROR_ID)) {
-#ifndef DEBUG_EXPAND_INCLUDES
       temp = val;
       putstr(temp == WARNING_ID ? "warning:" : "error:");
       // Print the rest of the line, it does not support \ at the end of the line but that's ok
@@ -1238,9 +1213,6 @@ void handle_preprocessor_directive() {
       putchar('\n');
       tok = '\n';
       if (temp == ERROR_ID) exit(1);
-#else
-      tok = '\n';
-#endif
     } else {
       putstr("tok="); putint(tok); putstr(": "); putstr(STRING_BUF(val)); putchar('\n');
       syntax_error("unsupported preprocessor directive");
@@ -1740,25 +1712,11 @@ void paste_tokens(int left_tok, int left_val) {
 
 void get_tok() {
 
-#ifdef SH_INCLUDE_C_CODE
-  int prev_char_buf_ix = code_char_buf_ix;
-  // Save the cursor in a local variable so we can restore it when the token is
-  // masked off. Not using the last_tok_code_buf_ix global because get_tok can
-  // be called recursively by handle_preprocessor_directive.
-  int prev_last_tok_char_buf_ix = code_char_buf_ix;
-#endif
-
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   int prev_tok_line_number = line_number;
   int prev_tok_column_number = column_number;
-#endif
 
   // This outer loop is used to skip over tokens removed by #ifdef/#ifndef/#else
   do {
-#ifdef SH_INCLUDE_C_CODE
-    code_char_buf_ix = prev_char_buf_ix; // Skip over tokens that are masked off
-#endif
-
     while (1) {
       // Check if there are any tokens to replay. Macros are just identifiers that
       // have been marked as macros. In terms of how we get into that state, a
@@ -2831,9 +2789,6 @@ ast parse_initializer_list() {
   expect_tok('{');
 
   while (tok != '}' && tok != EOF) {
-#ifdef sh
-    if (tok == '{') fatal_error("nested initializer lists not supported");
-#endif
     if (result == 0) {
       tail = result = cons(parse_initializer(), 0);
     } else {
@@ -2892,19 +2847,6 @@ ast parse_declarators(bool is_for_typedef, ast type_specifier, ast first_declara
 void add_typedef(ast declarator) {
   int decl_ident = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, declarator, 0));
   ast decl_type = get_child_(DECL, declarator, 1); // child#1 is the type
-
-#ifdef sh
-  // If the struct/union/enum doesn't have a name, we give it the name of the typedef.
-  // This is not correct, but it's a limitation of the current shell backend where we
-  // need the name of a struct/union/enum to compile sizeof and typedef'ed structures
-  // don't always have a name.
-  if (get_op(decl_type) == STRUCT_KW || get_op(decl_type) == UNION_KW || get_op(decl_type) == ENUM_KW) {
-    if (get_child(decl_type, 1) != 0 && get_val_(IDENTIFIER, get_child(decl_type, 1)) != decl_ident) {
-      syntax_error("typedef name must match struct/union/enum name");
-    }
-    set_child(decl_type, 1, new_ast0(IDENTIFIER, decl_ident));
-  }
-#endif
 
   heap[decl_ident + 2] = TYPE;
   heap[decl_ident + 3] = decl_type;
