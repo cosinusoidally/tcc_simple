@@ -240,10 +240,21 @@ void set_child(ast node, int i, ast child) {
   heap[node+i+1] = child;
 }
 
-#define get_val_(expected_node, node) get_val(node)
-#define get_child_(expected_parent_node, node, i) get_child(node, i)
-#define get_child__(expected_parent_node, expected_node, node, i) get_child(node, i)
-#define get_child_opt_(expected_parent_node, expected_node, node, i) get_child(node, i)
+function get_val_(expected_node, node) {
+  return get_val(node);
+}
+
+function get_child_(expected_parent_node, node, i) {
+  return get_child(node, i);
+}
+
+function get_child__(expected_parent_node, expected_node, node, i) {
+  return get_child(node, i);
+}
+
+function get_child_opt_(expected_parent_node, expected_node, node, i) {
+  return get_child(node, i);
+}
 
 ast ast_result;
 
