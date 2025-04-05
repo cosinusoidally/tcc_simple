@@ -1708,14 +1708,6 @@ void get_tok() {
             }
           } else {
             while (accum_digit(8));
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-            // 0 is a valid octal number, but we don't want to mark it as octal since it's so common
-#ifdef SUPPORT_64_BIT_LITERALS
-            tok = val_32[0] == 0 && val_32[1] == 0 ? INTEGER : INTEGER_OCT;
-#else
-            tok = val == 0 ? INTEGER : INTEGER_OCT;
-#endif
-#endif
           }
         } else {
           while (accum_digit(10));
