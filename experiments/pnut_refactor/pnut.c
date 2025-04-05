@@ -384,15 +384,10 @@ void accum_string_string(int string_probe) {
 // Similar to accum_string_string, but writes an integer to the string pool
 // Note that this function only supports small integers, represented as positive number.
 void accum_string_integer(int n) {
-#ifdef SUPPORT_64_BIT_LITERALS
-  if (n < 0) fatal_error("accum_string_integer: Only small integers can be pasted");
-#else
   if (n < 0) {
     accum_string_char('-');
     accum_string_integer(-n);
-  } else
-#endif
-  {
+  } else {
     if (n > 9) accum_string_integer(n / 10);
     accum_string_char('0' + n % 10);
   }
@@ -510,59 +505,6 @@ void pop_if_macro_mask() {
   if_macro_mask = if_macro_stack[if_macro_stack_ix];
   if_macro_executed = if_macro_stack[if_macro_stack_ix + 1];
 }
-
-// Includes the preprocessed C code along with the generated shell code
-#ifdef SH_INCLUDE_C_CODE
-#define C_CODE_BUF_LEN 20000
-
-char code_char_buf[C_CODE_BUF_LEN];
-int code_char_buf_ix = 0;
-// Point to the **last** character of the **last** token.
-// This is used to skip the current token when printing the code of a
-// declaration since it belongs to the next declaration.
-int last_tok_code_buf_ix = 0;
-
-void output_declaration_c_code(bool no_header) {
-
-  int i = 0;
-
-  if (!no_header) {
-    putstr("#################################### C code ####################################\n");
-  }
-  putchar('#');
-  putchar(' ');
-
-  // Skip leading newlines if any.
-  while (code_char_buf[i] == '\n') i += 1;
-
-  for (; i < last_tok_code_buf_ix; i += 1) {
-
-    if (code_char_buf[i] == '\n') {
-      // Condense the C code by removing extra newlines
-      if (code_char_buf[i - 1] != code_char_buf[i]) {
-        putchar('\n');
-        putchar('#');
-        putchar(' ');
-      }
-    } else {
-      putchar(code_char_buf[i]);
-    }
-  }
-
-  // End of decl
-  putchar('\n');
-  if (!no_header) {
-    putstr("################################# End of C code ################################\n");
-  }
-
-  // Copy the last token characters to the beginning of the buffer
-  for (i = 0; i < code_char_buf_ix - last_tok_code_buf_ix; i += 1) {
-    code_char_buf[i] = code_char_buf[last_tok_code_buf_ix + i];
-  }
-
-  code_char_buf_ix = i;
-}
-#endif
 
 void get_ch() {
   ch = fgetc(fp);
