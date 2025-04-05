@@ -1006,12 +1006,6 @@ int evaluate_if_condition() {
 void handle_include() {
   if (tok == STRING) {
     include_file(STRING_BUF(val), include_stack->dirname);
-#ifdef DEBUG_EXPAND_INCLUDES
-    // When running pnut in "expand includes" mode, we want to annotate the
-    // #include directives that were expanded with a comment so we can remove
-    // them later.
-    putstr(" // INCLUDED");
-#endif
     get_tok_macro(); // Skip the string
   } else if (tok == '<') {
     accum_string_until('>');
@@ -3364,7 +3358,6 @@ ast parse_compound_statement() {
 
 //-----------------------------------------------------------------------------
 
-#ifndef sh
 void handle_macro_D(char *opt) {
   char *start = opt;
   char *macro_buf;
@@ -3409,7 +3402,6 @@ void handle_macro_D(char *opt) {
 
   free(macro_buf);
 }
-#endif
 
 int main(int argc, char **argv) {
   int i;

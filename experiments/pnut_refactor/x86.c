@@ -2,7 +2,6 @@
 
 // x86 codegen
 #include "exe.c"
-#include "elf.c"
 
 // Registers common to i386 and x86-64 (E and R prefixes are omitted).
 
