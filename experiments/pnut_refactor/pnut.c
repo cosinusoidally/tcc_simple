@@ -358,7 +358,7 @@ function accum_string() {
 }
 
 // Append a character to the current string under construction in the pool
-void accum_string_char(char c) {
+function accum_string_char(c) {
   hash = (c + (hash ^ HASH_PARAM)) % HASH_PRIME;
   string_pool[string_pool_alloc] = c;
   string_pool_alloc += 1;
