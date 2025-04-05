@@ -2,20 +2,8 @@
 #define O_CREAT  0100
 #define O_TRUNC  01000
 
-#ifdef PNUT_CC
-
-#ifdef PNUT_SH
-// on pnut-sh, the file can only be opened in 3 modes: read, write and append
-// if it doesn't exist, it will be created.
-#define O_WRONLY 01
-#define O_CREAT  00
-#define O_TRUNC  00
-#else
-#define O_WRONLY 01
-#define O_CREAT  0100
-#define O_TRUNC  01000
-#endif
-#endif
+#define function int
+#define var int
 
 #define ast int
 #define true 1
