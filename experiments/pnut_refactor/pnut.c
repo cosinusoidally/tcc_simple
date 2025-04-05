@@ -608,7 +608,6 @@ void include_file(char *file_name, char *relative_to) {
   include_stack2->fp = fp;
   include_stack2->dirname = file_parent_directory(fp_filepath);
   include_stack2->filepath = fp_filepath;
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   include_stack2->line_number = 1;
   include_stack2->column_number = 0;
   // Save the current file position so we can return to it after the included file is done
@@ -618,63 +617,11 @@ void include_file(char *file_name, char *relative_to) {
   }
   line_number = 1;
   column_number = 1;
-#endif
   include_stack = include_stack2;
 }
 
-#ifdef SUPPORT_64_BIT_LITERALS
-// Array used to accumulate 64 bit unsigned integers on 32 bit systems
-int val_32[2];
-
-// x = x * y
-void u64_mul_u32(int *x, int y) {
-
-  // Note, because we are using 32 bit **signed** integers, we need to clear the
-  // sign bit when shifting right to avoid sign extension.
-  #define I32_LOGICAL_RSHIFT_16(x) ((x >> 16) & 0xffff)
-
-  int xlo = x[0] & 0xffff;
-  int xhi = I32_LOGICAL_RSHIFT_16(x[0]);
-  int ylo = y & 0xffff;
-  int yhi = I32_LOGICAL_RSHIFT_16(y);
-  int lo = xlo * ylo; /* 0 .. 0xfffe0001 */
-  int m1 = xlo * yhi + (lo >> 16); /* 0 .. 0xfffeffff */
-  int m2 = xhi * ylo; /* 0 .. 0xfffe0001 */
-  int m3 = (m1 & 0xffff) + (m2 & 0xffff); /* 0 .. 0x1fffe */
-  int hi = xhi * yhi + I32_LOGICAL_RSHIFT_16(m1) + I32_LOGICAL_RSHIFT_16(m2) + I32_LOGICAL_RSHIFT_16(m3); /* 0 .. 0xfffffffe */
-  x[0] = ((m3 & 0xffff) << 16) + (lo & 0xffff);
-  x[1] = x[1] * y + hi;
-}
-
-// x = x + y
-void u64_add_u32(int *x, int y) {
-  int lo = x[0] + y;
-  // Carry (using signed integers)
-  x[1] += ((x[0] < 0) != (lo < 0));
-  x[0] = lo;
-}
-
-// Pack a 64 bit unsigned integer into an object.
-// Because most integers are small and we want to save memory, we only store the
-// large int object ("large ints") if it is larger than 31 bits. Otherwise, we
-// store it as a regular integer. The sign bit is used to distinguish between
-// large ints (positive) and regular ints (negative).
-void u64_to_obj(int *x) {
-  if (x[0] >= 0 && x[1] == 0) { // "small int"
-    val = -x[0];
-  } else {
-    val = alloc_obj(2);
-    heap[val    ] = x[0];
-    heap[val + 1] = x[1];
-  }
-}
-
-#define DIGIT_BYTE (val_32[0] % 256)
-#define INIT_ACCUM_DIGIT() val_32[0] = 0; val_32[1] = 0;
-#else
 #define DIGIT_BYTE (-val % 256)
 #define INIT_ACCUM_DIGIT() val = 0;
-#endif
 
 int accum_digit(int base) {
   int digit = 99;
@@ -693,12 +640,7 @@ int accum_digit(int base) {
     //   fatal_error("literal integer overflow");
     // }
 
-#ifdef SUPPORT_64_BIT_LITERALS
-    u64_mul_u32(val_32, base);
-    u64_add_u32(val_32, digit);
-#else
     val = val * base - digit;
-#endif
     get_ch();
     return 1;
   }
@@ -951,10 +893,6 @@ int eval_constant(ast expr, bool if_macro) {
 #ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
     case INTEGER_HEX:
     case INTEGER_OCT:
-#endif
-#ifdef SUPPORT_64_BIT_LITERALS
-      // Disable large integers for now, hopefully they don't appear in TCC in enums and #if expressions
-      if (get_val(expr) > 0) fatal_error("constant expression too large");
 #endif
       return -get_val(expr);
     case CHARACTER:   return get_val_(CHARACTER, expr);
