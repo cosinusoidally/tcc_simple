@@ -161,29 +161,27 @@ void syntax_error(char *msg) {
 
 // tokenizer
 
-int ch;
-int tok;
-int val;
+var ch;
+var tok;
+var val;
 
 #define STRING_POOL_SIZE 500000
 char string_pool[STRING_POOL_SIZE];
 var string_pool_alloc = 0;
-int string_start;
-int hash;
+var string_start;
+var hash;
 
 // These parameters give a perfect hashing of the C keywords
 #define HASH_PARAM 1026
 #define HASH_PRIME 1009
 #define HEAP_SIZE 2000000
 int heap[HEAP_SIZE];
-int heap_alloc = HASH_PRIME;
+var heap_alloc = HASH_PRIME;
 
-int alloc_result;
+var alloc_result;
 
-int alloc_obj(int size) {
-
+function alloc_obj(size) {
   alloc_result = heap_alloc;
-
   heap_alloc += size;
 
   if (heap_alloc > HEAP_SIZE) {
