@@ -88,17 +88,11 @@ enum {
 
   // Non-character operands
   INTEGER     = 401, // Integer written in decimal
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-  INTEGER_HEX = 402, // Integer written in hexadecimal
-  INTEGER_OCT = 403, // Integer written in octal
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
   INTEGER_L   = 404,
   INTEGER_LL,
   INTEGER_U,
   INTEGER_UL,
   INTEGER_ULL,
-#endif
   CHARACTER = 410, // Fixed value so the ifdef above don't change the value
   STRING    = 411,
 
@@ -910,17 +904,11 @@ int eval_constant(ast expr, bool if_macro) {
   switch (op) {
     case PARENS:      return eval_constant(child0, if_macro);
     case INTEGER:
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
     case INTEGER_L:
     case INTEGER_LL:
     case INTEGER_U:
     case INTEGER_UL:
     case INTEGER_ULL:
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-    case INTEGER_HEX:
-    case INTEGER_OCT:
-#endif
       return -get_val(expr);
     case CHARACTER:   return get_val_(CHARACTER, expr);
     case '~':         return ~eval_constant(child0, if_macro);
@@ -1556,12 +1544,7 @@ void paste_tokens(int left_tok, int left_val) {
     if (right_tok == IDENTIFIER || right_tok == TYPE || right_tok == MACRO || right_tok <= WHILE_KW) {
       accum_string_string(right_val);
     } else if (right_tok == INTEGER
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-            || right_tok == INTEGER_HEX || right_tok == INTEGER_OCT
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
             || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
-#endif
               ) {
       accum_string_integer(-right_val);
     } else {
@@ -1574,20 +1557,10 @@ void paste_tokens(int left_tok, int left_val) {
     val = end_ident();
     tok = heap[val+2]; // The kind of the identifier
   } else if (left_tok == INTEGER
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-          || left_tok == INTEGER_HEX || left_tok == INTEGER_OCT
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
           || left_tok == INTEGER_L || left_tok == INTEGER_LL || left_tok == INTEGER_U || left_tok == INTEGER_UL || left_tok == INTEGER_ULL
-#endif
             ) {
     if (right_tok == INTEGER
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-     || right_tok == INTEGER_HEX || right_tok == INTEGER_OCT
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
     || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
-#endif
        ) {
       val = -paste_integers(-left_val, -right_val);
     } else if (right_tok == IDENTIFIER || right_tok == MACRO || right_tok <= WHILE_KW) {
@@ -1727,9 +1700,6 @@ void get_tok() {
         if (ch == '0') { // val == 0 <=> ch == '0'
           get_ch();
           if (ch == 'x' || ch == 'X') {
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-            tok = INTEGER_HEX;
-#endif
             get_ch();
             if (accum_digit(16)) {
               while (accum_digit(16));
@@ -1751,11 +1721,6 @@ void get_tok() {
           while (accum_digit(10));
         }
 
-#ifdef SUPPORT_64_BIT_LITERALS
-        u64_to_obj(val_32);
-#endif
-
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
         // If this is enabled with PARSE_NUMERIC_LITERAL_WITH_BASE, using a
         // suffix replaces INTEGER_OCT and INTEGER_HEX with base 10 INTEGER.
         if (ch == 'u' || ch == 'U') {
@@ -1787,7 +1752,6 @@ void get_tok() {
           while (accum_digit(10)); // Skip the fractional part
           val = 0; // Force the value to be 0 for now. TODO: Convert to float
         }
-#endif
 
         break;
 
