@@ -5383,7 +5383,6 @@ void codegen_begin() {
   access_lbl = alloc_label("access");
   cgc_add_global_fun(init_ident(IDENTIFIER, "access"), access_lbl, function_type2(int_type, string_type, int_type));
 
-#ifndef NO_BUILTIN_LIBC
   putchar_lbl = alloc_label("putchar");
   cgc_add_global_fun(init_ident(IDENTIFIER, "putchar"), putchar_lbl, function_type1(void_type, char_type));
 
@@ -5407,7 +5406,6 @@ void codegen_begin() {
 
   printf_lbl = alloc_label("printf");
   cgc_add_global_fun(init_ident(IDENTIFIER, "printf"), printf_lbl, make_variadic_func(function_type1(int_type, string_type)));
-#endif
 
   jump(setup_lbl);
 }
@@ -6074,13 +6072,6 @@ void codegen_glo_fun_decl(ast node) {
 
   def_label(heap[binding+4]);
 
-  // if (fp_filepath[0] != 'p' || fp_filepath[1] != 'o' || fp_filepath[2] != 'r' || fp_filepath[3] != 't') {
-  //   rt_debug(fp_filepath);
-  //   rt_debug(":");
-  //   rt_debug(STRING_BUF(name_probe));
-  //   rt_debug("\n");
-  // }
-
   cgc_fs = -1; // space for return address
   cgc_locals = 0;
   add_params(params);
@@ -6158,8 +6149,6 @@ void rt_crash(char* msg) {
   os_exit();
 }
 
-#ifndef NO_BUILTIN_LIBC
-
 void rt_fgetc(int fd_reg) {
   int success_lbl = alloc_label("rt_fgetc_success");
   push_reg(reg_X);            // Allocate buffer on stack, initialized with some random value
@@ -6208,8 +6197,6 @@ void rt_malloc() {
   mov_mem_reg(reg_glo, WORD_SIZE, reg_X); // Adjust the bump pointer
   mov_reg_reg(reg_X, reg_Y);              // Return the old bump pointer
 }
-
-#endif
 
 void codegen_end() {
   def_label(setup_lbl);
@@ -6282,10 +6269,8 @@ void codegen_end() {
 
   // close function
   def_label(close_lbl);
-#ifndef NO_BUILTIN_LIBC
   // fclose is just like close because FILE * is just the file descriptor in the builtin libc
   def_label(fclose_lbl);
-#endif
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
   os_close();
   ret();
@@ -6324,7 +6309,6 @@ void codegen_end() {
   os_access();
   ret();
 
-#ifndef NO_BUILTIN_LIBC
   // putchar function
   def_label(putchar_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
@@ -6364,7 +6348,6 @@ void codegen_end() {
   def_label(printf_lbl);
   rt_crash("printf is not supported yet.\n");
   ret();
-#endif
 
   assert_all_labels_defined();
 
