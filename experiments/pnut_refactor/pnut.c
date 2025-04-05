@@ -10,24 +10,7 @@
 #define false 0
 #define EOF (-1)
 
-// Options to parameterize the shell runtime library
-#ifndef RT_FREE_UNSETS_VARS_NOT
-#define RT_FREE_UNSETS_VARS
-#endif
-#define RT_NO_INIT_GLOBALS_not
-#define RT_COMPACT_not
-#define RT_INLINE_PUTCHAR
-#define RT_USE_LOOKUP_TABLE
-
-// Make sure we don't use the long line optimization when RT_COMPACT is on
-#ifdef RT_COMPACT
-#undef OPTIMIZE_LONG_LINES
-#endif
-
-#define PARSE_NUMERIC_LITERAL_SUFFIX
-
 typedef int bool;
-
 typedef int FILE;
 
 int line_number = 1;
