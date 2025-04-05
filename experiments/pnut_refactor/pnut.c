@@ -2210,11 +2210,6 @@ void get_tok() {
 #endif
 }
 
-// parser
-#if defined DEBUG_CPP || defined DEBUG_EXPAND_INCLUDES || defined NICE_ERR_MSG || defined HANDLE_SIGNALS || defined DEBUG_PARSER_SEXP
-#include "debug.c"
-#endif
-
 #define parse_error(msg, token) parse_error_internal(msg, token, __FILE__, __LINE__)
 
 void parse_error_internal(char * msg, int token, char * file, int line) {
@@ -3654,27 +3649,7 @@ ast parse_compound_statement() {
 
 // Select code generator
 
-#if !(defined DEBUG_CPP) && !(defined DEBUG_EXPAND_INCLUDES) && !(defined DEBUG_PARSER) && !(defined DEBUG_GETCHAR)
-#ifdef sh
-#include "sh.c"
-#endif
-
-#ifdef target_i386_linux
 #include "x86.c"
-#endif
-
-#ifdef target_x86_64_linux
-#include "x86.c"
-#endif
-
-#ifdef target_x86_64_mac
-#include "x86.c"
-#endif
-
-#ifdef arm
-#include "arm.c"
-#endif
-#endif
 
 //-----------------------------------------------------------------------------
 
@@ -3729,12 +3704,7 @@ int main(int argc, char **argv) {
   int i;
   ast decl;
 
-#ifdef HANDLE_SIGNALS
-  signal(SIGINT, signal_callback_handler);
-#endif
-
   init_ident_table();
-
   init_pnut_macros();
 
   for (i = 1; i < argc; i += 1) {
