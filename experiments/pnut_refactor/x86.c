@@ -1,3 +1,4 @@
+// start x86.c
 #define WORD_SIZE 4
 
 // x86 codegen
@@ -3791,3 +3792,4 @@ void os_chmod() {
 void os_access() {
   syscall_3(21, reg_X, reg_Y, -1); // SYS_ACCESS = 21
 }
+// end x86.c
