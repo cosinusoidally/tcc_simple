@@ -20,25 +20,6 @@
 // Make get_ch() use a length-1 character buffer to lookahead and skip line continuations
 #define SUPPORT_LINE_CONTINUATION_not
 
-// Shell backend codegen options
-#ifndef SH_AVOID_PRINTF_USE_NOT
-#define SH_AVOID_PRINTF_USE
-#endif
-#define SH_INLINE_PUTCHAR
-#define SH_INLINE_EXIT
-// Specifies if we include the C code along with the generated shell code
-#define SH_INCLUDE_C_CODE_not
-// Have let commands initialize function parameters
-#ifndef SH_SAVE_VARS_WITH_SET
-#define SH_INITIALIZE_PARAMS_WITH_LET
-#endif
-// If we use the `set` command and positional parameters to simulate local vars
-#if !defined(SH_SAVE_VARS_WITH_SET) && !defined(SH_INITIALIZE_PARAMS_WITH_LET)
-#define SH_SAVE_VARS_WITH_SET
-#endif
-// Inline ascii code of character literal
-#define SH_INLINE_CHAR_LITERAL_not
-
 // Options to parameterize the shell runtime library
 #ifndef RT_FREE_UNSETS_VARS_NOT
 #define RT_FREE_UNSETS_VARS
@@ -53,27 +34,12 @@
 #undef OPTIMIZE_LONG_LINES
 #endif
 
-// Toggles parsing literals with their base (octal, decimal or hexadecimal).
-// This is used by the shell code generator to output the literal in the correct base.
-#ifdef sh
-#define PARSE_NUMERIC_LITERAL_WITH_BASE
-#endif
-
-// Shell codegen doesn't support suffixes for numeric literals, but other backends do
-#ifndef sh
 #define PARSE_NUMERIC_LITERAL_SUFFIX
-#endif
 
 // 64 bit literals are only supported on 64 bit platforms for now
 #if defined(target_x86_64_linux) || defined(target_x86_64_mac)
 #define SUPPORT_64_BIT_LITERALS
 #endif
-
-// Options that turns Pnut into a C preprocessor or some variant of it
-// DEBUG_GETCHAR: Read and print the input character by character.
-// DEBUG_CPP: Run preprocessor like gcc -E. This can be useful for debugging the preprocessor.
-// DEBUG_EXPAND_INCLUDES: Reads the input file and includes the contents of the included files.
-// DEBUG_PARSER: Runs the tokenizer on the input. Outputs nothing.
 
 typedef int bool;
 
