@@ -7,5 +7,5 @@ time gcc -m32 --coverage -g -O0 -DBOOTSTRAP_LONG -Dtarget_i386_linux pnut.c -o .
 cd ..
 ./mk_tcc-boot-mes
 
-gcovr -r mujs_min artifacts --html-details -o artifacts/example.html
+gcovr -r pnut_refactor artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox artifacts/example.html
