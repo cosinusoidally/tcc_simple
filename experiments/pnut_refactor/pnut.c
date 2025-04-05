@@ -1032,9 +1032,6 @@ void handle_include() {
 
 void handle_preprocessor_directive() {
   int temp;
-#ifdef SH_INCLUDE_C_CODE
-  int prev_char_buf_ix = code_char_buf_ix; // Index of the # token in the code buffer
-#endif
   get_tok_macro(); // Get the # token
   get_tok_macro(); // Get the directive
 
@@ -1116,13 +1113,6 @@ void handle_preprocessor_directive() {
   // Because handle_preprocessor_directive is called from get_tok, and it loops
   // after the call to handle_preprocessor_directive, we don't need to call
   // get_tok before returning.
-
-#ifdef SH_INCLUDE_C_CODE
-  code_char_buf_ix = prev_char_buf_ix - 1;
-  // Copy the current char and a newline, because they were consumed by the last get_tok call
-  code_char_buf[code_char_buf_ix++] = '\n';
-  code_char_buf[code_char_buf_ix++] = ch;
-#endif
 }
 
 void get_ident() {
@@ -2023,14 +2013,8 @@ void get_tok() {
     }
   } while (!if_macro_mask);
 
-#ifdef SH_INCLUDE_C_CODE
-  last_tok_code_buf_ix = prev_last_tok_char_buf_ix - 1;
-#endif
-
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   last_tok_line_number = prev_tok_line_number;
   last_tok_column_number = prev_tok_column_number;
-#endif
 }
 
 #define parse_error(msg, token) parse_error_internal(msg, token, __FILE__, __LINE__)
