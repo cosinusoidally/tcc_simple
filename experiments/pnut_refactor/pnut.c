@@ -10,16 +10,6 @@
 #define false 0
 #define EOF (-1)
 
-// Uncomment to cause parse_error() to print which pnut function emitted the error
-//#define DEBUG_SHOW_ERR_ORIGIN
-
-// Use positional parameter directly for function parameters that are constants
-#define OPTIMIZE_CONSTANT_PARAM_not
-#define SUPPORT_ADDRESS_OF_OP_not
-
-// Make get_ch() use a length-1 character buffer to lookahead and skip line continuations
-#define SUPPORT_LINE_CONTINUATION_not
-
 // Options to parameterize the shell runtime library
 #ifndef RT_FREE_UNSETS_VARS_NOT
 #define RT_FREE_UNSETS_VARS
@@ -35,11 +25,6 @@
 #endif
 
 #define PARSE_NUMERIC_LITERAL_SUFFIX
-
-// 64 bit literals are only supported on 64 bit platforms for now
-#if defined(target_x86_64_linux) || defined(target_x86_64_mac)
-#define SUPPORT_64_BIT_LITERALS
-#endif
 
 typedef int bool;
 
