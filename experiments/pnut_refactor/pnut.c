@@ -317,11 +317,11 @@ function cdr(pair)               { return get_child_(LIST, pair, 1); }
 function cdr_(expected_op, pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
 function set_car(pair, value)    { set_child(pair, 0, value); }
 function set_cdr(pair, value)    { set_child(pair, 1, value); }
-#define tail(x) cdr_(LIST, x)
+function tail(x) { return cdr_(LIST, x); }
 
 // Returns the only element of a singleton list, if it is a singleton list.
 // Otherwise, returns 0.
-ast list_singleton(ast list) {
+function list_singleton(list) {
   if (list != 0 && tail(list) == 0) {
     return car(list);
   } else {
@@ -342,13 +342,13 @@ function STRING_BUF_END(string_val) {
   return (STRING_BUF(string_val) + STRING_LEN(string_val));
 }
 
-void begin_string() {
+function begin_string() {
   string_start = string_pool_alloc;
   hash = 0;
 }
 
 // Append the current character (ch) to the string under construction in the pool
-void accum_string() {
+function accum_string() {
   hash = (ch + (hash ^ HASH_PARAM)) % HASH_PRIME;
   string_pool[string_pool_alloc] = ch;
   string_pool_alloc += 1;
@@ -384,7 +384,9 @@ void accum_string_integer(int n) {
     accum_string_char('-');
     accum_string_integer(-n);
   } else {
-    if (n > 9) accum_string_integer(n / 10);
+    if (n > 9) {
+      accum_string_integer(n / 10);
+    }
     accum_string_char('0' + n % 10);
   }
 }
