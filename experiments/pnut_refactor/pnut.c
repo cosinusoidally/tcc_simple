@@ -310,13 +310,13 @@ function clone_ast(orig) {
 
 // TODO: Use macro to avoid indirection?
 // Functions used to create and access lists.
-ast cons(int child0, int child1)    { return new_ast2(LIST, child0, child1); }
-ast car(int pair)                   { return get_child_(LIST, pair, 0); }
-ast car_(int expected_op, int pair) { return get_child__(LIST, expected_op, pair, 0); }
-ast cdr(int pair)                   { return get_child_(LIST, pair, 1); }
-ast cdr_(int expected_op, int pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
-void set_car(int pair, int value)    { set_child(pair, 0, value); }
-void set_cdr(int pair, int value)    { set_child(pair, 1, value); }
+function cons(child0, child1)    { return new_ast2(LIST, child0, child1); }
+function car(pair)               { return get_child_(LIST, pair, 0); }
+function car_(expected_op, pair) { return get_child__(LIST, expected_op, pair, 0); }
+function cdr(pair)               { return get_child_(LIST, pair, 1); }
+function cdr_(expected_op, pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
+function set_car(pair, value)    { set_child(pair, 0, value); }
+function set_cdr(pair, value)    { set_child(pair, 1, value); }
 #define tail(x) cdr_(LIST, x)
 
 // Returns the only element of a singleton list, if it is a singleton list.
