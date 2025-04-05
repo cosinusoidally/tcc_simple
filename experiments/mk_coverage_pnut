@@ -1,0 +1,11 @@
+set -xe
+./mk_clean
+echo "building pnut"
+cd pnut_refactor/
+time gcc -m32 --coverage -g -O0 -DBOOTSTRAP_LONG -Dtarget_i386_linux pnut.c -o ../artifacts/pnut-exe
+
+cd ..
+./mk_tcc-boot-mes
+
+gcovr -r mujs_min artifacts --html-details -o artifacts/example.html
+~/ffnew/firefox/firefox artifacts/example.html
