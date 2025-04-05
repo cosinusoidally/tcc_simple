@@ -4,14 +4,13 @@
 
 #define function int
 #define var int
+#define bool int
+#define FILE int
 
 #define ast int
 #define true 1
 #define false 0
 #define EOF (-1)
-
-typedef int bool;
-typedef int FILE;
 
 int line_number = 1;
 int column_number = 0;
