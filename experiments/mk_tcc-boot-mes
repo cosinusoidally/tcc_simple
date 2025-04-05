@@ -287,4 +287,5 @@ $TEMP_DIR/tcc-boot3 \
 sha256sum $TEMP_DIR/tcc-boot-mes
 
 cd ..
+sha256sum -c sums_tcc-pnut
 sha256sum -c sums_tcc-boot-mes
