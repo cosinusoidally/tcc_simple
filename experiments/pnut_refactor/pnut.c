@@ -191,23 +191,23 @@ function alloc_obj(size) {
   return alloc_result;
 }
 
-int get_op(ast node) {
+function get_op(node) {
   return heap[node] & 1023;
 }
 
-ast get_nb_children(ast node) {
+function get_nb_children(node) {
   return heap[node] >> 10;
 }
 
-int get_val(ast node) {
+function get_val(node) {
   return heap[node+1];
 }
 
-void set_val(ast node, int val) {
+function set_val(node, val) {
   heap[node+1] = val;
 }
 
-ast get_child(ast node, int i) {
+function get_child(node, i) {
   return heap[node+i+1];
 }
 
