@@ -79,22 +79,18 @@ typedef int bool;
 
 typedef int FILE;
 
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
 int line_number = 1;
 int column_number = 0;
 int last_tok_line_number = 1;
 int last_tok_column_number = 0;
-#endif
 
 struct IncludeStack {
   FILE* fp;
   struct IncludeStack *next;
   char *dirname;  // The base path of the file, used to resolve relative paths
   char *filepath; // The path of the file, used to print error messages
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   int line_number;
   int column_number;
-#endif
 };
 struct IncludeStack *include_stack, *include_stack2;
 FILE *fp = 0; // Current file pointer that's being read
@@ -218,7 +214,6 @@ void putint(int n) {
 }
 
 void fatal_error(char *msg) {
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   if (include_stack != 0) {
     putstr(include_stack->filepath); putchar(':');
     putint(last_tok_line_number); putchar(':'); putint(last_tok_column_number);
@@ -226,20 +221,13 @@ void fatal_error(char *msg) {
   } else {
     putstr(msg); putchar('\n');
   }
-#else
-  putstr(msg); putchar('\n');
-#endif
   exit(1);
 }
 
 void syntax_error(char *msg) {
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   putstr(include_stack->filepath); putchar(':');
   putint(last_tok_line_number); putchar(':'); putint(last_tok_column_number);
   putstr("  syntax error: "); putstr(msg); putchar('\n');
-#else
-  putstr("syntax error: "); putstr(msg); putchar('\n');
-#endif
   exit(1);
 }
 
@@ -2458,13 +2446,11 @@ void parse_error_internal(char * msg, int token, char * file, int line) {
   putstr(msg);
 #endif
 
-#ifdef DEBUG_SHOW_ERR_ORIGIN
   putstr("Note, error emitted from ");
   putstr(file);
   putstr(" line ");
   putint(line);
   putstr("\n");
-#endif
 
   exit(1);
 }

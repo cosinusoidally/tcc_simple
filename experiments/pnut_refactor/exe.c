@@ -433,9 +433,7 @@ int alloc_label(char* name) {
   heap[lbl + 1] = 0; // Address of label
   heap[lbl + 2] = (int) name; // Name of label
   heap[lbl + 3] = (int) fp_filepath;
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   heap[lbl + 4] = line_number;
-#endif
   add_label(lbl);
   return lbl;
 }
