@@ -1,22 +1,10 @@
-// Those includes are parsed by pnut but ignored
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <string.h>
-#include <stdint.h> // for intptr_t
-#include <fcntl.h> // for open
-#include <unistd.h> // for write
+typedef int intptr_t;
+
+#define O_WRONLY 01
+#define O_CREAT  0100
+#define O_TRUNC  01000
 
 #ifdef PNUT_CC
-// When bootstrapping pnut, intptr_t is not defined.
-// On 64 bit platforms, intptr_t is a long long int.
-// On 32 bit (including shells) platforms, intptr_t is an int.
-#if defined(PNUT_EXE_64)
-typedef long long int intptr_t;
-#else
-typedef int intptr_t;
-#endif
 
 #ifdef PNUT_SH
 // on pnut-sh, the file can only be opened in 3 modes: read, write and append
@@ -135,11 +123,7 @@ typedef int intptr_t;
 
 typedef int bool;
 
-#ifdef PNUT_CC
-
 typedef int FILE;
-
-#endif
 
 #ifdef INCLUDE_LINE_NUMBER_ON_ERROR
 int line_number = 1;
