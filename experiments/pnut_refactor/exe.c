@@ -3012,7 +3012,6 @@ void codegen_end() {
   generate_exe();
 }
 
-// end exe.c
 // ELF file output
 
 // Minimal i386 bit ELF header.
@@ -3061,3 +3060,4 @@ void generate_exe() {
     i += 1;
   }
 }
+// end exe.c
