@@ -231,9 +231,9 @@ function get_child_opt_(expected_parent_node, expected_node, node, i) {
   return get_child(node, i);
 }
 
-ast ast_result;
+var ast_result;
 
-ast new_ast0(int op, int val) {
+function new_ast0(op, val) {
 
   ast_result = alloc_obj(2);
 
@@ -243,7 +243,7 @@ ast new_ast0(int op, int val) {
   return ast_result;
 }
 
-ast new_ast1(int op, ast child0) {
+function new_ast1(op, child0) {
 
   ast_result = alloc_obj(2);
 
