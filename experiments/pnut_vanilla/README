@@ -1,0 +1,10 @@
+Intended to be essentially a vanilla version of upstream (execpt with a couple
+of files removed).
+
+refactored version of:
+
+https://github.com/udem-dlteam/pnut
+
+currently based on:
+
+https://github.com/cosinusoidally/pnut/tree/tcc
