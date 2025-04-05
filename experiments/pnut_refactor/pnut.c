@@ -253,7 +253,7 @@ function new_ast1(op, child0) {
   return ast_result;
 }
 
-ast new_ast2(int op, ast child0, ast child1) {
+function new_ast2(op, child0, child1) {
 
   ast_result = alloc_obj(3);
 
@@ -264,7 +264,7 @@ ast new_ast2(int op, ast child0, ast child1) {
   return ast_result;
 }
 
-ast new_ast3(int op, ast child0, ast child1, ast child2) {
+function new_ast3(op, child0, child1, child2) {
 
   ast_result = alloc_obj(4);
 
@@ -276,7 +276,7 @@ ast new_ast3(int op, ast child0, ast child1, ast child2) {
   return ast_result;
 }
 
-ast new_ast4(int op, ast child0, ast child1, ast child2, ast child3) {
+function new_ast4(op, child0, child1, child2, child3) {
 
   ast_result = alloc_obj(5);
 
@@ -289,9 +289,11 @@ ast new_ast4(int op, ast child0, ast child1, ast child2, ast child3) {
   return ast_result;
 }
 
-ast clone_ast(ast orig) {
-  int nb_children = get_nb_children(orig);
+function clone_ast(orig) {
+  int nb_children;
   int i;
+
+  nb_children = get_nb_children(orig);
 
   // Account for the value of ast nodes with no child
   if (nb_children == 0) nb_children = 1;
