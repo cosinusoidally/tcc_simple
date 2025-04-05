@@ -211,7 +211,7 @@ function get_child(node, i) {
   return heap[node+i+1];
 }
 
-void set_child(node, i, child) {
+function set_child(node, i, child) {
   heap[node+i+1] = child;
 }
 
@@ -313,8 +313,8 @@ ast car(int pair)                   { return get_child_(LIST, pair, 0); }
 ast car_(int expected_op, int pair) { return get_child__(LIST, expected_op, pair, 0); }
 ast cdr(int pair)                   { return get_child_(LIST, pair, 1); }
 ast cdr_(int expected_op, int pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
-void set_car(int pair, int value)    { return set_child(pair, 0, value); }
-void set_cdr(int pair, int value)    { return set_child(pair, 1, value); }
+void set_car(int pair, int value)    { set_child(pair, 0, value); }
+void set_cdr(int pair, int value)    { set_child(pair, 1, value); }
 #define tail(x) cdr_(LIST, x)
 
 // Returns the only element of a singleton list, if it is a singleton list.
