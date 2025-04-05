@@ -3740,7 +3740,6 @@ int main(int argc, char **argv) {
   for (i = 1; i < argc; i += 1) {
     if (argv[i][0] == '-') {
       switch (argv[i][1]) {
-#ifndef sh
         case 'o':
           // Output file name
           if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
@@ -3759,12 +3758,6 @@ int main(int argc, char **argv) {
             handle_macro_D(argv[i] + 2); // skip '-D'
           }
           break;
-#else
-          case 'D':
-            // pnut-sh only needs -D<macro> and no other options
-            init_builtin_int_macro(argv[i] + 2, 1); // +2 to skip -D
-            break;
-#endif
         case 'U':
           if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
             i += 1;
@@ -3803,44 +3796,13 @@ int main(int argc, char **argv) {
 
   ch = '\n';
 
-#if defined DEBUG_GETCHAR // Read input
-  while (ch != EOF) {
-    get_ch();
-  }
-#elif defined DEBUG_EXPAND_INCLUDES || defined DEBUG_CPP // Tokenize input, output tokens
-  get_tok();
-
-  while (tok != EOF) {
-    skip_newlines = false; // Don't skip newlines so print_tok knows where to break lines
-#if defined DEBUG_CPP
-    print_tok(tok, val);
-#endif
-    get_tok();
-  }
-#elif defined DEBUG_PARSER // Parse input, output nothing
-    get_tok();
-  while (tok != EOF) {
-    decl = parse_declaration(false);
-#ifdef DEBUG_PARSER_SEXP
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
-    printf("# %s:%d:%d\n", fp_filepath, line_number, column_number);
-#endif
-    ast_to_sexp(decl);
-    putchar('\n');
-#endif
-  }
-#else
   codegen_begin();
   get_tok();
   while (tok != EOF) {
     decl = parse_declaration(false);
-#ifdef SH_INCLUDE_C_CODE
-    output_declaration_c_code(get_op(decl) == '=' | get_op(decl) == DECLS);
-#endif
     codegen_glo_decl(decl);
   }
   codegen_end();
-#endif
 
   return 0;
 }
