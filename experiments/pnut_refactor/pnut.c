@@ -642,8 +642,13 @@ void include_file(char *file_name, char *relative_to) {
   include_stack = include_stack2;
 }
 
-#define DIGIT_BYTE (-val % 256)
-#define INIT_ACCUM_DIGIT() val = 0;
+function DIGIT_BYTE(val) {
+  return (-val % 256);
+}
+
+function INIT_ACCUM_DIGIT() {
+  return 0;
+}
 
 int accum_digit(int base) {
   int digit = 99;
@@ -678,21 +683,21 @@ void get_string_char() {
       // Parse octal character, up to 3 digits.
       // Note that \1111 is parsed as '\111' followed by '1'
       // See https://en.wikipedia.org/wiki/Escape_sequences_in_C#Notes
-      INIT_ACCUM_DIGIT();
+      val = INIT_ACCUM_DIGIT();
       accum_digit(8);
       accum_digit(8);
       accum_digit(8);
-      val = DIGIT_BYTE; // keep low 8 bits, without overflowing
+      val = DIGIT_BYTE(val); // keep low 8 bits, without overflowing
     } else if (ch == 'x' || ch == 'X') {
       get_ch();
-      INIT_ACCUM_DIGIT();
+      val = INIT_ACCUM_DIGIT();
       // Allow 1 or 2 hex digits.
       if (accum_digit(16)) {
         accum_digit(16);
       } else {
         syntax_error("invalid hex escape -- it must have at least one digit");
       }
-      val = DIGIT_BYTE; // keep low 8 bits, without overflowing
+      val = DIGIT_BYTE(val); // keep low 8 bits, without overflowing
     } else {
       if (ch == 'a') {
         val = 7;
@@ -1716,7 +1721,7 @@ void get_tok() {
         break;
       } else if ('0' <= ch && ch <= '9') {
 
-        INIT_ACCUM_DIGIT();
+        val = INIT_ACCUM_DIGIT();
 
         tok = INTEGER;
         if (ch == '0') { // val == 0 <=> ch == '0'
