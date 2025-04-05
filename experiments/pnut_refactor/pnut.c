@@ -383,7 +383,7 @@ function accum_string_string(string_probe) {
 
 // Similar to accum_string_string, but writes an integer to the string pool
 // Note that this function only supports small integers, represented as positive number.
-void accum_string_integer(int n) {
+function accum_string_integer(n) {
   if (n < 0) {
     accum_string_char('-');
     accum_string_integer(-n);
@@ -395,15 +395,11 @@ void accum_string_integer(int n) {
   }
 }
 
-int probe;
-int probe_start;
-int c1;
-int c2;
-int end_ident_i;
-
-// Like end_ident, but for strings instead of identifiers
-// We want to deduplicate strings to reuse memory if possible.
-#define end_string end_ident
+var probe;
+var probe_start;
+var c1;
+var c2;
+var end_ident_i;
 
 int end_ident() {
   string_pool[string_pool_alloc] = 0; // terminate string
@@ -444,7 +440,13 @@ int end_ident() {
   return probe;
 }
 
-int probe_string(int probe) {
+// Like end_ident, but for strings instead of identifiers
+// We want to deduplicate strings to reuse memory if possible.
+function end_string() {
+  return end_ident();
+}
+
+function probe_string(probe) {
   return heap[probe+1]; // return the start of the string
 }
 
