@@ -211,7 +211,7 @@ function get_child(node, i) {
   return heap[node+i+1];
 }
 
-void set_child(ast node, int i, ast child) {
+void set_child(node, i, child) {
   heap[node+i+1] = child;
 }
 
