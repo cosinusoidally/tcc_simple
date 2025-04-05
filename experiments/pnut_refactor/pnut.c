@@ -358,6 +358,7 @@ function accum_string() {
 }
 
 // Append a character to the current string under construction in the pool
+// FIXME LJW should be a char?
 function accum_string_char(c) {
   hash = (c + (hash ^ HASH_PARAM)) % HASH_PRIME;
   string_pool[string_pool_alloc] = c;
@@ -368,9 +369,12 @@ function accum_string_char(c) {
 }
 
 // Append a string from the string_pool to the string under construction
-void accum_string_string(int string_probe) {
-  char *string_start = STRING_BUF(string_probe);
-  char *string_end = string_start + STRING_LEN(string_probe);
+function accum_string_string(string_probe) {
+  char *string_start;
+  char *string_end;
+
+  string_start = STRING_BUF(string_probe);
+  string_end = string_start + STRING_LEN(string_probe);
   while (string_start < string_end) {
     accum_string_char(*string_start);
     string_start += 1;
