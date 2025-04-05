@@ -276,105 +276,6 @@ ast get_nb_children(ast node) {
   return heap[node] >> 10;
 }
 
-// Because everything is an int in pnut, it's easy to make mistakes and pass the
-// wrong node type to a function. These versions of get_child take the input
-// and/or output node type and checks that the node has the expected type before
-// returning the child node.
-// It also checks that the index is within bounds.
-#ifdef SAFE_MODE
-int get_val_checked(char* file, int line, ast node) {
-  if (get_nb_children(node) != 0) {
-    printf("%s:%d: get_val called on node %d with %d children\n", file, line, get_op(node), get_nb_children(node));
-    exit(1);
-  }
-  return heap[node+1];
-}
-
-int get_val_go(char* file, int line, int expected_node, ast node) {
-  if (get_op(node) != expected_node) {
-    printf("%s:%d: Expected node %d, got %d\n", file, line, expected_node, get_op(node));
-    exit(1);
-  }
-  return get_val_checked(file, line, node);
-}
-
-void set_val_checked(char* file, int line, ast node, int val) {
-  if (get_nb_children(node) != 0) {
-    printf("%s:%d: set_val called on node %d with %d children\n", file, line, get_op(node), get_nb_children(node));
-    exit(1);
-  }
-  heap[node+1] = val;
-}
-
-ast get_child_checked(char* file, int line, ast node, int i) {
-  if (i != 0 && i >= get_nb_children(node)) {
-    printf("%s:%d: Index %d out of bounds for node %d\n", file, line, i, get_op(node));
-    exit(1);
-  }
-  return heap[node+i+1];
-}
-
-void set_child_checked(char* file, int line, ast node, int i, ast child) {
-  if (i != 0 && i >= get_nb_children(node)) {
-    printf("%s:%d: Index %d out of bounds for node %d\n", file, line, i, get_op(node));
-    exit(1);
-  }
-  heap[node+i+1] = child;
-}
-
-// This function checks that the parent node has the expected operator before
-// returning the child node.
-ast get_child_go(char* file, int line, int expected_parent_node, ast node, int i) {
-  ast res = get_child_checked(file, line, node, i);
-  if (get_op(node) != expected_parent_node) {
-    printf("%s:%d: Expected node %d, got %d\n", file, line, expected_parent_node, get_op(node));
-    exit(1);
-  }
-  return res;
-}
-
-// This function checks that the parent node has the expected operator and that
-// the child node has the expected operator before returning the child node.
-ast get_child__go(char* file, int line, int expected_parent_node, int expected_node, ast node, int i) {
-  ast res = get_child_checked(file, line, node, i);
-  if (get_op(node) != expected_parent_node) {
-    printf("%s:%d: Expected node %d, got %d\n", file, line, expected_parent_node, get_op(node));
-    exit(1);
-  }
-  if (get_op(res) != expected_node) {
-    printf("%s:%d: Expected child node %d, got %d\n", file, line, expected_node, get_op(res));
-    exit(1);
-  }
-  return res;
-}
-
-// This function checks that the parent node has the expected operator and that
-// the child node has the expected operator (if child node is not 0) before
-// returning the child node.
-ast get_child_opt_go(char* file, int line, int expected_parent_node, int expected_node, ast node, int i) {
-  ast res = get_child_checked(file, line, node, i);
-  if (get_op(node) != expected_parent_node) {
-    printf("%s:%d: Expected node %d, got %d\n", file, line, expected_parent_node, get_op(node));
-    exit(1);
-  }
-  if (res > 0 && get_op(res) != expected_node) {
-    printf("%s:%d: Expected child node %d, got %d\n", file, line, expected_node, get_op(res));
-    exit(1);
-  }
-  return res;
-}
-
-#define get_val(node) get_val_checked(__FILE__, __LINE__, node)
-#define get_val_(expected_node, node) get_val_go(__FILE__, __LINE__, expected_node, node)
-#define set_val(node, val) set_val_checked(__FILE__, __LINE__, node, val)
-#define set_child(node, i, child) set_child_checked(__FILE__, __LINE__, node, i, child)
-#define get_child(node, i) get_child_checked(__FILE__, __LINE__, node, i)
-#define get_child_(expected_parent_node, node, i) get_child_go(__FILE__, __LINE__, expected_parent_node, node, i)
-#define get_child__(expected_parent_node, expected_node, node, i) get_child__go(__FILE__, __LINE__, expected_parent_node, expected_node, node, i)
-#define get_child_opt_(expected_parent_node, expected_node, node, i) get_child_opt_go(__FILE__, __LINE__, expected_parent_node, expected_node, node, i)
-
-#else
-
 int get_val(ast node) {
   return heap[node+1];
 }
@@ -395,8 +296,6 @@ void set_child(ast node, int i, ast child) {
 #define get_child_(expected_parent_node, node, i) get_child(node, i)
 #define get_child__(expected_parent_node, expected_node, node, i) get_child(node, i)
 #define get_child_opt_(expected_parent_node, expected_node, node, i) get_child(node, i)
-
-#endif
 
 ast ast_result;
 
@@ -798,7 +697,6 @@ void get_ch() {
 #endif
 }
 
-#ifdef PNUT_CC
 // TODO: It would be nice to not have to duplicate this code
 int strlen(char *str) {
   int i = 0;
@@ -812,8 +710,6 @@ void memcpy(char *dest, char *src, int n) {
     dest[i] = src[i];
   }
 }
-
-#endif
 
 char *substr(char *str, int start, int end) {
   int len = end - start;
