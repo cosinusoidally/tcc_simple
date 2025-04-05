@@ -27,10 +27,10 @@ struct IncludeStack {
 };
 
 struct IncludeStack *include_stack, *include_stack2;
-FILE *fp = 0; // Current file pointer that's being read
-char* fp_filepath = 0; // The path of the current file being read
-char* include_search_path = 0; // Search path for include files
-int output_fd = 1; // Output file descriptor (1 = stdout)
+var fp = 0; // Current file pointer that's being read
+var fp_filepath = 0; // The path of the current file being read
+var include_search_path = 0; // Search path for include files
+var output_fd = 1; // Output file descriptor (1 = stdout)
 
 // Tokens and AST nodes
 enum {
