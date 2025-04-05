@@ -1,0 +1,6 @@
+./mk_clean
+
+set -xe
+
+./mk_pnut_exe
+./mk_tcc-boot-mes
