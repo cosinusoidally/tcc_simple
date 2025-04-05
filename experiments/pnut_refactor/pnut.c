@@ -353,9 +353,17 @@ ast list_singleton(ast list) {
 }
 
 // Simple accessor to get the string from the string pool
-#define STRING_BUF(string_val) (string_pool + heap[string_val+1])
-#define STRING_LEN(string_val) (heap[string_val+4])
-#define STRING_BUF_END(string_val) (STRING_BUF(string_val) + STRING_LEN(string_val))
+function STRING_BUF(string_val) {
+  return (string_pool + heap[string_val+1]);
+}
+
+function STRING_LEN(string_val) {
+  return (heap[string_val+4]);
+}
+
+function STRING_BUF_END(string_val) {
+  return (STRING_BUF(string_val) + STRING_LEN(string_val));
+}
 
 void begin_string() {
   string_start = string_pool_alloc;
