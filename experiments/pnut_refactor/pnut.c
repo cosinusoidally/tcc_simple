@@ -2749,12 +2749,7 @@ ast parse_primary_expression() {
   ast tail;
 
   if (tok == IDENTIFIER || tok == CHARACTER || tok == INTEGER
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-     || tok == INTEGER_HEX || tok == INTEGER_OCT
-#endif
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
      || tok == INTEGER_L ||  tok == INTEGER_LL ||  tok == INTEGER_U ||  tok == INTEGER_UL ||  tok == INTEGER_ULL
-#endif
      ) {
 
     result = new_ast0(tok, val);
