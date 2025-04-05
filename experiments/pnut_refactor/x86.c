@@ -31,19 +31,7 @@ const int reg_Z = 2; // DX: temporary register
 const int reg_SP = 4; // SP: stack pointer
 const int reg_glo = 3; // BX: global variables table
 
-#if WORD_SIZE == 8
-void rex_prefix(int reg1, int reg2) {
-  // REX prefix encodes:
-  //  0x40: fixed value
-  //  0x08: REX.W: a 64-bit operand size is used.
-  //  0x04: REX.R: 1-bit extension for first register encoded for mod_rm
-  //  0x02: REX.X: 1-bit extension for SIB index encoded for mod_rm (Not used)
-  //  0x01: REX.B: 1-bit extension for second register encoded for mod_rm
-  emit_i8(0x48 + 0x04 * (reg1 >= R8) + 0x01 * (reg2 >= R8));
-}
-#else
 #define rex_prefix(reg1, reg2) ((void)0)
-#endif
 
 void mod_rm(int reg1, int reg2) {
   // ModR/M byte
@@ -671,7 +659,6 @@ void mov_reg_lbl(int reg, int lbl) {
 }
 
 // For 32 bit linux.
-#ifdef target_i386_linux
 
 // Regular system calls for 32 bit linux.
 // The system call number is passed in the rax register.
@@ -743,125 +730,3 @@ void os_chmod() {
 void os_access() {
   syscall_3(21, reg_X, reg_Y, -1); // SYS_ACCESS = 21
 }
-
-#endif
-
-// Both x86_64_linux and x86_64_mac use the System V ABI, the difference is in the system calls.
-#ifdef target_x86_64_linux
-  #define SYSTEM_V_ABI
-  #define SYS_READ 0
-  #define SYS_WRITE 1
-  #define SYS_OPEN 2
-  #define SYS_CLOSE 3
-  #define SYS_LSEEK 8
-  #define SYS_UNLINK 87
-  #define SYS_MKDIR 83
-  #define SYS_CHMOD 90
-  #define SYS_ACCESS 21
-  #define SYS_STAT 4
-  #define SYS_MMAP_MAP_TYPE 0x22
-  #define SYS_MMAP 9
-  #define SYS_EXIT 60
-#endif
-
-#ifdef target_x86_64_mac
-  // Refer to following page for macOS system call numbers:
-  // https://web.archive.org/web/20211102014723/http://www.opensource.apple.com/source/xnu/xnu-1504.3.12/bsd/kern/syscalls.master
-  // Because it's a 64 bit system, 0x2000000 is added to the system call number.
-  #define SYSTEM_V_ABI
-  #define SYS_READ 0x2000003
-  #define SYS_WRITE 0x2000004
-  #define SYS_OPEN 0x2000005
-  #define SYS_CLOSE 0x2000006
-  #define SYS_LSEEK 0x20000c7
-  #define SYS_UNLINK 0x200000a
-  #define SYS_MKDIR 0x2000088
-  #define SYS_CHMOD 0x200000f
-  #define SYS_ACCESS 0x2000021
-  #define SYS_MMAP_MAP_TYPE 0x1020
-  #define SYS_MMAP 0x20000C5
-  #define SYS_EXIT 0x2000001
-#endif
-
-// For 64 bit System V ABI.
-#ifdef SYSTEM_V_ABI
-
-void syscall_() {
-
-  // SYSCALL ;; Fast System Call
-  // See: https://web.archive.org/web/20240620153804/https://www.felixcloutier.com/x86/syscall
-
-  emit_2_i8(0x0F, 0x05);
-}
-
-// Regular system calls for 64 bit linux and macOS.
-// The system call number is passed in the rax register.
-// Other arguments are passed in rdi, rsi and rdx.
-// The return value is in rax.
-// The di_reg, si_reg, dx_reg parameters
-// If the parameter registers are rdi, rsi or rdx, the function assume they may
-// be clobberred in the order of the mov instructions.
-// i.e. syscall_3(SYS_READ, ..., rdi, ...) is not valid because rdi is clobberred by the first mov instructions.
-// For syscalls that use less than 3 parameters, the extra register params are set to -1.
-void syscall_3(int syscall_code, int di_reg, int si_reg, int dx_reg) {
-  if (di_reg >= 0) mov_reg_reg(DI, di_reg);
-  if (si_reg >= 0) mov_reg_reg(SI, si_reg);
-  if (dx_reg >= 0) mov_reg_reg(DX, dx_reg);
-  mov_reg_imm(AX, syscall_code); // AX = syscall_code
-  syscall_();                    // syscall
-}
-
-void os_allocate_memory(int size) {
-  mov_reg_imm(DI, 0);                  // mov rdi, 0 | NULL
-  mov_reg_imm(SI, size);               // mov rsi, size | size
-  mov_reg_imm(DX, 0x3);                // mov rdx, 0x3 | PROT_READ (0x1) | PROT_WRITE (0x2)
-  mov_reg_imm(R10, SYS_MMAP_MAP_TYPE); // mov r10, 0x21 | MAP_ANONYMOUS (0x20) | MAP_PRIVATE (0x2)
-  mov_reg_imm(R8, -1);                 // mov r8, -1 (file descriptor)
-  mov_reg_imm(R9, 0);                  // mov r9, 0 (offset)
-  mov_reg_imm(AX, SYS_MMAP);           // mov rax, SYS_MMAP
-  syscall_();                          // syscall
-}
-
-void os_exit() {
-  syscall_3(SYS_EXIT, reg_X, -1, -1);
-}
-
-void os_read() {
-  syscall_3(SYS_READ, reg_X, reg_Y, reg_Z);
-}
-
-void os_write() {
-  syscall_3(SYS_WRITE, reg_X, reg_Y, reg_Z);
-}
-
-void os_open() {
-  syscall_3(SYS_OPEN, reg_X, reg_Y, reg_Z);
-  // MacOS (BSD) signals errors by setting the carry flag, while Linux uses a negative return value.
-  // For now, we'll assume macOS and Linux have the same behavior and return a negative value in rax.
-}
-
-void os_close() {
-  syscall_3(SYS_CLOSE, reg_X, -1, -1);
-}
-
-void os_seek() {
-  syscall_3(SYS_LSEEK, reg_X, reg_Y, reg_Z);
-}
-
-void os_unlink() {
-  syscall_3(SYS_UNLINK, reg_X, -1, -1);
-}
-
-void os_mkdir() {
-  syscall_3(SYS_MKDIR, reg_X, reg_Y, -1);
-}
-
-void os_chmod() {
-  syscall_3(SYS_CHMOD, reg_X, reg_Y, -1);
-}
-
-void os_access() {
-  syscall_3(SYS_ACCESS, reg_X, reg_Y, -1);
-}
-
-#endif
