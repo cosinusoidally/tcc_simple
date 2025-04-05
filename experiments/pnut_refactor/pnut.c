@@ -2020,43 +2020,7 @@ void get_tok() {
 #define parse_error(msg, token) parse_error_internal(msg, token, __FILE__, __LINE__)
 
 void parse_error_internal(char * msg, int token, char * file, int line) {
-
-#ifdef NICE_ERR_MSG
-  #define ANSI_RED     "\x1b[31m"
-  #define ANSI_GREEN   "\x1b[32m"
-  #define ANSI_YELLOW  "\x1b[33m"
-  #define ANSI_BLUE    "\x1b[34m"
-  #define ANSI_MAGENTA "\x1b[35m"
-  #define ANSI_CYAN    "\x1b[36m"
-  #define ANSI_RESET   "\x1b[0m"
-
-  //Error header
-  putstr(ANSI_RED"Error occurred while parsing ");
-  putstr(ANSI_GREEN"\"");
-  putstr(include_stack->filepath);
-  putstr("\""ANSI_RESET"\n");
-
-  //Error message
-  putstr("  Message: "ANSI_YELLOW);
   putstr(msg);
-  putstr(ANSI_RESET"\n");
-
-  //Error token
-  putstr("  Offending Token: "ANSI_YELLOW);
-  print_tok_type(token);
-  putstr(ANSI_RESET"\n");
-
-  //Error location
-  putstr("  Location: "ANSI_GREEN);
-  putstr(include_stack->filepath);
-  putchar(':');
-  putint(last_tok_line_number);
-  putchar(':');
-  putint(last_tok_column_number);
-  putstr(ANSI_RESET"\n");
-#else
-  putstr(msg);
-#endif
 
   putstr("Note, error emitted from ");
   putstr(file);
@@ -2069,13 +2033,8 @@ void parse_error_internal(char * msg, int token, char * file, int line) {
 
 void expect_tok_(int expected_tok, char* file, int line) {
   if (tok != expected_tok) {
-#ifdef NICE_ERR_MSG
-    putstr("expected tok="); print_tok_type(expected_tok);
-    putstr("\ncurrent tok="); print_tok_type(tok); putchar('\n');
-#else
     putstr("expected tok="); putint(expected_tok);
     putstr("\ncurrent tok="); putint(tok); putchar('\n');
-#endif
     parse_error_internal("unexpected token", tok, file, line);
   }
   get_tok();
