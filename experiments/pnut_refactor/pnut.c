@@ -167,7 +167,7 @@ int val;
 
 #define STRING_POOL_SIZE 500000
 char string_pool[STRING_POOL_SIZE];
-int string_pool_alloc = 0;
+var string_pool_alloc = 0;
 int string_start;
 int hash;
 
