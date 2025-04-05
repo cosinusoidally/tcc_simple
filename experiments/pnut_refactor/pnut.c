@@ -582,42 +582,7 @@ void output_declaration_c_code(bool no_header) {
 }
 #endif
 
-#ifdef SUPPORT_LINE_CONTINUATION
-// get_ch_ is reponsible for reading the next character from the input file,
-// switching to the next file if necessary and updating the line number.
-// get_ch is then responsible for skipping line continuations.
-void get_ch_();
-
-int line_continutation_prev_char = -2; // -1 is EOF, -2 is uninitialized
 void get_ch() {
-  if (line_continutation_prev_char == -2) {
-    while (1) {      // Loop as long as we're reading line continuations
-      get_ch_();     // Read the next character
-      if (ch == '\\') {
-        get_ch_();   // Skip backslash
-        if (ch == '\n') {
-          continue; // Loop again to read the next character
-        } else {
-          // '\' is not followed by newline, so we save the current character
-          // and make '\' the current character
-          line_continutation_prev_char = ch;
-          ch = '\\';
-          break;
-        }
-      } else {
-        break;
-      }
-    }
-  } else {
-    ch = line_continutation_prev_char;
-    line_continutation_prev_char = -2;
-  }
-}
-
-void get_ch_() {
-#else
-void get_ch() {
-#endif
   ch = fgetc(fp);
 
   if (ch == EOF) {
