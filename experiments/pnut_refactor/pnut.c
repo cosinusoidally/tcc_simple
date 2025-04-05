@@ -12,19 +12,20 @@
 #define false 0
 #define EOF (-1)
 
-int line_number = 1;
-int column_number = 0;
-int last_tok_line_number = 1;
-int last_tok_column_number = 0;
+var line_number = 1;
+var column_number = 0;
+var last_tok_line_number = 1;
+var last_tok_column_number = 0;
 
 struct IncludeStack {
-  FILE* fp;
+  int fp; // (FILE *)
   struct IncludeStack *next;
-  char *dirname;  // The base path of the file, used to resolve relative paths
-  char *filepath; // The path of the file, used to print error messages
+  int dirname;  // (char *) The base path of the file, used to resolve relative paths
+  int filepath; // (char *) The path of the file, used to print error messages
   int line_number;
   int column_number;
 };
+
 struct IncludeStack *include_stack, *include_stack2;
 FILE *fp = 0; // Current file pointer that's being read
 char* fp_filepath = 0; // The path of the current file being read
