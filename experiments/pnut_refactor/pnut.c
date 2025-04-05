@@ -465,11 +465,14 @@ int probe_string(int probe) {
   return heap[probe+1]; // return the start of the string
 }
 
-#define expect_tok(expected_tok) expect_tok_(expected_tok, __FILE__, __LINE__)
+void expect_tok_(int expected_tok, char* file, int line);
+
+function expect_tok(expected_tok) {
+  expect_tok_(expected_tok, __FILE__, __LINE__);
+}
 
 void get_tok();
 void get_ident();
-void expect_tok_(int expected_tok, char* file, int line);
 
 #define IFDEF_DEPTH_MAX 20
 bool if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
