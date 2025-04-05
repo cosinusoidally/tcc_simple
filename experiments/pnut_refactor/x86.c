@@ -1,29 +1,8 @@
-#ifdef target_i386_linux
-  #define WORD_SIZE 4
-#endif
-
-#ifdef target_x86_64_linux
-  #define WORD_SIZE 8
-#endif
-
-#ifdef target_x86_64_mac
-  #define WORD_SIZE 8
-#endif
+#define WORD_SIZE 4
 
 // x86 codegen
 #include "exe.c"
-
-#ifdef target_i386_linux
-  #include "elf.c"
-#endif
-
-#ifdef target_x86_64_linux
-  #include "elf.c"
-#endif
-
-#ifdef target_x86_64_mac
-  #include "mach-o.c"
-#endif
+#include "elf.c"
 
 // Registers common to i386 and x86-64 (E and R prefixes are omitted).
 
