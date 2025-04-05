@@ -880,17 +880,11 @@ ast value_type(ast node) {
   if (nb_children >= 2) child1 = get_child(node, 1);
 
   if (nb_children == 0) {
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
     if (op == INTEGER || op == INTEGER_L || op == INTEGER_LL) {
       return int_type;
     } else if (op == INTEGER_U || op == INTEGER_UL || op == INTEGER_ULL) {
       return uint_type;
     }
-#else
-    if (op == INTEGER) {
-      return int_type;
-    }
-#endif
     else if (op == CHARACTER) {
       return char_type;
     } else if (op == STRING) {
@@ -1461,15 +1455,9 @@ void codegen_rvalue(ast node) {
 
   if (nb_children == 0) {
     if ( op == INTEGER
-#ifdef PARSE_NUMERIC_LITERAL_SUFFIX
       || op == INTEGER_L || op == INTEGER_LL || op == INTEGER_U || op == INTEGER_UL || op == INTEGER_ULL
-#endif
        ) {
-#ifdef SUPPORT_64_BIT_LITERALS
-      mov_reg_large_imm(reg_X, get_val(node));
-#else
       mov_reg_imm(reg_X, -get_val(node));
-#endif
       push_reg(reg_X);
     } else if (op == CHARACTER) {
       mov_reg_imm(reg_X, get_val_(CHARACTER, node));
