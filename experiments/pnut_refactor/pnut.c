@@ -10,38 +10,6 @@
 #define false 0
 #define EOF (-1)
 
-#ifdef SAFE_MODE
-#define INCLUDE_LINE_NUMBER_ON_ERROR
-#define NICE_ERR_MSG
-#endif
-
-#ifdef RELEASE_PNUT_SH
-#define sh
-#define RT_NO_INIT_GLOBALS
-#define RELEASE_PNUT
-#endif
-
-#ifdef RELEASE_PNUT_i386_linux
-#define target_i386_linux
-#define RELEASE_PNUT
-#endif
-
-#ifdef RELEASE_PNUT_x86_64_linux
-#define target_x86_64_linux
-#define RELEASE_PNUT
-#endif
-
-#ifdef RELEASE_PNUT_x86_64_mac
-#define target_x86_64_mac
-#define RELEASE_PNUT
-#endif
-
-#ifdef RELEASE_PNUT
-#define INCLUDE_LINE_NUMBER_ON_ERROR
-#define NICE_ERR_MSG
-#define OPTIMIZE_LONG_LINES
-#endif
-
 // Uncomment to cause parse_error() to print which pnut function emitted the error
 //#define DEBUG_SHOW_ERR_ORIGIN
 
