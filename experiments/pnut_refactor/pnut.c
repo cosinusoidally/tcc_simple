@@ -1,5 +1,3 @@
-typedef int intptr_t;
-
 #define O_WRONLY 01
 #define O_CREAT  0100
 #define O_TRUNC  01000
@@ -308,7 +306,7 @@ int hash;
 #define HASH_PARAM 1026
 #define HASH_PRIME 1009
 #define HEAP_SIZE 2000000
-intptr_t heap[HEAP_SIZE];
+int heap[HEAP_SIZE];
 int heap_alloc = HASH_PRIME;
 
 int alloc_result;

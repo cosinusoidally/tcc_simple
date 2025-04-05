@@ -431,8 +431,8 @@ int alloc_label(char* name) {
   int lbl = alloc_obj(5);
   heap[lbl] = GENERIC_LABEL;
   heap[lbl + 1] = 0; // Address of label
-  heap[lbl + 2] = (intptr_t) name; // Name of label
-  heap[lbl + 3] = (intptr_t) fp_filepath;
+  heap[lbl + 2] = (int) name; // Name of label
+  heap[lbl + 3] = (int) fp_filepath;
 #ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   heap[lbl + 4] = line_number;
 #endif
