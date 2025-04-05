@@ -593,10 +593,8 @@ void get_ch() {
       include_stack = include_stack->next;
       fp = include_stack->fp;
       fp_filepath = include_stack->filepath;
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
       line_number = include_stack->line_number;
       column_number = include_stack->column_number;
-#endif
       // Not freeing include_stack2->filepath because it may not be dynamically allocated
       free(include_stack2->dirname);
       free(include_stack2);
@@ -605,27 +603,12 @@ void get_ch() {
       ch = '\n';
     }
   }
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
   else if (ch == '\n') {
     line_number += 1;
     column_number = 0;
   } else {
     column_number += 1;
   }
-#endif
-#ifdef SH_INCLUDE_C_CODE
-  // Save C code chars so they can be displayed with the shell code
-  code_char_buf[code_char_buf_ix] = ch;
-  code_char_buf_ix += 1;
-#endif
-#ifdef DEBUG_EXPAND_INCLUDES
-  // Because ch is always 1 character ahead of the token, we print the character
-  // with a 1 character delay to match this delay. This makes it easy to
-  // annotate certain preprocessor directives so they can be removed in a later
-  // step.
-  if (prev_ch != EOF) putchar(prev_ch);
-  prev_ch = ch;
-#endif
 }
 
 // TODO: It would be nice to not have to duplicate this code
