@@ -11,4 +11,7 @@ echo "invalid_lit.c"
 echo "mising.c"
 ../artifacts/pnut-exe tests/missing.c -o ../artifacts/fails.exe
 
+echo "unterminated_string.c"
+../artifacts/pnut-exe tests/unterminated_string.c -o ../artifacts/fails.exe
+
 exit 0
