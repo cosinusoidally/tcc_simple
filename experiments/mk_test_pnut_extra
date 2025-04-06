@@ -22,7 +22,16 @@ $PNUT -z
 echo "TEST no input file"
 $PNUT -o ../artifacts/fails.exe
 
+echo "TEST no space before output file"
+$PNUT -o../artifacts/fails.exe
+
 echo "TEST undefine macro"
 $PNUT -Ufoo
+
+echo "TEST undefine macro2"
+$PNUT -U foo
+
+echo "TEST include"
+$PNUT -I.
 
 exit 0

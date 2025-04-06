@@ -26,6 +26,15 @@ unknown option
 TEST no input file
 Usage: ../artifacts/pnut-exe <filename>
 no input file
+TEST no space before output file
+Usage: ../artifacts/pnut-exe <filename>
+no input file
 TEST undefine macro
+Usage: ../artifacts/pnut-exe <filename>
+no input file
+TEST undefine macro2
+Usage: ../artifacts/pnut-exe <filename>
+no input file
+TEST include
 Usage: ../artifacts/pnut-exe <filename>
 no input file
