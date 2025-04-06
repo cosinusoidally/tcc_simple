@@ -3517,33 +3517,6 @@ int cgc_add_local(enum BINDING binding_type, int ident, ast type, int env) {
   return binding;
 }
 
-#ifdef sh
-void cgc_add_local_var(enum BINDING binding_type, int ident, ast type) {
-  cgc_fs += 1;
-  cgc_locals = cgc_add_local(binding_type, ident, type, cgc_locals);
-  // Add to cgc_locals_fun as well, if not already there
-  if (cgc_lookup_var(ident, cgc_locals_fun) == 0) {
-    cgc_locals_fun = cgc_add_local(binding_type, ident, type, cgc_locals_fun);
-  }
-}
-
-void cgc_add_enclosing_loop() {
-  int binding = alloc_obj(4);
-  heap[binding+0] = cgc_locals;
-  heap[binding+1] = BINDING_LOOP;
-  heap[binding+2] = 0; // loop end action start
-  heap[binding+3] = 0; // loop end action end
-  cgc_locals = binding;
-}
-
-void cgc_add_enclosing_switch(bool in_tail_position) {
-  int binding = alloc_obj(3);
-  heap[binding+0] = cgc_locals;
-  heap[binding+1] = BINDING_SWITCH;
-  heap[binding+2] = in_tail_position;
-  cgc_locals = binding;
-}
-#else
 void cgc_add_local_param(int ident, int width, ast type) {
   cgc_locals = cgc_add_local(BINDING_PARAM_LOCAL, ident, type, cgc_locals);
   cgc_fs -= width;
@@ -3627,7 +3600,6 @@ void cgc_add_typedef(int ident, enum BINDING struct_or_union_or_enum, ast type) 
   heap[binding+3] = type;
   cgc_globals = binding;
 }
-#endif
 
 void grow_fs(int words) {
   cgc_fs += words;
@@ -3640,9 +3612,6 @@ const int reg_SP;
 const int reg_glo;
 
 void mov_reg_imm(int dst, int imm);             // Move 32 bit immediate to register
-#ifdef SUPPORT_64_BIT_LITERALS
-void mov_reg_large_imm(int dst, int large_imm); // Move large immediate to register
-#endif
 void mov_reg_reg(int dst, int src);
 void mov_mem8_reg(int base, int offset, int src);
 void mov_mem16_reg(int base, int offset, int src);
@@ -4905,11 +4874,7 @@ void codegen_rvalue(ast node) {
           push_reg(reg_X);
           break;
         case BINDING_ENUM_CST:
-#ifdef SUPPORT_64_BIT_LITERALS
-          mov_reg_large_imm(reg_X, get_val(heap[binding+3]));
-#else
           mov_reg_imm(reg_X, -get_val_(INTEGER, heap[binding+3]));
-#endif
           push_reg(reg_X);
           break;
 
@@ -6292,28 +6257,6 @@ void op_reg_slash_digit(int opcode, int digit, int reg) {
   emit_i8(opcode);
   mod_rm_slash_digit(digit, reg);
 }
-
-#ifdef SKIP
-
-// deprecated... kept here in case it might be useful in the future
-
-void inc_reg(int dst) { rex_prefix(dst, 0); emit_2_i8(0xff, 0xc0 + (dst & 7)); }
-void dec_reg(int dst) { rex_prefix(dst, 0); emit_2_i8(0xff, 0xc8 + (dst & 7)); }
-void xchg_reg_reg(int dst, int src) { op_reg_reg(0x87, dst, src); }
-void not_reg(int dst) { rex_prefix(dst, 0); emit_2_i8(0xf7, 0xd0 + (dst & 7)); }
-void neg_reg(int dst) { rex_prefix(dst, 0); emit_2_i8(0xf7, 0xd8 + (dst & 7)); }
-void shr_reg_cl(int dst) { rex_prefix(dst, 0); emit_2_i8(0xd3, 0xe8 + (dst & 7)); }
-void jump_cond_short(int cond, int n) { emit_2_i8(0x70 + cond, n); }
-
-void test_reg_reg(int dst, int src) {
-
-  // TEST dst_reg, src_reg ;; set Z condition flag based on result of dst_reg&src_reg
-  // See: https://web.archive.org/web/20231004142335/https://www.felixcloutier.com/x86/test
-
-  op_reg_reg(0x85, dst, src, WORD_SIZE);
-}
-
-#endif
 
 void add_reg_reg(int dst, int src) {
 
