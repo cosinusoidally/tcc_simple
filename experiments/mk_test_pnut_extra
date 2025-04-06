@@ -1,0 +1,4 @@
+cd pnut_refactor
+../artifacts/pnut-exe tests/fails.c -o ../artifacts/fails.exe
+
+exit 0

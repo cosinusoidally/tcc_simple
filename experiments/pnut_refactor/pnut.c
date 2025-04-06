@@ -450,7 +450,7 @@ function probe_string(probe) {
   return heap[probe+1]; // return the start of the string
 }
 
-void expect_tok_(int expected_tok, char* file, int line);
+function expect_tok_(expected_tok, file, line);
 
 function expect_tok(expected_tok) {
   expect_tok_(expected_tok, __FILE__, __LINE__);
@@ -1999,7 +1999,7 @@ void parse_error_internal(char * msg, int token, char * file, int line) {
   exit(1);
 }
 
-void expect_tok_(int expected_tok, char* file, int line) {
+function expect_tok_(expected_tok, file, line) {
   if (tok != expected_tok) {
     putstr("expected tok="); putint(expected_tok);
     putstr("\ncurrent tok="); putint(tok); putchar('\n');
