@@ -7,6 +7,12 @@
 #define bool int
 #define FILE int
 
+/* decls */
+
+function expect_tok_(expected_tok, file, line);
+function get_tok();
+function get_ident();
+
 #define ast int
 #define true 1
 #define false 0
@@ -430,10 +436,6 @@ int end_ident() {
 function end_string() {
   return end_ident();
 }
-
-function expect_tok_(expected_tok, file, line);
-function get_tok();
-function get_ident();
 
 function expect_tok(expected_tok) {
   expect_tok_(expected_tok, __FILE__, __LINE__);
