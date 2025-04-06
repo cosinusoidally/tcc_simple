@@ -315,7 +315,6 @@ function car(pair)               { return get_child_(LIST, pair, 0); }
 function car_(expected_op, pair) { return get_child__(LIST, expected_op, pair, 0); }
 function cdr(pair)               { return get_child_(LIST, pair, 1); }
 function cdr_(expected_op, pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
-function set_car(pair, value)    { set_child(pair, 0, value); }
 function set_cdr(pair, value)    { set_child(pair, 1, value); }
 function tail(x) { return cdr_(LIST, x); }
 
@@ -326,10 +325,6 @@ function STRING_BUF(string_val) {
 
 function STRING_LEN(string_val) {
   return (heap[string_val+4]);
-}
-
-function STRING_BUF_END(string_val) {
-  return (STRING_BUF(string_val) + STRING_LEN(string_val));
 }
 
 function begin_string() {
