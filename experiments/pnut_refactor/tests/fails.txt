@@ -15,6 +15,8 @@ TEST_9
 TEST_10
 TEST invalid_lit.c
 tests/invalid_lit.c:1:7  syntax error: unimplemented string character escape
+TEST invalid_hex.c
+tests/invalid_hex.c:1:9  syntax error: invalid hex integer -- it must have at least one digit
 TEST mising.c
 tests/missing.c
 Could not open file

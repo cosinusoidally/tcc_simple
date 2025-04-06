@@ -10,6 +10,9 @@ done
 echo "TEST invalid_lit.c"
 $PNUT tests/invalid_lit.c -o ../artifacts/fails.exe
 
+echo "TEST invalid_hex.c"
+$PNUT tests/invalid_hex.c -o ../artifacts/fails.exe
+
 echo "TEST mising.c"
 $PNUT tests/missing.c -o ../artifacts/fails.exe
 
