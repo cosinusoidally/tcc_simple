@@ -1,17 +1,28 @@
 cd pnut_refactor
 
+PNUT="../artifacts/pnut-exe"
+
 for i in $(seq 10); do
 echo "TEST_$i"
-../artifacts/pnut-exe tests/fails.c -DTEST_$i -o ../artifacts/fails.exe
+$PNUT tests/fails.c -DTEST_$i -o ../artifacts/fails.exe
 done
 
-echo "invalid_lit.c"
-../artifacts/pnut-exe tests/invalid_lit.c -o ../artifacts/fails.exe
+echo "TEST invalid_lit.c"
+$PNUT tests/invalid_lit.c -o ../artifacts/fails.exe
 
-echo "mising.c"
-../artifacts/pnut-exe tests/missing.c -o ../artifacts/fails.exe
+echo "TEST mising.c"
+$PNUT tests/missing.c -o ../artifacts/fails.exe
 
-echo "unterminated_string.c"
-../artifacts/pnut-exe tests/unterminated_string.c -o ../artifacts/fails.exe
+echo "TEST unterminated_string.c"
+$PNUT tests/unterminated_string.c -o ../artifacts/fails.exe
+
+echo "TEST invalid option"
+$PNUT -z
+
+echo "TEST no input file"
+$PNUT -o ../artifacts/fails.exe
+
+echo "TEST undefine macro"
+$PNUT -Ufoo
 
 exit 0
