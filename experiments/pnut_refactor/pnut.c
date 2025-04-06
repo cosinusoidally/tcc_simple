@@ -3657,13 +3657,8 @@ void mov_reg_mem16_sign_ext(int dst, int base, int offset);
 void mov_reg_mem32_sign_ext(int dst, int base, int offset);
 void mov_reg_mem64(int dst, int base, int offset);
 
-#if WORD_SIZE == 4
 #define mov_mem_reg(base, offset, src) mov_mem32_reg(base, offset, src)
 #define mov_reg_mem(dst, base, offset) mov_reg_mem32(dst, base, offset)
-#elif WORD_SIZE == 8
-#define mov_mem_reg(base, offset, src) mov_mem64_reg(base, offset, src)
-#define mov_reg_mem(dst, base, offset) mov_reg_mem64(dst, base, offset)
-#endif
 
 void add_reg_imm(int dst, int imm);
 void add_reg_lbl(int dst, int lbl);
@@ -3698,12 +3693,7 @@ void load_mem_location(int dst, int base, int offset, int width, bool is_signed)
     switch (width) {
       case 1: mov_reg_mem8_sign_ext(dst, base, offset);  break;
       case 2: mov_reg_mem16_sign_ext(dst, base, offset); break;
-#if WORD_SIZE == 4
       case 4: mov_reg_mem32(dst, base, offset); break;
-#elif WORD_SIZE == 8
-      case 4: mov_reg_mem32_sign_ext(dst, base, offset); break; // This instruction is only available in 64-bit mode
-      case 8: mov_reg_mem64(dst, base, offset);          break; // no sign extension needed
-#endif
       default: fatal_error("load_mem_location: unknown width");
     }
   } else {
@@ -3711,9 +3701,6 @@ void load_mem_location(int dst, int base, int offset, int width, bool is_signed)
       case 1: mov_reg_mem8(dst, base, offset);  break;
       case 2: mov_reg_mem16(dst, base, offset); break;
       case 4: mov_reg_mem32(dst, base, offset); break;
-#if WORD_SIZE == 8
-      case 8: mov_reg_mem64(dst, base, offset); break;
-#endif
       default: fatal_error("load_mem_location: unknown width");
     }
   }
@@ -4232,16 +4219,8 @@ int type_width(ast type, bool array_value, bool word_align) {
     case SHORT_KW: width = 2;         break;
     case INT_KW:   width = 4;         break;
     case LONG_KW:
-#if WORD_SIZE == 8
-      width = 8;
-      break;
-#elif defined (BOOTSTRAP_LONG)
       width = 4;
       break;
-#else
-      fatal_error("type_width: long type not supported");
-      return -1;
-#endif
     case STRUCT_KW:
     case UNION_KW:
       width = struct_union_size(type);
@@ -4727,36 +4706,14 @@ int codegen_param(ast param) {
   return type_width(type, false, true) / WORD_SIZE;
 }
 
-#ifdef SAFE_MODE
-int codegen_params(ast params, ast params_type, bool allow_extra_params) {
-#else
 int codegen_params(ast params) {
-#endif
 
   int fs = 0;
 
   if (params != 0) {
-#ifdef SAFE_MODE
-    if (!allow_extra_params && params_type == 0) {
-      fatal_error("codegen_params: Function expects less parameters than provided");
-    }
-
-    // Check that the number of parameters is correct
-    if (params_type != 0) params_type = tail(params_type);
-#endif
-
-#ifdef SAFE_MODE
-    fs = codegen_params(tail(params), params_type, allow_extra_params);
-#else
     fs = codegen_params(tail(params));
-#endif
     fs += codegen_param(car(params));
   }
-  #ifdef SAFE_MODE
-  else if (params_type != 0) {
-    fatal_error("codegen_params: Function expects more parameters than provided");
-  }
-  #endif
 
   return fs;
 }
@@ -6515,13 +6472,7 @@ void mov_reg_imm(int dst, int imm) {
 
   rex_prefix(0, dst);
   emit_i8(0xb8 + (dst & 7));
-#if WORD_SIZE == 4
   emit_i32_le(imm);
-#elif WORD_SIZE == 8
-  emit_i64_le(imm);
-#else
-  #error "mov_reg_imm: unknown word size"
-#endif
 }
 
 #ifdef SUPPORT_64_BIT_LITERALS
