@@ -3912,66 +3912,6 @@ enum {
   GOTO_LABEL,
 };
 
-#if defined (UNDEFINED_LABELS_ARE_RUNTIME_ERRORS) || defined (SAFE_MODE)
-#define LABELS_ARR_SIZE 100000
-int labels[LABELS_ARR_SIZE];
-int labels_ix = 0;
-
-#ifdef UNDEFINED_LABELS_ARE_RUNTIME_ERRORS
-void def_label(int lbl);
-#endif
-
-void assert_all_labels_defined() {
-  int i = 0;
-  int lbl;
-  // Check that all labels are defined
-  for (; i < labels_ix; i++) {
-    lbl = labels[i];
-#ifdef UNDEFINED_LABELS_ARE_RUNTIME_ERRORS
-    if (heap[lbl + 1] > 0) {
-      if (heap[lbl] == GENERIC_LABEL && heap[lbl + 2] != 0) {
-        def_label(lbl);
-        rt_debug("Function or label is not defined\n");
-        rt_debug("name = ");
-        rt_debug((char*) heap[lbl + 2]);
-        rt_debug("\n");
-        // TODO: This should crash but let's just return for now to see how far we can get
-        ret();
-      }
-    }
-#else
-    if (heap[lbl + 1] > 0) {
-      putstr("Label ");
-      if (heap[lbl] == GENERIC_LABEL && heap[lbl + 2] != 0) {
-        putstr((char*) heap[lbl + 2]);
-      } else {
-        putint(lbl);
-      }
-      putstr(" is not defined\n");
-      exit(1);
-    }
-#endif
-  }
-}
-
-void add_label(int lbl) {
-  if (labels_ix >= LABELS_ARR_SIZE) fatal_error("labels array is full");
-
-  labels[labels_ix++] = lbl;
-}
-
-int alloc_label(char* name) {
-  int lbl = alloc_obj(5);
-  heap[lbl] = GENERIC_LABEL;
-  heap[lbl + 1] = 0; // Address of label
-  heap[lbl + 2] = (int) name; // Name of label
-  heap[lbl + 3] = (int) fp_filepath;
-  heap[lbl + 4] = line_number;
-  add_label(lbl);
-  return lbl;
-}
-#else
-
 #define assert_all_labels_defined() // No-op
 #define add_label(lbl) // No-op
 #define alloc_label(name) alloc_label_()
@@ -3983,7 +3923,6 @@ int alloc_label_() {
   add_label(lbl);
   return lbl;
 }
-#endif
 
 int alloc_goto_label() {
   int lbl = alloc_obj(3);
@@ -6474,25 +6413,6 @@ void mov_reg_imm(int dst, int imm) {
   emit_i8(0xb8 + (dst & 7));
   emit_i32_le(imm);
 }
-
-#ifdef SUPPORT_64_BIT_LITERALS
-void mov_reg_large_imm(int dst, int large_imm) {
-
-  // MOV dst_reg, large_imm  ;; Move 32 bit or 64 bit immediate value to register
-  // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
-
-  rex_prefix(0, dst);
-  emit_i8(0xb8 + (dst & 7));
-
-#if WORD_SIZE == 4
-  emit_i32_le_large_imm(large_imm);
-#elif WORD_SIZE == 8
-  emit_i64_le_large_imm(large_imm);
-#else
-  #error "mov_reg_large_imm: unknown word size"
-#endif
-}
-#endif
 
 void add_reg_imm(int dst, int imm) {
 
