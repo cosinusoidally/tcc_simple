@@ -1,7 +1,7 @@
 TEST_1
 expected tok=125
 current tok=-1
-unexpected tokenNote, error emitted from pnut.c line 456
+unexpected token
 TEST_2
 ident = i0
 tests/fails.c:15:0  identifier not found

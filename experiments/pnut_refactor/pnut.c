@@ -319,16 +319,6 @@ function set_car(pair, value)    { set_child(pair, 0, value); }
 function set_cdr(pair, value)    { set_child(pair, 1, value); }
 function tail(x) { return cdr_(LIST, x); }
 
-// Returns the only element of a singleton list, if it is a singleton list.
-// Otherwise, returns 0.
-function list_singleton(list) {
-  if (list != 0 && tail(list) == 0) {
-    return car(list);
-  } else {
-    return 0;
-  }
-}
-
 // Simple accessor to get the string from the string pool
 function STRING_BUF(string_val) {
   return (string_pool + heap[string_val+1]);
@@ -1989,11 +1979,6 @@ void get_tok() {
 
 void parse_error_internal(char * msg, int token, char * file, int line) {
   putstr(msg);
-
-  putstr("Note, error emitted from ");
-  putstr(file);
-  putstr(" line ");
-  putint(line);
   putstr("\n");
 
   exit(1);
