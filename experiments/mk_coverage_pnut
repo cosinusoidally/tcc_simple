@@ -5,6 +5,9 @@ cd pnut_refactor/
 time gcc -m32 --coverage -g -O0 -DBOOTSTRAP_LONG -Dtarget_i386_linux pnut.c -o ../artifacts/pnut-exe
 
 cd ..
+
+./mk_test_pnut_extra
+
 ./mk_tcc-boot-mes
 
 gcovr -r pnut_refactor artifacts --html-details -o artifacts/example.html
