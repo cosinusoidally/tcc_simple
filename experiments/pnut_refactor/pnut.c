@@ -432,13 +432,12 @@ function end_string() {
 }
 
 function expect_tok_(expected_tok, file, line);
+function get_tok();
+function get_ident();
 
 function expect_tok(expected_tok) {
   expect_tok_(expected_tok, __FILE__, __LINE__);
 }
-
-void get_tok();
-void get_ident();
 
 #define IFDEF_DEPTH_MAX 20
 bool if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
@@ -750,7 +749,7 @@ int FILE__ID;
 int LINE__ID;
 
 // When we parse a macro, we generally want the tokens as they are, without expanding them.
-void get_tok_macro() {
+function get_tok_macro() {
   bool prev_expand_macro = expand_macro;
   bool prev_macro_mask = if_macro_mask;
   bool skip_newlines_prev = skip_newlines;
@@ -766,7 +765,7 @@ void get_tok_macro() {
 
 // Like get_tok_macro, but skips newline
 // This is useful when we want to read the arguments of a macro expansion.
-void get_tok_macro_expand() {
+function get_tok_macro_expand() {
   bool prev_expand_macro = expand_macro;
   bool prev_macro_mask = if_macro_mask;
 
@@ -1096,7 +1095,7 @@ void handle_preprocessor_directive() {
   // get_tok before returning.
 }
 
-void get_ident() {
+function get_ident() {
 
   begin_string();
 
@@ -1541,7 +1540,7 @@ void paste_tokens(int left_tok, int left_val) {
   }
 }
 
-void get_tok() {
+function get_tok() {
 
   int prev_tok_line_number = line_number;
   int prev_tok_column_number = column_number;
