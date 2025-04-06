@@ -1427,11 +1427,9 @@ bool attempt_macro_expansion(int macro) {
     if (macro == FILE__ID) {
       tokens = cons(cons(STRING, intern_str(fp_filepath)), 0);
     }
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
     else if (macro == LINE__ID) {
       tokens = cons(cons(INTEGER, -line_number), 0);
     }
-#endif
     begin_macro_expansion(macro, tokens, 0);
     return true;
   } else { // Function-like macro
@@ -1471,9 +1469,6 @@ void stringify() {
 int paste_integers(int left_val, int right_val) {
   int result = left_val;
   int right_digits = right_val;
-#ifdef SUPPORT_64_BIT_LITERALS
-  if (left_val < 0 || right_val < 0) fatal_error("Only small integers can be pasted");
-#endif
   while (right_digits > 0) {
     result *= 10;
     right_digits /= 10;
@@ -2098,23 +2093,12 @@ ast parse_enum() {
         value = parse_assignment_expression();
         if (value == 0) parse_error("Enum value must be a constant expression", tok);
 
-#ifdef PARSE_NUMERIC_LITERAL_WITH_BASE
-        // Preserve the type of integer literals (dec/hex/oct) by only creating
-        // a new node if the value is not already a literal. We use the last
-        // literal type to determine which type to use when creating a new node.
-        value = non_parenthesized_operand(value);
-        if (get_op(value) != INTEGER && get_op(value) != INTEGER_HEX && get_op(value) != INTEGER_OCT) {
-          value = new_ast0(last_literal_type, -eval_constant(value, false));
-        }
-        last_literal_type = get_op(value);
-#else
         if (get_op(value) != INTEGER
         && get_op(value) != INTEGER_U && get_op(value) != INTEGER_UL && get_op(value) != INTEGER_ULL
         && get_op(value) != INTEGER_L && get_op(value) != INTEGER_LL
            ) {
         value = new_ast0(last_literal_type, -eval_constant(value, false)); // negative value to indicate it's a small integer
         }
-#endif
         next_value = get_val(value) - 1; // Next value is the current value + 1, but val is negative
       } else {
         value = new_ast0(last_literal_type, next_value);
@@ -3381,27 +3365,6 @@ void emit_i64_le(int n) {
   // Sign extend to 64 bits. Arithmetic shift by 31 gives -1 for negative numbers and 0 for positive numbers.
   emit_i32_le(n >> 31);
 }
-
-#ifdef SUPPORT_64_BIT_LITERALS
-void emit_i32_le_large_imm(int imm_obj) {
-  if (imm_obj <= 0) {
-    emit_i32_le(-imm_obj);
-  } else {
-    // Check that the number doesn't overflow 64 bits
-    if (heap[imm_obj + 1] != 0) fatal_error("emit_i32_le_large_imm: integer overflow");
-    emit_i32_le(heap[imm_obj]);
-  }
-}
-
-void emit_i64_le_large_imm(int imm_obj) {
-  if (imm_obj <= 0) {
-    emit_i64_le(-imm_obj);
-  } else {
-    emit_i32_le(heap[imm_obj]);
-    emit_i32_le(heap[imm_obj + 1]);
-  }
-}
-#endif
 
 char write_buf[1];
 void write_i8(int n) {
