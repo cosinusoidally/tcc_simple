@@ -3959,34 +3959,16 @@ void def_label(int lbl) {
 
   if (heap[lbl] != GENERIC_LABEL) fatal_error("def_label expects generic label");
 
-  if (addr < 0) {
-#ifdef SAFE_MODE
-    putstr("Label ");
-    if (heap[lbl + 2] != 0) {
-      putstr((char*) heap[lbl + 2]);
-    } else {
-      putint(lbl);
-    }
-    putstr(" previously defined at ");
-    putstr((char*) heap[lbl + 3]);
-#ifdef INCLUDE_LINE_NUMBER_ON_ERROR
-    putstr(":");
-    putint(heap[lbl + 4]);
-#endif
-    fatal_error(" being redefined");
-#endif
-  } else {
-    heap[lbl + 1] = -label_addr; // define label's address
-    while (addr != 0) {
-      next = code[addr-1]; // get pointer to next patch address
-      code_alloc = addr;
-      addr = label_addr - addr; // compute relative address
-      code_alloc -= 4;
-      emit_i32_le(addr);
-      addr = next;
-    }
-    code_alloc = label_addr;
+  heap[lbl + 1] = -label_addr; // define label's address
+  while (addr != 0) {
+    next = code[addr-1]; // get pointer to next patch address
+    code_alloc = addr;
+    addr = label_addr - addr; // compute relative address
+    code_alloc -= 4;
+    emit_i32_le(addr);
+    addr = next;
   }
+  code_alloc = label_addr;
 }
 
 // Similar to use_label, but for gotos.
@@ -4674,21 +4656,7 @@ void codegen_call(ast node) {
     if (binding_kind(binding) != BINDING_FUN) binding = 0;
   }
 
-#ifdef SAFE_MODE
-  // Make sure fun has a type that can be called, either a function pointer or a function
-  ast type = value_type(fun);
-  if (!is_function_type(type)) {
-    putstr("type="); putint(get_op(type)); putchar('\n');
-    fatal_error("Called object is not a function or function pointer");
-  }
-  if (get_op(type) == '*') type = get_child_('*', type, 1); // Dereference function pointer
-  // allow_extra_params is true if the function is called indirectly or if the function is variadic
-  bool allow_extra_params = binding == 0;
-  if (get_child_('(', type, 2)) allow_extra_params = true;
-  nb_params = codegen_params(params, get_child_('(', type, 1), allow_extra_params);
-#else
   nb_params = codegen_params(params);
-#endif
 
   if (binding != 0) {
     // Generate a fast path for direct calls
@@ -6473,13 +6441,6 @@ void mov_mem8_reg(int base, int offset, int src) {
   // MOVB [base_reg + offset], src_reg  ;; Move byte from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
 
-#ifdef SAFE_MODE
-  // The ModR/M byte cannot encode lower registers that are not AL, CL, DL, or BL
-  if (src != AX && src != CX && src != DX && src != BX) {
-    fatal_error("mov_mem8_reg: src must one of AX, CX, DX, BX");
-  }
-#endif
-
   mov_memory(0x88, src, base, offset, 1);
 }
 
@@ -6642,10 +6603,6 @@ void div_reg_reg(int dst, int src) {
   // is emulated with a sequence of instructions that will clobber the
   // registers AX and DX.
 
-#ifdef SAFE_MODE
-  if (src == AX || src == DX) fatal_error("div_reg_reg: src cannot be AX");
-#endif
-
   mov_reg_reg(AX, dst);
   mov_reg_imm(DX, 0); // Clear DX
   div_reg(src);
@@ -6679,10 +6636,6 @@ void s_l_reg_reg(int dst, int src) {
   // This is not an actual instruction on x86. The operation
   // is emulated with a sequence of instructions that clobbers the
   // register CX, and does not work if dst = CX.
-
-#ifdef SAFE_MODE
-  if (dst == CX) fatal_error("s_l_reg_reg: dst cannot be CX");
-#endif
 
   mov_reg_reg(CX, src);
   s_l_reg_cl(dst);
