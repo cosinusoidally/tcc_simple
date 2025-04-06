@@ -6,7 +6,7 @@ time gcc -m32 --coverage -g -O0 -DBOOTSTRAP_LONG -Dtarget_i386_linux pnut.c -o .
 
 cd ..
 
-./mk_test_pnut_extra
+./mk_test_pnut_extra &> artifacts/fails.txt
 
 ./mk_tcc-boot-mes
 

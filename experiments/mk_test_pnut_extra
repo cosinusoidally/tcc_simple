@@ -1,9 +1,14 @@
 cd pnut_refactor
 
 for i in $(seq 10); do
-echo "TEST_$i" >> ../artifacts/fails.txt
-../artifacts/pnut-exe tests/fails.c -DTEST_$i -o ../artifacts/fails.exe &> ../artifacts/fails_tmp.txt
-cat ../artifacts/fails_tmp.txt >> ../artifacts/fails.txt
+echo "TEST_$i"
+../artifacts/pnut-exe tests/fails.c -DTEST_$i -o ../artifacts/fails.exe
 done
+
+echo "invalid_lit.c"
+../artifacts/pnut-exe tests/invalid_lit.c -o ../artifacts/fails.exe
+
+echo "mising.c"
+../artifacts/pnut-exe tests/missing.c -o ../artifacts/fails.exe
 
 exit 0
