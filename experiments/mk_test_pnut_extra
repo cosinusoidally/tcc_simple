@@ -1,4 +1,9 @@
 cd pnut_refactor
-../artifacts/pnut-exe tests/fails.c -o ../artifacts/fails.exe
+
+for i in $(seq 10); do
+echo "TEST_$i" >> ../artifacts/fails.txt
+../artifacts/pnut-exe tests/fails.c -DTEST_$i -o ../artifacts/fails.exe &> ../artifacts/fails_tmp.txt
+cat ../artifacts/fails_tmp.txt >> ../artifacts/fails.txt
+done
 
 exit 0
