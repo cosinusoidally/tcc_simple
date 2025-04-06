@@ -14,3 +14,10 @@ int blah(x) {
 }
 
 #endif
+
+#ifdef TEST_3
+
+#warning "This is a warning"
+#error "This is an error"
+
+#endif

@@ -6,6 +6,8 @@ TEST_2
 ident = i0
 tests/fails.c:15:0  identifier not found
 TEST_3
+warning: "This is a warning"
+error: "This is an error"
 TEST_4
 TEST_5
 TEST_6
