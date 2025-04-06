@@ -431,10 +431,6 @@ function end_string() {
   return end_ident();
 }
 
-function probe_string(probe) {
-  return heap[probe+1]; // return the start of the string
-}
-
 function expect_tok_(expected_tok, file, line);
 
 function expect_tok(expected_tok) {
