@@ -1,0 +1,31 @@
+TEST_1
+expected tok=125
+current tok=-1
+unexpected tokenNote, error emitted from pnut.c line 456
+TEST_2
+ident = i0
+tests/fails.c:15:0  identifier not found
+TEST_3
+TEST_4
+TEST_5
+TEST_6
+TEST_7
+TEST_8
+TEST_9
+TEST_10
+TEST invalid_lit.c
+tests/invalid_lit.c:1:7  syntax error: unimplemented string character escape
+TEST mising.c
+tests/missing.c
+Could not open file
+TEST unterminated_string.c
+tests/unterminated_string.c:1:11  syntax error: unterminated string literal
+TEST invalid option
+Option -z
+unknown option
+TEST no input file
+Usage: ../artifacts/pnut-exe <filename>
+no input file
+TEST undefine macro
+Usage: ../artifacts/pnut-exe <filename>
+no input file

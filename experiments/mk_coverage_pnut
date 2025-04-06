@@ -8,6 +8,8 @@ cd ..
 
 ./mk_test_pnut_extra &> artifacts/fails.txt
 
+diff -u -s artifacts/fails.txt pnut_refactor/tests/fails.txt
+
 ./mk_tcc-boot-mes
 
 gcovr -r pnut_refactor artifacts --html-details -o artifacts/example.html
