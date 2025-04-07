@@ -367,9 +367,9 @@ function begin_string() {
 
 // Append the current character (ch) to the string under construction in the pool
 function accum_string() {
-  hash = (ch + (hash ^ HASH_PARAM)) % HASH_PRIME;
+  hash = mod(add(ch, xor(hash, HASH_PARAM)), HASH_PRIME);
   string_pool[string_pool_alloc] = ch;
-  string_pool_alloc += 1;
+  string_pool_alloc = add(string_pool_alloc, 1);
   if (string_pool_alloc >= STRING_POOL_SIZE) {
     fatal_error(mks("string pool overflow"));
   }
