@@ -604,19 +604,22 @@ function str_concat(s1, s2) {
 // Removes the last component of the path, keeping the trailing slash if any.
 // For example, /a/b/c.txt -> /a/b/
 // If the path does not contain a slash, it returns "".
-char *file_parent_directory(char *path) {
-  int i = 0;
-  int last_slash = -1;
-  while (path[i] != '\0') {
-    if (path[i] == '/') last_slash = i;
-
-    i += 1;
+function file_parent_directory(path) {
+  int i;
+  int last_slash;
+  i = 0;
+  last_slash = sub(0, 1);
+  while (neq(ri8(add(path, i)), 0)) {
+    if (eq(ri8(add(path, i)), mkc('/'))) {
+      last_slash = i;
+    }
+    i = add(i, 1);
   }
-  if (last_slash == -1) {
+  if (eq(last_slash, sub(i, 1))) {
     path = malloc(1);
-    path[0] = '\0';
+    wi8(path, 0);
   } else {
-    path = substr(path, 0, last_slash + 1);
+    path = substr(path, 0, add(last_slash, 1));
   }
   return path;
 }
