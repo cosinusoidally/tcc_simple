@@ -768,35 +768,35 @@ var INCLUDE_ID;
 var DEFINED_ID;
 var WARNING_ID;
 var ERROR_ID;
-int INCLUDE_SHELL_ID;
+var INCLUDE_SHELL_ID;
 
-int NOT_SUPPORTED_ID;
+var NOT_SUPPORTED_ID;
 
 // We want to recognize certain identifers without having to do expensive string comparisons
-int ARGV__ID;
-int ARGV_ID;
-int IFS_ID;
-int MAIN_ID;
+var ARGV__ID;
+var ARGV_ID;
+var IFS_ID;
+var MAIN_ID;
 
-int PUTCHAR_ID;
-int GETCHAR_ID;
-int EXIT_ID;
-int MALLOC_ID;
-int FREE_ID;
-int PRINTF_ID;
-int FOPEN_ID;
-int FCLOSE_ID;
-int FGETC_ID;
-int PUTSTR_ID;
-int PUTS_ID;
-int READ_ID;
-int WRITE_ID;
-int OPEN_ID;
-int CLOSE_ID;
+var PUTCHAR_ID;
+var GETCHAR_ID;
+var EXIT_ID;
+var MALLOC_ID;
+var FREE_ID;
+var PRINTF_ID;
+var FOPEN_ID;
+var FCLOSE_ID;
+var FGETC_ID;
+var PUTSTR_ID;
+var PUTS_ID;
+var READ_ID;
+var WRITE_ID;
+var OPEN_ID;
+var CLOSE_ID;
 
 // Macros that are defined by the preprocessor
-int FILE__ID;
-int LINE__ID;
+var FILE__ID;
+var LINE__ID;
 
 // When we parse a macro, we generally want the tokens as they are, without expanding them.
 function get_tok_macro() {
@@ -826,18 +826,23 @@ function get_tok_macro_expand() {
   if_macro_mask = prev_macro_mask;
 }
 
-int lookup_macro_token(int args, int tok, int val) {
-  int ix = 0;
+function lookup_macro_token(args, tok, val) {
+  int ix;
+  ix = 0;
 
-  if (tok < IDENTIFIER) return cons(tok, val); // Not an identifier
-
-  while (args != 0) {
-    if (car(args) == val) break; // Found!
-    args = cdr(args);
-    ix += 1;
+  if (lt(tok, IDENTIFIER)) {
+    return cons(tok, val); // Not an identifier
   }
 
-  if (args == 0) { // Identifier is not a macro argument
+  while (neq(args, 0)) {
+    if (eq(car(args), val)) {
+      break; // Found!
+    }
+    args = cdr(args);
+    ix = add(ix, 1);
+  }
+
+  if (eq(args, 0)) { // Identifier is not a macro argument
     return cons(tok, val);
   } else {
     return cons(MACRO_ARG, ix);
