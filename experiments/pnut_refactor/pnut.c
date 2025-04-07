@@ -504,7 +504,7 @@ function prev_macro_mask() {
   return r_if_macro_stack(sub(if_macro_stack_ix, 2));
 }
 
-void push_if_macro_mask(bool new_mask) {
+function push_if_macro_mask(new_mask) {
   if (gte(if_macro_stack_ix, IFDEF_DEPTH_MAX)) {
     fatal_error(mks("Too many nested #ifdef/#ifndef directives. Maximum supported is 20."));
   }
@@ -517,19 +517,20 @@ void push_if_macro_mask(bool new_mask) {
   new_mask = and(if_macro_mask, new_mask);
 
   // Then set the new mask value and reset the executed flag
-  if_macro_mask = if_macro_executed = new_mask;
+  if_macro_mask = new_mask;
+  if_macro_executed = new_mask;
 }
 
-void pop_if_macro_mask() {
-  if (if_macro_stack_ix == 0) {
-    fatal_error("Unbalanced #ifdef/#ifndef/#else/#endif directives.");
+function pop_if_macro_mask() {
+  if (eq(if_macro_stack_ix, 0)) {
+    fatal_error(mks("Unbalanced #ifdef/#ifndef/#else/#endif directives."));
   }
-  if_macro_stack_ix -= 2;
-  if_macro_mask = if_macro_stack[if_macro_stack_ix];
-  if_macro_executed = if_macro_stack[if_macro_stack_ix + 1];
+  if_macro_stack_ix = sub(if_macro_stack_ix, 2);
+  if_macro_mask = r_if_macro_stack(if_macro_stack_ix);
+  if_macro_executed = r_if_macro_stack(if_macro_stack_ix, 1);
 }
 
-void get_ch() {
+function get_ch() {
   ch = fgetc(fp);
 
   if (ch == EOF) {
