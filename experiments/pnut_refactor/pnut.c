@@ -658,19 +658,19 @@ function include_file(file_name, relative_to) {
 }
 
 function DIGIT_BYTE(val) {
-  return (-val % 256);
+  return (mod(sub(0, val), 256));
 }
 
 function INIT_ACCUM_DIGIT() {
   return 0;
 }
 
-int accum_digit(int base) {
+function accum_digit(base) {
   int digit = 99;
-  if ('0' <= ch && ch <= '9') {
-    digit = ch - '0';
-  } else if ('A' <= ch && ch <= 'Z') {
-    digit = ch - 'A' + 10;
+  if (and(lte(mkc('0'), ch), lte(ch, mkc('9')))) {
+    digit = sub(ch, mkc('0'));
+  } else if (and(lte(mkc('A'), ch), lte(ch, mkc('Z')))) {
+    digit = add(sub(ch, mkc('A')), 10);
   } else if ('a' <= ch && ch <= 'z') {
     digit = ch - 'a' + 10;
   }
