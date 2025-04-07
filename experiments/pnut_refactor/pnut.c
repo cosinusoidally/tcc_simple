@@ -998,20 +998,23 @@ function eval_constant(expr, if_macro) {
         case '|':     return or(op1, op2);
         case '^':     return xor(op1, op2);
         case LSHIFT:  return shl(op1, op2);
-        case RSHIFT:  return op1 >> op2;
-        case EQ_EQ:   return op1 == op2;
-        case EXCL_EQ: return op1 != op2;
-        case LT_EQ:   return op1 <= op2;
-        case GT_EQ:   return op1 >= op2;
-        case '<':     return op1 < op2;
-        case '>':     return op1 > op2;
+        case RSHIFT:  return shr(op1, op2);
+        case EQ_EQ:   return eq(op1, op2);
+        case EXCL_EQ: return neq(op1, op2);
+        case LT_EQ:   return lte(op1, op2);
+        case GT_EQ:   return gte(op1, op2);
+        case '<':     return lt(op1, op2);
+        case '>':     return gt(op1, op2);
       }
       return 0; // Should never reach here
 
     case AMP_AMP:
       op1 = eval_constant(child0, if_macro);
-      if (!op1) return 0;
-      else return eval_constant(child1, if_macro);
+      if (eq(0,op1)) {
+        return 0;
+      } else {
+        return eval_constant(child1, if_macro);
+      }
 
     case BAR_BAR:
       op1 = eval_constant(child0, if_macro);
