@@ -671,10 +671,10 @@ function accum_digit(base) {
     digit = sub(ch, mkc('0'));
   } else if (and(lte(mkc('A'), ch), lte(ch, mkc('Z')))) {
     digit = add(sub(ch, mkc('A')), 10);
-  } else if ('a' <= ch && ch <= 'z') {
+  } else if (and(lte(mkc('a'), ch), lte(ch, mkc('z')))) {
     digit = ch - 'a' + 10;
   }
-  if (digit >= base) {
+  if (gte(digit, base)) {
     return 0; // character is not a digit in that base
   } else {
     // TODO: Put overflow check back
@@ -682,19 +682,19 @@ function accum_digit(base) {
     //   fatal_error("literal integer overflow");
     // }
 
-    val = val * base - digit;
+    val = sub(mul(val, base), digit);
     get_ch();
     return 1;
   }
 }
 
-void get_string_char() {
+function get_string_char() {
 
   val = ch;
   get_ch();
 
-  if (val == '\\') {
-    if ('0' <= ch && ch <= '7') {
+  if (eq(val, mkc('\\'))) {
+    if (and(lte(mkc('0'), ch), lte(ch, mkc('7')))) {
       // Parse octal character, up to 3 digits.
       // Note that \1111 is parsed as '\111' followed by '1'
       // See https://en.wikipedia.org/wiki/Escape_sequences_in_C#Notes
