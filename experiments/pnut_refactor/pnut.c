@@ -136,9 +136,11 @@ function putstr(str) {
   }
 }
 
-void putint_aux(int n) {
-  if (n <= -10) putint_aux(n / 10);
-  putchar('0' - (n % 10));
+function putint_aux(n) {
+  if (lte(n, sub(0,10))) {
+    putint_aux(div_(n, 10));
+  }
+  putchar(sub(mkc('0'), mod(n, 10)));
 }
 
 void putint(int n) {
