@@ -569,10 +569,12 @@ function strlen(str) {
   return i;
 }
 
-void memcpy(char *dest, char *src, int n) {
+function memcpy(dest, src, n) {
   int i;
-  for (i = 0; i < n; i += 1) {
-    dest[i] = src[i];
+  i = 0;
+  while(lt(i, n)) {
+    wi8(add(dest, i), ri8(add(src, i)));
+    i = add(i, 1);
   }
 }
 
