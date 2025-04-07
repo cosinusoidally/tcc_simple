@@ -888,22 +888,22 @@ function handle_define() {
   args_count = sub(0, 1);
 
   if (and(and(neq(tok,IDENTIFIER),neq(tok,MACRO)),or(lt(tok,AUTO_KW),lt(tok,WHILE_KW)))) {
-    putstr("tok="); putint(tok); putchar('\n');
-    syntax_error("#define directive can only be followed by a identifier");
+    putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
+    syntax_error(mks("#define directive can only be followed by a identifier"));
   }
 
-  heap[val + 2] = MACRO; // Mark the identifier as a macro
+  heap[add(val, 2)] = MACRO; // Mark the identifier as a macro
   macro = val;
-  if (ch == '(') { // Function-like macro
+  if (eq(ch, mkc('('))) { // Function-like macro
     args_count = 0;
     get_tok_macro(); // Skip macro name
     get_tok_macro(); // Skip '('
-    while (tok != '\n' && tok != EOF) {
-      if (tok == ',') {
+    while (and(neq(tok, mkc('\n')), neq(tok, EOF))) {
+      if (eq(tok, mkc(','))) {
         // Allow sequence of commas, this is more lenient than the standard
         get_tok_macro();
         continue;
-      } else if (tok == ')') {
+      } else if (eq(tok, mkc(')'))) {
         get_tok_macro();
         break;
       }
@@ -911,25 +911,32 @@ function handle_define() {
       // Accumulate parameters in reverse order. That's ok because the arguments
       // to the macro will also be in reverse order.
       args = cons(val, args);
-      args_count += 1;
+      args_count = add(args_count, 1);
     }
   } else {
     get_tok_macro(); // Skip macro name
   }
 
   // Accumulate tokens so they can be replayed when the macro is used
-  heap[macro + 3] = cons(read_macro_tokens(args), args_count);
+  heap[add(macro, 3)] = cons(read_macro_tokens(args), args_count);
 
 }
 
-int eval_constant(ast expr, bool if_macro) {
-  int op = get_op(expr);
-  int op1;
-  int op2;
-  ast child0, child1;
+function eval_constant(expr, if_macro) {
+  var op;
+  var op1;
+  var op2;
+  var child0;
+  var child1;
 
-  if (get_nb_children(expr) >= 1) child0 = get_child(expr, 0);
-  if (get_nb_children(expr) >= 2) child1 = get_child(expr, 1);
+  op = get_op(expr);
+
+  if (gte(get_nb_children(expr), 1)) {
+    child0 = get_child(expr, 0);
+  }
+  if (gte(get_nb_children(expr), 2)) {
+    child1 = get_child(expr, 1);
+  }
 
   switch (op) {
     case PARENS:      return eval_constant(child0, if_macro);
@@ -939,10 +946,10 @@ int eval_constant(ast expr, bool if_macro) {
     case INTEGER_U:
     case INTEGER_UL:
     case INTEGER_ULL:
-      return -get_val(expr);
+      return sub(0, get_val(expr));
     case CHARACTER:   return get_val_(CHARACTER, expr);
-    case '~':         return ~eval_constant(child0, if_macro);
-    case '!':         return !eval_constant(child0, if_macro);
+    case '~':         return not(eval_constant(child0, if_macro));
+    case '!':         return eq(0, eval_constant(child0, if_macro));
     case '-':
     case '+':
       op1 = eval_constant(child0, if_macro);
