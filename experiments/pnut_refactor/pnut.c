@@ -1314,7 +1314,7 @@ function init_ident_table() {
 
   // Stringizing is recognized by the macro expander, but it returns a hardcoded
   // string instead of the actual value. This may be enough to compile TCC.
-  NOT_SUPPORTED_ID = init_ident(IDENTIFIER, "NOT_SUPPORTED");
+  NOT_SUPPORTED_ID = init_ident(IDENTIFIER, mks("NOT_SUPPORTED"));
 }
 
 int init_builtin_string_macro(char *macro_str, char* value) {
