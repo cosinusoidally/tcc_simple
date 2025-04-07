@@ -351,7 +351,7 @@ function accum_string() {
   string_pool[string_pool_alloc] = ch;
   string_pool_alloc += 1;
   if (string_pool_alloc >= STRING_POOL_SIZE) {
-    fatal_error("string pool overflow");
+    fatal_error(mks("string pool overflow"));
   }
 }
 
@@ -403,10 +403,10 @@ int end_ident() {
   string_pool[string_pool_alloc] = 0; // terminate string
   string_pool_alloc += 1; // account for terminator
 
-  probe = heap[hash];
+  probe = r_heap(hash);
 
   while (probe != 0) {
-    probe_start = heap[probe+1];
+    probe_start = r_heap(add(probe,1));
     end_ident_i = 0;
     c1 = string_pool[string_start+end_ident_i];
     c2 = string_pool[probe_start+end_ident_i];
@@ -3352,12 +3352,6 @@ void emit_i32_le(int n) {
   emit_4_i8(n, n >> 8, n >> 16, n >> 24);
 }
 
-void emit_i64_le(int n) {
-  emit_i32_le(n);
-  // Sign extend to 64 bits. Arithmetic shift by 31 gives -1 for negative numbers and 0 for positive numbers.
-  emit_i32_le(n >> 31);
-}
-
 char write_buf[1];
 void write_i8(int n) {
   write_buf[0] = (n & 0xff);
@@ -3489,16 +3483,6 @@ int cgc_lookup_enum_value(int ident, int env) {
   return cgc_lookup_binding_ident(BINDING_ENUM_CST, ident, env);
 }
 
-int cgc_loop_depth(int binding) {
-  int loop_depth = 0;
-  binding = cgc_lookup_enclosing_loop(binding); // Find the first loop
-  while (binding != 0) {
-    binding = cgc_lookup_enclosing_loop(binding_next(binding));
-    loop_depth += 1;
-  }
-  return loop_depth;
-}
-
 int cgc_add_local(enum BINDING binding_type, int ident, ast type, int env) {
   int binding = alloc_obj(5);
   heap[binding+0] = env;
@@ -3608,15 +3592,12 @@ void mov_reg_reg(int dst, int src);
 void mov_mem8_reg(int base, int offset, int src);
 void mov_mem16_reg(int base, int offset, int src);
 void mov_mem32_reg(int base, int offset, int src);
-void mov_mem64_reg(int base, int offset, int src);
 void mov_mem8_reg(int base, int offset, int src);
 void mov_reg_mem8(int dst, int base, int offset);
 void mov_reg_mem16(int dst, int base, int offset);
 void mov_reg_mem32(int dst, int base, int offset);
 void mov_reg_mem8_sign_ext(int dst, int base, int offset);
 void mov_reg_mem16_sign_ext(int dst, int base, int offset);
-void mov_reg_mem32_sign_ext(int dst, int base, int offset);
-void mov_reg_mem64(int dst, int base, int offset);
 
 #define mov_mem_reg(base, offset, src) mov_mem32_reg(base, offset, src)
 #define mov_reg_mem(dst, base, offset) mov_reg_mem32(dst, base, offset)
@@ -3677,7 +3658,6 @@ void write_mem_location(int base, int offset, int src, int width) {
     case 1: mov_mem8_reg(base, offset, src); break;
     case 2: mov_mem16_reg(base, offset, src); break;
     case 4: mov_mem32_reg(base, offset, src); break;
-    case 8: mov_mem64_reg(base, offset, src); break;
     default: fatal_error("write_mem_location: unknown width");
   }
 }
@@ -6395,14 +6375,6 @@ void mov_mem32_reg(int base, int offset, int src) {
   mov_memory(0x89, src, base, offset, 4);
 }
 
-void mov_mem64_reg(int base, int offset, int src) {
-
-  // MOVB [base_reg + offset], src_reg  ;; Move qword (8 bytes) from register to memory
-  // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
-
-  mov_memory(0x89, src, base, offset, 8);
-}
-
 void mov_reg_mem8(int dst, int base, int offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, zero-extended
@@ -6443,22 +6415,6 @@ void mov_reg_mem16_sign_ext(int dst, int base, int offset) {
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
 
   mov_memory_extend(0xbf, dst, base, offset, true);
-}
-
-void mov_reg_mem32_sign_ext(int dst, int base, int offset) {
-
-  // MOV dst_reg, [base_reg + offset]  ;; Move dword (4 bytes) from memory to register, sign-extended
-  // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
-
-  mov_memory_extend(0x63, dst, base, offset, false);
-}
-
-void mov_reg_mem64(int dst, int base, int offset) {
-
-  // MOV dst_reg, [base_reg + offset]  ;; Move qword (8 bytes) from memory to register
-  // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
-
-  mov_memory(0x8b, dst, base, offset, 8);
 }
 
 void imul_reg_reg(int dst, int src) {
