@@ -561,7 +561,7 @@ function get_ch() {
 
 // TODO: It would be nice to not have to duplicate this code
 function strlen(str) {
-  int i;
+  var i;
   i = 0;
   while (neq(ri8(add(str, i)), 0)) {
     i = add(i, 1);
@@ -570,7 +570,7 @@ function strlen(str) {
 }
 
 function memcpy(dest, src, n) {
-  int i;
+  var i;
   i = 0;
   while(lt(i, n)) {
     wi8(add(dest, i), ri8(add(src, i)));
@@ -579,8 +579,8 @@ function memcpy(dest, src, n) {
 }
 
 function substr(str, start, end) {
-  int len;
-  int temp;
+  var len;
+  var temp;
   len = sub(end, start);
   temp = malloc(add(len, 1));
   memcpy(temp, add(str, start), len);
@@ -589,9 +589,9 @@ function substr(str, start, end) {
 }
 
 function str_concat(s1, s2) {
-  int s1_len;
-  int s2_len;
-  int temp;
+  var s1_len;
+  var s2_len;
+  var temp;
   s1_len = strlen(s1);
   s2_len = strlen(s2);
   temp = malloc(add(add(s1_len, s2_len), 1));
@@ -605,8 +605,8 @@ function str_concat(s1, s2) {
 // For example, /a/b/c.txt -> /a/b/
 // If the path does not contain a slash, it returns "".
 function file_parent_directory(path) {
-  int i;
-  int last_slash;
+  var i;
+  var last_slash;
   i = 0;
   last_slash = sub(0, 1);
   while (neq(ri8(add(path, i)), 0)) {
@@ -624,16 +624,16 @@ function file_parent_directory(path) {
   return path;
 }
 
-FILE *fopen_source_file(char *file_name, char *relative_to) {
-  FILE *fp;
+function fopen_source_file(file_name, relative_to) {
+  var fp;
   fp_filepath = file_name;
   if (relative_to) {
     fp_filepath = str_concat(relative_to, fp_filepath);
   }
-  fp = fopen(fp_filepath, "r");
-  if (fp == 0) {
-    putstr(fp_filepath); putchar('\n');
-    fatal_error("Could not open file");
+  fp = fopen(fp_filepath, mks("r"));
+  if (eq(fp, 0)) {
+    putstr(fp_filepath); putchar(mkc('\n'));
+    fatal_error(mks("Could not open file"));
   }
   return fp;
 }
