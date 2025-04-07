@@ -205,15 +205,15 @@ function alloc_obj(size) {
 }
 
 function get_op(node) {
-  return heap[node] & 1023;
+  return and(r_heap(node), 1023);
 }
 
 function get_nb_children(node) {
-  return heap[node] >> 10;
+  return shr(r_heap(node), 10);
 }
 
 function get_val(node) {
-  return heap[node+1];
+  return r_heap(add(node,1));
 }
 
 function set_val(node, val) {
