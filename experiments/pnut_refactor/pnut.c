@@ -953,11 +953,17 @@ function eval_constant(expr, if_macro) {
     case '-':
     case '+':
       op1 = eval_constant(child0, if_macro);
-      if (get_nb_children(expr) == 1) {
-        return op == '-' ? -op1 : op1;
+      if (eq(get_nb_children(expr), 1)) {
+        if(eq(op, mkc('-'))) {
+          return sub(0, op1);
+        }
+        return op1;
       } else {
         op2 = eval_constant(child1, if_macro);
-        return op == '-' ? op1 - op2 : op1 + op2;
+        if(eq(op,mkc('-'))) {
+          return sub(op1, op2);
+        }
+        return add(op1, op2);
       }
 
     case '?':
@@ -985,13 +991,13 @@ function eval_constant(expr, if_macro) {
       op1 = eval_constant(child0, if_macro);
       op2 = eval_constant(child1, if_macro);
       switch (op) {
-        case '*':     return op1 * op2;
-        case '/':     return op1 / op2;
-        case '%':     return op1 % op2;
-        case '&':     return op1 & op2;
-        case '|':     return op1 | op2;
-        case '^':     return op1 ^ op2;
-        case LSHIFT:  return op1 << op2;
+        case '*':     return mul(op1, op2);
+        case '/':     return div_(op1, op2);
+        case '%':     return mod(op1, op2);
+        case '&':     return and(op1, op2);
+        case '|':     return or(op1, op2);
+        case '^':     return xor(op1, op2);
+        case LSHIFT:  return shl(op1, op2);
         case RSHIFT:  return op1 >> op2;
         case EQ_EQ:   return op1 == op2;
         case EXCL_EQ: return op1 != op2;
