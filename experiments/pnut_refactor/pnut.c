@@ -199,8 +199,8 @@ function alloc_obj(size) {
   alloc_result = heap_alloc;
   heap_alloc = add(heap_alloc, size);
 
-  if (heap_alloc > HEAP_SIZE) {
-    fatal_error("heap overflow");
+  if (gt(heap_alloc, HEAP_SIZE)) {
+    fatal_error(mks("heap overflow"));
   }
 
   return alloc_result;
@@ -272,7 +272,7 @@ function new_ast2(op, child0, child1) {
 
   ast_result = alloc_obj(3);
 
-  heap[ast_result] = op + 2048;
+  heap[ast_result] = add(op, 2048);
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
 
@@ -283,7 +283,7 @@ function new_ast3(op, child0, child1, child2) {
 
   ast_result = alloc_obj(4);
 
-  heap[ast_result] = op + 3072;
+  heap[ast_result] = add(op, 3072);
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
   set_child(ast_result, 2, child2);
@@ -295,7 +295,7 @@ function new_ast4(op, child0, child1, child2, child3) {
 
   ast_result = alloc_obj(5);
 
-  heap[ast_result] = op + 4096;
+  heap[ast_result] = add(op, 4096);
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
   set_child(ast_result, 2, child2);
@@ -311,9 +311,11 @@ function clone_ast(orig) {
   nb_children = get_nb_children(orig);
 
   // Account for the value of ast nodes with no child
-  if (nb_children == 0) nb_children = 1;
+  if (eq(nb_children, 0)) {
+    nb_children = 1;
+  }
 
-  ast_result = alloc_obj(nb_children + 1);
+  ast_result = alloc_obj(add(nb_children, 1));
 
   heap[ast_result] = r_heap(orig); // copy operator and nb of children
   for (i = 0; i < nb_children; i += 1) {
