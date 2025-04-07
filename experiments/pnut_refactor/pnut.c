@@ -221,7 +221,7 @@ function set_val(node, val) {
 }
 
 function get_child(node, i) {
-  return heap[node+i+1];
+  return r_heap(add(node, add(i,1)));
 }
 
 function set_child(node, i, child) {
@@ -260,7 +260,7 @@ function new_ast1(op, child0) {
 
   ast_result = alloc_obj(2);
 
-  heap[ast_result] = op + 1024;
+  heap[ast_result] = add(op, 1024);
   set_child(ast_result, 0, child0);
 
   return ast_result;
@@ -313,7 +313,7 @@ function clone_ast(orig) {
 
   ast_result = alloc_obj(nb_children + 1);
 
-  heap[ast_result] = heap[orig]; // copy operator and nb of children
+  heap[ast_result] = r_heap(orig); // copy operator and nb of children
   for (i = 0; i < nb_children; i += 1) {
     set_child(ast_result, i, get_child(orig, i));
   }
@@ -333,11 +333,11 @@ function tail(x) { return cdr_(LIST, x); }
 
 // Simple accessor to get the string from the string pool
 function STRING_BUF(string_val) {
-  return (string_pool + heap[string_val+1]);
+  return add(string_pool, r_heap(add(string_val,1)));
 }
 
 function STRING_LEN(string_val) {
-  return (heap[string_val+4]);
+  return r_heap(add(string_val,4));
 }
 
 function begin_string() {
