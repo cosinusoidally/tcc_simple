@@ -143,12 +143,12 @@ function putint_aux(n) {
   putchar(sub(mkc('0'), mod(n, 10)));
 }
 
-void putint(int n) {
-  if (n < 0) {
-    putchar('-');
+function putint(n) {
+  if (lt(n, 0)) {
+    putchar(mkc('-'));
     putint_aux(n);
   } else {
-    putint_aux(-n);
+    putint_aux(sub(0, n));
   }
 }
 
