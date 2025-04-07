@@ -318,8 +318,10 @@ function clone_ast(orig) {
   ast_result = alloc_obj(add(nb_children, 1));
 
   heap[ast_result] = r_heap(orig); // copy operator and nb of children
-  for (i = 0; i < nb_children; i += 1) {
+  i = 0;
+  while(lt(i, nb_children)) {
     set_child(ast_result, i, get_child(orig, i));
+    i = add(i,1);
   }
 
   return ast_result;
@@ -327,8 +329,12 @@ function clone_ast(orig) {
 
 // TODO: Use macro to avoid indirection?
 // Functions used to create and access lists.
-function cons(child0, child1)    { return new_ast2(LIST, child0, child1); }
-function car(pair)               { return get_child_(LIST, pair, 0); }
+function cons(child0, child1) {
+  return new_ast2(LIST, child0, child1);
+}
+function car(pair) {
+  return get_child_(LIST, pair, 0);
+}
 function car_(expected_op, pair) { return get_child__(LIST, expected_op, pair, 0); }
 function cdr(pair)               { return get_child_(LIST, pair, 1); }
 function cdr_(expected_op, pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
