@@ -474,6 +474,10 @@ var if_macro_stack_ix = 0;
 var if_macro_mask = true;      // Indicates if the current if/elif block is being executed
 var if_macro_executed = false; // If any of the previous if/elif conditions were true
 
+function r_if_macro_stack(o) {
+  return ri32(add(if_macro_stack,mul(4,o)));
+}
+
 // get_tok parameters:
 // Whether to expand macros or not.
 // Useful to parse macro definitions containing other macros without expanding them.
@@ -493,21 +497,24 @@ var macro_ident = 0;    // The identifier of the macro being expanded (if any)
 var macro_args_count;   // Number of arguments for the current macro being expanded
 var paste_last_token = false; // Whether the last token was a ## or not
 
-bool prev_macro_mask() {
-  return if_macro_stack_ix == 0 || if_macro_stack[if_macro_stack_ix - 2];
+function prev_macro_mask() {
+  if(eq(if_macro_stack_ix, 0)) {
+    return 0;
+  }
+  return r_if_macro_stack(sub(if_macro_stack_ix, 2));
 }
 
 void push_if_macro_mask(bool new_mask) {
-  if (if_macro_stack_ix >= IFDEF_DEPTH_MAX) {
-    fatal_error("Too many nested #ifdef/#ifndef directives. Maximum supported is 20.");
+  if (gte(if_macro_stack_ix, IFDEF_DEPTH_MAX)) {
+    fatal_error(mks("Too many nested #ifdef/#ifndef directives. Maximum supported is 20."));
   }
   // Save current mask on the stack because it's about to be overwritten
   if_macro_stack[if_macro_stack_ix] = if_macro_mask;
-  if_macro_stack[if_macro_stack_ix + 1] = if_macro_executed;
-  if_macro_stack_ix += 2;
+  if_macro_stack[add(if_macro_stack_ix, 1)] = if_macro_executed;
+  if_macro_stack_ix = add(if_macro_stack_ix, 2);
 
   // If the current block is masked off, then the new mask is the logical AND of the current mask and the new mask
-  new_mask = if_macro_mask & new_mask;
+  new_mask = and(if_macro_mask, new_mask);
 
   // Then set the new mask value and reset the executed flag
   if_macro_mask = if_macro_executed = new_mask;
