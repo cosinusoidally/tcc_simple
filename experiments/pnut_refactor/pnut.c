@@ -2196,10 +2196,8 @@ ast parse_type_specifier() {
     case CHAR_KW:
     case INT_KW:
     case VOID_KW:
-#ifndef sh
     case FLOAT_KW:
     case DOUBLE_KW:
-#endif
       type_specifier = new_ast0(tok, 0);
       get_tok();
       return type_specifier;
@@ -2216,7 +2214,6 @@ ast parse_type_specifier() {
       if (type_specifier == 0) type_specifier = new_ast0(INT_KW, 0);
       return type_specifier;
 
-#ifndef sh
     case UNSIGNED_KW:
       get_tok();
       type_specifier = parse_type_specifier();
@@ -2225,16 +2222,13 @@ ast parse_type_specifier() {
       // Set the unsigned flag
       else set_val(type_specifier, get_val(type_specifier) | MK_TYPE_SPECIFIER(UNSIGNED_KW));
       return type_specifier;
-#endif
 
     case LONG_KW:
       get_tok();
-#ifndef sh
       if (tok == DOUBLE_KW) {
         get_tok();
         return new_ast0(DOUBLE_KW, 0);
       } else
-#endif
       {
         if (tok == LONG_KW) {
           get_tok();
