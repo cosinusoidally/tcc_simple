@@ -1,14 +1,14 @@
 #include "support.c"
 #include "support_common.c"
 
-#define O_WRONLY 01
-#define O_CREAT  0100
-#define O_TRUNC  01000
-
 #define function int
 #define var int
 #define bool int
 #define FILE int
+
+var O_WRONLY;
+var O_CREAT;
+var O_TRUNC;
 
 /* decls */
 
@@ -6837,7 +6837,12 @@ void handle_macro_D(char *opt) {
 }
 
 function init_globals() {
+  O_WRONLY = 01;
+  O_CREAT  = 0100;
+  O_TRUNC  = 01000;
+
   heap_alloc = HASH_PRIME;
+
   STRING_POOL_SIZE = 500000;
   string_pool = malloc(STRING_POOL_SIZE);
 }
