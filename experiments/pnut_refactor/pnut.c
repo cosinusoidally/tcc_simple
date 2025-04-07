@@ -1099,7 +1099,7 @@ function handle_preprocessor_directive() {
   if (and(eq(tok,IDENTIFIER),or(eq(val,IFDEF_ID),eq(val,IFNDEF_ID)))) {
     temp = val;
     get_tok_macro(); // Get the macro name
-      push_if_macro_mask(temp == IFDEF_ID ? tok == MACRO : tok != MACRO);
+    push_if_macro_mask(eq(temp,IFDEF_ID) ? eq(tok,MACRO) : neq(tok,MACRO));
     get_tok_macro(); // Skip the macro name
   } else if (tok == IF_KW) {
     temp = evaluate_if_condition() != 0;
