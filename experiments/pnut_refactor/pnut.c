@@ -368,7 +368,7 @@ function begin_string() {
 // Append the current character (ch) to the string under construction in the pool
 function accum_string() {
   hash = mod(add(ch, xor(hash, HASH_PARAM)), HASH_PRIME);
-  string_pool[string_pool_alloc] = ch;
+  wi8(add(string_pool, string_pool_alloc), ch);
   string_pool_alloc = add(string_pool_alloc, 1);
   if (gte(string_pool_alloc, STRING_POOL_SIZE)) {
     fatal_error(mks("string pool overflow"));
@@ -388,28 +388,28 @@ function accum_string_char(c) {
 
 // Append a string from the string_pool to the string under construction
 function accum_string_string(string_probe) {
-  char *string_start;
-  char *string_end;
+  var string_start;
+  var string_end;
 
   string_start = STRING_BUF(string_probe);
-  string_end = string_start + STRING_LEN(string_probe);
-  while (string_start < string_end) {
-    accum_string_char(*string_start);
-    string_start += 1;
+  string_end = add(string_start, STRING_LEN(string_probe));
+  while (lt(string_start, string_end)) {
+    accum_string_char(ri8(string_start));
+    string_start = add(string_start, 1);
   }
 }
 
 // Similar to accum_string_string, but writes an integer to the string pool
 // Note that this function only supports small integers, represented as positive number.
 function accum_string_integer(n) {
-  if (n < 0) {
-    accum_string_char('-');
-    accum_string_integer(-n);
+  if (lt(n, 0)) {
+    accum_string_char(mkc('-'));
+    accum_string_integer(sub(0, n));
   } else {
-    if (n > 9) {
-      accum_string_integer(n / 10);
+    if (gt(n, 9)) {
+      accum_string_integer(div_(n, 10));
     }
-    accum_string_char('0' + n % 10);
+    accum_string_char(add(mkc('0'), mod(n, 10)));
   }
 }
 
@@ -419,7 +419,7 @@ var c1;
 var c2;
 var end_ident_i;
 
-int end_ident() {
+function end_ident() {
   string_pool[string_pool_alloc] = 0; // terminate string
   string_pool_alloc += 1; // account for terminator
 
