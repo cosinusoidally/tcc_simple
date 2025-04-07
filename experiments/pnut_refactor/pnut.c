@@ -129,10 +129,10 @@ enum {
   LIST = 600, // List object
 };
 
-void putstr(char *str) {
-  while (*str) {
-    putchar(*str);
-    str += 1;
+function putstr(str) {
+  while (ri8(str)) {
+    putchar(ri8(str));
+    str = add(str, 1);
   }
 }
 
