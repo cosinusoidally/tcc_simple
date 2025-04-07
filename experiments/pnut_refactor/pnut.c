@@ -1108,17 +1108,17 @@ function handle_preprocessor_directive() {
   } else if (eq(tok, IF_KW)) {
     temp = neq(evaluate_if_condition(), 0);
     push_if_macro_mask(temp);
-  } else if (tok == IDENTIFIER && val == ELIF_ID) {
-    temp = evaluate_if_condition() != 0;
-    if (prev_macro_mask() && !if_macro_executed) {
-      if_macro_executed |= temp;
+  } else if (and(eq(tok, IDENTIFIER), eq(val, ELIF_ID))) {
+    temp = neq(evaluate_if_condition(), 0);
+    if (and(prev_macro_mask(), eq(0, if_macro_executed))) {
+      if_macro_executed = or(if_macro_executed, temp);
       if_macro_mask = temp;
     } else {
       if_macro_mask = false;
     }
-  } else if (tok == ELSE_KW) {
+  } else if (eq(tok, ELSE_KW)) {
     if (prev_macro_mask()) { // If the parent block mask is true
-      if_macro_mask = !if_macro_executed;
+      if_macro_mask = eq(0, if_macro_executed);
       if_macro_executed = true;
     } else {
       if_macro_mask = false;
