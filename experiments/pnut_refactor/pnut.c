@@ -533,9 +533,9 @@ function pop_if_macro_mask() {
 function get_ch() {
   ch = fgetc(fp);
 
-  if (ch == EOF) {
+  if (eq(ch, EOF)) {
     // If it's not the last file on the stack, EOF means that we need to switch to the next file
-    if (include_stack->next != 0) {
+    if (neq(include_stack->next, 0)) {
       fclose(include_stack->fp);
       include_stack2 = include_stack;
       include_stack = include_stack->next;
@@ -548,21 +548,24 @@ function get_ch() {
       free(include_stack2);
       // EOF is treated as a newline so that files without a newline at the end are still parsed correctly
       // On the next get_ch call, the first character of the next file will be read
-      ch = '\n';
+      ch = mkc('\n');
     }
   }
-  else if (ch == '\n') {
-    line_number += 1;
+  else if (eq(ch, mkc('\n'))) {
+    line_number = add(line_number, 1);
     column_number = 0;
   } else {
-    column_number += 1;
+    column_number = add(column_number, 1);
   }
 }
 
 // TODO: It would be nice to not have to duplicate this code
-int strlen(char *str) {
-  int i = 0;
-  while (str[i] != '\0') i += 1;
+function strlen(str) {
+  int i;
+  i = 0;
+  while (neq(ri8(add(str, i)), 0)) {
+    i = add(i, 1);
+  }
   return i;
 }
 
