@@ -6836,11 +6836,16 @@ void handle_macro_D(char *opt) {
   free(macro_buf);
 }
 
+function init_globals() {
+//  string_pool = malloc(STRING_POOL_SIZE);
+}
+
 int main(int argc, char **argv) {
   int i;
   ast decl;
 
   init_c();
+  init_globals();
 
   init_ident_table();
   init_pnut_macros();
