@@ -578,11 +578,13 @@ function memcpy(dest, src, n) {
   }
 }
 
-char *substr(char *str, int start, int end) {
-  int len = end - start;
-  char *temp = malloc(len + 1);
-  memcpy(temp, str + start, len);
-  temp[len] = '\0';
+function substr(str, start, end) {
+  int len;
+  int temp;
+  len = sub(end, start);
+  temp = malloc(add(len, 1));
+  memcpy(temp, add(str, start), len);
+  wi8(add(temp, len), 0);
   return temp;
 }
 
