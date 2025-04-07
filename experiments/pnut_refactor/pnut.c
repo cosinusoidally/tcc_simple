@@ -1072,31 +1072,31 @@ function evaluate_if_condition() {
   return eval_constant(expr, true);
 }
 
-void handle_include() {
-  if (tok == STRING) {
+function handle_include() {
+  if (eq(tok, STRING)) {
     include_file(STRING_BUF(val), include_stack->dirname);
     get_tok_macro(); // Skip the string
-  } else if (tok == '<') {
-    accum_string_until('>');
+  } else if (eq(tok, mkc('<'))) {
+    accum_string_until(mkc('>'));
     val = end_string();
     // #include <file> directives only take effect if the search path is provided
     // TODO: Issue a warning to stderr when skipping the directive
-    if (include_search_path != 0) {
+    if (neq(include_search_path, 0)) {
       include_file(STRING_BUF(val), include_search_path);
     }
     get_tok_macro(); // Skip the string
   } else {
-    putstr("tok="); putint(tok); putchar('\n');
-    syntax_error("expected string to #include directive");
+    putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
+    syntax_error(mks("expected string to #include directive"));
   }
 }
 
-void handle_preprocessor_directive() {
-  int temp;
+function handle_preprocessor_directive() {
+  var temp;
   get_tok_macro(); // Get the # token
   get_tok_macro(); // Get the directive
 
-  if (tok == IDENTIFIER && (val == IFDEF_ID || val == IFNDEF_ID)) {
+  if (and(eq(tok,IDENTIFIER),or(eq(val,IFDEF_ID),eq(val,IFNDEF_ID)))) {
     temp = val;
     get_tok_macro(); // Get the macro name
       push_if_macro_mask(temp == IFDEF_ID ? tok == MACRO : tok != MACRO);
