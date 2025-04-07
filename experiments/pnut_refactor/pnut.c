@@ -163,10 +163,10 @@ function fatal_error(msg) {
   exit(1);
 }
 
-void syntax_error(char *msg) {
-  putstr(include_stack->filepath); putchar(':');
-  putint(last_tok_line_number); putchar(':'); putint(last_tok_column_number);
-  putstr("  syntax error: "); putstr(msg); putchar('\n');
+function syntax_error(msg) {
+  putstr(include_stack->filepath); putchar(mkc(':'));
+  putint(last_tok_line_number); putchar(mkc(':')); putint(last_tok_column_number);
+  putstr(mks("  syntax error: ")); putstr(msg); putchar(mkc('\n'));
   exit(1);
 }
 
@@ -178,13 +178,13 @@ var val;
 
 int STRING_POOL_SIZE;
 char *string_pool;
-var string_pool_alloc = 0;
+var string_pool_alloc;
 var string_start;
 var hash;
 
 // These parameters give a perfect hashing of the C keywords
-#define HASH_PARAM 1026
-#define HASH_PRIME 1009
+var HASH_PARAM;
+var HASH_PRIME;
 #define HEAP_SIZE 2000000
 var heap[HEAP_SIZE];
 var heap_alloc;
@@ -197,7 +197,7 @@ var alloc_result;
 
 function alloc_obj(size) {
   alloc_result = heap_alloc;
-  heap_alloc += size;
+  heap_alloc = add(heap_alloc, size);
 
   if (heap_alloc > HEAP_SIZE) {
     fatal_error("heap overflow");
@@ -6847,6 +6847,12 @@ function init_globals() {
   column_number = 0;
   last_tok_line_number = 1;
   last_tok_column_number = 0;
+
+  string_pool_alloc = 0;
+
+// These parameters give a perfect hashing of the C keywords
+  HASH_PARAM = 1026;
+  HASH_PRIME = 1009;
 
   heap_alloc = HASH_PRIME;
 
