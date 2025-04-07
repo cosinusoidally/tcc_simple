@@ -1192,21 +1192,24 @@ function get_ident() {
 
   begin_string();
 
-  while (('A' <= ch && ch <= 'Z') ||
-         ('a' <= ch && ch <= 'z') ||
-         ('0' <= ch && ch <= '9') ||
-         (ch == '_')) {
+  while (or(or(and(lte(mkc('A'), ch), lte(ch, mkc('Z'))),
+               and(lte(mkc('a'), ch), lte(ch, mkc('z')))),
+            or(and(lte(mkc('0'), ch), lte(ch, mkc('9'))),
+               eq(ch, mkc('_'))))) {
     accum_string();
     get_ch();
   }
 
   val = end_ident();
-  tok = heap[val+2];
+  tok = r_heap(add(val, 2));
 }
 
 int intern_str(char* name) {
-  int i = 0;
-  int prev_ch = ch; // The character may be important to the calling function, saving it
+  var i;
+  var prev_ch;
+
+  i = 0;
+  prev_ch = ch; // The character may be important to the calling function, saving it
 
   begin_string();
 
