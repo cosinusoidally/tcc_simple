@@ -849,25 +849,26 @@ function lookup_macro_token(args, tok, val) {
   }
 }
 
-int read_macro_tokens(int args) {
-  int toks = 0; // List of token to replay
+function read_macro_tokens(args) {
+  int toks; // List of token to replay
   int tail;
+  toks = 0;
 
   // Accumulate tokens so they can be replayed when the macro is used
-  if (tok != '\n' && tok != EOF) {
+  if (and(neq(tok, mkc('\n')), neq(tok, EOF))) {
     // Append the token/value pair to the replay list
     toks = cons(lookup_macro_token(args, tok, val), 0);
     tail = toks;
     get_tok_macro();
-    while (tok != '\n' && tok != EOF) {
+    while (and(neq(tok, mkc('\n')), neq(tok, EOF))) {
       set_cdr(tail, cons(lookup_macro_token(args, tok, val), 0));
       tail = cdr(tail); // Advance tail
       get_tok_macro();
     }
 
     // Check that there are no leading or trailing ##
-    if (car(car(toks)) == HASH_HASH || car(car(tail)) == HASH_HASH) {
-      syntax_error("'##' cannot appear at either end of a macro expansion");
+    if (or(eq(car(car(toks)), HASH_HASH), eq(car(car(tail)), HASH_HASH))) {
+      syntax_error(mks("'##' cannot appear at either end of a macro expansion"));
     }
   }
 
