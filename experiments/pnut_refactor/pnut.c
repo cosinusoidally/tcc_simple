@@ -21,10 +21,10 @@ function get_ident();
 #define false 0
 #define EOF (-1)
 
-var line_number = 1;
-var column_number = 0;
-var last_tok_line_number = 1;
-var last_tok_column_number = 0;
+var line_number;
+var column_number;
+var last_tok_line_number;
+var last_tok_column_number;
 
 struct IncludeStack {
   int fp; // (FILE *)
@@ -6840,6 +6840,11 @@ function init_globals() {
   O_WRONLY = 01;
   O_CREAT  = 0100;
   O_TRUNC  = 01000;
+
+  line_number = 1;
+  column_number = 0;
+  last_tok_line_number = 1;
+  last_tok_column_number = 0;
 
   heap_alloc = HASH_PRIME;
 
