@@ -738,8 +738,8 @@ function get_string_char() {
   }
 }
 
-void accum_string_until(char end) {
-  while (ch != end && ch != EOF) {
+function accum_string_until(end) {
+  while (and(neq(ch, end), neq(ch, EOF))) {
     get_string_char();
     tok = ch;
     ch = val;
@@ -747,8 +747,8 @@ void accum_string_until(char end) {
     ch = tok;
   }
 
-  if (ch != end) {
-    syntax_error("unterminated string literal");
+  if (neq(ch, end)) {
+    syntax_error(mks("unterminated string literal"));
   }
 
   get_ch();
@@ -758,16 +758,16 @@ void accum_string_until(char end) {
 // recognized by the preprocessor. Because these are not C keywords, their kind
 // is still IDENTIFIER so the parser (which runs after the preprocessor) can
 // treat them as such.
-int IFDEF_ID;
-int IFNDEF_ID;
-int ELIF_ID;
-int ENDIF_ID;
-int DEFINE_ID;
-int UNDEF_ID;
-int INCLUDE_ID;
-int DEFINED_ID;
-int WARNING_ID;
-int ERROR_ID;
+var IFDEF_ID;
+var IFNDEF_ID;
+var ELIF_ID;
+var ENDIF_ID;
+var DEFINE_ID;
+var UNDEF_ID;
+var INCLUDE_ID;
+var DEFINED_ID;
+var WARNING_ID;
+var ERROR_ID;
 int INCLUDE_SHELL_ID;
 
 int NOT_SUPPORTED_ID;
