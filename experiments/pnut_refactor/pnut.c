@@ -1204,7 +1204,7 @@ function get_ident() {
   tok = r_heap(add(val, 2));
 }
 
-int intern_str(char* name) {
+function intern_str(name) {
   var i;
   var prev_ch;
 
@@ -1213,10 +1213,10 @@ int intern_str(char* name) {
 
   begin_string();
 
-  while (name[i] != 0) {
-    ch = name[i];
+  while (neq(ri8(add(name, i)), 0)) {
+    ch = ri8(add(name, i));
     accum_string();
-    i += 1;
+    i = add(i, 1);
   }
 
   i = end_string();
@@ -1226,89 +1226,91 @@ int intern_str(char* name) {
   return i;
 }
 
-int init_ident(int tok, char *name) {
-  int i = intern_str(name);
-  heap[i+2] = tok;
+function init_ident(tok, name) {
+  var i;
+  i = intern_str(name);
+  heap[add(i, 2)] = tok;
   return i;
 }
 
-void init_ident_table() {
+function init_ident_table() {
 
-  int i = 0;
+  var i;
+  i = 0;
 
-  while (i < HASH_PRIME) {
+  while (lt(i, HASH_PRIME)) {
     heap[i] = 0;
-    i += 1;
+    i = add(i, 1);
   }
 
-  init_ident(AUTO_KW,     "auto");
-  init_ident(BREAK_KW,    "break");
-  init_ident(CASE_KW,     "case");
-  init_ident(CHAR_KW,     "char");
-  init_ident(CONST_KW,    "const");
-  init_ident(CONTINUE_KW, "continue");
-  init_ident(DEFAULT_KW,  "default");
-  init_ident(DO_KW,       "do");
-  init_ident(DOUBLE_KW,   "double");
-  init_ident(ELSE_KW,     "else");
-  init_ident(ENUM_KW,     "enum");
-  init_ident(EXTERN_KW,   "extern");
-  init_ident(FLOAT_KW,    "float");
-  init_ident(FOR_KW,      "for");
-  init_ident(GOTO_KW,     "goto");
-  init_ident(IF_KW,       "if");
-  init_ident(INLINE_KW,   "inline");
-  init_ident(INT_KW,      "int");
-  init_ident(LONG_KW,     "long");
-  init_ident(REGISTER_KW, "register");
-  init_ident(RETURN_KW,   "return");
-  init_ident(SHORT_KW,    "short");
-  init_ident(SIGNED_KW,   "signed");
-  init_ident(SIZEOF_KW,   "sizeof");
-  init_ident(STATIC_KW,   "static");
-  init_ident(STRUCT_KW,   "struct");
-  init_ident(SWITCH_KW,   "switch");
-  init_ident(TYPEDEF_KW,  "typedef");
-  init_ident(UNION_KW,    "union");
-  init_ident(UNSIGNED_KW, "unsigned");
-  init_ident(VOID_KW,     "void");
-  init_ident(VOLATILE_KW, "volatile");
-  init_ident(WHILE_KW,    "while");
+  init_ident(AUTO_KW,     mks("auto"));
+  init_ident(BREAK_KW,    mks("break"));
+  init_ident(CASE_KW,     mks("case"));
+  init_ident(CHAR_KW,     mks("char"));
+  init_ident(CONST_KW,    mks("const"));
+  init_ident(CONTINUE_KW, mks("continue"));
+  init_ident(DEFAULT_KW,  mks("default"));
+  init_ident(DO_KW,       mks("do"));
+  init_ident(DOUBLE_KW,   mks("double"));
+  init_ident(ELSE_KW,     mks("else"));
+  init_ident(ENUM_KW,     mks("enum"));
+  init_ident(EXTERN_KW,   mks("extern"));
+  init_ident(FLOAT_KW,    mks("float"));
+  init_ident(FOR_KW,      mks("for"));
+  init_ident(GOTO_KW,     mks("goto"));
+  init_ident(IF_KW,       mks("if"));
+  init_ident(INLINE_KW,   mks("inline"));
+  init_ident(INT_KW,      mks("int"));
+  init_ident(LONG_KW,     mks("long"));
+  init_ident(REGISTER_KW, mks("register"));
+  init_ident(RETURN_KW,   mks("return"));
+  init_ident(SHORT_KW,    mks("short"));
+  init_ident(SIGNED_KW,   mks("signed"));
+  init_ident(SIZEOF_KW,   mks("sizeof"));
+  init_ident(STATIC_KW,   mks("static"));
+  init_ident(STRUCT_KW,   mks("struct"));
+  init_ident(SWITCH_KW,   mks("switch"));
+  init_ident(TYPEDEF_KW,  mks("typedef"));
+  init_ident(UNION_KW,    mks("union"));
+  init_ident(UNSIGNED_KW, mks("unsigned"));
+  init_ident(VOID_KW,     mks("void"));
+  init_ident(VOLATILE_KW, mks("volatile"));
+  init_ident(WHILE_KW,    mks("while"));
 
   // Preprocessor keywords. These are not tagged as keyword since they can be
   // used as identifiers after the preprocessor stage.
-  IFDEF_ID   = init_ident(IDENTIFIER, "ifdef");
-  IFNDEF_ID  = init_ident(IDENTIFIER, "ifndef");
-  ELIF_ID    = init_ident(IDENTIFIER, "elif");
-  ENDIF_ID   = init_ident(IDENTIFIER, "endif");
-  DEFINE_ID  = init_ident(IDENTIFIER, "define");
-  WARNING_ID = init_ident(IDENTIFIER, "warning");
-  ERROR_ID   = init_ident(IDENTIFIER, "error");
-  UNDEF_ID   = init_ident(IDENTIFIER, "undef");
-  INCLUDE_ID = init_ident(IDENTIFIER, "include");
-  DEFINED_ID = init_ident(IDENTIFIER, "defined");
-  INCLUDE_SHELL_ID = init_ident(IDENTIFIER, "include_shell");
+  IFDEF_ID   = init_ident(IDENTIFIER, mks("ifdef"));
+  IFNDEF_ID  = init_ident(IDENTIFIER, mks("ifndef"));
+  ELIF_ID    = init_ident(IDENTIFIER, mks("elif"));
+  ENDIF_ID   = init_ident(IDENTIFIER, mks("endif"));
+  DEFINE_ID  = init_ident(IDENTIFIER, mks("define"));
+  WARNING_ID = init_ident(IDENTIFIER, mks("warning"));
+  ERROR_ID   = init_ident(IDENTIFIER, mks("error"));
+  UNDEF_ID   = init_ident(IDENTIFIER, mks("undef"));
+  INCLUDE_ID = init_ident(IDENTIFIER, mks("include"));
+  DEFINED_ID = init_ident(IDENTIFIER, mks("defined"));
+  INCLUDE_SHELL_ID = init_ident(IDENTIFIER, mks("include_shell"));
 
-  ARGV_ID = init_ident(IDENTIFIER, "argv");
-  ARGV__ID = init_ident(IDENTIFIER, "argv_");
-  IFS_ID  = init_ident(IDENTIFIER, "IFS");
-  MAIN_ID = init_ident(IDENTIFIER, "main");
+  ARGV_ID = init_ident(IDENTIFIER, mks("argv"));
+  ARGV__ID = init_ident(IDENTIFIER, mks("argv_"));
+  IFS_ID  = init_ident(IDENTIFIER, mks("IFS"));
+  MAIN_ID = init_ident(IDENTIFIER, mks("main"));
 
-  PUTCHAR_ID = init_ident(IDENTIFIER, "putchar");
-  GETCHAR_ID = init_ident(IDENTIFIER, "getchar");
-  EXIT_ID    = init_ident(IDENTIFIER, "exit");
-  MALLOC_ID  = init_ident(IDENTIFIER, "malloc");
-  FREE_ID    = init_ident(IDENTIFIER, "free");
-  PRINTF_ID  = init_ident(IDENTIFIER, "printf");
-  FOPEN_ID   = init_ident(IDENTIFIER, "fopen");
-  FCLOSE_ID  = init_ident(IDENTIFIER, "fclose");
-  FGETC_ID   = init_ident(IDENTIFIER, "fgetc");
-  PUTSTR_ID  = init_ident(IDENTIFIER, "putstr");
-  PUTS_ID    = init_ident(IDENTIFIER, "puts");
-  READ_ID    = init_ident(IDENTIFIER, "read");
-  WRITE_ID   = init_ident(IDENTIFIER, "write");
-  OPEN_ID    = init_ident(IDENTIFIER, "open");
-  CLOSE_ID   = init_ident(IDENTIFIER, "close");
+  PUTCHAR_ID = init_ident(IDENTIFIER, mks("putchar"));
+  GETCHAR_ID = init_ident(IDENTIFIER, mks("getchar"));
+  EXIT_ID    = init_ident(IDENTIFIER, mks("exit"));
+  MALLOC_ID  = init_ident(IDENTIFIER, mks("malloc"));
+  FREE_ID    = init_ident(IDENTIFIER, mks("free"));
+  PRINTF_ID  = init_ident(IDENTIFIER, mks("printf"));
+  FOPEN_ID   = init_ident(IDENTIFIER, mks("fopen"));
+  FCLOSE_ID  = init_ident(IDENTIFIER, mks("fclose"));
+  FGETC_ID   = init_ident(IDENTIFIER, mks("fgetc"));
+  PUTSTR_ID  = init_ident(IDENTIFIER, mks("putstr"));
+  PUTS_ID    = init_ident(IDENTIFIER, mks("puts"));
+  READ_ID    = init_ident(IDENTIFIER, mks("read"));
+  WRITE_ID   = init_ident(IDENTIFIER, mks("write"));
+  OPEN_ID    = init_ident(IDENTIFIER, mks("open"));
+  CLOSE_ID   = init_ident(IDENTIFIER, mks("close"));
 
   // Stringizing is recognized by the macro expander, but it returns a hardcoded
   // string instead of the actual value. This may be enough to compile TCC.
