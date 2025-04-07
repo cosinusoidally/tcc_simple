@@ -152,13 +152,13 @@ function putint(n) {
   }
 }
 
-void fatal_error(char *msg) {
-  if (include_stack != 0) {
-    putstr(include_stack->filepath); putchar(':');
-    putint(last_tok_line_number); putchar(':'); putint(last_tok_column_number);
-    putstr("  "); putstr(msg); putchar('\n');
+function fatal_error(msg) {
+  if (neq(include_stack, 0)) {
+    putstr(include_stack->filepath); putchar(mkc(':'));
+    putint(last_tok_line_number); putchar(mkc(':')); putint(last_tok_column_number);
+    putstr(mks("  ")); putstr(msg); putchar(mkc('\n'));
   } else {
-    putstr(msg); putchar('\n');
+    putstr(msg); putchar(mkc('\n'));
   }
   exit(1);
 }
