@@ -421,15 +421,15 @@ var end_ident_i;
 
 function end_ident() {
   string_pool[string_pool_alloc] = 0; // terminate string
-  string_pool_alloc += 1; // account for terminator
+  string_pool_alloc = add(string_pool_alloc, 1); // account for terminator
 
   probe = r_heap(hash);
 
-  while (probe != 0) {
+  while (neq(probe, 0)) {
     probe_start = r_heap(add(probe,1));
     end_ident_i = 0;
-    c1 = string_pool[string_start+end_ident_i];
-    c2 = string_pool[probe_start+end_ident_i];
+    c1 = ri8(add(string_pool, add(string_start, end_ident_i)));
+    c2 = ri8(add(string_pool, add(probe_start, end_ident_i)));
     while (c1 == c2) {
       if (c1 == 0) {
         string_pool_alloc = string_start; // undo string allocation
