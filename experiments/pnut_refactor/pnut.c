@@ -335,11 +335,21 @@ function cons(child0, child1) {
 function car(pair) {
   return get_child_(LIST, pair, 0);
 }
-function car_(expected_op, pair) { return get_child__(LIST, expected_op, pair, 0); }
-function cdr(pair)               { return get_child_(LIST, pair, 1); }
-function cdr_(expected_op, pair) { return get_child_opt_(LIST, expected_op, pair, 1); }
-function set_cdr(pair, value)    { set_child(pair, 1, value); }
-function tail(x) { return cdr_(LIST, x); }
+function car_(expected_op, pair) {
+  return get_child__(LIST, expected_op, pair, 0);
+}
+function cdr(pair) {
+  return get_child_(LIST, pair, 1);
+}
+function cdr_(expected_op, pair) {
+  return get_child_opt_(LIST, expected_op, pair, 1);
+}
+function set_cdr(pair, value) {
+  set_child(pair, 1, value);
+}
+function tail(x) {
+  return cdr_(LIST, x);
+}
 
 // Simple accessor to get the string from the string pool
 function STRING_BUF(string_val) {
