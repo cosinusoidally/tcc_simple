@@ -588,13 +588,16 @@ function substr(str, start, end) {
   return temp;
 }
 
-char *str_concat(char *s1, char *s2) {
-  int s1_len = strlen(s1);
-  int s2_len = strlen(s2);
-  char *temp = malloc(s1_len + s2_len + 1);
+function str_concat(s1, s2) {
+  int s1_len;
+  int s2_len;
+  int temp;
+  s1_len = strlen(s1);
+  s2_len = strlen(s2);
+  temp = malloc(add(add(s1_len, s2_len), 1));
   memcpy(temp, s1, s1_len);
-  memcpy(temp + s1_len, s2, s2_len);
-  temp[s1_len + s2_len] = '\0';
+  memcpy(add(temp, s1_len), s2, s2_len);
+  wi8(add(temp, add(s1_len, s2_len)), 0);
   return temp;
 }
 
