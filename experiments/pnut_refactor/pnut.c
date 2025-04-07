@@ -184,7 +184,7 @@ var hash;
 #define HASH_PARAM 1026
 #define HASH_PRIME 1009
 #define HEAP_SIZE 2000000
-var *heap;
+var heap[HEAP_SIZE];
 var heap_alloc;
 
 function r_heap(o) {
@@ -6837,7 +6837,6 @@ void handle_macro_D(char *opt) {
 }
 
 function init_globals() {
-  heap = malloc(mul(HEAP_SIZE, 4));
   heap_alloc = HASH_PRIME;
   STRING_POOL_SIZE = 500000;
   string_pool = malloc(STRING_POOL_SIZE);
