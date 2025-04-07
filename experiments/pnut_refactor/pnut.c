@@ -703,7 +703,7 @@ function get_string_char() {
       accum_digit(8);
       accum_digit(8);
       val = DIGIT_BYTE(val); // keep low 8 bits, without overflowing
-    } else if (ch == 'x' || ch == 'X') {
+    } else if (or(eq(ch, mkc('x')), eq(ch, mkc('X')))) {
       get_ch();
       val = INIT_ACCUM_DIGIT();
       // Allow 1 or 2 hex digits.
@@ -714,24 +714,24 @@ function get_string_char() {
       }
       val = DIGIT_BYTE(val); // keep low 8 bits, without overflowing
     } else {
-      if (ch == 'a') {
+      if (eq(ch, mkc('a'))) {
         val = 7;
-      } else if (ch == 'b') {
+      } else if (eq(ch, mkc('b'))) {
         val = 8;
-      } else if (ch == 'f') {
+      } else if (eq(ch, mkc('f'))) {
         val = 12;
-      } else if (ch == 'n') {
+      } else if (eq(ch, mkc('n'))) {
         val = 10;
-      } else if (ch == 'r') {
+      } else if (eq(ch, mkc('r'))) {
         val = 13;
-      } else if (ch == 't') {
+      } else if (eq(ch, mkc('t'))) {
         val = 9;
-      } else if (ch == 'v') {
+      } else if (eq(ch, mkc('v'))) {
         val = 11;
-      } else if (ch == '\\' || ch == '\'' || ch == '\"') {
+      } else if (or(or(eq(ch, mkc('\\')),eq(ch,mkc('\''))),eq(ch,mkc('\"')))) {
         val = ch;
       } else {
-        syntax_error("unimplemented string character escape");
+        syntax_error(mks("unimplemented string character escape"));
       }
       get_ch();
     }
