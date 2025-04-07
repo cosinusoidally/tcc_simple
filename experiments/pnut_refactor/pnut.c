@@ -15,6 +15,7 @@ var O_TRUNC;
 function expect_tok_(expected_tok, file, line);
 function get_tok();
 function get_ident();
+function parse_assignment_expression();
 
 #define ast int
 #define true 1
@@ -1018,14 +1019,17 @@ function eval_constant(expr, if_macro) {
 
     case BAR_BAR:
       op1 = eval_constant(child0, if_macro);
-      if (op1) return 1;
-      else return eval_constant(child1, if_macro);
+      if (op1) {
+        return 1;
+      } else {
+        return eval_constant(child1, if_macro);
+      }
 
     case '(': // defined operators are represented as fun calls
-      if (if_macro && get_val_(IDENTIFIER, child0) == DEFINED_ID) {
-        return child1 == MACRO;
+      if (and(if_macro, or(get_val_(IDENTIFIER, child0),DEFINED_ID))) {
+        return eq(child1, MACRO);
       } else {
-        fatal_error("unknown function call in constant expressions");
+        fatal_error(mks("unknown function call in constant expressions"));
         return 0;
       }
 
@@ -1036,23 +1040,25 @@ function eval_constant(expr, if_macro) {
         return 0;
       } else {
         // TODO: Enums when outside of if_macro
-        fatal_error("identifiers are not allowed in constant expression");
+        fatal_error(mks("identifiers are not allowed in constant expression"));
         return 0;
       }
 
     default:
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("unsupported operator in constant expression");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("unsupported operator in constant expression"));
       return 0;
   }
 }
 
-ast parse_assignment_expression();
 
-int evaluate_if_condition() {
-  bool prev_skip_newlines = skip_newlines;
-  int previous_mask = if_macro_mask;
-  ast expr;
+function evaluate_if_condition() {
+  var prev_skip_newlines;
+  var previous_mask;
+  var expr;
+
+  prev_skip_newlines = skip_newlines;
+  previous_mask = if_macro_mask;
   // Temporarily set to true so that we can read the condition even if it's inside an ifdef false block
   // Unlike in other directives using get_tok_macro, we want to expand macros in the condition
   if_macro_mask = true;
