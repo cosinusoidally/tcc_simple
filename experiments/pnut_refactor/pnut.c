@@ -370,7 +370,7 @@ function accum_string() {
   hash = mod(add(ch, xor(hash, HASH_PARAM)), HASH_PRIME);
   string_pool[string_pool_alloc] = ch;
   string_pool_alloc = add(string_pool_alloc, 1);
-  if (string_pool_alloc >= STRING_POOL_SIZE) {
+  if (gte(string_pool_alloc, STRING_POOL_SIZE)) {
     fatal_error(mks("string pool overflow"));
   }
 }
