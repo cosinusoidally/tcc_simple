@@ -879,12 +879,15 @@ function read_macro_tokens(args) {
 // - We allow sequence of commas in the argument list
 // - Function-like macros with 0 arguments can be called either without parenthesis or with ().
 // - No support for variadic macros. Tcc only uses them in tests so it should be ok.
-void handle_define() {
-  int macro;    // The identifier that is being defined as a macro
-  int args = 0; // List of arguments for a function-like macro
-  int args_count = -1; // Number of arguments for a function-like macro. -1 means it's an object-like macro
+function handle_define() {
+  var macro;    // The identifier that is being defined as a macro
+  var args; // List of arguments for a function-like macro
+  var args_count; // Number of arguments for a function-like macro. -1 means it's an object-like macro
 
-  if (tok != IDENTIFIER && tok != MACRO && (tok < AUTO_KW || tok > WHILE_KW)) {
+  args = 0;
+  args_count = sub(0, 1);
+
+  if (and(and(neq(tok,IDENTIFIER),neq(tok,MACRO)),or(lt(tok,AUTO_KW),lt(tok,WHILE_KW)))) {
     putstr("tok="); putint(tok); putchar('\n');
     syntax_error("#define directive can only be followed by a identifier");
   }
