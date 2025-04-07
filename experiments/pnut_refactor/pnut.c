@@ -174,8 +174,8 @@ var ch;
 var tok;
 var val;
 
-#define STRING_POOL_SIZE 500000
-char string_pool[STRING_POOL_SIZE];
+int STRING_POOL_SIZE;
+char *string_pool;
 var string_pool_alloc = 0;
 var string_start;
 var hash;
@@ -6837,7 +6837,8 @@ void handle_macro_D(char *opt) {
 }
 
 function init_globals() {
-//  string_pool = malloc(STRING_POOL_SIZE);
+  STRING_POOL_SIZE = 500000;
+  string_pool = malloc(STRING_POOL_SIZE);
 }
 
 int main(int argc, char **argv) {
