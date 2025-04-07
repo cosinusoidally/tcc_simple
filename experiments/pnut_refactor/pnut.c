@@ -1,3 +1,6 @@
+#include "support.c"
+#include "support_common.c"
+
 #define O_WRONLY 01
 #define O_CREAT  0100
 #define O_TRUNC  01000
@@ -1962,13 +1965,15 @@ function get_tok() {
   last_tok_column_number = prev_tok_column_number;
 }
 
-#define parse_error(msg, token) parse_error_internal(msg, token, __FILE__, __LINE__)
-
 void parse_error_internal(char * msg, int token, char * file, int line) {
   putstr(msg);
   putstr("\n");
 
   exit(1);
+}
+
+function parse_error(msg, token) {
+  parse_error_internal(msg, token, __FILE__, __LINE__);
 }
 
 function expect_tok_(expected_tok, file, line) {
@@ -6898,6 +6903,8 @@ void handle_macro_D(char *opt) {
 int main(int argc, char **argv) {
   int i;
   ast decl;
+
+  init_c();
 
   init_ident_table();
   init_pnut_macros();
