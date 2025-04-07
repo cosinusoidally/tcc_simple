@@ -1153,30 +1153,34 @@ function handle_preprocessor_directive() {
         putstr(mks("error:"));
       }
       // Print the rest of the line, it does not support \ at the end of the line but that's ok
-      while (ch != '\n' && ch != EOF) {
+      while (and(neq(ch, mkc('\n')), neq(ch, EOF))) {
         putchar(ch); get_ch();
       }
-      putchar('\n');
-      tok = '\n';
-      if (temp == ERROR_ID) exit(1);
+      putchar(mkc('\n'));
+      tok = mkc('\n');
+      if (eq(temp, ERROR_ID)) {
+        exit(1);
+      }
     } else {
-      putstr("tok="); putint(tok); putstr(": "); putstr(STRING_BUF(val)); putchar('\n');
-      syntax_error("unsupported preprocessor directive");
+      putstr(mks("tok=")); putint(tok); putstr(mks(": ")); putstr(STRING_BUF(val)); putchar(mkc('\n'));
+      syntax_error(mks("unsupported preprocessor directive"));
     }
   } else {
     // Skip the rest of the directive
-    while (tok != '\n' && tok != EOF) get_tok_macro();
+    while (and(neq(tok, mkc('\n')), neq(tok, EOF))) {
+      get_tok_macro();
+    }
   }
 
-  if (tok != '\n' && tok != EOF) {
-    putstr("tok="); putint(tok); putchar('\n');
-    putstr("directive="); putint(tok); putchar('\n');
-    if (tok == IDENTIFIER || tok == MACRO) {
-      putstr("string = ");
+  if (and(neq(tok, mkc('\n')), neq(tok, EOF))) {
+    putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
+    putstr(mks("directive=")); putint(tok); putchar(mkc('\n'));
+    if (or(eq(tok, IDENTIFIER), eq(tok, MACRO))) {
+      putstr(mks("string = "));
       putstr(STRING_BUF(val));
-      putchar('\n');
+      putchar(mkc('\n'));
     }
-    syntax_error("preprocessor expected end of line");
+    syntax_error(mks("preprocessor expected end of line"));
   }
 
   // Because handle_preprocessor_directive is called from get_tok, and it loops
