@@ -1124,30 +1124,34 @@ function handle_preprocessor_directive() {
       if_macro_mask = false;
     }
     get_tok_macro(); // Skip the else keyword
-  } else if (tok == IDENTIFIER && val == ENDIF_ID) {
-      pop_if_macro_mask();
+  } else if (and(eq(tok, IDENTIFIER), eq(val, ENDIF_ID))) {
+    pop_if_macro_mask();
     get_tok_macro(); // Skip the else keyword
   } else if (if_macro_mask) {
-    if (tok == IDENTIFIER && val == INCLUDE_ID) {
+    if (and(eq(tok, IDENTIFIER), eq(val, INCLUDE_ID))) {
       get_tok_macro(); // Get the STRING token
       handle_include();
     }
-    else if (tok == IDENTIFIER && val == UNDEF_ID) {
+    else if (and(eq(tok, IDENTIFIER), eq(val, UNDEF_ID))) {
       get_tok_macro(); // Get the macro name
-      if (tok == IDENTIFIER || tok == MACRO) {
+      if (or(eq(tok, IDENTIFIER), eq(tok, MACRO))) {
         // TODO: Doesn't play nice with typedefs, because they are not marked as macros
-        heap[val + 2] = IDENTIFIER; // Unmark the macro identifier
+        heap[add(val, 2)] = IDENTIFIER; // Unmark the macro identifier
         get_tok_macro(); // Skip the macro name
       } else {
-        putstr("tok="); putint(tok); putchar('\n');
-        syntax_error("#undef directive can only be followed by a identifier");
+        putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
+        syntax_error(mks("#undef directive can only be followed by a identifier"));
       }
-    } else if (tok == IDENTIFIER && val == DEFINE_ID) {
+    } else if (and(eq(tok, IDENTIFIER), eq(val, DEFINE_ID))) {
       get_tok_macro(); // Get the macro name
       handle_define();
-    } else if (tok == IDENTIFIER && (val == WARNING_ID || val == ERROR_ID)) {
+    } else if (and(eq(tok,IDENTIFIER),or(eq(val,WARNING_ID),eq(val,ERROR_ID)))) {
       temp = val;
-      putstr(temp == WARNING_ID ? "warning:" : "error:");
+      if(eq(temp, WARNING_ID)) {
+        putstr(mks("warning:"));
+      } else {
+        putstr(mks("error:"));
+      }
       // Print the rest of the line, it does not support \ at the end of the line but that's ok
       while (ch != '\n' && ch != EOF) {
         putchar(ch); get_ch();
