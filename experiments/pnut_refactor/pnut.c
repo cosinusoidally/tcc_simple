@@ -430,17 +430,17 @@ function end_ident() {
     end_ident_i = 0;
     c1 = ri8(add(string_pool, add(string_start, end_ident_i)));
     c2 = ri8(add(string_pool, add(probe_start, end_ident_i)));
-    while (c1 == c2) {
-      if (c1 == 0) {
+    while (eq(c1, c2)) {
+      if (eq(c1, 0)) {
         string_pool_alloc = string_start; // undo string allocation
         return probe;
       }
-      end_ident_i += 1;
-      c1 = string_pool[string_start+end_ident_i];
-      c2 = string_pool[probe_start+end_ident_i];
+      end_ident_i = add(end_ident_i, 1);
+      c1 = ri8(add(string_pool, add(string_start, end_ident_i)));
+      c2 = ri8(add(string_pool, add(probe_start, end_ident_i)));
     }
     hash = probe; // remember previous ident
-    probe = heap[probe];
+    probe = r_heap(probe);
   }
 
   // a new ident has been found
@@ -450,10 +450,10 @@ function end_ident() {
   heap[hash] = probe; // add new ident at end of chain
 
   heap[probe] = 0; // no next ident
-  heap[probe+1] = string_start;
-  heap[probe+2] = IDENTIFIER;
-  heap[probe+3] = 0; // Token tag
-  heap[probe+4] = string_pool_alloc - string_start - 1; // string length (excluding terminator)
+  heap[add(probe, 1)] = string_start;
+  heap[add(probe, 2)] = IDENTIFIER;
+  heap[add(probe, 3)] = 0; // Token tag
+  heap[add(probe, 4)] = sub(sub(string_pool_alloc, string_start), 1); // string length (excluding terminator)
 
   return probe;
 }
@@ -469,29 +469,29 @@ function expect_tok(expected_tok) {
 }
 
 #define IFDEF_DEPTH_MAX 20
-bool if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
-bool if_macro_stack_ix = 0;
-bool if_macro_mask = true;      // Indicates if the current if/elif block is being executed
-bool if_macro_executed = false; // If any of the previous if/elif conditions were true
+var if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
+var if_macro_stack_ix = 0;
+var if_macro_mask = true;      // Indicates if the current if/elif block is being executed
+var if_macro_executed = false; // If any of the previous if/elif conditions were true
 
 // get_tok parameters:
 // Whether to expand macros or not.
 // Useful to parse macro definitions containing other macros without expanding them.
-bool expand_macro = true;
+var expand_macro = true;
 // Don't expand macro arguments. Used for stringification and token pasting.
-bool expand_macro_arg = true;
+var expand_macro_arg = true;
 // Don't produce newline tokens. Used when reading the tokens of a macro definition.
-bool skip_newlines = true;
+var skip_newlines = true;
 
 #define MACRO_RECURSION_MAX 180 // Supports up to 60 (180 / 3) nested macro expansions.
-int macro_stack[MACRO_RECURSION_MAX];
-int macro_stack_ix = 0;
+var macro_stack[MACRO_RECURSION_MAX];
+var macro_stack_ix = 0;
 
-int macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
-int macro_args = 0;     // Current list of arguments for the macro being expanded
-int macro_ident = 0;    // The identifier of the macro being expanded (if any)
-int macro_args_count;   // Number of arguments for the current macro being expanded
-bool paste_last_token = false; // Whether the last token was a ## or not
+var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
+var macro_args = 0;     // Current list of arguments for the macro being expanded
+var macro_ident = 0;    // The identifier of the macro being expanded (if any)
+var macro_args_count;   // Number of arguments for the current macro being expanded
+var paste_last_token = false; // Whether the last token was a ## or not
 
 bool prev_macro_mask() {
   return if_macro_stack_ix == 0 || if_macro_stack[if_macro_stack_ix - 2];
