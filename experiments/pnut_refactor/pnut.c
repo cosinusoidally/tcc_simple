@@ -1470,8 +1470,8 @@ function return_to_parent_macro() {
 
   macro_stack_ix = sub(macro_stack_ix, 3);
   macro_tok_lst   = r_macro_stack(macro_stack_ix);
-  macro_args      = macro_stack[macro_stack_ix + 1];
-  macro_ident     = macro_stack[macro_stack_ix + 2];
+  macro_args      = r_macro_stack(add(macro_stack_ix, 1));
+  macro_ident     = r_macro_stack(add(macro_stack_ix, 2));
 }
 
 // Begins a new macro expansion context, saving the current context onn the macro stack.
