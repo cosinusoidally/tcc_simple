@@ -1367,10 +1367,14 @@ function macro_parse_argument() {
   parens_depth = 0;
 
   while ((parens_depth > 0 || (tok != ',' && tok != ')')) && tok != EOF) {
-    if (tok == '(') parens_depth += 1; // Enter parenthesis
-    if (tok == ')') parens_depth -= 1; // End of parenthesis
+    if (eq(tok,mkc('('))) {
+      parens_depth = add(parens_depth, 1); // Enter parenthesis
+    }
+    if (eq(tok,mkc(')'))) {
+      parens_depth = sub(parens_depth, 1); // End of parenthesis
+    }
 
-    if (arg_tokens == 0) {
+    if (eq(arg_tokens, 0)) {
       arg_tokens = cons(cons(tok, val), 0);
       tail = arg_tokens;
     } else {
