@@ -1366,7 +1366,7 @@ function macro_parse_argument() {
   arg_tokens = 0;
   parens_depth = 0;
 
-  while ((parens_depth > 0 || (tok != ',' && tok != ')')) && tok != EOF) {
+  while(and(or(gt(parens_depth,0),and(neq(tok,mkc(',')),neq(tok,mkc(')')))),neq(tok,EOF))) {
     if (eq(tok,mkc('('))) {
       parens_depth = add(parens_depth, 1); // Enter parenthesis
     }
@@ -1387,8 +1387,9 @@ function macro_parse_argument() {
   return arg_tokens;
 }
 
-void check_macro_arity(int macro_args_count, int macro) {
-  int expected_argc = cdr(heap[macro + 3]);
+function check_macro_arity(int macro_args_count, int macro) {
+  int expected_argc;
+  expected_argc = cdr(heap[macro + 3]);
   if (macro_args_count != expected_argc) {
     putstr("expected_argc="); putint(expected_argc);
     putstr(" != macro_args_count="); putint(macro_args_count);
