@@ -1402,18 +1402,23 @@ function check_macro_arity(macro_args_count, macro) {
 // Reads the arguments of a macro call, where the arguments are split by commas.
 // Note that args are accumulated in reverse order, as the macro arguments refer
 // to the tokens in reverse order.
-int get_macro_args_toks(int macro) {
-  int args = 0;
-  int macro_args_count = 0;
-  bool prev_is_comma = tok == ',';
+function get_macro_args_toks(macro) {
+  var args;
+  var macro_args_count;
+  var prev_is_comma;
+
+  args = 0;
+  macro_args_count = 0;
+  prev_is_comma = eq(tok, mkc(','));
+
   get_tok_macro_expand(); // Skip '('
 
-  while (tok != ')' && tok != EOF) {
-    if (tok == ',') {
+  while (and(neq(tok, mkc(')')), neq(tok, EOF))) {
+    if (eq(tok, mkc(','))) {
       get_tok_macro_expand(); // Skip comma
       if (prev_is_comma) { // Push empty arg
         args = cons(0, args);
-        macro_args_count += 1;
+        macro_args_count = add(macro_args_count, 1);
       }
       prev_is_comma = true;
       continue;
@@ -1422,14 +1427,16 @@ int get_macro_args_toks(int macro) {
     }
 
     args = cons(macro_parse_argument(), args);
-    macro_args_count += 1;
+    macro_args_count = add(macro_args_count, 1);
   }
 
-  if (tok != ')') syntax_error("unterminated macro argument list");
+  if (neq(tok, mkc(')'))) {
+    syntax_error(mks("unterminated macro argument list"));
+  }
 
   if (prev_is_comma) {
     args = cons(0, args); // Push empty arg
-    macro_args_count += 1;
+    macro_args_count = add(macro_args_count, 1);
   }
 
   check_macro_arity(macro_args_count, macro);
