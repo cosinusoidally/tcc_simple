@@ -492,6 +492,10 @@ var skip_newlines = true;
 var macro_stack[MACRO_RECURSION_MAX];
 var macro_stack_ix = 0;
 
+function r_macro_stack(o) {
+  return ri32(add(macro_stack,mul(4,o)));
+}
+
 var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
 var macro_args = 0;     // Current list of arguments for the macro being expanded
 var macro_ident = 0;    // The identifier of the macro being expanded (if any)
@@ -1459,11 +1463,13 @@ function get_macro_arg(ix) {
 
 // "Pops" the current macro expansion and restores the previous macro expansion context.
 // This is done when the current macro expansion is done.
-void return_to_parent_macro() {
-  if (macro_stack_ix == 0) fatal_error("return_to_parent_macro: no parent macro");
+function return_to_parent_macro() {
+  if (eq(macro_stack_ix, 0)) {
+    fatal_error(mks("return_to_parent_macro: no parent macro"));
+  }
 
-  macro_stack_ix -= 3;
-  macro_tok_lst   = macro_stack[macro_stack_ix];
+  macro_stack_ix = sub(macro_stack_ix, 3);
+  macro_tok_lst   = r_macro_stack(macro_stack_ix);
   macro_args      = macro_stack[macro_stack_ix + 1];
   macro_ident     = macro_stack[macro_stack_ix + 2];
 }
