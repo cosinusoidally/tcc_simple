@@ -1444,12 +1444,15 @@ function get_macro_args_toks(macro) {
   return args;
 }
 
-int get_macro_arg(int ix) {
-  int arg = macro_args;
-  while (ix > 0) {
-    if (arg == 0) syntax_error("too few arguments to macro");
+function get_macro_arg(ix) {
+  var arg;
+  arg = macro_args;
+  while (gt(ix, 0)) {
+    if (eq(arg, 0)) {
+      syntax_error(mks("too few arguments to macro"));
+    }
     arg = cdr(arg);
-    ix -= 1;
+    ix = sub(ix, 1);
   }
   return car(arg);
 }
