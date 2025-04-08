@@ -177,7 +177,7 @@ var ch;
 var tok;
 var val;
 
-int STRING_POOL_SIZE;
+var STRING_POOL_SIZE;
 char *string_pool;
 var string_pool_alloc;
 var string_start;
@@ -1317,16 +1317,17 @@ function init_ident_table() {
   NOT_SUPPORTED_ID = init_ident(IDENTIFIER, mks("NOT_SUPPORTED"));
 }
 
-int init_builtin_string_macro(char *macro_str, char* value) {
-  int macro_id = init_ident(MACRO, macro_str);
+function init_builtin_string_macro(macro_str, value) {
+  var macro_id;
+  macro_id = init_ident(MACRO, macro_str);
   // Macro object shape: ([(tok, val)], arity). -1 arity means it's an object-like macro
-  heap[macro_id + 3] = cons(cons(cons(STRING, intern_str(value)), 0), -1);
+  heap[add(macro_id, 3)] = cons(cons(cons(STRING, intern_str(value)), 0), sub(0,1));
   return macro_id;
 }
 
-int init_builtin_int_macro(char *macro_str, int value) {
+function init_builtin_int_macro(macro_str, value) {
   int macro_id = init_ident(MACRO, macro_str);
-  heap[macro_id + 3] = cons(cons(cons(INTEGER, -value), 0), -1);
+  heap[add(macro_id, 3)] = cons(cons(cons(INTEGER, sub(0,value)), 0), sub(0,1));
   return macro_id;
 }
 
