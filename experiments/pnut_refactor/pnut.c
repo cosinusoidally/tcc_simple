@@ -1387,15 +1387,15 @@ function macro_parse_argument() {
   return arg_tokens;
 }
 
-function check_macro_arity(int macro_args_count, int macro) {
-  int expected_argc;
-  expected_argc = cdr(heap[macro + 3]);
-  if (macro_args_count != expected_argc) {
-    putstr("expected_argc="); putint(expected_argc);
-    putstr(" != macro_args_count="); putint(macro_args_count);
-    putchar('\n');
-    putstr("macro="); putstr(STRING_BUF(macro)); putchar('\n');
-    syntax_error("macro argument count mismatch");
+function check_macro_arity(macro_args_count, macro) {
+  var expected_argc;
+  expected_argc = cdr(r_heap(add(macro,3)));
+  if (neq(macro_args_count, expected_argc)) {
+    putstr(mks("expected_argc=")); putint(expected_argc);
+    putstr(mks(" != macro_args_count=")); putint(macro_args_count);
+    putchar(mkc('\n'));
+    putstr(mks("macro=")); putstr(STRING_BUF(macro)); putchar(mkc('\n'));
+    syntax_error(mks("macro argument count mismatch"));
   }
 }
 
