@@ -1331,37 +1331,40 @@ function init_builtin_int_macro(macro_str, value) {
   return macro_id;
 }
 
-int init_builtin_empty_macro(char *macro_str) {
+function init_builtin_empty_macro(macro_str) {
   int macro_id = init_ident(MACRO, macro_str);
-  heap[macro_id + 3] = cons(0, -1); // -1 means it's an object-like macro, 0 means no tokens
+  heap[add(macro_id, 3)] = cons(0, sub(0,1)); // -1 means it's an object-like macro, 0 means no tokens
   return macro_id;
 }
 
-void init_pnut_macros() {
-  init_builtin_int_macro("PNUT_CC", 1);
+function init_pnut_macros() {
+  init_builtin_int_macro(mks("PNUT_CC"), 1);
 
-  init_builtin_string_macro("__DATE__", "Jan  1 1970");
-  init_builtin_string_macro("__TIME__", "00:00:00");
-  init_builtin_string_macro("__TIMESTAMP__", "Jan  1 1970 00:00:00");
-  FILE__ID = init_builtin_string_macro("__FILE__", "<unknown>");
-  LINE__ID = init_builtin_int_macro("__LINE__", 0);
+  init_builtin_string_macro(mks("__DATE__"), mks("Jan  1 1970"));
+  init_builtin_string_macro(mks("__TIME__"), mks("00:00:00"));
+  init_builtin_string_macro(mks("__TIMESTAMP__"), mks("Jan  1 1970 00:00:00"));
+  FILE__ID = init_builtin_string_macro(mks("__FILE__"), mks("<unknown>"));
+  LINE__ID = init_builtin_int_macro(mks("__LINE__"), 0);
 
-  init_builtin_int_macro("PNUT_EXE", 1);
-  init_builtin_int_macro("PNUT_EXE_32", 1);
-  init_builtin_int_macro("PNUT_I386", 1);
-  init_builtin_int_macro("PNUT_I386_LINUX", 1);
-  init_builtin_int_macro("__linux__", 1);
-  init_builtin_int_macro("__i386__", 1);
+  init_builtin_int_macro(mks("PNUT_EXE"), 1);
+  init_builtin_int_macro(mks("PNUT_EXE_32"), 1);
+  init_builtin_int_macro(mks("PNUT_I386"), 1);
+  init_builtin_int_macro(mks("PNUT_I386_LINUX"), 1);
+  init_builtin_int_macro(mks("__linux__"), 1);
+  init_builtin_int_macro(mks("__i386__"), 1);
 }
 
 // A macro argument is represented using a list of tokens.
 // Macro arguments are split by commas, but commas can also appear in function
 // calls and as operators. To distinguish between the two, we need to keep track
 // of the parenthesis depth.
-int macro_parse_argument() {
-  int arg_tokens = 0;
-  int parens_depth = 0;
-  int tail;
+function macro_parse_argument() {
+  var arg_tokens;
+  var parens_depth;
+  var tail;
+
+  arg_tokens = 0;
+  parens_depth = 0;
 
   while ((parens_depth > 0 || (tok != ',' && tok != ')')) && tok != EOF) {
     if (tok == '(') parens_depth += 1; // Enter parenthesis
