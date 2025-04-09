@@ -1762,7 +1762,7 @@ function get_tok() {
 
         get_ident();
 
-        if (tok == MACRO) {
+        if (eq(tok, MACRO)) {
           // We only expand in ifdef true blocks and if the expander is enabled.
           // Since this is the "base case" of the macro expansion, we don't need
           // to disable the other places where macro expansion is done.
@@ -1774,19 +1774,19 @@ function get_tok() {
           }
         }
         break;
-      } else if ('0' <= ch && ch <= '9') {
+      } else if (and(lte(mkc('0'), ch), lte(ch, mkc('9')))) {
 
         val = INIT_ACCUM_DIGIT();
 
         tok = INTEGER;
-        if (ch == '0') { // val == 0 <=> ch == '0'
+        if (eq(ch, mkc('0'))) { // val == 0 <=> ch == '0'
           get_ch();
-          if (ch == 'x' || ch == 'X') {
+          if (or(eq(ch, mkc('x')), eq(ch, mkc('X')))) {
             get_ch();
             if (accum_digit(16)) {
               while (accum_digit(16));
             } else {
-              syntax_error("invalid hex integer -- it must have at least one digit");
+              syntax_error(mks("invalid hex integer -- it must have at least one digit"));
             }
           } else {
             while (accum_digit(8));
@@ -1797,26 +1797,26 @@ function get_tok() {
 
         // If this is enabled with PARSE_NUMERIC_LITERAL_WITH_BASE, using a
         // suffix replaces INTEGER_OCT and INTEGER_HEX with base 10 INTEGER.
-        if (ch == 'u' || ch == 'U') {
+        if (or(eq(ch, mkc('u')), eq(ch, mkc('U')))) {
           // Note: allows suffixes with mixed case, such as lL for simplicity
           tok = INTEGER_U;
           get_ch();
-          if (ch == 'l' || ch == 'L') {
+          if (or(eq(ch, mkc('l')), eq(ch, mkc('L')))) {
             tok = INTEGER_UL;
             get_ch();
-            if (ch == 'l' || ch == 'L') {
+            if (or(eq(ch, mkc('l')), eq(ch, mkc('L')))) {
               tok = INTEGER_ULL;
               get_ch();
             }
           }
-        } else if (ch == 'l' || ch == 'L') {
+        } else if (or(eq(ch, mkc('l')), eq(ch, mkc('L')))) {
           tok = INTEGER_L;
           get_ch();
-          if (ch == 'l' || ch == 'L') {
+          if (or(eq(ch, mkc('l')), eq(ch, mkc('L')))) {
             tok = INTEGER_LL;
             get_ch();
           }
-          if (ch == 'u' || ch == 'U') {
+          if (or(eq(ch, mkc('u')), eq(ch, mkc('U')))) {
             tok = tok == INTEGER_LL ? INTEGER_ULL : INTEGER_UL;
             get_ch();
           }
