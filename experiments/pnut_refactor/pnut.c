@@ -1681,8 +1681,8 @@ function get_tok() {
         }
 
         // Check if the next token is ## for token pasting
-        if (macro_tok_lst != 0 && car(car(macro_tok_lst)) == HASH_HASH) {
-          if (tok == MACRO || tok == MACRO_ARG) {
+        if (and(neq(macro_tok_lst,0),eq(car(car(macro_tok_lst)), HASH_HASH))) {
+          if (or(eq(tok,MACRO),eq(tok,MACRO_ARG))) {
             // If the token is a macro or macro arg, it must be expanded before pasting
             macro_tok_lst = cdr(macro_tok_lst); // We consume the ## token
             paste_last_token = true;
