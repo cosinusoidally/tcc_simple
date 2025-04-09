@@ -2612,33 +2612,27 @@ function parse_param_list() {
 }
 
 function get_inner_type(type) {
-  int t;
+  var t;
   t = get_op(type);
   if(or(eq(t, DECL), eq(t, mkc('*')))) {
     return get_child(type, 1);
+  } else if(or(eq(t, mkc('[')), eq(t, mkc('(')))) {
+    return get_child(type, 0);
   } else {
-  switch (t) {
-    case '[':
-    case '(':
-      return get_child(type, 0);
-    default:
-      fatal_error("Invalid type");
-      return 0;
-  }
+    fatal_error(mks("Invalid type"));
+    return 0;
   }
 }
 
-void update_inner_type(ast parent_type, ast inner_type) {
-  switch (get_op(parent_type)) {
-    case DECL:
-    case '*':
-      set_child(parent_type, 1, inner_type);
-      break;
-
-    case '[':
-    case '(':
-      set_child(parent_type, 0, inner_type);
-      break;
+function update_inner_type(parent_type, inner_type) {
+  var t;
+  t = get_op(parent_type);
+  if(or(eq(t, DECL), eq(t, mkc('*')))) {
+    set_child(parent_type, 1, inner_type);
+  } else if(or(eq(t, mkc('[')), eq(t, mkc('(')))) {
+    set_child(parent_type, 0, inner_type);
+  } else {
+    return 0;
   }
 }
 
