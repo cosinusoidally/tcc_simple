@@ -2057,7 +2057,7 @@ function get_tok() {
             tok = mkc('.');
           }
           break;
-        } else if (eq(ch,mkc('~')) || eq(ch,mkc('.')) || eq(ch,mkc('?')) || eq(ch,mkc(',')) || eq(ch,mkc(':')) || eq(ch,mkc(';')) || eq(ch,mkc('(')) || eq(ch,mkc(')')) || eq(ch,mkc('[')) || eq(ch,mkc(']')) || eq(ch,mkc('{')) || eq(ch,mkc('}'))) {
+        } else if (or(or(or(eq(ch,mkc('~')),eq(ch,mkc('.'))),or(or(eq(ch,mkc('?')),eq(ch,mkc(','))),or(eq(ch,mkc(':')),eq(ch,mkc(';'))))),or(or(or(eq(ch,mkc('(')),eq(ch,mkc(')'))),or(eq(ch,mkc('[')),eq(ch,mkc(']')))),or(eq(ch,mkc('{')),eq(ch,mkc('}')))))) {
 
           tok = ch;
 
