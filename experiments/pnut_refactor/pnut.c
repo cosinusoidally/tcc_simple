@@ -2262,40 +2262,44 @@ function parse_enum() {
            ) {
         value = new_ast0(last_literal_type, -eval_constant(value, false)); // negative value to indicate it's a small integer
         }
-        next_value = get_val(value) - 1; // Next value is the current value + 1, but val is negative
+        next_value = sub(get_val(value), 1); // Next value is the current value + 1, but val is negative
       } else {
         value = new_ast0(last_literal_type, next_value);
-        next_value -= 1;
+        next_value = sub(next_value, 1);
       }
 
-      if (result == 0) {
-        result = cons(new_ast2('=', ident, value), 0);
+      if (eq(result, 0)) {
+        result = cons(new_ast2(mkc('='), ident, value), 0);
         tail = result;
       } else {
-        set_child(tail, 1, cons(new_ast2('=', ident, value), 0));
+        set_child(tail, 1, cons(new_ast2(mkc('='), ident, value), 0));
         tail = get_child_(LIST, tail, 1);
       }
 
-      if (tok == ',') {
+      if (eq(tok, mkc(','))) {
         get_tok();
       } else {
         break;
       }
     }
 
-    expect_tok('}');
+    expect_tok(mkc('}'));
 
   }
 
   return new_ast3(ENUM_KW, 0, name, result); // child#0 is the storage-class specifiers and type qualifiers
 }
 
-ast parse_struct_or_union(int struct_or_union_tok) {
-  ast name;
-  ast type_specifier, decl;
-  ast result = 0;
-  ast tail;
-  bool ends_in_flex_array = false;
+function parse_struct_or_union(struct_or_union_tok) {
+  var name;
+  var type_specifier;
+  var decl;
+  var result;
+  var tail;
+  var ends_in_flex_array;
+
+  result = 0;
+  ends_in_flex_array = false;
 
   expect_tok(struct_or_union_tok);
 
