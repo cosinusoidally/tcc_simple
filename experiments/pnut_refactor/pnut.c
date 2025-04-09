@@ -1817,10 +1817,14 @@ function get_tok() {
             get_ch();
           }
           if (or(eq(ch, mkc('u')), eq(ch, mkc('U')))) {
-            tok = tok == INTEGER_LL ? INTEGER_ULL : INTEGER_UL;
+            if(eq(tok, INTEGER_LL)) {
+              tok = INTEGER_ULL;
+            } else {
+              tok = INTEGER_UL;
+            }
             get_ch();
           }
-        } else if (ch == 'f' || ch == '.') {
+        } else if (or(eq(ch, mkc('f')), eq(ch, mkc('.')))) {
           get_ch();
           tok = INTEGER;
           while (accum_digit(10)); // Skip the fractional part
@@ -1829,13 +1833,13 @@ function get_tok() {
 
         break;
 
-      } else if (ch == '\'') {
+      } else if (eq(ch, mkc('\''))) {
 
         get_ch();
         get_string_char();
 
-        if (ch != '\'') {
-          syntax_error("unterminated character literal");
+        if (neq(ch, mkc('\''))) {
+          syntax_error(mks("unterminated character literal"));
         }
 
         get_ch();
@@ -1844,12 +1848,12 @@ function get_tok() {
 
         break;
 
-      } else if (ch == '\"') {
+      } else if (eq(ch, mkc('\"'))) {
 
         get_ch();
 
         begin_string();
-        accum_string_until('\"');
+        accum_string_until(mkc('\"'));
 
         val = end_string();
         tok = STRING;
@@ -1860,69 +1864,69 @@ function get_tok() {
 
         tok = ch; // fallback for single char tokens
 
-        if (ch == '/') {
+        if (eq(ch, mkc('/'))) {
 
           get_ch();
-          if (ch == '*') {
+          if (eq(ch, mkc('*'))) {
             get_ch();
             tok = ch; // remember previous char, except first one
-            while ((tok != '*' || ch != '/') && ch != EOF) {
+            while (and(or(neq(tok,mkc('*')),neq(ch,mkc('/'))),neq(ch,EOF))) {
               tok = ch;
               get_ch();
             }
-            if (ch == EOF) {
-              syntax_error("unterminated comment");
+            if (eq(ch, EOF)) {
+              syntax_error(mks("unterminated comment"));
             }
             get_ch();
             // will continue while (1) loop
-          } else if (ch == '/') {
-            while (ch != '\n' && ch != EOF) {
+          } else if (eq(ch, mkc('/'))) {
+            while (and(neq(ch, mkc('\n')), neq(ch, EOF))) {
               get_ch();
             }
             // will continue while (1) loop
           } else {
-            if (ch == '=') {
+            if (eq(ch, mkc('='))) {
               get_ch();
               tok = SLASH_EQ;
             }
             break;
           }
 
-        } else if (ch == '&') {
+        } else if (eq(ch, mkc('&'))) {
 
           get_ch();
-          if (ch == '&') {
+          if (eq(ch, mkc('&'))) {
             get_ch();
             tok = AMP_AMP;
-          } else if (ch == '=') {
+          } else if (eq(ch, mkc('='))) {
             get_ch();
             tok = AMP_EQ;
           }
 
           break;
 
-        } else if (ch == '|') {
+        } else if (eq(ch, mkc('|'))) {
 
           get_ch();
-          if (ch == '|') {
+          if (eq(ch, mkc('|'))) {
             get_ch();
             tok = BAR_BAR;
-          } else if (ch == '=') {
+          } else if (eq(ch, mkc('='))) {
             get_ch();
             tok = BAR_EQ;
           }
 
           break;
 
-        } else if (ch == '<') {
+        } else if (eq(ch, mkc('<'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = LT_EQ;
-          } else if (ch == '<') {
+          } else if (eq(ch, mkc('<'))) {
             get_ch();
-            if (ch == '=') {
+            if (eq(ch, mkc('='))) {
               get_ch();
               tok = LSHIFT_EQ;
             } else {
@@ -1932,15 +1936,15 @@ function get_tok() {
 
           break;
 
-        } else if (ch == '>') {
+        } else if (eq(ch, mkc('>'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = GT_EQ;
-          } else if (ch == '>') {
+          } else if (eq(ch, mkc('>'))) {
             get_ch();
-            if (ch == '=') {
+            if (eq(ch, mkc('='))) {
               get_ch();
               tok = RSHIFT_EQ;
             } else {
@@ -1950,20 +1954,20 @@ function get_tok() {
 
           break;
 
-        } else if (ch == '=') {
+        } else if (eq(ch, mkc('='))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = EQ_EQ;
           }
 
           break;
 
-        } else if (ch == '!') {
+        } else if (eq(ch, mkc('!'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = EXCL_EQ;
           }
