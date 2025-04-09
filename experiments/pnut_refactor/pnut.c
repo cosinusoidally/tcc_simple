@@ -1622,16 +1622,16 @@ function paste_tokens(left_tok, left_val) {
     } else if (or(or(or(eq(right_tok,INTEGER),
                eq(right_tok,INTEGER_L)),or(eq(right_tok,INTEGER_LL),eq(right_tok,INTEGER_U))),or(eq(right_tok,INTEGER_UL),eq(right_tok,INTEGER_ULL))
               )) {
-      accum_string_integer(-right_val);
+      accum_string_integer(sub(0,right_val));
     } else {
-      putstr("left_tok="); putint(left_tok); putstr(", right_tok="); putint(right_tok); putchar('\n');
+      putstr(mks("left_tok=")); putint(left_tok); putstr(mks(", right_tok=")); putint(right_tok); putchar(mkc('\n'));
       // show identifier/macro string
-      putstr("left="); putstr(STRING_BUF(left_val)); putchar('\n');
-      syntax_error("cannot paste an identifier with a non-identifier or non-negative integer");
+      putstr(mks("left=")); putstr(STRING_BUF(left_val)); putchar(mkc('\n'));
+      syntax_error(mks("cannot paste an identifier with a non-identifier or non-negative integer"));
     }
 
     val = end_ident();
-    tok = heap[val+2]; // The kind of the identifier
+    tok = r_heap(add(val, 2)); // The kind of the identifier
   } else if (left_tok == INTEGER
           || left_tok == INTEGER_L || left_tok == INTEGER_LL || left_tok == INTEGER_U || left_tok == INTEGER_UL || left_tok == INTEGER_ULL
             ) {
