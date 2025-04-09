@@ -1569,7 +1569,7 @@ function stringify() {
   arg = get_macro_arg(val);
   tok = STRING;
   // Support the case where the argument is a single identifier/macro/keyword token
-  if (and(eq(car(car(arg)),IDENTIFIER) || eq(car(car(arg)),MACRO) || and(lte(AUTO_KW,car(car(arg))),lte(car(car(arg)),WHILE_KW)),eq(cdr(arg),0))) {
+  if (and(or(or(eq(car(car(arg)),IDENTIFIER),eq(car(car(arg)),MACRO)),and(lte(AUTO_KW,car(car(arg))),lte(car(car(arg)),WHILE_KW))),eq(cdr(arg),0))) {
     val = cdr(car(arg)); // Use the identifier probe
   } else {
     val = NOT_SUPPORTED_ID; // Return string "NOT_SUPPORTED"
