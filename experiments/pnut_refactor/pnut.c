@@ -2303,7 +2303,7 @@ function parse_struct_or_union(struct_or_union_tok) {
 
   expect_tok(struct_or_union_tok);
 
-  if (tok == IDENTIFIER || tok == TYPE) {
+  if (or(eq(tok, IDENTIFIER), eq(tok, TYPE))) {
     // When the struct/union keyword is used with an identifier that's typedefed, the typedef is ignored.
     name = new_ast0(IDENTIFIER, val);
     get_tok();
@@ -2313,18 +2313,22 @@ function parse_struct_or_union(struct_or_union_tok) {
 
   // Note: The parser doesn't distinguish between a reference to a struct/union type and a declaration.
   // If child#2 is 0, it's either a reference to a type or a forward declaration.
-  if (tok == '{') {
+  if (eq(tok, mkc('{'))) {
     get_tok();
 
-    while (tok != '}') {
-      if (!is_type_starter(tok)) parse_error("type expected in struct declaration", tok);
-      if (ends_in_flex_array)    parse_error("flexible array member must be last", tok);
+    while (neq(tok, mkc('}'))) {
+      if (eq(0,is_type_starter(tok))) {
+        parse_error(mks("type expected in struct declaration"), tok);
+      }
+      if (ends_in_flex_array) {
+        parse_error(mks("flexible array member must be last"), tok);
+      }
       type_specifier = parse_declaration_specifiers(false);
 
       // If the decl has no name, it's an anonymous struct/union member
       // and there can only be 1 declarator so not looping.
-      if (tok == ';') {
-        if (get_op(type_specifier) != ENUM_KW && get_op(type_specifier) != STRUCT_KW && get_op(type_specifier) != UNION_KW) {
+      if (eq(tok, mkc(';'))) {
+        if (neq(get_op(type_specifier),ENUM_KW) && neq(get_op(type_specifier),STRUCT_KW) && neq(get_op(type_specifier),UNION_KW)) {
           parse_error("Anonymous struct/union member must be a struct or union type", tok);
         }
         decl = new_ast3(DECL, 0, type_specifier, 0);
