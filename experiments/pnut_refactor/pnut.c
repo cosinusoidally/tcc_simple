@@ -2129,20 +2129,18 @@ function TEST_TYPE_SPECIFIER(specifier, tok) {
   return and(specifier, shl(1, sub(tok, AUTO_KW)));
 }
 
-ast get_type_specifier(ast type_or_decl) {
+function get_type_specifier(type_or_decl) {
+  var td;
   while (1) {
-    switch (get_op(type_or_decl)) {
-      case DECL:
-        type_or_decl = get_child_(DECL, type_or_decl, 1);
-        break;
-      case '[':
-        type_or_decl = get_child_('[', type_or_decl, 0);
-        break;
-      case '*':
-        type_or_decl = get_child_('*', type_or_decl, 0);
-        break;
-      default:
-        return type_or_decl;
+    td = get_op(type_or_decl);
+    if(eq(td, DECL)) {
+      type_or_decl = get_child_(DECL, type_or_decl, 1);
+    } else if (eq(td, mkc('['))) {
+      type_or_decl = get_child_(mkc('['), type_or_decl, 0);
+    } else if (eq(td, mkc('*'))) {
+      type_or_decl = get_child_(mkc('*'), type_or_decl, 0);
+    } else {
+      return type_or_decl;
     }
   }
 }
