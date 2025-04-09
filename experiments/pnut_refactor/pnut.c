@@ -16,6 +16,17 @@ function expect_tok_(expected_tok, file, line);
 function get_tok();
 function get_ident();
 function parse_assignment_expression();
+function parse_comma_expression();
+function parse_call_params();
+function parse_cast_expression();
+function parse_compound_statement();
+function parse_conditional_expression();
+function parse_enum();
+function parse_struct_or_union(struct_or_union_tok);
+function parse_declarator(abstract_decl, parent_type);
+function parse_declaration_specifiers(allow_typedef);
+function parse_initializer_list();
+function parse_initializer();
 
 #define ast int
 #define true 1
@@ -2089,9 +2100,9 @@ function get_tok() {
   last_tok_column_number = prev_tok_column_number;
 }
 
-void parse_error_internal(char * msg, int token, char * file, int line) {
+int parse_error_internal(msg, token, file, line) {
   putstr(msg);
-  putstr("\n");
+  putstr(mks("\n"));
 
   exit(1);
 }
@@ -2101,25 +2112,13 @@ function parse_error(msg, token) {
 }
 
 function expect_tok_(expected_tok, file, line) {
-  if (tok != expected_tok) {
-    putstr("expected tok="); putint(expected_tok);
-    putstr("\ncurrent tok="); putint(tok); putchar('\n');
-    parse_error_internal("unexpected token", tok, file, line);
+  if (neq(tok, expected_tok)) {
+    putstr(mks("expected tok=")); putint(expected_tok);
+    putstr(mks("\ncurrent tok=")); putint(tok); putchar(mkc('\n'));
+    parse_error_internal(mks("unexpected token"), tok, file, line);
   }
   get_tok();
 }
-
-ast parse_comma_expression();
-ast parse_call_params();
-ast parse_cast_expression();
-ast parse_compound_statement();
-ast parse_conditional_expression();
-ast parse_enum();
-ast parse_struct_or_union(int struct_or_union_tok);
-ast parse_declarator(bool abstract_decl, ast parent_type);
-ast parse_declaration_specifiers(bool allow_typedef);
-ast parse_initializer_list();
-ast parse_initializer();
 
 // The storage class specifier and type qualifier tokens are all between 300 (AUTO_KW) and 326 (VOLATILE_KW) so we store them as bits in an int.
 #define MK_TYPE_SPECIFIER(tok) (1 << (tok - AUTO_KW))
