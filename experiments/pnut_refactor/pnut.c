@@ -2375,8 +2375,9 @@ function parse_struct_or_union(struct_or_union_tok) {
   return new_ast3(struct_or_union_tok, 0, name, result); // child#0 is the storage-class specifiers and type qualifiers
 }
 
-ast parse_type_specifier() {
-  ast type_specifier = 0;
+function parse_type_specifier() {
+  var type_specifier;
+  type_specifier = 0;
   switch (tok) {
     case CHAR_KW:
     case INT_KW:
