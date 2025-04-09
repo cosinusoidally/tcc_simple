@@ -2358,7 +2358,7 @@ function parse_struct_or_union(struct_or_union_tok) {
             ends_in_flex_array = true;
             break;
           }
-          if (tok == ',') {
+          if (eq(tok, mkc(','))) {
             get_tok();
           } else {
             break;
@@ -2366,10 +2366,10 @@ function parse_struct_or_union(struct_or_union_tok) {
         }
       }
 
-      expect_tok(';');
+      expect_tok(mkc(';'));
     }
 
-    expect_tok('}');
+    expect_tok(mkc('}'));
   }
 
   return new_ast3(struct_or_union_tok, 0, name, result); // child#0 is the storage-class specifiers and type qualifiers
