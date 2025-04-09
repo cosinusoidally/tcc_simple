@@ -1592,16 +1592,16 @@ function paste_integers(left_val, right_val) {
 }
 
 // Support token pasting between identifiers and non-negative integers
-void paste_tokens(int left_tok, int left_val) {
-  int right_tok;
-  int right_val;
+function paste_tokens(left_tok, left_val) {
+  var right_tok;
+  var right_val;
   expand_macro_arg = false;
   get_tok_macro();
   expand_macro_arg = true;
   // We need to handle the case where the right-hand side is a macro argument that expands to empty
   // In that case, the left-hand side is returned as is.
-  if (tok == MACRO_ARG) {
-    if (get_macro_arg(val) == 0) {
+  if (eq(tok, MACRO_ARG)) {
+    if (eq(get_macro_arg(val), 0)) {
       tok = left_tok;
       val = left_val;
       return;
