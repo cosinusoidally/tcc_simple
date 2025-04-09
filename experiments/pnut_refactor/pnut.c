@@ -2177,7 +2177,7 @@ function make_variadic_func(func_type) {
 }
 
 // Type and declaration parser
-bool is_type_starter(int tok) {
+function is_type_starter(tok) {
   switch (tok) {
     case INT_KW: case CHAR_KW: case SHORT_KW: case LONG_KW: // Numeric types
     case VOID_KW: case FLOAT_KW: case DOUBLE_KW:            // Void and floating point types
@@ -2190,9 +2190,8 @@ bool is_type_starter(int tok) {
     case TYPEDEF_KW: case STATIC_KW: case AUTO_KW: case REGISTER_KW: case EXTERN_KW:
     case INLINE_KW:
       return true;
-    default:
-      return false;
   }
+  return false;
 }
 
 ast parse_enum() {
