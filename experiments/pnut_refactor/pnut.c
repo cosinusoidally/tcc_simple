@@ -2390,37 +2390,46 @@ function parse_type_specifier() {
 
     case SHORT_KW:
       get_tok();
-      if (tok == INT_KW) get_tok(); // Just "short" is equivalent to "short int"
+      if (eq(tok, INT_KW)) {
+        get_tok(); // Just "short" is equivalent to "short int"
+      }
       return new_ast0(SHORT_KW, 0);
 
     case SIGNED_KW:
       get_tok();
       type_specifier = parse_type_specifier();
       // Just "signed" is equivalent to "signed int"
-      if (type_specifier == 0) type_specifier = new_ast0(INT_KW, 0);
+      if (eq(type_specifier, 0)) {
+        type_specifier = new_ast0(INT_KW, 0);
+      }
       return type_specifier;
 
     case UNSIGNED_KW:
       get_tok();
       type_specifier = parse_type_specifier();
       // Just "unsigned" is equivalent to "unsigned int"
-      if (type_specifier == 0) type_specifier = new_ast0(INT_KW, MK_TYPE_SPECIFIER(UNSIGNED_KW));
+      if (eq(type_specifier, 0)) {
+        type_specifier = new_ast0(INT_KW, MK_TYPE_SPECIFIER(UNSIGNED_KW));
+      }
       // Set the unsigned flag
-      else set_val(type_specifier, get_val(type_specifier) | MK_TYPE_SPECIFIER(UNSIGNED_KW));
+      else {
+        set_val(type_specifier, or(get_val(type_specifier),MK_TYPE_SPECIFIER(UNSIGNED_KW)));
+      }
       return type_specifier;
 
     case LONG_KW:
       get_tok();
-      if (tok == DOUBLE_KW) {
+      if (eq(tok, DOUBLE_KW)) {
         get_tok();
         return new_ast0(DOUBLE_KW, 0);
-      } else
-      {
-        if (tok == LONG_KW) {
+      } else {
+        if (eq(tok, LONG_KW)) {
           get_tok();
-          if (tok == INT_KW) get_tok(); // Just "long long" is equivalent to "long long int"
+          if (eq(tok, INT_KW)) {
+            get_tok(); // Just "long long" is equivalent to "long long int"
+          }
           return new_ast0(LONG_KW, 0);
-        } else if (tok == INT_KW) {
+        } else if (eq(tok, INT_KW)) {
           get_tok(); // Just "long" is equivalent to "long int", which we treat as "int"
           return new_ast0(INT_KW, 0);
         } else {
@@ -2438,12 +2447,19 @@ function parse_type_specifier() {
 //    2. declarators and initializers
 // This function parses the first part
 // Storage class specifiers affect declarations instead of types, so it's easier to extract it from the type
-int glo_specifier_storage_class = 0;
-ast parse_declaration_specifiers(bool allow_typedef) {
-  ast type_specifier = 0;
-  int type_qualifier = 0;
-  bool loop = true;
-  int specifier_storage_class = 0;
+
+var glo_specifier_storage_class = 0;
+
+function parse_declaration_specifiers(allow_typedef) {
+  var type_specifier;
+  var type_qualifier;
+  var loop;
+  var specifier_storage_class;
+
+  type_specifier = 0;
+  type_qualifier = 0;
+  loop = true;
+  specifier_storage_class = 0;
 
   while (loop) {
     switch (tok) {
