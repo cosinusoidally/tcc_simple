@@ -1691,37 +1691,37 @@ function get_tok() {
             macro_tok_lst = cdr(macro_tok_lst); // Skip the ##
             paste_tokens(tok, val);
           }
-        } else if (macro_tok_lst == 0 && paste_last_token) { // We finished expanding the left-hand side of ##
-          if (macro_stack_ix == 0) {
+        } else if (and(eq(macro_tok_lst,0),paste_last_token)) { // We finished expanding the left-hand side of ##
+          if (eq(macro_stack_ix, 0)) {
             // If we are not in a macro expansion, we can't paste the last token
             // This should not happen if the macro is well-formed, which is
             // checked by read_macro_tokens.
-            syntax_error("## cannot appear at the end of a macro expansion");
+            syntax_error(mks("## cannot appear at the end of a macro expansion"));
           }
           return_to_parent_macro();
           paste_last_token = false; // We are done pasting
           paste_tokens(tok, val);
         }
 
-        if (tok == MACRO) { // Nested macro expansion!
+        if (eq(tok, MACRO)) { // Nested macro expansion!
           if (attempt_macro_expansion(val)) {
             continue;
           }
           break;
-        } else if (tok == MACRO_ARG && expand_macro_arg) {
+        } else if (and(eq(tok, MACRO_ARG), expand_macro_arg)) {
           begin_macro_expansion(0, get_macro_arg(val), 0); // Play the tokens of the macro argument
           continue;
-        } else if (tok == '#') { // Stringizing!
+        } else if (eq(tok, mkc('#'))) { // Stringizing!
           stringify();
           break;
         }
         break;
-      } else if (macro_stack_ix != 0) {
+      } else if (neq(macro_stack_ix, 0)) {
         return_to_parent_macro();
         continue;
-      } else if (ch <= ' ') {
+      } else if (lte(ch, mkc(' '))) {
 
-        if (ch == EOF) {
+        if (eq(ch, EOF)) {
           tok = EOF;
           break;
         }
@@ -1733,12 +1733,14 @@ function get_tok() {
         // to end the current preprocessor directive.
 
         tok = 0; // Reset the token
-        while (0 <= ch && ch <= ' ') {
-          if (ch == '\n') tok = ch;
+        while (and(lte(0, ch), lte(ch, mkc(' ')))) {
+          if (eq(ch, mkc('\n'))) {
+            tok = ch;
+          }
           get_ch();
         }
 
-        if (tok == '\n' && !skip_newlines) {
+        if (and(eq(tok, mkc('\n')), eq(0, skip_newlines))) {
           // If the newline is followed by a #, the preprocessor directive is
           // handled in the next iteration of the loop.
           break;
