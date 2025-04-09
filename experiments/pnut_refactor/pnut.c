@@ -2065,18 +2065,18 @@ function get_tok() {
 
           break;
 
-        } else if (ch == '\\') {
+        } else if (eq(ch, mkc('\\'))) {
           get_ch();
 
-          if (ch == '\n') { // Continues with next token
+          if (eq(ch, mkc('\n'))) { // Continues with next token
             get_ch();
           } else {
-            putstr("ch="); putint(ch); putchar('\n');
-            syntax_error("unexpected character after backslash");
+            putstr(mks("ch=")); putint(ch); putchar(mkc('\n'));
+            syntax_error(mks("unexpected character after backslash"));
           }
         } else {
-          putstr("ch="); putint(ch); putchar('\n');
-          syntax_error("invalid token");
+          putstr(mks("ch=")); putint(ch); putchar(mkc('\n'));
+          syntax_error(mks("invalid token"));
         }
       }
     }
