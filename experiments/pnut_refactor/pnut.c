@@ -2179,15 +2179,15 @@ function make_variadic_func(func_type) {
 // Type and declaration parser
 function is_type_starter(tok) {
   // Numeric types
-  if(eq(tok,INT_KW) || eq(tok,CHAR_KW) || eq(tok,SHORT_KW) || eq(tok,LONG_KW)) {
+  if(or(or(eq(tok,INT_KW),eq(tok,CHAR_KW)),or(eq(tok,SHORT_KW),eq(tok,LONG_KW)))) {
     return true;
   }
   // Void and floating point types
-  if(eq(tok,VOID_KW) || eq(tok,FLOAT_KW) || eq(tok,DOUBLE_KW)) {
+  if(or(eq(tok,VOID_KW),or(eq(tok,FLOAT_KW),eq(tok,DOUBLE_KW)))) {
     return true;
   }
   // Signedness
-  if(eq(tok,SIGNED_KW) || eq(tok,UNSIGNED_KW)) {
+  if(or(eq(tok,SIGNED_KW),eq(tok,UNSIGNED_KW))) {
     return true;
   }
   // User defined types
@@ -2195,16 +2195,16 @@ function is_type_starter(tok) {
     return true;
   }
   // Type attributes
-  if(eq(tok,CONST_KW) || eq(tok,VOLATILE_KW)) {
+  if(or(eq(tok,CONST_KW),eq(tok,VOLATILE_KW))) {
     return true;
   }
   // Enum, struct, union
-  if(eq(tok,ENUM_KW) || eq(tok,STRUCT_KW) || eq(tok,UNION_KW)) {
+  if(or(eq(tok,ENUM_KW),or(eq(tok,STRUCT_KW),eq(tok,UNION_KW)))) {
     return true;
   }
   // Storage class specifiers are not always valid type starters in all
   // contexts, but we allow them here
-  if(eq(tok,TYPEDEF_KW) || eq(tok,STATIC_KW) || eq(tok,AUTO_KW) || eq(tok,REGISTER_KW) || eq(tok,EXTERN_KW)) {
+  if(or(eq(tok,TYPEDEF_KW),or(eq(tok,STATIC_KW),or(eq(tok,AUTO_KW),or(eq(tok,REGISTER_KW),eq(tok,EXTERN_KW)))))) {
     return true;
   }
   if(eq(tok,INLINE_KW)) {
@@ -2213,7 +2213,7 @@ function is_type_starter(tok) {
   return false;
 }
 
-ast parse_enum() {
+function parse_enum() {
   ast name;
   ast ident;
   ast result = 0;
