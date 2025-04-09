@@ -1578,14 +1578,17 @@ function stringify() {
 
 // Concatenates two non-negative integers into a single integer
 // Note that this function only supports small integers, represented as positive integers.
-int paste_integers(int left_val, int right_val) {
-  int result = left_val;
-  int right_digits = right_val;
-  while (right_digits > 0) {
-    result *= 10;
-    right_digits /= 10;
+function paste_integers(left_val, right_val) {
+  int result;
+  int right_digits;
+  result = left_val;
+  right_digits = right_val;
+
+  while (gt(right_digits, 0)) {
+    result = mul(result, 10);
+    right_digits = div_(right_digits, 10);
   }
-  return result + right_val;
+  return add(result, right_val);
 }
 
 // Support token pasting between identifiers and non-negative integers
