@@ -1612,7 +1612,7 @@ function paste_tokens(left_tok, left_val) {
   }
   right_tok = tok;
   right_val = val;
-  if (left_tok == IDENTIFIER || left_tok == TYPE || left_tok == MACRO || left_tok <= WHILE_KW) {
+  if (or(or(eq(left_tok,IDENTIFIER),eq(left_tok,TYPE)),or(eq(left_tok,MACRO),lte(left_tok,WHILE_KW)))) {
     // Something that starts with an identifier can only be an identifier
     begin_string();
     accum_string_string(left_val);
