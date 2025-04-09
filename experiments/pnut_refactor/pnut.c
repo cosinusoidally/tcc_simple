@@ -1635,11 +1635,11 @@ function paste_tokens(left_tok, left_val) {
   } else if (or(or(eq(left_tok,INTEGER),
              eq(left_tok,INTEGER_L)),or(or(eq(left_tok,INTEGER_LL),eq(left_tok,INTEGER_U)),or(eq(left_tok,INTEGER_UL),eq(left_tok,INTEGER_ULL))))
             ) {
-    if (right_tok == INTEGER
-    || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
+    if (eq(right_tok,INTEGER)
+    || eq(right_tok,INTEGER_L) || eq(right_tok,INTEGER_LL) || eq(right_tok,INTEGER_U) || eq(right_tok,INTEGER_UL) || eq(right_tok,INTEGER_ULL)
        ) {
-      val = -paste_integers(-left_val, -right_val);
-    } else if (right_tok == IDENTIFIER || right_tok == MACRO || right_tok <= WHILE_KW) {
+      val = sub(0,paste_integers(sub(0,left_val), sub(0,right_val)));
+    } else if (eq(right_tok,IDENTIFIER) || eq(right_tok,MACRO) || lte(right_tok,WHILE_KW)) {
       begin_string();
       accum_string_integer(-left_val);
       accum_string_string(right_val);
