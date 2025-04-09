@@ -2328,13 +2328,14 @@ function parse_struct_or_union(struct_or_union_tok) {
       // If the decl has no name, it's an anonymous struct/union member
       // and there can only be 1 declarator so not looping.
       if (eq(tok, mkc(';'))) {
-        if (neq(get_op(type_specifier),ENUM_KW) && neq(get_op(type_specifier),STRUCT_KW) && neq(get_op(type_specifier),UNION_KW)) {
-          parse_error("Anonymous struct/union member must be a struct or union type", tok);
+        if (and(neq(get_op(type_specifier),ENUM_KW), and(neq(get_op(type_specifier),STRUCT_KW),neq(get_op(type_specifier),UNION_KW)))) {
+          parse_error(mks("Anonymous struct/union member must be a struct or union type"), tok);
         }
         decl = new_ast3(DECL, 0, type_specifier, 0);
 
-        if (result == 0) {
-          tail = result = cons(decl, 0);
+        if (eq(result, 0)) {
+          result = cons(decl, 0);
+          tail = result;
         } else {
           set_child(tail, 1, cons(decl, 0));
           tail = get_child_(LIST, tail, 1);
@@ -2342,14 +2343,16 @@ function parse_struct_or_union(struct_or_union_tok) {
       } else {
         while (1) {
           decl = parse_declarator(false, type_specifier);
-          if (result == 0) {
+          if (eq(result, 0)) {
             tail = result = cons(decl, 0);
           } else {
             set_child(tail, 1, cons(decl, 0));
             tail = get_child_(LIST, tail, 1);
           }
 
-          if (get_child_(DECL, decl, 1) == VOID_KW) parse_error("member with void type not allowed in struct/union", tok);
+          if (eq(get_child_(DECL, decl, 1), VOID_KW)) {
+            parse_error(mks("member with void type not allowed in struct/union"), tok);
+          }
           if (get_child_(DECL, decl, 1) == '[' && get_child_('[', get_child_(DECL, decl, 1), 1) == 0) {
             // Set ends_in_flex_array if the type is an array with no size
             ends_in_flex_array = true;
