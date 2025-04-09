@@ -1987,74 +1987,74 @@ function get_tok() {
 
           break;
 
-        } else if (ch == '-') {
+        } else if (eq(ch, mkc('-'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = MINUS_EQ;
-          } else if (ch == '>') {
+          } else if (eq(ch, mkc('>'))) {
             get_ch();
             tok = ARROW;
-          } else if (ch == '-') {
+          } else if (eq(ch, mkc('-'))) {
             get_ch();
             tok = MINUS_MINUS;
           }
 
           break;
 
-        } else if (ch == '*') {
+        } else if (eq(ch, mkc('*'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = STAR_EQ;
           }
 
           break;
 
-        } else if (ch == '%') {
+        } else if (eq(ch, mkc('%'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = PERCENT_EQ;
           }
 
           break;
 
-        } else if (ch == '^') {
+        } else if (eq(ch, mkc('^'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = CARET_EQ;
           }
 
           break;
 
-        } else if (ch == '#') {
+        } else if (eq(ch, mkc('#'))) {
 
           get_ch();
-          if (ch == '#') {
+          if (eq(ch, mkc('#'))) {
             get_ch();
             tok = HASH_HASH;
           }
 
           break;
 
-        } else if (ch == '.') {
+        } else if (eq(ch, mkc('.'))) {
           get_ch();
-          if (ch == '.') {
+          if (eq(ch, mkc('.'))) {
             get_ch();
-            if (ch == '.') {
+            if (eq(ch, mkc('.'))) {
               get_ch();
               tok = ELLIPSIS;
             } else {
-              syntax_error("invalid token");
+              syntax_error(mks("invalid token"));
             }
           } else {
-            tok = '.';
+            tok = mkc('.');
           }
           break;
         } else if (ch == '~' || ch == '.' || ch == '?' || ch == ',' || ch == ':' || ch == ';' || ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}') {
