@@ -2214,13 +2214,18 @@ function is_type_starter(tok) {
 }
 
 function parse_enum() {
-  ast name;
-  ast ident;
-  ast result = 0;
-  ast tail;
-  ast value = 0;
-  int next_value = 0;
-  int last_literal_type = INTEGER; // Default to decimal integer for enum values
+  var name;
+  var ident;
+  var result;
+  var tail;
+  var value;
+  var next_value;
+  var last_literal_type;
+
+  result = 0;
+  value = 0;
+  next_value = 0;
+  last_literal_type = INTEGER; // Default to decimal integer for enum values
 
   expect_tok(ENUM_KW);
 
