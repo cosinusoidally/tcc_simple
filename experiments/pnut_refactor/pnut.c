@@ -1476,15 +1476,15 @@ function return_to_parent_macro() {
 
 // Begins a new macro expansion context, saving the current context onn the macro stack.
 // Takes as argument the name of the macro, the tokens to be expanded and the arguments.
-void begin_macro_expansion(int ident, int tokens, int args) {
-  if (macro_stack_ix + 3 >= MACRO_RECURSION_MAX) {
-    fatal_error("Macro recursion depth exceeded.");
+function begin_macro_expansion(ident, tokens, args) {
+  if (gte(add(macro_stack_ix, 3), MACRO_RECURSION_MAX)) {
+    fatal_error(mks("Macro recursion depth exceeded."));
   }
 
   macro_stack[macro_stack_ix]     = macro_tok_lst;
-  macro_stack[macro_stack_ix + 1] = macro_args;
-  macro_stack[macro_stack_ix + 2] = macro_ident;
-  macro_stack_ix += 3;
+  macro_stack[add(macro_stack_ix, 1)] = macro_args;
+  macro_stack[add(macro_stack_ix, 2)] = macro_ident;
+  macro_stack_ix = add(macro_stack_ix, 3);
 
   macro_ident   = ident;
   macro_tok_lst = tokens;
@@ -1492,8 +1492,9 @@ void begin_macro_expansion(int ident, int tokens, int args) {
 }
 
 // Search the macro stack to see if the macro is already expanding.
-bool macro_is_already_expanding(int ident) {
-  int i = macro_stack_ix;
+function macro_is_already_expanding(ident) {
+  var i;
+  i = macro_stack_ix;
   if (ident == 0 || macro_ident == 0) return false; // Unnamed macro or no macro is expanding
   if (ident == macro_ident)           return true;  // The same macro is already expanding
 
