@@ -2353,13 +2353,16 @@ function parse_struct_or_union(struct_or_union_tok) {
           if (eq(get_child_(DECL, decl, 1), VOID_KW)) {
             parse_error(mks("member with void type not allowed in struct/union"), tok);
           }
-          if (get_child_(DECL, decl, 1) == '[' && get_child_('[', get_child_(DECL, decl, 1), 1) == 0) {
+          if (and(eq(get_child_(DECL, decl, 1), mkc('[')), eq(get_child_('[', get_child_(DECL, decl, 1), 1), 0))) {
             // Set ends_in_flex_array if the type is an array with no size
             ends_in_flex_array = true;
             break;
           }
-          if (tok == ',') get_tok();
-          else break;
+          if (tok == ',') {
+            get_tok();
+          } else {
+            break;
+          }
         }
       }
 
