@@ -2243,7 +2243,7 @@ function parse_enum() {
     get_tok();
 
     while (neq(tok, mkc('}'))) {
-      if (tok != IDENTIFIER) {
+      if (neq(tok, IDENTIFIER)) {
         parse_error(mks("identifier expected"), tok);
       }
       ident = new_ast0(IDENTIFIER, val);
@@ -2256,9 +2256,9 @@ function parse_enum() {
           parse_error(mks("Enum value must be a constant expression"), tok);
         }
 
-        if (get_op(value) != INTEGER
-        && get_op(value) != INTEGER_U && get_op(value) != INTEGER_UL && get_op(value) != INTEGER_ULL
-        && get_op(value) != INTEGER_L && get_op(value) != INTEGER_LL
+        if (and(neq(get_op(value), INTEGER)
+        , and(neq(get_op(value),INTEGER_U), and(neq(get_op(value),INTEGER_UL),and(neq(get_op(value),INTEGER_ULL),
+        and(neq(get_op(value),INTEGER_L), neq(get_op(value),INTEGER_LL))))))
            ) {
         value = new_ast0(last_literal_type, -eval_constant(value, false)); // negative value to indicate it's a small integer
         }
