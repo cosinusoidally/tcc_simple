@@ -1495,20 +1495,26 @@ function begin_macro_expansion(ident, tokens, args) {
 function macro_is_already_expanding(ident) {
   var i;
   i = macro_stack_ix;
-  if (ident == 0 || macro_ident == 0) return false; // Unnamed macro or no macro is expanding
-  if (ident == macro_ident)           return true;  // The same macro is already expanding
+  if (or(eq(ident, 0), eq(macro_ident, 0))) {
+    return false; // Unnamed macro or no macro is expanding
+  }
+  if (eq(ident, macro_ident)) {
+    return true;  // The same macro is already expanding
+  }
 
   // Traverse the stack to see if the macro is already expanding
-  while (i > 0) {
-    i -= 3;
-    if (macro_stack[i + 2] == ident) return true;
+  while (gt(i, 0)) {
+    i = sub(i, 3);
+    if (eq(r_macro_stack(add(i, 2)), ident)) {
+      return true;
+    }
   }
   return false;
 }
 
 // Undoes the effect of get_tok by replacing the current token with the previous
 // token and saving the current token to be returned by the next call to get_tok.
-void undo_token(int prev_tok, int prev_val) {
+function undo_token(prev_tok, prev_val) {
   begin_macro_expansion(0, cons(cons(tok, val), 0), 0); // Push the current token back
   tok = prev_tok;
   val = prev_val;
@@ -1519,27 +1525,28 @@ void undo_token(int prev_tok, int prev_val) {
 // macro that is not called with parenthesis. In that case, the macro identifier
 // is returned as a normal identifier.
 // If the wrong number of arguments is passed to a function-like macro, a fatal error is raised.
-bool attempt_macro_expansion(int macro) {
+function attempt_macro_expansion(macro) {
   // We must save the tokens because the macro may be redefined while reading the arguments
-  int tokens = car(heap[macro + 3]);
+  var tokens;
+  tokens = car(r_heap(add(macro, 3)));
 
   if (macro_is_already_expanding(macro)) { // Self referencing macro
     tok = IDENTIFIER;
     val = macro;
     return false;
-  } else if (cdr(heap[macro + 3]) == -1) { // Object-like macro
+  } else if (eq(cdr(r_heap(add(macro,3))),sub(0,1))) { // Object-like macro
     // Note: Redefining __{FILE,LINE}__ macros, either with the #define or #line directives is not supported.
-    if (macro == FILE__ID) {
+    if (eq(macro, FILE__ID)) {
       tokens = cons(cons(STRING, intern_str(fp_filepath)), 0);
     }
-    else if (macro == LINE__ID) {
-      tokens = cons(cons(INTEGER, -line_number), 0);
+    else if (eq(macro, LINE__ID)) {
+      tokens = cons(cons(INTEGER, sub(0, line_number)), 0);
     }
     begin_macro_expansion(macro, tokens, 0);
     return true;
   } else { // Function-like macro
     expect_tok(MACRO); // Skip macro identifier
-    if (tok == '(') {
+    if (eq(tok, mkc('('))) {
       begin_macro_expansion(macro, tokens, get_macro_args_toks(macro));
       return true;
     } else {
