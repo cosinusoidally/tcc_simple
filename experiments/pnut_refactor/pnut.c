@@ -2100,7 +2100,7 @@ function get_tok() {
   last_tok_column_number = prev_tok_column_number;
 }
 
-int parse_error_internal(msg, token, file, line) {
+function parse_error_internal(msg, token, file, line) {
   putstr(msg);
   putstr(mks("\n"));
 
@@ -2121,8 +2121,13 @@ function expect_tok_(expected_tok, file, line) {
 }
 
 // The storage class specifier and type qualifier tokens are all between 300 (AUTO_KW) and 326 (VOLATILE_KW) so we store them as bits in an int.
-#define MK_TYPE_SPECIFIER(tok) (1 << (tok - AUTO_KW))
-#define TEST_TYPE_SPECIFIER(specifier, tok) ((specifier) & (1 << (tok - AUTO_KW)))
+function MK_TYPE_SPECIFIER(tok) {
+  return shl(1, (sub(tok, AUTO_KW)));
+}
+
+function TEST_TYPE_SPECIFIER(specifier, tok) {
+  return and(specifier, shl(1, sub(tok, AUTO_KW)));
+}
 
 ast get_type_specifier(ast type_or_decl) {
   while (1) {
