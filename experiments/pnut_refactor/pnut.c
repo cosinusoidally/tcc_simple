@@ -1619,9 +1619,9 @@ function paste_tokens(left_tok, left_val) {
 
     if (or(or(eq(right_tok,IDENTIFIER),eq(right_tok,TYPE)),or(eq(right_tok, MACRO),lte(right_tok,WHILE_KW)))) {
       accum_string_string(right_val);
-    } else if (right_tok == INTEGER
-            || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
-              ) {
+    } else if (or(or(or(eq(right_tok,INTEGER),
+               eq(right_tok,INTEGER_L)),or(eq(right_tok,INTEGER_LL),eq(right_tok,INTEGER_U))),or(eq(right_tok,INTEGER_UL),eq(right_tok,INTEGER_ULL))
+              )) {
       accum_string_integer(-right_val);
     } else {
       putstr("left_tok="); putint(left_tok); putstr(", right_tok="); putint(right_tok); putchar('\n');
