@@ -2468,8 +2468,12 @@ function parse_declaration_specifiers(allow_typedef) {
       case STATIC_KW:
       case EXTERN_KW:
       case TYPEDEF_KW:
-        if (specifier_storage_class != 0) fatal_error("Multiple storage classes not supported");
-        if (tok == TYPEDEF_KW && !allow_typedef) parse_error("Unexpected typedef", tok);
+        if (neq(specifier_storage_class, 0)) {
+          fatal_error(mks("Multiple storage classes not supported"));
+        }
+        if (and(eq(tok, TYPEDEF_KW), eq(0,allow_typedef))) {
+          parse_error(mks("Unexpected typedef"), tok);
+        }
         specifier_storage_class = tok;
         get_tok();
         break;
@@ -2480,7 +2484,7 @@ function parse_declaration_specifiers(allow_typedef) {
 
       case CONST_KW:
       case VOLATILE_KW:
-        type_qualifier |= MK_TYPE_SPECIFIER(tok);
+        type_qualifier = or(type_qualifier, MK_TYPE_SPECIFIER(tok));
         get_tok();
         break;
 
@@ -2493,24 +2497,34 @@ function parse_declaration_specifiers(allow_typedef) {
       case LONG_KW:
       case FLOAT_KW:
       case DOUBLE_KW:
-        if (type_specifier != 0) parse_error("Unexpected C type specifier", tok);
+        if (neq(type_specifier, 0)) {
+          parse_error(mks("Unexpected C type specifier"), tok);
+        }
         type_specifier = parse_type_specifier();
-        if (type_specifier == 0) parse_error("Failed to parse type specifier", tok);
+        if (eq(type_specifier, 0)) {
+          parse_error(mks("Failed to parse type specifier"), tok);
+        }
         break;
 
       case STRUCT_KW:
       case UNION_KW:
-        if (type_specifier != 0) parse_error("Multiple types not supported", tok);
+        if (neq(type_specifier, 0)) {
+          parse_error(mks("Multiple types not supported"), tok);
+        }
         type_specifier = parse_struct_or_union(tok);
         break;
 
       case ENUM_KW:
-        if (type_specifier != 0) parse_error("Multiple types not supported", tok);
+        if (neq(type_specifier, 0)) {
+          parse_error(mks("Multiple types not supported"), tok);
+        }
         type_specifier = parse_enum();
         break;
 
       case TYPE:
-        if (type_specifier != 0) parse_error("Multiple types not supported", tok);
+        if (neq(type_specifier, 0)) {
+          parse_error(mks("Multiple types not supported"), tok);
+        }
         // Lookup type in the types table. It is stored in the tag of the
         // interned string object. The type is cloned so it can be modified.
         type_specifier = clone_ast(heap[val + 3]);
@@ -2524,22 +2538,26 @@ function parse_declaration_specifiers(allow_typedef) {
   }
 
   // Note: Remove to support K&R C syntax
-  if (type_specifier == 0) parse_error("Type expected", tok);
+  if (eq(type_specifier, 0)) {
+    parse_error(mks("Type expected"), tok);
+  }
 
-  if (type_qualifier != 0) {
+  if (neq(type_qualifier, 0)) {
     // This can only happen if an array/function type is typedef'ed
-    if (get_op(type_specifier) == '[' || get_op(type_specifier) == '(')
-      parse_error("Type qualifiers not allowed on typedef'ed array or function type", tok);
+    if (or(eq(get_op(type_specifier),mkc('[')),eq(get_op(type_specifier),mkc('(')))) {
+      parse_error(mks("Type qualifiers not allowed on typedef'ed array or function type"), tok);
+    }
 
     // Set the type qualifier, keeping the storage class specifier from the typedef if it exists
-    set_child(type_specifier, 0, get_child(type_specifier, 0) | type_qualifier);
+    set_child(type_specifier, 0, or(get_child(type_specifier, 0),type_qualifier));
   }
   glo_specifier_storage_class = specifier_storage_class;
 
   return type_specifier;
 }
 
-bool parse_param_list_is_variadic = false;
+var parse_param_list_is_variadic = false;
+
 int parse_param_list() {
   ast result = 0;
   ast tail;
