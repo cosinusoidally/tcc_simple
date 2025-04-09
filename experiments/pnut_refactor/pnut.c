@@ -1632,8 +1632,8 @@ function paste_tokens(left_tok, left_val) {
 
     val = end_ident();
     tok = r_heap(add(val, 2)); // The kind of the identifier
-  } else if (left_tok == INTEGER
-          || left_tok == INTEGER_L || left_tok == INTEGER_LL || left_tok == INTEGER_U || left_tok == INTEGER_UL || left_tok == INTEGER_ULL
+  } else if (or(or(eq(left_tok,INTEGER),
+             eq(left_tok,INTEGER_L)),or(or(eq(left_tok,INTEGER_LL),eq(left_tok,INTEGER_U)),or(eq(left_tok,INTEGER_UL),eq(left_tok,INTEGER_ULL))))
             ) {
     if (right_tok == INTEGER
     || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
