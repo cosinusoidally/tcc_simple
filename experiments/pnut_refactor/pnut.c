@@ -1750,15 +1750,15 @@ function get_tok() {
       }
 
       // detect '#' at start of line, possibly preceded by whitespace
-      else if (tok == '\n' && ch == '#') {
+      else if (and(eq(tok, mkc('\n')), eq(ch, mkc('#')))) {
         tok = 0; // Consume the newline so handle_preprocessor_directive's get_tok doesn't re-enter this case
         handle_preprocessor_directive();
         // will continue while (1) loop
       }
 
-      else if (('a' <= ch && ch <= 'z') ||
-               ('A' <= ch && ch <= 'Z') ||
-               (ch == '_')) {
+      else if (or(and(lte(mkc('a'), ch), lte(ch, mkc('z'))),
+                  or(and(lte(mkc('A'), ch), lte(ch, mkc('Z'))),
+                     eq(ch, mkc('_'))))) {
 
         get_ident();
 
