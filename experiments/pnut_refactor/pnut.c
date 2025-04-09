@@ -2674,22 +2674,21 @@ function parse_declarator(abstract_decl, parent_type) {
   first_tok = tok; // Indicates if the declarator is a noptr-declarator
   result = 0;
 
+  if(eq(tok, IDENTIFIER)) {
+    result = new_ast3(DECL, new_ast0(IDENTIFIER, val), parent_type, 0); // child#2 is the initializer
+    parent_type_parent = result;
+    get_tok();
+  } else if(eq(tok, mkc('*'))) {
+    get_tok();
+    // Pointers may be const-qualified
+    parent_type_parent = pointer_type(parent_type, eq(tok, CONST_KW));
+    if (eq(tok, CONST_KW)) {
+      get_tok();
+    }
+    result = parse_declarator(abstract_decl, parent_type_parent);
+  } else {
 // LJW HERE
   switch (tok) {
-    case IDENTIFIER:
-      result = new_ast3(DECL, new_ast0(IDENTIFIER, val), parent_type, 0); // child#2 is the initializer
-      parent_type_parent = result;
-      get_tok();
-      break;
-
-    case '*':
-      get_tok();
-      // Pointers may be const-qualified
-      parent_type_parent = pointer_type(parent_type, tok == CONST_KW);
-      if (tok == CONST_KW) get_tok();
-      result = parse_declarator(abstract_decl, parent_type_parent);
-      break;
-
     // Parenthesis delimit the specifier-and-qualifier part of the declaration from the declarator
     case '(':
       get_tok();
@@ -2708,6 +2707,7 @@ function parse_declarator(abstract_decl, parent_type) {
       } else {
         parse_error("Invalid declarator, expected an identifier but declarator doesn't have one", tok);
       }
+  }
   }
 
   // At this point, the only non-recursive declarator is an identifier
