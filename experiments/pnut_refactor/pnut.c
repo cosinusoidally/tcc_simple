@@ -2686,34 +2686,29 @@ function parse_declarator(abstract_decl, parent_type) {
       get_tok();
     }
     result = parse_declarator(abstract_decl, parent_type_parent);
-  } else {
-// LJW HERE
-  switch (tok) {
+  } else if(eq(tok, mkc('('))) {
     // Parenthesis delimit the specifier-and-qualifier part of the declaration from the declarator
-    case '(':
-      get_tok();
-      result = parse_declarator(abstract_decl, parent_type);
-      parent_type_parent = parse_declarator_parent_type_parent;
-      expect_tok(')');
-      break;
-
-    default:
-      // Abstract declarators don't need names, and so in the base declarator,
-      // we don't require an identifier. This is useful for function pointers.
-      // In that case, we create a DECL node with no identifier.
-      if (abstract_decl) {
-        result = new_ast3(DECL, 0, parent_type, 0); // child#0 is the identifier, child#2 is the initializer
-        parent_type_parent = result;
-      } else {
-        parse_error("Invalid declarator, expected an identifier but declarator doesn't have one", tok);
-      }
-  }
+    get_tok();
+    result = parse_declarator(abstract_decl, parent_type);
+    parent_type_parent = parse_declarator_parent_type_parent;
+    expect_tok(mkc(')'));
+  } else {
+    // Abstract declarators don't need names, and so in the base declarator,
+    // we don't require an identifier. This is useful for function pointers.
+    // In that case, we create a DECL node with no identifier.
+    if (abstract_decl) {
+      result = new_ast3(DECL, 0, parent_type, 0); // child#0 is the identifier, child#2 is the initializer
+      parent_type_parent = result;
+    } else {
+      parse_error(mks("Invalid declarator, expected an identifier but declarator doesn't have one"), tok);
+    }
   }
 
   // At this point, the only non-recursive declarator is an identifier
   // so we know that get_op(result) == DECL.
   // Because we want the DECL to stay as the outermost node, we temporarily
   // unwrap the DECL parent_type.
+// LJW HERE
   decl = result;
   result = get_child_(DECL, decl, 1);
 
