@@ -2198,13 +2198,17 @@ function is_type_starter(tok) {
   if(eq(tok,CONST_KW) || eq(tok,VOLATILE_KW)) {
     return true;
   }
-  switch (tok) {
-    case ENUM_KW: case STRUCT_KW: case UNION_KW:            // Enum, struct, union
-    // Storage class specifiers are not always valid type starters in all
-    // contexts, but we allow them here
-    case TYPEDEF_KW: case STATIC_KW: case AUTO_KW: case REGISTER_KW: case EXTERN_KW:
-    case INLINE_KW:
-      return true;
+  // Enum, struct, union
+  if(eq(tok,ENUM_KW) || eq(tok,STRUCT_KW) || eq(tok,UNION_KW)) {
+    return true;
+  }
+  // Storage class specifiers are not always valid type starters in all
+  // contexts, but we allow them here
+  if(eq(tok,TYPEDEF_KW) || eq(tok,STATIC_KW) || eq(tok,AUTO_KW) || eq(tok,REGISTER_KW) || eq(tok,EXTERN_KW)) {
+    return true;
+  }
+  if(eq(tok,INLINE_KW)) {
+    return true;
   }
   return false;
 }
