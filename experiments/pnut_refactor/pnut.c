@@ -2611,17 +2611,20 @@ function parse_param_list() {
   return result;
 }
 
-ast get_inner_type(ast type) {
-  switch (get_op(type)) {
-    case DECL:
-    case '*':
-      return get_child(type, 1);
+function get_inner_type(type) {
+  int t;
+  t = get_op(type);
+  if(or(eq(t, DECL), eq(t, mkc('*')))) {
+    return get_child(type, 1);
+  } else {
+  switch (t) {
     case '[':
     case '(':
       return get_child(type, 0);
     default:
       fatal_error("Invalid type");
       return 0;
+  }
   }
 }
 
