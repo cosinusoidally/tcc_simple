@@ -2229,7 +2229,7 @@ function parse_enum() {
 
   expect_tok(ENUM_KW);
 
-  if (tok == IDENTIFIER || tok == TYPE) {
+  if (or(eq(tok, IDENTIFIER), eq(tok, TYPE))) {
     // When the enum keyword is used with an identifier that's typedefed, the typedef is ignored.
     name = new_ast0(IDENTIFIER, val);
     get_tok();
@@ -2239,20 +2239,22 @@ function parse_enum() {
 
   // Note: The parser doesn't distinguish between a reference to an enum type and a declaration.
   // If child#2 is 0, it's either a reference to a type or a forward declaration.
-  if (tok == '{') {
+  if (eq(tok, mkc('{'))) {
     get_tok();
 
-    while (tok != '}') {
+    while (neq(tok, mkc('}'))) {
       if (tok != IDENTIFIER) {
-        parse_error("identifier expected", tok);
+        parse_error(mks("identifier expected"), tok);
       }
       ident = new_ast0(IDENTIFIER, val);
       get_tok();
 
-      if (tok == '=') {
+      if (eq(tok, mkc('='))) {
         get_tok();
         value = parse_assignment_expression();
-        if (value == 0) parse_error("Enum value must be a constant expression", tok);
+        if (eq(value, 0)) {
+          parse_error(mks("Enum value must be a constant expression"), tok);
+        }
 
         if (get_op(value) != INTEGER
         && get_op(value) != INTEGER_U && get_op(value) != INTEGER_UL && get_op(value) != INTEGER_ULL
