@@ -1557,19 +1557,19 @@ function attempt_macro_expansion(macro) {
 }
 
 // https://gcc.gnu.org/onlinedocs/cpp/Stringizing.html
-void stringify() {
-  int arg;
+function stringify() {
+  var arg;
   expand_macro_arg = false;
   get_tok_macro();
   expand_macro_arg = true;
-  if (tok != MACRO_ARG) {
-    putstr("tok="); putint(tok); putchar('\n');
-    syntax_error("expected macro argument after #");
+  if (neq(tok, MACRO_ARG)) {
+    putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
+    syntax_error(mks("expected macro argument after #"));
   }
   arg = get_macro_arg(val);
   tok = STRING;
   // Support the case where the argument is a single identifier/macro/keyword token
-  if ((car(car(arg)) == IDENTIFIER || car(car(arg)) == MACRO || (AUTO_KW <= car(car(arg)) && car(car(arg)) <= WHILE_KW)) && cdr(arg) == 0) {
+  if (and(eq(car(car(arg)),IDENTIFIER) || eq(car(car(arg)),MACRO) || and(lte(AUTO_KW,car(car(arg))),lte(car(car(arg)),WHILE_KW)),eq(cdr(arg),0))) {
     val = cdr(car(arg)); // Use the identifier probe
   } else {
     val = NOT_SUPPORTED_ID; // Return string "NOT_SUPPORTED"
