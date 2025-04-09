@@ -2178,8 +2178,11 @@ function make_variadic_func(func_type) {
 
 // Type and declaration parser
 function is_type_starter(tok) {
+  // Numeric types
+  if(eq(tok,INT_KW) || eq(tok,CHAR_KW) || eq(tok,SHORT_KW) || eq(tok,LONG_KW)) {
+    return true;
+  }
   switch (tok) {
-    case INT_KW: case CHAR_KW: case SHORT_KW: case LONG_KW: // Numeric types
     case VOID_KW: case FLOAT_KW: case DOUBLE_KW:            // Void and floating point types
     case SIGNED_KW: case UNSIGNED_KW:                       // Signedness
     case TYPE:                                              // User defined types
