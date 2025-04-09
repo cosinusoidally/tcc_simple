@@ -1657,24 +1657,28 @@ function paste_tokens(left_tok, left_val) {
 }
 
 function get_tok() {
+  var prev_tok_line_number;
+  var prev_tok_column_number;
 
-  int prev_tok_line_number = line_number;
-  int prev_tok_column_number = column_number;
+  prev_tok_line_number = line_number;
+  prev_tok_column_number = column_number;
 
   // This outer loop is used to skip over tokens removed by #ifdef/#ifndef/#else
-  do {
+  while(1) {
     while (1) {
       // Check if there are any tokens to replay. Macros are just identifiers that
       // have been marked as macros. In terms of how we get into that state, a
       // macro token is first returned by the get_ident call a few lines below.
-      if (macro_tok_lst != 0) {
+      if (neq(macro_tok_lst, 0)) {
         tok = car(car(macro_tok_lst));
         val = cdr(car(macro_tok_lst));
         macro_tok_lst = cdr(macro_tok_lst);
         // Tokens that are identifiers and up are tokens whose kind can change
         // between the moment the macro is defined and where it is used.
         // So we reload the kind from the ident table.
-        if (tok >= IDENTIFIER) tok = heap[val + 2];
+        if (gte(tok, IDENTIFIER)) {
+          tok = r_heap(add(val, 2));
+        }
 
         // Check if the next token is ## for token pasting
         if (macro_tok_lst != 0 && car(car(macro_tok_lst)) == HASH_HASH) {
@@ -2070,7 +2074,10 @@ function get_tok() {
         }
       }
     }
-  } while (!if_macro_mask);
+    if(if_macro_mask) {
+      break;
+    }
+  }
 
   last_tok_line_number = prev_tok_line_number;
   last_tok_column_number = prev_tok_column_number;
