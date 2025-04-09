@@ -2182,11 +2182,23 @@ function is_type_starter(tok) {
   if(eq(tok,INT_KW) || eq(tok,CHAR_KW) || eq(tok,SHORT_KW) || eq(tok,LONG_KW)) {
     return true;
   }
+  // Void and floating point types
+  if(eq(tok,VOID_KW) || eq(tok,FLOAT_KW) || eq(tok,DOUBLE_KW)) {
+    return true;
+  }
+  // Signedness
+  if(eq(tok,SIGNED_KW) || eq(tok,UNSIGNED_KW)) {
+    return true;
+  }
+  // User defined types
+  if(eq(tok,TYPE)) {
+    return true;
+  }
+  // Type attributes
+  if(eq(tok,CONST_KW) || eq(tok,VOLATILE_KW)) {
+    return true;
+  }
   switch (tok) {
-    case VOID_KW: case FLOAT_KW: case DOUBLE_KW:            // Void and floating point types
-    case SIGNED_KW: case UNSIGNED_KW:                       // Signedness
-    case TYPE:                                              // User defined types
-    case CONST_KW: case VOLATILE_KW:                        // Type attributes
     case ENUM_KW: case STRUCT_KW: case UNION_KW:            // Enum, struct, union
     // Storage class specifiers are not always valid type starters in all
     // contexts, but we allow them here
