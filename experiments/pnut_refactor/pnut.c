@@ -2577,31 +2577,36 @@ function parse_param_list() {
         }
         break;
       }
-    } else if (tok == IDENTIFIER) {
+    } else if (eq(tok, IDENTIFIER)) {
       // Support K&R param syntax in function definition
       decl = new_ast3(DECL, new_ast0(IDENTIFIER, val), new_ast0(INT_KW, 0), 0);
       get_tok();
-    } else if (tok == ELLIPSIS) {
+    } else if (eq(tok, ELLIPSIS)) {
       // ignore ELLIPSIS nodes for now, but it should be the last parameter
-      if (result == 0) parse_error("Function must have a named parameter before ellipsis parameter", tok);
+      if (eq(result, 0)) {
+        parse_error(mks("Function must have a named parameter before ellipsis parameter"), tok);
+      }
       get_tok();
       parse_param_list_is_variadic = true;
       break;
     } else {
-      parse_error("Parameter declaration expected", tok);
+      parse_error(mks("Parameter declaration expected"), tok);
     }
 
-    if (tok == ',') get_tok();
+    if (eq(tok, mkc(','))) {
+      get_tok();
+    }
 
-    if (result == 0) {
-      tail = result = cons(decl, 0);
+    if (eq(result, 0)) {
+      result = cons(decl, 0);
+      tail = result;
     } else {
       set_child(tail, 1, cons(decl, 0));
       tail = get_child_(LIST, tail, 1);
     }
   }
 
-  expect_tok(')');
+  expect_tok(mkc(')'));
 
   return result;
 }
