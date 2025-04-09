@@ -2662,14 +2662,19 @@ function update_inner_type(parent_type, inner_type) {
 // type.
 //
 // Parameters: abstract_decl: true if the declarator may omit the identifier
-ast parse_declarator_parent_type_parent;
-ast parse_declarator(bool abstract_decl, ast parent_type) {
-  bool first_tok = tok; // Indicates if the declarator is a noptr-declarator
-  ast result = 0;
-  ast decl;
-  ast arr_size_expr;
-  ast parent_type_parent;
+var parse_declarator_parent_type_parent;
 
+function parse_declarator(abstract_decl, parent_type) {
+  var first_tok;
+  var result;
+  var decl;
+  var arr_size_expr;
+  var parent_type_parent;
+
+  first_tok = tok; // Indicates if the declarator is a noptr-declarator
+  result = 0;
+
+// LJW HERE
   switch (tok) {
     case IDENTIFIER:
       result = new_ast3(DECL, new_ast0(IDENTIFIER, val), parent_type, 0); // child#2 is the initializer
