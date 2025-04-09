@@ -1635,24 +1635,24 @@ function paste_tokens(left_tok, left_val) {
   } else if (or(or(eq(left_tok,INTEGER),
              eq(left_tok,INTEGER_L)),or(or(eq(left_tok,INTEGER_LL),eq(left_tok,INTEGER_U)),or(eq(left_tok,INTEGER_UL),eq(left_tok,INTEGER_ULL))))
             ) {
-    if (eq(right_tok,INTEGER)
-    || eq(right_tok,INTEGER_L) || eq(right_tok,INTEGER_LL) || eq(right_tok,INTEGER_U) || eq(right_tok,INTEGER_UL) || eq(right_tok,INTEGER_ULL)
+    if (or(or(or(eq(right_tok,INTEGER),
+        eq(right_tok,INTEGER_L)),or(eq(right_tok,INTEGER_LL),eq(right_tok,INTEGER_U))),or(eq(right_tok,INTEGER_UL),eq(right_tok,INTEGER_ULL)))
        ) {
       val = sub(0,paste_integers(sub(0,left_val), sub(0,right_val)));
     } else if (or(or(eq(right_tok,IDENTIFIER),eq(right_tok,MACRO)),lte(right_tok,WHILE_KW))) {
       begin_string();
-      accum_string_integer(-left_val);
+      accum_string_integer(sub(0, left_val));
       accum_string_string(right_val);
 
       val = end_ident();
-      tok = heap[val+2]; // The kind of the identifier
+      tok = r_heap(add(val, 2)); // The kind of the identifier
     } else {
-      putstr("left_tok="); putint(left_tok); putstr(", right_tok="); putint(right_tok); putchar('\n');
-      syntax_error("cannot paste an integer with a non-integer");
+      putstr(mks("left_tok=")); putint(left_tok); putstr(mks(", right_tok=")); putint(right_tok); putchar(mkc('\n'));
+      syntax_error(mks("cannot paste an integer with a non-integer"));
     }
   } else {
-    putstr("left_tok="); putint(left_tok); putstr(", right_tok="); putint(right_tok); putchar('\n');
-    syntax_error("cannot paste a non-identifier or non-integer");
+    putstr(mks("left_tok=")); putint(left_tok); putstr(mks(", right_tok=")); putint(right_tok); putchar(mkc('\n'));
+    syntax_error(mks("cannot paste a non-identifier or non-integer"));
   }
 }
 
