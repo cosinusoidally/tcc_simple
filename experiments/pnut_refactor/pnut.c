@@ -1617,7 +1617,7 @@ function paste_tokens(left_tok, left_val) {
     begin_string();
     accum_string_string(left_val);
 
-    if (right_tok == IDENTIFIER || right_tok == TYPE || right_tok == MACRO || right_tok <= WHILE_KW) {
+    if (or(or(eq(right_tok,IDENTIFIER),eq(right_tok,TYPE)),or(eq(right_tok, MACRO),lte(right_tok,WHILE_KW)))) {
       accum_string_string(right_val);
     } else if (right_tok == INTEGER
             || right_tok == INTEGER_L || right_tok == INTEGER_LL || right_tok == INTEGER_U || right_tok == INTEGER_UL || right_tok == INTEGER_ULL
