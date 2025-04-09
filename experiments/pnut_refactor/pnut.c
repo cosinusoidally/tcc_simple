@@ -2558,20 +2558,23 @@ function parse_declaration_specifiers(allow_typedef) {
 
 var parse_param_list_is_variadic = false;
 
-int parse_param_list() {
-  ast result = 0;
-  ast tail;
-  ast decl;
+function parse_param_list() {
+  var result;
+  var tail;
+  var decl;
 
+  result = 0;
   parse_param_list_is_variadic = false;
 
-  expect_tok('(');
+  expect_tok(mkc('('));
 
-  while (tok != ')' && tok != EOF) {
+  while (and(neq(tok, mkc(')')), neq(tok, EOF))) {
     if (is_type_starter(tok)) {
       decl = parse_declarator(true, parse_declaration_specifiers(false));
-      if (get_op(get_child_(DECL, decl, 1)) == VOID_KW) {
-        if (tok != ')' || result != 0) parse_error("void must be the only parameter", tok);
+      if (eq(get_op(get_child_(DECL, decl, 1)), VOID_KW)) {
+        if (or(neq(tok,mkc(')')), neq(result, 0))) {
+          parse_error("void must be the only parameter", tok);
+        }
         break;
       }
     } else if (tok == IDENTIFIER) {
