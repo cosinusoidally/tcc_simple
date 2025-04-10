@@ -4148,19 +4148,16 @@ function align_to(mul_, n) {
   return mul(div_(sub(add(n, mul_), 1), mul_), mul_);
 }
 
-function grow_stack(int words) {
-  add_reg_imm(reg_SP, -words * WORD_SIZE);
+function grow_stack(words) {
+  add_reg_imm(reg_SP, mul(sub(0, words),WORD_SIZE));
 }
 
 // Like grow_stack, but takes bytes instead of words.
 // To maintain alignment, the stack is grown by a multiple of WORD_SIZE (rounded
 // up from the number of bytes).
-function grow_stack_bytes(int bytes) {
-  add_reg_imm(reg_SP, -word_size_align(bytes));
+function grow_stack_bytes(bytes) {
+  add_reg_imm(reg_SP, sub(0, word_size_align(bytes)));
 }
-
-void rt_debug(char* msg);
-void rt_crash(char* msg);
 
 // Label definition
 
@@ -4169,12 +4166,21 @@ enum {
   GOTO_LABEL,
 };
 
-#define assert_all_labels_defined() // No-op
-#define add_label(lbl) // No-op
-#define alloc_label(name) alloc_label_()
+function assert_all_labels_defined() {
+  return 0; // No-op
+}
+
+function add_label(lbl) {
+  return 0; // No-op
+}
+
+function alloc_label(name) {
+  return alloc_label_();
+}
 
 function alloc_label_() {
-  int lbl = alloc_obj(2);
+  var lbl;
+  lbl = alloc_obj(2);
   heap[lbl] = GENERIC_LABEL;
   heap[lbl + 1] = 0; // Address of label
   add_label(lbl);
