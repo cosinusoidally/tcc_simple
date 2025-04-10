@@ -2834,48 +2834,57 @@ function add_typedef(declarator) {
   heap[add(decl_ident, 3)] = decl_type;
 }
 
-ast parse_fun_def(ast declarator) {
-  ast fun_type = get_child__(DECL, '(', declarator, 1);
-  ast params = get_child_('(', fun_type, 1);
+function parse_fun_def(declarator) {
+  var fun_type;
+  var params;
+
+  fun_type = get_child__(DECL, '(', declarator, 1);
+  params = get_child_('(', fun_type, 1);
 
   // Check that the parameters are all named since declarator may be abstract
-  while (params != 0) {
-    if (get_child_(DECL, get_child__(LIST, DECL, params, 0), 0) == 0) {
+  while (neq(params, 0)) {
+    if (eq(get_child_(DECL, get_child__(LIST, DECL, params, 0), 0), 0)) {
       parse_error("Parameter name expected", tok);
     }
     params = get_child_(LIST, params, 1);
   }
-  if (get_child_(DECL, declarator, 2) != 0) parse_error("Initializer not allowed in function definition", tok);
+  if (neq(get_child_(DECL, declarator, 2), 0)) {
+    parse_error(mks("Initializer not allowed in function definition"), tok);
+  }
   return new_ast2(FUN_DECL, declarator, parse_compound_statement());
 }
 
-ast parse_declaration(bool local) {
-  ast result;
-  ast declarator;
-  ast declarators;
+function parse_declaration(local) {
+  var result;
+  var declarator;
+  var declarators;
+  var type_specifier;
+
   // First we parse the specifiers:
-  ast type_specifier = parse_declaration_specifiers(true);
+  type_specifier = parse_declaration_specifiers(true);
 
   // From cppreference:
   // > The enum, struct, and union declarations may omit declarators, in which
   // > case they only introduce the enumeration constants and/or tags.
-  if (tok == ';') {
-    if (get_op(type_specifier) != ENUM_KW && get_op(type_specifier) != STRUCT_KW && get_op(type_specifier) != UNION_KW) {
-      parse_error("enum/struct/union declaration expected", tok);
+  if (eq(tok, mkc(';'))) {
+    if(and(neq(get_op(type_specifier),ENUM_KW),and(neq(get_op(type_specifier),STRUCT_KW),neq(get_op(type_specifier),UNION_KW)))) {
+      parse_error(mks("enum/struct/union declaration expected"), tok);
     }
     // If the specifier is a typedef, we add the typedef'ed type to the type table
     // Note: Should this return a DECL node instead of a ENUM, STRUCT, or UNION node?
     // It doesn't have a name so maybe it makes more sense to have a separate node type?
-    if (glo_specifier_storage_class == TYPEDEF_KW) add_typedef(new_ast3(DECL, 0, type_specifier, 0));
+    if (eq(glo_specifier_storage_class, TYPEDEF_KW)) {
+      add_typedef(new_ast3(DECL, 0, type_specifier, 0));
+    }
     result = type_specifier;
-  } else if (glo_specifier_storage_class == TYPEDEF_KW) {
+  } else if (eq(glo_specifier_storage_class, TYPEDEF_KW)) {
     // The type_specifier contained a typedef, it can't be a function or a
     // variable declaration, and the declarators cannot be initialized.
     // The typedef'ed types will be added to the type table.
     declarator = parse_declarator_and_initializer(true, type_specifier); // First declarator
     declarators = parse_declarators(true, type_specifier, declarator);
     type_specifier = declarators; // Save declarators in type_specifier
-    while (declarators != 0) {
+    while (neq(declarators, 0)) {
       add_typedef(get_child__(LIST, DECL, declarators, 0));
       declarators = get_child_opt_(LIST, LIST, declarators, 1);
     }
@@ -2885,8 +2894,10 @@ ast parse_declaration(bool local) {
     declarator = parse_declarator_and_initializer(false, type_specifier);
 
     // The declarator may be a function definition, in which case we parse the function body
-    if (get_op(get_child_(DECL, declarator, 1)) == '(' && tok == '{') {
-      if (local) parse_error("Function definition not allowed in local scope", tok);
+    if(and(eq(get_op(get_child_(DECL,declarator,1)),mkc('(')),eq(tok,mkc('{')))) {
+      if (local) {
+        parse_error(mks("Function definition not allowed in local scope"), tok);
+      }
       return parse_fun_def(declarator);
     }
 
@@ -2894,27 +2905,28 @@ ast parse_declaration(bool local) {
     result = new_ast2(DECLS, declarators, glo_specifier_storage_class); // child#1 is the storage class specifier
   }
 
-  expect_tok(';');
+  expect_tok(mkc(';'));
   return result;
 }
 
-ast parse_parenthesized_expression() {
+function parse_parenthesized_expression() {
 
-  ast result;
+  var result;
 
-  expect_tok('(');
+  expect_tok(mkc('('));
 
   result = parse_comma_expression();
 
-  expect_tok(')');
+  expect_tok(mkc(')'));
 
   return new_ast1(PARENS, result);
 }
 
-ast parse_primary_expression() {
+function parse_primary_expression() {
+  var result;
+  var tail;
 
-  ast result = 0;
-  ast tail;
+  result = 0;
 
   if (tok == IDENTIFIER || tok == CHARACTER || tok == INTEGER
      || tok == INTEGER_L ||  tok == INTEGER_LL ||  tok == INTEGER_U ||  tok == INTEGER_UL ||  tok == INTEGER_ULL
