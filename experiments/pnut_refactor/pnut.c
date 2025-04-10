@@ -3955,16 +3955,15 @@ function write_mem_location(base, offset, src, width) {
     mov_mem8_reg(base, offset, src);
   } else if(eq(width, 2)) {
     mov_mem16_reg(base, offset, src);
+  } else if(eq(width, 4)) {
+    mov_mem32_reg(base, offset, src);
   } else {
-  switch (width) {
-    case 4: mov_mem32_reg(base, offset, src); break;
-    default: fatal_error("write_mem_location: unknown width");
-  }
+    fatal_error(mks("write_mem_location: unknown width"));
   }
 }
 
-function copy_obj(int dst_base, int dst_offset, int src_base, int src_offset, int width) {
-  int i;
+function copy_obj(dst_base, dst_offset, src_base, src_offset, width) {
+  var i;
   // move the words
   for (i = 0; i < width / WORD_SIZE; i += 1) {
     mov_reg_mem(reg_Z, src_base, src_offset + i * WORD_SIZE);
