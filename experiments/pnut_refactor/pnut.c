@@ -4204,7 +4204,9 @@ function use_label(lbl) {
 
   addr = heap[add(lbl, 1)];
 
-  if (heap[lbl] != GENERIC_LABEL) fatal_error("use_label expects generic label");
+  if (neq(r_heap(lbl), GENERIC_LABEL)) {
+    fatal_error(mks("use_label expects generic label"));
+  }
 
   if (addr < 0) {
     // label address is currently known
