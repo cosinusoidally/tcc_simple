@@ -2935,14 +2935,14 @@ function parse_primary_expression() {
     result = new_ast0(tok, val);
     get_tok();
 
-  } else if (tok == STRING) {
+  } else if (eq(tok, STRING)) {
     result = new_ast0(STRING, val);
     get_tok();
 
-    if (tok == STRING) { // Contiguous strings
+    if (eq(tok, STRING)) { // Contiguous strings
       result = cons(get_val_(STRING, result), 0); // Result is now a list of string values
       tail = result;
-      while (tok == STRING) {
+      while (eq(tok, STRING)) {
         set_cdr(tail, cons(val, 0));
         tail = cdr(tail);
         get_tok();
@@ -2951,7 +2951,7 @@ function parse_primary_expression() {
       // Unpack the list of strings into a single string
       begin_string();
 
-      while (result != 0) {
+      while (neq(result, 0)) {
         accum_string_string(car(result));
         result = cdr(result);
       }
@@ -2959,12 +2959,12 @@ function parse_primary_expression() {
       result = new_ast0(STRING, end_string());
     }
 
-  } else if (tok == '(') {
+  } else if (eq(tok, mkc('('))) {
 
     result = parse_parenthesized_expression();
 
   } else {
-    parse_error("identifier, literal, or '(' expected", tok);
+    parse_error(mks("identifier, literal, or '(' expected"), tok);
   }
 
   return result;
