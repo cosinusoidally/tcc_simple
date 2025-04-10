@@ -2779,19 +2779,20 @@ function parse_initializer_list() {
   return new_ast1(INITIALIZER_LIST, result);
 }
 
-ast parse_initializer() {
-  if (tok == '{') {
+function parse_initializer() {
+  if (eq(tok, mkc('{'))) {
     return parse_initializer_list();
   } else {
     return parse_assignment_expression();
   }
 }
 
-ast parse_declarator_and_initializer(bool is_for_typedef, ast type_specifier) {
-  ast declarator = parse_declarator(false, type_specifier);
+function parse_declarator_and_initializer(is_for_typedef, type_specifier) {
+  var declarator;
+  declarator = parse_declarator(false, type_specifier);
 
-  if (is_for_typedef == 0) {
-    if (tok == '=') {
+  if (eq(is_for_typedef, 0)) {
+    if (eq(tok, mkc('='))) {
       get_tok();
       // parse_declarator returns a DECL node where the initializer is child#2
       set_child(declarator, 2, parse_initializer());
@@ -2801,30 +2802,36 @@ ast parse_declarator_and_initializer(bool is_for_typedef, ast type_specifier) {
   return declarator;
 }
 
-ast parse_declarators(bool is_for_typedef, ast type_specifier, ast first_declarator) {
-  ast declarators = cons(first_declarator, 0); // Wrap the declarators in a list
-  ast tail = declarators;
+function parse_declarators(is_for_typedef, type_specifier, first_declarator) {
+  var declarators;
+  var tail;
+
+  declarators = cons(first_declarator, 0); // Wrap the declarators in a list
+  tail = declarators;
 
   // Otherwise, this is a variable or declaration
-  while (tok != ';') {
-    if (tok == ',') {
+  while (neq(tok, mkc(';'))) {
+    if (eq(tok, mkc(','))) {
       get_tok();
       set_child(tail, 1, cons(parse_declarator_and_initializer(is_for_typedef, type_specifier), 0));
       tail = get_child__(LIST, LIST, tail, 1);
     } else {
-      parse_error("';' or ',' expected", tok);
+      parse_error(mks("';' or ',' expected"), tok);
     }
   }
 
   return declarators;
 }
 
-void add_typedef(ast declarator) {
-  int decl_ident = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, declarator, 0));
-  ast decl_type = get_child_(DECL, declarator, 1); // child#1 is the type
+function add_typedef(declarator) {
+  var decl_ident;
+  var decl_type;
 
-  heap[decl_ident + 2] = TYPE;
-  heap[decl_ident + 3] = decl_type;
+  decl_ident = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, declarator, 0));
+  decl_type = get_child_(DECL, declarator, 1); // child#1 is the type
+
+  heap[add(decl_ident, 2)] = TYPE;
+  heap[add(decl_ident, 3)] = decl_type;
 }
 
 ast parse_fun_def(ast declarator) {
