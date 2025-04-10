@@ -2708,32 +2708,37 @@ function parse_declarator(abstract_decl, parent_type) {
   // so we know that get_op(result) == DECL.
   // Because we want the DECL to stay as the outermost node, we temporarily
   // unwrap the DECL parent_type.
-// LJW HERE
   decl = result;
   result = get_child_(DECL, decl, 1);
 
-  while (first_tok != '*') {
+  while (neq(first_tok, mkc('*'))) {
     // noptr-declarator may be followed by [ constant-expression ] to declare an
     // array or by ( parameter-type-list ) to declare a function. We loop since
     // both may be present.
-    if (tok == '[') {
+    if (eq(tok, mkc('['))) {
       // Check if not a void array
-      if (get_op(result) == VOID_KW) parse_error("void array not allowed", tok);
-        get_tok();
-      if (tok == ']') {
+      if (eq(get_op(result), VOID_KW)) {
+        parse_error(mks("void array not allowed"), tok);
+      }
+      get_tok();
+      if (eq(tok, mkc(']'))) {
         val = 0;
       } else {
         arr_size_expr = parse_assignment_expression();
-        if (arr_size_expr == 0) parse_error("Array size must be an integer constant", tok);
+        if (eq(arr_size_expr, 0)) {
+          parse_error(mks("Array size must be an integer constant"), tok);
+        }
         val = eval_constant(arr_size_expr, false);
       }
-      result = new_ast2('[', get_inner_type(parent_type_parent), val);
+      result = new_ast2(mkc('['), get_inner_type(parent_type_parent), val);
       update_inner_type(parent_type_parent, result);
       parent_type_parent = result;
-      expect_tok(']');
-    } else if (tok == '(') {
-      result = new_ast3('(', get_inner_type(parent_type_parent), parse_param_list(), false);
-      if (parse_param_list_is_variadic) result = make_variadic_func(result);
+      expect_tok(mkc(']'));
+    } else if (eq(tok, mkc('('))) {
+      result = new_ast3(mkc('('), get_inner_type(parent_type_parent), parse_param_list(), false);
+      if (parse_param_list_is_variadic) {
+        result = make_variadic_func(result);
+      }
       update_inner_type(parent_type_parent, result);
       parent_type_parent = result;
     } else {
@@ -2745,23 +2750,31 @@ function parse_declarator(abstract_decl, parent_type) {
   return decl;
 }
 
-ast parse_initializer_list() {
-  ast result = 0, tail = 0;
+function parse_initializer_list() {
+  var result;
+  var tail;
 
-  expect_tok('{');
+  result = 0;
+  tail = 0;
 
-  while (tok != '}' && tok != EOF) {
+  expect_tok(mkc('{'));
+
+  while (and(neq(tok, mkc('}')), neq(tok, EOF))) {
     if (result == 0) {
-      tail = result = cons(parse_initializer(), 0);
+      result = cons(parse_initializer(), 0);
+      tail = result;
     } else {
       set_child(tail, 1, cons(parse_initializer(), 0));
       tail = get_child_(LIST, tail, 1);
     }
-    if (tok == ',') get_tok();
-    else break;
+    if (eq(tok, mkc(','))) {
+      get_tok();
+    } else {
+      break;
+    }
   }
 
-  expect_tok('}');
+  expect_tok(mkc('}'));
 
   return new_ast1(INITIALIZER_LIST, result);
 }
