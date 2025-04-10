@@ -27,6 +27,7 @@ function parse_declarator(abstract_decl, parent_type);
 function parse_declaration_specifiers(allow_typedef);
 function parse_initializer_list();
 function parse_initializer();
+function generate_exe();
 
 #define ast int
 #define true 1
@@ -3196,7 +3197,7 @@ function parse_relational_expression() {
 
   result = parse_shift_expression();
 
-  while(eq(tok,mkc('<')) || eq(tok,mkc('>')) || eq(tok,LT_EQ) || eq(tok,GT_EQ)) {
+  while(or(eq(tok,mkc('<')),or(eq(tok,mkc('>')),or(eq(tok,LT_EQ),eq(tok,GT_EQ))))) {
 
     op = tok;
     get_tok();
@@ -3208,13 +3209,14 @@ function parse_relational_expression() {
   return result;
 }
 
-ast parse_equality_expression() {
+function parse_equality_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_relational_expression();
-  ast child;
-  int op;
+  result = parse_relational_expression();
 
-  while (tok == EQ_EQ || tok == EXCL_EQ) {
+  while (or(eq(tok,EQ_EQ), eq(tok, EXCL_EQ))) {
 
     op = tok;
     get_tok();
@@ -3226,44 +3228,47 @@ ast parse_equality_expression() {
   return result;
 }
 
-ast parse_AND_expression() {
+function parse_AND_expression() {
+  var result;
+  var child;
 
-  ast result = parse_equality_expression();
-  ast child;
+  result = parse_equality_expression();
 
-  while (tok == '&') {
+  while (eq(tok, mkc('&'))) {
 
     get_tok();
     child = parse_equality_expression();
-    result = new_ast2('&', result, child);
+    result = new_ast2(mkc('&'), result, child);
 
   }
 
   return result;
 }
 
-ast parse_exclusive_OR_expression() {
+function parse_exclusive_OR_expression() {
+  var result;
+  var child;
 
-  ast result = parse_AND_expression();
-  ast child;
+  result = parse_AND_expression();
 
-  while (tok == '^') {
+  while (eq(tok, mkc('^'))) {
 
     get_tok();
     child = parse_AND_expression();
-    result = new_ast2('^', result, child);
+    result = new_ast2(mkc('^'), result, child);
 
   }
 
   return result;
 }
 
-ast parse_inclusive_OR_expression() {
+function parse_inclusive_OR_expression() {
+  var result;
+  var child;
 
-  ast result = parse_exclusive_OR_expression();
-  ast child;
+  result = parse_exclusive_OR_expression();
 
-  while (tok == '|') {
+  while (eq(tok, mkc('|'))) {
 
     get_tok();
     child = parse_exclusive_OR_expression();
@@ -3274,12 +3279,13 @@ ast parse_inclusive_OR_expression() {
   return result;
 }
 
-ast parse_logical_AND_expression() {
+function parse_logical_AND_expression() {
+  var result;
+  var child;
 
-  ast result = parse_inclusive_OR_expression();
-  ast child;
+  result = parse_inclusive_OR_expression();
 
-  while (tok == AMP_AMP) {
+  while (eq(tok, AMP_AMP)) {
 
     get_tok();
     child = parse_inclusive_OR_expression();
@@ -3290,12 +3296,13 @@ ast parse_logical_AND_expression() {
   return result;
 }
 
-ast parse_logical_OR_expression() {
+function parse_logical_OR_expression() {
+  var result;
+  var child;
 
-  ast result = parse_logical_AND_expression();
-  ast child;
+  result = parse_logical_AND_expression();
 
-  while (tok == BAR_BAR) {
+  while (eq(tok, BAR_BAR)) {
 
     get_tok();
     child = parse_logical_AND_expression();
@@ -3306,35 +3313,37 @@ ast parse_logical_OR_expression() {
   return result;
 }
 
-ast parse_conditional_expression() {
+function parse_conditional_expression() {
+  var result;
+  var child1;
+  var child2;
 
-  ast result = parse_logical_OR_expression();
-  ast child1;
-  ast child2;
+  result = parse_logical_OR_expression();
 
-  if (tok == '?') {
+  if (eq(tok, mkc('?'))) {
 
     get_tok();
     child1 = parse_comma_expression();
-    expect_tok(':');
+    expect_tok(mkc(':'));
     child2 = parse_conditional_expression();
-    result = new_ast3('?', result, child1, child2);
+    result = new_ast3(mkc('?'), result, child1, child2);
 
   }
 
   return result;
 }
 
-ast parse_assignment_expression() {
+function parse_assignment_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_conditional_expression();
-  ast child;
-  int op;
+  result = parse_conditional_expression();
 
-  if (   tok == '='       || tok == PLUS_EQ   || tok == MINUS_EQ
-      || tok == STAR_EQ   || tok == SLASH_EQ  || tok == PERCENT_EQ
-      || tok == LSHIFT_EQ || tok == RSHIFT_EQ || tok == AMP_EQ
-      || tok == CARET_EQ  || tok == BAR_EQ) {
+  if (or(eq(tok, mkc('=')), or(eq(tok, PLUS_EQ), or(eq(tok, MINUS_EQ),
+         or(eq(tok, STAR_EQ), or(eq(tok, SLASH_EQ), or(eq(tok, PERCENT_EQ),
+         or(eq(tok, LSHIFT_EQ), or(eq(tok, RSHIFT_EQ), or(eq(tok, AMP_EQ),
+         or(eq(tok, CARET_EQ), eq(tok, BAR_EQ)))))))))))) {
 
     op = tok;
     get_tok();
@@ -3346,24 +3355,27 @@ ast parse_assignment_expression() {
   return result;
 }
 
-ast parse_comma_expression() {
+function parse_comma_expression() {
+  var result;
 
-  ast result = parse_assignment_expression();
+  result = parse_assignment_expression();
 
-  if (tok == ',') { // "comma expressions" without , don't need to be wrapped in a comma node
+  if (eq(tok, mkc(','))) { // "comma expressions" without , don't need to be wrapped in a comma node
     get_tok();
-    result = new_ast2(',', result, 0);
+    result = new_ast2(mkc(','), result, 0);
     set_child(result, 1, parse_comma_expression());
   }
 
   return result;
 }
 
-ast parse_call_params() {
-  ast result = parse_assignment_expression();
+function parse_call_params() {
+  var result;
+
+  result = parse_assignment_expression();
   result = new_ast2(LIST, result, 0);
 
-  if (tok == ',') {
+  if (eq(tok, mkc(','))) {
     get_tok();
     set_child(result, 1, parse_call_params());
   }
@@ -3371,11 +3383,10 @@ ast parse_call_params() {
   return result;
 }
 
-ast parse_comma_expression_opt() {
+function parse_comma_expression_opt() {
+  var result;
 
-  ast result;
-
-  if (tok == ':' || tok == ';' || tok == ')') {
+  if (or(eq(tok, mkc(':')), or(eq(tok, mkc(';')), eq(tok, mkc(')'))))) {
     result = 0;
   } else {
     result = parse_comma_expression();
@@ -3384,29 +3395,28 @@ ast parse_comma_expression_opt() {
   return result;
 }
 
-ast parse_expression() {
+function parse_expression() {
   return parse_comma_expression();
 }
 
-ast parse_constant_expression() {
+function parse_constant_expression() {
   return parse_expression();
 }
 
-ast parse_statement() {
+function parse_statement() {
+  var result;
+  var child1;
+  var child2;
+  var child3;
+  var start_tok;
 
-  ast result;
-  ast child1;
-  ast child2;
-  ast child3;
-  int start_tok;
-
-  if (tok == IF_KW) {
+  if (eq(tok, IF_KW)) {
 
     get_tok();
     result = parse_parenthesized_expression();
     child1 = parse_statement();
 
-    if (tok == ELSE_KW) {
+    if (eq(tok, ELSE_KW)) {
       get_tok();
       child2 = parse_statement();
     } else {
@@ -3415,7 +3425,7 @@ ast parse_statement() {
 
     result = new_ast3(IF_KW, result, child1, child2);
 
-  } else if (tok == SWITCH_KW) {
+  } else if (eq(tok, SWITCH_KW)) {
 
     get_tok();
     result = parse_parenthesized_expression();
@@ -3423,24 +3433,24 @@ ast parse_statement() {
 
     result = new_ast2(SWITCH_KW, result, child1);
 
-  } else if (tok == CASE_KW) {
+  } else if (eq(tok, CASE_KW)) {
 
     get_tok();
     result = parse_constant_expression();
-    expect_tok(':');
+    expect_tok(mkc(':'));
     child1 = parse_statement();
 
     result = new_ast2(CASE_KW, result, child1);
 
-  } else if (tok == DEFAULT_KW) {
+  } else if (eq(tok, DEFAULT_KW)) {
 
     get_tok();
-    expect_tok(':');
+    expect_tok(mkc(':'));
     result = parse_statement();
 
     result = new_ast1(DEFAULT_KW, result);
 
-  } else if (tok == WHILE_KW) {
+  } else if (eq(tok, WHILE_KW)) {
 
     get_tok();
     result = parse_parenthesized_expression();
@@ -3448,60 +3458,60 @@ ast parse_statement() {
 
     result = new_ast2(WHILE_KW, result, child1);
 
-  } else if (tok == DO_KW) {
+  } else if (eq(tok, DO_KW)) {
 
     get_tok();
     result = parse_statement();
     expect_tok(WHILE_KW);
     child1 = parse_parenthesized_expression();
-    expect_tok(';');
+    expect_tok(mkc(';'));
 
     result = new_ast2(DO_KW, result, child1);
 
-  } else if (tok == FOR_KW) {
+  } else if (eq(tok, FOR_KW)) {
 
     get_tok();
-    expect_tok('(');
+    expect_tok(mkc('('));
     result = parse_comma_expression_opt();
-    expect_tok(';');
+    expect_tok(mkc(';'));
     child1 = parse_comma_expression_opt();
-    expect_tok(';');
+    expect_tok(mkc(';'));
     child2 = parse_comma_expression_opt();
-    expect_tok(')');
+    expect_tok(mkc(')'));
     child3 = parse_statement();
 
     result = new_ast4(FOR_KW, result, child1, child2, child3);
 
-  } else if (tok == GOTO_KW) {
+  } else if (eq(tok, GOTO_KW)) {
 
     get_tok();
     expect_tok(IDENTIFIER);
     result = new_ast1(GOTO_KW, new_ast0(IDENTIFIER, val));
-    expect_tok(';');
+    expect_tok(mkc(';'));
 
-  } else if (tok == CONTINUE_KW) {
+  } else if (eq(tok, CONTINUE_KW)) {
 
     get_tok();
-    expect_tok(';');
+    expect_tok(mkc(';'));
 
     result = new_ast0(CONTINUE_KW, 0);
 
-  } else if (tok == BREAK_KW) {
+  } else if (eq(tok, BREAK_KW)) {
 
     get_tok();
-    expect_tok(';');
+    expect_tok(mkc(';'));
 
     result = new_ast0(BREAK_KW, 0);
 
-  } else if (tok == RETURN_KW) {
+  } else if (eq(tok, RETURN_KW)) {
 
     get_tok();
     result = parse_comma_expression_opt();
-    expect_tok(';');
+    expect_tok(mkc(';'));
 
     result = new_ast1(RETURN_KW, result);
 
-  } else if (tok == '{') {
+  } else if (eq(tok, mkc('{'))) {
 
     result = parse_compound_statement();
 
@@ -3511,17 +3521,17 @@ ast parse_statement() {
 
     result = parse_comma_expression_opt();
 
-    if (tok == ':' && start_tok != '(' && get_op(result) == IDENTIFIER) {
+    if(and(eq(tok,mkc(':')),and(neq(start_tok,mkc('(')),eq(get_op(result),IDENTIFIER)))) {
 
       get_tok(); // Skip :
 
       child1 = parse_statement();
 
-      result = new_ast2(':', result, child1);
+      result = new_ast2(mkc(':'), result, child1);
 
     } else {
 
-      expect_tok(';');
+      expect_tok(mkc(';'));
 
     }
   }
@@ -3529,36 +3539,37 @@ ast parse_statement() {
   return result;
 }
 
-ast parse_compound_statement() {
+function parse_compound_statement() {
+  var result;
+  var child1;
+  var tail;
 
-  ast result = 0;
-  ast child1;
-  ast tail;
+  result = 0;
 
-  expect_tok('{');
+  expect_tok(mkc('{'));
 
   // TODO: Simplify this
-  if (tok != '}' && tok != EOF) {
+  if (and(neq(tok, mkc('}')), neq(tok, EOF))) {
     if (is_type_starter(tok)) {
       child1 = parse_declaration(true);
     } else {
       child1 = parse_statement();
     }
-    result = new_ast2('{', child1, 0);
+    result = new_ast2(mkc('{'), child1, 0);
     tail = result;
-    while (tok != '}' && tok != EOF) {
+    while (and(neq(tok, mkc('}')), neq(tok, EOF))) {
       if (is_type_starter(tok)) {
         child1 = parse_declaration(true);
       } else {
         child1 = parse_statement();
       }
-      child1 = new_ast2('{', child1, 0);
+      child1 = new_ast2(mkc('{'), child1, 0);
       set_child(tail, 1, child1);
       tail = child1;
     }
   }
 
-  expect_tok('}');
+  expect_tok(mkc('}'));
 
   return result;
 }
@@ -3568,76 +3579,79 @@ ast parse_compound_statement() {
 // Select code generator
 
 // start x86.c
-#define WORD_SIZE 4
+var WORD_SIZE = 4;
 
 // x86 codegen
 // start exe.c
 
-// common part of machine code generators
-void generate_exe();
 
 // 1MB heap
-#define RT_HEAP_SIZE 104857600
+var RT_HEAP_SIZE = 104857600;
 
 #define MAX_CODE_SIZE 5000000
-int code[MAX_CODE_SIZE];
-int code_alloc = 0;
+var code[MAX_CODE_SIZE];
+var code_alloc = 0;
 
-void emit_i8(int a) {
-  if (code_alloc >= MAX_CODE_SIZE) {
-    fatal_error("code buffer overflow");
-  }
-  code[code_alloc] = (a & 0xff);
-  code_alloc += 1;
+function r_code(o) {
+  return ri32(add(code,mul(4,o)));
 }
 
-void emit_2_i8(int a, int b) {
+function emit_i8(a) {
+  if (gte(code_alloc, MAX_CODE_SIZE)) {
+    fatal_error(mks("code buffer overflow"));
+  }
+  code[code_alloc] = and(a, 0xFF);
+  code_alloc = add(code_alloc, 1);
+}
+
+function emit_2_i8(a, b) {
   emit_i8(a);
   emit_i8(b);
 }
 
-void emit_4_i8(int a, int b, int c, int d) {
+function emit_4_i8(a, b, c, d) {
   emit_2_i8(a, b);
   emit_2_i8(c, d);
 }
 
-void emit_i32_le(int n) {
-  emit_4_i8(n, n >> 8, n >> 16, n >> 24);
+function emit_i32_le(n) {
+  emit_4_i8(n, shr(n, 8), shr(n, 16), shr(n, 24));
 }
 
 char write_buf[1];
-void write_i8(int n) {
-  write_buf[0] = (n & 0xff);
+
+function write_i8(n) {
+  wi8(write_buf, and(n, 255));
   write(output_fd, write_buf, 1);
 }
 
-void write_2_i8(int a, int b) {
+function write_2_i8(a, b) {
   write_i8(a);
   write_i8(b);
 }
 
-void write_4_i8(int a, int b, int c, int d) {
+function write_4_i8(a, b, c, d) {
   write_2_i8(a, b);
   write_2_i8(c, d);
 }
 
-void write_i32_le(int n) {
-  write_4_i8(n, n >> 8, n >> 16, n >> 24);
+function write_i32_le(n) {
+  write_4_i8(n, shr(n, 8), shr(n, 16), shr(n, 24));
 }
 
 // If the main function returns a value
-bool main_returns = false;
+var main_returns = false;
 
 // Environment tracking
-int cgc_fs = 0;
+var cgc_fs = 0;
 // Function bindings that follows lexical scoping rules
-int cgc_locals = 0;
+var cgc_locals = 0;
 // Like cgc_locals, but with 1 scope for the entire function
-int cgc_locals_fun = 0;
+var cgc_locals_fun = 0;
 // Global bindings
-int cgc_globals = 0;
+var cgc_globals = 0;
 // Bump allocator used to allocate static objects
-int cgc_global_alloc = 0;
+var cgc_global_alloc = 0;
 
 enum BINDING {
   // Because function params, local and global variables all share the same
@@ -3660,11 +3674,19 @@ enum BINDING {
 // Some small accessor for the bindings
 // All bindings have a next pointer and a kind.
 // Most have an identifier, but not all
-#define binding_next(binding)  heap[binding]
-#define binding_kind(binding)  heap[binding+1]
-#define binding_ident(binding) heap[binding+2]
+function binding_next(binding) {
+  return r_heap(binding);
+}
 
-int cgc_lookup_binding_ident(int binding_type, int ident, int binding) {
+function binding_kind(binding) {
+  return r_heap(add(binding, 1));
+}
+
+function binding_ident(binding) {
+  return r_heap(add(binding, 2));
+}
+
+function cgc_lookup_binding_ident(binding_type, ident, binding) {
   while (binding != 0) {
     if (binding_kind(binding) == binding_type && binding_ident(binding) == ident) {
       break;
@@ -6393,7 +6415,8 @@ void write_elf_p_header() {
   write_i32_le(0x1000);            // p_align
 }
 
-void generate_exe() {
+// common part of machine code generators
+function generate_exe() {
   int i = 0;
 
   write_elf_e_header();
