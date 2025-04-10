@@ -2928,8 +2928,8 @@ function parse_primary_expression() {
 
   result = 0;
 
-  if (tok == IDENTIFIER || tok == CHARACTER || tok == INTEGER
-     || tok == INTEGER_L ||  tok == INTEGER_LL ||  tok == INTEGER_U ||  tok == INTEGER_UL ||  tok == INTEGER_ULL
+  if (eq(tok,IDENTIFIER) || eq(tok,CHARACTER) || eq(tok,INTEGER)
+     || eq(tok,INTEGER_L) ||  eq(tok,INTEGER_LL) ||  eq(tok,INTEGER_U) ||  eq(tok,INTEGER_UL) ||  eq(tok,INTEGER_ULL)
      ) {
 
     result = new_ast0(tok, val);
