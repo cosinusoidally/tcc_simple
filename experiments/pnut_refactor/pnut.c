@@ -4208,25 +4208,29 @@ function use_label(lbl) {
     fatal_error(mks("use_label expects generic label"));
   }
 
-  if (addr < 0) {
+  if (lt(addr, 0)) {
     // label address is currently known
-    addr = -addr - (code_alloc + 4); // compute relative address
+    addr = sub(sub(0, addr), add(code_alloc, 4)); // compute relative address
     emit_i32_le(addr);
   } else {
     // label address is not yet known
     emit_i32_le(0); // 32 bit placeholder for distance
-    code[code_alloc-1] = addr; // chain with previous patch address
-    heap[lbl + 1] = code_alloc;
+    code[sub(code_alloc, 1)] = addr; // chain with previous patch address
+    heap[add(lbl, 1)] = code_alloc;
   }
 }
 
-function def_label(int lbl) {
-
-  int addr = heap[lbl + 1];
-  int label_addr = code_alloc;
+function def_label(lbl) {
+  var addr;
+  var label_addr;
   int next;
 
-  if (heap[lbl] != GENERIC_LABEL) fatal_error("def_label expects generic label");
+  addr = r_heap(add(lbl, 1));
+  label_addr = code_alloc;
+
+  if (heap[lbl] != GENERIC_LABEL) {
+    fatal_error(mks("def_label expects generic label"));
+  }
 
   heap[lbl + 1] = -label_addr; // define label's address
   while (addr != 0) {
