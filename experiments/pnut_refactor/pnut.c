@@ -4140,8 +4140,8 @@ var mkdir_lbl;
 var chmod_lbl;
 var access_lbl;
 
-function word_size_align(int n) {
-  return (n + WORD_SIZE - 1) / WORD_SIZE * WORD_SIZE;
+function word_size_align(n) {
+  return mul(div_(sub(add(n, WORD_SIZE), 1), WORD_SIZE), WORD_SIZE);
 }
 
 function align_to(int mul, int n) {
