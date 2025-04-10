@@ -79,9 +79,9 @@ function os_mkdir();
 function os_chmod();
 function os_access();
 
-void rt_putchar();
-void rt_debug(char* msg);
-void rt_crash(char* msg);
+function rt_putchar();
+function rt_debug(msg);
+function rt_crash(msg);
 
 function setup_proc_args(global_vars_size);
 
@@ -6210,7 +6210,7 @@ void codegen_glo_decl(ast node) {
   }
 }
 
-void rt_putchar() {
+function rt_putchar() {
   push_reg(reg_X);            // Allocate buffer on stack containing the character
   mov_reg_imm(reg_X, 1);      // reg_X = file descriptor (stdout)
   mov_reg_reg(reg_Y, reg_SP); // reg_Y = buffer size
@@ -6219,15 +6219,15 @@ void rt_putchar() {
   pop_reg(reg_X);             // Deallocate buffer
 }
 
-void rt_debug(char* msg) {
-  while (*msg != 0) {
-    mov_reg_imm(reg_X, *msg);
+function rt_debug(msg) {
+  while (neq(ri8(msg), 0)) {
+    mov_reg_imm(reg_X, ri8(msg));
     rt_putchar();
-    msg += 1;
+    msg = add(msg, 1);
   }
 }
 
-void rt_crash(char* msg) {
+function rt_crash(msg) {
   rt_debug(msg);
   mov_reg_imm(reg_X, 42); // exit code
   os_exit();
