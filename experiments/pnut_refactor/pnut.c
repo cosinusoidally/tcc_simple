@@ -2928,9 +2928,9 @@ function parse_primary_expression() {
 
   result = 0;
 
-  if (eq(tok,IDENTIFIER) || eq(tok,CHARACTER) || eq(tok,INTEGER)
-     || eq(tok,INTEGER_L) ||  eq(tok,INTEGER_LL) ||  eq(tok,INTEGER_U) ||  eq(tok,INTEGER_UL) ||  eq(tok,INTEGER_ULL)
-     ) {
+  if (or(eq(tok,IDENTIFIER),or(eq(tok,CHARACTER),or(eq(tok,INTEGER),
+     or(eq(tok,INTEGER_L),or(eq(tok,INTEGER_LL),or(eq(tok,INTEGER_U),or(eq(tok,INTEGER_UL),eq(tok,INTEGER_ULL)
+     )))))))) {
 
     result = new_ast0(tok, val);
     get_tok();
