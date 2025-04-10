@@ -65,7 +65,7 @@ function call(lbl);
 function call_reg(reg);
 function ret();
 function debug_interrupt();
-
+function jump_cond_reg_reg(cond, lbl, reg1, reg2);
 
 
 #define ast int
@@ -4011,14 +4011,22 @@ function power_of_2_log(n) {
   return i;
 }
 
-function mul_for_pointer_arith(int reg, int width) {
-  int other_reg = reg == reg_X ? reg_Y : reg_X;
+function mul_for_pointer_arith(reg, width) {
+  var other_reg;
 
-  if (width == 1) return;
+  if(eq(reg, reg_X)) {
+    other_reg = reg_Y;
+  } else {
+    other_reg = reg_X;
+  }
+
+  if (eq(width, 1)) {
+    return;
+  }
 
   if (is_power_of_2(width)) {
-    while (width > 1) {
-      width /= 2;
+    while (gt(width, 1)) {
+      width = div_(width, 2);
       add_reg_reg(reg, reg);
     }
   } else {
@@ -4029,14 +4037,17 @@ function mul_for_pointer_arith(int reg, int width) {
   }
 }
 
-function div_for_pointer_arith(int reg, int width) {
-  int reg_start = reg;
+function div_for_pointer_arith(reg, width) {
+  var reg_start;
+  reg_start = reg;
 
-  if (width == 1) return;
+  if (eq(width, 1)) {
+    return;
+  }
 
   if (is_power_of_2(width)) {
     // sar_reg_reg does not work with reg_Y, so we need to shift the value to reg_X
-    if (reg_start != reg_X) {
+    if (neq(reg_start, reg_X)) {
       push_reg(reg_X);                // Save reg_X
       mov_reg_reg(reg_X, reg_start);  // Move the value to reg_X
       reg = reg_X;
@@ -4049,7 +4060,7 @@ function div_for_pointer_arith(int reg, int width) {
     sar_reg_reg(reg_X, reg_Y);
 
     // Now reg_X contains the result, and we move it back in reg_start if needed
-    if (reg_start != reg_X) {
+    if (neq(reg_start, reg_X)) {
       mov_reg_reg(reg_start, reg_X);
       pop_reg(reg_X);
     } else {
@@ -4057,7 +4068,7 @@ function div_for_pointer_arith(int reg, int width) {
     }
   } else {
     // div_reg_reg only works with reg_X on certain architectures, so we need to save it
-    if (reg_start != reg_X) {
+    if (neq(reg_start, reg_X)) {
       push_reg(reg_X);
       reg = reg_X;
     } else {
@@ -4067,7 +4078,7 @@ function div_for_pointer_arith(int reg, int width) {
     mov_reg_imm(reg_Y, width);
     div_reg_reg(reg_X, reg_Y);
 
-    if (reg_start != reg_X) {
+    if (neq(reg_start, reg_X)) {
       mov_reg_reg(reg_start, reg_X);
       pop_reg(reg_X);
     } else {
@@ -4076,18 +4087,16 @@ function div_for_pointer_arith(int reg, int width) {
   }
 }
 
-const int EQ; // x == y
-const int NE; // x != y
-const int LT; // x < y
-const int LT_U; // x < y  (unsigned)
-const int GE; // x >= y
-const int GE_U; // x >= y (unsigned)
-const int LE; // x <= y
-const int LE_U; // x <= y (unsigned)
-const int GT; // x > y
-const int GT_U; // x > y  (unsigned)
-
-function jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2);
+const var EQ; // x == y
+const var NE; // x != y
+const var LT; // x < y
+const var LT_U; // x < y  (unsigned)
+const var GE; // x >= y
+const var GE_U; // x >= y (unsigned)
+const var LE; // x <= y
+const var LE_U; // x <= y (unsigned)
+const var GT; // x > y
+const var GT_U; // x > y  (unsigned)
 
 void os_exit();
 void os_allocate_memory(int size);
