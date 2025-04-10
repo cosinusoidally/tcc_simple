@@ -67,23 +67,23 @@ function ret();
 function debug_interrupt();
 function jump_cond_reg_reg(cond, lbl, reg1, reg2);
 
-void os_exit();
-void os_allocate_memory(size);
-void os_read();
-void os_write();
-void os_open();
-void os_close();
-void os_seek();
-void os_unlink();
-void os_mkdir();
-void os_chmod();
-void os_access();
+function os_exit();
+function os_allocate_memory(size);
+function os_read();
+function os_write();
+function os_open();
+function os_close();
+function os_seek();
+function os_unlink();
+function os_mkdir();
+function os_chmod();
+function os_access();
 
 void rt_putchar();
 void rt_debug(char* msg);
 void rt_crash(char* msg);
 
-void setup_proc_args(global_vars_size);
+function setup_proc_args(global_vars_size);
 
 #define ast int
 #define true 1
@@ -4105,16 +4105,16 @@ function div_for_pointer_arith(reg, width) {
   }
 }
 
-const var EQ; // x == y
-const var NE; // x != y
-const var LT; // x < y
-const var LT_U; // x < y  (unsigned)
-const var GE; // x >= y
-const var GE_U; // x >= y (unsigned)
-const var LE; // x <= y
-const var LE_U; // x <= y (unsigned)
-const var GT; // x > y
-const var GT_U; // x > y  (unsigned)
+var EQ; // x == y
+var NE; // x != y
+var LT; // x < y
+var LT_U; // x < y  (unsigned)
+var GE; // x >= y
+var GE_U; // x >= y (unsigned)
+var LE; // x <= y
+var LE_U; // x <= y (unsigned)
+var GT; // x > y
+var GT_U; // x > y  (unsigned)
 
 int setup_lbl;
 int init_start_lbl;
@@ -6955,18 +6955,6 @@ function debug_interrupt() {
   emit_i8(0xcc);
 }
 
-// Conditions for use by jump_cond:
-
-const int EQ   = 0x4; // x == y
-const int NE   = 0x5; // x != y
-const int LT   = 0xc; // x < y
-const int LT_U = 0x2; // x < y  (Jump near if not above or equal (CF=1))
-const int GE   = 0xd; // x >= y
-const int GE_U = 0x3; // x >= y (Jump near if above or equal (CF=0))
-const int LE   = 0xe; // x <= y
-const int LE_U = 0x6; // x <= y (Jump near if below or equal (CF=1 or ZF=1))
-const int GT   = 0xf; // x > y
-const int GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 
 function jump_cond(int cond, int lbl) {
 
@@ -6991,7 +6979,7 @@ void int_i8(int n) {
   emit_2_i8(0xcd, n);
 }
 
-void setup_proc_args(int global_vars_size) {
+function setup_proc_args(global_vars_size) {
   // See page 54 of Intel386 System V ABI document:
   // https://web.archive.org/web/20240107061436/https://www.sco.com/developers/devspecs/abi386-4.pdf
   // See page 29 of AMD64 System V ABI document:
@@ -7058,7 +7046,7 @@ void syscall_3(int syscall_code, int bx_reg, int cx_reg, int dx_reg) {
   pop_reg(BX);                   // restore address of global variables table
 }
 
-void os_allocate_memory(int size) {
+function os_allocate_memory(int size) {
   push_reg(BX);           // save address of global variables table
   mov_reg_imm(AX, 192);   // mov  eax, 192 == SYS_MMAP2
   mov_reg_imm(BX, 0);     // mov  ebx, 0 | NULL
@@ -7071,43 +7059,43 @@ void os_allocate_memory(int size) {
   pop_reg(BX);            // restore address of global variables table
 }
 
-void os_exit() {
+function os_exit() {
   syscall_3(1, reg_X, -1, -1); // SYS_EXIT = 1
 }
 
-void os_read() {
+function os_read() {
   syscall_3(3, reg_X, reg_Y, reg_Z); // SYS_READ = 3
 }
 
-void os_write() {
+function os_write() {
   syscall_3(4, reg_X, reg_Y, reg_Z); // SYS_WRITE = 4
 }
 
-void os_open() {
+function os_open() {
   syscall_3(5, reg_X, reg_Y, reg_Z); // SYS_OPEN = 5
 }
 
-void os_close() {
+function os_close() {
   syscall_3(6, reg_X, -1, -1); // SYS_CLOSE = 6
 }
 
-void os_seek() {
+function os_seek() {
   syscall_3(19, reg_X, reg_Y, reg_Z); // SYS_LSEEK = 19
 }
 
-void os_unlink() {
+function os_unlink() {
   syscall_3(10, reg_X, -1, -1); // SYS_UNLINK = 10
 }
 
-void os_mkdir() {
+function os_mkdir() {
   syscall_3(39, reg_X, reg_Y, -1); // SYS_MKDIR = 39
 }
 
-void os_chmod() {
+function os_chmod() {
   syscall_3(15, reg_X, reg_Y, -1); // SYS_CHMOD = 15
 }
 
-void os_access() {
+function os_access() {
   syscall_3(21, reg_X, reg_Y, -1); // SYS_ACCESS = 21
 }
 // end x86.c
@@ -7179,6 +7167,19 @@ function init_globals() {
 
   STRING_POOL_SIZE = 500000;
   string_pool = malloc(STRING_POOL_SIZE);
+
+// Conditions for use by jump_cond:
+
+  EQ   = 0x4; // x == y
+  NE   = 0x5; // x != y
+  LT   = 0xc; // x < y
+  LT_U = 0x2; // x < y  (Jump near if not above or equal (CF=1))
+  GE   = 0xd; // x >= y
+  GE_U = 0x3; // x >= y (Jump near if above or equal (CF=0))
+  LE   = 0xe; // x <= y
+  LE_U = 0x6; // x <= y (Jump near if below or equal (CF=1 or ZF=1))
+  GT   = 0xf; // x > y
+  GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 }
 
 int main(int argc, char **argv) {
