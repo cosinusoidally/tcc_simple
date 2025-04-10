@@ -3802,14 +3802,19 @@ function cgc_add_enclosing_switch(loop_fs, break_lbl, next_case_lbl) {
   cgc_locals = binding;
 }
 
-void cgc_add_global(int ident, int width, ast type, bool is_static_local) {
-  int binding = alloc_obj(5);
-  heap[binding+0] = is_static_local ? cgc_locals : cgc_globals;
-  heap[binding+1] = BINDING_VAR_GLOBAL;
-  heap[binding+2] = ident;
-  heap[binding+3] = cgc_global_alloc;
-  heap[binding+4] = type;
-  cgc_global_alloc += width;
+function cgc_add_global(ident, width, type, is_static_local) {
+  var binding;
+  binding = alloc_obj(5);
+  if(is_static_local) {
+    heap[add(binding, 0)] = cgc_locals;
+  } else {
+    heap[add(binding, 0)] = cgc_globals;
+  }
+  heap[add(binding, 1)] = BINDING_VAR_GLOBAL;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = cgc_global_alloc;
+  heap[add(binding, 4)] = type;
+  cgc_global_alloc = add(cgc_global_alloc, width);
   if (is_static_local) {
     cgc_locals = binding;
   } else {
@@ -3817,8 +3822,9 @@ void cgc_add_global(int ident, int width, ast type, bool is_static_local) {
   }
 }
 
-void cgc_add_global_fun(int ident, int label, ast type) {
-  int binding = alloc_obj(6);
+function cgc_add_global_fun(ident, label, type) {
+  var binding;
+  binding = alloc_obj(6);
   heap[binding+0] = cgc_globals;
   heap[binding+1] = BINDING_FUN;
   heap[binding+2] = ident;
