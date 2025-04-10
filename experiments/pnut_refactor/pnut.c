@@ -4144,8 +4144,8 @@ function word_size_align(n) {
   return mul(div_(sub(add(n, WORD_SIZE), 1), WORD_SIZE), WORD_SIZE);
 }
 
-function align_to(int mul, int n) {
-  return (n + mul - 1) / mul * mul;
+function align_to(mul_, n) {
+  return mul(div_(sub(add(n, mul_), 1), mul_), mul_);
 }
 
 function grow_stack(int words) {
