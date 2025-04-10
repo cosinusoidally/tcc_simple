@@ -3077,16 +3077,16 @@ function parse_unary_expression() {
   } else if(and(eq(0,skip_newlines),and(eq(tok,IDENTIFIER),eq(val,DEFINED_ID)))) { // Parsing a macro
 
     get_tok_macro();
-    if (tok == '(') {
+    if (eq(tok, mkc('('))) {
       get_tok_macro();
-      result = new_ast2('(', new_ast0(IDENTIFIER, DEFINED_ID), tok);
+      result = new_ast2(mkc('('), new_ast0(IDENTIFIER, DEFINED_ID), tok);
       get_tok_macro();
-      expect_tok(')');
+      expect_tok(mkc(')'));
     } else if (tok == IDENTIFIER || tok == MACRO) {
-      result = new_ast2('(', new_ast0(IDENTIFIER, DEFINED_ID), tok);
+      result = new_ast2(mkc('('), new_ast0(IDENTIFIER, DEFINED_ID), tok);
       get_tok_macro();
     } else {
-      parse_error("identifier or '(' expected", tok);
+      parse_error(mks("identifier or '(' expected"), tok);
       return 0;
     }
 
@@ -3097,11 +3097,11 @@ function parse_unary_expression() {
   return result;
 }
 
-ast parse_cast_expression() {
-  ast result;
-  ast type;
+function parse_cast_expression() {
+  var result;
+  var type;
 
-  if (tok == '(') {
+  if (eq(tok, mkc('('))) {
     // Ideally, we'd parse as many ( as needed, but then we would have to
     // backtrack when the first parenthesis is for a parenthesized expression
     // and not a cast.
@@ -3120,7 +3120,7 @@ ast parse_cast_expression() {
     if (is_type_starter(tok)) {
       type = parse_declarator(true, parse_declaration_specifiers(false));
 
-      expect_tok(')');
+      expect_tok(mkc(')'));
       result = new_ast2(CAST, type, parse_cast_expression());
       return result;
     } else {
