@@ -4228,16 +4228,16 @@ function def_label(lbl) {
   addr = r_heap(add(lbl, 1));
   label_addr = code_alloc;
 
-  if (heap[lbl] != GENERIC_LABEL) {
+  if (neq(r_heap(lbl), GENERIC_LABEL)) {
     fatal_error(mks("def_label expects generic label"));
   }
 
-  heap[lbl + 1] = -label_addr; // define label's address
-  while (addr != 0) {
-    next = code[addr-1]; // get pointer to next patch address
+  heap[add(lbl, 1)] = sub(0, label_addr); // define label's address
+  while (neq(addr, 0)) {
+    next = r_code(sub(addr, 1)); // get pointer to next patch address
     code_alloc = addr;
-    addr = label_addr - addr; // compute relative address
-    code_alloc -= 4;
+    addr = sub(label_addr, addr); // compute relative address
+    code_alloc = sub(code_alloc, 4);
     emit_i32_le(addr);
     addr = next;
   }
@@ -4247,6 +4247,9 @@ function def_label(lbl) {
 // Similar to use_label, but for gotos.
 // The main difference is that it adjusts the stack and jumps, as opposed to
 // simply emitting the address.
+
+// LJW HERE
+
 function jump_to_goto_label(int lbl) {
 
   int addr = heap[lbl + 1];
