@@ -3047,7 +3047,7 @@ function parse_unary_expression() {
     result = parse_unary_expression();
     result = new_ast1(MINUS_MINUS_PRE, result);
 
-  } else if(eq(tok,mkc('&')) || eq(tok,mkc('*')) || eq(tok,mkc('+')) || eq(tok,mkc('-')) || eq(tok,mkc('~')) || eq(tok,mkc('!'))) {
+  } else if(or(eq(tok,mkc('&')),or(eq(tok,mkc('*')),or(eq(tok,mkc('+')),or(eq(tok,mkc('-')),or(eq(tok,mkc('~')),eq(tok,mkc('!')))))))) {
 
     op = tok;
     get_tok();
