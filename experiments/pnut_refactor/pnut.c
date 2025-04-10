@@ -85,6 +85,8 @@ void rt_crash(char* msg);
 
 function setup_proc_args(global_vars_size);
 
+function alloc_label_();
+
 #define ast int
 #define true 1
 #define false 0
@@ -4182,23 +4184,25 @@ function alloc_label_() {
   var lbl;
   lbl = alloc_obj(2);
   heap[lbl] = GENERIC_LABEL;
-  heap[lbl + 1] = 0; // Address of label
+  heap[add(lbl, 1)] = 0; // Address of label
   add_label(lbl);
   return lbl;
 }
 
 function alloc_goto_label() {
-  int lbl = alloc_obj(3);
+  var lbl;
+  lbl = alloc_obj(3);
   heap[lbl] = GOTO_LABEL;
-  heap[lbl + 1] = 0; // Address of label
-  heap[lbl + 2] = 0; // cgc-fs of label
+  heap[add(lbl, 1)] = 0; // Address of label
+  heap[add(lbl, 2)] = 0; // cgc-fs of label
   add_label(lbl);
   return lbl;
 }
 
-function use_label(int lbl) {
+function use_label(lbl) {
+  var addr;
 
-  int addr = heap[lbl + 1];
+  addr = heap[add(lbl, 1)];
 
   if (heap[lbl] != GENERIC_LABEL) fatal_error("use_label expects generic label");
 
