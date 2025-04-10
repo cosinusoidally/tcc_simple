@@ -3738,23 +3738,23 @@ function cgc_lookup_enclosing_loop_or_switch(binding) {
   return binding;
 }
 
-int cgc_lookup_goto_label(int ident, int env) {
+function cgc_lookup_goto_label(ident, env) {
   return cgc_lookup_binding_ident(BINDING_GOTO_LABEL, ident, env);
 }
 
-int cgc_lookup_struct(int ident, int env) {
+function cgc_lookup_struct(ident, env) {
   return cgc_lookup_binding_ident(BINDING_TYPE_STRUCT, ident, env);
 }
 
-int cgc_lookup_union(int ident, int env) {
+function cgc_lookup_union(ident, env) {
   return cgc_lookup_binding_ident(BINDING_TYPE_UNION, ident, env);
 }
 
-int cgc_lookup_enum(int ident, int env) {
+function cgc_lookup_enum(ident, env) {
   return cgc_lookup_binding_ident(BINDING_TYPE_ENUM, ident, env);
 }
 
-int cgc_lookup_enum_value(int ident, int env) {
+function cgc_lookup_enum_value(ident, env) {
   return cgc_lookup_binding_ident(BINDING_ENUM_CST, ident, env);
 }
 
