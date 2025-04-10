@@ -28,6 +28,45 @@ function parse_declaration_specifiers(allow_typedef);
 function parse_initializer_list();
 function parse_initializer();
 function generate_exe();
+function mov_reg_imm(dst, imm);             // Move 32 bit immediate to register
+function mov_reg_reg(dst, src);
+function mov_mem8_reg(base, offset, src);
+function mov_mem16_reg(base, offset, src);
+function mov_mem32_reg(base, offset, src);
+function mov_mem8_reg(base, offset, src);
+function mov_reg_mem8(dst, base, offset);
+function mov_reg_mem16(dst, base, offset);
+function mov_reg_mem32(dst, base, offset);
+function mov_reg_mem8_sign_ext(dst, base, offset);
+function mov_reg_mem16_sign_ext(dst, base, offset);
+
+function add_reg_imm(dst, imm);
+function add_reg_lbl(dst, lbl);
+function add_reg_reg(dst, src);
+function or_reg_reg (dst, src);
+function and_reg_reg(dst, src);
+function sub_reg_reg(dst, src);
+function xor_reg_reg(dst, src);
+function imul_reg_reg(dst, src); // signed multiplication
+function idiv_reg_reg(dst, src); // signed division
+function irem_reg_reg(dst, src); // signed remainder
+function mul_reg_reg(dst, src);  // unsigned multiplication
+function div_reg_reg(dst, src);  // unsigned division
+function rem_reg_reg(dst, src);  // unsigned remainder
+function s_l_reg_reg(dst, src);  // signed/unsigned left shift
+function sar_reg_reg(dst, src);  // signed right shift
+function shr_reg_reg(dst, src);  // unsigned right shift
+function mov_reg_lbl(reg, lbl);
+function push_reg(src);
+function pop_reg (dst);
+function jump(lbl);
+function jump_rel(offset);
+function call(lbl);
+function call_reg(reg);
+function ret();
+function debug_interrupt();
+
+
 
 #define ast int
 #define true 1
@@ -3874,48 +3913,8 @@ const var reg_Z;
 const var reg_SP;
 const var reg_glo;
 
-function mov_reg_imm(int dst, int imm);             // Move 32 bit immediate to register
-function mov_reg_reg(int dst, int src);
-function mov_mem8_reg(int base, int offset, int src);
-function mov_mem16_reg(int base, int offset, int src);
-function mov_mem32_reg(int base, int offset, int src);
-function mov_mem8_reg(int base, int offset, int src);
-function mov_reg_mem8(int dst, int base, int offset);
-function mov_reg_mem16(int dst, int base, int offset);
-function mov_reg_mem32(int dst, int base, int offset);
-function mov_reg_mem8_sign_ext(int dst, int base, int offset);
-function mov_reg_mem16_sign_ext(int dst, int base, int offset);
-
 #define mov_mem_reg(base, offset, src) mov_mem32_reg(base, offset, src)
 #define mov_reg_mem(dst, base, offset) mov_reg_mem32(dst, base, offset)
-
-function add_reg_imm(int dst, int imm);
-function add_reg_lbl(int dst, int lbl);
-function add_reg_reg(int dst, int src);
-function or_reg_reg (int dst, int src);
-function and_reg_reg(int dst, int src);
-function sub_reg_reg(int dst, int src);
-function xor_reg_reg(int dst, int src);
-function imul_reg_reg(int dst, int src); // signed multiplication
-function idiv_reg_reg(int dst, int src); // signed division
-function irem_reg_reg(int dst, int src); // signed remainder
-function mul_reg_reg(int dst, int src);  // unsigned multiplication
-function div_reg_reg(int dst, int src);  // unsigned division
-function rem_reg_reg(int dst, int src);  // unsigned remainder
-function s_l_reg_reg(int dst, int src);  // signed/unsigned left shift
-function sar_reg_reg(int dst, int src);  // signed right shift
-function shr_reg_reg(int dst, int src);  // unsigned right shift
-function mov_reg_lbl(int reg, int lbl);
-
-function push_reg(int src);
-function pop_reg (int dst);
-
-function jump(int lbl);
-function jump_rel(int offset);
-function call(int lbl);
-function call_reg(int reg);
-function ret();
-function debug_interrupt();
 
 function load_mem_location(int dst, int base, int offset, int width, bool is_signed) {
   if (is_signed) {
