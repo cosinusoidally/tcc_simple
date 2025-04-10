@@ -3997,15 +3997,16 @@ function initialize_memory(val, base, offset, width) {
   }
 }
 
-function is_power_of_2(int n) {
-  return n != 0 && (n & (n - 1)) == 0;
+function is_power_of_2(n) {
+  return and(neq(n, 0), eq(and(n, sub(n, 1)), 0));
 }
 
-function power_of_2_log(int n) {
-  int i = 0;
-  while (n > 1) {
-    n /= 2;
-    i += 1;
+function power_of_2_log(n) {
+  var i;
+  i = 0;
+  while (gt(n, 1)) {
+    n = div_(n, 2);
+    i = add(i, 1);
   }
   return i;
 }
