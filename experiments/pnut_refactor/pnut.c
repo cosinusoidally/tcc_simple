@@ -3825,51 +3825,54 @@ function cgc_add_global(ident, width, type, is_static_local) {
 function cgc_add_global_fun(ident, label, type) {
   var binding;
   binding = alloc_obj(6);
-  heap[binding+0] = cgc_globals;
-  heap[binding+1] = BINDING_FUN;
-  heap[binding+2] = ident;
-  heap[binding+3] = 0;
-  heap[binding+4] = label;
-  heap[binding+5] = type;
+  heap[add(binding, 0)] = cgc_globals;
+  heap[add(binding, 1)] = BINDING_FUN;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = 0;
+  heap[add(binding, 4)] = label;
+  heap[add(binding, 5)] = type;
   cgc_globals = binding;
 }
 
-void cgc_add_enum(int ident, int value) {
-  int binding = alloc_obj(4);
-  heap[binding+0] = cgc_globals;
-  heap[binding+1] = BINDING_ENUM_CST;
-  heap[binding+2] = ident;
-  heap[binding+3] = value;
+function cgc_add_enum(ident, value) {
+  var binding;
+  binding = alloc_obj(4);
+  heap[add(binding, 0)] = cgc_globals;
+  heap[add(binding, 1)] = BINDING_ENUM_CST;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = value;
   cgc_globals = binding;
 }
 
-void cgc_add_goto_label(int ident, int lbl) {
-  int binding = alloc_obj(5);
-  heap[binding+0] = cgc_locals_fun;
-  heap[binding+1] = BINDING_GOTO_LABEL;
-  heap[binding+2] = ident;
-  heap[binding+3] = lbl;
+function cgc_add_goto_label(ident, lbl) {
+  var binding;
+  binding = alloc_obj(5);
+  heap[add(binding, 0)] = cgc_locals_fun;
+  heap[add(binding, 1)] = BINDING_GOTO_LABEL;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = lbl;
   cgc_locals_fun = binding;
 }
 
-void cgc_add_typedef(int ident, enum BINDING struct_or_union_or_enum, ast type) {
-  int binding = alloc_obj(4);
-  heap[binding+0] = cgc_globals;
-  heap[binding+1] = struct_or_union_or_enum;
-  heap[binding+2] = ident;
-  heap[binding+3] = type;
+function cgc_add_typedef(ident, struct_or_union_or_enum, type) {
+  var binding;
+  binding = alloc_obj(4);
+  heap[add(binding, 0)] = cgc_globals;
+  heap[add(binding, 1)] = struct_or_union_or_enum;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = type;
   cgc_globals = binding;
 }
 
-void grow_fs(int words) {
-  cgc_fs += words;
+function grow_fs(words) {
+  cgc_fs = add(cgc_fs, words);
 }
 
-const int reg_X;
-const int reg_Y;
-const int reg_Z;
-const int reg_SP;
-const int reg_glo;
+const var reg_X;
+const var reg_Y;
+const var reg_Z;
+const var reg_SP;
+const var reg_glo;
 
 void mov_reg_imm(int dst, int imm);             // Move 32 bit immediate to register
 void mov_reg_reg(int dst, int src);
