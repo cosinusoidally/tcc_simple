@@ -3951,11 +3951,15 @@ function write_mem_location(base, offset, src, width) {
     fatal_error(mks("write_mem_location: width > WORD_SIZE"));
   }
 
+  if(eq(width, 1)) {
+    mov_mem8_reg(base, offset, src);
+  } else if(eq(width, 2)) {
+    mov_mem16_reg(base, offset, src);
+  } else {
   switch (width) {
-    case 1: mov_mem8_reg(base, offset, src); break;
-    case 2: mov_mem16_reg(base, offset, src); break;
     case 4: mov_mem32_reg(base, offset, src); break;
     default: fatal_error("write_mem_location: unknown width");
+  }
   }
 }
 
