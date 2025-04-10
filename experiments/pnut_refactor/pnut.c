@@ -3965,15 +3965,19 @@ function write_mem_location(base, offset, src, width) {
 function copy_obj(dst_base, dst_offset, src_base, src_offset, width) {
   var i;
   // move the words
-  for (i = 0; i < width / WORD_SIZE; i += 1) {
+  i = 0;
+  while(lt(i, div_(width, WORD_SIZE))) {
     mov_reg_mem(reg_Z, src_base, src_offset + i * WORD_SIZE);
     mov_mem_reg(dst_base, dst_offset + i * WORD_SIZE, reg_Z);
+    i = add(i, 1);
   }
 
   // then move the remaining bytes
-  for (i = width - width % WORD_SIZE; i < width; i += 1) {
+  i = sub(width, mod(width, WORD_SIZE));
+  while(lt(i, width)) {
     mov_reg_mem8(reg_Z, src_base, src_offset + i);
     mov_mem8_reg(dst_base, dst_offset + i, reg_Z);
+    i = add(i, 1);
   }
 }
 
