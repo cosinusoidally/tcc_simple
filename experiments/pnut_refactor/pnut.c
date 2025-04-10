@@ -3921,20 +3921,26 @@ function mov_reg_mem(dst, base, offset) {
   return mov_reg_mem32(dst, base, offset);
 }
 
-function load_mem_location(int dst, int base, int offset, int width, bool is_signed) {
+function load_mem_location(dst, base, offset, width, is_signed) {
   if (is_signed) {
-    switch (width) {
-      case 1: mov_reg_mem8_sign_ext(dst, base, offset);  break;
-      case 2: mov_reg_mem16_sign_ext(dst, base, offset); break;
-      case 4: mov_reg_mem32(dst, base, offset); break;
-      default: fatal_error("load_mem_location: unknown width");
+    if(eq(width, 1)) {
+      mov_reg_mem8_sign_ext(dst, base, offset);
+    } else if(eq(width, 2)) {
+      mov_reg_mem16_sign_ext(dst, base, offset);
+    } else if(eq(width, 4)) {
+      mov_reg_mem32(dst, base, offset);
+    } else {
+      fatal_error(mks("load_mem_location: unknown width"));
     }
   } else {
+    if(eq(width, 1)) {
+      mov_reg_mem8(dst, base, offset);
+    } else {
     switch (width) {
-      case 1: mov_reg_mem8(dst, base, offset);  break;
       case 2: mov_reg_mem16(dst, base, offset); break;
       case 4: mov_reg_mem32(dst, base, offset); break;
       default: fatal_error("load_mem_location: unknown width");
+    }
     }
   }
 }
