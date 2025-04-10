@@ -3170,13 +3170,14 @@ function parse_additive_expression() {
   return result;
 }
 
-ast parse_shift_expression() {
+function parse_shift_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_additive_expression();
-  ast child;
-  int op;
+  result = parse_additive_expression();
 
-  while (tok == LSHIFT || tok == RSHIFT) {
+  while (or(eq(tok, LSHIFT), eq(tok, RSHIFT))) {
 
     op = tok;
     get_tok();
@@ -3188,13 +3189,14 @@ ast parse_shift_expression() {
   return result;
 }
 
-ast parse_relational_expression() {
+function parse_relational_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_shift_expression();
-  ast child;
-  int op;
+  result = parse_shift_expression();
 
-  while (tok == '<' || tok == '>' || tok == LT_EQ || tok == GT_EQ) {
+  while(eq(tok,mkc('<')) || eq(tok,mkc('>')) || eq(tok,LT_EQ) || eq(tok,GT_EQ)) {
 
     op = tok;
     get_tok();
