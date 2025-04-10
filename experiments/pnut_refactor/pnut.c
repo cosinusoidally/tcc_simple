@@ -2970,56 +2970,55 @@ function parse_primary_expression() {
   return result;
 }
 
-ast parse_postfix_expression() {
-
-  ast result;
-  ast child;
+function parse_postfix_expression() {
+  var result;
+  var child;
 
   result = parse_primary_expression();
 
   while (1) {
-    if (tok == '[') {
+    if (eq(tok, mkc('['))) {
 
       get_tok();
       child = parse_comma_expression();
-      result = new_ast2('[', result, child);
-      expect_tok(']');
+      result = new_ast2(mkc('['), result, child);
+      expect_tok(mkc(']'));
 
     } else if (tok == '(') {
 
       get_tok();
-      if (tok == ')') {
+      if (eq(tok, mkc(')'))) {
         child = 0;
       } else {
         child = parse_call_params();
       }
-      result = new_ast2('(', result, child);
-      expect_tok(')');
+      result = new_ast2(mkc('('), result, child);
+      expect_tok(mkc(')'));
 
-    } else if (tok == '.') {
+    } else if (eq(tok, mkc('.'))) {
 
       get_tok();
-      if (tok != IDENTIFIER) {
-        parse_error("identifier expected", tok);
+      if (neq(tok, IDENTIFIER)) {
+        parse_error(mks("identifier expected"), tok);
       }
-      result = new_ast2('.', result, new_ast0(IDENTIFIER, val));
+      result = new_ast2(mkc('.'), result, new_ast0(IDENTIFIER, val));
       get_tok();
 
-    } else if (tok == ARROW) {
+    } else if (eq(tok, ARROW)) {
 
       get_tok();
-      if (tok != IDENTIFIER) {
-        parse_error("identifier expected", tok);
+      if (neq(tok, IDENTIFIER)) {
+        parse_error(mks("identifier expected"), tok);
       }
       result = new_ast2(ARROW, result, new_ast0(IDENTIFIER, val));
       get_tok();
 
-    } else if (tok == PLUS_PLUS) {
+    } else if (eq(tok, PLUS_PLUS)) {
 
       get_tok();
       result = new_ast1(PLUS_PLUS_POST, result);
 
-    } else if (tok == MINUS_MINUS) {
+    } else if (eq(tok, MINUS_MINUS)) {
 
       get_tok();
       result = new_ast1(MINUS_MINUS_POST, result);
@@ -3032,10 +3031,9 @@ ast parse_postfix_expression() {
   return result;
 }
 
-ast parse_unary_expression() {
-
-  ast result;
-  int op;
+function parse_unary_expression() {
+  var result;
+  var op;
 
   if (tok == PLUS_PLUS) {
 
