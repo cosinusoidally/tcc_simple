@@ -3913,8 +3913,13 @@ const var reg_Z;
 const var reg_SP;
 const var reg_glo;
 
-#define mov_mem_reg(base, offset, src) mov_mem32_reg(base, offset, src)
-#define mov_reg_mem(dst, base, offset) mov_reg_mem32(dst, base, offset)
+function mov_mem_reg(base, offset, src) {
+  return mov_mem32_reg(base, offset, src);
+}
+
+function mov_reg_mem(dst, base, offset) {
+  return mov_reg_mem32(dst, base, offset);
+}
 
 function load_mem_location(int dst, int base, int offset, int width, bool is_signed) {
   if (is_signed) {
