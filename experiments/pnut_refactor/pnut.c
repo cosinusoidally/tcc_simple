@@ -3982,14 +3982,18 @@ function copy_obj(dst_base, dst_offset, src_base, src_offset, width) {
 }
 
 // Initialize a memory location with a value
-function initialize_memory(int val, int base, int offset, int width) {
-  int i;
+function initialize_memory(val, base, offset, width) {
+  var i;
   mov_reg_imm(reg_Z, val);
-  for (i = 0; i < width / WORD_SIZE; i += 1) {
-    mov_mem_reg(base, offset + i * WORD_SIZE, reg_Z);
+  i = 0;
+  while(lt(i, div_(width, WORD_SIZE))) {
+    mov_mem_reg(base, add(offset, mul(i, WORD_SIZE)), reg_Z);
+    i = add(i, 1);
   }
-  for (i = width - width % WORD_SIZE; i < width; i += 1) {
-    mov_mem8_reg(base, offset + i, reg_Z);
+  i = sub(width, mod(width, WORD_SIZE));
+  while(lt(i, width)) {
+    mov_mem8_reg(base, add(offset, i), reg_Z);
+    i = add(i, 1);
   }
 }
 
