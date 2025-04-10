@@ -3758,23 +3758,24 @@ function cgc_lookup_enum_value(ident, env) {
   return cgc_lookup_binding_ident(BINDING_ENUM_CST, ident, env);
 }
 
-int cgc_add_local(enum BINDING binding_type, int ident, ast type, int env) {
-  int binding = alloc_obj(5);
-  heap[binding+0] = env;
-  heap[binding+1] = binding_type;
-  heap[binding+2] = ident;
-  heap[binding+3] = cgc_fs;
-  heap[binding+4] = type;
+function cgc_add_local(binding_type, ident, type, env) {
+  var binding;
+  binding = alloc_obj(5);
+  heap[add(binding, 0)] = env;
+  heap[add(binding, 1)] = binding_type;
+  heap[add(binding, 2)] = ident;
+  heap[add(binding, 3)] = cgc_fs;
+  heap[add(binding, 4)] = type;
   return binding;
 }
 
-void cgc_add_local_param(int ident, int width, ast type) {
+function cgc_add_local_param(ident, width, type) {
   cgc_locals = cgc_add_local(BINDING_PARAM_LOCAL, ident, type, cgc_locals);
-  cgc_fs -= width;
+  cgc_fs = sub(cgc_fs, width);
 }
 
-void cgc_add_local_var(int ident, int width, ast type) {
-  cgc_fs += width;
+function cgc_add_local_var(ident, width, type) {
+  cgc_fs = add(cgc_fs, width);
   cgc_locals = cgc_add_local(BINDING_VAR_LOCAL, ident, type, cgc_locals);
 }
 
