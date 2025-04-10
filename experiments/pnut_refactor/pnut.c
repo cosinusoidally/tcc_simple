@@ -3125,20 +3125,21 @@ function parse_cast_expression() {
       return result;
     } else {
       // We need to put the current token and '(' back on the token stream.
-      undo_token('(', 0);
+      undo_token(mkc('('), 0);
     }
   }
 
   return parse_unary_expression();
 }
 
-ast parse_multiplicative_expression() {
+function parse_multiplicative_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_cast_expression();
-  ast child;
-  int op;
+  result = parse_cast_expression();
 
-  while (tok == '*' || tok == '/' || tok == '%') {
+  while(or(eq(tok,mkc('*')),or(eq(tok,mkc('/')),eq(tok,mkc('%'))))) {
 
     op = tok;
     get_tok();
@@ -3150,13 +3151,14 @@ ast parse_multiplicative_expression() {
   return result;
 }
 
-ast parse_additive_expression() {
+function parse_additive_expression() {
+  var result;
+  var child;
+  var op;
 
-  ast result = parse_multiplicative_expression();
-  ast child;
-  int op;
+  result = parse_multiplicative_expression();
 
-  while (tok == '+' || tok == '-') {
+  while (or(eq(tok,mkc('+')),eq(tok,mkc('-')))) {
 
     op = tok;
     get_tok();
