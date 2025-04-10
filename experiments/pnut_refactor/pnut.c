@@ -3935,20 +3935,20 @@ function load_mem_location(dst, base, offset, width, is_signed) {
   } else {
     if(eq(width, 1)) {
       mov_reg_mem8(dst, base, offset);
+    } else if(eq(width, 2)) {
+      mov_reg_mem16(dst, base, offset);
+    } else if(eq(width, 4)) {
+      mov_reg_mem32(dst, base, offset);
     } else {
-    switch (width) {
-      case 2: mov_reg_mem16(dst, base, offset); break;
-      case 4: mov_reg_mem32(dst, base, offset); break;
-      default: fatal_error("load_mem_location: unknown width");
-    }
+      fatal_error(mks("load_mem_location: unknown width"));
     }
   }
 }
 
 // Write a value from a register to a memory location
-function write_mem_location(int base, int offset, int src, int width) {
-  if (width > WORD_SIZE) {
-    fatal_error("write_mem_location: width > WORD_SIZE");
+function write_mem_location(base, offset, src, width) {
+  if (gt(width, WORD_SIZE)) {
+    fatal_error(mks("write_mem_location: width > WORD_SIZE"));
   }
 
   switch (width) {
