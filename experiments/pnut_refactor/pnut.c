@@ -3054,19 +3054,19 @@ function parse_unary_expression() {
     result = parse_cast_expression();
     result = new_ast1(op, result);
 
-  } else if (skip_newlines && tok == SIZEOF_KW) { // only parse sizeof if we're not in a #if expression
+  } else if (and(skip_newlines, eq(tok, SIZEOF_KW))) { // only parse sizeof if we're not in a #if expression
 
     get_tok();
-    if (tok == '(') {
+    if (eq(tok, mkc('('))) {
       get_tok();
       // May be a type or an expression
       if (is_type_starter(tok)) {
       result = parse_declarator(true, parse_declaration_specifiers(false));
-      expect_tok(')');
+      expect_tok(mkc(')'));
       } else {
         // We need to put the current token and '(' back on the token stream.
         // Otherwise, sizeof (cast_expression) fails to parse.
-        undo_token('(', 0);
+        undo_token(mkc('('), 0);
         result = parse_unary_expression();
       }
     } else {
@@ -3074,7 +3074,7 @@ function parse_unary_expression() {
     }
     result = new_ast1(SIZEOF_KW, result);
 
-  } else if (!skip_newlines && tok == IDENTIFIER && val == DEFINED_ID) { // Parsing a macro
+  } else if(and(eq(0,skip_newlines),and(eq(tok,IDENTIFIER),eq(val,DEFINED_ID)))) { // Parsing a macro
 
     get_tok_macro();
     if (tok == '(') {
