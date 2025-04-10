@@ -3925,11 +3925,11 @@ function grow_fs(words) {
   cgc_fs = add(cgc_fs, words);
 }
 
-const var reg_X;
-const var reg_Y;
-const var reg_Z;
-const var reg_SP;
-const var reg_glo;
+var reg_X;
+var reg_Y;
+var reg_Z;
+var reg_SP;
+var reg_glo;
 
 function mov_mem_reg(base, offset, src) {
   return mov_mem32_reg(base, offset, src);
@@ -4116,29 +4116,29 @@ var LE_U; // x <= y (unsigned)
 var GT; // x > y
 var GT_U; // x > y  (unsigned)
 
-int setup_lbl;
-int init_start_lbl;
-int init_next_lbl;
-int main_lbl;
-int exit_lbl;
-int getchar_lbl;
-int putchar_lbl;
-int fopen_lbl;
-int fclose_lbl;
-int fgetc_lbl;
-int malloc_lbl;
-int free_lbl;
-int printf_lbl; // Stub
+var setup_lbl;
+var init_start_lbl;
+var init_next_lbl;
+var main_lbl;
+var exit_lbl;
+var getchar_lbl;
+var putchar_lbl;
+var fopen_lbl;
+var fclose_lbl;
+var fgetc_lbl;
+var malloc_lbl;
+var free_lbl;
+var printf_lbl; // Stub
 
-int read_lbl;
-int write_lbl;
-int open_lbl;
-int close_lbl;
-int seek_lbl;
-int unlink_lbl;
-int mkdir_lbl;
-int chmod_lbl;
-int access_lbl;
+var read_lbl;
+var write_lbl;
+var open_lbl;
+var close_lbl;
+var seek_lbl;
+var unlink_lbl;
+var mkdir_lbl;
+var chmod_lbl;
+var access_lbl;
 
 function word_size_align(int n) {
   return (n + WORD_SIZE - 1) / WORD_SIZE * WORD_SIZE;
@@ -6489,14 +6489,6 @@ const int R13 = 13;
 const int R14 = 14;
 const int R15 = 15;
 
-// On old versions of gcc (such as on debian woody), setting a const variable
-// to another const variable produces an error. This is a workaround.
-const int reg_X = 0; // AX: temporary register
-const int reg_Y = 1; // CX: temporary register
-const int reg_Z = 2; // DX: temporary register
-const int reg_SP = 4; // SP: stack pointer
-const int reg_glo = 3; // BX: global variables table
-
 #define rex_prefix(reg1, reg2) ((void)0)
 
 void mod_rm(int reg1, int reg2) {
@@ -7167,6 +7159,14 @@ function init_globals() {
 
   STRING_POOL_SIZE = 500000;
   string_pool = malloc(STRING_POOL_SIZE);
+
+// On old versions of gcc (such as on debian woody), setting a const variable
+// to another const variable produces an error. This is a workaround.
+  reg_X = 0; // AX: temporary register
+  reg_Y = 1; // CX: temporary register
+  reg_Z = 2; // DX: temporary register
+  reg_SP = 4; // SP: stack pointer
+  reg_glo = 3; // BX: global variables table
 
 // Conditions for use by jump_cond:
 
