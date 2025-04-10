@@ -3687,8 +3687,8 @@ function binding_ident(binding) {
 }
 
 function cgc_lookup_binding_ident(binding_type, ident, binding) {
-  while (binding != 0) {
-    if (binding_kind(binding) == binding_type && binding_ident(binding) == ident) {
+  while (neq(binding, 0)) {
+    if(and(eq(binding_kind(binding),binding_type),eq(binding_ident(binding),ident))) {
       break;
     }
     binding = binding_next(binding);
@@ -3696,9 +3696,9 @@ function cgc_lookup_binding_ident(binding_type, ident, binding) {
   return binding;
 }
 
-int cgc_lookup_last_binding(int binding_type, int binding) {
-  while (binding != 0) {
-    if (binding_kind(binding) == binding_type) {
+function cgc_lookup_last_binding(binding_type, binding) {
+  while (neq(binding, 0)) {
+    if (eq(binding_kind(binding), binding_type)) {
       break;
     }
     binding = binding_next(binding);
@@ -3706,9 +3706,9 @@ int cgc_lookup_last_binding(int binding_type, int binding) {
   return binding;
 }
 
-int cgc_lookup_var(int ident, int binding) {
-  while (binding != 0) {
-    if (binding_kind(binding) <= BINDING_VAR_GLOBAL && binding_ident(binding) == ident) {
+function cgc_lookup_var(ident, binding) {
+  while (neq(binding, 0)) {
+    if (and(lte(binding_kind(binding),BINDING_VAR_GLOBAL),eq(binding_ident(binding),ident))) {
       break;
     }
     binding = binding_next(binding);
@@ -3716,21 +3716,21 @@ int cgc_lookup_var(int ident, int binding) {
   return binding;
 }
 
-int cgc_lookup_fun(int ident, int env) {
+function cgc_lookup_fun(ident, env) {
   return cgc_lookup_binding_ident(BINDING_FUN, ident, env);
 }
 
-int cgc_lookup_enclosing_loop(int env) {
+function cgc_lookup_enclosing_loop(env) {
   return cgc_lookup_last_binding(BINDING_LOOP, env);
 }
 
-int cgc_lookup_enclosing_switch(int env) {
+function cgc_lookup_enclosing_switch(env) {
   return cgc_lookup_last_binding(BINDING_SWITCH, env);
 }
 
-int cgc_lookup_enclosing_loop_or_switch(int binding) {
-  while (binding != 0) {
-    if (binding_kind(binding) == BINDING_LOOP || binding_kind(binding) == BINDING_SWITCH) {
+function cgc_lookup_enclosing_loop_or_switch(binding) {
+  while (neq(binding, 0)) {
+    if(or(eq(binding_kind(binding),BINDING_LOOP),eq(binding_kind(binding),BINDING_SWITCH))) {
       break;
     }
     binding = binding_next(binding);
