@@ -67,11 +67,29 @@ function ret();
 function debug_interrupt();
 function jump_cond_reg_reg(cond, lbl, reg1, reg2);
 
+void os_exit();
+void os_allocate_memory(size);
+void os_read();
+void os_write();
+void os_open();
+void os_close();
+void os_seek();
+void os_unlink();
+void os_mkdir();
+void os_chmod();
+void os_access();
+
+void rt_putchar();
+void rt_debug(char* msg);
+void rt_crash(char* msg);
+
+void setup_proc_args(global_vars_size);
 
 #define ast int
 #define true 1
 #define false 0
 #define EOF (-1)
+#define cgc int
 
 var line_number;
 var column_number;
@@ -4097,26 +4115,6 @@ const var LE; // x <= y
 const var LE_U; // x <= y (unsigned)
 const var GT; // x > y
 const var GT_U; // x > y  (unsigned)
-
-void os_exit();
-void os_allocate_memory(int size);
-void os_read();
-void os_write();
-void os_open();
-void os_close();
-void os_seek();
-void os_unlink();
-void os_mkdir();
-void os_chmod();
-void os_access();
-
-void rt_putchar();
-void rt_debug(char* msg);
-void rt_crash(char* msg);
-
-void setup_proc_args(int global_vars_size);
-
-#define cgc int
 
 int setup_lbl;
 int init_start_lbl;
