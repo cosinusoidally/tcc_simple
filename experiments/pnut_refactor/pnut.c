@@ -3035,19 +3035,19 @@ function parse_unary_expression() {
   var result;
   var op;
 
-  if (tok == PLUS_PLUS) {
+  if (eq(tok, PLUS_PLUS)) {
 
     get_tok();
     result = parse_unary_expression();
     result = new_ast1(PLUS_PLUS_PRE, result);
 
-  } else if (tok == MINUS_MINUS) {
+  } else if (eq(tok, MINUS_MINUS)) {
 
     get_tok();
     result = parse_unary_expression();
     result = new_ast1(MINUS_MINUS_PRE, result);
 
-  } else if (tok == '&' || tok == '*' || tok == '+' || tok == '-' || tok == '~' || tok == '!') {
+  } else if(eq(tok,mkc('&')) || eq(tok,mkc('*')) || eq(tok,mkc('+')) || eq(tok,mkc('-')) || eq(tok,mkc('~')) || eq(tok,mkc('!'))) {
 
     op = tok;
     get_tok();
