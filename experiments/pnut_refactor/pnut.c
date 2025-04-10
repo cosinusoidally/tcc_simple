@@ -3874,50 +3874,50 @@ const var reg_Z;
 const var reg_SP;
 const var reg_glo;
 
-void mov_reg_imm(int dst, int imm);             // Move 32 bit immediate to register
-void mov_reg_reg(int dst, int src);
-void mov_mem8_reg(int base, int offset, int src);
-void mov_mem16_reg(int base, int offset, int src);
-void mov_mem32_reg(int base, int offset, int src);
-void mov_mem8_reg(int base, int offset, int src);
-void mov_reg_mem8(int dst, int base, int offset);
-void mov_reg_mem16(int dst, int base, int offset);
-void mov_reg_mem32(int dst, int base, int offset);
-void mov_reg_mem8_sign_ext(int dst, int base, int offset);
-void mov_reg_mem16_sign_ext(int dst, int base, int offset);
+function mov_reg_imm(int dst, int imm);             // Move 32 bit immediate to register
+function mov_reg_reg(int dst, int src);
+function mov_mem8_reg(int base, int offset, int src);
+function mov_mem16_reg(int base, int offset, int src);
+function mov_mem32_reg(int base, int offset, int src);
+function mov_mem8_reg(int base, int offset, int src);
+function mov_reg_mem8(int dst, int base, int offset);
+function mov_reg_mem16(int dst, int base, int offset);
+function mov_reg_mem32(int dst, int base, int offset);
+function mov_reg_mem8_sign_ext(int dst, int base, int offset);
+function mov_reg_mem16_sign_ext(int dst, int base, int offset);
 
 #define mov_mem_reg(base, offset, src) mov_mem32_reg(base, offset, src)
 #define mov_reg_mem(dst, base, offset) mov_reg_mem32(dst, base, offset)
 
-void add_reg_imm(int dst, int imm);
-void add_reg_lbl(int dst, int lbl);
-void add_reg_reg(int dst, int src);
-void or_reg_reg (int dst, int src);
-void and_reg_reg(int dst, int src);
-void sub_reg_reg(int dst, int src);
-void xor_reg_reg(int dst, int src);
-void imul_reg_reg(int dst, int src); // signed multiplication
-void idiv_reg_reg(int dst, int src); // signed division
-void irem_reg_reg(int dst, int src); // signed remainder
-void mul_reg_reg(int dst, int src);  // unsigned multiplication
-void div_reg_reg(int dst, int src);  // unsigned division
-void rem_reg_reg(int dst, int src);  // unsigned remainder
-void s_l_reg_reg(int dst, int src);  // signed/unsigned left shift
-void sar_reg_reg(int dst, int src);  // signed right shift
-void shr_reg_reg(int dst, int src);  // unsigned right shift
-void mov_reg_lbl(int reg, int lbl);
+function add_reg_imm(int dst, int imm);
+function add_reg_lbl(int dst, int lbl);
+function add_reg_reg(int dst, int src);
+function or_reg_reg (int dst, int src);
+function and_reg_reg(int dst, int src);
+function sub_reg_reg(int dst, int src);
+function xor_reg_reg(int dst, int src);
+function imul_reg_reg(int dst, int src); // signed multiplication
+function idiv_reg_reg(int dst, int src); // signed division
+function irem_reg_reg(int dst, int src); // signed remainder
+function mul_reg_reg(int dst, int src);  // unsigned multiplication
+function div_reg_reg(int dst, int src);  // unsigned division
+function rem_reg_reg(int dst, int src);  // unsigned remainder
+function s_l_reg_reg(int dst, int src);  // signed/unsigned left shift
+function sar_reg_reg(int dst, int src);  // signed right shift
+function shr_reg_reg(int dst, int src);  // unsigned right shift
+function mov_reg_lbl(int reg, int lbl);
 
-void push_reg(int src);
-void pop_reg (int dst);
+function push_reg(int src);
+function pop_reg (int dst);
 
-void jump(int lbl);
-void jump_rel(int offset);
-void call(int lbl);
-void call_reg(int reg);
-void ret();
-void debug_interrupt();
+function jump(int lbl);
+function jump_rel(int offset);
+function call(int lbl);
+function call_reg(int reg);
+function ret();
+function debug_interrupt();
 
-void load_mem_location(int dst, int base, int offset, int width, bool is_signed) {
+function load_mem_location(int dst, int base, int offset, int width, bool is_signed) {
   if (is_signed) {
     switch (width) {
       case 1: mov_reg_mem8_sign_ext(dst, base, offset);  break;
@@ -3936,7 +3936,7 @@ void load_mem_location(int dst, int base, int offset, int width, bool is_signed)
 }
 
 // Write a value from a register to a memory location
-void write_mem_location(int base, int offset, int src, int width) {
+function write_mem_location(int base, int offset, int src, int width) {
   if (width > WORD_SIZE) {
     fatal_error("write_mem_location: width > WORD_SIZE");
   }
@@ -3949,7 +3949,7 @@ void write_mem_location(int base, int offset, int src, int width) {
   }
 }
 
-void copy_obj(int dst_base, int dst_offset, int src_base, int src_offset, int width) {
+function copy_obj(int dst_base, int dst_offset, int src_base, int src_offset, int width) {
   int i;
   // move the words
   for (i = 0; i < width / WORD_SIZE; i += 1) {
@@ -3965,7 +3965,7 @@ void copy_obj(int dst_base, int dst_offset, int src_base, int src_offset, int wi
 }
 
 // Initialize a memory location with a value
-void initialize_memory(int val, int base, int offset, int width) {
+function initialize_memory(int val, int base, int offset, int width) {
   int i;
   mov_reg_imm(reg_Z, val);
   for (i = 0; i < width / WORD_SIZE; i += 1) {
@@ -3976,11 +3976,11 @@ void initialize_memory(int val, int base, int offset, int width) {
   }
 }
 
-int is_power_of_2(int n) {
+function is_power_of_2(int n) {
   return n != 0 && (n & (n - 1)) == 0;
 }
 
-int power_of_2_log(int n) {
+function power_of_2_log(int n) {
   int i = 0;
   while (n > 1) {
     n /= 2;
@@ -3989,7 +3989,7 @@ int power_of_2_log(int n) {
   return i;
 }
 
-void mul_for_pointer_arith(int reg, int width) {
+function mul_for_pointer_arith(int reg, int width) {
   int other_reg = reg == reg_X ? reg_Y : reg_X;
 
   if (width == 1) return;
@@ -4007,7 +4007,7 @@ void mul_for_pointer_arith(int reg, int width) {
   }
 }
 
-void div_for_pointer_arith(int reg, int width) {
+function div_for_pointer_arith(int reg, int width) {
   int reg_start = reg;
 
   if (width == 1) return;
@@ -4065,7 +4065,7 @@ const int LE_U; // x <= y (unsigned)
 const int GT; // x > y
 const int GT_U; // x > y  (unsigned)
 
-void jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2);
+function jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2);
 
 void os_exit();
 void os_allocate_memory(int size);
@@ -4111,22 +4111,22 @@ int mkdir_lbl;
 int chmod_lbl;
 int access_lbl;
 
-int word_size_align(int n) {
+function word_size_align(int n) {
   return (n + WORD_SIZE - 1) / WORD_SIZE * WORD_SIZE;
 }
 
-int align_to(int mul, int n) {
+function align_to(int mul, int n) {
   return (n + mul - 1) / mul * mul;
 }
 
-void grow_stack(int words) {
+function grow_stack(int words) {
   add_reg_imm(reg_SP, -words * WORD_SIZE);
 }
 
 // Like grow_stack, but takes bytes instead of words.
 // To maintain alignment, the stack is grown by a multiple of WORD_SIZE (rounded
 // up from the number of bytes).
-void grow_stack_bytes(int bytes) {
+function grow_stack_bytes(int bytes) {
   add_reg_imm(reg_SP, -word_size_align(bytes));
 }
 
@@ -4144,7 +4144,7 @@ enum {
 #define add_label(lbl) // No-op
 #define alloc_label(name) alloc_label_()
 
-int alloc_label_() {
+function alloc_label_() {
   int lbl = alloc_obj(2);
   heap[lbl] = GENERIC_LABEL;
   heap[lbl + 1] = 0; // Address of label
@@ -4152,7 +4152,7 @@ int alloc_label_() {
   return lbl;
 }
 
-int alloc_goto_label() {
+function alloc_goto_label() {
   int lbl = alloc_obj(3);
   heap[lbl] = GOTO_LABEL;
   heap[lbl + 1] = 0; // Address of label
@@ -4161,7 +4161,7 @@ int alloc_goto_label() {
   return lbl;
 }
 
-void use_label(int lbl) {
+function use_label(int lbl) {
 
   int addr = heap[lbl + 1];
 
@@ -4179,7 +4179,7 @@ void use_label(int lbl) {
   }
 }
 
-void def_label(int lbl) {
+function def_label(int lbl) {
 
   int addr = heap[lbl + 1];
   int label_addr = code_alloc;
@@ -4202,7 +4202,7 @@ void def_label(int lbl) {
 // Similar to use_label, but for gotos.
 // The main difference is that it adjusts the stack and jumps, as opposed to
 // simply emitting the address.
-void jump_to_goto_label(int lbl) {
+function jump_to_goto_label(int lbl) {
 
   int addr = heap[lbl + 1];
   int lbl_fs = heap[lbl + 2];
@@ -4230,7 +4230,7 @@ void jump_to_goto_label(int lbl) {
   }
 }
 
-void def_goto_label(int lbl) {
+function def_goto_label(int lbl) {
 
   int addr = heap[lbl + 1];
   int label_addr = code_alloc;
@@ -4268,7 +4268,7 @@ ast string_type;
 ast void_type;
 ast void_star_type;
 
-ast dereference_type(ast type) {
+function dereference_type(ast type) {
   switch (get_op(type)) {
     case '[': // Array type
       return get_child_('[', type, 0);
@@ -4285,12 +4285,12 @@ ast dereference_type(ast type) {
 int struct_union_size(ast struct_type);
 
 // A pointer type is either an array type or a type with at least one star
-bool is_pointer_type(ast type) {
+function is_pointer_type(ast type) {
   bool op = get_op(type);
   return op == '[' || op == '*';
 }
 
-bool is_function_type(ast type) {
+function is_function_type(ast type) {
   int op = get_op(type);
   if (op == '*') {
     if (get_op(get_child_('*', type, 1)) == '(') {
@@ -6056,7 +6056,7 @@ void codegen_statement(ast node) {
   }
 }
 
-void add_params(ast params) {
+function add_params(ast params) {
   ast decl, type;
   int ident;
 
@@ -6518,7 +6518,7 @@ void op_reg_slash_digit(int opcode, int digit, int reg) {
   mod_rm_slash_digit(digit, reg);
 }
 
-void add_reg_reg(int dst, int src) {
+function add_reg_reg(int dst, int src) {
 
   // ADD dst_reg, src_reg ;; dst_reg = dst_reg + src_reg
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6526,7 +6526,7 @@ void add_reg_reg(int dst, int src) {
   op_reg_reg(0x01, dst, src, WORD_SIZE);
 }
 
-void or_reg_reg (int dst, int src) {
+function or_reg_reg (int dst, int src) {
 
   // OR dst_reg, src_reg ;; dst_reg = dst_reg | src_reg
   // See: https://web.archive.org/web/20231002205127/https://www.felixcloutier.com/x86/or
@@ -6534,7 +6534,7 @@ void or_reg_reg (int dst, int src) {
   op_reg_reg(0x09, dst, src, WORD_SIZE);
 }
 
-void and_reg_reg(int dst, int src) {
+function and_reg_reg(int dst, int src) {
 
   // AND dst_reg, src_reg ;; dst_reg = dst_reg & src_reg
   // See: https://web.archive.org/web/20240228122102/https://www.felixcloutier.com/x86/and
@@ -6542,7 +6542,7 @@ void and_reg_reg(int dst, int src) {
   op_reg_reg(0x21, dst, src, WORD_SIZE);
 }
 
-void sub_reg_reg(int dst, int src) {
+function sub_reg_reg(int dst, int src) {
 
   // SUB dst_reg, src_reg ;; dst_reg = dst_reg - src_reg
   // See: https://web.archive.org/web/20240118202232/https://www.felixcloutier.com/x86/sub
@@ -6550,7 +6550,7 @@ void sub_reg_reg(int dst, int src) {
   op_reg_reg(0x29, dst, src, WORD_SIZE);
 }
 
-void xor_reg_reg(int dst, int src) {
+function xor_reg_reg(int dst, int src) {
 
   // XOR dst_reg, src_reg ;; dst_reg = dst_reg ^ src_reg
   // See: https://web.archive.org/web/20240323052259/https://www.felixcloutier.com/x86/xor
@@ -6558,7 +6558,7 @@ void xor_reg_reg(int dst, int src) {
   op_reg_reg(0x31, dst, src, WORD_SIZE);
 }
 
-void cmp_reg_reg(int dst, int src) {
+function cmp_reg_reg(int dst, int src) {
 
   // CMP dst_reg, src_reg  ;; Set condition flags according to dst_reg-src_reg
   // See: https://web.archive.org/web/20240407051947/https://www.felixcloutier.com/x86/cmp
@@ -6567,7 +6567,7 @@ void cmp_reg_reg(int dst, int src) {
   op_reg_reg(0x39, dst, src, WORD_SIZE);
 }
 
-void mov_reg_reg(int dst, int src) {
+function mov_reg_reg(int dst, int src) {
 
   // MOV dst_reg, src_reg  ;; dst_reg = src_reg
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6575,7 +6575,7 @@ void mov_reg_reg(int dst, int src) {
   op_reg_reg(0x89, dst, src, WORD_SIZE);
 }
 
-void mov_reg_imm(int dst, int imm) {
+function mov_reg_imm(int dst, int imm) {
 
   // MOV dst_reg, imm  ;; Move 32 bit immediate value to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6585,7 +6585,7 @@ void mov_reg_imm(int dst, int imm) {
   emit_i32_le(imm);
 }
 
-void add_reg_imm(int dst, int imm) {
+function add_reg_imm(int dst, int imm) {
 
   // ADD dst_reg, imm  ;; Add 32 bit immediate value to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6596,7 +6596,7 @@ void add_reg_imm(int dst, int imm) {
   emit_i32_le(imm);
 }
 
-void add_reg_lbl(int dst, int lbl) {
+function add_reg_lbl(int dst, int lbl) {
 
   // ADD dst_reg, rel addr  ;; Add 32 bit displacement between next instruction and label to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6607,7 +6607,7 @@ void add_reg_lbl(int dst, int lbl) {
   use_label(lbl); // 32 bit placeholder for distance
 }
 
-void mov_memory(int op, int reg, int base, int offset, int reg_width) {
+function mov_memory(int op, int reg, int base, int offset, int reg_width) {
 
   // Move word between register and memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6622,7 +6622,7 @@ void mov_memory(int op, int reg, int base, int offset, int reg_width) {
   emit_i32_le(offset);
 }
 
-void mov_memory_extend(int op, int reg, int base, int offset, bool include_0f) {
+function mov_memory_extend(int op, int reg, int base, int offset, bool include_0f) {
 
   // Move word between register and memory with sign extension
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
@@ -6639,7 +6639,7 @@ void mov_memory_extend(int op, int reg, int base, int offset, bool include_0f) {
   emit_i32_le(offset);
 }
 
-void mov_mem8_reg(int base, int offset, int src) {
+function mov_mem8_reg(int base, int offset, int src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move byte from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6647,7 +6647,7 @@ void mov_mem8_reg(int base, int offset, int src) {
   mov_memory(0x88, src, base, offset, 1);
 }
 
-void mov_mem16_reg(int base, int offset, int src) {
+function mov_mem16_reg(int base, int offset, int src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move word (2 bytes) from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6655,7 +6655,7 @@ void mov_mem16_reg(int base, int offset, int src) {
   mov_memory(0x89, src, base, offset, 2);
 }
 
-void mov_mem32_reg(int base, int offset, int src) {
+function mov_mem32_reg(int base, int offset, int src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move dword (4 bytes) from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6663,7 +6663,7 @@ void mov_mem32_reg(int base, int offset, int src) {
   mov_memory(0x89, src, base, offset, 4);
 }
 
-void mov_reg_mem8(int dst, int base, int offset) {
+function mov_reg_mem8(int dst, int base, int offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
@@ -6671,7 +6671,7 @@ void mov_reg_mem8(int dst, int base, int offset) {
   mov_memory_extend(0xb6, dst, base, offset, true);
 }
 
-void mov_reg_mem16(int dst, int base, int offset) {
+function mov_reg_mem16(int dst, int base, int offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
@@ -6679,7 +6679,7 @@ void mov_reg_mem16(int dst, int base, int offset) {
   mov_memory_extend(0xb7, dst, base, offset, true);
 }
 
-void mov_reg_mem32(int dst, int base, int offset) {
+function mov_reg_mem32(int dst, int base, int offset) {
 
   // MOV dst_reg, [base_reg + offset]  ;; Move dword (4 bytes) from memory to register, zero-extended
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6689,7 +6689,7 @@ void mov_reg_mem32(int dst, int base, int offset) {
   mov_memory(0x8b, dst, base, offset, 4);
 }
 
-void mov_reg_mem8_sign_ext(int dst, int base, int offset) {
+function mov_reg_mem8_sign_ext(int dst, int base, int offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
@@ -6697,7 +6697,7 @@ void mov_reg_mem8_sign_ext(int dst, int base, int offset) {
   mov_memory_extend(0xbe, dst, base, offset, true);
 }
 
-void mov_reg_mem16_sign_ext(int dst, int base, int offset) {
+function mov_reg_mem16_sign_ext(int dst, int base, int offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
@@ -6705,7 +6705,7 @@ void mov_reg_mem16_sign_ext(int dst, int base, int offset) {
   mov_memory_extend(0xbf, dst, base, offset, true);
 }
 
-void imul_reg_reg(int dst, int src) {
+function imul_reg_reg(int dst, int src) {
 
   // IMUL dst_reg, src_reg ;; dst_reg = dst_reg * src_reg
   // See: https://web.archive.org/web/20240228122220/https://www.felixcloutier.com/x86/imul
@@ -6715,7 +6715,7 @@ void imul_reg_reg(int dst, int src) {
   mod_rm(dst, src);
 }
 
-void mul_reg_reg(int dst, int src) {
+function mul_reg_reg(int dst, int src) {
 
   // For our purposes, this is the same as imul_reg_reg.
   // https://web.archive.org/web/20240914145321/https://stackoverflow.com/questions/42587607/why-is-imul-used-for-multiplying-unsigned-numbers
@@ -6723,7 +6723,7 @@ void mul_reg_reg(int dst, int src) {
   imul_reg_reg(dst, src);
 }
 
-void idiv_reg(int src) {
+function idiv_reg(int src) {
 
   // IDIV src_reg ;; AX = DX:AX / src_reg ; DX = DX:AX % src_reg
   // See: https://web.archive.org/web/20240407195950/https://www.felixcloutier.com/x86/idiv
@@ -6749,7 +6749,7 @@ void cdq_cqo() {
   emit_i8(0x99);
 }
 
-void idiv_reg_reg(int dst, int src) {
+function idiv_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg / src_reg
   // This is not an actual instruction on x86. The operation
@@ -6762,7 +6762,7 @@ void idiv_reg_reg(int dst, int src) {
   mov_reg_reg(dst, AX);
 }
 
-void irem_reg_reg(int dst, int src) {
+function irem_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg % src_reg
   // This is not an actual instruction on x86. The operation
@@ -6775,7 +6775,7 @@ void irem_reg_reg(int dst, int src) {
   mov_reg_reg(dst, DX);
 }
 
-void div_reg_reg(int dst, int src) {
+function div_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg / src_reg
   // This is not an actual instruction on x86. The operation
@@ -6788,7 +6788,7 @@ void div_reg_reg(int dst, int src) {
   mov_reg_reg(dst, AX);
 }
 
-void rem_reg_reg(int dst, int src) {
+function rem_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg % src_reg
   // This is not an actual instruction on x86. The operation
@@ -6801,7 +6801,7 @@ void rem_reg_reg(int dst, int src) {
   mov_reg_reg(dst, DX);
 }
 
-void s_l_reg_cl(int dst) {
+function s_l_reg_cl(int dst) {
 
   // SHL dst_reg, cl ;; dst_reg = dst_reg << cl (arithmetic or logical shift, they are the same)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
@@ -6809,7 +6809,7 @@ void s_l_reg_cl(int dst) {
   op_reg_slash_digit(0xd3, 4, dst);
 }
 
-void s_l_reg_reg(int dst, int src) {
+function s_l_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg << src_reg (arithmetic or logical shift, they are the same)
   // This is not an actual instruction on x86. The operation
@@ -6820,7 +6820,7 @@ void s_l_reg_reg(int dst, int src) {
   s_l_reg_cl(dst);
 }
 
-void sar_reg_cl(int dst) {
+function sar_reg_cl(int dst) {
 
   // SAR dst_reg, cl ;; dst_reg = dst_reg >> cl (arithmetic shift)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
@@ -6828,7 +6828,7 @@ void sar_reg_cl(int dst) {
   op_reg_slash_digit(0xd3, 7, dst);
 }
 
-void sar_reg_reg(int dst, int src) {
+function sar_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg >> src_reg (arithmetic shift)
   // This is not an actual instruction on x86. The operation
@@ -6839,7 +6839,7 @@ void sar_reg_reg(int dst, int src) {
   sar_reg_cl(dst);
 }
 
-void shr_reg_cl(int dst) {
+function shr_reg_cl(int dst) {
 
   // SHR dst_reg, cl ;; dst_reg = dst_reg >> cl (logical shift)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
@@ -6847,7 +6847,7 @@ void shr_reg_cl(int dst) {
   op_reg_slash_digit(0xd3, 5, dst);
 }
 
-void shr_reg_reg(int dst, int src) {
+function shr_reg_reg(int dst, int src) {
 
   // Computes dst_reg = dst_reg >> src_reg (logical shift)
   // This is not an actual instruction on x86. The operation
@@ -6858,7 +6858,7 @@ void shr_reg_reg(int dst, int src) {
   shr_reg_cl(dst);
 }
 
-void push_reg(int src) {
+function push_reg(int src) {
 
   // PUSH src_reg  ;; Push word from register to stack
   // See: https://web.archive.org/web/20240407051929/https://www.felixcloutier.com/x86/push
@@ -6866,7 +6866,7 @@ void push_reg(int src) {
   emit_i8(0x50 + src);
 }
 
-void pop_reg (int dst) {
+function pop_reg (int dst) {
 
   // POP dst_reg  ;; Pop word from stack to register
   // See: https://web.archive.org/web/20240204122208/https://www.felixcloutier.com/x86/pop
@@ -6874,7 +6874,7 @@ void pop_reg (int dst) {
   emit_i8(0x58 + dst);
 }
 
-void jump(int lbl) {
+function jump(int lbl) {
 
   // JMP rel32  ;; Jump to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240407051904/https://www.felixcloutier.com/x86/jmp
@@ -6883,7 +6883,7 @@ void jump(int lbl) {
   use_label(lbl);
 }
 
-void jump_rel(int offset) {
+function jump_rel(int offset) {
 
   // JMP rel32  ;; Jump to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240407051904/https://www.felixcloutier.com/x86/jmp
@@ -6892,7 +6892,7 @@ void jump_rel(int offset) {
   emit_i32_le(offset);
 }
 
-void call(int lbl) {
+function call(int lbl) {
 
   // CALL rel32  ;; Call to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240323052931/https://www.felixcloutier.com/x86/call
@@ -6901,7 +6901,7 @@ void call(int lbl) {
   use_label(lbl);
 }
 
-void call_reg(int reg) {
+function call_reg(int reg) {
 
   // CALL reg  ;; Indirect call to address in register
   // See: https://web.archive.org/web/20240323052931/https://www.felixcloutier.com/x86/call
@@ -6910,7 +6910,7 @@ void call_reg(int reg) {
   mod_rm(2, reg);
 }
 
-void ret() {
+function ret() {
 
   // RET  ;; Return to calling procedure
   // See: https://web.archive.org/web/20240302232015/https://www.felixcloutier.com/x86/ret
@@ -6918,7 +6918,7 @@ void ret() {
   emit_i8(0xc3);
 }
 
-void debug_interrupt() {
+function debug_interrupt() {
 
   // INT 3  ;; Debug interrupt
   // See: https://web.archive.org/web/20250118000553/https://www.felixcloutier.com/x86/intn:into:int3:int1
@@ -6939,7 +6939,7 @@ const int LE_U = 0x6; // x <= y (Jump near if below or equal (CF=1 or ZF=1))
 const int GT   = 0xf; // x > y
 const int GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 
-void jump_cond(int cond, int lbl) {
+function jump_cond(int cond, int lbl) {
 
   // JE rel32, JNE rel32, JL rel32, JLE rel32, JG rel32, JGE rel32, ...
   // Jump conditionally to 32 bit displacement relative to next instruction
@@ -6949,7 +6949,7 @@ void jump_cond(int cond, int lbl) {
   use_label(lbl);
 }
 
-void jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2) {
+function jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2) {
   cmp_reg_reg(reg1, reg2);
   jump_cond(cond, lbl);
 }
@@ -6994,7 +6994,7 @@ void setup_proc_args(int global_vars_size) {
   push_reg(reg_Y); // push argc
 }
 
-void mov_reg_lbl(int reg, int lbl) {
+function mov_reg_lbl(int reg, int lbl) {
   // Since we can't do rip-relative addressing in 32 bit mode, we need to push
   // the address to the stack and then some arithmetic to get the address in a
   // register.
