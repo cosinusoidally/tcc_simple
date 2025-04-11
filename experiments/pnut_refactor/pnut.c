@@ -4325,19 +4325,14 @@ var void_star_type;
 function dereference_type(type) {
   var t;
   t = get_op(type);
-  if(0) {
-  } else if(0) {
+  if(eq(t, mkc('['))) { // Array type
+    return get_child_(mkc('['), type, 0);
+  } else if(eq(t, mkc('*'))) { // Pointer type
+    return get_child_(mkc('*'), type, 1);
   } else {
-  switch (t) {
-    case '[': // Array type
-      return get_child_('[', type, 0);
-    case '*': // Pointer type
-      return get_child_('*', type, 1);
-    default:
-      putstr("type="); putint(get_op(type)); putchar('\n');
-      fatal_error("dereference_type: non pointer is being dereferenced with *");
-      return -1;
-  }
+    putstr(mks("type=")); putint(get_op(type)); putchar(mkc('\n'));
+    fatal_error(mks("dereference_type: non pointer is being dereferenced with *"));
+    return sub(0, 1);
   }
 }
 
