@@ -5083,31 +5083,45 @@ function codegen_goto(node) {
   label_ident = get_val_(IDENTIFIER, get_child__(GOTO_KW, IDENTIFIER, node, 0));
   binding = cgc_lookup_goto_label(label_ident, cgc_locals_fun);
 
-  if (binding == 0) {
+  if (eq(binding, 0)) {
     goto_lbl = alloc_goto_label();
     cgc_add_goto_label(label_ident, goto_lbl);
     binding = cgc_locals_fun;
   }
 
-  jump_to_goto_label(heap[binding + 3]); // Label
+  jump_to_goto_label(r_heap(add(binding, 3))); // Label
 }
 
 // Return the width of the lvalue
-int codegen_lvalue(ast node) {
-  int op = get_op(node);
-  int nb_children = get_nb_children(node);
-  int binding;
-  int lvalue_width = 0;
-  ast type;
-  ast child0, child1;
+function codegen_lvalue(node) {
+  var op;
+  var nb_children;
+  var binding;
+  var lvalue_width;
+  var type;
+  var child0;
+  var child1;
+  var t;
 
-  if (nb_children >= 1) child0 = get_child(node, 0);
-  if (nb_children >= 2) child1 = get_child(node, 1);
+  op = get_op(node);
+  nb_children = get_nb_children(node);
+  lvalue_width = 0;
 
-  if (nb_children == 0) {
-    if (op == IDENTIFIER) {
+  if (gte(nb_children, 1)) {
+    child0 = get_child(node, 0);
+  }
+  if (gte(nb_children, 2)) {
+    child1 = get_child(node, 1);
+  }
+
+  if (eq(nb_children, 0)) {
+    if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
-      switch (binding_kind(binding)) {
+      t = binding_kind(binding);
+      if(0) {
+      } else if(0) {
+      } else {
+      switch (t) {
         case BINDING_PARAM_LOCAL:
         case BINDING_VAR_LOCAL:
           mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
@@ -5126,6 +5140,7 @@ int codegen_lvalue(ast node) {
         default:
           fatal_error("codegen_lvalue: identifier not found");
           break;
+      }
       }
       lvalue_width = type_width(heap[binding+4], true, false);
     } else {
