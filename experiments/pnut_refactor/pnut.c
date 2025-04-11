@@ -4323,7 +4323,12 @@ var void_type;
 var void_star_type;
 
 function dereference_type(type) {
-  switch (get_op(type)) {
+  var t;
+  t = get_op(type);
+  if(0) {
+  } else if(0) {
+  } else {
+  switch (t) {
     case '[': // Array type
       return get_child_('[', type, 0);
     case '*': // Pointer type
@@ -4332,6 +4337,7 @@ function dereference_type(type) {
       putstr("type="); putint(get_op(type)); putchar('\n');
       fatal_error("dereference_type: non pointer is being dereferenced with *");
       return -1;
+  }
   }
 }
 
