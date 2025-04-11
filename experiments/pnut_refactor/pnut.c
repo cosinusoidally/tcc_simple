@@ -4819,28 +4819,38 @@ function value_type(node) {
   }
 }
 
-void codegen_binop(op, lhs, rhs) {
-  int lbl1;
-  int lbl2;
-  int cond = -1;
-  ast left_type = value_type(lhs);
-  ast right_type = value_type(rhs);
-  bool left_is_numeric = is_numeric_type(left_type);
-  bool right_is_numeric = is_numeric_type(right_type);
-  int width;
+function codegen_binop(op, lhs, rhs) {
+  var lbl1;
+  var lbl2;
+  var cond;
+  var left_type;
+  var right_type;
+  var left_is_numeric;
+  var right_is_numeric;
+  var width;
+  var is_signed;
+
+  cond = sub(0, 1);
+  left_type = value_type(lhs);
+  right_type = value_type(rhs);
+  left_is_numeric = is_numeric_type(left_type);
+  right_is_numeric = is_numeric_type(right_type);
   // If any of the operands is unsigned, the result is unsigned
-  bool is_signed = false;
-  if (is_signed_numeric_type(left_type) && is_signed_numeric_type(right_type)) is_signed = true;
+  is_signed = false;
+
+  if (and(is_signed_numeric_type(left_type),is_signed_numeric_type(right_type))) {
+    is_signed = true;
+  }
 
   pop_reg(reg_Y); // rhs operand
   pop_reg(reg_X); // lhs operand
 
-  if      (op == '<')     cond = is_signed ? LT : LT_U;
-  else if (op == '>')     cond = is_signed ? GT : GT_U;
-  else if (op == LT_EQ)   cond = is_signed ? LE : LE_U;
-  else if (op == GT_EQ)   cond = is_signed ? GE : GE_U;
-  else if (op == EQ_EQ)   cond = EQ;
-  else if (op == EXCL_EQ) cond = NE;
+  if      (eq(op,mkc('<')))     cond = is_signed ? LT : LT_U;
+  else if (eq(op,mkc('>')))     cond = is_signed ? GT : GT_U;
+  else if (eq(op,LT_EQ))   cond = is_signed ? LE : LE_U;
+  else if (eq(op,GT_EQ))   cond = is_signed ? GE : GE_U;
+  else if (eq(op,EQ_EQ))   cond = EQ;
+  else if (eq(op,EXCL_EQ)) cond = NE;
 
   if (cond != -1) {
 
