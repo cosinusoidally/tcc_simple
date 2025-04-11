@@ -4358,16 +4358,22 @@ bool is_struct_or_union_type(ast type) {
 }
 
 // An aggregate type is either an array type or a struct/union type (that's not a reference)
-bool is_aggregate_type(ast type) {
-  int op = get_op(type);
-  return op == '[' || op == STRUCT_KW || op == UNION_KW;
+function is_aggregate_type(type) {
+  var op;
+  op = get_op(type);
+  return or(eq(op,mkc('[')),or(eq(op,STRUCT_KW),eq(op,UNION_KW)));
 }
 
-bool is_not_pointer_type(ast type) {
-  return !is_pointer_type(type);
+function is_not_pointer_type(type) {
+  return eq(0, is_pointer_type(type));
 }
 
-bool is_numeric_type(ast type) {
+function is_numeric_type(type) {
+  var t;
+  t = get_op(type);
+  if( or(eq(t, CHAR_KW), eq(t, INT_KW))) {
+    return true;
+  } else {
   switch (get_op(type)) {
     case CHAR_KW:
     case INT_KW:
@@ -4379,6 +4385,7 @@ bool is_numeric_type(ast type) {
       return true;
     default: // Struct/union/pointer/array
       return false;
+  }
   }
 }
 
