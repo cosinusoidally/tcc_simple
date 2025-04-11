@@ -4371,21 +4371,14 @@ function is_not_pointer_type(type) {
 function is_numeric_type(type) {
   var t;
   t = get_op(type);
-  if( or(eq(t, CHAR_KW), eq(t, INT_KW))) {
+  if( or(eq(t, CHAR_KW), or(eq(t, INT_KW), or(eq(t, FLOAT_KW),
+      or(eq(t, DOUBLE_KW), or(eq(t, SHORT_KW), or(eq(t, LONG_KW),
+      eq(t, ENUM_KW) // Enums are considered numeric types
+    ))))))) {
     return true;
   } else {
-  switch (get_op(type)) {
-    case CHAR_KW:
-    case INT_KW:
-    case FLOAT_KW:
-    case DOUBLE_KW:
-    case SHORT_KW:
-    case LONG_KW:
-    case ENUM_KW: // Enums are considered numeric types
-      return true;
-    default: // Struct/union/pointer/array
-      return false;
-  }
+    // Struct/union/pointer/array
+    return false;
   }
 }
 
