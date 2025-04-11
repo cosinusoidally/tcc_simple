@@ -84,6 +84,9 @@ function rt_crash(msg);
 function setup_proc_args(global_vars_size);
 function alloc_label_();
 function struct_union_size(struct_type);
+function codegen_rvalue(node);
+function codegen_statement(node);
+function codegen_lvalue(node);
 
 #define ast int
 #define true 1
@@ -4975,68 +4978,70 @@ function codegen_binop(op, lhs, rhs) {
     mov_reg_reg(reg_X, reg_Y); // Ignore lhs and keep rhs
   } else if (eq(op,mkc('['))) {
     // Same as pointer addition for address calculation
-    if (is_pointer_type(left_type) && is_not_pointer_type(right_type)) {
+    if (and(is_pointer_type(left_type), is_not_pointer_type(right_type))) {
       mul_for_pointer_arith(reg_Y, ref_type_width(left_type));
       width = ref_type_width(left_type);
       is_signed = is_signed_numeric_type(dereference_type(left_type));
-    } else if (is_pointer_type(right_type) && is_not_pointer_type(left_type)) {
+    } else if (and(is_pointer_type(right_type), is_not_pointer_type(left_type))) {
       mul_for_pointer_arith(reg_X, ref_type_width(right_type));
       width = ref_type_width(right_type);
       is_signed = is_signed_numeric_type(dereference_type(right_type));
     } else {
-      fatal_error("codegen_binop: invalid array access operands");
+      fatal_error(mks("codegen_binop: invalid array access operands"));
       return;
     }
 
     add_reg_reg(reg_X, reg_Y);
     load_mem_location(reg_X, reg_X, 0, width, is_signed);
   } else {
-    putstr("op="); putint(op); putchar('\n');
-    fatal_error("codegen_binop: unknown op");
+    putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+    fatal_error(mks("codegen_binop: unknown op"));
   }
 
   push_reg(reg_X);
 }
 
-void codegen_rvalue(ast node);
-void codegen_statement(ast node);
-int codegen_lvalue(ast node);
+function codegen_param(param) {
+  var type;
+  var left_width;
 
-int codegen_param(ast param) {
-  int type = value_type(param);
-  int left_width;
+  type = value_type(param);
 
   if (is_struct_or_union_type(type)) {
     left_width = codegen_lvalue(param);
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
     grow_stack_bytes(word_size_align(left_width));
-    grow_fs(word_size_align(left_width) / WORD_SIZE);
+    grow_fs(div_(word_size_align(left_width), WORD_SIZE));
     copy_obj(reg_SP, 0, reg_X, 0, left_width);
   } else {
     codegen_rvalue(param);
   }
 
-  return type_width(type, false, true) / WORD_SIZE;
+  return div_(type_width(type, false, true), WORD_SIZE);
 }
 
-int codegen_params(ast params) {
+function codegen_params(params) {
+  var fs;
+  fs = 0;
 
-  int fs = 0;
-
-  if (params != 0) {
+  if (neq(params, 0)) {
     fs = codegen_params(tail(params));
-    fs += codegen_param(car(params));
+    fs = add(fs, codegen_param(car(params)));
   }
 
   return fs;
 }
 
-void codegen_call(ast node) {
-  ast fun = get_child_('(', node, 0);
-  ast params = get_child_('(', node, 1);
-  ast nb_params;
-  int binding = 0;
+function codegen_call(node) {
+  var fun;
+  var params;
+  var nb_params;
+  var binding;
+
+  fun = get_child_(mkc('('), node, 0);
+  params = get_child_(mkc('('), node, 1);
+  binding = 0;
 
   // Check if the function is a direct call, find the binding if it is
   if (get_op(fun) == IDENTIFIER) {
@@ -5068,7 +5073,7 @@ void codegen_call(ast node) {
   push_reg(reg_X);
 }
 
-void codegen_goto(ast node) {
+function codegen_goto(ast node) {
   ast label_ident = get_val_(IDENTIFIER, get_child__(GOTO_KW, IDENTIFIER, node, 0));
 
   int binding = cgc_lookup_goto_label(label_ident, cgc_locals_fun);
@@ -5244,7 +5249,7 @@ void codegen_string(int string_probe) {
   def_label(lbl);
 }
 
-void codegen_rvalue(ast node) {
+function codegen_rvalue(ast node) {
   int op = get_op(node);
   int nb_children = get_nb_children(node);
   int binding;
@@ -5960,7 +5965,7 @@ void codegen_body(ast node) {
   cgc_locals = save_locals;
 }
 
-void codegen_statement(ast node) {
+function codegen_statement(ast node) {
   int op;
   int lbl1, lbl2, lbl3;
   int save_fs;
