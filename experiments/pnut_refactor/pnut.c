@@ -5299,39 +5299,33 @@ function codegen_rvalue(node) {
     } else if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
       t = binding_kind(binding);
-      if(0) {
-      } else if(0) {
+      if(eq(t, BINDING_PARAM_LOCAL)) {
+        mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
+        add_reg_reg(reg_X, reg_SP);
+        // structs/unions are allocated on the stack, so no need to dereference
+        // For arrays, we need to dereference the pointer since they are passed as pointers
+        if (get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
+          load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
+        }
+        push_reg(reg_X);
+      } else if(eq(t, BINDING_VAR_LOCAL)) {
+        mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
+        add_reg_reg(reg_X, reg_SP);
+        // local arrays/structs/unions are allocated on the stack, so no need to dereference
+        if (get_op(heap[binding+4]) != '[' && get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
+          load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
+        }
+        push_reg(reg_X);
+      } else if(eq(t, BINDING_VAR_GLOBAL)) {
+        mov_reg_imm(reg_X, heap[binding+3]);
+        add_reg_reg(reg_X, reg_glo);
+        // global arrays/structs/unions are also allocated on the stack, so no need to dereference
+        if (get_op(heap[binding+4]) != '[' && get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
+          load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
+        }
+        push_reg(reg_X);
       } else {
       switch (t) {
-        case BINDING_PARAM_LOCAL:
-          mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
-          add_reg_reg(reg_X, reg_SP);
-          // structs/unions are allocated on the stack, so no need to dereference
-          // For arrays, we need to dereference the pointer since they are passed as pointers
-          if (get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
-            load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
-          }
-          push_reg(reg_X);
-          break;
-
-        case BINDING_VAR_LOCAL:
-          mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
-          add_reg_reg(reg_X, reg_SP);
-          // local arrays/structs/unions are allocated on the stack, so no need to dereference
-          if (get_op(heap[binding+4]) != '[' && get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
-            load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
-          }
-          push_reg(reg_X);
-          break;
-        case BINDING_VAR_GLOBAL:
-          mov_reg_imm(reg_X, heap[binding+3]);
-          add_reg_reg(reg_X, reg_glo);
-          // global arrays/structs/unions are also allocated on the stack, so no need to dereference
-          if (get_op(heap[binding+4]) != '[' && get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
-            load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
-          }
-          push_reg(reg_X);
-          break;
         case BINDING_ENUM_CST:
           mov_reg_imm(reg_X, -get_val_(INTEGER, heap[binding+3]));
           push_reg(reg_X);
