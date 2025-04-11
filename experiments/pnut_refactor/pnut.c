@@ -4788,39 +4788,38 @@ function value_type(node) {
     } else if (eq(op, ARROW)) {
       // Same as '.', but left_type must be a pointer
       left_type = value_type(child0);
-      if (get_op(left_type) == '*' && is_struct_or_union_type(get_child_('*', left_type, 1))) {
-        return get_child_(DECL, struct_member(get_child_('*', left_type, 1), child1), 1); // child 1 of member is the type
+      if (and(eq(get_op(left_type),mkc('*')),is_struct_or_union_type(get_child_(mkc('*'), left_type, 1)))) {
+        return get_child_(DECL, struct_member(get_child_(mkc('*'), left_type, 1), child1), 1); // child 1 of member is the type
       } else {
-        fatal_error("value_type: -> operator on non-struct pointer type");
-        return -1;
+        fatal_error(mks("value_type: -> operator on non-struct pointer type"));
+        return sub(0, 1);
       }
-    } else if (op == CAST) {
+    } else if (eq(op, CAST)) {
       return get_child_(DECL, child0, 1);
     } else {
-      fatal_error("value_type: unknown expression with 2 children");
-      return -1;
+      fatal_error(mks("value_type: unknown expression with 2 children"));
+      return sub(0, 1);
     }
 
-  } else if (nb_children == 3) {
+  } else if (eq(nb_children, 3)) {
 
-    if (op == '?') {
+    if (eq(op, mkc('?'))) {
       // We assume that the 2 cases have the same type.
       return value_type(child1);
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("value_type: unknown expression with 3 children");
-      return -1;
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("value_type: unknown expression with 3 children"));
+      return sub(0, 1);
     }
 
   } else {
-    putstr("op="); putint(op); putchar('\n');
-    fatal_error("value_type: unknown expression with >4 children");
-    return -1;
+    putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+    fatal_error(mks("value_type: unknown expression with >4 children"));
+    return sub(0, 1);
   }
 }
 
-void codegen_binop(int op, ast lhs, ast rhs) {
-
+void codegen_binop(op, lhs, rhs) {
   int lbl1;
   int lbl2;
   int cond = -1;
