@@ -5118,37 +5118,27 @@ function codegen_lvalue(node) {
     if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
       t = binding_kind(binding);
-      if(0) {
-      } else if(0) {
+      if(or(eq(t, BINDING_PARAM_LOCAL), eq(t, BINDING_VAR_LOCAL))) {
+        mov_reg_imm(reg_X, mul(sub(cgc_fs,r_heap(add(binding,3))),WORD_SIZE));
+        add_reg_reg(reg_X, reg_SP);
+        push_reg(reg_X);
+      } else if(eq(t, BINDING_VAR_GLOBAL)) {
+        mov_reg_imm(reg_X, r_heap(add(binding, 3)));
+        add_reg_reg(reg_X, reg_glo);
+        push_reg(reg_X);
+      } else if(eq(t, BINDING_FUN)) {
+        mov_reg_lbl(reg_X, r_heap(add(binding, 4)));
+        push_reg(reg_X);
       } else {
-      switch (t) {
-        case BINDING_PARAM_LOCAL:
-        case BINDING_VAR_LOCAL:
-          mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
-          add_reg_reg(reg_X, reg_SP);
-          push_reg(reg_X);
-          break;
-        case BINDING_VAR_GLOBAL:
-          mov_reg_imm(reg_X, heap[binding+3]);
-          add_reg_reg(reg_X, reg_glo);
-          push_reg(reg_X);
-          break;
-        case BINDING_FUN:
-          mov_reg_lbl(reg_X, heap[binding+4]);
-          push_reg(reg_X);
-          break;
-        default:
-          fatal_error("codegen_lvalue: identifier not found");
-          break;
+        fatal_error(mks("codegen_lvalue: identifier not found"));
       }
-      }
-      lvalue_width = type_width(heap[binding+4], true, false);
+      lvalue_width = type_width(r_heap(add(binding,4)), true, false);
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_lvalue: unknown lvalue with nb_children == 0");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_lvalue: unknown lvalue with nb_children == 0"));
     }
 
-  } else if (nb_children == 1) {
+  } else if (eq(nb_children, 1)) {
 
     if (op == '*') {
       codegen_rvalue(child0);
