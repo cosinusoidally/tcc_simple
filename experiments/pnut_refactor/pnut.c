@@ -4762,30 +4762,30 @@ function value_type(node) {
       }
     } else if (or(eq(op,mkc('=')),or(eq(op,AMP_EQ),or(eq(op,BAR_EQ),or(eq(op,CARET_EQ),or(eq(op,LSHIFT_EQ),or(eq(op,MINUS_EQ),or(eq(op,PERCENT_EQ),or(eq(op,PLUS_EQ),or(eq(op,RSHIFT_EQ),or(eq(op,SLASH_EQ),eq(op,STAR_EQ)))))))))))) {
       return value_type(child0); // Only the left side is relevant here
-    } else if (op == AMP_AMP || op == BAR_BAR) {
+    } else if (or(eq(op, AMP_AMP), eq(op, BAR_BAR))) {
       // TODO: Check that the operands have compatible types?
       return value_type(child0);
-    } else if (op == '(') {
+    } else if (eq(op, mkc('('))) {
       binding = cgc_lookup_fun(get_val_(IDENTIFIER, child0), cgc_globals);
-      if (binding != 0) {
+      if (neq(binding, 0)) {
         // heap[binding+5] is the '(' type
-        return get_child_('(', heap[binding+5], 0);
+        return get_child_(mkc('('), r_heap(add(binding, 5)), 0);
       } else {
-        putstr("ident = ");
+        putstr(mks("ident = "));
         putstr(STRING_BUF(get_val_(IDENTIFIER, child0)));
-        putchar('\n');
-        fatal_error("value_type: function not found");
-        return -1;
+        putchar(mkc('\n'));
+        fatal_error(mks("value_type: function not found"));
+        return sub(0, 1);
       }
-    } else if (op == '.') {
+    } else if (eq(op, mkc('.'))) {
       left_type = value_type(child0);
       if (is_struct_or_union_type(left_type)) {
         return get_child_(DECL, struct_member(left_type, child1), 1); // child 1 of member is the type
       } else {
-        fatal_error("value_type: . operator on non-struct pointer type");
-        return -1;
+        fatal_error(mks("value_type: . operator on non-struct pointer type"));
+        return sub(0, 1);
       }
-    } else if (op == ARROW) {
+    } else if (eq(op, ARROW)) {
       // Same as '.', but left_type must be a pointer
       left_type = value_type(child0);
       if (get_op(left_type) == '*' && is_struct_or_union_type(get_child_('*', left_type, 1))) {
