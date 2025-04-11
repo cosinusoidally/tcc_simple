@@ -5426,8 +5426,8 @@ function codegen_rvalue(node) {
       codegen_rvalue(child0);
       codegen_rvalue(child1);
       codegen_binop(op, child0, child1);
-      grow_fs(-2);
-    } else if (op == '=') {
+      grow_fs(sub(0, 2));
+    } else if (eq(op, mkc('='))) {
       type1 = value_type(child0);
       left_width = codegen_lvalue(child0);
       if (is_struct_or_union_type(type1)) {
@@ -5435,13 +5435,13 @@ function codegen_rvalue(node) {
         codegen_lvalue(child1);
         pop_reg(reg_X);
         pop_reg(reg_Y);
-        grow_fs(-2);
+        grow_fs(sub(0, 2));
         copy_obj(reg_Y, 0, reg_X, 0, left_width);
       } else {
         codegen_rvalue(child1);
         pop_reg(reg_X);
         pop_reg(reg_Y);
-        grow_fs(-2);
+        grow_fs(sub(0, 2));
         write_mem_location(reg_Y, 0, reg_X, left_width);
       }
       push_reg(reg_X);
