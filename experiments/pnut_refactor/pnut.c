@@ -5140,21 +5140,21 @@ function codegen_lvalue(node) {
 
   } else if (eq(nb_children, 1)) {
 
-    if (op == '*') {
+    if (eq(op, mkc('*'))) {
       codegen_rvalue(child0);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       lvalue_width = ref_type_width(value_type(child0));
-    } else if (op == PARENS) {
+    } else if (eq(op, PARENS)) {
       lvalue_width = codegen_lvalue(child0);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_lvalue: unexpected operator");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_lvalue: unexpected operator"));
     }
 
-  } else if (nb_children == 2) {
+  } else if (eq(nb_children, 2)) {
 
-    if (op == '[') {
+    if (eq(op, mkc('['))) {
       type = value_type(child0);
       codegen_rvalue(child0);
       codegen_rvalue(child1);
