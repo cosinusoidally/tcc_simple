@@ -4966,12 +4966,14 @@ function codegen_binop(op, lhs, rhs) {
       fatal_error(mks("invalid operands to |"));
     }
     or_reg_reg(reg_X, reg_Y);
-  } else if (op == '^' || op == CARET_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to ^");
+  } else if (or(eq(op,mkc('^')),eq(op,CARET_EQ))) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to ^"));
+    }
     xor_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == ',')                       mov_reg_reg(reg_X, reg_Y); // Ignore lhs and keep rhs
-  else if (op == '[') {
+  } else if (eq(op,mkc(',')))  {
+    mov_reg_reg(reg_X, reg_Y); // Ignore lhs and keep rhs
+  } else if (eq(op,mkc('['))) {
     // Same as pointer addition for address calculation
     if (is_pointer_type(left_type) && is_not_pointer_type(right_type)) {
       mul_for_pointer_arith(reg_Y, ref_type_width(left_type));
