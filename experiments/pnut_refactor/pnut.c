@@ -5408,20 +5408,20 @@ function codegen_rvalue(node) {
       push_reg(reg_X);
     } else if (eq(op, mkc('&'))) {
       codegen_lvalue(child0);
-      grow_fs(-1);
-    } else if (op == SIZEOF_KW) {
-      if (get_op(child0) == DECL) {
+      grow_fs(sub(0, 1));
+    } else if (eq(op, SIZEOF_KW)) {
+      if (eq(get_op(child0), DECL)) {
         mov_reg_imm(reg_X, type_width(get_child_(DECL, child0, 1), true, false));
       } else {
         mov_reg_imm(reg_X, type_width(value_type(child0), true, false));
       }
       push_reg(reg_X);
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_rvalue: unexpected operator");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_rvalue: unexpected operator"));
     }
 
-  } else if (nb_children == 2) {
+  } else if (eq(nb_children, 2)) {
     if (op == '+' || op == '-' || op == '*' || op == '/' || op == '%' || op == '&' || op == '|' || op == '^' || op == LSHIFT || op == RSHIFT || op == '<' || op == '>' || op == EQ_EQ || op == EXCL_EQ || op == LT_EQ || op == GT_EQ || op == '[' || op == ',') {
       codegen_rvalue(child0);
       codegen_rvalue(child1);
