@@ -5286,9 +5286,9 @@ function codegen_rvalue(node) {
     child1 = get_child(node, 1);
   }
 
-  if (nb_children == 0) {
-    if ( op == INTEGER
-      || op == INTEGER_L || op == INTEGER_LL || op == INTEGER_U || op == INTEGER_UL || op == INTEGER_ULL
+  if (eq(nb_children, 0)) {
+    if ( eq(op,INTEGER)
+      || eq(op,INTEGER_L) || eq(op,INTEGER_LL) || eq(op,INTEGER_U) || eq(op,INTEGER_UL) || eq(op,INTEGER_ULL)
        ) {
       mov_reg_imm(reg_X, -get_val(node));
       push_reg(reg_X);
