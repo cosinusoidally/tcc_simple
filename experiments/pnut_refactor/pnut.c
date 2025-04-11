@@ -4388,19 +4388,9 @@ function is_signed_numeric_type(type) {
   if( or(eq(t, CHAR_KW), or(eq(t, INT_KW), or(eq(t, FLOAT_KW),
       or(eq(t, DOUBLE_KW), or(eq(t, SHORT_KW), eq(t, LONG_KW)
     )))))) {
-    return !TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW);
+    return eq(0, TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW));
   } else {
-  switch (get_op(type)) {
-    case CHAR_KW:
-    case INT_KW:
-    case FLOAT_KW:
-    case DOUBLE_KW:
-    case SHORT_KW:
-    case LONG_KW:
-      return !TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW);
-    default:
-      return true; // Not a numeric type => it's a struct/union/pointer/array and we consider it signed
-  }
+    return true; // Not a numeric type => it's a struct/union/pointer/array and we consider it signed
   }
 }
 
@@ -4408,10 +4398,16 @@ function is_signed_numeric_type(type) {
 // If array_value is true, the size of the array is returned, otherwise the
 // size of the pointer is returned.
 // If word_align is true, the size is rounded up to the word size.
-int type_width(ast type, bool array_value, bool word_align) {
-  int width = 1;
+function type_width(type, array_value, word_align) {
+  var width;
+  var t;
+  width = 1;
   // Basic type kw
-  switch (get_op(type)) {
+  t = get_op(type);
+  if(0) {
+  } else if(0) {
+  } else {
+  switch (t) {
     case '[':
       // In certain contexts, we want to know the static size of the array (i.e.
       // sizeof, in struct definitions, etc.) while in other contexts we care
@@ -4435,6 +4431,7 @@ int type_width(ast type, bool array_value, bool word_align) {
       width = struct_union_size(type);
       break;
     default:       width = WORD_SIZE; break;
+  }
   }
 
   if (word_align) width = word_size_align(width);
