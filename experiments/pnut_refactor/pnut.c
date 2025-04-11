@@ -4223,7 +4223,7 @@ function use_label(lbl) {
 function def_label(lbl) {
   var addr;
   var label_addr;
-  int next;
+  var next;
 
   addr = r_heap(add(lbl, 1));
   label_addr = code_alloc;
@@ -4247,15 +4247,16 @@ function def_label(lbl) {
 // Similar to use_label, but for gotos.
 // The main difference is that it adjusts the stack and jumps, as opposed to
 // simply emitting the address.
+function jump_to_goto_label(lbl) {
+  var addr;
+  var lbl_fs;
+  var start_code_alloc;
+
+  addr = r_heap(add(lbl, 1));
+  lbl_fs = r_heap(add(lbl, 2));
+  start_code_alloc = code_alloc;
 
 // LJW HERE
-
-function jump_to_goto_label(int lbl) {
-
-  int addr = heap[lbl + 1];
-  int lbl_fs = heap[lbl + 2];
-  int start_code_alloc = code_alloc;
-
   if (heap[lbl] != GOTO_LABEL) fatal_error("jump_to_goto_label expects goto label");
 
   if (addr < 0) {
