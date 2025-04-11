@@ -4875,7 +4875,7 @@ function codegen_binop(op, lhs, rhs) {
     cond = NE;
   }
 
-  if (cond != -1) {
+  if (neq(cond, sub(0, 1))) {
 
     lbl1 = alloc_label(0);
     lbl2 = alloc_label(0);
@@ -4886,19 +4886,18 @@ function codegen_binop(op, lhs, rhs) {
     mov_reg_imm(reg_X, 1);
     def_label(lbl2);
 
-  } else if (op == '+' || op == PLUS_EQ || op == PLUS_PLUS_PRE || op == PLUS_PLUS_POST) {
+  } else if (or(eq(op,mkc('+')),or(eq(op,PLUS_EQ),or(eq(op,PLUS_PLUS_PRE),eq(op,PLUS_PLUS_POST))))) {
     // Check if one of the operands is a pointer
     // If so, multiply the other operand by the width of the pointer target object.
 
-    if (is_pointer_type(left_type) && is_not_pointer_type(right_type)) {
+    if (and(is_pointer_type(left_type), is_not_pointer_type(right_type))) {
       mul_for_pointer_arith(reg_Y, ref_type_width(left_type));
-    } else if (is_pointer_type(right_type) && is_not_pointer_type(left_type)) {
+    } else if (and(is_pointer_type(right_type), is_not_pointer_type(left_type))) {
       mul_for_pointer_arith(reg_X, ref_type_width(right_type));
     }
 
     add_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == '-' || op == MINUS_EQ || op == MINUS_MINUS_PRE || op == MINUS_MINUS_POST) {
+  } else if (eq(op,mkc('-')) || eq(op,MINUS_EQ) || eq(op,MINUS_MINUS_PRE) || eq(op,MINUS_MINUS_POST)) {
     // Pointer subtraction is only valid if one of the operands is a pointer
     // When both operands are pointers, the result is the difference between the two pointers divided by the width of the target object.
     // When one operand is a pointer and the other is an integer, the result is the pointer minus the integer times the width of the target object.
