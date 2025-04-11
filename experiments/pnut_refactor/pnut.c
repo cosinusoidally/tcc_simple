@@ -4704,19 +4704,19 @@ function value_type(node) {
 
   } else if (eq(nb_children, 1)) {
 
-    if (op == '*') {
+    if (eq(op, mkc('*'))) {
       left_type = value_type(child0);
       if (is_function_type(left_type)) {
         return left_type;
       } else {
         return dereference_type(left_type);
       }
-    } else if (op == '&') {
+    } else if (eq(op, mkc('&'))) {
       left_type = value_type(child0);
       return pointer_type(left_type, false);
-    } else if (op == '!') {
+    } else if (eq(op, mkc('!'))) {
       return int_type; // Logical not always returns an integer
-    } else if (op == '+' || op == '-' || op == '~' || op == MINUS_MINUS || op == PLUS_PLUS || op == MINUS_MINUS_POST || op == PLUS_PLUS_POST || op == PLUS_PLUS_PRE || op == MINUS_MINUS_PRE || op == PARENS) {
+    } else if (eq(op,mkc('+')) || eq(op,mkc('-')) || eq(op,mkc('~')) || eq(op,MINUS_MINUS) || eq(op,PLUS_PLUS) || eq(op,MINUS_MINUS_POST) || eq(op,PLUS_PLUS_POST) || eq(op,PLUS_PLUS_PRE) || eq(op,MINUS_MINUS_PRE) || eq(op,PARENS)) {
       // Unary operation don't change the type
       return value_type(child0);
     } else if (op == SIZEOF_KW) {
