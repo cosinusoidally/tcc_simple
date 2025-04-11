@@ -4409,30 +4409,31 @@ function type_width(type, array_value, word_align) {
     // sizeof, in struct definitions, etc.) while in other contexts we care
     // about the pointer (i.e. when passing an array to a function, etc.)
     if (array_value) {
-      width = get_child_('[', type, 1) * type_width(get_child_('[', type, 0), true, false);
+      width = mul(get_child_(mkc('['), type, 1), type_width(get_child_(mkc('['), type, 0), true, false));
     } else {
       width = WORD_SIZE; // Array is a pointer to the first element
     }
   } else if(eq(t, mkc('*'))) {
     width = WORD_SIZE;
+  } else if(eq(t, VOID_KW)) {
+    width = 1; // Default to 1 byte for void so pointer arithmetic and void casts work
+  } else if(eq(t, CHAR_KW)) {
+    width = 1;
+  } else if(eq(t, SHORT_KW)) {
+    width = 2;
+  } else if(eq(t, INT_KW)) {
+    width = 4;
+  } else if(eq(t, LONG_KW)) {
+    width = 4;
+  } else if(or(eq(t, STRUCT_KW), eq(t, UNION_KW))) {
+    width = struct_union_size(type);
   } else {
-  switch (t) {
-    case VOID_KW:  width = 1;         break; // Default to 1 byte for void so pointer arithmetic and void casts work
-    case CHAR_KW:  width = 1;         break;
-    case SHORT_KW: width = 2;         break;
-    case INT_KW:   width = 4;         break;
-    case LONG_KW:
-      width = 4;
-      break;
-    case STRUCT_KW:
-    case UNION_KW:
-      width = struct_union_size(type);
-      break;
-    default:       width = WORD_SIZE; break;
-  }
+    width = WORD_SIZE;
   }
 
-  if (word_align) width = word_size_align(width);
+  if (word_align) {
+    width = word_size_align(width);
+  }
   return width;
 }
 
