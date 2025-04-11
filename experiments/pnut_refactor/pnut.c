@@ -5044,40 +5044,44 @@ function codegen_call(node) {
   binding = 0;
 
   // Check if the function is a direct call, find the binding if it is
-  if (get_op(fun) == IDENTIFIER) {
-    if (get_val_(IDENTIFIER, fun) == intern_str("PNUT_INLINE_INTERRUPT")) {
+  if (eq(get_op(fun), IDENTIFIER)) {
+    if (eq(get_val_(IDENTIFIER, fun), intern_str(mks("PNUT_INLINE_INTERRUPT")))) {
       debug_interrupt();
       push_reg(reg_X); // Dummy push to keep the stack balanced
       return;
     }
     binding = resolve_identifier(get_val_(IDENTIFIER, fun));
-    if (binding_kind(binding) != BINDING_FUN) binding = 0;
+    if (neq(binding_kind(binding), BINDING_FUN)) {
+      binding = 0;
+    }
   }
 
   nb_params = codegen_params(params);
 
-  if (binding != 0) {
+  if (neq(binding, 0)) {
     // Generate a fast path for direct calls
-    call(heap[binding+4]);
+    call(r_heap(add(binding, 4)));
   } else {
     // Otherwise we go through the function pointer
     codegen_rvalue(fun);
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
     call_reg(reg_X);
   }
 
-  grow_stack(-nb_params);
-  grow_fs(-nb_params);
+  grow_stack(sub(0, nb_params));
+  grow_fs(sub(0, nb_params));
 
   push_reg(reg_X);
 }
 
-function codegen_goto(ast node) {
-  ast label_ident = get_val_(IDENTIFIER, get_child__(GOTO_KW, IDENTIFIER, node, 0));
+function codegen_goto(node) {
+  var label_ident;
+  var binding;
+  var goto_lbl;
 
-  int binding = cgc_lookup_goto_label(label_ident, cgc_locals_fun);
-  int goto_lbl;
+  label_ident = get_val_(IDENTIFIER, get_child__(GOTO_KW, IDENTIFIER, node, 0));
+  binding = cgc_lookup_goto_label(label_ident, cgc_locals_fun);
 
   if (binding == 0) {
     goto_lbl = alloc_goto_label();
