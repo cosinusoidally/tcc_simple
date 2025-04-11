@@ -4655,6 +4655,7 @@ function value_type(node) {
   var right_type;
   var child0;
   var child1;
+  var t;
 
   op = get_op(node);
   nb_children = get_nb_children(node);
@@ -4678,35 +4679,30 @@ function value_type(node) {
       return string_type;
     } else if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
-      if(0) {
-      } else if(0) {
+      t = binding_kind(binding);
+      if(or(eq(t, BINDING_PARAM_LOCAL),eq(t,BINDING_VAR_LOCAL))) {
+        return r_heap(add(binding, 4));
+      } else if(eq(t, BINDING_VAR_GLOBAL)) {
+        return r_heap(add(binding, 4));
+      } else if(eq(t, BINDING_ENUM_CST)) {
+        return int_type;
+      } else if(eq(t, BINDING_FUN)) {
+        return r_heap(add(binding, 5));
       } else {
-      switch (binding_kind(binding)) {
-        case BINDING_PARAM_LOCAL:
-        case BINDING_VAR_LOCAL:
-          return heap[binding+4];
-        case BINDING_VAR_GLOBAL:
-          return heap[binding+4];
-        case BINDING_ENUM_CST:
-          return int_type;
-        case BINDING_FUN:
-          return heap[binding+5];
-        default:
-          putstr("ident = ");
-          putstr(STRING_BUF(get_val_(IDENTIFIER, node)));
-          putchar('\n');
-          fatal_error("value_type: unknown identifier");
-          return -1;
-      }
+        putstr(mks("ident = "));
+        putstr(STRING_BUF(get_val_(IDENTIFIER, node)));
+        putchar(mkc('\n'));
+        fatal_error(mks("value_type: unknown identifier"));
+        return sub(0, 1);
       }
 
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("value_type: unknown expression with nb_children == 0");
-      return -1;
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("value_type: unknown expression with nb_children == 0"));
+      return sub(0, 1);
     }
 
-  } else if (nb_children == 1) {
+  } else if (eq(nb_children, 1)) {
 
     if (op == '*') {
       left_type = value_type(child0);
