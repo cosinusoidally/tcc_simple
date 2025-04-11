@@ -4479,42 +4479,49 @@ var struct_union_size_largest_member = 0;
 function type_largest_member(type) {
   var t;
   t = get_op(type);
-  if(0) {
-  } else if(0) {
+  if(or(eq(t, STRUCT_KW), eq(t, UNION_KW))) {
+    struct_union_size_largest_member = 0;
+    struct_union_size(type); // Compute struct_union_size_largest_member global
+    return struct_union_size_largest_member;
+  } else if(eq(t, mkc('['))) {
+    return type_largest_member(get_child_(mkc('['), type, 0));
   } else {
-  switch (get_op(type)) {
-    case STRUCT_KW:
-    case UNION_KW:
-      struct_union_size_largest_member = 0;
-      struct_union_size(type); // Compute struct_union_size_largest_member global
-      return struct_union_size_largest_member;
-    case '[':
-      return type_largest_member(get_child_('[', type, 0));
-    default:
-      return type_width(type, true, false);
-  }
+    return type_width(type, true, false);
   }
 }
 
 // Size of a struct or union type
-int struct_union_size(ast type) {
-  ast members;
-  ast member_type;
-  int member_size, largest_submember_size;
-  int sum_size = 0, max_size = 0, largest_member_size = 0;
+function struct_union_size(type) {
+  var members;
+  var member_type;
+  var member_size;
+  var largest_submember_size;
+  var sum_size;
+  var max_size;
+  var largest_member_size;
+
+  sum_size = 0;
+  max_size = 0;
+  largest_member_size = 0;
 
   type = canonicalize_type(type);
   members = get_child(type, 2);
 
-  while (members != 0) {
+  while (neq(members, 0)) {
     member_type = get_child_(DECL, car_(DECL, members), 1);
     members = tail(members);
     member_size = type_width(member_type, true, false);
     largest_submember_size = type_largest_member(member_type);
-    if (member_size != 0) sum_size = align_to(largest_submember_size, sum_size); // Align the member to the word size
-    sum_size += member_size;                                          // Struct size is the sum of its members
-    if (member_size > max_size) max_size = member_size;               // Union size is the max of its members
-    if (largest_member_size < largest_submember_size) largest_member_size = largest_submember_size;
+    if (neq(member_size, 0)) {
+      sum_size = align_to(largest_submember_size, sum_size); // Align the member to the word size
+    }
+    sum_size = add(sum_size, member_size);                                          // Struct size is the sum of its members
+    if (gt(member_size, max_size)) {
+      max_size = member_size;               // Union size is the max of its members
+    }
+    if (lt(largest_member_size, largest_submember_size)) {
+      largest_member_size = largest_submember_size;
+    }
   }
 
   sum_size = align_to(largest_member_size, sum_size); // The final struct size is a multiple of its widest member
@@ -4522,7 +4529,11 @@ int struct_union_size(ast type) {
 
   // Set the struct_union_size_largest_member global to "return" it
   struct_union_size_largest_member = largest_member_size;
-  return get_op(type) == STRUCT_KW ? sum_size : max_size;
+  if(eq(get_op(type), STRUCT_KW)) {
+    return sum_size;
+  } else {
+    return max_size;
+  }
 }
 
 // Find offset of struct member
