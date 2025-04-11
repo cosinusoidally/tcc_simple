@@ -4716,18 +4716,18 @@ function value_type(node) {
       return pointer_type(left_type, false);
     } else if (eq(op, mkc('!'))) {
       return int_type; // Logical not always returns an integer
-    } else if (eq(op,mkc('+')) || eq(op,mkc('-')) || eq(op,mkc('~')) || eq(op,MINUS_MINUS) || eq(op,PLUS_PLUS) || eq(op,MINUS_MINUS_POST) || eq(op,PLUS_PLUS_POST) || eq(op,PLUS_PLUS_PRE) || eq(op,MINUS_MINUS_PRE) || eq(op,PARENS)) {
+    } else if (or(eq(op,mkc('+')),or(eq(op,mkc('-')),or(eq(op,mkc('~')),or(eq(op,MINUS_MINUS),or(eq(op,PLUS_PLUS),or(eq(op,MINUS_MINUS_POST),or(eq(op,PLUS_PLUS_POST),or(eq(op,PLUS_PLUS_PRE),or(eq(op,MINUS_MINUS_PRE),eq(op,PARENS))))))))))) {
       // Unary operation don't change the type
       return value_type(child0);
-    } else if (op == SIZEOF_KW) {
+    } else if (eq(op, SIZEOF_KW)) {
       return int_type; // sizeof always returns an integer
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("value_type: unexpected operator");
-      return -1;
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("value_type: unexpected operator"));
+      return sub(0, 1);
     }
 
-  } else if (nb_children == 2) {
+  } else if (eq(nb_children, 2)) {
 
     if (op == '+' || op == '-' || op == '*' || op == '/' || op == '%' || op == '&' || op == '|' || op == '^'
      || op == LSHIFT || op == RSHIFT) {
