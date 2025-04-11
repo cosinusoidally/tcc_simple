@@ -4943,23 +4943,30 @@ function codegen_binop(op, lhs, rhs) {
       rem_reg_reg(reg_X, reg_Y);
     }
   } else if (or(eq(op,RSHIFT),eq(op,RSHIFT_EQ))) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to >>");
-    if (is_signed) sar_reg_reg(reg_X, reg_Y);
-    else shr_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == LSHIFT || op == LSHIFT_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to <<");
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to >>"));
+    }
+    if (is_signed) {
+      sar_reg_reg(reg_X, reg_Y);
+    } else {
+      shr_reg_reg(reg_X, reg_Y);
+    }
+  } else if (or(eq(op,LSHIFT),eq(op,LSHIFT_EQ))) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to <<"));
+    }
     s_l_reg_reg(reg_X, reg_Y); // Shift left, independent of sign
-  }
-  else if (op == '&' || op == AMP_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to &");
+  } else if (or(eq(op,mkc('&')),eq(op,AMP_EQ))) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to &"));
+    }
     and_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == '|' || op == BAR_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to |");
+  } else if (or(eq(op,mkc('|')),eq(op,BAR_EQ))) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to |"));
+    }
     or_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == '^' || op == CARET_EQ) {
+  } else if (op == '^' || op == CARET_EQ) {
     if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to ^");
     xor_reg_reg(reg_X, reg_Y);
   }
