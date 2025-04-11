@@ -5321,31 +5321,31 @@ function codegen_rvalue(node) {
         add_reg_reg(reg_X, reg_glo);
         // global arrays/structs/unions are also allocated on the stack, so no need to dereference
         if(and(neq(get_op(r_heap(add(binding,4))),mkc('[')),and(neq(get_op(r_heap(add(binding,4))),STRUCT_KW),neq(get_op(r_heap(add(binding,4))),UNION_KW)))) {
-          load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
+          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), false, false), is_signed_numeric_type(r_heap(add(binding,4))));
         }
         push_reg(reg_X);
       } else if(eq(t, BINDING_ENUM_CST)) {
-        mov_reg_imm(reg_X, -get_val_(INTEGER, heap[binding+3]));
+        mov_reg_imm(reg_X,sub(0,get_val_(INTEGER,r_heap(add(binding,3)))));
         push_reg(reg_X);
       } else if(eq(t, BINDING_FUN)) {
-        mov_reg_lbl(reg_X, heap[binding+4]);
+        mov_reg_lbl(reg_X, r_heap(add(binding, 4)));
         push_reg(reg_X);
       } else {
-        putstr("ident = "); putstr(STRING_BUF(get_val_(IDENTIFIER, node))); putchar('\n');
-        fatal_error("codegen_rvalue: identifier not found");
+        putstr(mks("ident = ")); putstr(STRING_BUF(get_val_(IDENTIFIER, node))); putchar(mkc('\n'));
+        fatal_error(mks("codegen_rvalue: identifier not found"));
       }
-    } else if (op == STRING) {
+    } else if (eq(op, STRING)) {
       codegen_string(get_val_(STRING, node));
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_rvalue: unknown rvalue with nb_children == 0");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_rvalue: unknown rvalue with nb_children == 0"));
     }
 
-  } else if (nb_children == 1) {
-    if (op == '*') {
+  } else if (eq(nb_children, 1)) {
+    if (eq(op, mkc('*'))) {
       type1 = value_type(child0);
       codegen_rvalue(child0);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       if (is_function_type(type1)) {
       } else if (is_pointer_type(type1)) {
         pop_reg(reg_X);
