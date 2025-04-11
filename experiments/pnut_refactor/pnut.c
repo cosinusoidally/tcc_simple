@@ -4404,21 +4404,19 @@ function type_width(type, array_value, word_align) {
   width = 1;
   // Basic type kw
   t = get_op(type);
-  if(0) {
-  } else if(0) {
+  if(eq(t, mkc('['))) {
+    // In certain contexts, we want to know the static size of the array (i.e.
+    // sizeof, in struct definitions, etc.) while in other contexts we care
+    // about the pointer (i.e. when passing an array to a function, etc.)
+    if (array_value) {
+      width = get_child_('[', type, 1) * type_width(get_child_('[', type, 0), true, false);
+    } else {
+      width = WORD_SIZE; // Array is a pointer to the first element
+    }
+  } else if(eq(t, mkc('*'))) {
+    width = WORD_SIZE;
   } else {
   switch (t) {
-    case '[':
-      // In certain contexts, we want to know the static size of the array (i.e.
-      // sizeof, in struct definitions, etc.) while in other contexts we care
-      // about the pointer (i.e. when passing an array to a function, etc.)
-      if (array_value) {
-        width = get_child_('[', type, 1) * type_width(get_child_('[', type, 0), true, false);
-      } else {
-        width = WORD_SIZE; // Array is a pointer to the first element
-      }
-      break;
-    case '*':      width = WORD_SIZE; break;
     case VOID_KW:  width = 1;         break; // Default to 1 byte for void so pointer arithmetic and void casts work
     case CHAR_KW:  width = 1;         break;
     case SHORT_KW: width = 2;         break;
