@@ -4845,12 +4845,23 @@ function codegen_binop(op, lhs, rhs) {
   pop_reg(reg_Y); // rhs operand
   pop_reg(reg_X); // lhs operand
 
-  if      (eq(op,mkc('<')))     cond = is_signed ? LT : LT_U;
-  else if (eq(op,mkc('>')))     cond = is_signed ? GT : GT_U;
-  else if (eq(op,LT_EQ))   cond = is_signed ? LE : LE_U;
-  else if (eq(op,GT_EQ))   cond = is_signed ? GE : GE_U;
-  else if (eq(op,EQ_EQ))   cond = EQ;
-  else if (eq(op,EXCL_EQ)) cond = NE;
+  if(eq(op,mkc('<'))) {
+    if(is_signed) {
+      cond = LT;
+    } else {
+      cond = LT_U;
+    }
+  } else if(eq(op,mkc('>'))) {
+    cond = is_signed ? GT : GT_U;
+  } else if(eq(op,LT_EQ)) {
+    cond = is_signed ? LE : LE_U;
+  } else if(eq(op,GT_EQ)) {
+    cond = is_signed ? GE : GE_U;
+  } else if(eq(op,EQ_EQ)) {
+    cond = EQ;
+  } else if(eq(op,EXCL_EQ)) {
+    cond = NE;
+  }
 
   if (cond != -1) {
 
