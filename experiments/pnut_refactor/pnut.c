@@ -4760,7 +4760,7 @@ function value_type(node) {
         fatal_error(mks("value_type: non pointer is being dereferenced as array"));
         return sub(0, 1);
       }
-    } else if (op == '=' || op == AMP_EQ || op == BAR_EQ || op == CARET_EQ || op == LSHIFT_EQ || op == MINUS_EQ || op == PERCENT_EQ || op == PLUS_EQ || op == RSHIFT_EQ || op == SLASH_EQ || op == STAR_EQ) {
+    } else if (or(eq(op,mkc('=')),or(eq(op,AMP_EQ),or(eq(op,BAR_EQ),or(eq(op,CARET_EQ),or(eq(op,LSHIFT_EQ),or(eq(op,MINUS_EQ),or(eq(op,PERCENT_EQ),or(eq(op,PLUS_EQ),or(eq(op,RSHIFT_EQ),or(eq(op,SLASH_EQ),eq(op,STAR_EQ)))))))))))) {
       return value_type(child0); // Only the left side is relevant here
     } else if (op == AMP_AMP || op == BAR_BAR) {
       // TODO: Check that the operands have compatible types?
