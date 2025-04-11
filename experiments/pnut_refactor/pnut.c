@@ -5422,7 +5422,7 @@ function codegen_rvalue(node) {
     }
 
   } else if (eq(nb_children, 2)) {
-    if(eq(op,mkc('+')) || eq(op,mkc('-')) || eq(op,mkc('*')) || eq(op,mkc('/')) || eq(op,mkc('%')) || eq(op,mkc('&')) || eq(op,mkc('|')) || eq(op,mkc('^')) || eq(op,LSHIFT) || eq(op,RSHIFT) || eq(op,mkc('<')) || eq(op,mkc('>')) || eq(op,EQ_EQ) || eq(op,EXCL_EQ) || eq(op,LT_EQ) || eq(op,GT_EQ) || eq(op,mkc('[')) || eq(op,mkc(','))) {
+    if(or(eq(op,mkc('+')),or(eq(op,mkc('-')),or(eq(op,mkc('*')),or(eq(op,mkc('/')),or(eq(op,mkc('%')),or(eq(op,mkc('&')),or(eq(op,mkc('|')),or(eq(op,mkc('^')),or(eq(op,LSHIFT),or(eq(op,RSHIFT),or(eq(op,mkc('<')),or(eq(op,mkc('>')),or(eq(op,EQ_EQ),or(eq(op,EXCL_EQ),or(eq(op,LT_EQ),or(eq(op,GT_EQ),or(eq(op,mkc('[')),eq(op,mkc(',')))))))))))))))))))) {
       codegen_rvalue(child0);
       codegen_rvalue(child1);
       codegen_binop(op, child0, child1);
