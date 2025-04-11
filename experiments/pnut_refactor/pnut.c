@@ -4256,15 +4256,16 @@ function jump_to_goto_label(lbl) {
   lbl_fs = r_heap(add(lbl, 2));
   start_code_alloc = code_alloc;
 
-// LJW HERE
-  if (heap[lbl] != GOTO_LABEL) fatal_error("jump_to_goto_label expects goto label");
+  if (neq(r_heap(lbl), GOTO_LABEL)) {
+    fatal_error(mks("jump_to_goto_label expects goto label"));
+  }
 
-  if (addr < 0) {
+  if (lt(addr, 0)) {
     // label address is currently known
-    grow_stack(lbl_fs - cgc_fs);
+    grow_stack(sub(lbl_fs, cgc_fs));
     start_code_alloc = code_alloc;
     jump_rel(0); // Generate dummy jump instruction to get instruction length
-    addr = -addr - code_alloc; // compute relative address
+    addr = sub(sub(0, addr), code_alloc); // compute relative address
     code_alloc = start_code_alloc;
     jump_rel(addr);
   } else {
@@ -4272,20 +4273,22 @@ function jump_to_goto_label(lbl) {
     // placeholders for when we know the destination address and frame size
     grow_stack(0);
     jump_rel(0);
-    code[code_alloc-1] = addr; // chain with previous patch address
-    code[code_alloc-2] = cgc_fs; // save current frame size
-    code[code_alloc-3] = start_code_alloc; // track initial code alloc so we can come back
-    heap[lbl + 1] = code_alloc;
+    code[sub(code_alloc, 1)] = addr; // chain with previous patch address
+    code[sub(code_alloc, 2)] = cgc_fs; // save current frame size
+    code[sub(code_alloc, 3)] = start_code_alloc; // track initial code alloc so we can come back
+    heap[add(lbl, 1)] = code_alloc;
   }
 }
 
-function def_goto_label(int lbl) {
+function def_goto_label(lbl) {
+  var addr;
+  var label_addr;
+  var next;
+  var goto_fs;
+  var start_code_alloc;
 
-  int addr = heap[lbl + 1];
-  int label_addr = code_alloc;
-  int next;
-  int goto_fs;
-  int start_code_alloc;
+  addr = heap[lbl + 1];
+  label_addr = code_alloc;
 
   if (heap[lbl] != GOTO_LABEL) fatal_error("def_goto_label expects goto label");
 
