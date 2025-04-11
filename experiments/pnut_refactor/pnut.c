@@ -4537,65 +4537,84 @@ function struct_union_size(type) {
 }
 
 // Find offset of struct member
-int struct_member_offset_go(ast struct_type, ast member_ident) {
-  ast members = get_child(canonicalize_type(struct_type), 2);
-  int offset = 0;
-  int member_size, sub_offset;
-  ast decl, ident;
+function struct_member_offset_go(struct_type, member_ident) {
+  var members;
+  var offset;
+  var member_size;
+  var sub_offset;
+  var decl;
+  var ident;
 
-  while (members != 0) {
+  members = get_child(canonicalize_type(struct_type), 2);
+  offset = 0;
+
+  while (neq(members, 0)) {
     decl = car_(DECL, members);
     ident = get_child_opt_(DECL, IDENTIFIER, decl, 0);
-    if (ident == 0) { // Anonymous struct member, search that struct
+    if (eq(ident, 0)) { // Anonymous struct member, search that struct
       sub_offset = struct_member_offset_go(get_child_(DECL, decl, 1), member_ident);
-      if (sub_offset != -1) return offset + sub_offset;
-    } else if (get_val_(IDENTIFIER, member_ident) == get_val_(IDENTIFIER, ident)) {
+      if (neq(sub_offset, sub(0, 1))) {
+        return add(offset, sub_offset);
+      }
+    } else if (eq(get_val_(IDENTIFIER, member_ident), get_val_(IDENTIFIER, ident))) {
       return offset;
     }
 
-    if (get_op(struct_type) == STRUCT_KW) {
+    if (eq(get_op(struct_type), STRUCT_KW)) {
       // For unions, fields are always at offset 0. We must still iterate
       // because the field may be in an anonymous struct, in which case the
       // final offset is not 0.
       member_size = type_width(get_child_(DECL, decl, 1), true, false);
-      if (member_size != 0) offset = align_to(type_largest_member(get_child_(DECL, decl, 1)), offset);
-      offset += member_size;
+      if (neq(member_size, 0)) {
+        offset = align_to(type_largest_member(get_child_(DECL, decl, 1)), offset);
+      }
+      offset = add(offset, member_size);
     }
     members = tail(members);
   }
 
-  return -1;
+  return sub(0, 1);
 }
 
-int struct_member_offset(ast struct_type, ast member_ident) {
-  int offset = struct_member_offset_go(struct_type, member_ident);
-  if (offset == -1) fatal_error("struct_member_offset: member not found");
+function struct_member_offset(struct_type, member_ident) {
+  var offset;
+  offset = struct_member_offset_go(struct_type, member_ident);
+  if (eq(offset, sub(0, 1))) {
+    fatal_error(mks("struct_member_offset: member not found"));
+  }
   return offset;
 }
 
 // Find a struct member
-ast struct_member_go(ast struct_type, ast member_ident) {
-  ast members = get_child(canonicalize_type(struct_type), 2);
-  ast decl, ident;
+function struct_member_go(struct_type, member_ident) {
+  var members;
+  var decl;
+  var ident;
 
-  while (members != 0) {
+  members = get_child(canonicalize_type(struct_type), 2);
+
+  while (neq(members, 0)) {
     decl = car_(DECL, members);
     ident = get_child_opt_(DECL, IDENTIFIER, decl, 0);
-    if (ident == 0) { // Anonymous struct member, search that struct
+    if (eq(ident, 0)) { // Anonymous struct member, search that struct
       ident = struct_member_go(get_child_(DECL, decl, 1), member_ident);
-      if (ident != -1) return ident; // Found member in the anonymous struct
-    } else if (get_val_(IDENTIFIER, member_ident) == get_val_(IDENTIFIER, ident)) {
+      if (neq(ident, sub(0, 1))) {
+        return ident; // Found member in the anonymous struct
+      }
+    } else if (eq(get_val_(IDENTIFIER, member_ident),get_val_(IDENTIFIER, ident))) {
       return decl;
     }
     members = tail(members);
   }
 
-  return -1;
+  return sub(0, 1);
 }
 
-ast struct_member(ast struct_type, ast member_ident) {
+function struct_member(struct_type, member_ident) {
   ast member = struct_member_go(struct_type, member_ident);
-  if (member == -1) fatal_error("struct_member: member not found");
+  if (eq(member, sub(0, 1))) {
+    fatal_error(mks("struct_member: member not found"));
+  }
   return member;
 }
 
