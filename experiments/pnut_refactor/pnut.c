@@ -4382,7 +4382,14 @@ function is_numeric_type(type) {
   }
 }
 
-bool is_signed_numeric_type(ast type) {
+function is_signed_numeric_type(type) {
+  var t;
+  t = get_op(type);
+  if( or(eq(t, CHAR_KW), or(eq(t, INT_KW), or(eq(t, FLOAT_KW),
+      or(eq(t, DOUBLE_KW), or(eq(t, SHORT_KW), eq(t, LONG_KW)
+    )))))) {
+    return !TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW);
+  } else {
   switch (get_op(type)) {
     case CHAR_KW:
     case INT_KW:
@@ -4393,6 +4400,7 @@ bool is_signed_numeric_type(ast type) {
       return !TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW);
     default:
       return true; // Not a numeric type => it's a struct/union/pointer/array and we consider it signed
+  }
   }
 }
 
