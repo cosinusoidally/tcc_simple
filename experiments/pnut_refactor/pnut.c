@@ -5352,26 +5352,26 @@ function codegen_rvalue(node) {
         load_mem_location(reg_X, reg_X, 0, ref_type_width(type1), is_signed_numeric_type(dereference_type(type1)));
         push_reg(reg_X);
       } else {
-        fatal_error("codegen_rvalue: non-pointer is being dereferenced with *");
+        fatal_error(mks("codegen_rvalue: non-pointer is being dereferenced with *"));
       }
-    } else if (op == '+' || op == PARENS) {
+    } else if (or(eq(op, mkc('+')), eq(op, PARENS))) {
       codegen_rvalue(child0);
-      grow_fs(-1);
-    } else if (op == '-') {
+      grow_fs(sub(0, 1));
+    } else if (eq(op, mkc('-'))) {
       codegen_rvalue(child0);
       pop_reg(reg_Y);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       xor_reg_reg(reg_X, reg_X);
       sub_reg_reg(reg_X, reg_Y);
       push_reg(reg_X);
-    } else if (op == '~') {
+    } else if (eq(op, mkc('~'))) {
       codegen_rvalue(child0);
       pop_reg(reg_Y);
-      grow_fs(-1);
-      mov_reg_imm(reg_X, -1);
+      grow_fs(sub(0, 1));
+      mov_reg_imm(reg_X, sub(0, 1));
       xor_reg_reg(reg_X, reg_Y);
       push_reg(reg_X);
-    } else if (op == '!') {
+    } else if (eq(op, mkc('!'))) {
       xor_reg_reg(reg_X, reg_X);
       push_reg(reg_X);
       grow_fs(1);
