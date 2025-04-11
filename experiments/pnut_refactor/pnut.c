@@ -4742,7 +4742,7 @@ function value_type(node) {
         // if left is not a pointer, the type is the type of the right operand
         return right_type;
       }
-    } else if (op == '<' || op == '>' || op == EQ_EQ || op == EXCL_EQ || op == LT_EQ || op == GT_EQ) {
+    } else if (eq(op,mkc('<')) || eq(op,mkc('>')) || eq(op,EQ_EQ) || eq(op,EXCL_EQ) || eq(op,LT_EQ) || eq(op,GT_EQ)) {
       return int_type; // Comparison always returns an integer
     } else if (op == ',') {
       return value_type(child1); // The type of the right operand
