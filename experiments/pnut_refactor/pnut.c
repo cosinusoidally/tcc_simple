@@ -5445,7 +5445,7 @@ function codegen_rvalue(node) {
         write_mem_location(reg_Y, 0, reg_X, left_width);
       }
       push_reg(reg_X);
-    } else if (op == AMP_EQ || op == BAR_EQ || op == CARET_EQ || op == LSHIFT_EQ || op == MINUS_EQ || op == PERCENT_EQ || op == PLUS_EQ || op == RSHIFT_EQ || op == SLASH_EQ || op == STAR_EQ) {
+    } else if (eq(op,AMP_EQ) || eq(op,BAR_EQ) || eq(op,CARET_EQ) || eq(op,LSHIFT_EQ) || eq(op,MINUS_EQ) || eq(op,PERCENT_EQ) || eq(op,PLUS_EQ) || eq(op,RSHIFT_EQ) || eq(op,SLASH_EQ) || eq(op,STAR_EQ)) {
       left_width = codegen_lvalue(child0);
       pop_reg(reg_Y);
       push_reg(reg_Y);
