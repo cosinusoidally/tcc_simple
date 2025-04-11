@@ -4618,37 +4618,56 @@ function struct_member(struct_type, member_ident) {
   return member;
 }
 
-int resolve_identifier(int ident_probe) {
-  int binding = cgc_lookup_var(ident_probe, cgc_locals);
-  if (binding != 0) return binding;
+function resolve_identifier(ident_probe) {
+  var binding;
+  binding = cgc_lookup_var(ident_probe, cgc_locals);
+
+  if (neq(binding, 0)) {
+    return binding;
+  }
 
   binding = cgc_lookup_var(ident_probe, cgc_globals);
-  if (binding != 0) return binding;
+  if (neq(binding, 0)) {
+    return binding;
+  }
 
   binding = cgc_lookup_fun(ident_probe, cgc_globals);
-  if (binding != 0) return binding;
+  if (neq(binding, 0)) {
+    return binding;
+  }
 
   binding = cgc_lookup_enum_value(ident_probe, cgc_globals);
-  if (binding != 0) return binding;
+  if (neq(binding, 0)) {
+    return binding;
+  }
 
-  putstr("ident = "); putstr(STRING_BUF(ident_probe)); putchar('\n');
-  fatal_error("identifier not found");
+  putstr(mks("ident = ")); putstr(STRING_BUF(ident_probe)); putchar(mkc('\n'));
+  fatal_error(mks("identifier not found"));
   return 0;
 }
 
 // Compute the type of an expression
-ast value_type(ast node) {
-  int op = get_op(node);
-  int nb_children = get_nb_children(node);
-  int binding;
-  ast left_type, right_type;
-  ast child0, child1;
+function value_type(node) {
+  var op;
+  var nb_children;
+  var binding;
+  var left_type;
+  var right_type;
+  var child0;
+  var child1;
 
-  if (nb_children >= 1) child0 = get_child(node, 0);
-  if (nb_children >= 2) child1 = get_child(node, 1);
+  op = get_op(node);
+  nb_children = get_nb_children(node);
 
-  if (nb_children == 0) {
-    if (op == INTEGER || op == INTEGER_L || op == INTEGER_LL) {
+  if (gte(nb_children, 1)) {
+    child0 = get_child(node, 0);
+  }
+  if (gte(nb_children, 2)) {
+    child1 = get_child(node, 1);
+  }
+
+  if (eq(nb_children, 0)) {
+    if (or(eq(op,INTEGER),or(eq(op,INTEGER_L),eq(op,INTEGER_LL)))) {
       return int_type;
     } else if (op == INTEGER_U || op == INTEGER_UL || op == INTEGER_ULL) {
       return uint_type;
