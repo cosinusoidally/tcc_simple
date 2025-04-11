@@ -5465,12 +5465,17 @@ function codegen_rvalue(node) {
       pop_reg(reg_X);
       push_reg(reg_X);
       xor_reg_reg(reg_Y, reg_Y);
-      jump_cond_reg_reg(op == AMP_AMP ? EQ : NE, lbl1, reg_X, reg_Y);
-      pop_reg(reg_X); grow_fs(-1);
+      if(eq(op, AMP_AMP)) {
+        t = EQ;
+      } else {
+        t = NE;
+      }
+      jump_cond_reg_reg(t, lbl1, reg_X, reg_Y);
+      pop_reg(reg_X); grow_fs(sub(0, 1));
       codegen_rvalue(child1);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       def_label(lbl1);
-    } else if (op == '(') {
+    } else if (eq(op, mkc('('))) {
       codegen_call(node);
     } else if (op == '.') {
       type1 = value_type(child0);
