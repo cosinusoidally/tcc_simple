@@ -5377,8 +5377,8 @@ function codegen_rvalue(node) {
       grow_fs(1);
       codegen_rvalue(child0);
       codegen_binop(EQ_EQ, new_ast0(INTEGER, 0), child0);
-      grow_fs(-2);
-    } else if (op == MINUS_MINUS_POST || op == PLUS_PLUS_POST) {
+      grow_fs(sub(0, 2));
+    } else if (or(eq(op, MINUS_MINUS_POST), eq(op, PLUS_PLUS_POST))) {
       left_width = codegen_lvalue(child0);
       pop_reg(reg_Y);
       load_mem_location(reg_X, reg_Y, 0, left_width, is_signed_numeric_type(value_type(child0)));
@@ -5390,9 +5390,9 @@ function codegen_rvalue(node) {
       codegen_binop(op, child0, new_ast0(INTEGER, 0)); // Pops two values off the stack and pushes the result
       pop_reg(reg_X); // result
       pop_reg(reg_Y); // address
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       write_mem_location(reg_Y, 0, reg_X, left_width); // Store the result in the address
-    } else if (op == MINUS_MINUS_PRE || op == PLUS_PLUS_PRE) {
+    } else if (or(eq(op, MINUS_MINUS_PRE), eq(op, PLUS_PLUS_PRE))) {
       left_width = codegen_lvalue(child0);
       pop_reg(reg_Y);
       push_reg(reg_Y);
@@ -5403,10 +5403,10 @@ function codegen_rvalue(node) {
       codegen_binop(op, child0, new_ast0(INTEGER, 0)); // Pops two values off the stack and pushes the result
       pop_reg(reg_X); // result
       pop_reg(reg_Y); // address
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       write_mem_location(reg_Y, 0, reg_X, left_width); // store the result in the address
       push_reg(reg_X);
-    } else if (op == '&') {
+    } else if (eq(op, mkc('&'))) {
       codegen_lvalue(child0);
       grow_fs(-1);
     } else if (op == SIZEOF_KW) {
