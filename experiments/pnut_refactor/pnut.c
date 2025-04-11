@@ -4438,7 +4438,7 @@ function type_width(type, array_value, word_align) {
 }
 
 // Width of an object pointed to by a reference type.
-ast ref_type_width(ast type) {
+function ref_type_width(type) {
   return type_width(dereference_type(type), false, false);
 }
 
@@ -4448,33 +4448,40 @@ ast ref_type_width(ast type) {
 //
 // We mostly want to work with type definitions, and not type references so
 // this function returns the type definition when passed a type reference.
-ast canonicalize_type(ast type) {
-  ast res = type;
-  int binding;
+function canonicalize_type(type) {
+  var res;
+  var binding;
 
-  if (get_op(type) == STRUCT_KW && get_child_opt_(STRUCT_KW, LIST, type, 2) == 0) { // struct with empty def => reference
+  res = type;
+
+  if (and(eq(get_op(type),STRUCT_KW),eq(get_child_opt_(STRUCT_KW, LIST, type, 2),0))) { // struct with empty def => reference
     binding = cgc_lookup_struct(get_val_(IDENTIFIER, get_child__(STRUCT_KW, IDENTIFIER, type, 1)), cgc_globals);
-  } else if (get_op(type) == UNION_KW && get_child_opt_(UNION_KW, LIST, type, 2) == 0) { // union with empty def => reference
+  } else if (and(eq(get_op(type),UNION_KW),eq(get_child_opt_(UNION_KW, LIST, type, 2),0))) { // union with empty def => reference
     binding = cgc_lookup_union(get_val_(IDENTIFIER, get_child__(UNION_KW, IDENTIFIER, type, 1)), cgc_globals);
-  } else if (get_op(type) == ENUM_KW && get_child_opt_(ENUM_KW, LIST, type, 2) == 0) { // enum with empty def => reference
+  } else if (and(eq(get_op(type),ENUM_KW),eq(get_child_opt_(ENUM_KW, LIST, type, 2),0))) { // enum with empty def => reference
     binding = cgc_lookup_enum(get_val_(IDENTIFIER, get_child__(ENUM_KW, IDENTIFIER, type, 1)), cgc_globals);
   } else {
     return res;
   }
 
-  if (binding == 0) {
-    putstr("type="); putstr(STRING_BUF(get_val_(IDENTIFIER, get_child(type, 1)))); putchar('\n');
-    fatal_error("canonicalize_type: type is not defined");
+  if (eq(binding, 0)) {
+    putstr(mks("type=")); putstr(STRING_BUF(get_val_(IDENTIFIER, get_child(type, 1)))); putchar(mkc('\n'));
+    fatal_error(mks("canonicalize_type: type is not defined"));
   }
-  res = heap[binding+3];
+  res = r_heap(add(binding, 3));
 
   return res;
 }
 
 // Size of the largest member of a struct or union, used for alignment
-int struct_union_size_largest_member = 0;
+var struct_union_size_largest_member = 0;
 
-int type_largest_member(ast type) {
+function type_largest_member(type) {
+  var t;
+  t = get_op(type);
+  if(0) {
+  } else if(0) {
+  } else {
   switch (get_op(type)) {
     case STRUCT_KW:
     case UNION_KW:
@@ -4485,6 +4492,7 @@ int type_largest_member(ast type) {
       return type_largest_member(get_child_('[', type, 0));
     default:
       return type_width(type, true, false);
+  }
   }
 }
 
