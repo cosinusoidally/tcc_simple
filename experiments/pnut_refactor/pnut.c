@@ -4925,16 +4925,24 @@ function codegen_binop(op, lhs, rhs) {
       mul_reg_reg(reg_X, reg_Y);
     }
   } else if (or(eq(op,mkc('/')),eq(op,SLASH_EQ))) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to /");
-    if (is_signed) idiv_reg_reg(reg_X, reg_Y);
-    else div_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == '%' || op == PERCENT_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to %");
-    if (is_signed) irem_reg_reg(reg_X, reg_Y);
-    else rem_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == RSHIFT || op == RSHIFT_EQ) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to /"));
+    }
+    if (is_signed) {
+      idiv_reg_reg(reg_X, reg_Y);
+    } else {
+      div_reg_reg(reg_X, reg_Y);
+    }
+  } else if (or(eq(op,mkc('%')),eq(op, PERCENT_EQ))) {
+    if (or(eq(0,left_is_numeric),eq(0,right_is_numeric))) {
+      fatal_error(mks("invalid operands to %"));
+    }
+    if (is_signed) {
+      irem_reg_reg(reg_X, reg_Y);
+    } else {
+      rem_reg_reg(reg_X, reg_Y);
+    }
+  } else if (or(eq(op,RSHIFT),eq(op,RSHIFT_EQ))) {
     if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to >>");
     if (is_signed) sar_reg_reg(reg_X, reg_Y);
     else shr_reg_reg(reg_X, reg_Y);
