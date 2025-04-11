@@ -5445,7 +5445,7 @@ function codegen_rvalue(node) {
         write_mem_location(reg_Y, 0, reg_X, left_width);
       }
       push_reg(reg_X);
-    } else if (eq(op,AMP_EQ) || eq(op,BAR_EQ) || eq(op,CARET_EQ) || eq(op,LSHIFT_EQ) || eq(op,MINUS_EQ) || eq(op,PERCENT_EQ) || eq(op,PLUS_EQ) || eq(op,RSHIFT_EQ) || eq(op,SLASH_EQ) || eq(op,STAR_EQ)) {
+    } else if (or(eq(op,AMP_EQ),or(eq(op,BAR_EQ),or(eq(op,CARET_EQ),or(eq(op,LSHIFT_EQ),or(eq(op,MINUS_EQ),or(eq(op,PERCENT_EQ),or(eq(op,PLUS_EQ),or(eq(op,RSHIFT_EQ),or(eq(op,SLASH_EQ),eq(op,STAR_EQ))))))))))) {
       left_width = codegen_lvalue(child0);
       pop_reg(reg_Y);
       push_reg(reg_Y);
@@ -5456,10 +5456,10 @@ function codegen_rvalue(node) {
       codegen_binop(op, child0, child1);
       pop_reg(reg_X);
       pop_reg(reg_Y);
-      grow_fs(-3);
+      grow_fs(sub(0, 3));
       write_mem_location(reg_Y, 0, reg_X, left_width);
       push_reg(reg_X);
-    } else if (op == AMP_AMP || op == BAR_BAR) {
+    } else if (or(eq(op, AMP_AMP), eq(op, BAR_BAR))) {
       lbl1 = alloc_label(0);
       codegen_rvalue(child0);
       pop_reg(reg_X);
