@@ -4852,11 +4852,23 @@ function codegen_binop(op, lhs, rhs) {
       cond = LT_U;
     }
   } else if(eq(op,mkc('>'))) {
-    cond = is_signed ? GT : GT_U;
+    if(is_signed) {
+      cond = GT;
+    } else {
+      cond = GT_U;
+    }
   } else if(eq(op,LT_EQ)) {
-    cond = is_signed ? LE : LE_U;
+    if(is_signed) {
+      cond = LE;
+    } else {
+      cond = LE_U;
+    }
   } else if(eq(op,GT_EQ)) {
-    cond = is_signed ? GE : GE_U;
+    if(is_signed) {
+      cond = GE;
+    } else {
+      cond = GE_U;
+    }
   } else if(eq(op,EQ_EQ)) {
     cond = EQ;
   } else if(eq(op,EXCL_EQ)) {
