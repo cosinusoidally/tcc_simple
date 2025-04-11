@@ -5324,23 +5324,15 @@ function codegen_rvalue(node) {
           load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
         }
         push_reg(reg_X);
+      } else if(eq(t, BINDING_ENUM_CST)) {
+        mov_reg_imm(reg_X, -get_val_(INTEGER, heap[binding+3]));
+        push_reg(reg_X);
+      } else if(eq(t, BINDING_FUN)) {
+        mov_reg_lbl(reg_X, heap[binding+4]);
+        push_reg(reg_X);
       } else {
-      switch (t) {
-        case BINDING_ENUM_CST:
-          mov_reg_imm(reg_X, -get_val_(INTEGER, heap[binding+3]));
-          push_reg(reg_X);
-          break;
-
-        case BINDING_FUN:
-          mov_reg_lbl(reg_X, heap[binding+4]);
-          push_reg(reg_X);
-          break;
-
-        default:
-          putstr("ident = "); putstr(STRING_BUF(get_val_(IDENTIFIER, node))); putchar('\n');
-          fatal_error("codegen_rvalue: identifier not found");
-          break;
-      }
+        putstr("ident = "); putstr(STRING_BUF(get_val_(IDENTIFIER, node))); putchar('\n');
+        fatal_error("codegen_rvalue: identifier not found");
       }
     } else if (op == STRING) {
       codegen_string(get_val_(STRING, node));
