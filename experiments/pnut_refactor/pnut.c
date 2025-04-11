@@ -4669,15 +4669,18 @@ function value_type(node) {
   if (eq(nb_children, 0)) {
     if (or(eq(op,INTEGER),or(eq(op,INTEGER_L),eq(op,INTEGER_LL)))) {
       return int_type;
-    } else if (op == INTEGER_U || op == INTEGER_UL || op == INTEGER_ULL) {
+    } else if (or(eq(op,INTEGER_U),or(eq(op,INTEGER_UL),eq(op,INTEGER_ULL)))) {
       return uint_type;
     }
-    else if (op == CHARACTER) {
+    else if (eq(op, CHARACTER)) {
       return char_type;
-    } else if (op == STRING) {
+    } else if (eq(op, STRING)) {
       return string_type;
-    } else if (op == IDENTIFIER) {
+    } else if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
+      if(0) {
+      } else if(0) {
+      } else {
       switch (binding_kind(binding)) {
         case BINDING_PARAM_LOCAL:
         case BINDING_VAR_LOCAL:
@@ -4694,6 +4697,7 @@ function value_type(node) {
           putchar('\n');
           fatal_error("value_type: unknown identifier");
           return -1;
+      }
       }
 
     } else {
