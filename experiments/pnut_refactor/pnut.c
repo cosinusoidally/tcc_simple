@@ -5158,55 +5158,55 @@ function codegen_lvalue(node) {
       type = value_type(child0);
       codegen_rvalue(child0);
       codegen_rvalue(child1);
-      codegen_binop('+', child0, child1);
-      grow_fs(-2);
+      codegen_binop(mkc('+'), child0, child1);
+      grow_fs(sub(0, 2));
       lvalue_width = ref_type_width(type);
-    } else if (op == '.') {
+    } else if (eq(op, mkc('.'))) {
       type = value_type(child0);
       if (is_struct_or_union_type(type)) {
         codegen_lvalue(child0);
         pop_reg(reg_X);
         // union members are at the same offset: 0
-        if (get_op(type) == STRUCT_KW) {
+        if (eq(get_op(type), STRUCT_KW)) {
           add_reg_imm(reg_X, struct_member_offset(type, child1));
         }
         push_reg(reg_X);
-        grow_fs(-1);
+        grow_fs(sub(0, 1));
         lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), true, false); // child 1 of member is the type
       } else {
-        fatal_error("codegen_lvalue: . operator on non-struct type");
+        fatal_error(mks("codegen_lvalue: . operator on non-struct type"));
       }
-    } else if (op == ARROW) {
+    } else if (eq(op, ARROW)) {
       // Same as '.', but type must be a pointer
       type = value_type(child0);
-      if (get_op(type) == '*' && is_struct_or_union_type(get_child_('*', type, 1))) {
-        type = get_child_('*', type, 1);
+      if (and(eq(get_op(type),mkc('*')),is_struct_or_union_type(get_child_(mkc('*'), type, 1)))) {
+        type = get_child_(mkc('*'), type, 1);
         codegen_rvalue(child0);
         pop_reg(reg_X);
         // union members are at the same offset: 0
-        if (get_op(type) == STRUCT_KW) {
+        if (eq(get_op(type), STRUCT_KW)) {
           add_reg_imm(reg_X, struct_member_offset(type, child1));
         }
         push_reg(reg_X);
-        grow_fs(-1);
+        grow_fs(sub(0, 1));
         lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), true, false); // child 1 of member is the type
       } else {
-        fatal_error("codegen_lvalue: -> operator on non-struct pointer type");
+        fatal_error(mks("codegen_lvalue: -> operator on non-struct pointer type"));
       }
-    } else if (op == CAST) {
+    } else if (eq(op, CAST)) {
       codegen_lvalue(child1);
       lvalue_width = type_width(child0, true, false);
-      grow_fs(-1); // grow_fs is called at the end of the function, so we need to decrement it here
-    } else if (op == PARENS) {
+      grow_fs(sub(0, 1)); // grow_fs is called at the end of the function, so we need to decrement it here
+    } else if (eq(op, PARENS)) {
       lvalue_width = codegen_lvalue(child0);
       grow_fs(-1);
     } else {
-      fatal_error("codegen_lvalue: unknown lvalue with 2 children");
+      fatal_error(mks("codegen_lvalue: unknown lvalue with 2 children"));
     }
 
-  } else if (nb_children == 3) {
+  } else if (eq(nb_children, 3)) {
 
-    if (op == '?') {
+    if (eq(op, mkc('?'))) {
 
       int lbl1 = alloc_label(0); // false label
       int lbl2 = alloc_label(0); // end label
