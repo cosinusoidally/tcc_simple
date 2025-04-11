@@ -4897,12 +4897,12 @@ function codegen_binop(op, lhs, rhs) {
     }
 
     add_reg_reg(reg_X, reg_Y);
-  } else if (eq(op,mkc('-')) || eq(op,MINUS_EQ) || eq(op,MINUS_MINUS_PRE) || eq(op,MINUS_MINUS_POST)) {
+  } else if(or(eq(op,mkc('-')),or(eq(op,MINUS_EQ),or(eq(op,MINUS_MINUS_PRE),eq(op,MINUS_MINUS_POST))))) {
     // Pointer subtraction is only valid if one of the operands is a pointer
     // When both operands are pointers, the result is the difference between the two pointers divided by the width of the target object.
     // When one operand is a pointer and the other is an integer, the result is the pointer minus the integer times the width of the target object.
 
-    if (is_pointer_type(left_type) && is_pointer_type(right_type)) {
+    if (and(is_pointer_type(left_type), is_pointer_type(right_type))) {
       sub_reg_reg(reg_X, reg_Y);
       div_for_pointer_arith(reg_X, ref_type_width(left_type));
     } else if (is_pointer_type(left_type)) {
@@ -4915,12 +4915,16 @@ function codegen_binop(op, lhs, rhs) {
       sub_reg_reg(reg_X, reg_Y);
     }
   }
-  else if (op == '*' || op == STAR_EQ) {
-    if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to *");
-    if (is_signed) imul_reg_reg(reg_X, reg_Y);
-    else mul_reg_reg(reg_X, reg_Y);
-  }
-  else if (op == '/' || op == SLASH_EQ) {
+  else if (or(eq(op,mkc('*')), eq(op, STAR_EQ))) {
+    if (or(eq(0, left_is_numeric), eq(0, right_is_numeric))) {
+      fatal_error(mks("invalid operands to *"));
+    }
+    if (is_signed) {
+      imul_reg_reg(reg_X, reg_Y);
+    } else {
+      mul_reg_reg(reg_X, reg_Y);
+    }
+  } else if (or(eq(op,mkc('/')),eq(op,SLASH_EQ))) {
     if (!left_is_numeric || !right_is_numeric) fatal_error("invalid operands to /");
     if (is_signed) idiv_reg_reg(reg_X, reg_Y);
     else div_reg_reg(reg_X, reg_Y);
