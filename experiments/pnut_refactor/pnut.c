@@ -4742,23 +4742,23 @@ function value_type(node) {
         // if left is not a pointer, the type is the type of the right operand
         return right_type;
       }
-    } else if (eq(op,mkc('<')) || eq(op,mkc('>')) || eq(op,EQ_EQ) || eq(op,EXCL_EQ) || eq(op,LT_EQ) || eq(op,GT_EQ)) {
+    } else if (or(eq(op,mkc('<')),or(eq(op,mkc('>')),or(eq(op,EQ_EQ),or(eq(op,EXCL_EQ),or(eq(op,LT_EQ),eq(op,GT_EQ))))))) {
       return int_type; // Comparison always returns an integer
-    } else if (op == ',') {
+    } else if (eq(op, mkc(','))) {
       return value_type(child1); // The type of the right operand
-    } else if (op == '[') {
+    } else if (eq(op, mkc('['))) {
       left_type = value_type(child0);
       right_type = value_type(child1);
 
-      if (get_op(left_type) == '[' || get_op(left_type) == '*') {
+      if (or(eq(get_op(left_type), mkc('[')), eq(get_op(left_type), mkc('*')))) {
         return dereference_type(left_type);
-      } else if (get_op(right_type) == '[' || get_op(right_type) == '*') {
+      } else if (or(eq(get_op(right_type),mkc('[')),eq(get_op(right_type),mkc('*')))) {
         return dereference_type(right_type);
       } else {
-        putstr("left_type="); putint(get_op(left_type)); putchar('\n');
-        putstr("right_type="); putint(get_op(right_type)); putchar('\n');
-        fatal_error("value_type: non pointer is being dereferenced as array");
-        return -1;
+        putstr(mks("left_type=")); putint(get_op(left_type)); putchar(mkc('\n'));
+        putstr(mks("right_type=")); putint(get_op(right_type)); putchar(mkc('\n'));
+        fatal_error(mks("value_type: non pointer is being dereferenced as array"));
+        return sub(0, 1);
       }
     } else if (op == '=' || op == AMP_EQ || op == BAR_EQ || op == CARET_EQ || op == LSHIFT_EQ || op == MINUS_EQ || op == PERCENT_EQ || op == PLUS_EQ || op == RSHIFT_EQ || op == SLASH_EQ || op == STAR_EQ) {
       return value_type(child0); // Only the left side is relevant here
