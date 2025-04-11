@@ -5477,90 +5477,90 @@ function codegen_rvalue(node) {
       def_label(lbl1);
     } else if (eq(op, mkc('('))) {
       codegen_call(node);
-    } else if (op == '.') {
+    } else if (eq(op, mkc('.'))) {
       type1 = value_type(child0);
       if (is_struct_or_union_type(type1)) {
         type2 = get_child_(DECL, struct_member(type1, child1), 1);
         codegen_lvalue(child0);
         pop_reg(reg_Y);
-        grow_fs(-1);
+        grow_fs(sub(0, 1));
         // union members are at the same offset: 0
-        if (get_op(type1) == STRUCT_KW) {
+        if (eq(get_op(type1), STRUCT_KW)) {
           add_reg_imm(reg_Y, struct_member_offset(type1, child1));
         }
-        if (!is_aggregate_type(type2)) {
+        if (eq(0, is_aggregate_type(type2))) {
           load_mem_location(reg_Y, reg_Y, 0, type_width(type2, false, false), is_signed_numeric_type(type2));
         }
         push_reg(reg_Y);
       } else {
-        fatal_error("codegen_rvalue: . operator on non-struct type");
+        fatal_error(mks("codegen_rvalue: . operator on non-struct type"));
       }
-    } else if (op == ARROW) {
+    } else if (eq(op, ARROW)) {
       type1 = value_type(child0);
-      if (get_op(type1) == '*' && is_struct_or_union_type(get_child_('*', type1, 1))) {
-        type1 = get_child_('*', type1, 1);
+      if(and(eq(get_op(type1),mkc('*')),is_struct_or_union_type(get_child_(mkc('*'),type1,1)))) {
+        type1 = get_child_(mkc('*'), type1, 1);
         type2 = get_child_(DECL, struct_member(type1, child1), 1);
         codegen_rvalue(child0);
         pop_reg(reg_Y);
-        grow_fs(-1);
+        grow_fs(sub(0, 1));
         // union members are at the same offset: 0
-        if (get_op(type1) == STRUCT_KW) {
+        if (eq(get_op(type1), STRUCT_KW)) {
           add_reg_imm(reg_Y, struct_member_offset(type1, child1));
         }
-        if (!is_aggregate_type(type2)) {
+        if (eq(0, is_aggregate_type(type2))) {
           load_mem_location(reg_Y, reg_Y, 0, type_width(type2, false, false), is_signed_numeric_type(type2));
         }
         push_reg(reg_Y);
       } else {
-        fatal_error("codegen_rvalue: -> operator on non-struct pointer type");
+        fatal_error(mks("codegen_rvalue: -> operator on non-struct pointer type"));
       }
-    } else if (op == CAST) {
+    } else if (eq(op, CAST)) {
       codegen_rvalue(child1);
       // If the cast is to a value narrower than the width of the value, we need
       // to truncate the value. This is done by writing the value to the stack
       // and then reading it back, sign extending it if necessary.
       child0 = get_child_(DECL, child0, 1); // child 1 of cast is the type
-      if (type_width(child0, false, false) < type_width(value_type(child1), false, false)) {
+      if(lt(type_width(child0, false, false),type_width(value_type(child1), false, false))) {
         load_mem_location(reg_X, reg_SP, 0, type_width(child0, false, false), is_signed_numeric_type(child0));
-        grow_stack(-1);
+        grow_stack(sub(0, 1));
         push_reg(reg_X);
       }
-      grow_fs(-1); // grow_fs(1) is called by codegen_rvalue and at the end of the function
+      grow_fs(sub(0, 1)); // grow_fs(1) is called by codegen_rvalue and at the end of the function
     } else {
-      fatal_error("codegen_rvalue: unknown rvalue with 2 children");
+      fatal_error(mks("codegen_rvalue: unknown rvalue with 2 children"));
     }
 
-  } else if (nb_children == 3) {
+  } else if (eq(nb_children, 3)) {
 
-    if (op == '?') {
+    if (eq(op, mkc('?'))) {
       lbl1 = alloc_label(0); // false label
       lbl2 = alloc_label(0); // end label
       codegen_rvalue(child0);
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       xor_reg_reg(reg_Y, reg_Y);
       jump_cond_reg_reg(EQ, lbl1, reg_X, reg_Y);
       codegen_rvalue(child1); // value when true
       jump(lbl2);
       def_label(lbl1);
-      grow_fs(-1); // here, the child#1 is not on the stack, so we adjust it
+      grow_fs(sub(0, 1)); // here, the child#1 is not on the stack, so we adjust it
       codegen_rvalue(get_child(node, 2)); // value when false
-      grow_fs(-1); // grow_fs(1) is called by codegen_rvalue and at the end of the function
+      grow_fs(sub(0, 1)); // grow_fs(1) is called by codegen_rvalue and at the end of the function
       def_label(lbl2);
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_rvalue: unknown rvalue with 3 children");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_rvalue: unknown rvalue with 3 children"));
     }
 
   } else {
-    putstr("op="); putint(op); putchar('\n');
-    fatal_error("codegen_rvalue: unknown rvalue with >4 children");
+    putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+    fatal_error(mks("codegen_rvalue: unknown rvalue with >4 children"));
   }
 
   grow_fs(1);
 }
 
-void codegen_begin() {
+function codegen_begin() {
 
   setup_lbl = alloc_label("setup");
   init_start_lbl = alloc_label("init_start");
