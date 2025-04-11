@@ -78,14 +78,12 @@ function os_unlink();
 function os_mkdir();
 function os_chmod();
 function os_access();
-
 function rt_putchar();
 function rt_debug(msg);
 function rt_crash(msg);
-
 function setup_proc_args(global_vars_size);
-
 function alloc_label_();
+function struct_union_size(struct_type);
 
 #define ast int
 #define true 1
@@ -4336,23 +4334,22 @@ function dereference_type(type) {
   }
 }
 
-// Type, structure and union handling
-int struct_union_size(ast struct_type);
-
 // A pointer type is either an array type or a type with at least one star
-function is_pointer_type(ast type) {
-  bool op = get_op(type);
-  return op == '[' || op == '*';
+function is_pointer_type(type) {
+  var op;
+  op = get_op(type);
+  return or(eq(op, mkc('[')), eq(op, mkc('*')));
 }
 
-function is_function_type(ast type) {
-  int op = get_op(type);
-  if (op == '*') {
-    if (get_op(get_child_('*', type, 1)) == '(') {
+function is_function_type(type) {
+  var op;
+  op = get_op(type);
+  if (eq(op, mkc('*'))) {
+    if (eq(get_op(get_child_(mkc('*'), type, 1)), mkc('('))) {
       return true;
     }
   }
-  return op == '(';
+  return eq(op, mkc('('));
 }
 
 bool is_struct_or_union_type(ast type) {
