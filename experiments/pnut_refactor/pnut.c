@@ -4287,24 +4287,26 @@ function def_goto_label(lbl) {
   var goto_fs;
   var start_code_alloc;
 
-  addr = heap[lbl + 1];
+  addr = r_heap(add(lbl, 1));
   label_addr = code_alloc;
 
-  if (heap[lbl] != GOTO_LABEL) fatal_error("def_goto_label expects goto label");
+  if (neq(r_heap(lbl), GOTO_LABEL)) {
+    fatal_error(mks("def_goto_label expects goto label"));
+  }
 
-  if (addr < 0) {
-    fatal_error("goto label defined more than once");
+  if (lt(addr, 0)) {
+    fatal_error(mks("goto label defined more than once"));
   } else {
-    heap[lbl + 1] = -label_addr; // define label's address
-    heap[lbl + 2] = cgc_fs;      // define label's frame size
-    while (addr != 0) {
-      next = code[addr-1]; // get pointer to next patch address
-      goto_fs = code[addr-2]; // get frame size at goto instruction
-      code_alloc = code[addr-3]; // reset code pointer to start of jump_to_goto_label instruction
-      grow_stack(cgc_fs - goto_fs); // adjust stack
+    heap[add(lbl, 1)] = sub(0, label_addr); // define label's address
+    heap[add(lbl, 2)] = cgc_fs;      // define label's frame size
+    while (neq(addr, 0)) {
+      next = r_code(sub(addr, 1)); // get pointer to next patch address
+      goto_fs = r_code(sub(addr, 2)); // get frame size at goto instruction
+      code_alloc = r_code(sub(addr, 3)); // reset code pointer to start of jump_to_goto_label instruction
+      grow_stack(sub(cgc_fs, goto_fs)); // adjust stack
       start_code_alloc = code_alloc;
       jump_rel(0); // Generate dummy jump instruction to get instruction length
-      addr = label_addr - code_alloc; // compute relative address
+      addr = sub(label_addr, code_alloc); // compute relative address
       code_alloc = start_code_alloc;
       jump_rel(addr);
       addr = next;
@@ -4313,14 +4315,14 @@ function def_goto_label(lbl) {
   }
 }
 
-ast int_type;
-ast uint_type;
-ast char_type;
-ast string_type;
-ast void_type;
-ast void_star_type;
+var int_type;
+var uint_type;
+var char_type;
+var string_type;
+var void_type;
+var void_star_type;
 
-function dereference_type(ast type) {
+function dereference_type(type) {
   switch (get_op(type)) {
     case '[': // Array type
       return get_child_('[', type, 0);
