@@ -5300,16 +5300,16 @@ function codegen_rvalue(node) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
       t = binding_kind(binding);
       if(eq(t, BINDING_PARAM_LOCAL)) {
-        mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
+        mov_reg_imm(reg_X,mul(sub(cgc_fs,r_heap(add(binding,3))),WORD_SIZE));
         add_reg_reg(reg_X, reg_SP);
         // structs/unions are allocated on the stack, so no need to dereference
         // For arrays, we need to dereference the pointer since they are passed as pointers
-        if (get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
-          load_mem_location(reg_X, reg_X, 0, type_width(heap[binding+4], false, false), is_signed_numeric_type(heap[binding+4]));
+        if(and(neq(get_op(r_heap(add(binding,4))),STRUCT_KW),neq(get_op(r_heap(add(binding,4))),UNION_KW))) {
+          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), false, false), is_signed_numeric_type(r_heap(add(binding,4))));
         }
         push_reg(reg_X);
       } else if(eq(t, BINDING_VAR_LOCAL)) {
-        mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
+        mov_reg_imm(reg_X,sub(cgc_fs,heap[binding+3]) * WORD_SIZE);
         add_reg_reg(reg_X, reg_SP);
         // local arrays/structs/unions are allocated on the stack, so no need to dereference
         if (get_op(heap[binding+4]) != '[' && get_op(heap[binding+4]) != STRUCT_KW && get_op(heap[binding+4]) != UNION_KW) {
