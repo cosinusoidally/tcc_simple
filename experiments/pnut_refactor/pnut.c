@@ -4729,8 +4729,8 @@ function value_type(node) {
 
   } else if (eq(nb_children, 2)) {
 
-    if (op == '+' || op == '-' || op == '*' || op == '/' || op == '%' || op == '&' || op == '|' || op == '^'
-     || op == LSHIFT || op == RSHIFT) {
+    if (eq(op,mkc('+')) || eq(op,mkc('-')) || eq(op,mkc('*')) || eq(op,mkc('/')) || eq(op,mkc('%')) || eq(op,mkc('&')) || eq(op,mkc('|')) || eq(op,mkc('^'))
+     || eq(op,LSHIFT) || eq(op,RSHIFT)) {
       left_type = value_type(child0);
       right_type = value_type(child1);
       if (is_pointer_type(left_type) && is_pointer_type(right_type) && op == '-') {
