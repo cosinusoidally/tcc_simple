@@ -5244,15 +5244,19 @@ function codegen_lvalue(node) {
 }
 
 function codegen_string(string_probe) {
-  int lbl = alloc_label(0);
-  char *string_start = STRING_BUF(string_probe);
-  char *string_end = string_start + heap[string_probe + 4];
+  var lbl;
+  var string_start;
+  var string_end;
+
+  lbl = alloc_label(0);
+  string_start = STRING_BUF(string_probe);
+  string_end = add(string_start, r_heap(add(string_probe, 4)));
 
   call(lbl);
 
-  while (string_start != string_end) {
-    emit_i8(*string_start);
-    string_start += 1;
+  while (neq(string_start, string_end)) {
+    emit_i8(ri8(string_start));
+    string_start = add(string_start, 1);
   }
 
   emit_i8(0);
