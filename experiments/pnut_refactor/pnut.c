@@ -5264,17 +5264,27 @@ function codegen_string(string_probe) {
   def_label(lbl);
 }
 
-function codegen_rvalue(ast node) {
-  int op = get_op(node);
-  int nb_children = get_nb_children(node);
-  int binding;
-  int lbl1, lbl2;
-  int left_width;
-  ast type1, type2;
-  ast child0, child1;
+function codegen_rvalue(node) {
+  var op;
+  var nb_children;
+  var binding;
+  var lbl1;
+  var lbl2;
+  var left_width;
+  var type1;
+  var type2;
+  var child0;
+  var child1;
 
-  if (nb_children >= 1) child0 = get_child(node, 0);
-  if (nb_children >= 2) child1 = get_child(node, 1);
+  op = get_op(node);
+  nb_children = get_nb_children(node);
+
+  if (gte(nb_children, 1)) {
+    child0 = get_child(node, 0);
+  }
+  if (gte(nb_children, 2)) {
+    child1 = get_child(node, 1);
+  }
 
   if (nb_children == 0) {
     if ( op == INTEGER
