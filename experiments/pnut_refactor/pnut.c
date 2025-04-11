@@ -5275,6 +5275,7 @@ function codegen_rvalue(node) {
   var type2;
   var child0;
   var child1;
+  var t;
 
   op = get_op(node);
   nb_children = get_nb_children(node);
@@ -5287,17 +5288,21 @@ function codegen_rvalue(node) {
   }
 
   if (eq(nb_children, 0)) {
-    if ( eq(op,INTEGER)
-      || eq(op,INTEGER_L) || eq(op,INTEGER_LL) || eq(op,INTEGER_U) || eq(op,INTEGER_UL) || eq(op,INTEGER_ULL)
-       ) {
-      mov_reg_imm(reg_X, -get_val(node));
+    if ( or(eq(op,INTEGER),
+            or(eq(op,INTEGER_L),or(eq(op,INTEGER_LL),or(eq(op,INTEGER_U),or(eq(op,INTEGER_UL),eq(op,INTEGER_ULL))
+       ))))) {
+      mov_reg_imm(reg_X, sub(0, get_val(node)));
       push_reg(reg_X);
-    } else if (op == CHARACTER) {
+    } else if (eq(op, CHARACTER)) {
       mov_reg_imm(reg_X, get_val_(CHARACTER, node));
       push_reg(reg_X);
-    } else if (op == IDENTIFIER) {
+    } else if (eq(op, IDENTIFIER)) {
       binding = resolve_identifier(get_val_(IDENTIFIER, node));
-      switch (binding_kind(binding)) {
+      t = binding_kind(binding);
+      if(0) {
+      } else if(0) {
+      } else {
+      switch (t) {
         case BINDING_PARAM_LOCAL:
           mov_reg_imm(reg_X, (cgc_fs - heap[binding+3]) * WORD_SIZE);
           add_reg_reg(reg_X, reg_SP);
@@ -5341,6 +5346,7 @@ function codegen_rvalue(node) {
           putstr("ident = "); putstr(STRING_BUF(get_val_(IDENTIFIER, node))); putchar('\n');
           fatal_error("codegen_rvalue: identifier not found");
           break;
+      }
       }
     } else if (op == STRING) {
       codegen_string(get_val_(STRING, node));
