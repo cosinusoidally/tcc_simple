@@ -5102,6 +5102,8 @@ function codegen_lvalue(node) {
   var child0;
   var child1;
   var t;
+  var lbl1;
+  var lbl2;
 
   op = get_op(node);
   nb_children = get_nb_children(node);
@@ -5208,40 +5210,40 @@ function codegen_lvalue(node) {
 
     if (eq(op, mkc('?'))) {
 
-      int lbl1 = alloc_label(0); // false label
-      int lbl2 = alloc_label(0); // end label
+      lbl1 = alloc_label(0); // false label
+      lbl2 = alloc_label(0); // end label
       codegen_rvalue(child0);
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       xor_reg_reg(reg_Y, reg_Y);
       jump_cond_reg_reg(EQ, lbl1, reg_X, reg_Y);
       lvalue_width = codegen_lvalue(child1); // value when true, assume that lvalue_width is the same for both cases
       jump(lbl2);
       def_label(lbl1);
-      grow_fs(-1); // here, the child#1 is not on the stack, so we adjust it
-      codegen_lvalue(get_child_('?', node, 2)); // value when false
-      grow_fs(-1); // grow_fs(1) is called by codegen_rvalue and at the end of the function
+      grow_fs(sub(0, 1)); // here, the child#1 is not on the stack, so we adjust it
+      codegen_lvalue(get_child_(mkc('?'), node, 2)); // value when false
+      grow_fs(sub(0, 1)); // grow_fs(1) is called by codegen_rvalue and at the end of the function
       def_label(lbl2);
 
     } else {
-      putstr("op="); putint(op); putchar('\n');
-      fatal_error("codegen_lvalue: unknown lvalue with 3 children");
+      putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+      fatal_error(mks("codegen_lvalue: unknown lvalue with 3 children"));
     }
 
   } else {
-    putstr("op="); putint(op); putchar('\n');
-    fatal_error("codegen_lvalue: unknown lvalue with >2 children");
+    putstr(mks("op=")); putint(op); putchar(mkc('\n'));
+    fatal_error(mks("codegen_lvalue: unknown lvalue with >2 children"));
   }
 
-  if (lvalue_width == 0) {
-    fatal_error("codegen_lvalue: lvalue_width == 0");
+  if (eq(lvalue_width, 0)) {
+    fatal_error(mks("codegen_lvalue: lvalue_width == 0"));
   }
 
   grow_fs(1);
   return lvalue_width;
 }
 
-void codegen_string(int string_probe) {
+function codegen_string(string_probe) {
   int lbl = alloc_label(0);
   char *string_start = STRING_BUF(string_probe);
   char *string_end = string_start + heap[string_probe + 4];
