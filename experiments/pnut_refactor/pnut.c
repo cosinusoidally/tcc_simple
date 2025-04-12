@@ -7478,27 +7478,23 @@ int main(int argc, char **argv) {
   while(lt(i, argc)) {
     if (eq(ri8(r_32(argv, i)), mkc('-'))) {
       t = ri8(add(r_32(argv, i), 1));
-      if(0) {
+      if(eq(t, mkc('o'))) {
+        // Output file name
+        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
+          i += 1;
+          output_fd = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        } else {
+          output_fd = open(argv[i] + 2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        }
+      } else if(eq(t, mkc('D'))) {
+        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
+          i += 1;
+          handle_macro_D(argv[i]);
+        } else {
+          handle_macro_D(argv[i] + 2); // skip '-D'
+        }
       } else {
       switch (t) {
-        case 'o':
-          // Output file name
-          if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-            i += 1;
-            output_fd = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-          } else {
-            output_fd = open(argv[i] + 2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-          }
-          break;
-
-        case 'D':
-          if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-            i += 1;
-            handle_macro_D(argv[i]);
-          } else {
-            handle_macro_D(argv[i] + 2); // skip '-D'
-          }
-          break;
         case 'U':
           if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
             i += 1;
