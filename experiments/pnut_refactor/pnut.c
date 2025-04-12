@@ -7394,12 +7394,14 @@ function handle_macro_D(char *opt) {
       free(buf2);
     } else if (and(lte(mkc('0'),ri8(opt)),lte(ri8(opt),mkc('9')))) { // Start of integer token
       acc = 0;
-      while ('0' <= *opt && *opt <= '9') {
-        acc *= 10;
-        acc += *opt - '0';
-        opt += 1;
+      while (and(lte(mkc('0'),ri8(opt)),lte(ri8(opt),mkc('9')))) {
+        acc = mul(acc, 10);
+        acc = add(acc, sub(ri8(opt), mkc('0')));
+        opt = add(opt, 1);
       }
-      if (*opt != 0) fatal_error("Invalid macro definition value");
+      if (neq(ri8(opt), 0)) {
+        fatal_error(mks("Invalid macro definition value"));
+      }
       init_builtin_int_macro(macro_buf, acc);
     } else if (*opt == '\0') { // No value given, empty macro
       init_builtin_empty_macro(macro_buf);
