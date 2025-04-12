@@ -1001,6 +1001,9 @@ function eval_constant(expr, if_macro) {
     child1 = get_child(expr, 1);
   }
 
+  if(0) {
+  } else if(0) {
+  } else {
   switch (op) {
     case PARENS:      return eval_constant(child0, if_macro);
     case INTEGER:
@@ -1110,6 +1113,7 @@ function eval_constant(expr, if_macro) {
       putstr(mks("op=")); putint(op); putchar(mkc('\n'));
       fatal_error(mks("unsupported operator in constant expression"));
       return 0;
+  }
   }
 }
 
