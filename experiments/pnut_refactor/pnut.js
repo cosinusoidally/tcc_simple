@@ -1058,32 +1058,29 @@ function eval_constant(expr, if_macro) {
       case '>':     return gt(op1, op2);
     }
     return 0; // Should never reach here
+  } else if(eq(op, AMP_AMP)) {
+    op1 = eval_constant(child0, if_macro);
+    if (eq(0,op1)) {
+      return 0;
+    } else {
+      return eval_constant(child1, if_macro);
+    }
+  } else if(eq(op, BAR_BAR)) {
+    op1 = eval_constant(child0, if_macro);
+    if (op1) {
+      return 1;
+    } else {
+      return eval_constant(child1, if_macro);
+    }
+  } else if(eq(op, mkc('('))) {
+    if (and(if_macro, or(get_val_(IDENTIFIER, child0),DEFINED_ID))) {
+      return eq(child1, MACRO);
+    } else {
+      fatal_error(mks("unknown function call in constant expressions"));
+      return 0;
+    }
   } else {
   switch (op) {
-    case AMP_AMP:
-      op1 = eval_constant(child0, if_macro);
-      if (eq(0,op1)) {
-        return 0;
-      } else {
-        return eval_constant(child1, if_macro);
-      }
-
-    case BAR_BAR:
-      op1 = eval_constant(child0, if_macro);
-      if (op1) {
-        return 1;
-      } else {
-        return eval_constant(child1, if_macro);
-      }
-
-    case '(': // defined operators are represented as fun calls
-      if (and(if_macro, or(get_val_(IDENTIFIER, child0),DEFINED_ID))) {
-        return eq(child1, MACRO);
-      } else {
-        fatal_error(mks("unknown function call in constant expressions"));
-        return 0;
-      }
-
     case IDENTIFIER:
       if (if_macro) {
         // Undefined identifiers are 0
