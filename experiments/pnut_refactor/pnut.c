@@ -5751,10 +5751,15 @@ function codegen_initializer(local, init, type, base_reg, offset) {
   var inner_type;
   var arr_len;
   var inner_type_width;
+  var t;
 
   type = canonicalize_type(type);
+  t = get_op(init);
 
-  switch (get_op(init)) {
+  if(0) {
+  } else if(0) {
+  } else {
+  switch (t) {
     case STRING:
       codegen_initializer_string(get_val_(STRING, init), type, base_reg, offset);
       break;
@@ -5848,6 +5853,7 @@ function codegen_initializer(local, init, type, base_reg, offset) {
         fatal_error("codegen_initializer: cannot initialize array with scalar value");
       }
       break;
+  }
   }
 }
 
