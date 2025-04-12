@@ -5718,22 +5718,30 @@ function codegen_initializer_string(string_probe, type, base_reg, offset) {
   str_len = STRING_LEN(string_probe);
 
   // Only acceptable types are char[] or char*
-  if (get_op(type) == '[' && get_op(get_child_('[', type, 0)) == CHAR_KW) {
-    arr_len = get_child_('[', type, 1);
-    if (str_len > arr_len) fatal_error("codegen_initializer: string initializer is too long for char[]");
+  if(and(eq(get_op(type),mkc('[')),eq(get_op(get_child_(mkc('['), type, 0)),CHAR_KW))) {
+    arr_len = get_child_(mkc('['), type, 1);
+    if (gt(str_len, arr_len)) {
+      fatal_error(mks("codegen_initializer: string initializer is too long for char[]"));
+    }
 
     // Place the bytes of the string in the memory location allocated for the array
-    for (; i < arr_len; i += 1) {
-      mov_reg_imm(reg_X, i < str_len ? ri8(add(string_start, i)) : 0);
-      write_mem_location(base_reg, offset + i, reg_X, 1);
+    while(lt(i, arr_len)) {
+      if(lt(i, str_len)) {
+        t = ri8(add(string_start, i));
+      } else {
+        t = 0;
+      }
+      mov_reg_imm(reg_X, t);
+      write_mem_location(base_reg, add(offset, i), reg_X, 1);
+      i = add(i, 1);
     }
-  } else if (get_op(type) == '*' && get_op(get_child_('*', type, 1)) == CHAR_KW) {
+  } else if(and(eq(get_op(type),mkc('*')),eq(get_op(get_child_(mkc('*'), type, 1)),CHAR_KW))) {
     // Create the string and assign global variable to the pointer
     codegen_string(string_probe);
     pop_reg(reg_X);
     mov_mem_reg(base_reg, offset, reg_X);
   } else {
-    fatal_error("codegen_initializer: string initializer must be assigned to a char[] or char*");
+    fatal_error(mks("codegen_initializer: string initializer must be assigned to a char[] or char*"));
   }
 }
 
