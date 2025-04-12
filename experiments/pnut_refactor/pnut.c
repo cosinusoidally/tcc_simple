@@ -3650,9 +3650,7 @@ var WORD_SIZE = 4;
 // x86 codegen
 // start exe.c
 
-
-// 1MB heap
-var RT_HEAP_SIZE = 104857600;
+var RT_HEAP_SIZE;
 
 #define MAX_CODE_SIZE 5000000
 var code[MAX_CODE_SIZE];
@@ -3670,7 +3668,7 @@ function emit_i8(a) {
   if (gte(code_alloc, MAX_CODE_SIZE)) {
     fatal_error(mks("code buffer overflow"));
   }
-  code[code_alloc] = and(a, 0xFF);
+  w_code(code_alloc, and(a, 0xFF));
   code_alloc = add(code_alloc, 1);
 }
 
@@ -4225,7 +4223,7 @@ function use_label(lbl) {
   } else {
     // label address is not yet known
     emit_i32_le(0); // 32 bit placeholder for distance
-    code[sub(code_alloc, 1)] = addr; // chain with previous patch address
+    w_code(sub(code_alloc, 1), addr); // chain with previous patch address
     w_heap(add(lbl, 1), code_alloc);
   }
 }
@@ -4283,9 +4281,9 @@ function jump_to_goto_label(lbl) {
     // placeholders for when we know the destination address and frame size
     grow_stack(0);
     jump_rel(0);
-    code[sub(code_alloc, 1)] = addr; // chain with previous patch address
-    code[sub(code_alloc, 2)] = cgc_fs; // save current frame size
-    code[sub(code_alloc, 3)] = start_code_alloc; // track initial code alloc so we can come back
+    w_code(sub(code_alloc, 1), addr); // chain with previous patch address
+    w_code(sub(code_alloc, 2), cgc_fs); // save current frame size
+    w_code(sub(code_alloc, 3), start_code_alloc); // track initial code alloc so we can come back
     w_heap(add(lbl, 1), code_alloc);
   }
 }
@@ -7463,6 +7461,14 @@ function init_globals() {
 
   STRING_POOL_SIZE = 500000;
   string_pool = malloc(STRING_POOL_SIZE);
+
+// 1MB heap
+  RT_HEAP_SIZE = 104857600;
+/*
+  MAX_CODE_SIZE = 5000000;
+  code = malloc(mul(4, MAX_CODE_SIZE));
+  code_alloc = 0;
+*/
 
 // On old versions of gcc (such as on debian woody), setting a const variable
 // to another const variable produces an error. This is a workaround.
