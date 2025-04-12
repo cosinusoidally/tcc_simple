@@ -263,6 +263,10 @@ function r_heap(o) {
   return ri32(add(heap,mul(4,o)));
 }
 
+function w_heap(o, v) {
+  wi32(add(heap,mul(4,o)), v);
+}
+
 var alloc_result;
 
 function alloc_obj(size) {
