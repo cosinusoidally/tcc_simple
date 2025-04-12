@@ -1041,8 +1041,11 @@ function eval_constant(expr, if_macro) {
             or(eq(op,mkc('<')),eq(op,mkc('>')))))))))))))))) {
     op1 = eval_constant(child0, if_macro);
     op2 = eval_constant(child1, if_macro);
+    if(eq(op, mkc('*'))) {
+      return mul(op1, op2);
+    } else if(0) {
+    } else {
     switch (op) {
-      case '*':     return mul(op1, op2);
       case '/':     return div_(op1, op2);
       case '%':     return mod(op1, op2);
       case '&':     return and(op1, op2);
@@ -1056,6 +1059,7 @@ function eval_constant(expr, if_macro) {
       case GT_EQ:   return gte(op1, op2);
       case '<':     return lt(op1, op2);
       case '>':     return gt(op1, op2);
+    }
     }
     return 0; // Should never reach here
   } else if(eq(op, AMP_AMP)) {
