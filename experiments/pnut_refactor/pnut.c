@@ -4238,7 +4238,7 @@ function def_label(lbl) {
     fatal_error(mks("def_label expects generic label"));
   }
 
-  heap[add(lbl, 1)] = sub(0, label_addr); // define label's address
+  w_heap(add(lbl, 1), sub(0, label_addr)); // define label's address
   while (neq(addr, 0)) {
     next = r_code(sub(addr, 1)); // get pointer to next patch address
     code_alloc = addr;
@@ -4282,7 +4282,7 @@ function jump_to_goto_label(lbl) {
     code[sub(code_alloc, 1)] = addr; // chain with previous patch address
     code[sub(code_alloc, 2)] = cgc_fs; // save current frame size
     code[sub(code_alloc, 3)] = start_code_alloc; // track initial code alloc so we can come back
-    heap[add(lbl, 1)] = code_alloc;
+    w_heap(add(lbl, 1), code_alloc);
   }
 }
 
@@ -4303,8 +4303,8 @@ function def_goto_label(lbl) {
   if (lt(addr, 0)) {
     fatal_error(mks("goto label defined more than once"));
   } else {
-    heap[add(lbl, 1)] = sub(0, label_addr); // define label's address
-    heap[add(lbl, 2)] = cgc_fs;      // define label's frame size
+    w_heap(add(lbl, 1), sub(0, label_addr)); // define label's address
+    w_heap(add(lbl, 2), cgc_fs);      // define label's frame size
     while (neq(addr, 0)) {
       next = r_code(sub(addr, 1)); // get pointer to next patch address
       goto_fs = r_code(sub(addr, 2)); // get frame size at goto instruction
@@ -6208,7 +6208,7 @@ function codegen_statement(node) {
       lbl1 = alloc_label(0);                  // skip case when falling through
       jump(lbl1);
       def_label(r_heap(add(binding, 4)));           // false jump location of previous case
-      heap[add(binding, 4)] = alloc_label(0);     // create false jump location for current case
+      w_heap(add(binding, 4), alloc_label(0));     // create false jump location for current case
       codegen_rvalue(get_child_(CASE_KW, node, 0)); // evaluate case expression and compare it
       pop_reg(reg_Y); grow_fs(sub(0, 1));
       mov_reg_mem(reg_X, reg_SP, 0);          // get switch operand without popping it
@@ -6228,7 +6228,7 @@ function codegen_statement(node) {
       if (r_heap(add(binding, 5))) {
         fatal_error(mks("default already defined in switch"));
       }
-      heap[add(binding, 5)] = alloc_label(0);                 // create label for default
+      w_heap(add(binding, 5), alloc_label(0));                 // create label for default
       def_label(r_heap(add(binding, 5)));                       // default label
       codegen_statement(get_child_(DEFAULT_KW, node, 0)); // default statement
     } else {
