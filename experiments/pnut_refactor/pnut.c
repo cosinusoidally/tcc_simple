@@ -300,7 +300,7 @@ function putint(n) {
 
 function fatal_error(msg) {
   if (neq(include_stack, 0)) {
-    putstr(include_stack->filepath); putchar(mkc(':'));
+    putstr(r_i_filepath(include_stack)); putchar(mkc(':'));
     putint(last_tok_line_number); putchar(mkc(':')); putint(last_tok_column_number);
     putstr(mks("  ")); putstr(msg); putchar(mkc('\n'));
   } else {
@@ -310,7 +310,7 @@ function fatal_error(msg) {
 }
 
 function syntax_error(msg) {
-  putstr(include_stack->filepath); putchar(mkc(':'));
+  putstr(r_i_filepath(include_stack)); putchar(mkc(':'));
   putint(last_tok_line_number); putchar(mkc(':')); putint(last_tok_column_number);
   putstr(mks("  syntax error: ")); putstr(msg); putchar(mkc('\n'));
   exit(1);
@@ -653,7 +653,7 @@ function get_ch() {
       include_stack2 = include_stack;
       include_stack = r_i_next(include_stack);
       fp = r_i_fp(include_stack);
-      fp_filepath = include_stack->filepath;
+      fp_filepath = r_i_filepath(include_stack);
       line_number = include_stack->line_number;
       column_number = include_stack->column_number;
       // Not freeing include_stack2->filepath because it may not be dynamically allocated
