@@ -57,7 +57,7 @@ var RT_HEAP_SIZE;
 
 var code_alloc = 0;
 
-
+/* for reference this was the IncludeStack definition
 struct IncludeStack {
   var fp; // (FILE *)
   struct IncludeStack *next;
@@ -66,6 +66,7 @@ struct IncludeStack {
   var line_number;
   var column_number;
 };
+*/
 
 var sizeof_struct_IncludeStack;
 var r_i_fp_o;
@@ -117,7 +118,8 @@ function w_i_column_number(o, v) {
   wi32(add(r_i_column_number_o, o), v);
 }
 
-struct IncludeStack *include_stack, *include_stack2;
+var include_stack;
+var include_stack2;
 var fp = 0; // Current file pointer that's being read
 var fp_filepath = 0; // The path of the current file being read
 var include_search_path = 0; // Search path for include files
