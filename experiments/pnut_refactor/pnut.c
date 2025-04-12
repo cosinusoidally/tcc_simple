@@ -4,7 +4,6 @@
 #define function int
 #define var int
 #define bool int
-#define FILE int
 
 var O_WRONLY;
 var O_CREAT;
@@ -879,9 +878,13 @@ var LINE__ID;
 
 // When we parse a macro, we generally want the tokens as they are, without expanding them.
 function get_tok_macro() {
-  bool prev_expand_macro = expand_macro;
-  bool prev_macro_mask = if_macro_mask;
-  bool skip_newlines_prev = skip_newlines;
+  var prev_expand_macro;
+  var prev_macro_mask;
+  var skip_newlines_prev;
+
+  prev_expand_macro = expand_macro;
+  prev_macro_mask = if_macro_mask;
+  skip_newlines_prev = skip_newlines;
 
   expand_macro = false;
   if_macro_mask = true;
@@ -895,8 +898,11 @@ function get_tok_macro() {
 // Like get_tok_macro, but skips newline
 // This is useful when we want to read the arguments of a macro expansion.
 function get_tok_macro_expand() {
-  bool prev_expand_macro = expand_macro;
-  bool prev_macro_mask = if_macro_mask;
+  var prev_expand_macro;
+  var prev_macro_mask;
+
+  prev_expand_macro = expand_macro;
+  prev_macro_mask = if_macro_mask;
 
   expand_macro = false;
   if_macro_mask = true;
@@ -906,7 +912,7 @@ function get_tok_macro_expand() {
 }
 
 function lookup_macro_token(args, tok, val) {
-  int ix;
+  var ix;
   ix = 0;
 
   if (lt(tok, IDENTIFIER)) {
@@ -4357,9 +4363,10 @@ function is_function_type(type) {
   return eq(op, mkc('('));
 }
 
-bool is_struct_or_union_type(ast type) {
-  int op = get_op(type);
-  return op == STRUCT_KW || op == UNION_KW;
+function is_struct_or_union_type(type) {
+  var op;
+  op = get_op(type);
+  return or(eq(op, STRUCT_KW), eq(op, UNION_KW));
 }
 
 // An aggregate type is either an array type or a struct/union type (that's not a reference)
