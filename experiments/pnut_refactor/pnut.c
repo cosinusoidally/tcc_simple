@@ -5746,11 +5746,11 @@ function codegen_initializer_string(string_probe, type, base_reg, offset) {
 }
 
 // Initialize a variable with an initializer
-void codegen_initializer(bool local, ast init, ast type, int base_reg, int offset) {
-  ast members;
-  ast inner_type;
-  int arr_len;
-  int inner_type_width;
+function codegen_initializer(local, init, type, base_reg, offset) {
+  var members;
+  var inner_type;
+  var arr_len;
+  var inner_type_width;
 
   type = canonicalize_type(type);
 
