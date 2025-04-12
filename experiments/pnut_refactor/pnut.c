@@ -5974,20 +5974,21 @@ function codegen_static_local_var_decl(node) {
 
 function codegen_local_var_decls(node) {
   var is_static;
+  var t;
+
   is_static = false;
 
-  switch (get_child_(DECLS, node, 1)) {
-    // AUTO_KW and REGISTER_KW can simply be ignored.
-    case STATIC_KW:
-      is_static = true;
-      break;
-    case EXTERN_KW:
-      fatal_error("Extern class specifier not supported");
-      break;
+  t = get_child_(DECLS, node, 1);
+  // AUTO_KW and REGISTER_KW can simply be ignored.
+  if(eq(t, STATIC_KW)) {
+    is_static = true;
+  }
+  if(eq(t, EXTERN_KW)) {
+    fatal_error(mks("Extern class specifier not supported"));
   }
 
   node = get_child__(DECLS, LIST, node, 0);
-  while (node != 0) { // Multiple variable declarations
+  while (neq(node, 0)) { // Multiple variable declarations
     if (is_static) {
       codegen_static_local_var_decl(car_(DECL, node));
     } else {
@@ -5997,33 +5998,38 @@ function codegen_local_var_decls(node) {
   }
 }
 
-void codegen_body(ast node) {
-  int save_fs = cgc_fs;
-  int save_locals = cgc_locals;
-  ast stmt;
+function codegen_body(node) {
+  var save_fs;
+  var save_locals;
+  var stmt;
 
-  while (node != 0) {
-    stmt = get_child_('{', node, 0);
-    if (get_op(stmt) == DECLS) { // Variable declaration
+  save_fs = cgc_fs;
+  save_locals = cgc_locals;
+
+  while (neq(node, 0)) {
+    stmt = get_child_(mkc('{'), node, 0);
+    if (eq(get_op(stmt), DECLS)) { // Variable declaration
       codegen_local_var_decls(stmt);
     } else {
       codegen_statement(stmt);
     }
-    node = get_child_opt_('{', '{', node, 1);
+    node = get_child_opt_(mkc('{'), mkc('{'), node, 1);
   }
 
-  grow_stack(save_fs - cgc_fs);
+  grow_stack(sub(save_fs, cgc_fs));
 
   cgc_fs = save_fs;
   cgc_locals = save_locals;
 }
 
-function codegen_statement(ast node) {
-  int op;
-  int lbl1, lbl2, lbl3;
-  int save_fs;
-  int save_locals;
-  int binding;
+function codegen_statement(node) {
+  var op;
+  var lbl1;
+  var lbl2;
+  var lbl3;
+  var save_fs;
+  var save_locals;
+  var binding;
 
   if (node == 0) return;
 
