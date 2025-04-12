@@ -552,6 +552,10 @@ function r_if_macro_stack(o) {
   return ri32(add(if_macro_stack,mul(4,o)));
 }
 
+function w_if_macro_stack(o, v) {
+  wi32(add(if_macro_stack,mul(4,o)), v);
+}
+
 var expand_macro;
 var expand_macro_arg;
 var skip_newlines;
