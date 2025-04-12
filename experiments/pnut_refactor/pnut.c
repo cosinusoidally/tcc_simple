@@ -247,7 +247,7 @@ var tok;
 var val;
 
 var STRING_POOL_SIZE;
-char *string_pool;
+var string_pool;
 var string_pool_alloc;
 var string_start;
 var hash;
@@ -258,6 +258,7 @@ var HASH_PRIME;
 #define HEAP_SIZE 2000000
 var heap[HEAP_SIZE];
 var heap_alloc;
+var alloc_result;
 
 function r_heap(o) {
   return ri32(add(heap,mul(4,o)));
@@ -266,8 +267,6 @@ function r_heap(o) {
 function w_heap(o, v) {
   wi32(add(heap,mul(4,o)), v);
 }
-
-var alloc_result;
 
 function alloc_obj(size) {
   alloc_result = heap_alloc;
