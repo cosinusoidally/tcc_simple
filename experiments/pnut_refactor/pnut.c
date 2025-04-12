@@ -586,8 +586,8 @@ function push_if_macro_mask(new_mask) {
     fatal_error(mks("Too many nested #ifdef/#ifndef directives. Maximum supported is 20."));
   }
   // Save current mask on the stack because it's about to be overwritten
-  if_macro_stack[if_macro_stack_ix] = if_macro_mask;
-  if_macro_stack[add(if_macro_stack_ix, 1)] = if_macro_executed;
+  w_if_macro_stack(if_macro_stack_ix, if_macro_mask);
+  w_if_macro_stack(add(if_macro_stack_ix, 1), if_macro_executed);
   if_macro_stack_ix = add(if_macro_stack_ix, 2);
 
   // If the current block is masked off, then the new mask is the logical AND of the current mask and the new mask
