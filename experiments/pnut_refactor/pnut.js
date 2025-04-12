@@ -1045,14 +1045,20 @@ function eval_constant(expr, if_macro) {
       return mul(op1, op2);
     } else if(eq(op, mkc('/'))) {
       return div_(op1, op2);
+    } else if(eq(op, mkc('%'))) {
+      return mod(op1, op2);
+    } else if(eq(op, mkc('&'))) {
+      return and(op1, op2);
+    } else if(eq(op, mkc('|'))) {
+      return or(op1, op2);
+    } else if(eq(op, mkc('^'))) {
+      return xor(op1, op2);
+    } else if(eq(op, LSHIFT)) {
+      return shl(op1, op2);
+    } else if(eq(op, RSHIFT)) {
+      return shr(op1, op2);
     } else {
     switch (op) {
-      case '%':     return mod(op1, op2);
-      case '&':     return and(op1, op2);
-      case '|':     return or(op1, op2);
-      case '^':     return xor(op1, op2);
-      case LSHIFT:  return shl(op1, op2);
-      case RSHIFT:  return shr(op1, op2);
       case EQ_EQ:   return eq(op1, op2);
       case EXCL_EQ: return neq(op1, op2);
       case LT_EQ:   return lte(op1, op2);
