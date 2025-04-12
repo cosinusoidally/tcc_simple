@@ -6296,44 +6296,58 @@ function add_params(params) {
   var type;
   var ident;
 
-  while (params != 0) {
+  while (neq(params, 0)) {
     decl = car_(DECL, params);
     ident = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, decl, 0));
     type = get_child_(DECL, decl, 1);
 
     // Array to pointer decay
-    if (get_op(type) == '[') { type = pointer_type(dereference_type(type), false); }
+    if (eq(get_op(type), mkc('['))) {
+      type = pointer_type(dereference_type(type), false);
+    }
 
-    if (cgc_lookup_var(ident, cgc_locals) != 0) fatal_error("add_params: duplicate parameter");
+    if (neq(cgc_lookup_var(ident, cgc_locals), 0)) {
+      fatal_error(mks("add_params: duplicate parameter"));
+    }
 
-    cgc_add_local_param(ident, type_width(type, false, true) / WORD_SIZE, type);
+    cgc_add_local_param(ident, div_(type_width(type, false, true), WORD_SIZE), type);
     params = tail(params);
   }
 }
 
-void codegen_glo_fun_decl(ast node) {
-  ast decl = get_child__(FUN_DECL, DECL, node, 0);
-  ast body = get_child_opt_(FUN_DECL, '{', node, 1);
-  ast name_probe = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, decl, 0));
-  ast fun_type = get_child__(DECL, '(', decl, 1);
-  ast params = get_child_opt_('(', LIST, fun_type, 1);
-  ast fun_return_type = get_child_('(', fun_type, 0);
-  int binding;
-  int save_locals_fun = cgc_locals_fun;
+function codegen_glo_fun_decl(node) {
+  var decl;
+  var body;
+  var name_probe;
+  var fun_type;
+  var params;
+  var fun_return_type;
+  var binding;
+  var save_locals_fun;
+
+  decl = get_child__(FUN_DECL, DECL, node, 0);
+  body = get_child_opt_(FUN_DECL, mkc('{'), node, 1);
+  name_probe = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, decl, 0));
+  fun_type = get_child__(DECL, mkc('('), decl, 1);
+  params = get_child_opt_(mkc('('), LIST, fun_type, 1);
+  fun_return_type = get_child_(mkc('('), fun_type, 0);
+  save_locals_fun = cgc_locals_fun;
 
   if (is_aggregate_type(fun_return_type)) {
-    fatal_error("Returning arrays or structs from function not supported");
+    fatal_error(mks("Returning arrays or structs from function not supported"));
   }
 
   // If the function is main
-  if (name_probe == MAIN_ID) {
+  if (eq(name_probe, MAIN_ID)) {
     // Check if main returns an exit code.
-    if (get_op(fun_return_type) != VOID_KW) main_returns = true;
+    if (neq(get_op(fun_return_type), VOID_KW)) {
+      main_returns = true;
+    }
   }
 
   binding = cgc_lookup_fun(name_probe, cgc_globals);
 
-  if (binding == 0) {
+  if (eq(binding, 0)) {
     cgc_add_global_fun(name_probe, alloc_label(STRING_BUF(name_probe)), fun_type);
     binding = cgc_globals;
   }
@@ -6342,16 +6356,16 @@ void codegen_glo_fun_decl(ast node) {
   debug_interrupt(); // Marker to helps us find the function in the disassembly
   codegen_string(name_probe);
 
-  def_label(heap[binding+4]);
+  def_label(r_heap(add(binding, 4)));
 
-  cgc_fs = -1; // space for return address
+  cgc_fs = sub(0, 1); // space for return address
   cgc_locals = 0;
   add_params(params);
   cgc_fs = 0;
 
   codegen_body(body);
 
-  grow_stack(-cgc_fs);
+  grow_stack(sub(0, cgc_fs));
   cgc_fs = 0;
 
   ret();
@@ -6362,10 +6376,14 @@ void codegen_glo_fun_decl(ast node) {
 // For now, we don't do anything with the declarations in a typedef.
 // The only thing we need to do is to call handle_enum_struct_union_type_decl
 // on the type specifier, which is the same for all declarations.
-void handle_typedef(ast node) {
-  ast decls = get_child__(TYPEDEF_KW, LIST, node, 0);
-  ast decl = car_(DECL, decls);
-  ast type = get_child_(DECL, decl, 1);
+function handle_typedef(node) {
+  var decls;
+  var decl;
+  var type;
+
+  decls = get_child__(TYPEDEF_KW, LIST, node, 0);
+  decl = car_(DECL, decls);
+  type = get_child_(DECL, decl, 1);
 
   handle_enum_struct_union_type_decl(get_type_specifier(type));
 }
