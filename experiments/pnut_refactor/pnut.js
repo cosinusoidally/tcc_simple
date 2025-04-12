@@ -2499,25 +2499,19 @@ function parse_declaration_specifiers(allow_typedef) {
   specifier_storage_class = 0;
 
   while (loop) {
-    if(0) {
+    if(or(eq(tok,AUTO_KW),or(eq(tok,REGISTER_KW),or(eq(tok,STATIC_KW),
+       or(eq(tok,EXTERN_KW),eq(tok,TYPEDEF_KW)))))) {
+      if (neq(specifier_storage_class, 0)) {
+        fatal_error(mks("Multiple storage classes not supported"));
+      }
+      if (and(eq(tok, TYPEDEF_KW), eq(0,allow_typedef))) {
+        parse_error(mks("Unexpected typedef"), tok);
+      }
+      specifier_storage_class = tok;
+      get_tok();
     } else if(0) {
     } else {
     switch (tok) {
-      case AUTO_KW:
-      case REGISTER_KW:
-      case STATIC_KW:
-      case EXTERN_KW:
-      case TYPEDEF_KW:
-        if (neq(specifier_storage_class, 0)) {
-          fatal_error(mks("Multiple storage classes not supported"));
-        }
-        if (and(eq(tok, TYPEDEF_KW), eq(0,allow_typedef))) {
-          parse_error(mks("Unexpected typedef"), tok);
-        }
-        specifier_storage_class = tok;
-        get_tok();
-        break;
-
       case INLINE_KW:
         get_tok(); // Ignore inline
         break;
