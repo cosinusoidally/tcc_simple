@@ -1408,14 +1408,14 @@ function init_builtin_string_macro(macro_str, value) {
 function init_builtin_int_macro(macro_str, value) {
   var macro_id;
   macro_id = init_ident(MACRO, macro_str);
-  heap[add(macro_id, 3)] = cons(cons(cons(INTEGER, sub(0,value)), 0), sub(0,1));
+  w_heap(add(macro_id, 3), cons(cons(cons(INTEGER, sub(0,value)), 0), sub(0,1)));
   return macro_id;
 }
 
 function init_builtin_empty_macro(macro_str) {
   var macro_id;
   macro_id = init_ident(MACRO, macro_str);
-  heap[add(macro_id, 3)] = cons(0, sub(0,1)); // -1 means it's an object-like macro, 0 means no tokens
+  w_heap(add(macro_id, 3), cons(0, sub(0,1))); // -1 means it's an object-like macro, 0 means no tokens
   return macro_id;
 }
 
@@ -2594,7 +2594,7 @@ function parse_declaration_specifiers(allow_typedef) {
         }
         // Lookup type in the types table. It is stored in the tag of the
         // interned string object. The type is cloned so it can be modified.
-        type_specifier = clone_ast(heap[val + 3]);
+        type_specifier = clone_ast(r_heap(add(val, 3)));
         get_tok();
         break;
 
@@ -2897,8 +2897,8 @@ function add_typedef(declarator) {
   decl_ident = get_val_(IDENTIFIER, get_child__(DECL, IDENTIFIER, declarator, 0));
   decl_type = get_child_(DECL, declarator, 1); // child#1 is the type
 
-  heap[add(decl_ident, 2)] = TYPE;
-  heap[add(decl_ident, 3)] = decl_type;
+  w_heap(add(decl_ident, 2), TYPE);
+  w_heap(add(decl_ident, 3), decl_type);
 }
 
 function parse_fun_def(declarator) {
@@ -3826,11 +3826,11 @@ function cgc_lookup_enum_value(ident, env) {
 function cgc_add_local(binding_type, ident, type, env) {
   var binding;
   binding = alloc_obj(5);
-  heap[add(binding, 0)] = env;
-  heap[add(binding, 1)] = binding_type;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = cgc_fs;
-  heap[add(binding, 4)] = type;
+  w_heap(add(binding, 0), env);
+  w_heap(add(binding, 1), binding_type);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), cgc_fs);
+  w_heap(add(binding, 4), type);
   return binding;
 }
 
@@ -3847,11 +3847,11 @@ function cgc_add_local_var(ident, width, type) {
 function cgc_add_enclosing_loop(loop_fs, break_lbl, continue_lbl) {
   var binding;
   binding = alloc_obj(5);
-  heap[add(binding, 0)] = cgc_locals;
-  heap[add(binding, 1)] = BINDING_LOOP;
-  heap[add(binding, 2)] = loop_fs;
-  heap[add(binding, 3)] = break_lbl;
-  heap[add(binding, 4)] = continue_lbl;
+  w_heap(add(binding, 0), cgc_locals);
+  w_heap(add(binding, 1), BINDING_LOOP);
+  w_heap(add(binding, 2), loop_fs);
+  w_heap(add(binding, 3), break_lbl);
+  w_heap(add(binding, 4), continue_lbl);
   cgc_locals = binding;
 }
 
