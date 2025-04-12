@@ -166,27 +166,31 @@ var r_i_line_number_o;
 var r_i_column_number_o;
 
 function r_i_fp(o) {
-  return ri32(o);
+  return ri32(add(r_i_fp_o, o));
+}
+
+function w_i_fp(o, v) {
+  wi32(add(r_i_fp_o, o), v);
 }
 
 function r_i_next(o) {
-  return ri32(add(o, 4));
+  return ri32(add(r_i_next_o, o));
 }
 
 function r_i_dirname(o) {
-  return ri32(add(o, 8));
+  return ri32(add(r_i_dirname_o, o));
 }
 
 function r_i_filepath(o) {
-  return ri32(add(o, 12));
+  return ri32(add(r_i_filepath_o, o));
 }
 
 function r_i_line_number(o) {
-  return ri32(add(o, 16));
+  return ri32(add(r_i_line_number_o, o));
 }
 
 function r_i_column_number(o) {
-  return ri32(add(o, 20));
+  return ri32(add(r_i_column_number_o, o));
 }
 
 struct IncludeStack *include_stack, *include_stack2;
