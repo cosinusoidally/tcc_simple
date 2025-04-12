@@ -125,46 +125,80 @@ var fp_filepath = 0; // The path of the current file being read
 var include_search_path = 0; // Search path for include files
 var output_fd = 1; // Output file descriptor (1 = stdout)
 
-function init_tokens_ast() {
+var AUTO_KW;
+var BREAK_KW;
+var CASE_KW;
+var CHAR_KW;
+var CONST_KW;
+var CONTINUE_KW;
+var DEFAULT_KW;
+var DO_KW;
+var DOUBLE_KW;
+var ELSE_KW;
+var ENUM_KW;
+var EXTERN_KW;
+var FLOAT_KW;
+var FOR_KW;
+var GOTO_KW;
+var IF_KW;
+var INLINE_KW;
+var INT_KW;
+var LONG_KW;
+var REGISTER_KW;
+var RETURN_KW;
+var SHORT_KW;
+var SIGNED_KW;
+var SIZEOF_KW;
+var STATIC_KW;
+var STRUCT_KW;
+var SWITCH_KW;
+var TYPEDEF_KW;
+var UNION_KW;
+var UNSIGNED_KW;
+var VOID_KW;
+var VOLATILE_KW;
+var WHILE_KW;
 
+function init_tokens_ast() {
+  var i;
+  i = 300;
+// Tokens and AST nodes
+  AUTO_KW = i; i = add(i,1);
+  BREAK_KW = i; i = add(i,1);
+  CASE_KW = i; i = add(i,1);
+  CHAR_KW = i; i = add(i,1);
+  CONST_KW = i; i = add(i,1);
+  CONTINUE_KW = i; i = add(i,1);
+  DEFAULT_KW = i; i = add(i,1);
+  DO_KW = i; i = add(i,1);
+  DOUBLE_KW = i; i = add(i,1);
+  ELSE_KW = i; i = add(i,1);
+  ENUM_KW = i; i = add(i,1);
+  EXTERN_KW = i; i = add(i,1);
+  FLOAT_KW = i; i = add(i,1);
+  FOR_KW = i; i = add(i,1);
+  GOTO_KW = i; i = add(i,1);
+  IF_KW = i; i = add(i,1);
+  INLINE_KW = i; i = add(i,1);
+  INT_KW = i; i = add(i,1);
+  LONG_KW = i; i = add(i,1);
+  REGISTER_KW = i; i = add(i,1);
+  RETURN_KW = i; i = add(i,1);
+  SHORT_KW = i; i = add(i,1);
+  SIGNED_KW = i; i = add(i,1);
+  SIZEOF_KW = i; i = add(i,1);
+  STATIC_KW = i; i = add(i,1);
+  STRUCT_KW = i; i = add(i,1);
+  SWITCH_KW = i; i = add(i,1);
+  TYPEDEF_KW = i; i = add(i,1);
+  UNION_KW = i; i = add(i,1);
+  UNSIGNED_KW = i; i = add(i,1);
+  VOID_KW = i; i = add(i,1);
+  VOLATILE_KW = i; i = add(i,1);
+  WHILE_KW = i; i = add(i,1);
 }
 
-// Tokens and AST nodes
 enum {
-  // Keywords
-  AUTO_KW = 300,
-  BREAK_KW,
-  CASE_KW,
-  CHAR_KW,
-  CONST_KW,
-  CONTINUE_KW,
-  DEFAULT_KW,
-  DO_KW,
-  DOUBLE_KW,
-  ELSE_KW,
-  ENUM_KW,
-  EXTERN_KW,
-  FLOAT_KW,
-  FOR_KW,
-  GOTO_KW,
-  IF_KW,
-  INLINE_KW,
-  INT_KW,
-  LONG_KW,
-  REGISTER_KW,
-  RETURN_KW,
-  SHORT_KW,
-  SIGNED_KW,
-  SIZEOF_KW,
-  STATIC_KW,
-  STRUCT_KW,
-  SWITCH_KW,
-  TYPEDEF_KW,
-  UNION_KW,
-  UNSIGNED_KW,
-  VOID_KW,
-  VOLATILE_KW,
-  WHILE_KW,
 
   // Non-character operands
   INTEGER     = 401, // Integer written in decimal
