@@ -7475,7 +7475,7 @@ int main(int argc, char **argv) {
 
   i = 1;
   while(lt(i, argc)) {
-    if (argv[i][0] == '-') {
+    if (eq(ri8(argv[i]), mkc('-'))) {
       switch (argv[i][1]) {
         case 'o':
           // Output file name
