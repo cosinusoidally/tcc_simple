@@ -159,6 +159,15 @@ var VOID_KW;
 var VOLATILE_KW;
 var WHILE_KW;
 
+var INTEGER;
+var INTEGER_L;
+var INTEGER_LL;
+var INTEGER_U;
+var INTEGER_UL;
+var INTEGER_ULL;
+var CHARACTER;
+var STRING;
+
 function init_tokens_ast() {
   var i;
   i = 300;
@@ -196,19 +205,21 @@ function init_tokens_ast() {
   VOID_KW = i; i = add(i,1);
   VOLATILE_KW = i; i = add(i,1);
   WHILE_KW = i; i = add(i,1);
+
+  // Non-character operands
+  INTEGER     = 401; // Integer written in decimal
+  i = 404;
+  INTEGER_L = i; i = add(i,1);
+  INTEGER_LL = i; i = add(i,1);
+  INTEGER_U = i; i = add(i,1);
+  INTEGER_UL = i; i = add(i,1);
+  INTEGER_ULL = i; i = add(i,1);
+  CHARACTER = 410; // Fixed value so the ifdef above don't change the value
+  STRING    = 411;
 }
 
 enum {
 
-  // Non-character operands
-  INTEGER     = 401, // Integer written in decimal
-  INTEGER_L   = 404,
-  INTEGER_LL,
-  INTEGER_U,
-  INTEGER_UL,
-  INTEGER_ULL,
-  CHARACTER = 410, // Fixed value so the ifdef above don't change the value
-  STRING    = 411,
 
   AMP_AMP   = 450,
   AMP_EQ,
