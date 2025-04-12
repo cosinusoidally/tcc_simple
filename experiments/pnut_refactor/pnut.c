@@ -6763,23 +6763,27 @@ function mod_rm_slash_digit(digit, reg1) {
 }
 
 // For instructions with 2 register operands
-void op_reg_reg(int opcode, int dst, int src, int reg_width) {
+function op_reg_reg(opcode, dst, src, reg_width) {
   // 16-bit operand size override prefix
   // See section on Legacy Prefixes: https://web.archive.org/web/20250210181519/https://wiki.osdev.org/X86-64_Instruction_Encoding#ModR/M
-  if (reg_width == 2) emit_i8(0x66);
-  if (reg_width == 8) rex_prefix(src, dst);
+  if (eq(reg_width, 2)) {
+    emit_i8(0x66);
+  }
+  if (eq(reg_width, 8)) {
+    rex_prefix(src, dst);
+  }
   emit_i8(opcode);
   mod_rm(src, dst);
 }
 
 // For instructions with 1 register operand and /digit opcode extension
-void op_reg_slash_digit(int opcode, int digit, int reg) {
+function op_reg_slash_digit(opcode, digit, reg) {
   rex_prefix(0, reg);
   emit_i8(opcode);
   mod_rm_slash_digit(digit, reg);
 }
 
-function add_reg_reg(int dst, int src) {
+function add_reg_reg(dst, src) {
 
   // ADD dst_reg, src_reg ;; dst_reg = dst_reg + src_reg
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6787,7 +6791,7 @@ function add_reg_reg(int dst, int src) {
   op_reg_reg(0x01, dst, src, WORD_SIZE);
 }
 
-function or_reg_reg (int dst, int src) {
+function or_reg_reg (dst, src) {
 
   // OR dst_reg, src_reg ;; dst_reg = dst_reg | src_reg
   // See: https://web.archive.org/web/20231002205127/https://www.felixcloutier.com/x86/or
@@ -6795,7 +6799,7 @@ function or_reg_reg (int dst, int src) {
   op_reg_reg(0x09, dst, src, WORD_SIZE);
 }
 
-function and_reg_reg(int dst, int src) {
+function and_reg_reg(dst, src) {
 
   // AND dst_reg, src_reg ;; dst_reg = dst_reg & src_reg
   // See: https://web.archive.org/web/20240228122102/https://www.felixcloutier.com/x86/and
