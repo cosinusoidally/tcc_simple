@@ -7374,15 +7374,19 @@ function handle_macro_D(char *opt) {
 
   macro_buf = malloc(add(sub(opt, start), 1));
   memcpy(macro_buf, start, sub(opt, start));
-  macro_buf[sub(opt, start)] = 0;
+  wi8(add(macro_buf, sub(opt, start)), 0);
 
   if (eq(ri8(opt), mkc('='))) {
     opt = add(opt, 1);
     if (eq(ri8(opt), mkc('"'))) { // Start of string literal
       opt = add(opt, 1);
       start = opt;
-      while (*opt != 0 && *opt != '"') opt += 1;
-      if (*opt == 0) fatal_error("Unterminated string literal");
+      while (and(neq(ri8(opt), 0), neq(ri8(opt), mkc('"')))) {
+        opt = add(opt, 1);
+      }
+      if (eq(ri8(opt), 0)) {
+        fatal_error(mks("Unterminated string literal"));
+      }
       buf2 = malloc(opt - start + 1);
       memcpy(buf2, start, opt - start);
       buf2[opt - start] = '\0';
