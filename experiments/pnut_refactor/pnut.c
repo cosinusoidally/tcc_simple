@@ -648,10 +648,10 @@ function get_ch() {
 
   if (eq(ch, EOF)) {
     // If it's not the last file on the stack, EOF means that we need to switch to the next file
-    if (neq(include_stack->next, 0)) {
+    if (neq(r_i_next(include_stack), 0)) {
       fclose(r_i_fp(include_stack));
       include_stack2 = include_stack;
-      include_stack = include_stack->next;
+      include_stack = r_i_next(include_stack);
       fp = r_i_fp(include_stack);
       fp_filepath = include_stack->filepath;
       line_number = include_stack->line_number;
