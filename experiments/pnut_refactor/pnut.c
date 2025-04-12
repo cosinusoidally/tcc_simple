@@ -5876,32 +5876,39 @@ function infer_array_length(type, init) {
   }
 }
 
-// LJW HERE
 function codegen_glo_var_decl(node) {
-  ast name = get_child__(DECL, IDENTIFIER, node, 0);
-  ast type = get_child_(DECL, node, 1);
-  ast init = get_child_(DECL, node, 2);
-  int name_probe = get_val_(IDENTIFIER, name);
-  int binding = cgc_lookup_var(name_probe, cgc_globals);
+  var name;
+  var type;
+  var init;
+  var name_probe;
+  var binding;
 
-  if (get_op(type) == '(') {
+  name = get_child__(DECL, IDENTIFIER, node, 0);
+  type = get_child_(DECL, node, 1);
+  init = get_child_(DECL, node, 2);
+  name_probe = get_val_(IDENTIFIER, name);
+  binding = cgc_lookup_var(name_probe, cgc_globals);
+
+  if (eq(get_op(type), mkc('('))) {
     // Forward declaration
     binding = cgc_lookup_fun(name_probe, cgc_globals);
-    if (binding == 0) cgc_add_global_fun(name_probe, alloc_label(STRING_BUF(name_probe)), type);
+    if (eq(binding, 0)) {
+      cgc_add_global_fun(name_probe, alloc_label(STRING_BUF(name_probe)), type);
+    }
 
   } else {
     handle_enum_struct_union_type_decl(type);
     infer_array_length(type, init);
 
-    if (binding == 0) {
+    if (eq(binding, 0)) {
       cgc_add_global(name_probe, type_width(type, true, true), type, false);
       binding = cgc_globals;
     }
 
-    if (init != 0) {
+    if (neq(init, 0)) {
       def_label(init_next_lbl);
-      init_next_lbl = alloc_label("init_next");
-      codegen_initializer(false, init, type, reg_glo, heap[binding + 3]); // heap[binding + 3] = offset
+      init_next_lbl = alloc_label(mks("init_next"));
+      codegen_initializer(false, init, type, reg_glo, r_heap(add(binding, 3))); // heap[binding + 3] = offset
       jump(init_next_lbl);
     }
   }
