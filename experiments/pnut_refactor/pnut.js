@@ -1001,11 +1001,11 @@ function eval_constant(expr, if_macro) {
     child1 = get_child(expr, 1);
   }
 
-  if(0) {
+  if(eq(op, PARENS)) {
+    return eval_constant(child0, if_macro);
   } else if(0) {
   } else {
   switch (op) {
-    case PARENS:      return eval_constant(child0, if_macro);
     case INTEGER:
     case INTEGER_L:
     case INTEGER_LL:
