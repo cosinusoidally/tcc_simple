@@ -7387,12 +7387,12 @@ function handle_macro_D(char *opt) {
       if (eq(ri8(opt), 0)) {
         fatal_error(mks("Unterminated string literal"));
       }
-      buf2 = malloc(opt - start + 1);
-      memcpy(buf2, start, opt - start);
-      buf2[opt - start] = '\0';
+      buf2 = malloc(add(sub(opt, start), 1));
+      memcpy(buf2, start, sub(opt, start));
+      wi8(add(buf2, sub(opt, start)), 0);
       init_builtin_string_macro(macro_buf, buf2);
       free(buf2);
-    } else if ('0' <= *opt && *opt <= '9') { // Start of integer token
+    } else if (and(lte(mkc('0'),ri8(opt)),lte(ri8(opt),mkc('9')))) { // Start of integer token
       acc = 0;
       while ('0' <= *opt && *opt <= '9') {
         acc *= 10;
