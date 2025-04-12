@@ -453,10 +453,10 @@ function accum_string() {
 // FIXME LJW should be a char?
 function accum_string_char(c) {
   hash = (c + (hash ^ HASH_PARAM)) % HASH_PRIME;
-  string_pool[string_pool_alloc] = c;
-  string_pool_alloc += 1;
-  if (string_pool_alloc >= STRING_POOL_SIZE) {
-    fatal_error("string pool overflow");
+  wi8(add(string_pool, string_pool_alloc), c);
+  string_pool_alloc = add(string_pool_alloc, 1);
+  if (gte(string_pool_alloc, STRING_POOL_SIZE)) {
+    fatal_error(mks("string pool overflow"));
   }
 }
 
