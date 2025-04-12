@@ -655,7 +655,7 @@ function get_ch() {
       fp = r_i_fp(include_stack);
       fp_filepath = r_i_filepath(include_stack);
       line_number = r_i_line_number(include_stack);
-      column_number = include_stack->column_number;
+      column_number = r_i_column_number(include_stack);
       // Not freeing include_stack2->filepath because it may not be dynamically allocated
       free(r_i_dirname(include_stack2));
       free(include_stack2);
