@@ -5946,29 +5946,35 @@ function codegen_local_var_decl(node) {
   }
 }
 
-void codegen_static_local_var_decl(ast node) {
-  ast name = get_child__(DECL, IDENTIFIER, node, 0);
-  ast type = get_child_(DECL, node, 1);
-  ast init = get_child_(DECL, node, 2);
-  int size = compute_local_var_decl_size(type, init);
-  int skip_init_lbl;
+function codegen_static_local_var_decl(node) {
+  var name;
+  var type;
+  var init;
+  var size;
+  var skip_init_lbl;
+
+  name = get_child__(DECL, IDENTIFIER, node, 0);
+  type = get_child_(DECL, node, 1);
+  init = get_child_(DECL, node, 2);
+  size = compute_local_var_decl_size(type, init);
 
   cgc_add_global(get_val_(IDENTIFIER, name), size, type, true);
 
-  if (init != 0) {
+  if (neq(init, 0)) {
     // Skip over the initialization code that will run during program initialization
-    skip_init_lbl = alloc_label("skip_init");
+    skip_init_lbl = alloc_label(mks("skip_init"));
     jump(skip_init_lbl);
     def_label(init_next_lbl);
-    init_next_lbl = alloc_label("init_next");
-    codegen_initializer(false, init, type, reg_glo, heap[cgc_locals + 3]); // heap[cgc_locals + 3] = offset
+    init_next_lbl = alloc_label(mks("init_next"));
+    codegen_initializer(false, init, type, reg_glo, r_heap(add(cgc_locals, 3))); // heap[cgc_locals + 3] = offset
     jump(init_next_lbl);
     def_label(skip_init_lbl);
   }
 }
 
-void codegen_local_var_decls(ast node) {
-  bool is_static = false;
+function codegen_local_var_decls(node) {
+  var is_static;
+  is_static = false;
 
   switch (get_child_(DECLS, node, 1)) {
     // AUTO_KW and REGISTER_KW can simply be ignored.
