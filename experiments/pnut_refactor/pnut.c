@@ -657,7 +657,7 @@ function get_ch() {
       line_number = include_stack->line_number;
       column_number = include_stack->column_number;
       // Not freeing include_stack2->filepath because it may not be dynamically allocated
-      free(include_stack2->dirname);
+      free(r_i_dirname(include_stack2));
       free(include_stack2);
       // EOF is treated as a newline so that files without a newline at the end are still parsed correctly
       // On the next get_ch call, the first character of the next file will be read
@@ -1194,7 +1194,7 @@ function evaluate_if_condition() {
 
 function handle_include() {
   if (eq(tok, STRING)) {
-    include_file(STRING_BUF(val), include_stack->dirname);
+    include_file(STRING_BUF(val), r_i_dirname(include_stack));
     get_tok_macro(); // Skip the string
   } else if (eq(tok, mkc('<'))) {
     accum_string_until(mkc('>'));
