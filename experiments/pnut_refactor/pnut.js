@@ -2499,6 +2499,9 @@ function parse_declaration_specifiers(allow_typedef) {
   specifier_storage_class = 0;
 
   while (loop) {
+    if(0) {
+    } else if(0) {
+    } else {
     switch (tok) {
       case AUTO_KW:
       case REGISTER_KW:
@@ -2571,6 +2574,7 @@ function parse_declaration_specifiers(allow_typedef) {
       default:
         loop = false; // Break out of loop
         break;
+    }
     }
   }
 
