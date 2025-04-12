@@ -1079,24 +1079,20 @@ function eval_constant(expr, if_macro) {
       fatal_error(mks("unknown function call in constant expressions"));
       return 0;
     }
+  } else if(eq(op, IDENTIFIER)) {
+    if (if_macro) {
+      // Undefined identifiers are 0
+      // At this point, macros have already been expanded so we can't have a macro identifier
+      return 0;
+    } else {
+      // TODO: Enums when outside of if_macro
+      fatal_error(mks("identifiers are not allowed in constant expression"));
+      return 0;
+    }
   } else {
-  switch (op) {
-    case IDENTIFIER:
-      if (if_macro) {
-        // Undefined identifiers are 0
-        // At this point, macros have already been expanded so we can't have a macro identifier
-        return 0;
-      } else {
-        // TODO: Enums when outside of if_macro
-        fatal_error(mks("identifiers are not allowed in constant expression"));
-        return 0;
-      }
-
-    default:
       putstr(mks("op=")); putint(op); putchar(mkc('\n'));
       fatal_error(mks("unsupported operator in constant expression"));
       return 0;
-  }
   }
 }
 
