@@ -2525,16 +2525,13 @@ function parse_declaration_specifiers(allow_typedef) {
       if (eq(type_specifier, 0)) {
         parse_error(mks("Failed to parse type specifier"), tok);
       }
+    } else if(or(eq(tok, STRUCT_KW), eq(tok, UNION_KW))) {
+      if (neq(type_specifier, 0)) {
+        parse_error(mks("Multiple types not supported"), tok);
+      }
+      type_specifier = parse_struct_or_union(tok);
     } else {
     switch (tok) {
-      case STRUCT_KW:
-      case UNION_KW:
-        if (neq(type_specifier, 0)) {
-          parse_error(mks("Multiple types not supported"), tok);
-        }
-        type_specifier = parse_struct_or_union(tok);
-        break;
-
       case ENUM_KW:
         if (neq(type_specifier, 0)) {
           parse_error(mks("Multiple types not supported"), tok);
