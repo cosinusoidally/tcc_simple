@@ -5706,11 +5706,16 @@ function handle_enum_struct_union_type_decl(type) {
   // If not an enum, struct, or union, do nothing
 }
 
-void codegen_initializer_string(int string_probe, ast type, int base_reg, int offset) {
-  char *string_start = STRING_BUF(string_probe);
-  int i = 0;
-  int str_len = STRING_LEN(string_probe);
-  int arr_len;
+function codegen_initializer_string(string_probe, type, base_reg, offset) {
+  var string_start;
+  var i;
+  var str_len;
+  var arr_len;
+  var t;
+
+  string_start = STRING_BUF(string_probe);
+  i = 0;
+  str_len = STRING_LEN(string_probe);
 
   // Only acceptable types are char[] or char*
   if (get_op(type) == '[' && get_op(get_child_('[', type, 0)) == CHAR_KW) {
@@ -5719,7 +5724,7 @@ void codegen_initializer_string(int string_probe, ast type, int base_reg, int of
 
     // Place the bytes of the string in the memory location allocated for the array
     for (; i < arr_len; i += 1) {
-      mov_reg_imm(reg_X, i < str_len ? string_start[i] : 0);
+      mov_reg_imm(reg_X, i < str_len ? ri8(add(string_start, i)) : 0);
       write_mem_location(base_reg, offset + i, reg_X, 1);
     }
   } else if (get_op(type) == '*' && get_op(get_child_('*', type, 1)) == CHAR_KW) {
