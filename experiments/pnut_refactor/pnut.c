@@ -293,7 +293,7 @@ function get_val(node) {
 }
 
 function set_val(node, val) {
-  heap[node+1] = val;
+  w_heap(add(node, 1), val);
 }
 
 function get_child(node, i) {
