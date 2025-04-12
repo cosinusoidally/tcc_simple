@@ -157,6 +157,7 @@ struct IncludeStack {
   var column_number;
 };
 
+var sizeof_struct_IncludeStack;
 var r_i_fp_o;
 var r_i_next_o;
 var r_i_dirname_o;
@@ -7478,6 +7479,7 @@ function init_globals() {
   r_i_filepath_o = 12;
   r_i_line_number_o = 16;
   r_i_column_number_o = 20;
+  sizeof_struct_IncludeStack = 24;
 
 // get_tok parameters:
 // Whether to expand macros or not.
