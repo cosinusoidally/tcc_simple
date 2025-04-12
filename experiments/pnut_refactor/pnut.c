@@ -7466,6 +7466,7 @@ function r_32(p, o) {
 int main(int argc, char **argv) {
   int i;
   var decl;
+  var t;
 
   init_c();
   init_globals();
@@ -7475,8 +7476,11 @@ int main(int argc, char **argv) {
 
   i = 1;
   while(lt(i, argc)) {
-    if (eq(ri8(argv[i]), mkc('-'))) {
-      switch (argv[i][1]) {
+    if (eq(ri8(r_32(argv, i)), mkc('-'))) {
+      t = ri8(add(r_32(argv, i), 1));
+      if(0) {
+      } else {
+      switch (t) {
         case 'o':
           // Output file name
           if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
@@ -7519,6 +7523,7 @@ int main(int argc, char **argv) {
           putstr("Option "); putstr(argv[i]); putchar('\n');
           fatal_error("unknown option");
           break;
+      }
       }
     } else {
       // Options that don't start with '-' are file names
