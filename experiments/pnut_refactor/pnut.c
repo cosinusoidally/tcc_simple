@@ -6659,7 +6659,7 @@ function codegen_end() {
 // https://web.archive.org/web/20240409140025/http://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
 // https://web.archive.org/web/20240414151854/https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
 
-void write_elf_e_header() {
+function write_elf_e_header() {
   write_4_i8(0x7F, 0x45, 0x4C, 0x46); // e_ident
   write_4_i8(0x01, 0x01, 0x01, 0x00);
   write_4_i8(0x00, 0x00, 0x00, 0x00);
@@ -6679,7 +6679,7 @@ void write_elf_e_header() {
   write_2_i8(0x00, 0x00);             // e_shstrndx
 }
 
-void write_elf_p_header() {
+function write_elf_p_header() {
   write_i32_le(1);                 // p_type (1=PT_LOAD = a loadable segment)
   write_i32_le(0);                 // p_offset
   write_i32_le(0x08048000);        // p_vaddr
@@ -6692,14 +6692,15 @@ void write_elf_p_header() {
 
 // common part of machine code generators
 function generate_exe() {
-  int i = 0;
+  var i;
+  i = 0;
 
   write_elf_e_header();
   write_elf_p_header();
 
-  while (i < code_alloc) {
-    write_i8(code[i]);
-    i += 1;
+  while (lt(i, code_alloc)) {
+    write_i8(r_code(i));
+    i = add(i, 1);
   }
 }
 // end exe.c
