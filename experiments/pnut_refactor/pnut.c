@@ -3,7 +3,6 @@
 
 #define function int
 #define var int
-#define bool int
 
 var O_WRONLY;
 var O_CREAT;
