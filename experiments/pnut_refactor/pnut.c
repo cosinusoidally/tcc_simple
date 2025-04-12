@@ -83,12 +83,12 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
-#define IFDEF_DEPTH_MAX 20
+var IFDEF_DEPTH_MAX;
 #define MACRO_RECURSION_MAX 180 // Supports up to 60 (180 / 3) nested macro expansions.
 #define HEAP_SIZE 2000000
 #define MAX_CODE_SIZE 5000000
 
-var if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
+var if_macro_stack; // Stack of if macro states
 var macro_stack[MACRO_RECURSION_MAX];
 var heap[HEAP_SIZE];
 var code[MAX_CODE_SIZE];
@@ -7435,6 +7435,9 @@ function init_globals() {
   O_WRONLY = 01;
   O_CREAT  = 0100;
   O_TRUNC  = 01000;
+
+  IFDEF_DEPTH_MAX = 20;
+  if_macro_stack = malloc(mul(4, IFDEF_DEPTH_MAX)); // Stack of if macro states
 
 // get_tok parameters:
 // Whether to expand macros or not.
