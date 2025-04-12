@@ -6707,29 +6707,29 @@ function generate_exe() {
 
 // Registers common to i386 and x86-64 (E and R prefixes are omitted).
 
-const var AX = 0;
-const var CX = 1;
-const var DX = 2;
-const var BX = 3;
-const var SP = 4;
-const var BP = 5;
-const var SI = 6;
-const var DI = 7;
-const var R8 = 8;
-const var R9 = 9;
-const var R10 = 10;
-const var R11 = 11;
-const var R12 = 12;
-const var R13 = 13;
-const var R14 = 14;
-const var R15 = 15;
+var AX = 0;
+var CX = 1;
+var DX = 2;
+var BX = 3;
+var SP = 4;
+var BP = 5;
+var SI = 6;
+var DI = 7;
+var R8 = 8;
+var R9 = 9;
+var R10 = 10;
+var R11 = 11;
+var R12 = 12;
+var R13 = 13;
+var R14 = 14;
+var R15 = 15;
 
 function rex_prefix(reg1, reg2) {
 // LJW FIXME restore the 64 bit backend
   return 0;
 }
 
-void mod_rm(int reg1, int reg2) {
+function mod_rm(reg1, reg2) {
   // ModR/M byte
   //
   // It is used to encode the operand(s) to an instruction.
@@ -6754,11 +6754,13 @@ void mod_rm(int reg1, int reg2) {
   //
   // For our purposes, we only use the case where both operands are registers,
   // and so we always emit 0xc0 (mod = 11) with the reg1 and reg2 fields.
-  emit_i8(0xc0 + ((reg1 & 7) << 3) + (reg2 & 7));
+  emit_i8(add(add(0xC0, shl(and(reg1, 7), 3)), and(reg2, 7)));
 }
 
 // ModR/M byte with /digit opcode extension => The reg1 field is repurposed as an opcode extension.
-#define mod_rm_slash_digit(digit, reg1) mod_rm(digit, reg1)
+function mod_rm_slash_digit(digit, reg1) {
+  return mod_rm(digit, reg1);
+}
 
 // For instructions with 2 register operands
 void op_reg_reg(int opcode, int dst, int src, int reg_width) {
