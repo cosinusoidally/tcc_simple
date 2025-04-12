@@ -1567,9 +1567,9 @@ function begin_macro_expansion(ident, tokens, args) {
     fatal_error(mks("Macro recursion depth exceeded."));
   }
 
-  macro_stack[macro_stack_ix]     = macro_tok_lst;
-  macro_stack[add(macro_stack_ix, 1)] = macro_args;
-  macro_stack[add(macro_stack_ix, 2)] = macro_ident;
+  w_macro_stack(macro_stack_ix, macro_tok_lst);
+  w_macro_stack(add(macro_stack_ix, 1),  macro_args);
+  w_macro_stack(add(macro_stack_ix, 2), macro_ident);
   macro_stack_ix = add(macro_stack_ix, 3);
 
   macro_ident   = ident;
