@@ -2424,26 +2424,19 @@ function parse_struct_or_union(struct_or_union_tok) {
 function parse_type_specifier() {
   var type_specifier;
   type_specifier = 0;
-  if(0) {
-  } else if(0) {
+  if(or(eq(tok, CHAR_KW),or(eq(tok, INT_KW),or(eq(tok, VOID_KW),
+     or(eq(tok, FLOAT_KW),eq(tok, DOUBLE_KW)))))) {
+    type_specifier = new_ast0(tok, 0);
+    get_tok();
+    return type_specifier;
+  } else if(eq(tok, SHORT_KW)) {
+    get_tok();
+    if (eq(tok, INT_KW)) {
+      get_tok(); // Just "short" is equivalent to "short int"
+    }
+    return new_ast0(SHORT_KW, 0);
   } else {
   switch (tok) {
-    case CHAR_KW:
-    case INT_KW:
-    case VOID_KW:
-    case FLOAT_KW:
-    case DOUBLE_KW:
-      type_specifier = new_ast0(tok, 0);
-      get_tok();
-      return type_specifier;
-
-    case SHORT_KW:
-      get_tok();
-      if (eq(tok, INT_KW)) {
-        get_tok(); // Just "short" is equivalent to "short int"
-      }
-      return new_ast0(SHORT_KW, 0);
-
     case SIGNED_KW:
       get_tok();
       type_specifier = parse_type_specifier();
