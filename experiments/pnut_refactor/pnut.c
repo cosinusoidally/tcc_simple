@@ -83,6 +83,51 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
+#define IFDEF_DEPTH_MAX 20
+#define MACRO_RECURSION_MAX 180 // Supports up to 60 (180 / 3) nested macro expansions.
+#define HEAP_SIZE 2000000
+#define MAX_CODE_SIZE 5000000
+
+var if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
+var macro_stack[MACRO_RECURSION_MAX];
+var heap[HEAP_SIZE];
+var code[MAX_CODE_SIZE];
+
+// tokenizer
+
+var ch;
+var tok;
+var val;
+
+var STRING_POOL_SIZE;
+var string_pool;
+var string_pool_alloc;
+var string_start;
+var hash;
+
+// These parameters give a perfect hashing of the C keywords
+var HASH_PARAM;
+var HASH_PRIME;
+var heap_alloc;
+var alloc_result;
+
+var ast_result;
+
+var if_macro_stack_ix = 0;
+var if_macro_mask;
+var if_macro_executed;
+
+var expand_macro;
+var expand_macro_arg;
+var skip_newlines;
+
+var macro_stack_ix = 0;
+
+var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
+var macro_args = 0;     // Current list of arguments for the macro being expanded
+var macro_ident = 0;    // The identifier of the macro being expanded (if any)
+var macro_args_count;   // Number of arguments for the current macro being expanded
+var paste_last_token;
 var true;
 var false;
 var EOF;
@@ -95,6 +140,13 @@ var line_number;
 var column_number;
 var last_tok_line_number;
 var last_tok_column_number;
+
+var WORD_SIZE = 4;
+
+var RT_HEAP_SIZE;
+
+var code_alloc = 0;
+
 
 struct IncludeStack {
   var fp; // (FILE *)
@@ -240,26 +292,6 @@ function syntax_error(msg) {
   exit(1);
 }
 
-// tokenizer
-
-var ch;
-var tok;
-var val;
-
-var STRING_POOL_SIZE;
-var string_pool;
-var string_pool_alloc;
-var string_start;
-var hash;
-
-// These parameters give a perfect hashing of the C keywords
-var HASH_PARAM;
-var HASH_PRIME;
-#define HEAP_SIZE 2000000
-var heap[HEAP_SIZE];
-var heap_alloc;
-var alloc_result;
-
 function r_heap(o) {
   return ri32(add(heap,mul(4,o)));
 }
@@ -318,8 +350,6 @@ function get_child__(expected_parent_node, expected_node, node, i) {
 function get_child_opt_(expected_parent_node, expected_node, node, i) {
   return get_child(node, i);
 }
-
-var ast_result;
 
 function new_ast0(op, val) {
 
@@ -540,28 +570,6 @@ function end_string() {
 function expect_tok(expected_tok) {
   expect_tok_(expected_tok, __FILE__, __LINE__);
 }
-
-#define IFDEF_DEPTH_MAX 20
-var if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
-var if_macro_stack_ix = 0;
-var if_macro_mask;
-var if_macro_executed;
-
-
-var expand_macro;
-var expand_macro_arg;
-var skip_newlines;
-
-#define MACRO_RECURSION_MAX 180 // Supports up to 60 (180 / 3) nested macro expansions.
-var macro_stack[MACRO_RECURSION_MAX];
-var macro_stack_ix = 0;
-
-
-var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
-var macro_args = 0;     // Current list of arguments for the macro being expanded
-var macro_ident = 0;    // The identifier of the macro being expanded (if any)
-var macro_args_count;   // Number of arguments for the current macro being expanded
-var paste_last_token;
 
 function r_if_macro_stack(o) {
   return ri32(add(if_macro_stack,mul(4,o)));
@@ -3651,18 +3659,6 @@ function parse_compound_statement() {
 //-----------------------------------------------------------------------------
 
 // Select code generator
-
-// start x86.c
-var WORD_SIZE = 4;
-
-// x86 codegen
-// start exe.c
-
-var RT_HEAP_SIZE;
-
-#define MAX_CODE_SIZE 5000000
-var code[MAX_CODE_SIZE];
-var code_alloc = 0;
 
 function r_code(o) {
   return ri32(add(code,mul(4,o)));
