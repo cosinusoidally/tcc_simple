@@ -521,13 +521,13 @@ function end_ident() {
 
   probe = alloc_obj(5);
 
-  heap[hash] = probe; // add new ident at end of chain
+  w_heap(hash, probe); // add new ident at end of chain
 
-  heap[probe] = 0; // no next ident
-  heap[add(probe, 1)] = string_start;
-  heap[add(probe, 2)] = IDENTIFIER;
-  heap[add(probe, 3)] = 0; // Token tag
-  heap[add(probe, 4)] = sub(sub(string_pool_alloc, string_start), 1); // string length (excluding terminator)
+  w_heap(probe, 0); // no next ident
+  w_heap(add(probe, 1), string_start);
+  w_heap(add(probe, 2), IDENTIFIER);
+  w_heap(add(probe, 3), 0); // Token tag
+  w_heap(add(probe, 4), sub(sub(string_pool_alloc, string_start), 1)); // string length (excluding terminator)
 
   return probe;
 }
@@ -973,7 +973,7 @@ function handle_define() {
     syntax_error(mks("#define directive can only be followed by a identifier"));
   }
 
-  heap[add(val, 2)] = MACRO; // Mark the identifier as a macro
+  w_heap(add(val, 2), MACRO); // Mark the identifier as a macro
   macro = val;
   if (eq(ch, mkc('('))) { // Function-like macro
     args_count = 0;
@@ -999,7 +999,7 @@ function handle_define() {
   }
 
   // Accumulate tokens so they can be replayed when the macro is used
-  heap[add(macro, 3)] = cons(read_macro_tokens(args), args_count);
+  w_heap(add(macro, 3), cons(read_macro_tokens(args), args_count));
 
 }
 
@@ -1216,7 +1216,7 @@ function handle_preprocessor_directive() {
       get_tok_macro(); // Get the macro name
       if (or(eq(tok, IDENTIFIER), eq(tok, MACRO))) {
         // TODO: Doesn't play nice with typedefs, because they are not marked as macros
-        heap[add(val, 2)] = IDENTIFIER; // Unmark the macro identifier
+        w_heap(add(val, 2), IDENTIFIER); // Unmark the macro identifier
         get_tok_macro(); // Skip the macro name
       } else {
         putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
@@ -1309,7 +1309,7 @@ function intern_str(name) {
 function init_ident(tok, name) {
   var i;
   i = intern_str(name);
-  heap[add(i, 2)] = tok;
+  w_heap(add(i, 2), tok);
   return i;
 }
 
@@ -1319,7 +1319,7 @@ function init_ident_table() {
   i = 0;
 
   while (lt(i, HASH_PRIME)) {
-    heap[i] = 0;
+    w_heap(i, 0);
     i = add(i, 1);
   }
 
@@ -1401,7 +1401,7 @@ function init_builtin_string_macro(macro_str, value) {
   var macro_id;
   macro_id = init_ident(MACRO, macro_str);
   // Macro object shape: ([(tok, val)], arity). -1 arity means it's an object-like macro
-  heap[add(macro_id, 3)] = cons(cons(cons(STRING, intern_str(value)), 0), sub(0,1));
+  w_heap(add(macro_id, 3), cons(cons(cons(STRING, intern_str(value)), 0), sub(0,1)));
   return macro_id;
 }
 
