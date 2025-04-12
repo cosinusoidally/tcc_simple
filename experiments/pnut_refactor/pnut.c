@@ -761,7 +761,7 @@ function fopen_source_file(file_name, relative_to) {
 
 function include_file(file_name, relative_to) {
   fp = fopen_source_file(file_name, relative_to);
-  include_stack2 = malloc(sizeof(struct IncludeStack));
+  include_stack2 = malloc(sizeof_struct_IncludeStack);
   include_stack2->next = include_stack;
   include_stack2->fp = fp;
   include_stack2->dirname = file_parent_directory(fp_filepath);
