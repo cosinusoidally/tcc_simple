@@ -5866,18 +5866,18 @@ function initializer_size(initializer) {
   }
 }
 
-// LJW HERE
-void infer_array_length(ast type, ast init) {
+function infer_array_length(type, init) {
   // Array declaration with no size
-  if (get_op(type) == '[' && get_child_('[', type, 1) == 0) {
-    if (init == 0) {
-      fatal_error("Array declaration with no size must have an initializer");
+  if(and(eq(get_op(type), mkc('[')), eq(get_child_(mkc('['), type, 1), 0))) {
+    if (eq(init, 0)) {
+      fatal_error(mks("Array declaration with no size must have an initializer"));
     }
     set_child(type, 1, initializer_size(init));
   }
 }
 
-void codegen_glo_var_decl(ast node) {
+// LJW HERE
+function codegen_glo_var_decl(node) {
   ast name = get_child__(DECL, IDENTIFIER, node, 0);
   ast type = get_child_(DECL, node, 1);
   ast init = get_child_(DECL, node, 2);
