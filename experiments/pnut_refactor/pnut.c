@@ -7360,10 +7360,10 @@ function os_access() {
 
 //-----------------------------------------------------------------------------
 
-function handle_macro_D(char *opt) {
-  char *start;
-  char *macro_buf;
-  char *buf2;
+function handle_macro_D(opt) {
+  var start;
+  var macro_buf;
+  var buf2;
   var acc;
 
   start = opt;
