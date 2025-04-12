@@ -7373,13 +7373,13 @@ function handle_macro_D(char *opt) {
   }
 
   macro_buf = malloc(add(sub(opt, start), 1));
-  memcpy(macro_buf, start, opt - start);
-  macro_buf[opt - start] = '\0';
+  memcpy(macro_buf, start, sub(opt, start));
+  macro_buf[sub(opt, start)] = 0;
 
-  if (*opt == '=') {
-    opt += 1;
-    if (*opt == '"') { // Start of string literal
-      opt += 1;
+  if (eq(ri8(opt), mkc('='))) {
+    opt = add(opt, 1);
+    if (eq(ri8(opt), mkc('"'))) { // Start of string literal
+      opt = add(opt, 1);
       start = opt;
       while (*opt != 0 && *opt != '"') opt += 1;
       if (*opt == 0) fatal_error("Unterminated string literal");
