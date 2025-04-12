@@ -87,6 +87,8 @@ function struct_union_size(struct_type);
 function codegen_rvalue(node);
 function codegen_statement(node);
 function codegen_lvalue(node);
+function handle_enum_struct_union_type_decl(type);
+
 
 #define ast int
 #define true 1
@@ -5626,25 +5628,26 @@ function codegen_begin() {
   fgetc_lbl = alloc_label(mks("fgetc"));
   cgc_add_global_fun(init_ident(IDENTIFIER, mks("fgetc")), fgetc_lbl, function_type1(int_type, int_type));
 
-  malloc_lbl = alloc_label("malloc");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "malloc"), malloc_lbl, function_type1(void_star_type, int_type));
+  malloc_lbl = alloc_label(mks("malloc"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("malloc")), malloc_lbl, function_type1(void_star_type, int_type));
 
-  free_lbl = alloc_label("free");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "free"), free_lbl, function_type1(void_type, void_star_type));
+  free_lbl = alloc_label(mks("free"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("free")), free_lbl, function_type1(void_type, void_star_type));
 
-  printf_lbl = alloc_label("printf");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "printf"), printf_lbl, make_variadic_func(function_type1(int_type, string_type)));
+  printf_lbl = alloc_label(mks("printf"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("printf")), printf_lbl, make_variadic_func(function_type1(int_type, string_type)));
 
   jump(setup_lbl);
 }
 
-void handle_enum_struct_union_type_decl(ast type);
+function codegen_enum(node) {
+  var name;
+  var cases;
+  var cas;
+  var binding;
 
-void codegen_enum(ast node) {
-  ast name = get_child_opt_(ENUM_KW, IDENTIFIER, node, 1);
-  ast cases = get_child_opt_(ENUM_KW, LIST, node, 2);
-  ast cas;
-  int binding;
+  name = get_child_opt_(ENUM_KW, IDENTIFIER, node, 1);
+  cases = get_child_opt_(ENUM_KW, LIST, node, 2);
 
   if (name != 0 && cases != 0) { // if enum has a name and members (not a reference to an existing type)
     binding = cgc_lookup_enum(get_val_(IDENTIFIER, name), cgc_globals);
@@ -5682,7 +5685,7 @@ void codegen_struct_or_union(ast node, enum BINDING kind) {
   }
 }
 
-void handle_enum_struct_union_type_decl(ast type) {
+function handle_enum_struct_union_type_decl(ast type) {
   if (get_op(type) == ENUM_KW) {
     codegen_enum(type);
   } else if (get_op(type) == STRUCT_KW) {
