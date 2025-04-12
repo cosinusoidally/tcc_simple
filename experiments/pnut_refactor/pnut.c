@@ -6561,8 +6561,8 @@ function codegen_end() {
   // > applied as the file mode.
   def_label(open_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE);
-  mov_reg_mem(reg_Z, reg_SP, 3*WORD_SIZE);
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE));
+  mov_reg_mem(reg_Z, reg_SP, mul(3, WORD_SIZE));
   os_open();
   ret();
 
@@ -6577,8 +6577,8 @@ function codegen_end() {
   // seek function
   def_label(seek_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);   // fd
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE); // offset
-  mov_reg_mem(reg_Z, reg_SP, 3*WORD_SIZE); // whence
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE)); // offset
+  mov_reg_mem(reg_Z, reg_SP, mul(3, WORD_SIZE)); // whence
   os_seek();
   ret();
 
@@ -6591,20 +6591,20 @@ function codegen_end() {
   // mkdir function
   def_label(mkdir_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);   // pathname
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE); // mode
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE)); // mode
   os_mkdir();
 
   // chmod function
   def_label(chmod_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);   // pathname
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE); // mode
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE)); // mode
   os_chmod();
   ret();
 
   // stat function
   def_label(access_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);   // pathname
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE); // mode
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE)); // mode
   os_access();
   ret();
 
@@ -6645,7 +6645,7 @@ function codegen_end() {
 
   // printf function stub
   def_label(printf_lbl);
-  rt_crash("printf is not supported yet.\n");
+  rt_crash(mks("printf is not supported yet.\n"));
   ret();
 
   assert_all_labels_defined();
@@ -6660,7 +6660,7 @@ function codegen_end() {
 // https://web.archive.org/web/20240414151854/https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
 
 void write_elf_e_header() {
-  write_4_i8(0x7f, 0x45, 0x4c, 0x46); // e_ident
+  write_4_i8(0x7F, 0x45, 0x4C, 0x46); // e_ident
   write_4_i8(0x01, 0x01, 0x01, 0x00);
   write_4_i8(0x00, 0x00, 0x00, 0x00);
   write_4_i8(0x00, 0x00, 0x00, 0x00);
@@ -6684,8 +6684,8 @@ void write_elf_p_header() {
   write_i32_le(0);                 // p_offset
   write_i32_le(0x08048000);        // p_vaddr
   write_i32_le(0x08048000);        // p_paddr
-  write_i32_le(0x54 + code_alloc); // p_filesz
-  write_i32_le(0x54 + code_alloc); // p_memsz
+  write_i32_le(add(0x54, code_alloc)); // p_filesz
+  write_i32_le(add(0x54, code_alloc)); // p_memsz
   write_i32_le(5);                 // p_flags
   write_i32_le(0x1000);            // p_align
 }
