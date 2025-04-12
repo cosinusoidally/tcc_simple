@@ -3858,12 +3858,12 @@ function cgc_add_enclosing_loop(loop_fs, break_lbl, continue_lbl) {
 function cgc_add_enclosing_switch(loop_fs, break_lbl, next_case_lbl) {
   var binding;
   binding = alloc_obj(6);
-  heap[add(binding, 0)] = cgc_locals;
-  heap[add(binding, 1)] = BINDING_SWITCH;
-  heap[add(binding, 2)] = loop_fs;
-  heap[add(binding, 3)] = break_lbl;
-  heap[add(binding, 4)] = next_case_lbl;
-  heap[add(binding, 5)] = 0; // Default label
+  w_heap(add(binding, 0), cgc_locals);
+  w_heap(add(binding, 1), BINDING_SWITCH);
+  w_heap(add(binding, 2), loop_fs);
+  w_heap(add(binding, 3), break_lbl);
+  w_heap(add(binding, 4), next_case_lbl);
+  w_heap(add(binding, 5), 0); // Default label
   cgc_locals = binding;
 }
 
@@ -3871,14 +3871,14 @@ function cgc_add_global(ident, width, type, is_static_local) {
   var binding;
   binding = alloc_obj(5);
   if(is_static_local) {
-    heap[add(binding, 0)] = cgc_locals;
+    w_heap(add(binding, 0), cgc_locals);
   } else {
-    heap[add(binding, 0)] = cgc_globals;
+    w_heap(add(binding, 0), cgc_globals);
   }
-  heap[add(binding, 1)] = BINDING_VAR_GLOBAL;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = cgc_global_alloc;
-  heap[add(binding, 4)] = type;
+  w_heap(add(binding, 1), BINDING_VAR_GLOBAL);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), cgc_global_alloc);
+  w_heap(add(binding, 4), type);
   cgc_global_alloc = add(cgc_global_alloc, width);
   if (is_static_local) {
     cgc_locals = binding;
@@ -3890,12 +3890,12 @@ function cgc_add_global(ident, width, type, is_static_local) {
 function cgc_add_global_fun(ident, label, type) {
   var binding;
   binding = alloc_obj(6);
-  heap[add(binding, 0)] = cgc_globals;
-  heap[add(binding, 1)] = BINDING_FUN;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = 0;
-  heap[add(binding, 4)] = label;
-  heap[add(binding, 5)] = type;
+  w_heap(add(binding, 0), cgc_globals);
+  w_heap(add(binding, 1), BINDING_FUN);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), 0);
+  w_heap(add(binding, 4), label);
+  w_heap(add(binding, 5), type);
   cgc_globals = binding;
 }
 
