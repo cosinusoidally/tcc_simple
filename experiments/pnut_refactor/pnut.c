@@ -301,7 +301,7 @@ function get_child(node, i) {
 }
 
 function set_child(node, i, child) {
-  heap[node+i+1] = child;
+  w_heap(add(add(node, i), 1), child);
 }
 
 function get_val_(expected_node, node) {
@@ -326,7 +326,7 @@ function new_ast0(op, val) {
 
   ast_result = alloc_obj(2);
 
-  heap[ast_result] = op;
+  w_heap(ast_result, op);
   set_val(ast_result, val);
 
   return ast_result;
@@ -336,7 +336,7 @@ function new_ast1(op, child0) {
 
   ast_result = alloc_obj(2);
 
-  heap[ast_result] = add(op, 1024);
+  w_heap(ast_result, add(op, 1024));
   set_child(ast_result, 0, child0);
 
   return ast_result;
@@ -346,7 +346,7 @@ function new_ast2(op, child0, child1) {
 
   ast_result = alloc_obj(3);
 
-  heap[ast_result] = add(op, 2048);
+  w_heap(ast_result, add(op, 2048));
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
 
@@ -357,7 +357,7 @@ function new_ast3(op, child0, child1, child2) {
 
   ast_result = alloc_obj(4);
 
-  heap[ast_result] = add(op, 3072);
+  w_heap(ast_result, add(op, 3072));
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
   set_child(ast_result, 2, child2);
@@ -369,7 +369,7 @@ function new_ast4(op, child0, child1, child2, child3) {
 
   ast_result = alloc_obj(5);
 
-  heap[ast_result] = add(op, 4096);
+  w_heap(ast_result, add(op, 4096));
   set_child(ast_result, 0, child0);
   set_child(ast_result, 1, child1);
   set_child(ast_result, 2, child2);
@@ -391,7 +391,7 @@ function clone_ast(orig) {
 
   ast_result = alloc_obj(add(nb_children, 1));
 
-  heap[ast_result] = r_heap(orig); // copy operator and nb of children
+  w_heap(ast_result, r_heap(orig)); // copy operator and nb of children
   i = 0;
   while(lt(i, nb_children)) {
     set_child(ast_result, i, get_child(orig, i));
