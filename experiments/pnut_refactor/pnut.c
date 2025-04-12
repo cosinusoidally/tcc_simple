@@ -7459,9 +7459,13 @@ function init_globals() {
   GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 }
 
+function r_32(p, o) {
+  return ri32(add(p,mul(4,o)));
+}
+
 int main(int argc, char **argv) {
   int i;
-  ast decl;
+  var decl;
 
   init_c();
   init_globals();
@@ -7469,7 +7473,8 @@ int main(int argc, char **argv) {
   init_ident_table();
   init_pnut_macros();
 
-  for (i = 1; i < argc; i += 1) {
+  i = 1;
+  while(lt(i, argc)) {
     if (argv[i][0] == '-') {
       switch (argv[i][1]) {
         case 'o':
@@ -7519,6 +7524,7 @@ int main(int argc, char **argv) {
       // Options that don't start with '-' are file names
       include_file(argv[i], 0);
     }
+    i = add(i, 1);
   }
 
   if (fp == 0) {
