@@ -6227,58 +6227,58 @@ function codegen_statement(node) {
       def_label(r_heap(add(binding, 5)));                       // default label
       codegen_statement(get_child_(DEFAULT_KW, node, 0)); // default statement
     } else {
-      fatal_error("default outside of switch");
+      fatal_error(mks("default outside of switch"));
     }
 
-  } else if (op == BREAK_KW) {
+  } else if (eq(op, BREAK_KW)) {
 
     binding = cgc_lookup_enclosing_loop_or_switch(cgc_locals);
-    if (binding != 0) {
-      grow_stack(heap[binding+2] - cgc_fs);
-      jump(heap[binding+3]); // jump to break label
+    if (neq(binding, 0)) {
+      grow_stack(sub(r_heap(add(binding, 2)), cgc_fs));
+      jump(r_heap(add(binding, 3))); // jump to break label
     } else {
-      fatal_error("break is not in the body of a loop");
+      fatal_error(mks("break is not in the body of a loop"));
     }
 
-  } else if (op == CONTINUE_KW) {
+  } else if (eq(op, CONTINUE_KW)) {
 
     binding = cgc_lookup_enclosing_loop(cgc_locals);
-    if (binding != 0 && heap[binding+4] != 0) {
-      grow_stack(heap[binding+2] - cgc_fs);
-      jump(heap[binding+4]); // jump to continue label
+    if (and(neq(binding, 0), neq(r_heap(add(binding, 4)), 0))) {
+      grow_stack(sub(r_heap(add(binding, 2)), cgc_fs));
+      jump(r_heap(add(binding, 4))); // jump to continue label
     } else {
-      fatal_error("continue is not in the body of a loop");
+      fatal_error(mks("continue is not in the body of a loop"));
     }
 
-  } else if (op == RETURN_KW) {
+  } else if (eq(op, RETURN_KW)) {
 
-    if (get_child_(RETURN_KW, node, 0) != 0) {
+    if (neq(get_child_(RETURN_KW, node, 0), 0)) {
       codegen_rvalue(get_child_(RETURN_KW, node, 0));
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
     }
 
-    grow_stack(-cgc_fs);
+    grow_stack(sub(0, cgc_fs));
 
     ret();
 
-  } else if (op == '{') {
+  } else if (eq(op, mkc('{'))) {
 
     codegen_body(node);
 
-  } else if (op == ':') {
+  } else if (eq(op, mkc(':'))) {
 
-    binding = cgc_lookup_goto_label(get_val_(IDENTIFIER, get_child_(':', node, 0)), cgc_locals_fun);
+    binding = cgc_lookup_goto_label(get_val_(IDENTIFIER, get_child_(mkc(':'), node, 0)), cgc_locals_fun);
 
-    if (binding == 0) {
-      cgc_add_goto_label(get_val_(IDENTIFIER, get_child_(':', node, 0)), alloc_goto_label());
+    if (eq(binding, 0)) {
+      cgc_add_goto_label(get_val_(IDENTIFIER, get_child_(mkc(':'), node, 0)), alloc_goto_label());
       binding = cgc_locals_fun;
     }
 
-    def_goto_label(heap[binding + 3]);
-    codegen_statement(get_child_(':', node, 1)); // labelled statement
+    def_goto_label(r_heap(add(binding, 3)));
+    codegen_statement(get_child_(mkc(':'), node, 1)); // labelled statement
 
-  } else if (op == GOTO_KW) {
+  } else if (eq(op, GOTO_KW)) {
 
     codegen_goto(node);
 
@@ -6286,14 +6286,15 @@ function codegen_statement(node) {
 
     codegen_rvalue(node);
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
 
   }
 }
 
-function add_params(ast params) {
-  ast decl, type;
-  int ident;
+function add_params(params) {
+  var decl;
+  var type;
+  var ident;
 
   while (params != 0) {
     decl = car_(DECL, params);
