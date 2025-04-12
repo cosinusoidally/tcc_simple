@@ -1034,42 +1034,32 @@ function eval_constant(expr, if_macro) {
     } else {
       return eval_constant(get_child(expr, 2), if_macro);
     }
+  } else if(or(eq(op,mkc('*')),or(eq(op,mkc('/')),or(eq(op,mkc('%')),
+            or(eq(op,mkc('&')),or(eq(op,mkc('|')),or(eq(op,mkc('^')),
+            or(eq(op,LSHIFT),or(eq(op,RSHIFT),or(eq(op,EQ_EQ),
+            or(eq(op,EXCL_EQ),or(eq(op,LT_EQ),or(eq(op,GT_EQ),
+            or(eq(op,mkc('<')),eq(op,mkc('>')))))))))))))))) {
+    op1 = eval_constant(child0, if_macro);
+    op2 = eval_constant(child1, if_macro);
+    switch (op) {
+      case '*':     return mul(op1, op2);
+      case '/':     return div_(op1, op2);
+      case '%':     return mod(op1, op2);
+      case '&':     return and(op1, op2);
+      case '|':     return or(op1, op2);
+      case '^':     return xor(op1, op2);
+      case LSHIFT:  return shl(op1, op2);
+      case RSHIFT:  return shr(op1, op2);
+      case EQ_EQ:   return eq(op1, op2);
+      case EXCL_EQ: return neq(op1, op2);
+      case LT_EQ:   return lte(op1, op2);
+      case GT_EQ:   return gte(op1, op2);
+      case '<':     return lt(op1, op2);
+      case '>':     return gt(op1, op2);
+    }
+    return 0; // Should never reach here
   } else {
   switch (op) {
-    case '*':
-    case '/':
-    case '%':
-    case '&':
-    case '|':
-    case '^':
-    case LSHIFT:
-    case RSHIFT:
-    case EQ_EQ:
-    case EXCL_EQ:
-    case LT_EQ:
-    case GT_EQ:
-    case '<':
-    case '>':
-      op1 = eval_constant(child0, if_macro);
-      op2 = eval_constant(child1, if_macro);
-      switch (op) {
-        case '*':     return mul(op1, op2);
-        case '/':     return div_(op1, op2);
-        case '%':     return mod(op1, op2);
-        case '&':     return and(op1, op2);
-        case '|':     return or(op1, op2);
-        case '^':     return xor(op1, op2);
-        case LSHIFT:  return shl(op1, op2);
-        case RSHIFT:  return shr(op1, op2);
-        case EQ_EQ:   return eq(op1, op2);
-        case EXCL_EQ: return neq(op1, op2);
-        case LT_EQ:   return lte(op1, op2);
-        case GT_EQ:   return gte(op1, op2);
-        case '<':     return lt(op1, op2);
-        case '>':     return gt(op1, op2);
-      }
-      return 0; // Should never reach here
-
     case AMP_AMP:
       op1 = eval_constant(child0, if_macro);
       if (eq(0,op1)) {
