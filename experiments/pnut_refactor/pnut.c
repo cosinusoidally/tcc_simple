@@ -568,6 +568,10 @@ function r_macro_stack(o) {
   return ri32(add(macro_stack,mul(4,o)));
 }
 
+function w_macro_stack(o, v) {
+  wi32(add(macro_stack,mul(4,o)), v);
+}
+
 var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
 var macro_args = 0;     // Current list of arguments for the macro being expanded
 var macro_ident = 0;    // The identifier of the macro being expanded (if any)
