@@ -7253,23 +7253,29 @@ function setup_proc_args(global_vars_size) {
   add_reg_imm(reg_X, global_vars_size + WORD_SIZE); // compute address of argv
   push_reg(reg_X); // push argv address
 
-  mov_reg_mem(reg_Y, reg_X, -WORD_SIZE); // load argc
+  mov_reg_mem(reg_Y, reg_X, sub(0, WORD_SIZE)); // load argc
   push_reg(reg_Y); // push argc
 }
 
-function mov_reg_lbl(int reg, int lbl) {
+function mov_reg_lbl(reg, lbl) {
   // Since we can't do rip-relative addressing in 32 bit mode, we need to push
   // the address to the stack and then some arithmetic to get the address in a
   // register.
 
-  int lbl_for_pc = alloc_label("lbl_for_pc");
+  var lbl_for_pc;
+  lbl_for_pc = alloc_label(mks("lbl_for_pc"));
 
   call(lbl_for_pc);        // call lbl
   def_label(lbl_for_pc);   // end label
                            // <--- The stack now has the address of the next instruction
   pop_reg(reg);            // pop reg_X (1 byte)
   add_reg_lbl(reg, lbl);   // load address of label to reg_X (6 or 7 bytes if 32 or 64 bit)
-  add_reg_imm(reg, WORD_SIZE == 8 ? 8 : 7); // adjust for the pop and add instructions
+  // adjust for the pop and add instructions
+  if(eq(WORD_SIZE, 8)) {
+    add_reg_imm(reg, 8);
+  } else {
+    add_reg_imm(reg, 7);
+  }
 }
 
 // For 32 bit linux.
@@ -7282,24 +7288,30 @@ function mov_reg_lbl(int reg, int lbl) {
 // be clobberred in the order of the mov instructions.
 // i.e. syscall_3(SYS_READ, ..., ebx, ...) is not valid because ebx is clobberred by the first mov instructions.
 // For syscalls that use less than 3 parameters, the extra register params are set to -1.
-void syscall_3(int syscall_code, int bx_reg, int cx_reg, int dx_reg) {
+function syscall_3(syscall_code, bx_reg, cx_reg, dx_reg) {
   push_reg(BX);                  // save address of global variables table
-  if (bx_reg >= 0) mov_reg_reg(BX, bx_reg);
-  if (cx_reg >= 0) mov_reg_reg(CX, cx_reg);
-  if (dx_reg >= 0) mov_reg_reg(DX, dx_reg);
+  if (bx_reg >= 0) {
+    mov_reg_reg(BX, bx_reg);
+  }
+  if (cx_reg >= 0) {
+    mov_reg_reg(CX, cx_reg);
+  }
+  if (dx_reg >= 0) {
+    mov_reg_reg(DX, dx_reg);
+  }
   mov_reg_imm(AX, syscall_code); // AX = syscall_code
   int_i8(0x80);                  // syscall
   pop_reg(BX);                   // restore address of global variables table
 }
 
-function os_allocate_memory(int size) {
+function os_allocate_memory(size) {
   push_reg(BX);           // save address of global variables table
   mov_reg_imm(AX, 192);   // mov  eax, 192 == SYS_MMAP2
   mov_reg_imm(BX, 0);     // mov  ebx, 0 | NULL
   mov_reg_imm(CX, size);  // mov  ecx, size | size
   mov_reg_imm(DX, 0x3);   // mov  edx, 0x3 | PROT_READ (0x1) | PROT_WRITE (0x2)
   mov_reg_imm(SI, 0x22);  // mov  esi, 0x21 | MAP_ANONYMOUS (0x20) | MAP_PRIVATE (0x2)
-  mov_reg_imm(DI, -1);    // mov  edi, -1 (file descriptor)
+  mov_reg_imm(DI, sub(0, 1));    // mov  edi, -1 (file descriptor)
   mov_reg_imm(BP, 0);     // mov  ebp, 0 (offset)
   int_i8(0x80);           // int  0x80     # system call
   pop_reg(BX);            // restore address of global variables table
