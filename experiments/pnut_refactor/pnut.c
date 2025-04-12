@@ -452,7 +452,7 @@ function accum_string() {
 // Append a character to the current string under construction in the pool
 // FIXME LJW should be a char?
 function accum_string_char(c) {
-  hash = (c + (hash ^ HASH_PARAM)) % HASH_PRIME;
+  hash = mod(add(c, xor(hash, HASH_PARAM)), HASH_PRIME);
   wi8(add(string_pool, string_pool_alloc), c);
   string_pool_alloc = add(string_pool_alloc, 1);
   if (gte(string_pool_alloc, STRING_POOL_SIZE)) {
@@ -494,7 +494,7 @@ var c2;
 var end_ident_i;
 
 function end_ident() {
-  string_pool[string_pool_alloc] = 0; // terminate string
+  wi8(add(string_pool, string_pool_alloc), 0); // terminate string
   string_pool_alloc = add(string_pool_alloc, 1); // account for terminator
 
   probe = r_heap(hash);
