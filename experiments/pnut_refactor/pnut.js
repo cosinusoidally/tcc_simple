@@ -1043,10 +1043,10 @@ function eval_constant(expr, if_macro) {
     op2 = eval_constant(child1, if_macro);
     if(eq(op, mkc('*'))) {
       return mul(op1, op2);
-    } else if(0) {
+    } else if(eq(op, mkc('/'))) {
+      return div_(op1, op2);
     } else {
     switch (op) {
-      case '/':     return div_(op1, op2);
       case '%':     return mod(op1, op2);
       case '&':     return and(op1, op2);
       case '|':     return or(op1, op2);
