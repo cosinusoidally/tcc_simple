@@ -2515,8 +2515,9 @@ function parse_declaration_specifiers(allow_typedef) {
       type_qualifier = or(type_qualifier, MK_TYPE_SPECIFIER(tok));
       get_tok();
     } else if(or(eq(tok,CHAR_KW),or(eq(tok,INT_KW),or(eq(tok,VOID_KW),
-              or(eq(tok,SHORT_KW),or(eq(tok,SIGNED_KW),eq(tok,UNSIGNED_KW)
-       )))))) {
+              or(eq(tok,SHORT_KW),or(eq(tok,SIGNED_KW),or(eq(tok,UNSIGNED_KW),
+              or(eq(tok,LONG_KW),or(eq(tok,FLOAT_KW),eq(tok,DOUBLE_KW)
+             ))))))))) {
       if (neq(type_specifier, 0)) {
         parse_error(mks("Unexpected C type specifier"), tok);
       }
@@ -2526,18 +2527,6 @@ function parse_declaration_specifiers(allow_typedef) {
       }
     } else {
     switch (tok) {
-      case LONG_KW:
-      case FLOAT_KW:
-      case DOUBLE_KW:
-        if (neq(type_specifier, 0)) {
-          parse_error(mks("Unexpected C type specifier"), tok);
-        }
-        type_specifier = parse_type_specifier();
-        if (eq(type_specifier, 0)) {
-          parse_error(mks("Failed to parse type specifier"), tok);
-        }
-        break;
-
       case STRUCT_KW:
       case UNION_KW:
         if (neq(type_specifier, 0)) {
