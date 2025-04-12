@@ -6907,12 +6907,14 @@ function mov_memory_extend(op, reg, base, offset, include_0f) {
     emit_i8(0x0F); // Most sign/zero extend instructions have a 0x0f prefix
   }
   emit_i8(op);
-  emit_i8(0x80 + (reg & 7) * 8 + (base & 7));
-  if (base == SP || base == R12) emit_i8(0x24); // SIB byte. See 32/64-bit addressing mode
+  emit_i8(add(add(0x80, mul(and(reg, 7), 8)), and(base, 7)));
+  if (or(eq(base, SP), eq(base, R12))) {
+    emit_i8(0x24); // SIB byte. See 32/64-bit addressing mode
+  }
   emit_i32_le(offset);
 }
 
-function mov_mem8_reg(int base, int offset, int src) {
+function mov_mem8_reg(base, offset, src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move byte from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6920,7 +6922,7 @@ function mov_mem8_reg(int base, int offset, int src) {
   mov_memory(0x88, src, base, offset, 1);
 }
 
-function mov_mem16_reg(int base, int offset, int src) {
+function mov_mem16_reg(base, offset, src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move word (2 bytes) from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6928,7 +6930,7 @@ function mov_mem16_reg(int base, int offset, int src) {
   mov_memory(0x89, src, base, offset, 2);
 }
 
-function mov_mem32_reg(int base, int offset, int src) {
+function mov_mem32_reg(base, offset, src) {
 
   // MOVB [base_reg + offset], src_reg  ;; Move dword (4 bytes) from register to memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6936,59 +6938,59 @@ function mov_mem32_reg(int base, int offset, int src) {
   mov_memory(0x89, src, base, offset, 4);
 }
 
-function mov_reg_mem8(int dst, int base, int offset) {
+function mov_reg_mem8(dst, base, offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
 
-  mov_memory_extend(0xb6, dst, base, offset, true);
+  mov_memory_extend(0xB6, dst, base, offset, true);
 }
 
-function mov_reg_mem16(int dst, int base, int offset) {
+function mov_reg_mem16(dst, base, offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
 
-  mov_memory_extend(0xb7, dst, base, offset, true);
+  mov_memory_extend(0xB7, dst, base, offset, true);
 }
 
-function mov_reg_mem32(int dst, int base, int offset) {
+function mov_reg_mem32(dst, base, offset) {
 
   // MOV dst_reg, [base_reg + offset]  ;; Move dword (4 bytes) from memory to register, zero-extended
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
 
   // Operations writing to the lower 32 bits of a register zero-extend the
   // result, so there's no movzx instruction for 32-bit operands.
-  mov_memory(0x8b, dst, base, offset, 4);
+  mov_memory(0x8B, dst, base, offset, 4);
 }
 
-function mov_reg_mem8_sign_ext(int dst, int base, int offset) {
+function mov_reg_mem8_sign_ext(dst, base, offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
 
-  mov_memory_extend(0xbe, dst, base, offset, true);
+  mov_memory_extend(0xBE, dst, base, offset, true);
 }
 
-function mov_reg_mem16_sign_ext(int dst, int base, int offset) {
+function mov_reg_mem16_sign_ext(dst, base, offset) {
 
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
 
-  mov_memory_extend(0xbf, dst, base, offset, true);
+  mov_memory_extend(0xBF, dst, base, offset, true);
 }
 
-function imul_reg_reg(int dst, int src) {
+function imul_reg_reg(dst, src) {
 
   // IMUL dst_reg, src_reg ;; dst_reg = dst_reg * src_reg
   // See: https://web.archive.org/web/20240228122220/https://www.felixcloutier.com/x86/imul
 
   rex_prefix(dst, src);
-  emit_2_i8(0x0f, 0xaf);
+  emit_2_i8(0x0F, 0xaf);
   mod_rm(dst, src);
 }
 
-function mul_reg_reg(int dst, int src) {
+function mul_reg_reg(dst, src) {
 
   // For our purposes, this is the same as imul_reg_reg.
   // https://web.archive.org/web/20240914145321/https://stackoverflow.com/questions/42587607/why-is-imul-used-for-multiplying-unsigned-numbers
@@ -6996,23 +6998,23 @@ function mul_reg_reg(int dst, int src) {
   imul_reg_reg(dst, src);
 }
 
-function idiv_reg(int src) {
+function idiv_reg(src) {
 
   // IDIV src_reg ;; AX = DX:AX / src_reg ; DX = DX:AX % src_reg
   // See: https://web.archive.org/web/20240407195950/https://www.felixcloutier.com/x86/idiv
 
-  op_reg_slash_digit(0xf7, 7, src);
+  op_reg_slash_digit(0xF7, 7, src);
 }
 
-void div_reg(int src) {
+function div_reg(src) {
 
   // DIV src_reg ;; AX = DX:AX / src_reg ; DX = DX:AX % src_reg
   // See: https://web.archive.org/web/20250202075400/https://www.felixcloutier.com/x86/div
 
-  op_reg_slash_digit(0xf7, 6, src);
+  op_reg_slash_digit(0xF7, 6, src);
 }
 
-void cdq_cqo() {
+function cdq_cqo() {
 
   // CDQ ;; Convert Doubleword to Quadword (EDX:EAX = sign-extend EAX)
   // x86-64: CQO ;; Convert Quadword to Octoword (RDX:RAX = sign-extend RAX)
@@ -7022,7 +7024,7 @@ void cdq_cqo() {
   emit_i8(0x99);
 }
 
-function idiv_reg_reg(int dst, int src) {
+function idiv_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg / src_reg
   // This is not an actual instruction on x86. The operation
@@ -7035,7 +7037,7 @@ function idiv_reg_reg(int dst, int src) {
   mov_reg_reg(dst, AX);
 }
 
-function irem_reg_reg(int dst, int src) {
+function irem_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg % src_reg
   // This is not an actual instruction on x86. The operation
@@ -7048,7 +7050,7 @@ function irem_reg_reg(int dst, int src) {
   mov_reg_reg(dst, DX);
 }
 
-function div_reg_reg(int dst, int src) {
+function div_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg / src_reg
   // This is not an actual instruction on x86. The operation
@@ -7061,7 +7063,7 @@ function div_reg_reg(int dst, int src) {
   mov_reg_reg(dst, AX);
 }
 
-function rem_reg_reg(int dst, int src) {
+function rem_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg % src_reg
   // This is not an actual instruction on x86. The operation
@@ -7074,15 +7076,15 @@ function rem_reg_reg(int dst, int src) {
   mov_reg_reg(dst, DX);
 }
 
-function s_l_reg_cl(int dst) {
+function s_l_reg_cl(dst) {
 
   // SHL dst_reg, cl ;; dst_reg = dst_reg << cl (arithmetic or logical shift, they are the same)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
 
-  op_reg_slash_digit(0xd3, 4, dst);
+  op_reg_slash_digit(0xD3, 4, dst);
 }
 
-function s_l_reg_reg(int dst, int src) {
+function s_l_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg << src_reg (arithmetic or logical shift, they are the same)
   // This is not an actual instruction on x86. The operation
@@ -7093,15 +7095,15 @@ function s_l_reg_reg(int dst, int src) {
   s_l_reg_cl(dst);
 }
 
-function sar_reg_cl(int dst) {
+function sar_reg_cl(dst) {
 
   // SAR dst_reg, cl ;; dst_reg = dst_reg >> cl (arithmetic shift)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
 
-  op_reg_slash_digit(0xd3, 7, dst);
+  op_reg_slash_digit(0xD3, 7, dst);
 }
 
-function sar_reg_reg(int dst, int src) {
+function sar_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg >> src_reg (arithmetic shift)
   // This is not an actual instruction on x86. The operation
@@ -7112,15 +7114,15 @@ function sar_reg_reg(int dst, int src) {
   sar_reg_cl(dst);
 }
 
-function shr_reg_cl(int dst) {
+function shr_reg_cl(dst) {
 
   // SHR dst_reg, cl ;; dst_reg = dst_reg >> cl (logical shift)
   // See: https://web.archive.org/web/20240405194323/https://www.felixcloutier.com/x86/sal:sar:shl:shr
 
-  op_reg_slash_digit(0xd3, 5, dst);
+  op_reg_slash_digit(0xD3, 5, dst);
 }
 
-function shr_reg_reg(int dst, int src) {
+function shr_reg_reg(dst, src) {
 
   // Computes dst_reg = dst_reg >> src_reg (logical shift)
   // This is not an actual instruction on x86. The operation
@@ -7131,55 +7133,55 @@ function shr_reg_reg(int dst, int src) {
   shr_reg_cl(dst);
 }
 
-function push_reg(int src) {
+function push_reg(src) {
 
   // PUSH src_reg  ;; Push word from register to stack
   // See: https://web.archive.org/web/20240407051929/https://www.felixcloutier.com/x86/push
 
-  emit_i8(0x50 + src);
+  emit_i8(add(0x50, src));
 }
 
-function pop_reg (int dst) {
+function pop_reg (dst) {
 
   // POP dst_reg  ;; Pop word from stack to register
   // See: https://web.archive.org/web/20240204122208/https://www.felixcloutier.com/x86/pop
 
-  emit_i8(0x58 + dst);
+  emit_i8(add(0x58, dst));
 }
 
-function jump(int lbl) {
+function jump(lbl) {
 
   // JMP rel32  ;; Jump to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240407051904/https://www.felixcloutier.com/x86/jmp
 
-  emit_i8(0xe9);
+  emit_i8(0xE9);
   use_label(lbl);
 }
 
-function jump_rel(int offset) {
+function jump_rel(offset) {
 
   // JMP rel32  ;; Jump to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240407051904/https://www.felixcloutier.com/x86/jmp
 
-  emit_i8(0xe9);
+  emit_i8(0xE9);
   emit_i32_le(offset);
 }
 
-function call(int lbl) {
+function call(lbl) {
 
   // CALL rel32  ;; Call to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20240323052931/https://www.felixcloutier.com/x86/call
 
-  emit_i8(0xe8);
+  emit_i8(0xE8);
   use_label(lbl);
 }
 
-function call_reg(int reg) {
+function call_reg(reg) {
 
   // CALL reg  ;; Indirect call to address in register
   // See: https://web.archive.org/web/20240323052931/https://www.felixcloutier.com/x86/call
 
-  emit_i8(0xff);
+  emit_i8(0xFF);
   mod_rm(2, reg);
 }
 
@@ -7188,7 +7190,7 @@ function ret() {
   // RET  ;; Return to calling procedure
   // See: https://web.archive.org/web/20240302232015/https://www.felixcloutier.com/x86/ret
 
-  emit_i8(0xc3);
+  emit_i8(0xC3);
 }
 
 function debug_interrupt() {
@@ -7196,31 +7198,31 @@ function debug_interrupt() {
   // INT 3  ;; Debug interrupt
   // See: https://web.archive.org/web/20250118000553/https://www.felixcloutier.com/x86/intn:into:int3:int1
 
-  emit_i8(0xcc);
+  emit_i8(0xCC);
 }
 
 
-function jump_cond(int cond, int lbl) {
+function jump_cond(cond, lbl) {
 
   // JE rel32, JNE rel32, JL rel32, JLE rel32, JG rel32, JGE rel32, ...
   // Jump conditionally to 32 bit displacement relative to next instruction
   // See: https://web.archive.org/web/20231007122614/https://www.felixcloutier.com/x86/jcc
 
-  emit_2_i8(0x0f, 0x80 + cond);
+  emit_2_i8(0x0F, add(0x80, cond));
   use_label(lbl);
 }
 
-function jump_cond_reg_reg(int cond, int lbl, int reg1, int reg2) {
+function jump_cond_reg_reg(cond, lbl, reg1, reg2) {
   cmp_reg_reg(reg1, reg2);
   jump_cond(cond, lbl);
 }
 
-void int_i8(int n) {
+function int_i8(n) {
 
   // INT imm8 ;; Software interrupt with vector specified by immediate byte
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/intn:into:int3:int1
 
-  emit_2_i8(0xcd, n);
+  emit_2_i8(0xCD, n);
 }
 
 function setup_proc_args(global_vars_size) {
