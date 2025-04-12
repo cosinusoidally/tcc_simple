@@ -7318,7 +7318,7 @@ function os_allocate_memory(size) {
 }
 
 function os_exit() {
-  syscall_3(1, reg_X, -1, -1); // SYS_EXIT = 1
+  syscall_3(1, reg_X, sub(0, 1), sub(0, 1)); // SYS_EXIT = 1
 }
 
 function os_read() {
@@ -7334,7 +7334,7 @@ function os_open() {
 }
 
 function os_close() {
-  syscall_3(6, reg_X, -1, -1); // SYS_CLOSE = 6
+  syscall_3(6, reg_X, sub(0, 1), sub(0, 1)); // SYS_CLOSE = 6
 }
 
 function os_seek() {
@@ -7342,32 +7342,37 @@ function os_seek() {
 }
 
 function os_unlink() {
-  syscall_3(10, reg_X, -1, -1); // SYS_UNLINK = 10
+  syscall_3(10, reg_X, sub(0, 1), sub(0, 1)); // SYS_UNLINK = 10
 }
 
 function os_mkdir() {
-  syscall_3(39, reg_X, reg_Y, -1); // SYS_MKDIR = 39
+  syscall_3(39, reg_X, reg_Y, sub(0, 1)); // SYS_MKDIR = 39
 }
 
 function os_chmod() {
-  syscall_3(15, reg_X, reg_Y, -1); // SYS_CHMOD = 15
+  syscall_3(15, reg_X, reg_Y, sub(0, 1)); // SYS_CHMOD = 15
 }
 
 function os_access() {
-  syscall_3(21, reg_X, reg_Y, -1); // SYS_ACCESS = 21
+  syscall_3(21, reg_X, reg_Y, sub(0, 1)); // SYS_ACCESS = 21
 }
 // end x86.c
 
 //-----------------------------------------------------------------------------
 
-void handle_macro_D(char *opt) {
-  char *start = opt;
+function handle_macro_D(char *opt) {
+  char *start;
   char *macro_buf;
   char *buf2;
-  int acc;
-  while (*opt != 0 && *opt != '=') opt += 1; // Find = sign if any
+  var acc;
 
-  macro_buf = malloc(opt - start + 1);
+  start = opt;
+
+  while (and(neq(ri8(opt), 0), neq(ri8(opt), mkc('=')))) {
+    opt = add(opt, 1); // Find = sign if any
+  }
+
+  macro_buf = malloc(add(sub(opt, start), 1));
   memcpy(macro_buf, start, opt - start);
   macro_buf[opt - start] = '\0';
 
