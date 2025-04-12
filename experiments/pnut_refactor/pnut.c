@@ -6388,31 +6388,35 @@ function handle_typedef(node) {
   handle_enum_struct_union_type_decl(get_type_specifier(type));
 }
 
-void codegen_glo_decl(ast node) {
-  ast decls;
-  int op = get_op(node);
+function codegen_glo_decl(node) {
+  var decls;
+  var op;
 
-  if (op == DECLS) {
+  op = get_op(node);
+
+  if (eq(op, DECLS)) {
     // AUTO_KW and REGISTER_KW can simply be ignored. STATIC_KW is the default
     // storage class for global variables since pnut-sh only supports 1
     // translation unit.
-    if (get_child_(DECLS, node, 1) == EXTERN_KW) fatal_error("Extern storage class specifier not supported");
+    if (eq(get_child_(DECLS, node, 1), EXTERN_KW)) {
+      fatal_error(mks("Extern storage class specifier not supported"));
+    }
 
     decls = get_child__(DECLS, LIST, node, 0); // Declaration list
-    while (decls != 0) { // Multiple variable declarations
+    while (neq(decls, 0)) { // Multiple variable declarations
       codegen_glo_var_decl(car_(DECL, decls));
       decls = tail(decls); // Next variable declaration
     }
-  } else if (op == FUN_DECL) {
+  } else if (eq(op, FUN_DECL)) {
     codegen_glo_fun_decl(node);
-  } else if (op == TYPEDEF_KW) {
+  } else if (eq(op, TYPEDEF_KW)) {
     handle_typedef(node);
-  } else if (op == ENUM_KW || op == STRUCT_KW || op == UNION_KW) {
+  } else if (or(eq(op,ENUM_KW),or(eq(op,STRUCT_KW),eq(op,UNION_KW)))) {
     handle_enum_struct_union_type_decl(node);
   } else {
-    putstr("op="); putint(op);
-    putstr(" with "); putint(get_nb_children(node)); putstr(" children\n");
-    fatal_error("codegen_glo_decl: unexpected declaration");
+    putstr(mks("op=")); putint(op);
+    putstr(mks(" with ")); putint(get_nb_children(node)); putstr(mks(" children\n"));
+    fatal_error(mks("codegen_glo_decl: unexpected declaration"));
   }
 }
 
