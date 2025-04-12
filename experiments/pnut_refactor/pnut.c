@@ -6443,8 +6443,9 @@ function rt_crash(msg) {
   os_exit();
 }
 
-void rt_fgetc(int fd_reg) {
-  int success_lbl = alloc_label("rt_fgetc_success");
+function rt_fgetc(fd_reg) {
+  var success_lbl;
+  success_lbl = alloc_label(mks("rt_fgetc_success"));
   push_reg(reg_X);            // Allocate buffer on stack, initialized with some random value
   mov_reg_reg(reg_X, fd_reg); // reg_X = file descriptor (stdin)
   mov_reg_reg(reg_Y, reg_SP); // reg_Y = buffer size
@@ -6454,13 +6455,14 @@ void rt_fgetc(int fd_reg) {
   pop_reg(reg_Z);             // Get character from buffer and deallocate buffer
   mov_reg_imm(reg_Y, 0);      // If read returned 0, then we're at EOF (-1)
   jump_cond_reg_reg(NE, success_lbl, reg_X, reg_Y);
-  mov_reg_imm(reg_Z, -1);     // mov  eax, -1  # -1 on EOF
+  mov_reg_imm(reg_Z, sub(0, 1));     // mov  eax, -1  # -1 on EOF
   def_label(success_lbl);     // end label
   mov_reg_reg(reg_X, reg_Z);  // return value
 }
 
-void rt_fopen() {
-  int fopen_success_lbl = alloc_label("fopen_success");
+function rt_fopen() {
+  var fopen_success_lbl;
+  fopen_success_lbl = alloc_label(mks("fopen_success"));
 
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
   mov_reg_imm(reg_Y, 0); // mode
@@ -6473,8 +6475,9 @@ void rt_fopen() {
   def_label(fopen_success_lbl);
 }
 
-void rt_malloc() {
-  int end_lbl = alloc_label("rt_malloc_success");
+function rt_malloc() {
+  var end_lbl;
+  end_lbl = alloc_label(mks("rt_malloc_success"));
 
   mov_reg_mem(reg_Y, reg_glo, WORD_SIZE); // Bump pointer
   add_reg_reg(reg_X, reg_Y);              // New bump pointer
@@ -6484,7 +6487,7 @@ void rt_malloc() {
   // Make sure the heap is large enough.
   // new bump pointer (reg_x) >= end of heap (reg_y)
   jump_cond_reg_reg(LE, end_lbl, reg_X, reg_Y);
-  rt_crash("Heap overflow\n");
+  rt_crash(mks("Heap overflow\n"));
 
   def_label(end_lbl);
   mov_reg_mem(reg_Y, reg_glo, WORD_SIZE); // Old bump pointer
@@ -6492,7 +6495,7 @@ void rt_malloc() {
   mov_reg_reg(reg_X, reg_Y);              // Return the old bump pointer
 }
 
-void codegen_end() {
+function codegen_end() {
   def_label(setup_lbl);
 
   // Allocate some space for the global variables.
@@ -6519,7 +6522,9 @@ void codegen_end() {
   def_label(init_next_lbl);
   setup_proc_args(0);
   call(main_lbl);
-  if (!main_returns) mov_reg_imm(reg_X, 0); // exit process with 0 if main returns void
+  if (eq(0, main_returns)) {
+    mov_reg_imm(reg_X, 0); // exit process with 0 if main returns void
+  }
   push_reg(reg_X); // exit process with result of main
   push_reg(reg_X); // dummy return address (exit never needs it)
 
@@ -6531,16 +6536,16 @@ void codegen_end() {
   // read function
   def_label(read_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE);
-  mov_reg_mem(reg_Z, reg_SP, 3*WORD_SIZE);
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE));
+  mov_reg_mem(reg_Z, reg_SP, mul(3, WORD_SIZE));
   os_read();
   ret();
 
   // write function
   def_label(write_lbl);
   mov_reg_mem(reg_X, reg_SP, WORD_SIZE);
-  mov_reg_mem(reg_Y, reg_SP, 2*WORD_SIZE);
-  mov_reg_mem(reg_Z, reg_SP, 3*WORD_SIZE);
+  mov_reg_mem(reg_Y, reg_SP, mul(2, WORD_SIZE));
+  mov_reg_mem(reg_Z, reg_SP, mul(3, WORD_SIZE));
   os_write();
   ret();
 
