@@ -6188,7 +6188,7 @@ function codegen_statement(node) {
     cgc_fs = save_fs;
     cgc_locals = save_locals;
 
-  } else if (op == CASE_KW) {
+  } else if (eq(op, CASE_KW)) {
 
     binding = cgc_lookup_enclosing_switch(cgc_locals);
 
@@ -6199,30 +6199,32 @@ function codegen_statement(node) {
     //   jump to statements
     // else:
     //   jump to next case
-    if (binding != 0) {
+    if (neq(binding, 0)) {
       lbl1 = alloc_label(0);                  // skip case when falling through
       jump(lbl1);
-      def_label(heap[binding + 4]);           // false jump location of previous case
-      heap[binding + 4] = alloc_label(0);     // create false jump location for current case
+      def_label(r_heap(add(binding, 4)));           // false jump location of previous case
+      heap[add(binding, 4)] = alloc_label(0);     // create false jump location for current case
       codegen_rvalue(get_child_(CASE_KW, node, 0)); // evaluate case expression and compare it
-      pop_reg(reg_Y); grow_fs(-1);
+      pop_reg(reg_Y); grow_fs(sub(0, 1));
       mov_reg_mem(reg_X, reg_SP, 0);          // get switch operand without popping it
       jump_cond_reg_reg(EQ, lbl1, reg_X, reg_Y);
-      jump(heap[binding + 4]);                // condition is false => jump to next case
+      jump(r_heap(add(binding, 4)));                // condition is false => jump to next case
       def_label(lbl1);                        // start of case conditional block
       codegen_statement(get_child_(CASE_KW, node, 1));  // case statement
     } else {
-      fatal_error("case outside of switch");
+      fatal_error(mks("case outside of switch"));
     }
 
-  } else if (op == DEFAULT_KW) {
+  } else if (eq(op, DEFAULT_KW)) {
 
     binding = cgc_lookup_enclosing_switch(cgc_locals);
 
-    if (binding != 0) {
-      if (heap[binding + 5]) fatal_error("default already defined in switch");
-      heap[binding + 5] = alloc_label(0);                 // create label for default
-      def_label(heap[binding + 5]);                       // default label
+    if (neq(binding, 0)) {
+      if (r_heap(add(binding, 5))) {
+        fatal_error(mks("default already defined in switch"));
+      }
+      heap[add(binding, 5)] = alloc_label(0);                 // create label for default
+      def_label(r_heap(add(binding, 5)));                       // default label
       codegen_statement(get_child_(DEFAULT_KW, node, 0)); // default statement
     } else {
       fatal_error("default outside of switch");
