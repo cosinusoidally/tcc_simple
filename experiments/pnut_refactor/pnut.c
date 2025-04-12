@@ -5691,16 +5691,16 @@ function codegen_struct_or_union(node, kind) {
 }
 
 function handle_enum_struct_union_type_decl(type) {
-  if (get_op(type) == ENUM_KW) {
+  if (eq(get_op(type), ENUM_KW)) {
     codegen_enum(type);
-  } else if (get_op(type) == STRUCT_KW) {
+  } else if (eq(get_op(type), STRUCT_KW)) {
     codegen_struct_or_union(type, BINDING_TYPE_STRUCT);
-  } else if (get_op(type) == UNION_KW) {
+  } else if (eq(get_op(type), UNION_KW)) {
     codegen_struct_or_union(type, BINDING_TYPE_UNION);
-  } else if (get_op(type) == '*') {
-    handle_enum_struct_union_type_decl(get_child_('*', type, 1));
-  } else if (get_op(type) == '[') {
-    handle_enum_struct_union_type_decl(get_child_('[', type, 0));
+  } else if (eq(get_op(type), mkc('*'))) {
+    handle_enum_struct_union_type_decl(get_child_(mkc('*'), type, 1));
+  } else if (eq(get_op(type), mkc('['))) {
+    handle_enum_struct_union_type_decl(get_child_(mkc('['), type, 0));
   }
 
   // If not an enum, struct, or union, do nothing
