@@ -7494,11 +7494,11 @@ function main(int argc, char **argv) {
           handle_macro_D(add(r_32(argv, i), 2)); // skip '-D'
         }
       } else if(eq(t, mkc('U'))) {
-        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-          i += 1;
-          init_ident(IDENTIFIER, argv[i]);
+        if (eq(ri8(add(r_32(argv, i),2)), 0)) { // rest of option is in argv[i + 1]
+          i = add(i, 1);
+          init_ident(IDENTIFIER, r_32(argv, i));
         } else {
-          init_ident(IDENTIFIER, argv[i] + 2); // skip '-U'
+          init_ident(IDENTIFIER, add(r_32(argv, i), 2)); // skip '-U'
         }
       } else {
       switch (t) {
