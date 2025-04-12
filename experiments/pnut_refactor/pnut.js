@@ -1027,16 +1027,15 @@ function eval_constant(expr, if_macro) {
       }
       return add(op1, op2);
     }
+  } else if(eq(op, mkc('?'))) {
+    op1 = eval_constant(child0, if_macro);
+    if (op1) {
+      return eval_constant(child1, if_macro);
+    } else {
+      return eval_constant(get_child(expr, 2), if_macro);
+    }
   } else {
   switch (op) {
-    case '?':
-      op1 = eval_constant(child0, if_macro);
-      if (op1) {
-        return eval_constant(child1, if_macro);
-      } else {
-        return eval_constant(get_child(expr, 2), if_macro);
-      }
-
     case '*':
     case '/':
     case '%':
