@@ -5814,14 +5814,13 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       }
       codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
     } else {
-// LJW HERE
-      if (neq(tail(init), 0) /* More than 1 element */
-       || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
-        fatal_error("codegen_initializer: scalar initializer list has more than one element");
+      if (or(neq(tail(init), 0), /* More than 1 element */
+          eq(get_op(car(init)), INITIALIZER_LIST))) { // Or nested initializer list
+        fatal_error(mks("codegen_initializer: scalar initializer list has more than one element"));
       }
       codegen_rvalue(car(init));
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
     }
   } else {
@@ -5829,15 +5828,15 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       // Struct assignment, we copy the struct.
       codegen_lvalue(init);
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       copy_obj(base_reg, offset, reg_X, 0, type_width(type, true, true));
-    } else if (get_op(type) != '[') {
+    } else if (neq(get_op(type), mkc('['))) {
       codegen_rvalue(init);
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
     } else {
-      fatal_error("codegen_initializer: cannot initialize array with scalar value");
+      fatal_error(mks("codegen_initializer: cannot initialize array with scalar value"));
     }
   }
 }
@@ -5845,27 +5844,29 @@ function codegen_initializer(local, init, type, base_reg, offset) {
 // Return size of initializer.
 // If it's an initializer list, return the number of elements
 // If it's a string, return the length of the string and delimiter.
-int initializer_size(ast initializer) {
-  int size = 0;
+function initializer_size(initializer) {
+  var size;
+  var t;
 
-  switch (get_op(initializer)) {
-    case INITIALIZER_LIST:
-      initializer = get_child_(INITIALIZER_LIST, initializer, 0);
-      while (initializer != 0) {
-        size += 1;
-        initializer = tail(initializer);
-      }
-      return size;
+  size = 0;
 
-    case STRING:
-      return heap[get_val_(STRING, initializer) + 4] + 1;
-
-    default:
-      fatal_error("initializer_size: unknown initializer");
-      return -1;
+  t = get_op(initializer);
+  if(eq(t, INITIALIZER_LIST)) {
+    initializer = get_child_(INITIALIZER_LIST, initializer, 0);
+    while (neq(initializer, 0)) {
+      size = add(size, 1);
+      initializer = tail(initializer);
+    }
+    return size;
+  } else if(eq(t, STRING)) {
+    return add(r_heap(add(get_val_(STRING, initializer), 4)), 1);
+  } else {
+    fatal_error(mks("initializer_size: unknown initializer"));
+    return sub(0, 1);
   }
 }
 
+// LJW HERE
 void infer_array_length(ast type, ast init) {
   // Array declaration with no size
   if (get_op(type) == '[' && get_child_('[', type, 1) == 0) {
