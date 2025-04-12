@@ -7501,13 +7501,15 @@ function main(int argc, char **argv) {
           init_ident(IDENTIFIER, add(r_32(argv, i), 2)); // skip '-U'
         }
       } else if(eq(t, mkc('I'))) {
-        if (include_search_path != 0) fatal_error("only one include path allowed");
+        if (neq(include_search_path, 0)) {
+          fatal_error(mks("only one include path allowed"));
+        }
 
-        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-          i += 1;
-          include_search_path = argv[i];
+        if (eq(ri8(add(r_32(argv,i),2)),0)) { // rest of option is in argv[i + 1]
+          i = add(i, 1);
+          include_search_path = r_32(argv, i);
         } else {
-          include_search_path = argv[i] + 2; // skip '-I'
+          include_search_path = add(r_32(argv, i), 2); // skip '-I'
         }
       } else {
         putstr("Option "); putstr(argv[i]); putchar('\n');
