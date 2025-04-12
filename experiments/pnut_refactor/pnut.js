@@ -1057,17 +1057,21 @@ function eval_constant(expr, if_macro) {
       return shl(op1, op2);
     } else if(eq(op, RSHIFT)) {
       return shr(op1, op2);
+    } else if(eq(op, EQ_EQ)) {
+      return eq(op1, op2);
+    } else if(eq(op, EXCL_EQ)) {
+      return neq(op1, op2);
+    } else if(eq(op, LT_EQ)) {
+      return lte(op1, op2);
+    } else if(eq(op, GT_EQ)) {
+      return gte(op1, op2);
+    } else if(eq(op, mkc('<'))) {
+      return lt(op1, op2);
+    } else if(eq(op, mkc('>'))) {
+      return gt(op1, op2);
     } else {
-    switch (op) {
-      case EQ_EQ:   return eq(op1, op2);
-      case EXCL_EQ: return neq(op1, op2);
-      case LT_EQ:   return lte(op1, op2);
-      case GT_EQ:   return gte(op1, op2);
-      case '<':     return lt(op1, op2);
-      case '>':     return gt(op1, op2);
+      return 0; // Should never reach here
     }
-    }
-    return 0; // Should never reach here
   } else if(eq(op, AMP_AMP)) {
     op1 = eval_constant(child0, if_macro);
     if (eq(0,op1)) {
