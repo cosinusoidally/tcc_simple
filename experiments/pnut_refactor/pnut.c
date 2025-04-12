@@ -5789,33 +5789,33 @@ function codegen_initializer(local, init, type, base_reg, offset) {
         initialize_memory(0, base_reg, offset, mul(inner_type_width, arr_len));
       }
     } else if(eq(t, STRUCT_KW)) {
-// LJW HERE
       members = get_child_(STRUCT_KW, type, 2);
-      while (init != 0 && members != 0) {
+      while (and(neq(init, 0), neq(members, 0))) {
         inner_type = get_child_(DECL, car_(DECL, members), 1);
         codegen_initializer(local, car(init), inner_type, base_reg, offset);
-        offset += type_width(inner_type, true, false);
+        offset = add(offset, type_width(inner_type, true, false));
         init = tail(init);
         members = tail(members);
       }
 
       // Initialize rest of the members to 0
-      while (local && members != 0) {
+      while (and(local, neq(members, 0))) {
         inner_type = get_child_(DECL, car_(DECL, members), 1);
         initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
-        offset += type_width(inner_type, true, false);
+        offset = add(offset, type_width(inner_type, true, false));
         members = tail(members);
       }
     } else if(eq(t, UNION_KW)) {
       members = get_child_(STRUCT_KW, type, 2);
-      if (tail(init) != 0) {
-        fatal_error("codegen_initializer: union initializer list has more than one element");
-      } else if (members == 0) {
-        fatal_error("codegen_initializer: union has no members");
+      if (neq(tail(init), 0)) {
+        fatal_error(mks("codegen_initializer: union initializer list has more than one element"));
+      } else if (eq(members, 0)) {
+        fatal_error(mks("codegen_initializer: union has no members"));
       }
       codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
     } else {
-      if (tail(init) != 0 // More than 1 element
+// LJW HERE
+      if (neq(tail(init), 0) /* More than 1 element */
        || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
         fatal_error("codegen_initializer: scalar initializer list has more than one element");
       }
