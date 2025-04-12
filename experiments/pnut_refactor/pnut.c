@@ -5649,29 +5649,34 @@ function codegen_enum(node) {
   name = get_child_opt_(ENUM_KW, IDENTIFIER, node, 1);
   cases = get_child_opt_(ENUM_KW, LIST, node, 2);
 
-  if (name != 0 && cases != 0) { // if enum has a name and members (not a reference to an existing type)
+  if (and(neq(name, 0), neq(cases, 0))) { // if enum has a name and members (not a reference to an existing type)
     binding = cgc_lookup_enum(get_val_(IDENTIFIER, name), cgc_globals);
-    if (binding != 0) { fatal_error("codegen_enum: enum already declared"); }
+    if (neq(binding, 0)) {
+      fatal_error(mks("codegen_enum: enum already declared"));
+    }
     cgc_add_typedef(get_val_(IDENTIFIER, name), BINDING_TYPE_ENUM, node);
   }
 
-  while (cases != 0) {
-    cas = car_('=', cases);
-    cgc_add_enum(get_val_(IDENTIFIER, get_child__('=', IDENTIFIER, cas, 0)), get_child_('=', cas, 1));
+  while (neq(cases, 0)) {
+    cas = car_(mkc('='), cases);
+    cgc_add_enum(get_val_(IDENTIFIER, get_child__(mkc('='), IDENTIFIER, cas, 0)), get_child_(mkc('='), cas, 1));
     cases = tail(cases);
   }
 }
 
-void codegen_struct_or_union(ast node, enum BINDING kind) {
-  ast name = get_child(node, 1);
-  ast members = get_child(node, 2);
-  int binding;
+function codegen_struct_or_union(node, kind) {
+  var name;
+  var members;
+  var binding;
+
+  name = get_child(node, 1);
+  members = get_child(node, 2);
 
   // if struct has a name and members (not a reference to an existing type)
-  if (name != 0 && members != 0) {
+  if (and(neq(name, 0), neq(members, 0))) {
     binding = cgc_lookup_binding_ident(kind, get_val_(IDENTIFIER, name), cgc_globals);
-    if (binding != 0 && heap[binding + 3] != node && get_child(heap[binding + 3], 2) != members) {
-      fatal_error("codegen_struct_or_union: struct/union already declared");
+    if(and(neq(binding,0),and(neq(r_heap(add(binding,3)),node),neq(get_child(r_heap(add(binding,3)),2),members)))) {
+      fatal_error(mks("codegen_struct_or_union: struct/union already declared"));
     }
     cgc_add_typedef(get_val_(IDENTIFIER, name), kind, node);
   }
@@ -5679,13 +5684,13 @@ void codegen_struct_or_union(ast node, enum BINDING kind) {
   // Traverse the structure to find any other declarations.
   // This is not the right semantic because inner declarations are scoped to
   // this declaration, but it's probably good enough for TCC.
-  while (members != 0) {
+  while (neq(members, 0)) {
     handle_enum_struct_union_type_decl(get_child_(DECL, car_(DECL, members), 1));
     members = tail(members);
   }
 }
 
-function handle_enum_struct_union_type_decl(ast type) {
+function handle_enum_struct_union_type_decl(type) {
   if (get_op(type) == ENUM_KW) {
     codegen_enum(type);
   } else if (get_op(type) == STRUCT_KW) {
