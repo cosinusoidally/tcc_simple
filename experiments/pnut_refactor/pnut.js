@@ -1003,16 +1003,12 @@ function eval_constant(expr, if_macro) {
 
   if(eq(op, PARENS)) {
     return eval_constant(child0, if_macro);
-  } else if(0) {
+  } else if(or(eq(op,INTEGER),or(eq(op,INTEGER_L),or(eq(op,INTEGER_LL),
+            or(eq(op,INTEGER_U),or(eq(op,INTEGER_UL),eq(op,INTEGER_ULL)
+            )))))) {
+    return sub(0, get_val(expr));
   } else {
   switch (op) {
-    case INTEGER:
-    case INTEGER_L:
-    case INTEGER_LL:
-    case INTEGER_U:
-    case INTEGER_UL:
-    case INTEGER_ULL:
-      return sub(0, get_val(expr));
     case CHARACTER:   return get_val_(CHARACTER, expr);
     case '~':         return not(eval_constant(child0, if_macro));
     case '!':         return eq(0, eval_constant(child0, if_macro));
