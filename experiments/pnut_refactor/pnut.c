@@ -547,13 +547,6 @@ var if_macro_stack_ix = 0;
 var if_macro_mask;
 var if_macro_executed;
 
-function r_if_macro_stack(o) {
-  return ri32(add(if_macro_stack,mul(4,o)));
-}
-
-function w_if_macro_stack(o, v) {
-  wi32(add(if_macro_stack,mul(4,o)), v);
-}
 
 var expand_macro;
 var expand_macro_arg;
@@ -563,6 +556,20 @@ var skip_newlines;
 var macro_stack[MACRO_RECURSION_MAX];
 var macro_stack_ix = 0;
 
+
+var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
+var macro_args = 0;     // Current list of arguments for the macro being expanded
+var macro_ident = 0;    // The identifier of the macro being expanded (if any)
+var macro_args_count;   // Number of arguments for the current macro being expanded
+var paste_last_token;
+
+function r_if_macro_stack(o) {
+  return ri32(add(if_macro_stack,mul(4,o)));
+}
+
+function w_if_macro_stack(o, v) {
+  wi32(add(if_macro_stack,mul(4,o)), v);
+}
 function r_macro_stack(o) {
   return ri32(add(macro_stack,mul(4,o)));
 }
@@ -570,12 +577,6 @@ function r_macro_stack(o) {
 function w_macro_stack(o, v) {
   wi32(add(macro_stack,mul(4,o)), v);
 }
-
-var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
-var macro_args = 0;     // Current list of arguments for the macro being expanded
-var macro_ident = 0;    // The identifier of the macro being expanded (if any)
-var macro_args_count;   // Number of arguments for the current macro being expanded
-var paste_last_token;
 
 function prev_macro_mask() {
   if(eq(if_macro_stack_ix, 0)) {
