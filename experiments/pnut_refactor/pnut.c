@@ -7403,10 +7403,10 @@ function handle_macro_D(char *opt) {
         fatal_error(mks("Invalid macro definition value"));
       }
       init_builtin_int_macro(macro_buf, acc);
-    } else if (*opt == '\0') { // No value given, empty macro
+    } else if (eq(ri8(opt), 0)) { // No value given, empty macro
       init_builtin_empty_macro(macro_buf);
     } else {
-      fatal_error("Invalid macro definition value");
+      fatal_error(mks("Invalid macro definition value"));
     }
   } else {
     // Default to 1 when no value is given
