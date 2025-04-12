@@ -83,10 +83,9 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
-#define true 1
-#define false 0
-#define EOF (-1)
-#define cgc int
+var true;
+var false;
+var EOF;
 
 var O_WRONLY;
 var O_CREAT;
@@ -542,21 +541,16 @@ function expect_tok(expected_tok) {
 #define IFDEF_DEPTH_MAX 20
 var if_macro_stack[IFDEF_DEPTH_MAX]; // Stack of if macro states
 var if_macro_stack_ix = 0;
-var if_macro_mask = true;      // Indicates if the current if/elif block is being executed
-var if_macro_executed = false; // If any of the previous if/elif conditions were true
+var if_macro_mask;
+var if_macro_executed;
 
 function r_if_macro_stack(o) {
   return ri32(add(if_macro_stack,mul(4,o)));
 }
 
-// get_tok parameters:
-// Whether to expand macros or not.
-// Useful to parse macro definitions containing other macros without expanding them.
-var expand_macro = true;
-// Don't expand macro arguments. Used for stringification and token pasting.
-var expand_macro_arg = true;
-// Don't produce newline tokens. Used when reading the tokens of a macro definition.
-var skip_newlines = true;
+var expand_macro;
+var expand_macro_arg;
+var skip_newlines;
 
 #define MACRO_RECURSION_MAX 180 // Supports up to 60 (180 / 3) nested macro expansions.
 var macro_stack[MACRO_RECURSION_MAX];
@@ -570,7 +564,7 @@ var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being 
 var macro_args = 0;     // Current list of arguments for the macro being expanded
 var macro_ident = 0;    // The identifier of the macro being expanded (if any)
 var macro_args_count;   // Number of arguments for the current macro being expanded
-var paste_last_token = false; // Whether the last token was a ## or not
+var paste_last_token;
 
 function prev_macro_mask() {
   if(eq(if_macro_stack_ix, 0)) {
@@ -2625,7 +2619,7 @@ function parse_declaration_specifiers(allow_typedef) {
   return type_specifier;
 }
 
-var parse_param_list_is_variadic = false;
+var parse_param_list_is_variadic;
 
 function parse_param_list() {
   var result;
@@ -3707,8 +3701,7 @@ function write_i32_le(n) {
   write_4_i8(n, shr(n, 8), shr(n, 16), shr(n, 24));
 }
 
-// If the main function returns a value
-var main_returns = false;
+var main_returns;
 
 // Environment tracking
 var cgc_fs = 0;
@@ -7425,9 +7418,27 @@ function handle_macro_D(opt) {
 }
 
 function init_globals() {
+  true = 1;
+  false = 0;
+  EOF = sub(0, 1);
+
   O_WRONLY = 01;
   O_CREAT  = 0100;
   O_TRUNC  = 01000;
+
+// get_tok parameters:
+// Whether to expand macros or not.
+// Useful to parse macro definitions containing other macros without expanding them.
+  expand_macro = true;
+// Don't expand macro arguments. Used for stringification and token pasting.
+  expand_macro_arg = true;
+// Don't produce newline tokens. Used when reading the tokens of a macro definition.
+  skip_newlines = true;
+  if_macro_mask = true;      // Indicates if the current if/elif block is being executed
+  if_macro_executed = false; // If any of the previous if/elif conditions were true
+  paste_last_token = false; // Whether the last token was a ## or not
+
+  parse_param_list_is_variadic = false;
 
   line_number = 1;
   column_number = 0;
@@ -7465,6 +7476,9 @@ function init_globals() {
   LE_U = 0x6; // x <= y (Jump near if below or equal (CF=1 or ZF=1))
   GT   = 0xf; // x > y
   GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
+
+// If the main function returns a value
+  main_returns = false;
 }
 
 function r_32(p, o) {
