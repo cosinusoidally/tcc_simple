@@ -3902,30 +3902,30 @@ function cgc_add_global_fun(ident, label, type) {
 function cgc_add_enum(ident, value) {
   var binding;
   binding = alloc_obj(4);
-  heap[add(binding, 0)] = cgc_globals;
-  heap[add(binding, 1)] = BINDING_ENUM_CST;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = value;
+  w_heap(add(binding, 0), cgc_globals);
+  w_heap(add(binding, 1), BINDING_ENUM_CST);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), value);
   cgc_globals = binding;
 }
 
 function cgc_add_goto_label(ident, lbl) {
   var binding;
   binding = alloc_obj(5);
-  heap[add(binding, 0)] = cgc_locals_fun;
-  heap[add(binding, 1)] = BINDING_GOTO_LABEL;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = lbl;
+  w_heap(add(binding, 0), cgc_locals_fun);
+  w_heap(add(binding, 1), BINDING_GOTO_LABEL);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), lbl);
   cgc_locals_fun = binding;
 }
 
 function cgc_add_typedef(ident, struct_or_union_or_enum, type) {
   var binding;
   binding = alloc_obj(4);
-  heap[add(binding, 0)] = cgc_globals;
-  heap[add(binding, 1)] = struct_or_union_or_enum;
-  heap[add(binding, 2)] = ident;
-  heap[add(binding, 3)] = type;
+  w_heap(add(binding, 0), cgc_globals);
+  w_heap(add(binding, 1), struct_or_union_or_enum);
+  w_heap(add(binding, 2), ident);
+  w_heap(add(binding, 3), type);
   cgc_globals = binding;
 }
 
