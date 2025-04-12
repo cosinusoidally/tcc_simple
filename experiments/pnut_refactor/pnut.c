@@ -83,15 +83,16 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
-var IFDEF_DEPTH_MAX;
-var MACRO_RECURSION_MAX;
 #define HEAP_SIZE 2000000
 #define MAX_CODE_SIZE 5000000
 
-var if_macro_stack;
-var macro_stack;
 var heap[HEAP_SIZE];
 var code[MAX_CODE_SIZE];
+
+var IFDEF_DEPTH_MAX;
+var MACRO_RECURSION_MAX;
+var if_macro_stack;
+var macro_stack;
 
 // tokenizer
 
@@ -788,8 +789,8 @@ function include_file(file_name, relative_to) {
   w_i_column_number(include_stack2, 0);
   // Save the current file position so we can return to it after the included file is done
   if (neq(include_stack, 0)) {
-    include_stack->line_number = line_number;
-    include_stack->column_number = column_number;
+    w_i_line_number(include_stack, line_number);
+    w_i_column_number(include_stack, column_number);
   }
   line_number = 1;
   column_number = 1;
