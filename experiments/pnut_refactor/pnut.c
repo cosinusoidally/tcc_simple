@@ -4189,8 +4189,8 @@ function alloc_label(name) {
 function alloc_label_() {
   var lbl;
   lbl = alloc_obj(2);
-  heap[lbl] = GENERIC_LABEL;
-  heap[add(lbl, 1)] = 0; // Address of label
+  w_heap(lbl, GENERIC_LABEL);
+  w_heap(add(lbl, 1), 0); // Address of label
   add_label(lbl);
   return lbl;
 }
@@ -4198,9 +4198,9 @@ function alloc_label_() {
 function alloc_goto_label() {
   var lbl;
   lbl = alloc_obj(3);
-  heap[lbl] = GOTO_LABEL;
-  heap[add(lbl, 1)] = 0; // Address of label
-  heap[add(lbl, 2)] = 0; // cgc-fs of label
+  w_heap(lbl, GOTO_LABEL);
+  w_heap(add(lbl, 1), 0); // Address of label
+  w_heap(add(lbl, 2), 0); // cgc-fs of label
   add_label(lbl);
   return lbl;
 }
@@ -4208,7 +4208,7 @@ function alloc_goto_label() {
 function use_label(lbl) {
   var addr;
 
-  addr = heap[add(lbl, 1)];
+  addr = r_heap(add(lbl, 1));
 
   if (neq(r_heap(lbl), GENERIC_LABEL)) {
     fatal_error(mks("use_label expects generic label"));
@@ -4222,7 +4222,7 @@ function use_label(lbl) {
     // label address is not yet known
     emit_i32_le(0); // 32 bit placeholder for distance
     code[sub(code_alloc, 1)] = addr; // chain with previous patch address
-    heap[add(lbl, 1)] = code_alloc;
+    w_heap(add(lbl, 1), code_alloc);
   }
 }
 
