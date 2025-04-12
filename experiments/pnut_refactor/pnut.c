@@ -7480,11 +7480,11 @@ int main(int argc, char **argv) {
       t = ri8(add(r_32(argv, i), 1));
       if(eq(t, mkc('o'))) {
         // Output file name
-        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-          i += 1;
-          output_fd = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (eq(ri8(add(r_32(argv,i),2)),0)) { // rest of option is in argv[i + 1]
+          i = add(i, 1);
+          output_fd = open(r_32(argv,i),or(O_WRONLY,or(O_CREAT,O_TRUNC)),0644);
         } else {
-          output_fd = open(argv[i] + 2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+          output_fd = open(add(r_32(argv,i),2),or(O_WRONLY,or(O_CREAT,O_TRUNC)), 0644);
         }
       } else if(eq(t, mkc('D'))) {
         if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
