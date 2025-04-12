@@ -2514,11 +2514,17 @@ function parse_declaration_specifiers(allow_typedef) {
     } else if(or(eq(tok, CONST_KW), eq(tok, VOLATILE_KW))) {
       type_qualifier = or(type_qualifier, MK_TYPE_SPECIFIER(tok));
       get_tok();
+    } else if(or(eq(tok, CHAR_KW), or(eq(tok, INT_KW),eq(tok, VOID_KW)
+       ))) {
+      if (neq(type_specifier, 0)) {
+        parse_error(mks("Unexpected C type specifier"), tok);
+      }
+      type_specifier = parse_type_specifier();
+      if (eq(type_specifier, 0)) {
+        parse_error(mks("Failed to parse type specifier"), tok);
+      }
     } else {
     switch (tok) {
-      case CHAR_KW:
-      case INT_KW:
-      case VOID_KW:
       case SHORT_KW:
       case SIGNED_KW:
       case UNSIGNED_KW:
