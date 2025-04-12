@@ -4,10 +4,6 @@
 #define function int
 #define var int
 
-var O_WRONLY;
-var O_CREAT;
-var O_TRUNC;
-
 /* decls */
 
 function expect_tok_(expected_tok, file, line);
@@ -87,12 +83,14 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
-
-#define ast int
 #define true 1
 #define false 0
 #define EOF (-1)
 #define cgc int
+
+var O_WRONLY;
+var O_CREAT;
+var O_TRUNC;
 
 var line_number;
 var column_number;
@@ -4625,7 +4623,8 @@ function struct_member_go(struct_type, member_ident) {
 }
 
 function struct_member(struct_type, member_ident) {
-  ast member = struct_member_go(struct_type, member_ident);
+  var member;
+  member = struct_member_go(struct_type, member_ident);
   if (eq(member, sub(0, 1))) {
     fatal_error(mks("struct_member: member not found"));
   }
