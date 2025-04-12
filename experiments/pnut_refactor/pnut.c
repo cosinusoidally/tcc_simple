@@ -5756,15 +5756,9 @@ function codegen_initializer(local, init, type, base_reg, offset) {
   type = canonicalize_type(type);
   t = get_op(init);
 
-  if(0) {
-  } else if(0) {
-  } else {
-  switch (t) {
-    case STRING:
-      codegen_initializer_string(get_val_(STRING, init), type, base_reg, offset);
-      break;
-
-    case INITIALIZER_LIST:
+  if(eq(t, STRING)) {
+    codegen_initializer_string(get_val_(STRING, init), type, base_reg, offset);
+  } else if(eq(t, INITIALIZER_LIST)) {
       init = get_child_(INITIALIZER_LIST, init, 0);
       // Acceptable types are:
       //  arrays
@@ -5834,10 +5828,7 @@ function codegen_initializer(local, init, type, base_reg, offset) {
           write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
           break;
       }
-
-      break;
-
-    default:
+  } else {
       if (is_struct_or_union_type(type)) {
         // Struct assignment, we copy the struct.
         codegen_lvalue(init);
@@ -5852,8 +5843,6 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       } else {
         fatal_error("codegen_initializer: cannot initialize array with scalar value");
       }
-      break;
-  }
   }
 }
 
