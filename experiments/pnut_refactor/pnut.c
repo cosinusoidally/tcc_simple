@@ -6707,24 +6707,27 @@ function generate_exe() {
 
 // Registers common to i386 and x86-64 (E and R prefixes are omitted).
 
-const int AX = 0;
-const int CX = 1;
-const int DX = 2;
-const int BX = 3;
-const int SP = 4;
-const int BP = 5;
-const int SI = 6;
-const int DI = 7;
-const int R8 = 8;
-const int R9 = 9;
-const int R10 = 10;
-const int R11 = 11;
-const int R12 = 12;
-const int R13 = 13;
-const int R14 = 14;
-const int R15 = 15;
+const var AX = 0;
+const var CX = 1;
+const var DX = 2;
+const var BX = 3;
+const var SP = 4;
+const var BP = 5;
+const var SI = 6;
+const var DI = 7;
+const var R8 = 8;
+const var R9 = 9;
+const var R10 = 10;
+const var R11 = 11;
+const var R12 = 12;
+const var R13 = 13;
+const var R14 = 14;
+const var R15 = 15;
 
-#define rex_prefix(reg1, reg2) ((void)0)
+function rex_prefix(reg1, reg2) {
+// LJW FIXME restore the 64 bit backend
+  return 0;
+}
 
 void mod_rm(int reg1, int reg2) {
   // ModR/M byte
