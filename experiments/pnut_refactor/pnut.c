@@ -5765,35 +5765,33 @@ function codegen_initializer(local, init, type, base_reg, offset) {
     //  structs
     //  union   (if the initializer list has only one element)
     //  scalars (if the initializer list has only one element)
-
-// LJW HERE
     t = get_op(type);
-    if(0) {
+    if(eq(t, mkc('['))) {
+      inner_type = get_child_(mkc('['), type, 0);
+      arr_len = get_child_(mkc('['), type, 1);
+      inner_type_width = type_width(get_child_(mkc('['), type, 0), true, false);
+
+      while (and(neq(init, 0), neq(arr_len, 0))) {
+        codegen_initializer(local, car(init), inner_type, base_reg, offset);
+        offset = add(offset, inner_type_width);
+        init = tail(init);
+        arr_len = sub(arr_len, 1); // decrement the number of elements left to initialize to make sure we don't overflow
+      }
+
+      if (neq(init, 0)) {
+        fatal_error(mks("codegen_initializer: too many elements in initializer list"));
+      }
+
+      // If there are still elements to initialize, set them to 0.
+      // If it's not a local variable, we don't need to initialize the
+      // memory since the stack is zeroed during setup.
+      if (and(local, gt(arr_len, 0))) {
+        initialize_memory(0, base_reg, offset, mul(inner_type_width, arr_len));
+      }
     } else if(0) {
+// LJW HERE
     } else {
     switch (t) {
-      case '[':
-        inner_type = get_child_('[', type, 0);
-        arr_len = get_child_('[', type, 1);
-        inner_type_width = type_width(get_child_('[', type, 0), true, false);
-
-        while (init != 0 && arr_len != 0) {
-          codegen_initializer(local, car(init), inner_type, base_reg, offset);
-          offset += inner_type_width;
-          init = tail(init);
-          arr_len -= 1; // decrement the number of elements left to initialize to make sure we don't overflow
-        }
-
-        if (init != 0) {
-          fatal_error("codegen_initializer: too many elements in initializer list");
-        }
-
-        // If there are still elements to initialize, set them to 0.
-        // If it's not a local variable, we don't need to initialize the
-        // memory since the stack is zeroed during setup.
-        if (local && arr_len > 0) initialize_memory(0, base_reg, offset, inner_type_width * arr_len);
-        break;
-
       case STRUCT_KW:
         members = get_child_(STRUCT_KW, type, 2);
         while (init != 0 && members != 0) {
