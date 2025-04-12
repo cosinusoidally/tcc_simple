@@ -7463,8 +7463,8 @@ function r_32(p, o) {
   return ri32(add(p,mul(4,o)));
 }
 
-int main(int argc, char **argv) {
-  int i;
+function main(int argc, char **argv) {
+  var i;
   var decl;
   var t;
 
@@ -7493,17 +7493,15 @@ int main(int argc, char **argv) {
         } else {
           handle_macro_D(add(r_32(argv, i), 2)); // skip '-D'
         }
+      } else if(eq(t, mkc('U'))) {
+        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
+          i += 1;
+          init_ident(IDENTIFIER, argv[i]);
+        } else {
+          init_ident(IDENTIFIER, argv[i] + 2); // skip '-U'
+        }
       } else {
       switch (t) {
-        case 'U':
-          if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-            i += 1;
-            init_ident(IDENTIFIER, argv[i]);
-          } else {
-            init_ident(IDENTIFIER, argv[i] + 2); // skip '-U'
-          }
-          break;
-
         case 'I':
           if (include_search_path != 0) fatal_error("only one include path allowed");
 
