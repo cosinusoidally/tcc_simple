@@ -5562,14 +5562,14 @@ function codegen_rvalue(node) {
 
 function codegen_begin() {
 
-  setup_lbl = alloc_label("setup");
-  init_start_lbl = alloc_label("init_start");
+  setup_lbl = alloc_label(mks("setup"));
+  init_start_lbl = alloc_label(mks("init_start"));
   init_next_lbl = init_start_lbl;
 
   // Make room for heap start and malloc bump pointer.
   // reg_glo[0]: heap start
   // reg_glo[WORD_SIZE]: malloc bump pointer
-  cgc_global_alloc += 2 * WORD_SIZE;
+  cgc_global_alloc = add(cgc_global_alloc, mul(2, WORD_SIZE));
 
   int_type = new_ast0(INT_KW, 0);
   uint_type = new_ast0(INT_KW, MK_TYPE_SPECIFIER(UNSIGNED_KW));
@@ -5578,53 +5578,53 @@ function codegen_begin() {
   void_type = new_ast0(VOID_KW, 0);
   void_star_type = pointer_type(new_ast0(VOID_KW, 0), false);
 
-  main_lbl = alloc_label("main");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "main"), main_lbl, function_type(void_type, 0));
+  main_lbl = alloc_label(mks("main"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("main")), main_lbl, function_type(void_type, 0));
 
-  exit_lbl = alloc_label("exit");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "exit"), exit_lbl, function_type1(void_type, int_type));
+  exit_lbl = alloc_label(mks("exit"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("exit")), exit_lbl, function_type1(void_type, int_type));
 
-  read_lbl = alloc_label("read");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "read"), read_lbl, function_type3(int_type, int_type, void_star_type, int_type));
+  read_lbl = alloc_label(mks("read"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("read")), read_lbl, function_type3(int_type, int_type, void_star_type, int_type));
 
-  write_lbl = alloc_label("write");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "write"), write_lbl, function_type3(int_type, int_type, void_star_type, int_type));
+  write_lbl = alloc_label(mks("write"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("write")), write_lbl, function_type3(int_type, int_type, void_star_type, int_type));
 
-  open_lbl = alloc_label("open");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "open"), open_lbl, make_variadic_func(function_type2(int_type, string_type, int_type)));
+  open_lbl = alloc_label(mks("open"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("open")), open_lbl, make_variadic_func(function_type2(int_type, string_type, int_type)));
 
-  close_lbl = alloc_label("close");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "close"), close_lbl, function_type1(int_type, int_type));
+  close_lbl = alloc_label(mks("close"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("close")), close_lbl, function_type1(int_type, int_type));
 
-  seek_lbl = alloc_label("lseek");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "lseek"), seek_lbl, function_type3(int_type, int_type, int_type, int_type));
+  seek_lbl = alloc_label(mks("lseek"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("lseek")), seek_lbl, function_type3(int_type, int_type, int_type, int_type));
 
-  unlink_lbl = alloc_label("unlink");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "unlink"), unlink_lbl, function_type1(int_type, string_type));
+  unlink_lbl = alloc_label(mks("unlink"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("unlink")), unlink_lbl, function_type1(int_type, string_type));
 
-  mkdir_lbl = alloc_label("mkdir");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "mkdir"), mkdir_lbl, function_type2(int_type, string_type, int_type));
+  mkdir_lbl = alloc_label(mks("mkdir"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("mkdir")), mkdir_lbl, function_type2(int_type, string_type, int_type));
 
-  chmod_lbl = alloc_label("chmod");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "chmod"), chmod_lbl, function_type2(int_type, string_type, int_type));
+  chmod_lbl = alloc_label(mks("chmod"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("chmod")), chmod_lbl, function_type2(int_type, string_type, int_type));
 
-  access_lbl = alloc_label("access");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "access"), access_lbl, function_type2(int_type, string_type, int_type));
+  access_lbl = alloc_label(mks("access"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("access")), access_lbl, function_type2(int_type, string_type, int_type));
 
-  putchar_lbl = alloc_label("putchar");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "putchar"), putchar_lbl, function_type1(void_type, char_type));
+  putchar_lbl = alloc_label(mks("putchar"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("putchar")), putchar_lbl, function_type1(void_type, char_type));
 
-  getchar_lbl = alloc_label("getchar");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "getchar"), getchar_lbl, function_type(char_type, 0));
+  getchar_lbl = alloc_label(mks("getchar"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("getchar")), getchar_lbl, function_type(char_type, 0));
 
-  fopen_lbl = alloc_label("fopen");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "fopen"), fopen_lbl, function_type2(int_type, string_type, string_type));
+  fopen_lbl = alloc_label(mks("fopen"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("fopen")), fopen_lbl, function_type2(int_type, string_type, string_type));
 
-  fclose_lbl = alloc_label("fclose");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "fclose"), fclose_lbl, function_type1(int_type, int_type));
+  fclose_lbl = alloc_label(mks("fclose"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("fclose")), fclose_lbl, function_type1(int_type, int_type));
 
-  fgetc_lbl = alloc_label("fgetc");
-  cgc_add_global_fun(init_ident(IDENTIFIER, "fgetc"), fgetc_lbl, function_type1(int_type, int_type));
+  fgetc_lbl = alloc_label(mks("fgetc"));
+  cgc_add_global_fun(init_ident(IDENTIFIER, mks("fgetc")), fgetc_lbl, function_type1(int_type, int_type));
 
   malloc_lbl = alloc_label("malloc");
   cgc_add_global_fun(init_ident(IDENTIFIER, "malloc"), malloc_lbl, function_type1(void_star_type, int_type));
