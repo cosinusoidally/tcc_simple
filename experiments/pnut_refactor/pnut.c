@@ -182,21 +182,21 @@ function w_i_next(o, v) {
 function r_i_dirname(o) {
   return ri32(add(r_i_dirname_o, o));
 }
-function w_dirname_fp(o, v) {
+function w_i_dirname(o, v) {
   wi32(add(r_i_dirname_o, o), v);
 }
 
 function r_i_filepath(o) {
   return ri32(add(r_i_filepath_o, o));
 }
-function w_filepath_fp(o, v) {
+function w_i_filepath(o, v) {
   wi32(add(r_i_filepath_o, o), v);
 }
 
 function r_i_line_number(o) {
   return ri32(add(r_i_line_number_o, o));
 }
-function w_i_line_number_fp(o, v) {
+function w_i_line_number(o, v) {
   wi32(add(r_i_line_number_o, o), v);
 }
 
@@ -780,12 +780,12 @@ function fopen_source_file(file_name, relative_to) {
 function include_file(file_name, relative_to) {
   fp = fopen_source_file(file_name, relative_to);
   include_stack2 = malloc(sizeof_struct_IncludeStack);
-  include_stack2->next = include_stack;
-  include_stack2->fp = fp;
-  include_stack2->dirname = file_parent_directory(fp_filepath);
-  include_stack2->filepath = fp_filepath;
-  include_stack2->line_number = 1;
-  include_stack2->column_number = 0;
+  w_i_next(include_stack2, include_stack);
+  w_i_fp(include_stack2, fp);
+  w_i_dirname(include_stack2, file_parent_directory(fp_filepath));
+  w_i_filepath(include_stack2, fp_filepath);
+  w_i_line_number(include_stack2, 1);
+  w_i_column_number(include_stack2, 0);
   // Save the current file position so we can return to it after the included file is done
   if (neq(include_stack, 0)) {
     include_stack->line_number = line_number;
