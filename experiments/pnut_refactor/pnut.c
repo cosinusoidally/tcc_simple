@@ -3662,6 +3662,10 @@ function r_code(o) {
   return ri32(add(code,mul(4,o)));
 }
 
+function w_code(o, v) {
+  wi32(add(code,mul(4,o)), v);
+}
+
 function emit_i8(a) {
   if (gte(code_alloc, MAX_CODE_SIZE)) {
     fatal_error(mks("code buffer overflow"));
