@@ -1007,11 +1007,14 @@ function eval_constant(expr, if_macro) {
             or(eq(op,INTEGER_U),or(eq(op,INTEGER_UL),eq(op,INTEGER_ULL)
             )))))) {
     return sub(0, get_val(expr));
+  } else if(eq(op, CHARACTER)) {
+    return get_val_(CHARACTER, expr);
+  } else if(eq(op, mkc('~'))) {
+    return not(eval_constant(child0, if_macro));
+  } else if(eq(op, mkc('!'))) {
+    return eq(0, eval_constant(child0, if_macro));
   } else {
   switch (op) {
-    case CHARACTER:   return get_val_(CHARACTER, expr);
-    case '~':         return not(eval_constant(child0, if_macro));
-    case '!':         return eq(0, eval_constant(child0, if_macro));
     case '-':
     case '+':
       op1 = eval_constant(child0, if_macro);
