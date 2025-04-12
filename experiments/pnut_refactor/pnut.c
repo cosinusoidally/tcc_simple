@@ -5788,50 +5788,41 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       if (and(local, gt(arr_len, 0))) {
         initialize_memory(0, base_reg, offset, mul(inner_type_width, arr_len));
       }
-    } else if(0) {
+    } else if(eq(t, STRUCT_KW)) {
 // LJW HERE
+      members = get_child_(STRUCT_KW, type, 2);
+      while (init != 0 && members != 0) {
+        inner_type = get_child_(DECL, car_(DECL, members), 1);
+        codegen_initializer(local, car(init), inner_type, base_reg, offset);
+        offset += type_width(inner_type, true, false);
+        init = tail(init);
+        members = tail(members);
+      }
+
+      // Initialize rest of the members to 0
+      while (local && members != 0) {
+        inner_type = get_child_(DECL, car_(DECL, members), 1);
+        initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
+        offset += type_width(inner_type, true, false);
+        members = tail(members);
+      }
+    } else if(eq(t, UNION_KW)) {
+      members = get_child_(STRUCT_KW, type, 2);
+      if (tail(init) != 0) {
+        fatal_error("codegen_initializer: union initializer list has more than one element");
+      } else if (members == 0) {
+        fatal_error("codegen_initializer: union has no members");
+      }
+      codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
     } else {
-    switch (t) {
-      case STRUCT_KW:
-        members = get_child_(STRUCT_KW, type, 2);
-        while (init != 0 && members != 0) {
-          inner_type = get_child_(DECL, car_(DECL, members), 1);
-          codegen_initializer(local, car(init), inner_type, base_reg, offset);
-          offset += type_width(inner_type, true, false);
-          init = tail(init);
-          members = tail(members);
-        }
-
-        // Initialize rest of the members to 0
-        while (local && members != 0) {
-          inner_type = get_child_(DECL, car_(DECL, members), 1);
-          initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
-          offset += type_width(inner_type, true, false);
-          members = tail(members);
-        }
-        break;
-
-      case UNION_KW:
-        members = get_child_(STRUCT_KW, type, 2);
-        if (tail(init) != 0) {
-          fatal_error("codegen_initializer: union initializer list has more than one element");
-        } else if (members == 0) {
-          fatal_error("codegen_initializer: union has no members");
-        }
-        codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
-        break;
-
-      default:
-        if (tail(init) != 0 // More than 1 element
-         || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
-          fatal_error("codegen_initializer: scalar initializer list has more than one element");
-        }
-        codegen_rvalue(car(init));
-        pop_reg(reg_X);
-        grow_fs(-1);
-        write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
-        break;
-    }
+      if (tail(init) != 0 // More than 1 element
+       || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
+        fatal_error("codegen_initializer: scalar initializer list has more than one element");
+      }
+      codegen_rvalue(car(init));
+      pop_reg(reg_X);
+      grow_fs(-1);
+      write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
     }
   } else {
     if (is_struct_or_union_type(type)) {
