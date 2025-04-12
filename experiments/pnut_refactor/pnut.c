@@ -7512,26 +7512,26 @@ function main(int argc, char **argv) {
           include_search_path = add(r_32(argv, i), 2); // skip '-I'
         }
       } else {
-        putstr("Option "); putstr(argv[i]); putchar('\n');
-        fatal_error("unknown option");
+        putstr(mks("Option ")); putstr(argv[i]); putchar(mkc('\n'));
+        fatal_error(mks("unknown option"));
       }
     } else {
       // Options that don't start with '-' are file names
-      include_file(argv[i], 0);
+      include_file(r_32(argv, i), 0);
     }
     i = add(i, 1);
   }
 
-  if (fp == 0) {
-    putstr("Usage: "); putstr(argv[0]); putstr(" <filename>\n");
-    fatal_error("no input file");
+  if (eq(fp, 0)) {
+    putstr(mks("Usage: ")); putstr(r_32(argv, 0)); putstr(mks(" <filename>\n"));
+    fatal_error(mks("no input file"));
   }
 
-  ch = '\n';
+  ch = mkc('\n');
 
   codegen_begin();
   get_tok();
-  while (tok != EOF) {
+  while (neq(tok, EOF)) {
     decl = parse_declaration(false);
     codegen_glo_decl(decl);
   }
