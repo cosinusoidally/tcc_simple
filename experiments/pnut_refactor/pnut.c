@@ -157,6 +157,13 @@ struct IncludeStack {
   var column_number;
 };
 
+var r_i_fp_o;
+var r_i_next_o;
+var r_i_dirname_o;
+var r_i_filepath_o;
+var r_i_line_number_o;
+var r_i_column_number_o;
+
 function r_i_fp(o) {
   return ri32(o);
 }
@@ -7464,6 +7471,13 @@ function init_globals() {
   MACRO_RECURSION_MAX = 180; // Supports up to 60 (180 / 3) nested macro expansions.
   if_macro_stack = malloc(mul(4, IFDEF_DEPTH_MAX)); // Stack of if macro states
   macro_stack = malloc(mul(4, MACRO_RECURSION_MAX));
+
+  r_i_fp_o = 0;
+  r_i_next_o = 4;
+  r_i_dirname_o = 8;
+  r_i_filepath_o = 12;
+  r_i_line_number_o = 16;
+  r_i_column_number_o = 20;
 
 // get_tok parameters:
 // Whether to expand macros or not.
