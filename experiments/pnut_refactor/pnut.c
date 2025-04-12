@@ -6031,17 +6031,19 @@ function codegen_statement(node) {
   var save_locals;
   var binding;
 
-  if (node == 0) return;
+  if (eq(node, 0)) {
+    return;
+  }
 
   op = get_op(node);
 
-  if (op == IF_KW) {
+  if (eq(op, IF_KW)) {
 
     lbl1 = alloc_label(0); // else statement
     lbl2 = alloc_label(0); // join point after if
     codegen_rvalue(get_child_(IF_KW, node, 0));
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
     xor_reg_reg(reg_Y, reg_Y);
     jump_cond_reg_reg(EQ, lbl1, reg_X, reg_Y);
     codegen_statement(get_child_(IF_KW, node, 1));
@@ -6050,7 +6052,7 @@ function codegen_statement(node) {
     codegen_statement(get_child_(IF_KW, node, 2));
     def_label(lbl2);
 
-  } else if (op == WHILE_KW) {
+  } else if (eq(op, WHILE_KW)) {
 
     lbl1 = alloc_label(0); // while statement start
     lbl2 = alloc_label(0); // join point after while
@@ -6063,7 +6065,7 @@ function codegen_statement(node) {
     def_label(lbl1);
     codegen_rvalue(get_child_(WHILE_KW, node, 0));
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
     xor_reg_reg(reg_Y, reg_Y);
     jump_cond_reg_reg(EQ, lbl2, reg_X, reg_Y);
     codegen_statement(get_child_(WHILE_KW, node, 1));
@@ -6073,7 +6075,7 @@ function codegen_statement(node) {
     cgc_fs = save_fs;
     cgc_locals = save_locals;
 
-  } else if (op == FOR_KW) {
+  } else if (eq(op, FOR_KW)) {
 
     lbl1 = alloc_label(0); // while statement start
     lbl2 = alloc_label(0); // join point after while
@@ -6089,10 +6091,10 @@ function codegen_statement(node) {
     def_label(lbl1);
     codegen_statement(get_child_(FOR_KW, node, 2)); // post loop action
     def_label(lbl3);
-    if (get_child_(FOR_KW, node, 1) != 0) {
+    if (neq(get_child_(FOR_KW, node, 1), 0)) {
       codegen_rvalue(get_child_(FOR_KW, node, 1)); // test
       pop_reg(reg_X);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
       xor_reg_reg(reg_Y, reg_Y);
       jump_cond_reg_reg(EQ, lbl2, reg_X, reg_Y);
     }
@@ -6105,7 +6107,7 @@ function codegen_statement(node) {
     cgc_fs = save_fs;
     cgc_locals = save_locals;
 
-  } else if (op == DO_KW) {
+  } else if (eq(op, DO_KW)) {
 
     lbl1 = alloc_label(0); // do statement start
     lbl2 = alloc_label(0); // break point
@@ -6118,7 +6120,7 @@ function codegen_statement(node) {
     codegen_statement(get_child_(DO_KW, node, 0));
     codegen_rvalue(get_child_(DO_KW, node, 1));
     pop_reg(reg_X);
-    grow_fs(-1);
+    grow_fs(sub(0, 1));
     xor_reg_reg(reg_Y, reg_Y);
     jump_cond_reg_reg(NE, lbl1, reg_X, reg_Y);
 
@@ -6127,7 +6129,7 @@ function codegen_statement(node) {
     cgc_fs = save_fs;
     cgc_locals = save_locals;
 
-  } else if (op == SWITCH_KW) {
+  } else if (eq(op, SWITCH_KW)) {
 
     save_fs = cgc_fs;
     save_locals = cgc_locals;
@@ -6165,19 +6167,21 @@ function codegen_statement(node) {
     jump(lbl3);
 
     // In case #2 control ends up here
-    lbl2 = heap[binding + 4]; // Reload because the label is overwritten by CASE statements
+    lbl2 = r_heap(add(binding, 4)); // Reload because the label is overwritten by CASE statements
     def_label(lbl2);
     // If the default statement is present, we jump to it. Otherwise, we'll fall
     // through to the end of the switch and remove the switch operand from the
     // stack.
-    if (heap[binding + 5]) jump(heap[binding + 5]);
+    if (r_heap(add(binding, 5))) {
+      jump(r_heap(add(binding, 5)));
+    }
 
     def_label(lbl3);
 
     // If we fell through the switch, we need to remove the switch operand.
     // This is done before lbl1 because the stack is adjusted before the break statement.
-    grow_stack(-1);
-    grow_fs(-1);
+    grow_stack(sub(0, 1));
+    grow_fs(sub(0, 1));
 
     def_label(lbl1); // End of switch label
 
