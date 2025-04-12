@@ -89,7 +89,7 @@ var IFDEF_DEPTH_MAX;
 #define MAX_CODE_SIZE 5000000
 
 var if_macro_stack; // Stack of if macro states
-var macro_stack[MACRO_RECURSION_MAX];
+var macro_stack;
 var heap[HEAP_SIZE];
 var code[MAX_CODE_SIZE];
 
@@ -7438,6 +7438,7 @@ function init_globals() {
 
   IFDEF_DEPTH_MAX = 20;
   if_macro_stack = malloc(mul(4, IFDEF_DEPTH_MAX)); // Stack of if macro states
+  macro_stack = malloc(mul(4, MACRO_RECURSION_MAX));
 
 // get_tok parameters:
 // Whether to expand macros or not.
