@@ -1013,24 +1013,22 @@ function eval_constant(expr, if_macro) {
     return not(eval_constant(child0, if_macro));
   } else if(eq(op, mkc('!'))) {
     return eq(0, eval_constant(child0, if_macro));
+  } else if(or(eq(op, mkc('-')),eq(op, mkc('+')))) {
+    op1 = eval_constant(child0, if_macro);
+    if (eq(get_nb_children(expr), 1)) {
+      if(eq(op, mkc('-'))) {
+        return sub(0, op1);
+      }
+      return op1;
+    } else {
+      op2 = eval_constant(child1, if_macro);
+      if(eq(op,mkc('-'))) {
+        return sub(op1, op2);
+      }
+      return add(op1, op2);
+    }
   } else {
   switch (op) {
-    case '-':
-    case '+':
-      op1 = eval_constant(child0, if_macro);
-      if (eq(get_nb_children(expr), 1)) {
-        if(eq(op, mkc('-'))) {
-          return sub(0, op1);
-        }
-        return op1;
-      } else {
-        op2 = eval_constant(child1, if_macro);
-        if(eq(op,mkc('-'))) {
-          return sub(op1, op2);
-        }
-        return add(op1, op2);
-      }
-
     case '?':
       op1 = eval_constant(child0, if_macro);
       if (op1) {
