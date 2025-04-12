@@ -2535,22 +2535,16 @@ function parse_declaration_specifiers(allow_typedef) {
         parse_error(mks("Multiple types not supported"), tok);
       }
       type_specifier = parse_enum();
+    } else if(eq(tok, TYPE)) {
+      if (neq(type_specifier, 0)) {
+        parse_error(mks("Multiple types not supported"), tok);
+      }
+      // Lookup type in the types table. It is stored in the tag of the
+      // interned string object. The type is cloned so it can be modified.
+      type_specifier = clone_ast(r_heap(add(val, 3)));
+      get_tok();
     } else {
-    switch (tok) {
-      case TYPE:
-        if (neq(type_specifier, 0)) {
-          parse_error(mks("Multiple types not supported"), tok);
-        }
-        // Lookup type in the types table. It is stored in the tag of the
-        // interned string object. The type is cloned so it can be modified.
-        type_specifier = clone_ast(r_heap(add(val, 3)));
-        get_tok();
-        break;
-
-      default:
-        loop = false; // Break out of loop
-        break;
-    }
+      loop = false; // Break out of loop
     }
   }
 
