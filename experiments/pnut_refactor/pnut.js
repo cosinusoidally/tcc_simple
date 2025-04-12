@@ -2509,19 +2509,13 @@ function parse_declaration_specifiers(allow_typedef) {
       }
       specifier_storage_class = tok;
       get_tok();
-    } else if(0) {
+    } else if(eq(tok, INLINE_KW)) {
+      get_tok(); // Ignore inline
+    } else if(or(eq(tok, CONST_KW), eq(tok, VOLATILE_KW))) {
+      type_qualifier = or(type_qualifier, MK_TYPE_SPECIFIER(tok));
+      get_tok();
     } else {
     switch (tok) {
-      case INLINE_KW:
-        get_tok(); // Ignore inline
-        break;
-
-      case CONST_KW:
-      case VOLATILE_KW:
-        type_qualifier = or(type_qualifier, MK_TYPE_SPECIFIER(tok));
-        get_tok();
-        break;
-
       case CHAR_KW:
       case INT_KW:
       case VOID_KW:
