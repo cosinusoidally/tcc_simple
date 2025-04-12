@@ -100,12 +100,12 @@ var last_tok_line_number;
 var last_tok_column_number;
 
 struct IncludeStack {
-  int fp; // (FILE *)
+  var fp; // (FILE *)
   struct IncludeStack *next;
-  int dirname;  // (char *) The base path of the file, used to resolve relative paths
-  int filepath; // (char *) The path of the file, used to print error messages
-  int line_number;
-  int column_number;
+  var dirname;  // (char *) The base path of the file, used to resolve relative paths
+  var filepath; // (char *) The path of the file, used to print error messages
+  var line_number;
+  var column_number;
 };
 
 struct IncludeStack *include_stack, *include_stack2;
@@ -378,8 +378,8 @@ function new_ast4(op, child0, child1, child2, child3) {
 }
 
 function clone_ast(orig) {
-  int nb_children;
-  int i;
+  var nb_children;
+  var i;
 
   nb_children = get_nb_children(orig);
 
@@ -743,7 +743,8 @@ function INIT_ACCUM_DIGIT() {
 }
 
 function accum_digit(base) {
-  int digit = 99;
+  var digit;
+  digit = 99;
   if (and(lte(mkc('0'), ch), lte(ch, mkc('9')))) {
     digit = sub(ch, mkc('0'));
   } else if (and(lte(mkc('A'), ch), lte(ch, mkc('Z')))) {
@@ -934,8 +935,8 @@ function lookup_macro_token(args, tok, val) {
 }
 
 function read_macro_tokens(args) {
-  int toks; // List of token to replay
-  int tail;
+  var toks; // List of token to replay
+  var tail;
   toks = 0;
 
   // Accumulate tokens so they can be replayed when the macro is used
@@ -1409,13 +1410,15 @@ function init_builtin_string_macro(macro_str, value) {
 }
 
 function init_builtin_int_macro(macro_str, value) {
-  int macro_id = init_ident(MACRO, macro_str);
+  var macro_id;
+  macro_id = init_ident(MACRO, macro_str);
   heap[add(macro_id, 3)] = cons(cons(cons(INTEGER, sub(0,value)), 0), sub(0,1));
   return macro_id;
 }
 
 function init_builtin_empty_macro(macro_str) {
-  int macro_id = init_ident(MACRO, macro_str);
+  var macro_id;
+  macro_id = init_ident(MACRO, macro_str);
   heap[add(macro_id, 3)] = cons(0, sub(0,1)); // -1 means it's an object-like macro, 0 means no tokens
   return macro_id;
 }
@@ -1658,8 +1661,8 @@ function stringify() {
 // Concatenates two non-negative integers into a single integer
 // Note that this function only supports small integers, represented as positive integers.
 function paste_integers(left_val, right_val) {
-  int result;
-  int right_digits;
+  var result;
+  var right_digits;
   result = left_val;
   right_digits = right_val;
 
@@ -7469,7 +7472,7 @@ function r_32(p, o) {
   return ri32(add(p,mul(4,o)));
 }
 
-function main(int argc, char **argv) {
+function main(argc, argv) {
   var i;
   var decl;
   var t;
@@ -7518,7 +7521,7 @@ function main(int argc, char **argv) {
           include_search_path = add(r_32(argv, i), 2); // skip '-I'
         }
       } else {
-        putstr(mks("Option ")); putstr(argv[i]); putchar(mkc('\n'));
+        putstr(mks("Option ")); putstr(r_32(argv, i)); putchar(mkc('\n'));
         fatal_error(mks("unknown option"));
       }
     } else {
