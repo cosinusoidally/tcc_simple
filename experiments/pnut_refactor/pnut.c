@@ -6807,7 +6807,7 @@ function and_reg_reg(dst, src) {
   op_reg_reg(0x21, dst, src, WORD_SIZE);
 }
 
-function sub_reg_reg(int dst, int src) {
+function sub_reg_reg(dst, src) {
 
   // SUB dst_reg, src_reg ;; dst_reg = dst_reg - src_reg
   // See: https://web.archive.org/web/20240118202232/https://www.felixcloutier.com/x86/sub
@@ -6815,7 +6815,7 @@ function sub_reg_reg(int dst, int src) {
   op_reg_reg(0x29, dst, src, WORD_SIZE);
 }
 
-function xor_reg_reg(int dst, int src) {
+function xor_reg_reg(dst, src) {
 
   // XOR dst_reg, src_reg ;; dst_reg = dst_reg ^ src_reg
   // See: https://web.archive.org/web/20240323052259/https://www.felixcloutier.com/x86/xor
@@ -6823,7 +6823,7 @@ function xor_reg_reg(int dst, int src) {
   op_reg_reg(0x31, dst, src, WORD_SIZE);
 }
 
-function cmp_reg_reg(int dst, int src) {
+function cmp_reg_reg(dst, src) {
 
   // CMP dst_reg, src_reg  ;; Set condition flags according to dst_reg-src_reg
   // See: https://web.archive.org/web/20240407051947/https://www.felixcloutier.com/x86/cmp
@@ -6832,7 +6832,7 @@ function cmp_reg_reg(int dst, int src) {
   op_reg_reg(0x39, dst, src, WORD_SIZE);
 }
 
-function mov_reg_reg(int dst, int src) {
+function mov_reg_reg(dst, src) {
 
   // MOV dst_reg, src_reg  ;; dst_reg = src_reg
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
@@ -6840,17 +6840,17 @@ function mov_reg_reg(int dst, int src) {
   op_reg_reg(0x89, dst, src, WORD_SIZE);
 }
 
-function mov_reg_imm(int dst, int imm) {
+function mov_reg_imm(dst, imm) {
 
   // MOV dst_reg, imm  ;; Move 32 bit immediate value to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
 
   rex_prefix(0, dst);
-  emit_i8(0xb8 + (dst & 7));
+  emit_i8(add(0xB8, and(dst, 7)));
   emit_i32_le(imm);
 }
 
-function add_reg_imm(int dst, int imm) {
+function add_reg_imm(dst, imm) {
 
   // ADD dst_reg, imm  ;; Add 32 bit immediate value to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6861,7 +6861,7 @@ function add_reg_imm(int dst, int imm) {
   emit_i32_le(imm);
 }
 
-function add_reg_lbl(int dst, int lbl) {
+function add_reg_lbl(dst, lbl) {
 
   // ADD dst_reg, rel addr  ;; Add 32 bit displacement between next instruction and label to register
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/add
@@ -6872,22 +6872,28 @@ function add_reg_lbl(int dst, int lbl) {
   use_label(lbl); // 32 bit placeholder for distance
 }
 
-function mov_memory(int op, int reg, int base, int offset, int reg_width) {
+function mov_memory(op, reg, base, offset, reg_width) {
 
   // Move word between register and memory
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/mov
 
   // 16-bit operand size override prefix
   // See section on Legacy Prefixes: https://web.archive.org/web/20250210181519/https://wiki.osdev.org/X86-64_Instruction_Encoding#ModR/M
-  if (reg_width == 2) emit_i8(0x66);
-  if (reg_width == 8) rex_prefix(reg, base);
+  if (eq(reg_width, 2)) {
+    emit_i8(0x66);
+  }
+  if (eq(reg_width, 8)) {
+    rex_prefix(reg, base);
+  }
   emit_i8(op);
-  emit_i8(0x80 + (reg & 7) * 8 + (base & 7));
-  if (base == SP || base == R12) emit_i8(0x24); // SIB byte. See 32/64-bit addressing mode
+  emit_i8(add(add(0x80, mul(and(reg, 7), 8)), and(base, 7)));
+  if (or(eq(base, SP), eq(base, R12))) {
+    emit_i8(0x24); // SIB byte. See 32/64-bit addressing mode
+  }
   emit_i32_le(offset);
 }
 
-function mov_memory_extend(int op, int reg, int base, int offset, bool include_0f) {
+function mov_memory_extend(op, reg, base, offset, include_0f) {
 
   // Move word between register and memory with sign extension
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
@@ -6897,7 +6903,9 @@ function mov_memory_extend(int op, int reg, int base, int offset, bool include_0
   //  > The use of MOVSXD without REX.W in 64-bit mode is discouraged. Regular
   //  > MOV should be used instead of using MOVSXD without REX.W.
   rex_prefix(reg, base);
-  if (include_0f) emit_i8(0x0f); // Most sign/zero extend instructions have a 0x0f prefix
+  if (include_0f) {
+    emit_i8(0x0F); // Most sign/zero extend instructions have a 0x0f prefix
+  }
   emit_i8(op);
   emit_i8(0x80 + (reg & 7) * 8 + (base & 7));
   if (base == SP || base == R12) emit_i8(0x24); // SIB byte. See 32/64-bit addressing mode
