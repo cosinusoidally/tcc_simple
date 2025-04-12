@@ -5759,90 +5759,97 @@ function codegen_initializer(local, init, type, base_reg, offset) {
   if(eq(t, STRING)) {
     codegen_initializer_string(get_val_(STRING, init), type, base_reg, offset);
   } else if(eq(t, INITIALIZER_LIST)) {
-      init = get_child_(INITIALIZER_LIST, init, 0);
-      // Acceptable types are:
-      //  arrays
-      //  structs
-      //  union   (if the initializer list has only one element)
-      //  scalars (if the initializer list has only one element)
-      switch (get_op(type)) {
-        case '[':
-          inner_type = get_child_('[', type, 0);
-          arr_len = get_child_('[', type, 1);
-          inner_type_width = type_width(get_child_('[', type, 0), true, false);
+    init = get_child_(INITIALIZER_LIST, init, 0);
+    // Acceptable types are:
+    //  arrays
+    //  structs
+    //  union   (if the initializer list has only one element)
+    //  scalars (if the initializer list has only one element)
 
-          while (init != 0 && arr_len != 0) {
-            codegen_initializer(local, car(init), inner_type, base_reg, offset);
-            offset += inner_type_width;
-            init = tail(init);
-            arr_len -= 1; // decrement the number of elements left to initialize to make sure we don't overflow
-          }
+// LJW HERE
+    t = get_op(type);
+    if(0) {
+    } else if(0) {
+    } else {
+    switch (t) {
+      case '[':
+        inner_type = get_child_('[', type, 0);
+        arr_len = get_child_('[', type, 1);
+        inner_type_width = type_width(get_child_('[', type, 0), true, false);
 
-          if (init != 0) {
-            fatal_error("codegen_initializer: too many elements in initializer list");
-          }
+        while (init != 0 && arr_len != 0) {
+          codegen_initializer(local, car(init), inner_type, base_reg, offset);
+          offset += inner_type_width;
+          init = tail(init);
+          arr_len -= 1; // decrement the number of elements left to initialize to make sure we don't overflow
+        }
 
-          // If there are still elements to initialize, set them to 0.
-          // If it's not a local variable, we don't need to initialize the
-          // memory since the stack is zeroed during setup.
-          if (local && arr_len > 0) initialize_memory(0, base_reg, offset, inner_type_width * arr_len);
-          break;
+        if (init != 0) {
+          fatal_error("codegen_initializer: too many elements in initializer list");
+        }
 
-        case STRUCT_KW:
-          members = get_child_(STRUCT_KW, type, 2);
-          while (init != 0 && members != 0) {
-            inner_type = get_child_(DECL, car_(DECL, members), 1);
-            codegen_initializer(local, car(init), inner_type, base_reg, offset);
-            offset += type_width(inner_type, true, false);
-            init = tail(init);
-            members = tail(members);
-          }
+        // If there are still elements to initialize, set them to 0.
+        // If it's not a local variable, we don't need to initialize the
+        // memory since the stack is zeroed during setup.
+        if (local && arr_len > 0) initialize_memory(0, base_reg, offset, inner_type_width * arr_len);
+        break;
 
-          // Initialize rest of the members to 0
-          while (local && members != 0) {
-            inner_type = get_child_(DECL, car_(DECL, members), 1);
-            initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
-            offset += type_width(inner_type, true, false);
-            members = tail(members);
-          }
-          break;
+      case STRUCT_KW:
+        members = get_child_(STRUCT_KW, type, 2);
+        while (init != 0 && members != 0) {
+          inner_type = get_child_(DECL, car_(DECL, members), 1);
+          codegen_initializer(local, car(init), inner_type, base_reg, offset);
+          offset += type_width(inner_type, true, false);
+          init = tail(init);
+          members = tail(members);
+        }
 
-        case UNION_KW:
-          members = get_child_(STRUCT_KW, type, 2);
-          if (tail(init) != 0) {
-            fatal_error("codegen_initializer: union initializer list has more than one element");
-          } else if (members == 0) {
-            fatal_error("codegen_initializer: union has no members");
-          }
-          codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
-          break;
+        // Initialize rest of the members to 0
+        while (local && members != 0) {
+          inner_type = get_child_(DECL, car_(DECL, members), 1);
+          initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
+          offset += type_width(inner_type, true, false);
+          members = tail(members);
+        }
+        break;
 
-        default:
-          if (tail(init) != 0 // More than 1 element
-           || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
-            fatal_error("codegen_initializer: scalar initializer list has more than one element");
-          }
-          codegen_rvalue(car(init));
-          pop_reg(reg_X);
-          grow_fs(-1);
-          write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
-          break;
-      }
-  } else {
-      if (is_struct_or_union_type(type)) {
-        // Struct assignment, we copy the struct.
-        codegen_lvalue(init);
-        pop_reg(reg_X);
-        grow_fs(-1);
-        copy_obj(base_reg, offset, reg_X, 0, type_width(type, true, true));
-      } else if (get_op(type) != '[') {
-        codegen_rvalue(init);
+      case UNION_KW:
+        members = get_child_(STRUCT_KW, type, 2);
+        if (tail(init) != 0) {
+          fatal_error("codegen_initializer: union initializer list has more than one element");
+        } else if (members == 0) {
+          fatal_error("codegen_initializer: union has no members");
+        }
+        codegen_initializer(local, car(init), get_child_(DECL, car_(DECL, members), 1), base_reg, offset);
+        break;
+
+      default:
+        if (tail(init) != 0 // More than 1 element
+         || get_op(car(init)) == INITIALIZER_LIST) { // Or nested initializer list
+          fatal_error("codegen_initializer: scalar initializer list has more than one element");
+        }
+        codegen_rvalue(car(init));
         pop_reg(reg_X);
         grow_fs(-1);
         write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
-      } else {
-        fatal_error("codegen_initializer: cannot initialize array with scalar value");
-      }
+        break;
+    }
+    }
+  } else {
+    if (is_struct_or_union_type(type)) {
+      // Struct assignment, we copy the struct.
+      codegen_lvalue(init);
+      pop_reg(reg_X);
+      grow_fs(-1);
+      copy_obj(base_reg, offset, reg_X, 0, type_width(type, true, true));
+    } else if (get_op(type) != '[') {
+      codegen_rvalue(init);
+      pop_reg(reg_X);
+      grow_fs(-1);
+      write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
+    } else {
+      fatal_error("codegen_initializer: cannot initialize array with scalar value");
+    }
   }
 }
 
