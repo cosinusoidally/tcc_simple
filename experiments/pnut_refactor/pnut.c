@@ -7500,24 +7500,18 @@ function main(int argc, char **argv) {
         } else {
           init_ident(IDENTIFIER, add(r_32(argv, i), 2)); // skip '-U'
         }
+      } else if(eq(t, mkc('I'))) {
+        if (include_search_path != 0) fatal_error("only one include path allowed");
+
+        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
+          i += 1;
+          include_search_path = argv[i];
+        } else {
+          include_search_path = argv[i] + 2; // skip '-I'
+        }
       } else {
-      switch (t) {
-        case 'I':
-          if (include_search_path != 0) fatal_error("only one include path allowed");
-
-          if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-            i += 1;
-            include_search_path = argv[i];
-          } else {
-            include_search_path = argv[i] + 2; // skip '-I'
-          }
-          break;
-
-        default:
-          putstr("Option "); putstr(argv[i]); putchar('\n');
-          fatal_error("unknown option");
-          break;
-      }
+        putstr("Option "); putstr(argv[i]); putchar('\n');
+        fatal_error("unknown option");
       }
     } else {
       // Options that don't start with '-' are file names
