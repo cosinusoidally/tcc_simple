@@ -125,6 +125,10 @@ var fp_filepath = 0; // The path of the current file being read
 var include_search_path = 0; // Search path for include files
 var output_fd = 1; // Output file descriptor (1 = stdout)
 
+function init_tokens_ast() {
+
+}
+
 // Tokens and AST nodes
 enum {
   // Keywords
@@ -7472,6 +7476,9 @@ function init_globals() {
 
 // If the main function returns a value
   main_returns = false;
+
+
+  init_tokens_ast();
 }
 
 function r_32(p, o) {
