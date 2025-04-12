@@ -157,6 +157,30 @@ struct IncludeStack {
   var column_number;
 };
 
+function r_i_fp(o) {
+  return ri32(o);
+}
+
+function r_i_next(o) {
+  return ri32(add(o, 4));
+}
+
+function r_i_dirname(o) {
+  return ri32(add(o, 8));
+}
+
+function r_i_filepath(o) {
+  return ri32(add(o, 12));
+}
+
+function r_i_line_number(o) {
+  return ri32(add(o, 16));
+}
+
+function r_i_column_number(o) {
+  return ri32(add(o, 20));
+}
+
 struct IncludeStack *include_stack, *include_stack2;
 var fp = 0; // Current file pointer that's being read
 var fp_filepath = 0; // The path of the current file being read
