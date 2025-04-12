@@ -2424,6 +2424,9 @@ function parse_struct_or_union(struct_or_union_tok) {
 function parse_type_specifier() {
   var type_specifier;
   type_specifier = 0;
+  if(0) {
+  } else if(0) {
+  } else {
   switch (tok) {
     case CHAR_KW:
     case INT_KW:
@@ -2485,6 +2488,7 @@ function parse_type_specifier() {
 
     default:
       return 0;
+  }
   }
 }
 
