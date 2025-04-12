@@ -7487,11 +7487,11 @@ int main(int argc, char **argv) {
           output_fd = open(add(r_32(argv,i),2),or(O_WRONLY,or(O_CREAT,O_TRUNC)), 0644);
         }
       } else if(eq(t, mkc('D'))) {
-        if (argv[i][2] == 0) { // rest of option is in argv[i + 1]
-          i += 1;
-          handle_macro_D(argv[i]);
+        if (eq(ri8(add(r_32(argv, i),2)),0)) { // rest of option is in argv[i + 1]
+          i = add(i, 1);
+          handle_macro_D(r_32(argv, i));
         } else {
-          handle_macro_D(argv[i] + 2); // skip '-D'
+          handle_macro_D(add(r_32(argv, i), 2)); // skip '-D'
         }
       } else {
       switch (t) {
