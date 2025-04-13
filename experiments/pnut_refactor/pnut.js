@@ -168,6 +168,40 @@ var INTEGER_ULL;
 var CHARACTER;
 var STRING;
 
+var AMP_AMP;
+var AMP_EQ;
+var ARROW;
+var BAR_BAR;
+var BAR_EQ;
+var CARET_EQ;
+var EQ_EQ;
+var GT_EQ;
+var LSHIFT_EQ;
+var LSHIFT;
+var LT_EQ;
+var MINUS_EQ;
+var MINUS_MINUS;
+var EXCL_EQ;
+var PERCENT_EQ;
+var PLUS_EQ;
+var PLUS_PLUS;
+var RSHIFT_EQ;
+var RSHIFT;
+var SLASH_EQ;
+var STAR_EQ;
+var HASH_HASH;
+var PLUS_PLUS_PRE;
+var MINUS_MINUS_PRE;
+var PLUS_PLUS_POST;
+var MINUS_MINUS_POST;
+var ELLIPSIS;
+var PARENS;
+var INITIALIZER_LIST;
+var DECL;
+var DECLS;
+var FUN_DECL;
+var CAST;
+
 function init_tokens_ast() {
   var i;
   i = 300;
@@ -216,44 +250,44 @@ function init_tokens_ast() {
   INTEGER_ULL = i; i = add(i,1);
   CHARACTER = 410; // Fixed value so the ifdef above don't change the value
   STRING    = 411;
+
+  i = 450;
+  AMP_AMP = i; i = add(i,1);
+  AMP_EQ = i; i = add(i,1);
+  ARROW = i; i = add(i,1);
+  BAR_BAR = i; i = add(i,1);
+  BAR_EQ = i; i = add(i,1);
+  CARET_EQ = i; i = add(i,1);
+  EQ_EQ = i; i = add(i,1);
+  GT_EQ = i; i = add(i,1);
+  LSHIFT_EQ = i; i = add(i,1);
+  LSHIFT = i; i = add(i,1);
+  LT_EQ = i; i = add(i,1);
+  MINUS_EQ = i; i = add(i,1);
+  MINUS_MINUS = i; i = add(i,1);
+  EXCL_EQ = i; i = add(i,1);
+  PERCENT_EQ = i; i = add(i,1);
+  PLUS_EQ = i; i = add(i,1);
+  PLUS_PLUS = i; i = add(i,1);
+  RSHIFT_EQ = i; i = add(i,1);
+  RSHIFT = i; i = add(i,1);
+  SLASH_EQ = i; i = add(i,1);
+  STAR_EQ = i; i = add(i,1);
+  HASH_HASH = i; i = add(i,1);
+  PLUS_PLUS_PRE = i; i = add(i,1);
+  MINUS_MINUS_PRE = i; i = add(i,1);
+  PLUS_PLUS_POST = i; i = add(i,1);
+  MINUS_MINUS_POST = i; i = add(i,1);
+  ELLIPSIS = i; i = add(i,1);
+  PARENS = i; i = add(i,1);
+  INITIALIZER_LIST = i; i = add(i,1);
+  DECL = i; i = add(i,1);
+  DECLS = i; i = add(i,1);
+  FUN_DECL = i; i = add(i,1);
+  CAST = i; i = add(i,1);
 }
 
 enum {
-
-
-  AMP_AMP   = 450,
-  AMP_EQ,
-  ARROW,
-  BAR_BAR,
-  BAR_EQ,
-  CARET_EQ,
-  EQ_EQ,
-  GT_EQ,
-  LSHIFT_EQ,
-  LSHIFT,
-  LT_EQ,
-  MINUS_EQ,
-  MINUS_MINUS,
-  EXCL_EQ,
-  PERCENT_EQ,
-  PLUS_EQ,
-  PLUS_PLUS,
-  RSHIFT_EQ,
-  RSHIFT,
-  SLASH_EQ,
-  STAR_EQ,
-  HASH_HASH,
-  PLUS_PLUS_PRE,
-  MINUS_MINUS_PRE,
-  PLUS_PLUS_POST,
-  MINUS_MINUS_POST,
-  ELLIPSIS,
-  PARENS,
-  INITIALIZER_LIST,
-  DECL,
-  DECLS,
-  FUN_DECL,
-  CAST,
   MACRO_ARG = 499,
   IDENTIFIER = 500, // 500 because it's easy to remember
   TYPE = 501,
