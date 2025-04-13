@@ -3,6 +3,8 @@ var MACRO_RECURSION_MAX;
 var if_macro_stack;
 var macro_stack;
 
+var write_buf;
+
 // tokenizer
 
 var ch;
@@ -3702,7 +3704,6 @@ function emit_i32_le(n) {
   emit_4_i8(n, shr(n, 8), shr(n, 16), shr(n, 24));
 }
 
-char write_buf[1];
 
 function write_i8(n) {
   wi8(write_buf, and(n, 255));
@@ -7452,6 +7453,8 @@ function init_globals() {
   MACRO_RECURSION_MAX = 180; // Supports up to 60 (180 / 3) nested macro expansions.
   if_macro_stack = malloc(mul(4, IFDEF_DEPTH_MAX)); // Stack of if macro states
   macro_stack = malloc(mul(4, MACRO_RECURSION_MAX));
+
+  write_buf = malloc(4);
 
   r_i_fp_o = 0;
   r_i_next_o = 4;
