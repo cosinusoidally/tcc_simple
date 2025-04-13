@@ -59,6 +59,9 @@ var RT_HEAP_SIZE;
 
 var code_alloc = 0;
 
+var GENERIC_LABEL;
+var GOTO_LABEL;
+
 /* for reference this was the IncludeStack definition
 struct IncludeStack {
   var fp; // (FILE *)
@@ -4186,13 +4189,6 @@ function grow_stack_bytes(bytes) {
   add_reg_imm(reg_SP, sub(0, word_size_align(bytes)));
 }
 
-// Label definition
-
-enum {
-  GENERIC_LABEL,
-  GOTO_LABEL,
-};
-
 function assert_all_labels_defined() {
   return 0; // No-op
 }
@@ -7526,8 +7522,10 @@ function init_globals() {
 // If the main function returns a value
   main_returns = false;
 
-
   init_tokens_ast();
+// Label definition
+  GENERIC_LABEL = 1;
+  GOTO_LABEL = 1;
 }
 
 function r_32(p, o) {
