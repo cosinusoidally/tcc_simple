@@ -121,10 +121,11 @@ load("pnut.js");
 ri32 = _ri32;
 wi32 = _wi32;
 
-argc = 3;
-argv = malloc(mul(argc, 4));
+argc = 4;
+argv = malloc(mul(argc, mul(4,argc)));
 wi32(argv, mks("./artifacts/M2_simple_asm_m2.exe"));
-wi32(add(argv, 4), mks("./artifacts/M2_simple_asm_m2.c"));
-wi32(add(argv, 8), mks("../../tcc_simple/experiments/artifacts/M2_simple_asm_orig.M1"));
+wi32(add(argv, 4), mks("./pnut.c"));
+wi32(add(argv, 8), mks("-o"));
+wi32(add(argv, 12), mks("../artifacts/out.exe"));
 
 main(argc, argv);
