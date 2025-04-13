@@ -136,6 +136,14 @@ div_ = div;
 load("support.js");
 load("pnut.js");
 
+/* LJW HACK just spits out to stdout */
+write = function(fd, buf, count) {
+  if(count!=1) {
+    throw "write error";
+  }
+  putchar(ri8(buf));
+}
+
 /* override with builtins for memory read-write */
 ri32 = _ri32;
 wi32 = _wi32;
