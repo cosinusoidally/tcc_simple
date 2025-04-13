@@ -5236,7 +5236,7 @@ function codegen_lvalue(node) {
       grow_fs(sub(0, 1)); // grow_fs is called at the end of the function, so we need to decrement it here
     } else if (eq(op, PARENS)) {
       lvalue_width = codegen_lvalue(child0);
-      grow_fs(-1);
+      grow_fs(sub(0, 1));
     } else {
       fatal_error(mks("codegen_lvalue: unknown lvalue with 2 children"));
     }
