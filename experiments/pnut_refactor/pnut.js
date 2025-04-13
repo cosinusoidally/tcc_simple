@@ -3733,16 +3733,11 @@ function write_i32_le(n) {
 
 var main_returns;
 
-// Environment tracking
-var cgc_fs = 0;
-// Function bindings that follows lexical scoping rules
-var cgc_locals = 0;
-// Like cgc_locals, but with 1 scope for the entire function
-var cgc_locals_fun = 0;
-// Global bindings
-var cgc_globals = 0;
-// Bump allocator used to allocate static objects
-var cgc_global_alloc = 0;
+var cgc_fs;
+var cgc_locals;
+var cgc_locals_fun;
+var cgc_globals;
+var cgc_global_alloc;
 
 var BINDING_PARAM_LOCAL;
 var BINDING_VAR_LOCAL;
@@ -7580,6 +7575,18 @@ function init_globals() {
   R13 = 13;
   R14 = 14;
   R15 = 15;
+
+// Environment tracking
+  cgc_fs = 0;
+// Function bindings that follows lexical scoping rules
+  cgc_locals = 0;
+// Like cgc_locals, but with 1 scope for the entire function
+  cgc_locals_fun = 0;
+// Global bindings
+  cgc_globals = 0;
+// Bump allocator used to allocate static objects
+  cgc_global_alloc = 0;
+
 }
 
 function r_32(p, o) {
