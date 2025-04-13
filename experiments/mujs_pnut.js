@@ -48,6 +48,8 @@ function libc_open(pathname, flags, mode) {
     mode = "rb";
   } else if(and(eq(flags, 577), eq(mode, 384))) {
     mode = "wb";
+  } else if(and(eq(flags, 577), eq(mode, 420))) {
+    mode = "wb";
   } else {
     print("invalid mode");
     exit(1);
@@ -108,8 +110,11 @@ function exit(value) {
   err();
 }
 
+// hack since pnut.js also defines heap
+heap_real=heap;
+
 function real_addr(o) {
-  return add(heap, o);
+  return add(heap_real, o);
 }
 
 function open(pathname, flags, mode) {
@@ -121,6 +126,11 @@ close = libc_close;
 fgetc = libc_fgetc;
 fputc = libc_fputc;
 putchar = libc_putchar;
+
+__FILE__=0;
+__LINE__=0;
+
+div_ = div;
 
 load("support.js");
 load("pnut.js");

@@ -300,8 +300,6 @@ static void jsB_lte(js_State *J)
 	int r;
 	a=js_toint32(J,1);
 	b=js_toint32(J,2);
-puts("lte not impl");
-exit(1);
 	r = a <= b;
 	js_pushnumber(J,(double)r);
 }
