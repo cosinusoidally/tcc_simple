@@ -6743,24 +6743,22 @@ function generate_exe() {
 }
 // end exe.c
 
-// Registers common to i386 and x86-64 (E and R prefixes are omitted).
-
-var AX = 0;
-var CX = 1;
-var DX = 2;
-var BX = 3;
-var SP = 4;
-var BP = 5;
-var SI = 6;
-var DI = 7;
-var R8 = 8;
-var R9 = 9;
-var R10 = 10;
-var R11 = 11;
-var R12 = 12;
-var R13 = 13;
-var R14 = 14;
-var R15 = 15;
+var AX;
+var CX;
+var DX;
+var BX;
+var SP;
+var BP;
+var SI;
+var DI;
+var R8;
+var R9;
+var R10;
+var R11;
+var R12;
+var R13;
+var R14;
+var R15;
 
 function rex_prefix(reg1, reg2) {
 // LJW FIXME restore the 64 bit backend
@@ -7563,6 +7561,25 @@ function init_globals() {
   fp_filepath = 0; // The path of the current file being read
   include_search_path = 0; // Search path for include files
   output_fd = 1; // Output file descriptor (1 = stdout)
+
+// Registers common to i386 and x86-64 (E and R prefixes are omitted).
+
+  AX = 0;
+  CX = 1;
+  DX = 2;
+  BX = 3;
+  SP = 4;
+  BP = 5;
+  SI = 6;
+  DI = 7;
+  R8 = 8;
+  R9 = 9;
+  R10 = 10;
+  R11 = 11;
+  R12 = 12;
+  R13 = 13;
+  R14 = 14;
+  R15 = 15;
 }
 
 function r_32(p, o) {
