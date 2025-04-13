@@ -1,2 +1,7 @@
+set -xe
+./mk_mujs_min
 cd pnut_refactor
-../artifacts/mujs ../mujs_pnut.js
+../artifacts/mujs ../mujs_pnut.js > ../artifacts/pnut_js.exe
+chmod +x ../artifacts/pnut_js.exe
+../artifacts/pnut_js.exe pnut.c -o ../artifacts/pnut-exe
+chmod +x ../artifacts/pnut-exe
