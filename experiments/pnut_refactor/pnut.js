@@ -29,7 +29,7 @@ var alloc_result;
 
 var ast_result;
 
-var if_macro_stack_ix = 0;
+var if_macro_stack_ix;
 var if_macro_mask;
 var if_macro_executed;
 
@@ -37,11 +37,11 @@ var expand_macro;
 var expand_macro_arg;
 var skip_newlines;
 
-var macro_stack_ix = 0;
+var macro_stack_ix;
 
-var macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
-var macro_args = 0;     // Current list of arguments for the macro being expanded
-var macro_ident = 0;    // The identifier of the macro being expanded (if any)
+var macro_tok_lst;  // Current list of tokens to replay for the macro being expanded
+var macro_args;     // Current list of arguments for the macro being expanded
+var macro_ident;    // The identifier of the macro being expanded (if any)
 var macro_args_count;   // Number of arguments for the current macro being expanded
 var paste_last_token;
 var TRUE;
@@ -57,11 +57,11 @@ var column_number;
 var last_tok_line_number;
 var last_tok_column_number;
 
-var WORD_SIZE = 4;
+var WORD_SIZE;
 
 var RT_HEAP_SIZE;
 
-var code_alloc = 0;
+var code_alloc;
 
 var GENERIC_LABEL;
 var GOTO_LABEL;
@@ -7551,6 +7551,13 @@ function init_globals() {
 // Label definition
   GENERIC_LABEL = 1;
   GOTO_LABEL = 1;
+
+  macro_stack_ix = 0;
+  macro_tok_lst = 0;  // Current list of tokens to replay for the macro being expanded
+  macro_args = 0;     // Current list of arguments for the macro being expanded
+  macro_ident = 0;    // The identifier of the macro being expanded (if any)
+  WORD_SIZE = 4;
+  code_alloc = 0;
 }
 
 function r_32(p, o) {
