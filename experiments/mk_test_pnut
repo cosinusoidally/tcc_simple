@@ -5,5 +5,5 @@ set -xe
 ./mk_pnut_exe
 ./mk_tcc-boot-mes
 
-wc pnut_refactor/*c |sort -h
+wc pnut_refactor/*c pnut_refactor/*js | sort -h
 sha256sum -c sums_tcc-boot-mes
