@@ -2578,7 +2578,7 @@ function parse_type_specifier() {
 // This function parses the first part
 // Storage class specifiers affect declarations instead of types, so it's easier to extract it from the type
 
-var glo_specifier_storage_class = 0;
+var glo_specifier_storage_class;
 
 function parse_declaration_specifiers(allow_typedef) {
   var type_specifier;
@@ -4511,7 +4511,7 @@ function canonicalize_type(type) {
 }
 
 // Size of the largest member of a struct or union, used for alignment
-var struct_union_size_largest_member = 0;
+var struct_union_size_largest_member;
 
 function type_largest_member(type) {
   var t;
@@ -7587,6 +7587,10 @@ function init_globals() {
 // Bump allocator used to allocate static objects
   cgc_global_alloc = 0;
 
+  glo_specifier_storage_class = 0;
+
+// Size of the largest member of a struct or union, used for alignment
+  struct_union_size_largest_member = 0;
 }
 
 function r_32(p, o) {
