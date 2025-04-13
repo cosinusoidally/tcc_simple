@@ -7452,9 +7452,9 @@ function init_globals() {
   FALSE = 0;
   EOF = sub(0, 1);
 
-  O_WRONLY = 01;
-  O_CREAT  = 0100;
-  O_TRUNC  = 01000;
+  O_WRONLY = 1;
+  O_CREAT  = 64;
+  O_TRUNC  = 512;
 
   IFDEF_DEPTH_MAX = 20;
   MACRO_RECURSION_MAX = 180; // Supports up to 60 (180 / 3) nested macro expansions.
@@ -7616,9 +7616,10 @@ function main(argc, argv) {
         // Output file name
         if (eq(ri8(add(r_32(argv,i),2)),0)) { // rest of option is in argv[i + 1]
           i = add(i, 1);
-          output_fd = open(r_32(argv,i),or(O_WRONLY,or(O_CREAT,O_TRUNC)),0644);
+          /* 0640 octal is is 420 in decimal */
+          output_fd = open(r_32(argv,i),or(O_WRONLY,or(O_CREAT,O_TRUNC)),420);
         } else {
-          output_fd = open(add(r_32(argv,i),2),or(O_WRONLY,or(O_CREAT,O_TRUNC)), 0644);
+          output_fd = open(add(r_32(argv,i),2),or(O_WRONLY,or(O_CREAT,O_TRUNC)), 420);
         }
       } else if(eq(t, mkc('D'))) {
         if (eq(ri8(add(r_32(argv, i),2)),0)) { // rest of option is in argv[i + 1]
