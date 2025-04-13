@@ -69,11 +69,6 @@ int xor(int a, int b) {
   return a ^ b;
 }
 
-/* FIXME cop out to help implement r == (char)r */
-int movsx_eax_al(int eax) {
-  return (char)eax;
-}
-
 /* memory functions */
 
 int ri8(int o) {
