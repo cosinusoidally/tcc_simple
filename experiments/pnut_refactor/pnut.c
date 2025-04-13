@@ -83,10 +83,4 @@ function codegen_statement(node);
 function codegen_lvalue(node);
 function handle_enum_struct_union_type_decl(type);
 
-#define HEAP_SIZE 2000000
-#define MAX_CODE_SIZE 5000000
-
-var heap[HEAP_SIZE];
-var code[MAX_CODE_SIZE];
-
 #include "pnut.js"
