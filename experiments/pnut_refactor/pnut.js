@@ -40,8 +40,8 @@ var macro_args = 0;     // Current list of arguments for the macro being expande
 var macro_ident = 0;    // The identifier of the macro being expanded (if any)
 var macro_args_count;   // Number of arguments for the current macro being expanded
 var paste_last_token;
-var true;
-var false;
+var TRUE;
+var FALSE;
 var EOF;
 
 var O_WRONLY;
@@ -953,9 +953,9 @@ function get_tok_macro() {
   prev_macro_mask = if_macro_mask;
   skip_newlines_prev = skip_newlines;
 
-  expand_macro = false;
-  if_macro_mask = true;
-  skip_newlines = false;
+  expand_macro = FALSE;
+  if_macro_mask = TRUE;
+  skip_newlines = FALSE;
   get_tok();
   expand_macro = prev_expand_macro;
   if_macro_mask = prev_macro_mask;
@@ -971,8 +971,8 @@ function get_tok_macro_expand() {
   prev_expand_macro = expand_macro;
   prev_macro_mask = if_macro_mask;
 
-  expand_macro = false;
-  if_macro_mask = true;
+  expand_macro = FALSE;
+  if_macro_mask = TRUE;
   get_tok();
   expand_macro = prev_expand_macro;
   if_macro_mask = prev_macro_mask;
@@ -1209,15 +1209,15 @@ function evaluate_if_condition() {
   previous_mask = if_macro_mask;
   // Temporarily set to true so that we can read the condition even if it's inside an ifdef false block
   // Unlike in other directives using get_tok_macro, we want to expand macros in the condition
-  if_macro_mask = true;
-  skip_newlines = false; // We want to stop when we reach the first newline
+  if_macro_mask = TRUE;
+  skip_newlines = FALSE; // We want to stop when we reach the first newline
   get_tok(); // Skip the #if keyword
   expr = parse_assignment_expression();
 
   // Restore the previous value
   if_macro_mask = previous_mask;
   skip_newlines = prev_skip_newlines;
-  return eval_constant(expr, true);
+  return eval_constant(expr, TRUE);
 }
 
 function handle_include() {
@@ -1262,14 +1262,14 @@ function handle_preprocessor_directive() {
       if_macro_executed = or(if_macro_executed, temp);
       if_macro_mask = temp;
     } else {
-      if_macro_mask = false;
+      if_macro_mask = FALSE;
     }
   } else if (eq(tok, ELSE_KW)) {
     if (prev_macro_mask()) { // If the parent block mask is true
       if_macro_mask = eq(0, if_macro_executed);
-      if_macro_executed = true;
+      if_macro_executed = TRUE;
     } else {
-      if_macro_mask = false;
+      if_macro_mask = FALSE;
     }
     get_tok_macro(); // Skip the else keyword
   } else if (and(eq(tok, IDENTIFIER), eq(val, ENDIF_ID))) {
@@ -1570,10 +1570,10 @@ function get_macro_args_toks(macro) {
         args = cons(0, args);
         macro_args_count = add(macro_args_count, 1);
       }
-      prev_is_comma = true;
+      prev_is_comma = TRUE;
       continue;
     } else {
-      prev_is_comma = false;
+      prev_is_comma = FALSE;
     }
 
     args = cons(macro_parse_argument(), args);
@@ -1642,20 +1642,20 @@ function macro_is_already_expanding(ident) {
   var i;
   i = macro_stack_ix;
   if (or(eq(ident, 0), eq(macro_ident, 0))) {
-    return false; // Unnamed macro or no macro is expanding
+    return FALSE; // Unnamed macro or no macro is expanding
   }
   if (eq(ident, macro_ident)) {
-    return true;  // The same macro is already expanding
+    return TRUE;  // The same macro is already expanding
   }
 
   // Traverse the stack to see if the macro is already expanding
   while (gt(i, 0)) {
     i = sub(i, 3);
     if (eq(r_macro_stack(add(i, 2)), ident)) {
-      return true;
+      return TRUE;
     }
   }
-  return false;
+  return FALSE;
 }
 
 // Undoes the effect of get_tok by replacing the current token with the previous
@@ -1679,7 +1679,7 @@ function attempt_macro_expansion(macro) {
   if (macro_is_already_expanding(macro)) { // Self referencing macro
     tok = IDENTIFIER;
     val = macro;
-    return false;
+    return FALSE;
   } else if (eq(cdr(r_heap(add(macro,3))),sub(0,1))) { // Object-like macro
     // Note: Redefining __{FILE,LINE}__ macros, either with the #define or #line directives is not supported.
     if (eq(macro, FILE__ID)) {
@@ -1689,15 +1689,15 @@ function attempt_macro_expansion(macro) {
       tokens = cons(cons(INTEGER, sub(0, line_number)), 0);
     }
     begin_macro_expansion(macro, tokens, 0);
-    return true;
+    return TRUE;
   } else { // Function-like macro
     expect_tok(MACRO); // Skip macro identifier
     if (eq(tok, mkc('('))) {
       begin_macro_expansion(macro, tokens, get_macro_args_toks(macro));
-      return true;
+      return TRUE;
     } else {
       undo_token(IDENTIFIER, macro);
-      return false;
+      return FALSE;
     }
   }
 }
@@ -1705,9 +1705,9 @@ function attempt_macro_expansion(macro) {
 // https://gcc.gnu.org/onlinedocs/cpp/Stringizing.html
 function stringify() {
   var arg;
-  expand_macro_arg = false;
+  expand_macro_arg = FALSE;
   get_tok_macro();
-  expand_macro_arg = true;
+  expand_macro_arg = TRUE;
   if (neq(tok, MACRO_ARG)) {
     putstr(mks("tok=")); putint(tok); putchar(mkc('\n'));
     syntax_error(mks("expected macro argument after #"));
@@ -1741,9 +1741,9 @@ function paste_integers(left_val, right_val) {
 function paste_tokens(left_tok, left_val) {
   var right_tok;
   var right_val;
-  expand_macro_arg = false;
+  expand_macro_arg = FALSE;
   get_tok_macro();
-  expand_macro_arg = true;
+  expand_macro_arg = TRUE;
   // We need to handle the case where the right-hand side is a macro argument that expands to empty
   // In that case, the left-hand side is returned as is.
   if (eq(tok, MACRO_ARG)) {
@@ -1831,7 +1831,7 @@ function get_tok() {
           if (or(eq(tok,MACRO),eq(tok,MACRO_ARG))) {
             // If the token is a macro or macro arg, it must be expanded before pasting
             macro_tok_lst = cdr(macro_tok_lst); // We consume the ## token
-            paste_last_token = true;
+            paste_last_token = TRUE;
           } else {
             // macro_tok_lst is not empty because read_macro_tokens checked for trailing ##
             macro_tok_lst = cdr(macro_tok_lst); // Skip the ##
@@ -1845,7 +1845,7 @@ function get_tok() {
             syntax_error(mks("## cannot appear at the end of a macro expansion"));
           }
           return_to_parent_macro();
-          paste_last_token = false; // We are done pasting
+          paste_last_token = FALSE; // We are done pasting
           paste_tokens(tok, val);
         }
 
@@ -2291,7 +2291,7 @@ function pointer_type(parent_type, is_const) {
 }
 
 function function_type(parent_type, params) {
-  return new_ast3(mkc('('), parent_type, params, false);
+  return new_ast3(mkc('('), parent_type, params, FALSE);
 }
 
 function function_type1(parent_type, param1) {
@@ -2307,7 +2307,7 @@ function function_type3(parent_type, param1, param2, param3) {
 }
 
 function make_variadic_func(func_type) {
-  set_child(func_type, 2, true); // Set the variadic flag
+  set_child(func_type, 2, TRUE); // Set the variadic flag
   return func_type;
 }
 
@@ -2315,37 +2315,37 @@ function make_variadic_func(func_type) {
 function is_type_starter(tok) {
   // Numeric types
   if(or(or(eq(tok,INT_KW),eq(tok,CHAR_KW)),or(eq(tok,SHORT_KW),eq(tok,LONG_KW)))) {
-    return true;
+    return TRUE;
   }
   // Void and floating point types
   if(or(eq(tok,VOID_KW),or(eq(tok,FLOAT_KW),eq(tok,DOUBLE_KW)))) {
-    return true;
+    return TRUE;
   }
   // Signedness
   if(or(eq(tok,SIGNED_KW),eq(tok,UNSIGNED_KW))) {
-    return true;
+    return TRUE;
   }
   // User defined types
   if(eq(tok,TYPE)) {
-    return true;
+    return TRUE;
   }
   // Type attributes
   if(or(eq(tok,CONST_KW),eq(tok,VOLATILE_KW))) {
-    return true;
+    return TRUE;
   }
   // Enum, struct, union
   if(or(eq(tok,ENUM_KW),or(eq(tok,STRUCT_KW),eq(tok,UNION_KW)))) {
-    return true;
+    return TRUE;
   }
   // Storage class specifiers are not always valid type starters in all
   // contexts, but we allow them here
   if(or(eq(tok,TYPEDEF_KW),or(eq(tok,STATIC_KW),or(eq(tok,AUTO_KW),or(eq(tok,REGISTER_KW),eq(tok,EXTERN_KW)))))) {
-    return true;
+    return TRUE;
   }
   if(eq(tok,INLINE_KW)) {
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 function parse_enum() {
@@ -2395,7 +2395,7 @@ function parse_enum() {
         , and(neq(get_op(value),INTEGER_U), and(neq(get_op(value),INTEGER_UL),and(neq(get_op(value),INTEGER_ULL),
         and(neq(get_op(value),INTEGER_L), neq(get_op(value),INTEGER_LL))))))
            ) {
-        value = new_ast0(last_literal_type, -eval_constant(value, false)); // negative value to indicate it's a small integer
+        value = new_ast0(last_literal_type, sub(0,eval_constant(value, FALSE))); // negative value to indicate it's a small integer
         }
         next_value = sub(get_val(value), 1); // Next value is the current value + 1, but val is negative
       } else {
@@ -2434,7 +2434,7 @@ function parse_struct_or_union(struct_or_union_tok) {
   var ends_in_flex_array;
 
   result = 0;
-  ends_in_flex_array = false;
+  ends_in_flex_array = FALSE;
 
   expect_tok(struct_or_union_tok);
 
@@ -2458,7 +2458,7 @@ function parse_struct_or_union(struct_or_union_tok) {
       if (ends_in_flex_array) {
         parse_error(mks("flexible array member must be last"), tok);
       }
-      type_specifier = parse_declaration_specifiers(false);
+      type_specifier = parse_declaration_specifiers(FALSE);
 
       // If the decl has no name, it's an anonymous struct/union member
       // and there can only be 1 declarator so not looping.
@@ -2477,7 +2477,7 @@ function parse_struct_or_union(struct_or_union_tok) {
         }
       } else {
         while (1) {
-          decl = parse_declarator(false, type_specifier);
+          decl = parse_declarator(FALSE, type_specifier);
           if (eq(result, 0)) {
             tail = result = cons(decl, 0);
           } else {
@@ -2490,7 +2490,7 @@ function parse_struct_or_union(struct_or_union_tok) {
           }
           if (and(eq(get_child_(DECL, decl, 1), mkc('[')), eq(get_child_(mkc('['), get_child_(DECL, decl, 1), 1), 0))) {
             // Set ends_in_flex_array if the type is an array with no size
-            ends_in_flex_array = true;
+            ends_in_flex_array = TRUE;
             break;
           }
           if (eq(tok, mkc(','))) {
@@ -2584,7 +2584,7 @@ function parse_declaration_specifiers(allow_typedef) {
 
   type_specifier = 0;
   type_qualifier = 0;
-  loop = true;
+  loop = TRUE;
   specifier_storage_class = 0;
 
   while (loop) {
@@ -2633,7 +2633,7 @@ function parse_declaration_specifiers(allow_typedef) {
       type_specifier = clone_ast(r_heap(add(val, 3)));
       get_tok();
     } else {
-      loop = false; // Break out of loop
+      loop = FALSE; // Break out of loop
     }
   }
 
@@ -2664,13 +2664,13 @@ function parse_param_list() {
   var decl;
 
   result = 0;
-  parse_param_list_is_variadic = false;
+  parse_param_list_is_variadic = FALSE;
 
   expect_tok(mkc('('));
 
   while (and(neq(tok, mkc(')')), neq(tok, EOF))) {
     if (is_type_starter(tok)) {
-      decl = parse_declarator(true, parse_declaration_specifiers(false));
+      decl = parse_declarator(TRUE, parse_declaration_specifiers(FALSE));
       if (eq(get_op(get_child_(DECL, decl, 1)), VOID_KW)) {
         if (or(neq(tok,mkc(')')), neq(result, 0))) {
           parse_error("void must be the only parameter", tok);
@@ -2687,7 +2687,7 @@ function parse_param_list() {
         parse_error(mks("Function must have a named parameter before ellipsis parameter"), tok);
       }
       get_tok();
-      parse_param_list_is_variadic = true;
+      parse_param_list_is_variadic = TRUE;
       break;
     } else {
       parse_error(mks("Parameter declaration expected"), tok);
@@ -2828,14 +2828,14 @@ function parse_declarator(abstract_decl, parent_type) {
         if (eq(arr_size_expr, 0)) {
           parse_error(mks("Array size must be an integer constant"), tok);
         }
-        val = eval_constant(arr_size_expr, false);
+        val = eval_constant(arr_size_expr, FALSE);
       }
       result = new_ast2(mkc('['), get_inner_type(parent_type_parent), val);
       update_inner_type(parent_type_parent, result);
       parent_type_parent = result;
       expect_tok(mkc(']'));
     } else if (eq(tok, mkc('('))) {
-      result = new_ast3(mkc('('), get_inner_type(parent_type_parent), parse_param_list(), false);
+      result = new_ast3(mkc('('), get_inner_type(parent_type_parent), parse_param_list(), FALSE);
       if (parse_param_list_is_variadic) {
         result = make_variadic_func(result);
       }
@@ -2889,7 +2889,7 @@ function parse_initializer() {
 
 function parse_declarator_and_initializer(is_for_typedef, type_specifier) {
   var declarator;
-  declarator = parse_declarator(false, type_specifier);
+  declarator = parse_declarator(FALSE, type_specifier);
 
   if (eq(is_for_typedef, 0)) {
     if (eq(tok, mkc('='))) {
@@ -2961,7 +2961,7 @@ function parse_declaration(local) {
   var type_specifier;
 
   // First we parse the specifiers:
-  type_specifier = parse_declaration_specifiers(true);
+  type_specifier = parse_declaration_specifiers(TRUE);
 
   // From cppreference:
   // > The enum, struct, and union declarations may omit declarators, in which
@@ -2981,8 +2981,8 @@ function parse_declaration(local) {
     // The type_specifier contained a typedef, it can't be a function or a
     // variable declaration, and the declarators cannot be initialized.
     // The typedef'ed types will be added to the type table.
-    declarator = parse_declarator_and_initializer(true, type_specifier); // First declarator
-    declarators = parse_declarators(true, type_specifier, declarator);
+    declarator = parse_declarator_and_initializer(TRUE, type_specifier); // First declarator
+    declarators = parse_declarators(TRUE, type_specifier, declarator);
     type_specifier = declarators; // Save declarators in type_specifier
     while (neq(declarators, 0)) {
       add_typedef(get_child__(LIST, DECL, declarators, 0));
@@ -2991,7 +2991,7 @@ function parse_declaration(local) {
     result = new_ast1(TYPEDEF_KW, type_specifier);
   } else {
     // Then we parse the declarators and initializers
-    declarator = parse_declarator_and_initializer(false, type_specifier);
+    declarator = parse_declarator_and_initializer(FALSE, type_specifier);
 
     // The declarator may be a function definition, in which case we parse the function body
     if(and(eq(get_op(get_child_(DECL,declarator,1)),mkc('(')),eq(tok,mkc('{')))) {
@@ -3001,7 +3001,7 @@ function parse_declaration(local) {
       return parse_fun_def(declarator);
     }
 
-    declarators = parse_declarators(false, type_specifier, declarator);
+    declarators = parse_declarators(FALSE, type_specifier, declarator);
     result = new_ast2(DECLS, declarators, glo_specifier_storage_class); // child#1 is the storage class specifier
   }
 
@@ -3161,7 +3161,7 @@ function parse_unary_expression() {
       get_tok();
       // May be a type or an expression
       if (is_type_starter(tok)) {
-      result = parse_declarator(true, parse_declaration_specifiers(false));
+      result = parse_declarator(TRUE, parse_declaration_specifiers(FALSE));
       expect_tok(mkc(')'));
       } else {
         // We need to put the current token and '(' back on the token stream.
@@ -3218,7 +3218,7 @@ function parse_cast_expression() {
     get_tok();
 
     if (is_type_starter(tok)) {
-      type = parse_declarator(true, parse_declaration_specifiers(false));
+      type = parse_declarator(TRUE, parse_declaration_specifiers(FALSE));
 
       expect_tok(mkc(')'));
       result = new_ast2(CAST, type, parse_cast_expression());
@@ -3650,7 +3650,7 @@ function parse_compound_statement() {
   // TODO: Simplify this
   if (and(neq(tok, mkc('}')), neq(tok, EOF))) {
     if (is_type_starter(tok)) {
-      child1 = parse_declaration(true);
+      child1 = parse_declaration(TRUE);
     } else {
       child1 = parse_statement();
     }
@@ -3658,7 +3658,7 @@ function parse_compound_statement() {
     tail = result;
     while (and(neq(tok, mkc('}')), neq(tok, EOF))) {
       if (is_type_starter(tok)) {
-        child1 = parse_declaration(true);
+        child1 = parse_declaration(TRUE);
       } else {
         child1 = parse_statement();
       }
@@ -4383,7 +4383,7 @@ function is_function_type(type) {
   op = get_op(type);
   if (eq(op, mkc('*'))) {
     if (eq(get_op(get_child_(mkc('*'), type, 1)), mkc('('))) {
-      return true;
+      return TRUE;
     }
   }
   return eq(op, mkc('('));
@@ -4413,10 +4413,10 @@ function is_numeric_type(type) {
       or(eq(t, DOUBLE_KW), or(eq(t, SHORT_KW), or(eq(t, LONG_KW),
       eq(t, ENUM_KW) // Enums are considered numeric types
     ))))))) {
-    return true;
+    return TRUE;
   } else {
     // Struct/union/pointer/array
-    return false;
+    return FALSE;
   }
 }
 
@@ -4428,7 +4428,7 @@ function is_signed_numeric_type(type) {
     )))))) {
     return eq(0, TEST_TYPE_SPECIFIER(get_val(type), UNSIGNED_KW));
   } else {
-    return true; // Not a numeric type => it's a struct/union/pointer/array and we consider it signed
+    return TRUE; // Not a numeric type => it's a struct/union/pointer/array and we consider it signed
   }
 }
 
@@ -4447,7 +4447,7 @@ function type_width(type, array_value, word_align) {
     // sizeof, in struct definitions, etc.) while in other contexts we care
     // about the pointer (i.e. when passing an array to a function, etc.)
     if (array_value) {
-      width = mul(get_child_(mkc('['), type, 1), type_width(get_child_(mkc('['), type, 0), true, false));
+      width = mul(get_child_(mkc('['), type, 1), type_width(get_child_(mkc('['), type, 0), TRUE, FALSE));
     } else {
       width = WORD_SIZE; // Array is a pointer to the first element
     }
@@ -4477,7 +4477,7 @@ function type_width(type, array_value, word_align) {
 
 // Width of an object pointed to by a reference type.
 function ref_type_width(type) {
-  return type_width(dereference_type(type), false, false);
+  return type_width(dereference_type(type), FALSE, FALSE);
 }
 
 // Structs, enums and unions types come in 2 variants:
@@ -4524,7 +4524,7 @@ function type_largest_member(type) {
   } else if(eq(t, mkc('['))) {
     return type_largest_member(get_child_(mkc('['), type, 0));
   } else {
-    return type_width(type, true, false);
+    return type_width(type, TRUE, FALSE);
   }
 }
 
@@ -4548,7 +4548,7 @@ function struct_union_size(type) {
   while (neq(members, 0)) {
     member_type = get_child_(DECL, car_(DECL, members), 1);
     members = tail(members);
-    member_size = type_width(member_type, true, false);
+    member_size = type_width(member_type, TRUE, FALSE);
     largest_submember_size = type_largest_member(member_type);
     if (neq(member_size, 0)) {
       sum_size = align_to(largest_submember_size, sum_size); // Align the member to the word size
@@ -4602,7 +4602,7 @@ function struct_member_offset_go(struct_type, member_ident) {
       // For unions, fields are always at offset 0. We must still iterate
       // because the field may be in an anonymous struct, in which case the
       // final offset is not 0.
-      member_size = type_width(get_child_(DECL, decl, 1), true, false);
+      member_size = type_width(get_child_(DECL, decl, 1), TRUE, FALSE);
       if (neq(member_size, 0)) {
         offset = align_to(type_largest_member(get_child_(DECL, decl, 1)), offset);
       }
@@ -4752,7 +4752,7 @@ function value_type(node) {
       }
     } else if (eq(op, mkc('&'))) {
       left_type = value_type(child0);
-      return pointer_type(left_type, false);
+      return pointer_type(left_type, FALSE);
     } else if (eq(op, mkc('!'))) {
       return int_type; // Logical not always returns an integer
     } else if (or(eq(op,mkc('+')),or(eq(op,mkc('-')),or(eq(op,mkc('~')),or(eq(op,MINUS_MINUS),or(eq(op,PLUS_PLUS),or(eq(op,MINUS_MINUS_POST),or(eq(op,PLUS_PLUS_POST),or(eq(op,PLUS_PLUS_PRE),or(eq(op,MINUS_MINUS_PRE),eq(op,PARENS))))))))))) {
@@ -4875,10 +4875,10 @@ function codegen_binop(op, lhs, rhs) {
   left_is_numeric = is_numeric_type(left_type);
   right_is_numeric = is_numeric_type(right_type);
   // If any of the operands is unsigned, the result is unsigned
-  is_signed = false;
+  is_signed = FALSE;
 
   if (and(is_signed_numeric_type(left_type),is_signed_numeric_type(right_type))) {
-    is_signed = true;
+    is_signed = TRUE;
   }
 
   pop_reg(reg_Y); // rhs operand
@@ -5054,7 +5054,7 @@ function codegen_param(param) {
     codegen_rvalue(param);
   }
 
-  return div_(type_width(type, false, true), WORD_SIZE);
+  return div_(type_width(type, FALSE, TRUE), WORD_SIZE);
 }
 
 function codegen_params(params) {
@@ -5170,7 +5170,7 @@ function codegen_lvalue(node) {
       } else {
         fatal_error(mks("codegen_lvalue: identifier not found"));
       }
-      lvalue_width = type_width(r_heap(add(binding,4)), true, false);
+      lvalue_width = type_width(r_heap(add(binding,4)), TRUE, FALSE);
     } else {
       putstr(mks("op=")); putint(op); putchar(mkc('\n'));
       fatal_error(mks("codegen_lvalue: unknown lvalue with nb_children == 0"));
@@ -5210,7 +5210,7 @@ function codegen_lvalue(node) {
         }
         push_reg(reg_X);
         grow_fs(sub(0, 1));
-        lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), true, false); // child 1 of member is the type
+        lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), TRUE, FALSE); // child 1 of member is the type
       } else {
         fatal_error(mks("codegen_lvalue: . operator on non-struct type"));
       }
@@ -5227,13 +5227,13 @@ function codegen_lvalue(node) {
         }
         push_reg(reg_X);
         grow_fs(sub(0, 1));
-        lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), true, false); // child 1 of member is the type
+        lvalue_width = type_width(get_child_(DECL, struct_member(type, child1), 1), TRUE, FALSE); // child 1 of member is the type
       } else {
         fatal_error(mks("codegen_lvalue: -> operator on non-struct pointer type"));
       }
     } else if (eq(op, CAST)) {
       codegen_lvalue(child1);
-      lvalue_width = type_width(child0, true, false);
+      lvalue_width = type_width(child0, TRUE, FALSE);
       grow_fs(sub(0, 1)); // grow_fs is called at the end of the function, so we need to decrement it here
     } else if (eq(op, PARENS)) {
       lvalue_width = codegen_lvalue(child0);
@@ -5341,7 +5341,7 @@ function codegen_rvalue(node) {
         // structs/unions are allocated on the stack, so no need to dereference
         // For arrays, we need to dereference the pointer since they are passed as pointers
         if(and(neq(get_op(r_heap(add(binding,4))),STRUCT_KW),neq(get_op(r_heap(add(binding,4))),UNION_KW))) {
-          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), false, false), is_signed_numeric_type(r_heap(add(binding,4))));
+          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), FALSE, FALSE), is_signed_numeric_type(r_heap(add(binding,4))));
         }
         push_reg(reg_X);
       } else if(eq(t, BINDING_VAR_LOCAL)) {
@@ -5349,7 +5349,7 @@ function codegen_rvalue(node) {
         add_reg_reg(reg_X, reg_SP);
         // local arrays/structs/unions are allocated on the stack, so no need to dereference
         if(and(neq(get_op(r_heap(add(binding,4))),mkc('[')),and(neq(get_op(r_heap(add(binding,4))),STRUCT_KW),neq(get_op(r_heap(add(binding,4))),UNION_KW)))) {
-          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), false, false), is_signed_numeric_type(r_heap(add(binding,4))));
+          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), FALSE, FALSE), is_signed_numeric_type(r_heap(add(binding,4))));
         }
         push_reg(reg_X);
       } else if(eq(t, BINDING_VAR_GLOBAL)) {
@@ -5357,7 +5357,7 @@ function codegen_rvalue(node) {
         add_reg_reg(reg_X, reg_glo);
         // global arrays/structs/unions are also allocated on the stack, so no need to dereference
         if(and(neq(get_op(r_heap(add(binding,4))),mkc('[')),and(neq(get_op(r_heap(add(binding,4))),STRUCT_KW),neq(get_op(r_heap(add(binding,4))),UNION_KW)))) {
-          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), false, false), is_signed_numeric_type(r_heap(add(binding,4))));
+          load_mem_location(reg_X, reg_X, 0, type_width(r_heap(add(binding,4)), FALSE, FALSE), is_signed_numeric_type(r_heap(add(binding,4))));
         }
         push_reg(reg_X);
       } else if(eq(t, BINDING_ENUM_CST)) {
@@ -5447,9 +5447,9 @@ function codegen_rvalue(node) {
       grow_fs(sub(0, 1));
     } else if (eq(op, SIZEOF_KW)) {
       if (eq(get_op(child0), DECL)) {
-        mov_reg_imm(reg_X, type_width(get_child_(DECL, child0, 1), true, false));
+        mov_reg_imm(reg_X, type_width(get_child_(DECL, child0, 1), TRUE, FALSE));
       } else {
-        mov_reg_imm(reg_X, type_width(value_type(child0), true, false));
+        mov_reg_imm(reg_X, type_width(value_type(child0), TRUE, FALSE));
       }
       push_reg(reg_X);
     } else {
@@ -5525,7 +5525,7 @@ function codegen_rvalue(node) {
           add_reg_imm(reg_Y, struct_member_offset(type1, child1));
         }
         if (eq(0, is_aggregate_type(type2))) {
-          load_mem_location(reg_Y, reg_Y, 0, type_width(type2, false, false), is_signed_numeric_type(type2));
+          load_mem_location(reg_Y, reg_Y, 0, type_width(type2, FALSE, FALSE), is_signed_numeric_type(type2));
         }
         push_reg(reg_Y);
       } else {
@@ -5544,7 +5544,7 @@ function codegen_rvalue(node) {
           add_reg_imm(reg_Y, struct_member_offset(type1, child1));
         }
         if (eq(0, is_aggregate_type(type2))) {
-          load_mem_location(reg_Y, reg_Y, 0, type_width(type2, false, false), is_signed_numeric_type(type2));
+          load_mem_location(reg_Y, reg_Y, 0, type_width(type2, FALSE, FALSE), is_signed_numeric_type(type2));
         }
         push_reg(reg_Y);
       } else {
@@ -5556,8 +5556,8 @@ function codegen_rvalue(node) {
       // to truncate the value. This is done by writing the value to the stack
       // and then reading it back, sign extending it if necessary.
       child0 = get_child_(DECL, child0, 1); // child 1 of cast is the type
-      if(lt(type_width(child0, false, false),type_width(value_type(child1), false, false))) {
-        load_mem_location(reg_X, reg_SP, 0, type_width(child0, false, false), is_signed_numeric_type(child0));
+      if(lt(type_width(child0, FALSE, FALSE),type_width(value_type(child1), FALSE, FALSE))) {
+        load_mem_location(reg_X, reg_SP, 0, type_width(child0, FALSE, FALSE), is_signed_numeric_type(child0));
         grow_stack(sub(0, 1));
         push_reg(reg_X);
       }
@@ -5610,9 +5610,9 @@ function codegen_begin() {
   int_type = new_ast0(INT_KW, 0);
   uint_type = new_ast0(INT_KW, MK_TYPE_SPECIFIER(UNSIGNED_KW));
   char_type = new_ast0(CHAR_KW, 0);
-  string_type = pointer_type(new_ast0(CHAR_KW, 0), false);
+  string_type = pointer_type(new_ast0(CHAR_KW, 0), FALSE);
   void_type = new_ast0(VOID_KW, 0);
-  void_star_type = pointer_type(new_ast0(VOID_KW, 0), false);
+  void_star_type = pointer_type(new_ast0(VOID_KW, 0), FALSE);
 
   main_lbl = alloc_label(mks("main"));
   cgc_add_global_fun(init_ident(IDENTIFIER, mks("main")), main_lbl, function_type(void_type, 0));
@@ -5803,7 +5803,7 @@ function codegen_initializer(local, init, type, base_reg, offset) {
     if(eq(t, mkc('['))) {
       inner_type = get_child_(mkc('['), type, 0);
       arr_len = get_child_(mkc('['), type, 1);
-      inner_type_width = type_width(get_child_(mkc('['), type, 0), true, false);
+      inner_type_width = type_width(get_child_(mkc('['), type, 0), TRUE, FALSE);
 
       while (and(neq(init, 0), neq(arr_len, 0))) {
         codegen_initializer(local, car(init), inner_type, base_reg, offset);
@@ -5827,7 +5827,7 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       while (and(neq(init, 0), neq(members, 0))) {
         inner_type = get_child_(DECL, car_(DECL, members), 1);
         codegen_initializer(local, car(init), inner_type, base_reg, offset);
-        offset = add(offset, type_width(inner_type, true, false));
+        offset = add(offset, type_width(inner_type, TRUE, FALSE));
         init = tail(init);
         members = tail(members);
       }
@@ -5835,8 +5835,8 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       // Initialize rest of the members to 0
       while (and(local, neq(members, 0))) {
         inner_type = get_child_(DECL, car_(DECL, members), 1);
-        initialize_memory(0, base_reg, offset, type_width(inner_type, true, false));
-        offset = add(offset, type_width(inner_type, true, false));
+        initialize_memory(0, base_reg, offset, type_width(inner_type, TRUE, FALSE));
+        offset = add(offset, type_width(inner_type, TRUE, FALSE));
         members = tail(members);
       }
     } else if(eq(t, UNION_KW)) {
@@ -5855,7 +5855,7 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       codegen_rvalue(car(init));
       pop_reg(reg_X);
       grow_fs(sub(0, 1));
-      write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
+      write_mem_location(base_reg, offset, reg_X, type_width(type, TRUE, FALSE));
     }
   } else {
     if (is_struct_or_union_type(type)) {
@@ -5863,12 +5863,12 @@ function codegen_initializer(local, init, type, base_reg, offset) {
       codegen_lvalue(init);
       pop_reg(reg_X);
       grow_fs(sub(0, 1));
-      copy_obj(base_reg, offset, reg_X, 0, type_width(type, true, true));
+      copy_obj(base_reg, offset, reg_X, 0, type_width(type, TRUE, TRUE));
     } else if (neq(get_op(type), mkc('['))) {
       codegen_rvalue(init);
       pop_reg(reg_X);
       grow_fs(sub(0, 1));
-      write_mem_location(base_reg, offset, reg_X, type_width(type, true, false));
+      write_mem_location(base_reg, offset, reg_X, type_width(type, TRUE, FALSE));
     } else {
       fatal_error(mks("codegen_initializer: cannot initialize array with scalar value"));
     }
@@ -5935,14 +5935,14 @@ function codegen_glo_var_decl(node) {
     infer_array_length(type, init);
 
     if (eq(binding, 0)) {
-      cgc_add_global(name_probe, type_width(type, true, true), type, false);
+      cgc_add_global(name_probe, type_width(type, TRUE, TRUE), type, FALSE);
       binding = cgc_globals;
     }
 
     if (neq(init, 0)) {
       def_label(init_next_lbl);
       init_next_lbl = alloc_label(mks("init_next"));
-      codegen_initializer(false, init, type, reg_glo, r_heap(add(binding, 3))); // heap[binding + 3] = offset
+      codegen_initializer(FALSE, init, type, reg_glo, r_heap(add(binding, 3))); // heap[binding + 3] = offset
       jump(init_next_lbl);
     }
   }
@@ -5953,7 +5953,7 @@ function compute_local_var_decl_size(type, init) {
   infer_array_length(type, init);
 
   if (is_aggregate_type(type)) { // Array/struct/union declaration
-    return type_width(type, true, true);  // size in bytes (word aligned)
+    return type_width(type, TRUE, TRUE);  // size in bytes (word aligned)
   } else {
     return WORD_SIZE;
   }
@@ -5976,7 +5976,7 @@ function codegen_local_var_decl(node) {
 
   if (neq(init, 0)) {
     // offset (cgc_fs - heap[cgc_locals + 3]) should be 0 since we just allocated the space
-    codegen_initializer(true, init, type, reg_SP, 0);
+    codegen_initializer(TRUE, init, type, reg_SP, 0);
   }
 }
 
@@ -5992,7 +5992,7 @@ function codegen_static_local_var_decl(node) {
   init = get_child_(DECL, node, 2);
   size = compute_local_var_decl_size(type, init);
 
-  cgc_add_global(get_val_(IDENTIFIER, name), size, type, true);
+  cgc_add_global(get_val_(IDENTIFIER, name), size, type, TRUE);
 
   if (neq(init, 0)) {
     // Skip over the initialization code that will run during program initialization
@@ -6000,7 +6000,7 @@ function codegen_static_local_var_decl(node) {
     jump(skip_init_lbl);
     def_label(init_next_lbl);
     init_next_lbl = alloc_label(mks("init_next"));
-    codegen_initializer(false, init, type, reg_glo, r_heap(add(cgc_locals, 3))); // heap[cgc_locals + 3] = offset
+    codegen_initializer(FALSE, init, type, reg_glo, r_heap(add(cgc_locals, 3))); // heap[cgc_locals + 3] = offset
     jump(init_next_lbl);
     def_label(skip_init_lbl);
   }
@@ -6010,12 +6010,12 @@ function codegen_local_var_decls(node) {
   var is_static;
   var t;
 
-  is_static = false;
+  is_static = FALSE;
 
   t = get_child_(DECLS, node, 1);
   // AUTO_KW and REGISTER_KW can simply be ignored.
   if(eq(t, STATIC_KW)) {
-    is_static = true;
+    is_static = TRUE;
   }
   if(eq(t, EXTERN_KW)) {
     fatal_error(mks("Extern class specifier not supported"));
@@ -6337,14 +6337,14 @@ function add_params(params) {
 
     // Array to pointer decay
     if (eq(get_op(type), mkc('['))) {
-      type = pointer_type(dereference_type(type), false);
+      type = pointer_type(dereference_type(type), FALSE);
     }
 
     if (neq(cgc_lookup_var(ident, cgc_locals), 0)) {
       fatal_error(mks("add_params: duplicate parameter"));
     }
 
-    cgc_add_local_param(ident, div_(type_width(type, false, true), WORD_SIZE), type);
+    cgc_add_local_param(ident, div_(type_width(type, FALSE, TRUE), WORD_SIZE), type);
     params = tail(params);
   }
 }
@@ -6375,7 +6375,7 @@ function codegen_glo_fun_decl(node) {
   if (eq(name_probe, MAIN_ID)) {
     // Check if main returns an exit code.
     if (neq(get_op(fun_return_type), VOID_KW)) {
-      main_returns = true;
+      main_returns = TRUE;
     }
   }
 
@@ -6977,7 +6977,7 @@ function mov_reg_mem8(dst, base, offset) {
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
 
-  mov_memory_extend(0xB6, dst, base, offset, true);
+  mov_memory_extend(0xB6, dst, base, offset, TRUE);
 }
 
 function mov_reg_mem16(dst, base, offset) {
@@ -6985,7 +6985,7 @@ function mov_reg_mem16(dst, base, offset) {
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, zero-extended
   // See: https://web.archive.org/web/20250109202608/https://www.felixcloutier.com/x86/movzx
 
-  mov_memory_extend(0xB7, dst, base, offset, true);
+  mov_memory_extend(0xB7, dst, base, offset, TRUE);
 }
 
 function mov_reg_mem32(dst, base, offset) {
@@ -7003,7 +7003,7 @@ function mov_reg_mem8_sign_ext(dst, base, offset) {
   // MOVB dst_reg, [base_reg + offset]  ;; Move byte from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
 
-  mov_memory_extend(0xBE, dst, base, offset, true);
+  mov_memory_extend(0xBE, dst, base, offset, TRUE);
 }
 
 function mov_reg_mem16_sign_ext(dst, base, offset) {
@@ -7011,7 +7011,7 @@ function mov_reg_mem16_sign_ext(dst, base, offset) {
   // MOVB dst_reg, [base_reg + offset]  ;; Move word (2 bytes) from memory to register, sign-extended
   // See: https://web.archive.org/web/20250121105942/https://www.felixcloutier.com/x86/movsx:movsxd
 
-  mov_memory_extend(0xBF, dst, base, offset, true);
+  mov_memory_extend(0xBF, dst, base, offset, TRUE);
 }
 
 function imul_reg_reg(dst, src) {
@@ -7451,8 +7451,8 @@ function handle_macro_D(opt) {
 }
 
 function init_globals() {
-  true = 1;
-  false = 0;
+  TRUE = 1;
+  FALSE = 0;
   EOF = sub(0, 1);
 
   O_WRONLY = 01;
@@ -7477,16 +7477,16 @@ function init_globals() {
 // get_tok parameters:
 // Whether to expand macros or not.
 // Useful to parse macro definitions containing other macros without expanding them.
-  expand_macro = true;
+  expand_macro = TRUE;
 // Don't expand macro arguments. Used for stringification and token pasting.
-  expand_macro_arg = true;
+  expand_macro_arg = TRUE;
 // Don't produce newline tokens. Used when reading the tokens of a macro definition.
-  skip_newlines = true;
-  if_macro_mask = true;      // Indicates if the current if/elif block is being executed
-  if_macro_executed = false; // If any of the previous if/elif conditions were true
-  paste_last_token = false; // Whether the last token was a ## or not
+  skip_newlines = TRUE;
+  if_macro_mask = TRUE;      // Indicates if the current if/elif block is being executed
+  if_macro_executed = FALSE; // If any of the previous if/elif conditions were true
+  paste_last_token = FALSE; // Whether the last token was a ## or not
 
-  parse_param_list_is_variadic = false;
+  parse_param_list_is_variadic = FALSE;
 
   line_number = 1;
   column_number = 0;
@@ -7534,7 +7534,7 @@ function init_globals() {
   GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 
 // If the main function returns a value
-  main_returns = false;
+  main_returns = FALSE;
 
   init_tokens_ast();
   init_binding();
@@ -7616,7 +7616,7 @@ function main(argc, argv) {
   codegen_begin();
   get_tok();
   while (neq(tok, EOF)) {
-    decl = parse_declaration(false);
+    decl = parse_declaration(FALSE);
     codegen_glo_decl(decl);
   }
   codegen_end();
