@@ -129,10 +129,10 @@ function w_i_column_number(o, v) {
 
 var include_stack;
 var include_stack2;
-var fp = 0; // Current file pointer that's being read
-var fp_filepath = 0; // The path of the current file being read
-var include_search_path = 0; // Search path for include files
-var output_fd = 1; // Output file descriptor (1 = stdout)
+var fp; // Current file pointer that's being read
+var fp_filepath; // The path of the current file being read
+var include_search_path; // Search path for include files
+var output_fd; // Output file descriptor (1 = stdout)
 
 var AUTO_KW;
 var BREAK_KW;
@@ -7558,6 +7558,11 @@ function init_globals() {
   macro_ident = 0;    // The identifier of the macro being expanded (if any)
   WORD_SIZE = 4;
   code_alloc = 0;
+
+  fp = 0; // Current file pointer that's being read
+  fp_filepath = 0; // The path of the current file being read
+  include_search_path = 0; // Search path for include files
+  output_fd = 1; // Output file descriptor (1 = stdout)
 }
 
 function r_32(p, o) {
