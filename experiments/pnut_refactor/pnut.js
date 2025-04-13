@@ -821,7 +821,7 @@ function accum_digit(base) {
   } else if (and(lte(mkc('A'), ch), lte(ch, mkc('Z')))) {
     digit = add(sub(ch, mkc('A')), 10);
   } else if (and(lte(mkc('a'), ch), lte(ch, mkc('z')))) {
-    digit = ch - 'a' + 10;
+    digit = add(sub(ch, mkc('a')), 10);
   }
   if (gte(digit, base)) {
     return 0; // character is not a digit in that base
