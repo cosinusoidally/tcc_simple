@@ -202,6 +202,13 @@ var DECLS;
 var FUN_DECL;
 var CAST;
 
+var MACRO_ARG;
+var IDENTIFIER;
+var TYPE;
+var MACRO;
+
+var LIST;
+
 function init_tokens_ast() {
   var i;
   i = 300;
@@ -285,16 +292,14 @@ function init_tokens_ast() {
   DECLS = i; i = add(i,1);
   FUN_DECL = i; i = add(i,1);
   CAST = i; i = add(i,1);
+
+  MACRO_ARG = 499;
+  IDENTIFIER = 500; // 500 because it's easy to remember
+  TYPE = 501;
+  MACRO = 502;
+
+  LIST = 600; // List object
 }
-
-enum {
-  MACRO_ARG = 499,
-  IDENTIFIER = 500, // 500 because it's easy to remember
-  TYPE = 501,
-  MACRO = 502,
-
-  LIST = 600, // List object
-};
 
 function putstr(str) {
   while (ri8(str)) {
