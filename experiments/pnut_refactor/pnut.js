@@ -3740,27 +3740,37 @@ var cgc_globals = 0;
 // Bump allocator used to allocate static objects
 var cgc_global_alloc = 0;
 
+var BINDING_PARAM_LOCAL;
+var BINDING_VAR_LOCAL;
+var BINDING_VAR_GLOBAL;
+var BINDING_ENUM_CST;
+var BINDING_LOOP;
+var BINDING_SWITCH;
+var BINDING_FUN;
+var BINDING_GOTO_LABEL;
+var BINDING_TYPE_STRUCT;
+var BINDING_TYPE_UNION;
+var BINDING_TYPE_ENUM;
+
 function init_binding() {
-
-}
-
-enum BINDING {
+  var i;
   // Because function params, local and global variables all share the same
   // namespace and we want to find the first one of them, we need to keep
   // BINDING_PARAM_LOCAL, BINDING_VAR_LOCAL and BINDING_VAR_GLOBAL
   // in consecutive order.
-  BINDING_PARAM_LOCAL,
-  BINDING_VAR_LOCAL,
-  BINDING_VAR_GLOBAL,
-  BINDING_ENUM_CST,
-  BINDING_LOOP,
-  BINDING_SWITCH,
-  BINDING_FUN,
-  BINDING_GOTO_LABEL,
-  BINDING_TYPE_STRUCT,
-  BINDING_TYPE_UNION,
-  BINDING_TYPE_ENUM,
-};
+  i = 0;
+  BINDING_PARAM_LOCAL = i; i = add(i, 1);
+  BINDING_VAR_LOCAL = i; i = add(i, 1);
+  BINDING_VAR_GLOBAL = i; i = add(i, 1);
+  BINDING_ENUM_CST = i; i = add(i, 1);
+  BINDING_LOOP = i; i = add(i, 1);
+  BINDING_SWITCH = i; i = add(i, 1);
+  BINDING_FUN = i; i = add(i, 1);
+  BINDING_GOTO_LABEL = i; i = add(i, 1);
+  BINDING_TYPE_STRUCT = i; i = add(i, 1);
+  BINDING_TYPE_UNION = i; i = add(i, 1);
+  BINDING_TYPE_ENUM = i; i = add(i, 1);
+}
 
 // Some small accessor for the bindings
 // All bindings have a next pointer and a kind.
