@@ -3,6 +3,10 @@ var MACRO_RECURSION_MAX;
 var if_macro_stack;
 var macro_stack;
 
+/* LJW FIXME runtime allocation broken on coverage build */
+// var heap;
+// var code;
+
 var write_buf;
 
 // tokenizer
@@ -7463,6 +7467,10 @@ function init_globals() {
   MACRO_RECURSION_MAX = 180; // Supports up to 60 (180 / 3) nested macro expansions.
   if_macro_stack = malloc(mul(4, IFDEF_DEPTH_MAX)); // Stack of if macro states
   macro_stack = malloc(mul(4, MACRO_RECURSION_MAX));
+
+/* LJW FIXME runtime allocation broken on coverage build */
+//  heap = malloc(mul(4, HEAP_SIZE));
+//  code = malloc(mul(4, MAX_CODE_SIZE));
 
   write_buf = malloc(4);
 
