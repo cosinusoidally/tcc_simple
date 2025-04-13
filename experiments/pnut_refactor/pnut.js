@@ -7321,13 +7321,13 @@ function mov_reg_lbl(reg, lbl) {
 // For syscalls that use less than 3 parameters, the extra register params are set to -1.
 function syscall_3(syscall_code, bx_reg, cx_reg, dx_reg) {
   push_reg(BX);                  // save address of global variables table
-  if (bx_reg >= 0) {
+  if (gte(bx_reg, 0)) {
     mov_reg_reg(BX, bx_reg);
   }
-  if (cx_reg >= 0) {
+  if (gte(cx_reg, 0)) {
     mov_reg_reg(CX, cx_reg);
   }
-  if (dx_reg >= 0) {
+  if (gte(dx_reg, 0)) {
     mov_reg_reg(DX, dx_reg);
   }
   mov_reg_imm(AX, syscall_code); // AX = syscall_code
