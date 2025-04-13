@@ -2124,13 +2124,13 @@ function get_tok() {
 
           break;
 
-        } else if (ch == '+') {
+        } else if (eq(ch, mkc('+'))) {
 
           get_ch();
-          if (ch == '=') {
+          if (eq(ch, mkc('='))) {
             get_ch();
             tok = PLUS_EQ;
-          } else if (ch == '+') {
+          } else if (eq(ch, mkc('+'))) {
             get_ch();
             tok = PLUS_PLUS;
           }
