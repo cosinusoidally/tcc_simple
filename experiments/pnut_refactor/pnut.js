@@ -3186,7 +3186,7 @@ function parse_unary_expression() {
       result = new_ast2(mkc('('), new_ast0(IDENTIFIER, DEFINED_ID), tok);
       get_tok_macro();
       expect_tok(mkc(')'));
-    } else if (tok == IDENTIFIER || tok == MACRO) {
+    } else if (or(eq(tok, IDENTIFIER), eq(tok, MACRO))) {
       result = new_ast2(mkc('('), new_ast0(IDENTIFIER, DEFINED_ID), tok);
       get_tok_macro();
     } else {
@@ -7281,7 +7281,7 @@ function setup_proc_args(global_vars_size) {
   // Note(13/02/2025): Global variables are now allocated in a separate memory region so global_vars_size is 0.
 
   mov_reg_reg(reg_X, SP);
-  add_reg_imm(reg_X, global_vars_size + WORD_SIZE); // compute address of argv
+  add_reg_imm(reg_X, add(global_vars_size, WORD_SIZE)); // compute address of argv
   push_reg(reg_X); // push argv address
 
   mov_reg_mem(reg_Y, reg_X, sub(0, WORD_SIZE)); // load argc
