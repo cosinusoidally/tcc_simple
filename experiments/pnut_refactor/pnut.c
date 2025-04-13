@@ -22,7 +22,7 @@ function parse_declaration_specifiers(allow_typedef);
 function parse_initializer_list();
 function parse_initializer();
 function generate_exe();
-function mov_reg_imm(dst, imm);             // Move 32 bit immediate to register
+function mov_reg_imm(dst, imm);
 function mov_reg_reg(dst, src);
 function mov_mem8_reg(base, offset, src);
 function mov_mem16_reg(base, offset, src);
