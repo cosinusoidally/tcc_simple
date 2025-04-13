@@ -2864,7 +2864,7 @@ function parse_initializer_list() {
   expect_tok(mkc('{'));
 
   while (and(neq(tok, mkc('}')), neq(tok, EOF))) {
-    if (result == 0) {
+    if (eq(result, 0)) {
       result = cons(parse_initializer(), 0);
       tail = result;
     } else {
@@ -3088,7 +3088,7 @@ function parse_postfix_expression() {
       result = new_ast2(mkc('['), result, child);
       expect_tok(mkc(']'));
 
-    } else if (tok == '(') {
+    } else if (eq(tok, mkc('('))) {
 
       get_tok();
       if (eq(tok, mkc(')'))) {
