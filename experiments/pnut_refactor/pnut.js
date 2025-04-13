@@ -2942,8 +2942,8 @@ function parse_fun_def(declarator) {
   var fun_type;
   var params;
 
-  fun_type = get_child__(DECL, '(', declarator, 1);
-  params = get_child_('(', fun_type, 1);
+  fun_type = get_child__(DECL, mkc('('), declarator, 1);
+  params = get_child_(mkc('('), fun_type, 1);
 
   // Check that the parameters are all named since declarator may be abstract
   while (neq(params, 0)) {
@@ -3375,7 +3375,7 @@ function parse_inclusive_OR_expression() {
 
     get_tok();
     child = parse_exclusive_OR_expression();
-    result = new_ast2('|', result, child);
+    result = new_ast2(mkc('|'), result, child);
 
   }
 

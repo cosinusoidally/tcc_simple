@@ -69,6 +69,7 @@ libc_fgetc_ptr=dlsym(libc, "fgetc");
 
 function libc_fgetc(f) {
   var r = ffi_wrap(libc_fgetc_ptr, f);
+putchar(r);
   return r;
 }
 
