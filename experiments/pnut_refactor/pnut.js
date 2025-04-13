@@ -3740,6 +3740,10 @@ var cgc_globals = 0;
 // Bump allocator used to allocate static objects
 var cgc_global_alloc = 0;
 
+function init_binding() {
+
+}
+
 enum BINDING {
   // Because function params, local and global variables all share the same
   // namespace and we want to find the first one of them, we need to keep
@@ -7523,6 +7527,7 @@ function init_globals() {
   main_returns = false;
 
   init_tokens_ast();
+  init_binding();
 // Label definition
   GENERIC_LABEL = 1;
   GOTO_LABEL = 1;
