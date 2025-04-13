@@ -83,6 +83,12 @@ function libc_close(f) {
   return ffi_wrap(libc_fclose_ptr, f);
 }
 
+libc_putchar_ptr=dlsym(libc, "putchar");
+
+function libc_putchar(f) {
+  return ffi_wrap(libc_putchar_ptr, f);
+}
+
 var brk_ptr;
 
 brk_ptr = mul(128, 1024);
@@ -98,6 +104,7 @@ function brk(addr) {
 }
 
 function exit(value) {
+  print("exit called: "+value);
   err();
 }
 
@@ -113,6 +120,7 @@ function open(pathname, flags, mode) {
 close = libc_close;
 fgetc = libc_fgetc;
 fputc = libc_fputc;
+putchar = libc_putchar;
 
 load("support.js");
 load("pnut.js");

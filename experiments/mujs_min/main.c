@@ -368,8 +368,6 @@ static void jsB_xor(js_State *J)
 	int r;
 	a=js_toint32(J,1);
 	b=js_toint32(J,2);
-puts("xor not impl");
-exit(1);
 	r = (a ^ b);
 	js_pushnumber(J,(double)r);
 }
@@ -673,7 +671,7 @@ main(int argc, char **argv)
 	js_setglobal(J, "str_len");
 
 /* FIXME this should be set from JS */
-	heap = calloc(16*1024*1024, 1);
+	heap = calloc(128*1024*1024, 1);
 	js_pushnumber(J, (double)((int)heap));
 	js_setglobal(J, "heap");
 

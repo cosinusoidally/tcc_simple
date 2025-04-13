@@ -103,5 +103,11 @@ function init_support(){
 }
 
 function init_c() {
+  init_support();
 
+}
+
+function err(){
+  print("err not impl");
+  throw "error";
 }
