@@ -114,6 +114,7 @@ close = libc_close;
 fgetc = libc_fgetc;
 fputc = libc_fputc;
 
+load("support.js");
 load("pnut.js");
 
 /* override with builtins for memory read-write */
