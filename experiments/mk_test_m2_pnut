@@ -21,5 +21,11 @@ hex2-0 pnut-0-0.hex2 pnut_js.exe
 
 chmod +x pnut_js.exe
 
+cd ../pnut_refactor
+../artifacts/pnut_js.exe pnut.c -o ../artifacts/pnut-exe
+
+cd ../artifacts
+chmod +x pnut-exe
+
 wc *M1
-wc *hex2
+ls -l *exe

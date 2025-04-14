@@ -387,9 +387,16 @@ int putchar(int c) {
 }
 
 int fputs(int a, int b);
+int neq(int a, int b);
 
 int write(int fd, int buf, int count) {
   /* FIXME real impl */
+  if(neq(count, 1)) {
+    fputs("1 byte writes only atm", 1);
+    exit(1);
+  }
+  return fputc(ri8(buf), fd);
+
   fputs("write not impl", 1);
   exit(124);
 }
