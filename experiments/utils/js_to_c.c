@@ -226,9 +226,27 @@ int process_function(int l){
   free(args);
 }
 
+int strip_comments(int l) {
+  int i;
+  char *s;
+  s = l;
+  i = 0;
+  while(1) {
+    if(s[i]==0) {
+      return;
+    }
+    if((s[i] == 47) && (s[i+1] == 47)) {
+      s[i] = 0;
+      return;
+    }
+    i = i + 1;
+  }
+}
+
 int process_line(int l) {
   int t;
   int n;
+  strip_comments(l);
   if(memcmp("var ",l,4)==0){
     process_global_var(l);
     return;
