@@ -676,7 +676,7 @@ function pop_if_macro_mask() {
   }
   if_macro_stack_ix = sub(if_macro_stack_ix, 2);
   if_macro_mask = r_if_macro_stack(if_macro_stack_ix);
-  if_macro_executed = r_if_macro_stack(if_macro_stack_ix, 1);
+  if_macro_executed = r_if_macro_stack(add(if_macro_stack_ix, 1));
 }
 
 function get_ch() {
