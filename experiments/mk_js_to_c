@@ -7,4 +7,4 @@ cc_x86 js_to_c_all.c js_to_c_cc_x86.M1
 cat ../utils/x86_defs.M1 ../utils/libc-core.M1 js_to_c_cc_x86.M1 > js_to_c_cc_x86-0.M1
 M0 js_to_c_cc_x86-0.M1 js_to_c_cc_x86-0.hex2
 cat ../utils/ELF-i386.hex2 js_to_c_cc_x86-0.hex2 > js_to_c_cc_x86-0-0.hex2
-hex2-0 js_to_c_cc_x86-0-0.hex2 js_to_c_cc_x86.exe
+hex2-0 js_to_c_cc_x86-0-0.hex2 js_to_c.exe
