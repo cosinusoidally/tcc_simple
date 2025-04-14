@@ -1576,7 +1576,6 @@ function get_macro_args_toks(macro) {
         macro_args_count = add(macro_args_count, 1);
       }
       prev_is_comma = TRUE;
-      continue;
     } else {
       prev_is_comma = FALSE;
 
