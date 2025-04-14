@@ -3,7 +3,7 @@ set -xe
 ./mk_js_to_c
 cat pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js > artifacts/out.js
 ./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
-tcc -E artifacts/out.c > artifacts/out2.c
+mv artifacts/out.c artifacts/out2.c
 cat pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c artifacts/out2.c > artifacts/out3.c
 time M2-Planet --bootstrap-mode --architecture x86 --max-string 65535 -f artifacts/out3.c -o artifacts/pnut_m2.M1
 time cc_x86 artifacts/out3.c artifacts/pnut_cc_x86.M1

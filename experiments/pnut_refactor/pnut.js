@@ -627,7 +627,8 @@ function end_string() {
 }
 
 function expect_tok(expected_tok) {
-  expect_tok_(expected_tok, __FILE__, __LINE__);
+/*  expect_tok_(expected_tok, __FILE__, __LINE__); */
+  expect_tok_(expected_tok, "<unknown>", 0);
 }
 
 function r_if_macro_stack(o) {
@@ -2247,7 +2248,8 @@ function parse_error_internal(msg, token, file, line) {
 }
 
 function parse_error(msg, token) {
-  parse_error_internal(msg, token, __FILE__, __LINE__);
+/*  parse_error_internal(msg, token, __FILE__, __LINE__); */
+  parse_error_internal(msg, token, "<unknown>", 0);
 }
 
 function expect_tok_(expected_tok, file, line) {
