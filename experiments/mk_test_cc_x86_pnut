@@ -1,2 +1,2 @@
 ./mk_test_m2_pnut
-
+diff -u -s artifacts/pnut_m2.M1 artifacts/pnut_cc_x86.M1
