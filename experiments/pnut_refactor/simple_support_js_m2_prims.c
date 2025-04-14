@@ -383,11 +383,13 @@ int mkc(int c) {
 }
 
 int putchar(int c) {
-  /* FIXME real impl */
-  exit(123);
+  return fputc(c, 1);
 }
 
-int write(int x, int y, int z) {
+int fputs(int a, int b);
+
+int write(int fd, int buf, int count) {
   /* FIXME real impl */
+  fputs("write not impl", 1);
   exit(124);
 }
