@@ -2,4 +2,5 @@
 set -xe
 js_to_c_cc_x86.exe pnut_refactor/pnut.js artifacts/out.c
 tcc -E artifacts/out.c > artifacts/out2.c
-time M2-Planet --bootstrap-mode --architecture x86 --max-string 65535 -f artifacts/out2.c
+cat pnut_refactor/support_common.c artifacts/out2.c > artifacts/out3.c
+time M2-Planet --bootstrap-mode --architecture x86 --max-string 65535 -f artifacts/out3.c
