@@ -7527,13 +7527,13 @@ function init_globals() {
 
   EQ   = 0x4; // x == y
   NE   = 0x5; // x != y
-  LT   = 0xc; // x < y
+  LT   = 0xC; // x < y
   LT_U = 0x2; // x < y  (Jump near if not above or equal (CF=1))
-  GE   = 0xd; // x >= y
+  GE   = 0xD; // x >= y
   GE_U = 0x3; // x >= y (Jump near if above or equal (CF=0))
-  LE   = 0xe; // x <= y
+  LE   = 0xE; // x <= y
   LE_U = 0x6; // x <= y (Jump near if below or equal (CF=1 or ZF=1))
-  GT   = 0xf; // x > y
+  GT   = 0xF; // x > y
   GT_U = 0x7; // x > y  (Jump near if not below or equal (CF=0 and ZF=0))
 
 // If the main function returns a value
