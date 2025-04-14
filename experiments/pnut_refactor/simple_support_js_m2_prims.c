@@ -262,7 +262,8 @@ int wi8(int o,int v) {
 	);
 }
 
-int div(int a, int b){
+/* need to call this div_ to avoid a clash */
+int div_(int a, int b){
 /*	return a / b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -310,6 +311,19 @@ int fgetc(int f)
 	    "mov_eax, %-1"
 	    ":FUNCTION_fgetc_Done");
 }
+
+int not(int a) {
+/*  return ~a; */
+	asm(
+		"push_eax"
+		"lea_eax,[ebp+DWORD] %-4"
+		"mov_eax,[eax]"
+		"pop_ebx"
+		"not_eax"
+		"ret"
+	);
+}
+
 
 int fputc(int s, int f)
 {
@@ -366,4 +380,9 @@ int mks(int s) {
 
 int mkc(int c) {
   return c;
+}
+
+int putchar(int c) {
+  /* FIXME real impl */
+  exit(123);
 }
