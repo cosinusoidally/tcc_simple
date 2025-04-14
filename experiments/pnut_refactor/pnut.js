@@ -7017,7 +7017,7 @@ function imul_reg_reg(dst, src) {
   // See: https://web.archive.org/web/20240228122220/https://www.felixcloutier.com/x86/imul
 
   rex_prefix(dst, src);
-  emit_2_i8(0x0F, 0xaf);
+  emit_2_i8(0x0F, 0xAF);
   mod_rm(dst, src);
 }
 
