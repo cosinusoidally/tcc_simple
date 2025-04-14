@@ -1934,15 +1934,15 @@ function get_tok() {
           if (or(eq(ch, mkc('x')), eq(ch, mkc('X')))) {
             get_ch();
             if (accum_digit(16)) {
-              while (accum_digit(16));
+              while (accum_digit(16)) {}
             } else {
               syntax_error(mks("invalid hex integer -- it must have at least one digit"));
             }
           } else {
-            while (accum_digit(8));
+            while (accum_digit(8)) {}
           }
         } else {
-          while (accum_digit(10));
+          while (accum_digit(10)) {}
         }
 
         // If this is enabled with PARSE_NUMERIC_LITERAL_WITH_BASE, using a
@@ -1977,7 +1977,7 @@ function get_tok() {
         } else if (or(eq(ch, mkc('f')), eq(ch, mkc('.')))) {
           get_ch();
           tok = INTEGER;
-          while (accum_digit(10)); // Skip the fractional part
+          while (accum_digit(10)) {} // Skip the fractional part
           val = 0; // Force the value to be 0 for now. TODO: Convert to float
         }
 
