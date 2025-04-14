@@ -1809,12 +1809,17 @@ function paste_tokens(left_tok, left_val) {
 function get_tok() {
   var prev_tok_line_number;
   var prev_tok_column_number;
+  var cont;
 
   prev_tok_line_number = line_number;
   prev_tok_column_number = column_number;
 
   // This outer loop is used to skip over tokens removed by #ifdef/#ifndef/#else
   while(1) {
+    // LJW work around as cc_86 doesnt have continue
+    cont = 1;
+    while(cont) {
+    cont = 0;
     while (1) {
       // Check if there are any tokens to replay. Macros are just identifiers that
       // have been marked as macros. In terms of how we get into that state, a
@@ -2229,6 +2234,7 @@ function get_tok() {
           syntax_error(mks("invalid token"));
         }
       }
+    }
     }
     if(if_macro_mask) {
       break;
