@@ -1,0 +1,10 @@
+./mk_clean
+set -xe
+cd utils
+cat bootstrap_load.c bootstrappable_load.c elf_loader_support.c elf_loader_support_cc_x86.c js_to_c.c > ../artifacts/js_to_c_all.c
+cd ../artifacts/
+cc_x86 js_to_c_all.c js_to_c_cc_x86.M1
+cat ../utils/x86_defs.M1 ../utils/libc-core.M1 js_to_c_cc_x86.M1 > js_to_c_cc_x86-0.M1
+M0 js_to_c_cc_x86-0.M1 js_to_c_cc_x86-0.hex2
+cat ../utils/ELF-i386.hex2 js_to_c_cc_x86-0.hex2 > js_to_c_cc_x86-0-0.hex2
+hex2-0 js_to_c_cc_x86-0-0.hex2 js_to_c_cc_x86.exe
