@@ -18,7 +18,7 @@ int wi32(int o, int v) {
 }
 
 int init_c(){
-//  puts("init_c called");
+/*  puts("init_c called"); */
 }
 
 /* ================= end support_common.c ================================= */

@@ -29,7 +29,7 @@ function fputs(si, f) {
 }
 
 function fopen(filename, mode) {
-	var f;
+  var f;
 	if(eq(mkc('w'), ri8(mode))) {
 		/* 577 is O_WRONLY|O_CREAT|O_TRUNC, 384 is 600 in octal */
 		f = open(filename, 577 , 384);
@@ -46,7 +46,7 @@ function fopen(filename, mode) {
 }
 
 function fclose(stream) {
-	var error;
+  var error;
 	error = close(stream);
 	return error;
 }
@@ -55,8 +55,8 @@ var _malloc_ptr;
 var _brk_ptr;
 
 function malloc(size) {
-	var old_malloc;
-	if(eq(NULL, _brk_ptr)) {
+  var old_malloc;
+	if(eq(0, _brk_ptr)) {
 		_brk_ptr = brk(0);
 		_malloc_ptr = _brk_ptr;
 	}
@@ -72,7 +72,7 @@ function malloc(size) {
 }
 
 function memset(ptr, value, num) {
-	var s;
+  var s;
 	s = ptr;
 	while(lt(0, num))
 	{
@@ -83,10 +83,10 @@ function memset(ptr, value, num) {
 }
 
 function calloc(count, size) {
-	var ret;
+  var ret;
 	ret = malloc(mul(count, size));
-	if(eq(NULL, ret)) {
-		return NULL;
+	if(eq(0, ret)) {
+		return 0;
 	}
 	memset(ret, 0, mul(count, size));
 	return ret;

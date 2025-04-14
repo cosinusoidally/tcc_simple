@@ -357,3 +357,13 @@ int exit(int value)
 	    "mov_eax, %1"
 	    "int !0x80");
 }
+
+/* string and char functions */
+
+int mks(int s) {
+  return s;
+}
+
+int mkc(int c) {
+  return c;
+}
