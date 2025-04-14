@@ -1579,10 +1579,10 @@ function get_macro_args_toks(macro) {
       continue;
     } else {
       prev_is_comma = FALSE;
-    }
 
-    args = cons(macro_parse_argument(), args);
-    macro_args_count = add(macro_args_count, 1);
+      args = cons(macro_parse_argument(), args);
+      macro_args_count = add(macro_args_count, 1);
+    }
   }
 
   if (neq(tok, mkc(')'))) {
