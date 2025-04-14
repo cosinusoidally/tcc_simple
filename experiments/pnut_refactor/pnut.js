@@ -1860,12 +1860,12 @@ function get_tok() {
 
         if (eq(tok, MACRO)) { // Nested macro expansion!
           if (attempt_macro_expansion(val)) {
-            continue;
+            cont = 1; break;
           }
           break;
         } else if (and(eq(tok, MACRO_ARG), expand_macro_arg)) {
           begin_macro_expansion(0, get_macro_arg(val), 0); // Play the tokens of the macro argument
-          continue;
+          cont = 1; break;
         } else if (eq(tok, mkc('#'))) { // Stringizing!
           stringify();
           break;
@@ -1873,7 +1873,7 @@ function get_tok() {
         break;
       } else if (neq(macro_stack_ix, 0)) {
         return_to_parent_macro();
-        continue;
+        cont = 1; break;
       } else if (lte(ch, mkc(' '))) {
 
         if (eq(ch, EOF)) {
@@ -1923,7 +1923,7 @@ function get_tok() {
           // to disable the other places where macro expansion is done.
           if (if_macro_mask && expand_macro) {
             if (attempt_macro_expansion(val)) {
-              continue;
+              cont = 1; break;
             }
             break;
           }
