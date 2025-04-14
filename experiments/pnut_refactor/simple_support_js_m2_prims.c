@@ -386,3 +386,8 @@ int putchar(int c) {
   /* FIXME real impl */
   exit(123);
 }
+
+int write(int x, int y, int z) {
+  /* FIXME real impl */
+  exit(124);
+}
