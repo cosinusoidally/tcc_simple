@@ -1059,16 +1059,16 @@ function handle_define() {
       if (eq(tok, mkc(','))) {
         // Allow sequence of commas, this is more lenient than the standard
         get_tok_macro();
-        continue;
       } else if (eq(tok, mkc(')'))) {
         get_tok_macro();
         break;
+      } else {
+        get_tok_macro();
+        // Accumulate parameters in reverse order. That's ok because the arguments
+        // to the macro will also be in reverse order.
+        args = cons(val, args);
+        args_count = add(args_count, 1);
       }
-      get_tok_macro();
-      // Accumulate parameters in reverse order. That's ok because the arguments
-      // to the macro will also be in reverse order.
-      args = cons(val, args);
-      args_count = add(args_count, 1);
     }
   } else {
     get_tok_macro(); // Skip macro name
