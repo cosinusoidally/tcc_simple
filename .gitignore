@@ -8,3 +8,5 @@
 !experiments/artifacts/placeholder
 /experiments/chibicc/artifacts/*
 !experiments/chibicc/artifacts/placeholder
+/experiments/m2min_v2/artifacts/*
+!experiments/m2min_v2/artifacts/placeholder

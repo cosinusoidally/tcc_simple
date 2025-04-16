@@ -1,0 +1,15 @@
+./mk_clean
+
+cat simple_support_tcc.c > artifacts/M2_tcc_js_simple_full.c
+cat simple_support_common.c >> artifacts/M2_tcc_js_simple_full.c
+cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full.c
+
+echo "gcc build"
+gcc -I . -g -m32 -O0 artifacts/M2_tcc_js_simple_full.c -o artifacts/M2_gcc_js_simple.exe
+
+echo "tcc build"
+tcc -I. artifacts/M2_tcc_js_simple_full.c -o artifacts/M2_tcc_js_simple.exe
+
+ls -l artifacts/
+sha256sum artifacts/*M1
+sha256sum -c sums
