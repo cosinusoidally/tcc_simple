@@ -13,3 +13,17 @@ ls -l ../artifacts/pnut_m2.c
 ./artifacts/m2min_v2.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
 
 sha256sum -c sums
+
+rm artifacts/M2_tcc_js_simple_full_m2_self.M1
+rm artifacts/pnut_m2.M1
+
+cat simple_support_tcc.c > artifacts/m2min_v2_gcc.c
+cat simple_support_common.c >> artifacts/m2min_v2_gcc.c
+cat m2min_v2.c >> artifacts/m2min_v2_gcc.c
+
+gcc -g -m32 -O0 artifacts/m2min_v2_gcc.c -o artifacts/m2min_v2_gcc.exe
+
+./artifacts/m2min_v2_gcc.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
+./artifacts/m2min_v2_gcc.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
+
+sha256sum -c sums
