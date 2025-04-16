@@ -22,3 +22,4 @@ hex2-0 artifacts/M2_tcc_js_simple_full-0-0.hex2 artifacts/M2_tcc_js_simple_full.
 ./artifacts/M2_tcc_js_simple_full.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
 
 ls -l artifacts/
+sha256sum -c sums
