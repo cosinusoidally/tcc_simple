@@ -12,6 +12,12 @@ gcc -I . -g -m32 -O0 artifacts/M2_tcc_js_simple_full.c -o artifacts/M2_gcc_js_si
 echo "tcc build"
 tcc -I. artifacts/M2_tcc_js_simple_full.c -o artifacts/M2_tcc_js_simple.exe
 
+cat simple_support_m2_head.c > artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_m2.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_common.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
+
+
 ls -l artifacts/
 sha256sum artifacts/*M1
 sha256sum -c sums
