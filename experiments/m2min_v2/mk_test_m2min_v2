@@ -4,6 +4,7 @@ set -xe
 
 ./mk_m2min_v2
 ./artifacts/M2_tcc_js_simple_full.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
+ls -l ../artifacts/pnut_m2.c
 ./artifacts/M2_tcc_js_simple_full.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
 
 
