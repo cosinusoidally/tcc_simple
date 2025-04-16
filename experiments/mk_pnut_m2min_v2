@@ -23,7 +23,7 @@ popd
 cat pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js > artifacts/out.js
 ./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
 cat pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c artifacts/out.c > artifacts/pnut_m2.c
-time m2min_v2 artifacts/pnut_m2.c artifacts/pnut_m2.M1
+time m2min_v2.exe artifacts/pnut_m2.c artifacts/pnut_m2.M1
 
 cd artifacts
 
