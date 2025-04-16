@@ -1,5 +1,0 @@
-./mk_clean
-
-set -xe
-
-./mk_seeds

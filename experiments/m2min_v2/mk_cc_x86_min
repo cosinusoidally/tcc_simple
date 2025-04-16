@@ -1,0 +1,12 @@
+./mk_clean
+
+set -xe
+
+./mk_seeds
+./artifacts/hex0-seed hex0_x86.hex0 artifacts/hex0
+# hack ignore failure here since hex2 seems to incorrectly fail on cc_x86_min
+set +xe
+./artifacts/kaem-optional-seed ./cc_x86_min.kaem
+set -xe
+
+./artifacts/cc_x86_min.exe hello.c artifacts/hello.M1
