@@ -32,6 +32,6 @@ hex2-0 artifacts/M2_tcc_js_simple_full-0-0.hex2 artifacts/M2_tcc_js_simple_full.
 
 diff -u -s artifacts/M2_tcc_js_simple_full_m2_gcc.M1 artifacts/M2_tcc_js_simple_full_m2_self.M1
 
+cp ./artifacts/M2_tcc_js_simple_full.exe ./artifacts/m2min_v2.exe
+
 ls -l artifacts/
-sha256sum artifacts/*M1
-sha256sum -c sums
