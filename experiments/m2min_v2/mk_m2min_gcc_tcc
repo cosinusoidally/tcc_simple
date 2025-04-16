@@ -24,9 +24,9 @@ cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
 diff -u -s artifacts/M2_tcc_js_simple_full_m2_gcc.M1 artifacts/M2_tcc_js_simple_full_m2_tcc.M1
 
 cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/M2_tcc_js_simple_full_m2_gcc.M1 > artifacts/M2_tcc_js_simple_full-0.M1
-../x86/bin/M0 ./artifacts/M2_tcc_js_simple_full-0.M1 ./artifacts/M2_tcc_js_simple_full-0.hex2
+M0 ./artifacts/M2_tcc_js_simple_full-0.M1 ./artifacts/M2_tcc_js_simple_full-0.hex2
 cat ../x86/ELF-i386.hex2 artifacts/M2_tcc_js_simple_full-0.hex2 > artifacts/M2_tcc_js_simple_full-0-0.hex2
-../x86/bin/hex2-0 artifacts/M2_tcc_js_simple_full-0-0.hex2 artifacts/M2_tcc_js_simple_full.exe
+hex2-0 artifacts/M2_tcc_js_simple_full-0-0.hex2 artifacts/M2_tcc_js_simple_full.exe
 
 
 ls -l artifacts/
