@@ -1,0 +1,48 @@
+./mk_clean
+set -xe
+
+pushd .
+
+cd ../../tcc_bootstrap_alt
+./mk_cc_x86
+cd x86/bin
+export PATH=$PWD:$PATH
+
+popd
+
+pushd .
+
+cd m2min_v2
+./mk_m2min_gcc_tcc
+cd artifacts
+export PATH=$PWD:$PATH
+
+popd
+
+./mk_js_to_c
+cat pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js > artifacts/out.js
+./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
+cat pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c artifacts/out.c > artifacts/pnut_m2.c
+time m2min_v2 artifacts/pnut_m2.c artifacts/pnut_m2.M1
+
+cd artifacts
+
+cat ../utils/x86_defs.M1 ../utils/libc-core.M1 pnut_m2.M1 > pnut-0.M1
+
+time M0 pnut-0.M1 pnut-0.hex2
+
+cat ../utils/ELF-i386.hex2 pnut-0.hex2 > pnut-0-0.hex2
+
+time hex2-0 pnut-0-0.hex2 pnut_js.exe
+
+chmod +x pnut_js.exe
+
+cd ../pnut_refactor
+../artifacts/pnut_js.exe pnut.c -o ../artifacts/pnut-exe
+
+cd ../artifacts
+chmod +x pnut-exe
+
+cd ..
+
+./mk_tcc-boot-mes
