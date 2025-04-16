@@ -1,0 +1,28 @@
+./mk_clean
+
+set -xe
+
+M0 ./cc_x86_min.M1 ./artifacts/cc_x86_min-0.hex2
+cat ELF-i386.hex2 ./artifacts/cc_x86_min-0.hex2 > ./artifacts/cc_x86_min-1.hex2
+# hack pipe to "true" this errors out even though it's ok?
+hex2-0 ./artifacts/cc_x86_min-1.hex2 ./artifacts/cc_x86_min.exe | true
+
+cat simple_support_m2_head.c > artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_m2.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_common.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
+
+./artifacts/cc_x86_min.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_cc_x86_min.M1
+
+cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/M2_tcc_js_simple_full_cc_x86_min.M1 > artifacts/M2_tcc_js_simple_full-0.M1
+M0 ./artifacts/M2_tcc_js_simple_full-0.M1 ./artifacts/M2_tcc_js_simple_full-0.hex2
+cat ELF-i386.hex2 artifacts/M2_tcc_js_simple_full-0.hex2 > artifacts/M2_tcc_js_simple_full-0-0.hex2
+hex2-0 artifacts/M2_tcc_js_simple_full-0-0.hex2 artifacts/M2_tcc_js_simple_full.exe
+
+./artifacts/M2_tcc_js_simple_full.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
+# ./artifacts/M2_tcc_js_simple_full.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
+
+ls -l artifacts/
+sha256sum -c sums
+
+cp ./artifacts/M2_tcc_js_simple_full.exe ./artifacts/m2min_v2.exe

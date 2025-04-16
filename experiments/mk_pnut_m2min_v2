@@ -13,7 +13,7 @@ popd
 pushd .
 
 cd m2min_v2
-./mk_m2min_gcc_tcc
+./mk_m2min_v2
 cd artifacts
 export PATH=$PWD:$PATH
 
