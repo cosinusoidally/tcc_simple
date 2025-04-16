@@ -28,14 +28,3 @@ compile ./artifacts/boot1.exe artifacts/m2min_v2_full.c artifacts/boot2.exe
 diff -u -s artifacts/boot1.exe artifacts/boot2.exe
 
 cp ./artifacts/boot2.exe ./artifacts/m2min_v2.exe
-
-cat simple_support_m2_head.c > artifacts/M2_tcc_js_simple_full_m2.c
-cat simple_support_m2.c >> artifacts/M2_tcc_js_simple_full_m2.c
-cat simple_support_common.c >> artifacts/M2_tcc_js_simple_full_m2.c
-cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
-
-./artifacts/m2min_v2.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
-ls -l ../artifacts/pnut_m2.c
-./artifacts/m2min_v2.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
-
-sha256sum -c sums
