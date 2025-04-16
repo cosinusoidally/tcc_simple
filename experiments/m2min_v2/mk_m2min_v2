@@ -2,10 +2,11 @@
 
 set -xe
 
-M0 ./cc_x86_min.M1 ./artifacts/cc_x86_min-0.hex2
-cat ELF-i386.hex2 ./artifacts/cc_x86_min-0.hex2 > ./artifacts/cc_x86_min-1.hex2
-# hack pipe to "true" this errors out even though it's ok?
-hex2-0 ./artifacts/cc_x86_min-1.hex2 ./artifacts/cc_x86_min.exe | true
+./mk_cc_x86_min
+
+cd artifacts/
+export PATH=$PWD:$PATH
+cd ..
 
 cat simple_support_m2_head.c > artifacts/M2_tcc_js_simple_full_m2.c
 cat simple_support_m2.c >> artifacts/M2_tcc_js_simple_full_m2.c
