@@ -1,0 +1,13 @@
+set -xe
+
+function hex0_to_bin() {
+  for i in $(sed 's/[;#].*$//g' $1 | tr -d ' ' | tr -d '\t' | tr -d '\n' | fold -b -w2)
+    do printf "\\x$i"
+  done
+}
+
+hex0_to_bin hex0_x86.hex0 > artifacts/hex0-seed
+chmod +x artifacts/hex0-seed
+
+hex0_to_bin kaem-minimal.hex0 > artifacts/kaem-optional-seed
+chmod +x artifacts/kaem-optional-seed
