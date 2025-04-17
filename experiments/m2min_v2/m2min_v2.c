@@ -1365,36 +1365,7 @@ int common_recursion(int f) {
 	emit_out("pop_ebx\t# _common_recursion\n");
 }
 
-int general_recursion(int f, int s, int name, int iterate) {
-	require(neq(NULL, global_token), "Received EOF in general_recursion\n");
-	if(match(name, gtl_s(global_token)))
-	{
-		common_recursion(f);
-		emit_out(s);
-		dispatch(iterate);
-	}
-}
-
-int arithmetic_recursion(int f, int s1, int s2, int name, int iterate) {
-	require(neq(NULL, global_token), "Received EOF in arithmetic_recursion\n");
-	if(match(name, gtl_s(global_token))) {
-		common_recursion(f);
-		if(eq(NULL, current_target)) {
-			emit_out(s1);
-		} else if(gty_is_signed(current_target)) {
-			emit_out(s1);
-		} else {
-			emit_out(s2);
-		}
-		dispatch(iterate);
-	}
-}
-
 int type_name();
-
-int bitwise_expr() {
-	primary_expr();
-}
 
 int primary_expr() {
 	require(neq(NULL, global_token), "Received EOF where primary expression expected\n");
@@ -1417,7 +1388,7 @@ int primary_expr() {
 
 int expression() {
 	int store;
-	bitwise_expr();
+	primary_expr();
 	if(match("=", gtl_s(global_token))) {
 		store = "";
 		if(match("]", gtl_s(gtl_prev(global_token)))) {
