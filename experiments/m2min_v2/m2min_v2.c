@@ -767,7 +767,6 @@ int new_primitive(int name0, int name1, int name2, int size, int sign) {
 	require(neq(NULL, a), "Exhausted memory while declaring new primitive**\n");
 	sty_name(a, name2);
 	sty_size(a, register_size);
-	sty_indirect(a, a);
 	sty_is_signed(a, sign);
 
 	/* Create type* */
@@ -776,7 +775,6 @@ int new_primitive(int name0, int name1, int name2, int size, int sign) {
 	sty_name(b, name1);
 	sty_size(b, register_size);
 	sty_is_signed(b, sign);
-	sty_indirect(b, a);
 	sty_type(a, b);
 
 	r = calloc(1, sizeof_type);
@@ -784,7 +782,6 @@ int new_primitive(int name0, int name1, int name2, int size, int sign) {
 	sty_name(r, name0);
 	sty_size(r, size);
 	sty_is_signed(r, sign);
-	sty_indirect(r, b);
 	sty_type(r, r);
 	sty_type(b, r);
 
@@ -823,8 +820,6 @@ int lookup_type(int s, int start) {
 	}
 	return NULL;
 }
-
-int member_size;
 
 int type_name() {
 	int ret;
@@ -1035,13 +1030,7 @@ int variable_load(int a, int num_dereference)
 	emit_out("\n");
 
 	if(eq(0, match("=", gtl_s(global_token)))) {
-		emit_out(load_value(gty_size(current_target), gty_is_signed(current_target)));
-	}
-
-	while (gt(num_dereference, 0)) {
-		current_target = gty_type(current_target);
-		emit_out(load_value(gty_size(current_target), gty_is_signed(current_target)));
-		num_dereference = sub(num_dereference, 1);
+		emit_out(load_value(gty_size(current_target), TRUE));
 	}
 }
 
@@ -1067,7 +1056,7 @@ int global_load(int a) {
 		return;
 	}
 
-	emit_out(load_value(register_size, gty_is_signed(current_target)));
+	emit_out(load_value(register_size, TRUE));
 }
 
 /*
