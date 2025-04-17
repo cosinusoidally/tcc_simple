@@ -961,18 +961,10 @@ int function_call(int s, int bool) {
 
 	require_match("ERROR in process_expression_list\nNo ) was found\n", ")");
 
-	if(eq(TRUE, bool)) {
-			emit_out("lea_eax,[ebp+DWORD] %");
-			emit_out(s);
-			emit_out("\nmov_eax,[eax]\n");
-			emit_out("mov_ebp,edi\n");
-			emit_out("call_eax\n");
-	} else {
-			emit_out("mov_ebp,edi\n");
-			emit_out("call %FUNCTION_");
-			emit_out(s);
-			emit_out("\n");
-	}
+	emit_out("mov_ebp,edi\n");
+	emit_out("call %FUNCTION_");
+	emit_out(s);
+	emit_out("\n");
 
 	while(1) {
 		if(lte(passed, 0)) {
@@ -986,22 +978,8 @@ int function_call(int s, int bool) {
 	emit_out("pop_edi\t# Prevent overwrite\n");
 }
 
-int load_value_signed(int size) {
-	if(eq(size, 4)) {
-		return "mov_eax,[eax]\n";
-	}
-	line_error();
-	fputs(" Got unsupported size ", stderr);
-	fputs(int2str(size, 10, TRUE), stderr);
-	fputs(" when trying to load value.\n", stderr);
-	exit(EXIT_FAILURE);
-}
-
-int load_value(int size, int is_signed) {
-	if(is_signed) {
-		return load_value_signed(size);
-	}
-	fputs("load_value_unsigned umimpl"); exit(EXIT_FAILURE);
+int load_value() {
+	return "mov_eax,[eax]\n";
 }
 
 int store_value(int size) {
@@ -1030,7 +1008,7 @@ int variable_load(int a, int num_dereference)
 	emit_out("\n");
 
 	if(eq(0, match("=", gtl_s(global_token)))) {
-		emit_out(load_value(gty_size(current_target), TRUE));
+		emit_out(load_value());
 	}
 }
 
@@ -1056,7 +1034,7 @@ int global_load(int a) {
 		return;
 	}
 
-	emit_out(load_value(register_size, TRUE));
+	emit_out(load_value());
 }
 
 /*
