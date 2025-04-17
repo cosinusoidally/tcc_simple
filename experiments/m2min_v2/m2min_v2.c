@@ -805,10 +805,6 @@ int initialize_types() {
 	integer = new_primitive("int", "int*", "int**", register_size, TRUE);
 	prim_types = add_primitive(integer);
 
-	/* Define char */
-	hold = new_primitive("char", "char*", "char**", 1, TRUE);
-	prim_types = add_primitive(hold);
-
 	global_types = prim_types;
 }
 
@@ -839,12 +835,6 @@ int type_name() {
 
 	global_token = gtl_next(global_token);
 	require(neq(NULL, global_token), "unfinished type definition\n");
-
-	while(eq(ri8(gtl_s(global_token)), '*')) {
-		ret = gty_indirect(ret);
-		global_token = gtl_next(global_token);
-		require(neq(NULL, global_token), "unfinished type definition in indirection\n");
-	}
 
 	return ret;
 }
