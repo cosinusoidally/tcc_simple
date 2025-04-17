@@ -1335,22 +1335,6 @@ int postfix_expr();
 int additive_expr_stub();
 
 int fn_expression;
-int fn_primary_expr;
-int fn_postfix_expr;
-int fn_additive_expr;
-int fn_relational_expr;
-int fn_relational_expr_stub;
-int fn_bitwise_expr_stub;
-int fn_additive_expr_stub;
-
-int dispatch(int fn) {
-	if(eq(fn, fn_expression)) {
-		expression();
-	} else {
-		fputs("unsupported dispatch\n", stdout);
-		exit(1);
-	}
-}
 
 int common_recursion(int f) {
 	int last_type;
@@ -1359,7 +1343,12 @@ int common_recursion(int f) {
 	last_type = current_target;
 	global_token = gtl_next(global_token);
 	require(neq(NULL, global_token), "Received EOF in common_recursion\n");
-	dispatch(f);
+	if(eq(f, fn_expression)) {
+		expression();
+	} else {
+		fputs("unsupported dispatch\n", stdout);
+		exit(1);
+	}
 	current_target = promote_type(current_target, last_type);
 
 	emit_out("pop_ebx\t# _common_recursion\n");
@@ -1391,12 +1380,7 @@ int expression() {
 	primary_expr();
 	if(match("=", gtl_s(global_token))) {
 		store = "";
-		if(match("]", gtl_s(gtl_prev(global_token)))) {
-			store = store_value(gty_size(gty_type(current_target)));
-		} else {
-			store = store_value(gty_size(current_target));
-		}
-
+		store = store_value(gty_size(current_target));
 		common_recursion(fn_expression);
 		emit_out(store);
 		current_target = integer;
@@ -1922,13 +1906,6 @@ int initialize_globals() {
         EOF = sub(0, 1);
 
 	fn_expression = 1;
-	fn_primary_expr = 2;
-	fn_postfix_expr = 3;
-	fn_additive_expr = 4;
-	fn_relational_expr = 5;
-	fn_relational_expr_stub = 6;
-	fn_bitwise_expr_stub = 7;
-	fn_additive_expr_stub = 8;
 
 	quote_string=calloc(1, 16); /* round up */
 	wi8(quote_string, '\'');
