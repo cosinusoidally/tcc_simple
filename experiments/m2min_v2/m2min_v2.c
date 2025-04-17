@@ -1572,7 +1572,8 @@ int relational_expr() {
  */
 int bitwise_expr_stub() {
 		general_recursion(fn_relational_expr, "and_eax,ebx\n", "&", fn_bitwise_expr_stub);
-		general_recursion(fn_relational_expr, "and_eax,ebx\n", "&&", fn_bitwise_expr_stub);
+/*		general_recursion(fn_relational_expr, "and_eax,ebx\n", "&&", fn_bitwise_expr_stub);
+*/
 		general_recursion(fn_relational_expr, "or_eax,ebx\n", "|", fn_bitwise_expr_stub);
 		general_recursion(fn_relational_expr, "or_eax,ebx\n", "||", fn_bitwise_expr_stub);
 		general_recursion(fn_relational_expr, "xor_eax,ebx\n", "^", fn_bitwise_expr_stub);

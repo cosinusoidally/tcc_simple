@@ -1,0 +1,44 @@
+./mk_clean
+set -xe
+
+
+
+pushd .
+
+cd ..
+
+pushd .
+
+cd ../../tcc_bootstrap_alt
+./mk_cc_x86
+cd x86/bin
+export PATH=$PWD:$PATH
+
+popd
+
+
+./mk_js_to_c
+cat pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js > artifacts/out.js
+./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
+cat pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c artifacts/out.c > artifacts/pnut_m2.c
+
+popd
+
+cat simple_support_tcc.c > artifacts/m2min_v2_gcc.c
+cat simple_support_common.c >> artifacts/m2min_v2_gcc.c
+cat m2min_v2.c >> artifacts/m2min_v2_gcc.c
+
+gcc -g --coverage -m32 -O0 artifacts/m2min_v2_gcc.c -o artifacts/m2min_v2_gcc.exe
+
+cat simple_support_m2_head.c > artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_m2.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat simple_support_common.c >> artifacts/M2_tcc_js_simple_full_m2.c
+cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
+
+./artifacts/m2min_v2_gcc.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple_full_m2_self.M1
+./artifacts/m2min_v2_gcc.exe ../artifacts/pnut_m2.c artifacts/pnut_m2.M1
+
+sha256sum -c sums
+
+gcovr artifacts --html-details -o artifacts/example.html
+~/ffnew/firefox/firefox artifacts/example.html

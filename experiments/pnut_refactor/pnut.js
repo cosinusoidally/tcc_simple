@@ -1921,7 +1921,7 @@ function get_tok() {
           // We only expand in ifdef true blocks and if the expander is enabled.
           // Since this is the "base case" of the macro expansion, we don't need
           // to disable the other places where macro expansion is done.
-          if (if_macro_mask && expand_macro) {
+          if (and(if_macro_mask, expand_macro)) {
             if (attempt_macro_expansion(val)) {
               cont = 1; break;
             }
