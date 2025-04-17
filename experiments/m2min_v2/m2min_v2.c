@@ -1553,9 +1553,7 @@ int bitwise_expr() {
 int primary_expr() {
 	require(neq(NULL, global_token), "Received EOF where primary expression expected\n");
 
-	if(match("sizeof", gtl_s(global_token))) {
-		unary_expr_sizeof();
-	} else if(eq('-', ri8(gtl_s(global_token)))) {
+	if(eq('-', ri8(gtl_s(global_token)))) {
 		emit_out("mov_eax, %0\n");
 
 		common_recursion(fn_primary_expr);
@@ -1982,16 +1980,6 @@ int declare_function() {
 	}
 }
 
-int global_constant() {
-	global_token = gtl_next(global_token);
-	require(neq(NULL, global_token), "CONSTANT lacks a name\n");
-	global_constant_list = sym_declare(gtl_s(global_token), NULL, global_constant_list);
-
-	require(neq(NULL, gtl_next(global_token)), "CONSTANT lacks a value\n");
-	stl_arguments(global_constant_list, gtl_next(global_token));
-	global_token = gtl_next(gtl_next(global_token));
-}
-
 /*
  * program:
  *     declaration
@@ -2030,12 +2018,7 @@ int program() {
 					require(neq('#', ri8(gtl_s(global_token))), "unhandled macro directive\n");
 					require(eq(0, match("\n", gtl_s(global_token))), "unexpected newline token\n");
 
-					/* Handle cc_* CONSTANT statements */
-					if(match("CONSTANT", gtl_s(global_token))) {
-						global_constant();
-					} else {
-						break;
-					}
+					break;
 				}
 
 				type_size = type_name();
