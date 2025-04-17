@@ -1054,12 +1054,6 @@ int function_call(int s, int bool) {
 	emit_out("pop_edi\t# Prevent overwrite\n");
 }
 
-int constant_load(int a) {
-	emit_out("mov_eax, %");
-	emit_out(gtl_s(gtl_arguments(a)));
-	emit_out("\n");
-}
-
 int load_value_signed(int size) {
 	if(eq(size, 4)) {
 		return "mov_eax,[eax]\n";
@@ -1208,11 +1202,6 @@ int primary_expr_variable() {
 	num_dereference = 0;
 	s = gtl_s(global_token);
 	global_token = gtl_next(global_token);
-	a = sym_lookup(s, global_constant_list);
-	if(neq(NULL, a)) {
-		constant_load(a);
-		return;
-	}
 
 	a = sym_lookup(s, gtl_locals(function));
 	if(neq(NULL, a)) {
