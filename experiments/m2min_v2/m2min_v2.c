@@ -143,30 +143,6 @@ int gty_size(int t) {
         return ri32(add(t, type_size_offset));
 }
 
-int sty_is_signed(int t,int v) {
-        wi32(add(t, type_is_signed_offset), v);
-}
-
-int gty_is_signed(int t) {
-        return ri32(add(t, type_is_signed_offset));
-}
-
-int sty_indirect(int t,int v) {
-        wi32(add(t, type_indirect_offset), v);
-}
-
-int gty_indirect(int t) {
-        return ri32(add(t, type_indirect_offset));
-}
-
-int sty_type(int t,int v) {
-        wi32(add(t, type_type_offset), v);
-}
-
-int gty_type(int t) {
-        return ri32(add(t, type_type_offset));
-}
-
 int sty_name(int t,int v) {
         wi32(add(t, type_name_offset), v);
 }
@@ -431,8 +407,7 @@ int preserve_string(int c) {
 }
 
 
-int copy_string(int target, int source, int max)
-{
+int copy_string(int target, int source, int max) {
 	int i;
 	i = 0;
 	while(neq(0, ri8(add(source,i)))) {
@@ -762,7 +737,6 @@ int new_primitive(int name) {
 	r = calloc(1, sizeof_type);
 	sty_name(r, name);
 	sty_size(r, register_size);
-	sty_type(r, r);
 	return r;
 }
 
@@ -966,12 +940,9 @@ int store_value() {
 
 int variable_load(int a) {
 	require(neq(NULL, global_token), "incomplete variable load received\n");
-
 	emit_out("lea_eax,[ebp+DWORD] %");
-
 	emit_out(int2str(gtl_depth(a), 10, TRUE));
 	emit_out("\n");
-
 	if(eq(0, match("=", gtl_s(global_token)))) {
 		emit_out(load_value());
 	}
