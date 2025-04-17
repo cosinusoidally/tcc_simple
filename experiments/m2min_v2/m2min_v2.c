@@ -982,25 +982,12 @@ int load_value() {
 	return "mov_eax,[eax]\n";
 }
 
-int store_value(int size) {
-	if(eq(size, 4)) {
-		return "mov_[ebx],eax\n";
-	}
-	/* Should not happen but print error message. */
-	fputs("Got unsupported size ", stderr);
-	fputs(int2str(size, 10, TRUE), stderr);
-	fputs(" when storing number in register.\n", stderr);
-	line_error();
-	exit(EXIT_FAILURE);
+int store_value() {
+	return "mov_[ebx],eax\n";
 }
 
-int variable_load(int a, int num_dereference)
-{
+int variable_load(int a) {
 	require(neq(NULL, global_token), "incomplete variable load received\n");
-	if(and(or(match("FUNCTION", gty_name(gtl_type(a))), match("FUNCTION*", gty_name(gtl_type(a)))), match("(", gtl_s(global_token)))) {
-		require(0, "FUNCTION loads not impl");
-	}
-	current_target = gtl_type(a);
 
 	emit_out("lea_eax,[ebp+DWORD] %");
 
@@ -1102,13 +1089,13 @@ int primary_expr_variable() {
 
 	a = sym_lookup(s, gtl_locals(function));
 	if(neq(NULL, a)) {
-		variable_load(a, num_dereference);
+		variable_load(a);
 		return;
 	}
 
 	a = sym_lookup(s, gtl_arguments(function));
 	if(neq(NULL, a)) {
-		variable_load(a, num_dereference);
+		variable_load(a);
 		return;
 	}
 
@@ -1191,7 +1178,7 @@ int expression() {
 	primary_expr();
 	if(match("=", gtl_s(global_token))) {
 		store = "";
-		store = store_value(gty_size(current_target));
+		store = store_value();
 		common_recursion(fn_expression);
 		emit_out(store);
 		current_target = integer;
