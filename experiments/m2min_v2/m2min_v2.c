@@ -1333,10 +1333,8 @@ int promote_type(int a, int b) {
 }
 
 int postfix_expr();
-int relational_expr_stub();
 int additive_expr_stub();
 int additive_expr();
-int relational_expr();
 
 int fn_expression;
 int fn_primary_expr;
@@ -1356,10 +1354,6 @@ int dispatch(int fn) {
 		postfix_expr();
 	} else if(eq(fn, fn_additive_expr)) {
 		additive_expr();
-	} else if(eq(fn, fn_relational_expr)) {
-		relational_expr();
-	} else if(eq(fn, fn_relational_expr_stub)) {
-		relational_expr_stub();
 	} else if(eq(fn, fn_additive_expr_stub)) {
 		additive_expr_stub();
 	} else {
@@ -1462,20 +1456,6 @@ int postfix_expr_array() {
 
 int type_name();
 
-int unary_expr_sizeof() {
-	int a;
-
-	global_token = gtl_next(global_token);
-	require(neq(NULL, global_token), "Received EOF when starting sizeof\n");
-	require_match("ERROR in unary_expr\nMissing (\n", "(");
-	a = type_name();
-	require_match("ERROR in unary_expr\nMissing )\n", ")");
-
-	emit_out("mov_eax, %");
-	emit_out(int2str(gty_size(a), 10, TRUE));
-	emit_out("\n");
-}
-
 int postfix_expr_stub() {
 	require(neq(NULL, global_token), "Unexpected EOF, improperly terminated primary expression\n");
 	if(match("[", gtl_s(global_token))) {
@@ -1516,60 +1496,13 @@ int additive_expr() {
 	additive_expr_stub();
 }
 
-
-/*
- * relational-expr:
- *         additive_expr
- *         relational-expr < additive_expr
- *         relational-expr <= additive_expr
- *         relational-expr >= additive_expr
- *         relational-expr > additive_expr
- */
-
-int relational_expr_stub() {
-		arithmetic_recursion(fn_additive_expr, "cmp\nsetl_al\nmovzx_eax,al\n", "cmp\nsetb_al\nmovzx_eax,al\n", "<", fn_relational_expr_stub);
-		arithmetic_recursion(fn_additive_expr, "cmp\nsetle_al\nmovzx_eax,al\n", "cmp\nsetbe_al\nmovzx_eax,al\n", "<=", fn_relational_expr_stub);
-		arithmetic_recursion(fn_additive_expr, "cmp\nsetge_al\nmovzx_eax,al\n", "cmp\nsetae_al\nmovzx_eax,al\n", ">=", fn_relational_expr_stub);
-		arithmetic_recursion(fn_additive_expr, "cmp\nsetg_al\nmovzx_eax,al\n", "cmp\nseta_al\nmovzx_eax,al\n", ">", fn_relational_expr_stub);
-		general_recursion(fn_additive_expr, "cmp\nsete_al\nmovzx_eax,al\n", "==", fn_relational_expr_stub);
-		general_recursion(fn_additive_expr, "cmp\nsetne_al\nmovzx_eax,al\n", "!=", fn_relational_expr_stub);
-}
-
-int relational_expr() {
-	additive_expr();
-	relational_expr_stub();
-}
-
 int bitwise_expr() {
-	relational_expr();
+	additive_expr();
 }
-
-/*
- * expression:
- *         bitwise-or-expr
- *         bitwise-or-expr = expression
- */
 
 int primary_expr() {
 	require(neq(NULL, global_token), "Received EOF where primary expression expected\n");
-
-	if(eq('-', ri8(gtl_s(global_token)))) {
-		emit_out("mov_eax, %0\n");
-
-		common_recursion(fn_primary_expr);
-
-		emit_out("sub_ebx,eax\nmov_eax,ebx\n");
-	} else if(eq('!', ri8(gtl_s(global_token)))) {
-		emit_out("mov_eax, %1\n");
-
-		common_recursion(fn_postfix_expr);
-
-		emit_out("cmp\nseta_al\nmovzx_eax,al\n");
-	} else if(eq('~', ri8(gtl_s(global_token)))) {
-		common_recursion(fn_postfix_expr);
-
-		emit_out("not_eax\n");
-	} else if(eq(ri8(gtl_s(global_token)), '(')) {
+	if(eq(ri8(gtl_s(global_token)), '(')) {
 		global_token = gtl_next(global_token);
 		expression();
 		require_match("Error in Primary expression\nDidn't get )\n", ")");
@@ -1578,8 +1511,6 @@ int primary_expr() {
 	} else if(eq(ri8(gtl_s(global_token)), '"')) {
 		primary_expr_string();
 	} else if(in_set(ri8(gtl_s(global_token)), "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_")) {
-		primary_expr_variable();
-	} else if(eq(ri8(gtl_s(global_token)), '*')) {
 		primary_expr_variable();
 	} else if(in_set(ri8(gtl_s(global_token)), "0123456789")) {
 		primary_expr_number();
