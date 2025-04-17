@@ -253,7 +253,6 @@ int gtl_linenumber(int t) {
 int initialize_types();
 int reverse_list(int head);
 
-int remove_line_comment_tokens(int head);
 
 int eat_newline_tokens();
 int program();
@@ -491,25 +490,6 @@ int eat_until_newline(int head) {
 	}
 
 	return NULL;
-}
-
-int remove_line_comment_tokens(int head) {
-	int first;
-
-	first = NULL;
-
-	while (neq(NULL, head)) {
-		if(match("//", gtl_s(head))) {
-			head = eat_token(head);
-		} else {
-			if(eq(NULL, first)) {
-				first = head;
-			}
-			head = gtl_next(head);
-		}
-	}
-
-	return first;
 }
 
 int new_token(int s, int size) {
@@ -1907,8 +1887,6 @@ int main(int argc, int argv) {
 	i = add(i, 1);
 
 	global_token = reverse_list(global_token);
-
-	global_token = remove_line_comment_tokens(global_token);
 
 	/* the main parser doesn't know how to handle newline tokens */
 	eat_newline_tokens();
