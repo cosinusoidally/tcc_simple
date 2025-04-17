@@ -1155,7 +1155,6 @@ int store_value(int size) {
 	exit(EXIT_FAILURE);
 }
 
-int postfix_expr_stub();
 int variable_load(int a, int num_dereference)
 {
 	require(neq(NULL, global_token), "incomplete variable load received\n");
@@ -1456,17 +1455,8 @@ int postfix_expr_array() {
 
 int type_name();
 
-int postfix_expr_stub() {
-	require(neq(NULL, global_token), "Unexpected EOF, improperly terminated primary expression\n");
-	if(match("[", gtl_s(global_token))) {
-		postfix_expr_array();
-		postfix_expr_stub();
-	}
-}
-
 int postfix_expr() {
 	primary_expr();
-	postfix_expr_stub();
 }
 
 /*
