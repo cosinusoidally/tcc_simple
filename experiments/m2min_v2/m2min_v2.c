@@ -767,21 +767,18 @@ int new_primitive(int name0, int name1, int name2, int size, int sign) {
 	require(neq(NULL, a), "Exhausted memory while declaring new primitive**\n");
 	sty_name(a, name2);
 	sty_size(a, register_size);
-	sty_is_signed(a, sign);
 
 	/* Create type* */
 	b = calloc(1, sizeof_type);
 	require(neq(NULL, b), "Exhausted memory while declaring new primitive*\n");
 	sty_name(b, name1);
 	sty_size(b, register_size);
-	sty_is_signed(b, sign);
 	sty_type(a, b);
 
 	r = calloc(1, sizeof_type);
 	require(neq(NULL, r), "Exhausted memory while declaring new primitive\n");
 	sty_name(r, name0);
 	sty_size(r, size);
-	sty_is_signed(r, sign);
 	sty_type(r, r);
 	sty_type(b, r);
 
@@ -1014,16 +1011,6 @@ int global_load(int a) {
 	emit_out(load_value());
 }
 
-/*
- * primary-expr:
- * FAILURE
- * "String"
- * 'Char'
- * [0-9]*
- * [a-z,A-Z]*
- * ( expression )
- */
-
 int primary_expr_failure() {
 	require(neq(NULL, global_token), "hit EOF when expecting primary expression\n");
 	line_error();
@@ -1108,27 +1095,10 @@ int primary_expr_variable() {
 }
 
 int primary_expr();
-int promote_type(int a, int b) {
-	require(neq(NULL, b), "impossible case 1 in promote_type\n");
-	require(neq(NULL, a), "impossible case 2 in promote_type\n");
-
-	if(eq(a, b)) {
-		return a;
-	}
-
-	require(0, "unsupported promote_type\n");
-}
-
-int postfix_expr();
-int additive_expr_stub();
-
 int fn_expression;
 
 int common_recursion(int f) {
-	int last_type;
 	emit_out("push_eax\t#_common_recursion\n");
-
-	last_type = current_target;
 	global_token = gtl_next(global_token);
 	require(neq(NULL, global_token), "Received EOF in common_recursion\n");
 	if(eq(f, fn_expression)) {
@@ -1137,8 +1107,6 @@ int common_recursion(int f) {
 		fputs("unsupported dispatch\n", stdout);
 		exit(1);
 	}
-	current_target = promote_type(current_target, last_type);
-
 	emit_out("pop_ebx\t# _common_recursion\n");
 }
 
