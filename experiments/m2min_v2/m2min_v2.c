@@ -2012,17 +2012,12 @@ int statement() {
 
 	if(eq(ri8(gtl_s(global_token)), '{')) {
 		recursive_statement();
-	} else if(or(neq(NULL, lookup_type(gtl_s(global_token), prim_types)),
-	          match("struct", gtl_s(global_token)))) {
+	} else if(neq(NULL, lookup_type(gtl_s(global_token), prim_types))) {
 		collect_local();
 	} else if(match("if", gtl_s(global_token))) {
 		process_if();
-	} else if(match("do", gtl_s(global_token))) {
-		process_do();
 	} else if(match("while", gtl_s(global_token))) {
 		process_while();
-	} else if(match("for", gtl_s(global_token))) {
-		process_for();
 	} else if(match("asm", gtl_s(global_token))) {
 		process_asm();
 	} else if(match("return", gtl_s(global_token))) {
