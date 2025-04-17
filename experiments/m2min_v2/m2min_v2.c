@@ -999,12 +999,6 @@ int variable_load(int a) {
 	}
 }
 
-int function_load(int a) {
-	require(neq(NULL, global_token), "incomplete function load\n");
-	function_call(gtl_s(a));
-	return;
-}
-
 int global_load(int a) {
 	current_target = gtl_type(a);
 	emit_out("mov_eax, &GLOBAL_");
@@ -1097,7 +1091,7 @@ int primary_expr_variable() {
 
 	a = sym_lookup(s, global_function_list);
 	if(neq(NULL, a)) {
-		function_load(a);
+		function_call(gtl_s(a));
 		return;
 	}
 
