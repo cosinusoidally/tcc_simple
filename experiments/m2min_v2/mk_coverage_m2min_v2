@@ -29,5 +29,9 @@ diff -u -s artifacts/M2_tcc_js_simple_full_m2_self.M1 artifacts/M2_tcc_js_simple
 
 sha256sum -c sums
 
+diff -u -s ../artifacts/pnut_m2.M1 artifacts/pnut_m2.M1
+
+wc m2min_v2.c
+
 gcovr artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox artifacts/example.html

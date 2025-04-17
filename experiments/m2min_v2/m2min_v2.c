@@ -1122,28 +1122,10 @@ int constant_load(int a) {
 }
 
 int load_value_signed(int size) {
-	if(eq(size, 1)) {
-		return "movsx_eax,BYTE_PTR_[eax]\n";
-	} else if(eq(size, 2)) {
-		return "movsx_eax,WORD_PTR_[eax]\n";
-	} else if(eq(size, 4)) {
+	if(eq(size, 4)) {
 		return "mov_eax,[eax]\n";
 	}
 	line_error();
-	fputs(" Got unsupported size ", stderr);
-	fputs(int2str(size, 10, TRUE), stderr);
-	fputs(" when trying to load value.\n", stderr);
-	exit(EXIT_FAILURE);
-}
-
-int load_value_unsigned(int size) {
-	if(eq(size, 1)) {
-		return "movzx_eax,BYTE_PTR_[eax]\n";
-	} else if(eq(size, 2)) {
-		return "movzx_eax,WORD_PTR_[eax]\n";
-	} else if(eq(size, 4)) {
-		return "mov_eax,[eax]\n";
-	}
 	fputs(" Got unsupported size ", stderr);
 	fputs(int2str(size, 10, TRUE), stderr);
 	fputs(" when trying to load value.\n", stderr);
@@ -1154,7 +1136,7 @@ int load_value(int size, int is_signed) {
 	if(is_signed) {
 		return load_value_signed(size);
 	}
-	return load_value_unsigned(size);
+	fputs("load_value_unsigned umimpl"); exit(EXIT_FAILURE);
 }
 
 int store_value(int size) {
@@ -1352,7 +1334,6 @@ int promote_type(int a, int b) {
 
 int postfix_expr();
 int relational_expr_stub();
-int bitwise_expr_stub();
 int additive_expr_stub();
 int additive_expr();
 int relational_expr();
@@ -1379,8 +1360,6 @@ int dispatch(int fn) {
 		relational_expr();
 	} else if(eq(fn, fn_relational_expr_stub)) {
 		relational_expr_stub();
-	} else if(eq(fn, fn_bitwise_expr_stub)) {
-		bitwise_expr_stub();
 	} else if(eq(fn, fn_additive_expr_stub)) {
 		additive_expr_stub();
 	} else {
@@ -1561,28 +1540,8 @@ int relational_expr() {
 	relational_expr_stub();
 }
 
-/*
- * bitwise-expr:
- *         relational-expr
- *         bitwise-expr & bitwise-expr
- *         bitwise-expr && bitwise-expr
- *         bitwise-expr | bitwise-expr
- *         bitwise-expr || bitwise-expr
- *         bitwise-expr ^ bitwise-expr
- */
-int bitwise_expr_stub() {
-		general_recursion(fn_relational_expr, "and_eax,ebx\n", "&", fn_bitwise_expr_stub);
-/*		general_recursion(fn_relational_expr, "and_eax,ebx\n", "&&", fn_bitwise_expr_stub);
-*/
-		general_recursion(fn_relational_expr, "or_eax,ebx\n", "|", fn_bitwise_expr_stub);
-		general_recursion(fn_relational_expr, "or_eax,ebx\n", "||", fn_bitwise_expr_stub);
-		general_recursion(fn_relational_expr, "xor_eax,ebx\n", "^", fn_bitwise_expr_stub);
-}
-
-
 int bitwise_expr() {
 	relational_expr();
-	bitwise_expr_stub();
 }
 
 /*

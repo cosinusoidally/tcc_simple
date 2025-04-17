@@ -40,5 +40,7 @@ cat M2_tcc_js_simple.c >> artifacts/M2_tcc_js_simple_full_m2.c
 
 sha256sum -c sums
 
+wc m2min_v2.c
+
 gcovr artifacts --html-details -o artifacts/example.html
 ~/ffnew/firefox/firefox artifacts/example.html
