@@ -757,31 +757,12 @@ int add_primitive(int a) {
 }
 
 /* enable easy primitive creation */
-int new_primitive(int name0, int name1, int name2, int size, int sign) {
-	/* Create type** */
-	int a;
-	int b;
+int new_primitive(int name) {
 	int r;
-
-	a = calloc(1, sizeof_type);
-	require(neq(NULL, a), "Exhausted memory while declaring new primitive**\n");
-	sty_name(a, name2);
-	sty_size(a, register_size);
-
-	/* Create type* */
-	b = calloc(1, sizeof_type);
-	require(neq(NULL, b), "Exhausted memory while declaring new primitive*\n");
-	sty_name(b, name1);
-	sty_size(b, register_size);
-	sty_type(a, b);
-
 	r = calloc(1, sizeof_type);
-	require(neq(NULL, r), "Exhausted memory while declaring new primitive\n");
-	sty_name(r, name0);
-	sty_size(r, size);
+	sty_name(r, name);
+	sty_size(r, register_size);
 	sty_type(r, r);
-	sty_type(b, r);
-
 	return r;
 }
 
@@ -792,11 +773,11 @@ int initialize_types() {
 	register_size = 4;
 
 	/* Define void */
-	hold = new_primitive("void", "void*", "void**", register_size, FALSE);
+	hold = new_primitive("void");
 	prim_types = add_primitive(hold);
 
 	/* Define int */
-	integer = new_primitive("int", "int*", "int**", register_size, TRUE);
+	integer = new_primitive("int");
 	prim_types = add_primitive(integer);
 
 	global_types = prim_types;
