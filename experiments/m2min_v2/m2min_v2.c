@@ -1452,27 +1452,6 @@ int declare_function() {
 	}
 }
 
-/*
- * program:
- *     declaration
- *     declaration program
- *
- * declaration:
- *     CONSTANT identifer value
- *     typedef identifer type;
- *     type-name identifier ;
- *     type-name identifier = value ;
- *     type-name identifier [ value ];
- *     type-name identifier ( parameter-list ) ;
- *     type-name identifier ( parameter-list ) statement
- *
- * parameter-list:
- *     parameter-declaration
- *     parameter-list, parameter-declaration
- *
- * parameter-declaration:
- *     type-name identifier-opt
- */
 int program() {
 	int i;
 	int type_size;
