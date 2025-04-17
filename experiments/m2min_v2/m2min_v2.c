@@ -1073,11 +1073,7 @@ int load_value(int size, int is_signed) {
 }
 
 int store_value(int size) {
-	if(eq(size, 1)) {
-		return "mov_[ebx],al\n";
-	} else if(eq(size, 2)) {
-		return "mov_[ebx],ax\n";
-	} else if(eq(size, 4)) {
+	if(eq(size, 4)) {
 		return "mov_[ebx],eax\n";
 	}
 	/* Should not happen but print error message. */
@@ -1092,8 +1088,7 @@ int variable_load(int a, int num_dereference)
 {
 	require(neq(NULL, global_token), "incomplete variable load received\n");
 	if(and(or(match("FUNCTION", gty_name(gtl_type(a))), match("FUNCTION*", gty_name(gtl_type(a)))), match("(", gtl_s(global_token)))) {
-		function_call(int2str(gtl_depth(a), 10, TRUE), TRUE);
-		return;
+		require(0, "FUNCTION loads not impl");
 	}
 	current_target = gtl_type(a);
 
@@ -1120,9 +1115,7 @@ int function_load(int a) {
 		return;
 	}
 
-	emit_out("mov_eax, &FUNCTION_");
-	emit_out(gtl_s(a));
-	emit_out("\n");
+	require(0, "loading function address not impl");
 }
 
 int global_load(int a) {
