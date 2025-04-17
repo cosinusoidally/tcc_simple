@@ -1531,21 +1531,6 @@ int recursive_output(int head, int out) {
 	}
 }
 
-int eat_current_token() {
-	int update_global_token;
-
-	update_global_token = FALSE;
-	if (eq(macro_token, global_token)) {
-		update_global_token = TRUE;
-	}
-
-	macro_token = eat_token(macro_token);
-
-	if(update_global_token) {
-		global_token = macro_token;
-	}
-}
-
 int eat_newline_tokens() {
 	macro_token = global_token;
 
@@ -1555,7 +1540,7 @@ int eat_newline_tokens() {
 		}
 
 		if(match("\n", gtl_s(macro_token))) {
-			eat_current_token();
+			macro_token = eat_token(macro_token);
 		} else {
 			macro_token = gtl_next(macro_token);
 		}
