@@ -480,18 +480,6 @@ int eat_token(int token) {
 	return gtl_next(token);
 }
 
-int eat_until_newline(int head) {
-	while (neq(NULL, head)) {
-		if(eq('\n', ri8(gtl_s(head)))) {
-			return head;
-		} else {
-			head = eat_token(head);
-		}
-	}
-
-	return NULL;
-}
-
 int new_token(int s, int size) {
 	int current;
 
@@ -527,9 +515,6 @@ int get_token(int c) {
 		if(eq(c, EOF)) {
 			free(current);
 			return c;
-		} else if(eq('#', c)) {
-			c = consume_byte(c);
-			c = preserve_keyword(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 		} else if(in_set(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_")) {
 			c = preserve_keyword(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 		} else if(in_set(c, "<=>|&!^%")) {
@@ -554,12 +539,6 @@ int get_token(int c) {
 				c = consume_byte(c);
 			}
 		} else if (eq(c, '\n')) {
-			c = consume_byte(c);
-		} else if(eq(c, '*')) {
-			c = consume_byte(c);
-		} else if(eq(c, '+')) {
-			c = consume_byte(c);
-		} else if(eq(c, '-')) {
 			c = consume_byte(c);
 		} else {
 			c = consume_byte(c);
@@ -1586,24 +1565,6 @@ int recursive_statement() {
 	}
 	stl_locals(function, frame);
 }
-
-/*
- * statement:
- *     { statement-list-opt }
- *     type-name identifier ;
- *     type-name identifier = expression;
- *     if ( expression ) statement
- *     if ( expression ) statement else statement
- *     do statement while ( expression ) ;
- *     while ( expression ) statement
- *     for ( expression ; expression ; expression ) statement
- *     asm ( "assembly" ... "assembly" ) ;
- *     goto label ;
- *     label:
- *     return ;
- *     break ;
- *     expr ;
- */
 
 int statement() {
 	require(neq(NULL, global_token), "expected a C statement but received EOF\n");
