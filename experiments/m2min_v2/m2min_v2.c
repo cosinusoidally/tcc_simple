@@ -1710,80 +1710,6 @@ int process_if() {
 	uniqueID_out(gtl_s(function), number_string);
 }
 
-int process_for() {
-	int nested_locals;
-	int nested_break_head;
-	int nested_break_func;
-	int nested_break_num;
-	int number_string;
-
-	nested_locals = break_frame;
-	nested_break_head = break_target_head;
-	nested_break_func = break_target_func;
-	nested_break_num = break_target_num;
-
-	number_string = int2str(current_count, 10, TRUE);
-	current_count = add(current_count, 1);
-
-	break_target_head = "FOR_END_";
-	break_target_num = number_string;
-	break_frame = gtl_locals(function);
-	break_target_func = gtl_s(function);
-
-	emit_out("# FOR_initialization_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	global_token = gtl_next(global_token);
-
-	require_match("ERROR in process_for\nMISSING (\n", "(");
-	if(eq(0, match(";", gtl_s(global_token)))) {
-		expression();
-	}
-
-	emit_out(":FOR_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	require_match("ERROR in process_for\nMISSING ;1\n", ";");
-	expression();
-
-	emit_out("test_eax,eax\nje %FOR_END_");
-
-	uniqueID_out(gtl_s(function), number_string);
-
-	emit_out("jmp %FOR_THEN_");
-
-	uniqueID_out(gtl_s(function), number_string);
-
-	emit_out(":FOR_ITER_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	require_match("ERROR in process_for\nMISSING ;2\n", ";");
-	expression();
-
-	emit_out("jmp %FOR_");
-
-	uniqueID_out(gtl_s(function), number_string);
-
-	emit_out(":FOR_THEN_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	require_match("ERROR in process_for\nMISSING )\n", ")");
-	statement();
-	require(neq(NULL, global_token), "Reached EOF inside of function\n");
-
-	emit_out("jmp %FOR_ITER_");
-
-	uniqueID_out(gtl_s(function), number_string);
-
-	emit_out(":FOR_END_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	break_target_head = nested_break_head;
-	break_target_func = nested_break_func;
-	break_target_num = nested_break_num;
-	break_frame = nested_locals;
-}
-
 /* Process Assembly statements */
 int process_asm() {
 	global_token = gtl_next(global_token);
@@ -1797,58 +1723,6 @@ int process_asm() {
 	require_match("ERROR in process_asm\nMISSING )\n", ")");
 	require_match("ERROR in process_asm\nMISSING ;\n", ";");
 }
-
-/* Process do while loops */
-int process_do() {
-	int nested_locals;
-	int nested_break_head;
-	int nested_break_func;
-	int nested_break_num;
-	int number_string;
-
-	nested_locals = break_frame;
-	nested_break_head = break_target_head;
-	nested_break_func = break_target_func;
-	nested_break_num = break_target_num;
-
-	number_string = int2str(current_count, 10, TRUE);
-	current_count = add(current_count, 1);
-
-	break_target_head = "DO_END_";
-	break_target_num = number_string;
-	break_frame = gtl_locals(function);
-	break_target_func = gtl_s(function);
-
-	emit_out(":DO_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	global_token = gtl_next(global_token);
-	require(neq(NULL, global_token), "Received EOF where do statement is expected\n");
-	statement();
-	require(neq(NULL, global_token), "Reached EOF inside of function\n");
-
-	emit_out(":DO_TEST_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	require_match("ERROR in process_do\nMISSING while\n", "while");
-	require_match("ERROR in process_do\nMISSING (\n", "(");
-	expression();
-	require_match("ERROR in process_do\nMISSING )\n", ")");
-	require_match("ERROR in process_do\nMISSING ;\n", ";");
-
-	emit_out("test_eax,eax\njne %DO_");
-
-	uniqueID_out(gtl_s(function), number_string);
-
-	emit_out(":DO_END_");
-	uniqueID_out(gtl_s(function), number_string);
-
-	break_frame = nested_locals;
-	break_target_head = nested_break_head;
-	break_target_func = nested_break_func;
-	break_target_num = nested_break_num;
-}
-
 
 /* Process while loops */
 int process_while() {
