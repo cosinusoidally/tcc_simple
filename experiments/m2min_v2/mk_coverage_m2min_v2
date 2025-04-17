@@ -31,6 +31,7 @@ sha256sum -c sums
 
 diff -u -s ../artifacts/pnut_m2.M1 artifacts/pnut_m2.M1
 
+ls -lt artifacts/*exe
 wc m2min_v2.c
 
 gcovr artifacts --html-details -o artifacts/example.html

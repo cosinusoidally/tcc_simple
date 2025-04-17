@@ -1347,14 +1347,6 @@ int fn_additive_expr_stub;
 int dispatch(int fn) {
 	if(eq(fn, fn_expression)) {
 		expression();
-	} else if(eq(fn, fn_primary_expr)) {
-		primary_expr();
-	} else if(eq(fn, fn_postfix_expr)) {
-		postfix_expr();
-	} else if(eq(fn, fn_additive_expr)) {
-		additive_expr();
-	} else if(eq(fn, fn_additive_expr_stub)) {
-		additive_expr_stub();
 	} else {
 		fputs("unsupported dispatch\n", stdout);
 		exit(1);
@@ -1397,52 +1389,6 @@ int arithmetic_recursion(int f, int s1, int s2, int name, int iterate) {
 		}
 		dispatch(iterate);
 	}
-}
-
-
-/*
- * postfix-expr:
- *         primary-expr
- *         postfix-expr [ expression ]
- *         postfix-expr ( expression-list-opt )
- *         postfix-expr -> member
- *         postfix-expr . member
- */
-
-int postfix_expr_array() {
-	int array;
-	int assign;
-
-	array = current_target;
-	common_recursion(fn_expression);
-	current_target = array;
-	require(neq(NULL, current_target), "Arrays only apply to variables\n");
-
-	assign = load_value(register_size, gty_is_signed(current_target));
-
-	/* Add support for Ints */
-	if(match("char*", gty_name(current_target))) {
-		assign = load_value(1, TRUE);
-	} else {
-		emit_out("push_ebx\nmov_ebx, %");
-		emit_out(int2str(gty_size(gty_type(current_target)), 10, TRUE));
-		emit_out("\nmul_ebx\npop_ebx\n");
-	}
-
-	emit_out("add_eax,ebx\n");
-
-	require_match("ERROR in postfix_expr\nMissing ]\n", "]");
-	require(neq(NULL, global_token), "truncated array expression\n");
-
-	if(or(match("=", gtl_s(global_token)), match(".", gtl_s(global_token)))) {
-		assign = "";
-	}
-
-	if(match("[", gtl_s(global_token))) {
-		current_target = gty_type(current_target);
-	}
-
-	emit_out(assign);
 }
 
 /*
