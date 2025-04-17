@@ -1333,7 +1333,6 @@ int promote_type(int a, int b) {
 
 int postfix_expr();
 int additive_expr_stub();
-int additive_expr();
 
 int fn_expression;
 int fn_primary_expr;
@@ -1391,49 +1390,10 @@ int arithmetic_recursion(int f, int s1, int s2, int name, int iterate) {
 	}
 }
 
-/*
- * unary-expr:
- *         &postfix-expr
- *         - postfix-expr
- *         !postfix-expr
- *         sizeof ( type )
- */
-
 int type_name();
 
-int postfix_expr() {
-	primary_expr();
-}
-
-/*
- * additive-expr:
- *         postfix-expr
- *         additive-expr * postfix-expr
- *         additive-expr / postfix-expr
- *         additive-expr % postfix-expr
- *         additive-expr + postfix-expr
- *         additive-expr - postfix-expr
- *         additive-expr << postfix-expr
- *         additive-expr >> postfix-expr
- */
-int additive_expr_stub() {
-		arithmetic_recursion(fn_postfix_expr, "add_eax,ebx\n", "add_eax,ebx\n", "+", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "sub_ebx,eax\nmov_eax,ebx\n", "sub_ebx,eax\nmov_eax,ebx\n", "-", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "imul_ebx\n", "mul_ebx\n", "*", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "xchg_ebx,eax\ncdq\nidiv_ebx\n", "xchg_ebx,eax\nmov_edx, %0\ndiv_ebx\n", "/", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "xchg_ebx,eax\ncdq\nidiv_ebx\nmov_eax,edx\n", "xchg_ebx,eax\nmov_edx, %0\ndiv_ebx\nmov_eax,edx\n", "%", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "mov_ecx,eax\nmov_eax,ebx\nsal_eax,cl\n", "mov_ecx,eax\nmov_eax,ebx\nshl_eax,cl\n", "<<", fn_additive_expr_stub);
-		arithmetic_recursion(fn_postfix_expr, "mov_ecx,eax\nmov_eax,ebx\nsar_eax,cl\n", "mov_ecx,eax\nmov_eax,ebx\nshr_eax,cl\n", ">>", fn_additive_expr_stub);
-}
-
-
-int additive_expr() {
-	postfix_expr();
-	additive_expr_stub();
-}
-
 int bitwise_expr() {
-	additive_expr();
+	primary_expr();
 }
 
 int primary_expr() {
