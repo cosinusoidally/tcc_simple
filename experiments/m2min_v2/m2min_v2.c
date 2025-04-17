@@ -934,7 +934,7 @@ int require_match(int message, int required) {
 }
 
 int expression();
-int function_call(int s, int bool) {
+int function_call(int s) {
 	int passed;
 	require_match("ERROR in process_expression_list\nNo ( was found\n", "(");
 	require(neq(NULL, global_token), "Improper function call\n");
@@ -1001,12 +1001,8 @@ int variable_load(int a) {
 
 int function_load(int a) {
 	require(neq(NULL, global_token), "incomplete function load\n");
-	if(match("(", gtl_s(global_token))) {
-		function_call(gtl_s(a), FALSE);
-		return;
-	}
-
-	require(0, "loading function address not impl");
+	function_call(gtl_s(a));
+	return;
 }
 
 int global_load(int a) {
