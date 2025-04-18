@@ -3,18 +3,18 @@ set -xe
 
 pushd .
 
-cd ../../tcc_bootstrap_alt
-./mk_cc_x86
-cd x86/bin
+cd m2min_v2
+./mk_m2min_v2
+cd artifacts
 export PATH=$PWD:$PATH
 
 popd
 
 pushd .
 
-cd m2min_v2
-./mk_m2min_v2
-cd artifacts
+cd ../../tcc_bootstrap_alt
+./mk_cc_x86
+cd x86/bin
 export PATH=$PWD:$PATH
 
 popd
