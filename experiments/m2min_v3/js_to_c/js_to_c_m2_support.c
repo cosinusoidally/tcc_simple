@@ -47,6 +47,86 @@ int neq(int a, int b){
         );
 }
 
+int ri8(int o) {
+/*
+  char *h = 0;
+  return h[o] & 0xFF;
+*/
+        asm(
+                "mov_eax, %0"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-12"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "add_eax,ebx"
+                "movsx_eax,BYTE_PTR_[eax]"
+                "push_eax"
+                "mov_eax, %0xFF"
+                "pop_ebx"
+                "and_eax,ebx"
+                "pop_ebx"
+                "ret"
+        );
+}
+
+int wi8(int o,int v) {
+/*
+  char *h = 0;
+  h[o]=v;
+  return;
+*/
+        asm(
+                "mov_eax, %0"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-16"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "add_eax,ebx"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "mov_[ebx],al"
+                "pop_ebx"
+                "ret"
+        );
+}
+
+int add(int a, int b){
+/*      return a + b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "add_eax,ebx"
+                "ret"
+        );
+}
+
+int sub(int a, int b){
+/*      return a - b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "sub_ebx,eax"
+                "mov_eax,ebx"
+                "ret"
+        );
+}
+
 int stdin;
 int stdout;
 int stderr;
