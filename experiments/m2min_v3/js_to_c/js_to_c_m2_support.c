@@ -565,11 +565,11 @@ int puts(int a) {
   fputs("\n",stdout);
 }
 
-int init_c(void) {
-  p_size=4;
-  stdin=0;
-  stdout=1;
-  stderr=3;
+int init_c() {
+  p_size = 4;
+  stdin = 0;
+  stdout = 1;
+  stderr = 3;
   NULL = 0;
   TRUE = 1;
   FALSE = 0;
@@ -582,7 +582,7 @@ int memcpy(int a, int b, int c) {
   dest=a;
   src=b;
   for(i=0;i<c;i=i+1){
-    dest[i]=src[i];
+    wi8(add(dest, i), ri8(add(src, i)));
   }
 }
 
