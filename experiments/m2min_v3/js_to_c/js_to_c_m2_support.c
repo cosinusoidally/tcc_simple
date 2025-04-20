@@ -375,17 +375,21 @@ int malloc(int size)
 int strlen(char* str )
 {
 	int i = 0;
-	while(0 != str[i]) i = i + 1;
+	while(0 != str[i]) {
+		i = i + 1;
+	}
 	return i;
 }
 
-void* memset(void* ptr, int value, int num)
+int memset(int ptr, int value, int num)
 {
-	char* s;
-	for(s = ptr; 0 < num; num = num - 1)
+	int s;
+	s = ptr;
+	while(lt(0, num))
 	{
-		s[0] = value;
-		s = s + 1;
+		wi8(s, value);
+		s = add(s, 1);
+		num = sub(num, 1);
 	}
 }
 
