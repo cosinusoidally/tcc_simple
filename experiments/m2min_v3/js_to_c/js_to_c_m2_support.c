@@ -306,25 +306,24 @@ int open(int name, int flag, int mode)
 	    "int !0x80");
 }
 
-FILE* fopen(char* filename, char* mode)
+int fopen(int filename, int mode)
 {
-	FILE* f;
-	if('w' == mode[0])
+	int f;
+	if(eq('w', ri8(mode)))
 	{ /* 577 is O_WRONLY|O_CREAT|O_TRUNC, 384 is 600 in octal */
 		f = open(filename, 577 , 384);
-	}
-	else
-	{ /* Everything else is a read */
+	} else { /* Everything else is a read */
 		f = open(filename, 0, 0);
 	}
 
 	/* Negative numbers are error codes */
-	if(0 > f)
+	if(gt(0, f))
 	{
 		return 0;
 	}
 	return f;
 }
+
 
 int close(int fd)
 {
@@ -334,13 +333,13 @@ int close(int fd)
 	    "int !0x80");
 }
 
-int fclose(FILE* stream)
+int fclose(int stream)
 {
 	int error = close(stream);
 	return error;
 }
 
-int brk(void *addr)
+int brk(int addr)
 {
 	asm("mov_eax,[esp+DWORD] %4"
 	    "push_eax"
