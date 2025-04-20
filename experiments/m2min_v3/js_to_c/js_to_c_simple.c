@@ -316,19 +316,18 @@ int print_declare_globals(void){
   fputs(gdb, outfd);
 }
 
-int print_converted(void){
+int print_converted() {
   fwrite(ob,1,obo,outfd);
 }
 
-int main(int argc, int **argv){
+int main(int argc, int argv) {
   init_c();
   init_globals();
   if(eq(argc, 3)){
-    infile=argv[1];
-    outfd=fopen(argv[2],"wb");
+    infile = ri32(add(argv, 4));
+    outfd=fopen(ri32(add(argv, 8)),"wb");
   } else {
-    infile="tcc.js";
-    outfd=stdout;
+    exit(1);
   }
   process_file(infile);
 
