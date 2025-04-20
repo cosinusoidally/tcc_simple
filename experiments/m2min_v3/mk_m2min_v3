@@ -2,7 +2,10 @@
 
 set -xe
 
-cat simple_support_js_defs.c > artifacts/m2_min_v3_gcc.c
-cat simple_support_js.c >> artifacts/m2_min_v3_gcc.c
-cat simple_support_tcc.c >> artifacts/m2_min_v3_gcc.c
-cat m2min_v3.js >> artifacts/m2_min_v3_gcc.c
+cat simple_support_js_defs.c > artifacts/m2min_v3_gcc.c
+cat simple_support_js.c >> artifacts/m2min_v3_gcc.c
+cat simple_support_tcc.c >> artifacts/m2min_v3_gcc.c
+cat m2min_v3.js >> artifacts/m2min_v3_gcc.c
+
+echo "gcc build"
+gcc -g -m32 -O0 artifacts/m2min_v3_gcc.c.c -o artifacts/m2min_v3_gcc.exe
