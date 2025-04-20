@@ -210,7 +210,8 @@ int process_function(int l){
   dbputs(name);
   dbputs("(");
   if(args_n==0){
-    dbputs("void");
+/* breaks m2min_v3.js */
+/*    dbputs("void"); */
   } else {
     dbputs("int ");
     dbputs(args[1]);
