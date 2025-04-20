@@ -273,7 +273,7 @@ int process_line(int l) {
     return;
   }
   if(eq(memcmp("var ",t,4), 0)){
-    process_local_var(t+4,n);
+    process_local_var(add(t, 4),n);
     return;
   }
   oputs(l);
@@ -288,14 +288,14 @@ int process_file(int name){
   lb=malloc(l_size);
   f=fopen(name,"rb");
   lo=0;
-  while(neq((c=fgetc(f)), (-1))) {
-    wu8(lb+lo,c);
+  while(neq((c=fgetc(f)), sub(0, 1))) {
+    wu8(add(lb, lo),c);
     if(eq(c, '\n')){
       wu8(lb+lo,0);
       lo=0;
       process_line(lb);
     } else {
-      lo=lo+1;
+      lo = add(lo, 1);
     }
   }
   free(lb); 
