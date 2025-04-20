@@ -26,7 +26,7 @@ int wu8(int o, int v) {
 }
 
 int init_globals(void){
-  l_size=256;
+  l_size=4096;
   ob=calloc(1024*1024,1);
   obo=0;
   gib=calloc(1024*1024,1);
