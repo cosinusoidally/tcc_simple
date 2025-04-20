@@ -329,7 +329,7 @@ int print_converted(void){
 int main(int argc, int **argv){
   init_c();
   init_globals();
-  if(argc==3){
+  if(eq(argc, 3)){
     infile=argv[1];
     outfd=fopen(argv[2],"wb");
   } else {

@@ -655,3 +655,19 @@ int fclose_tramp(int x){
   asm("mov_ebx, &FUNCTION_fclose"
       "jmp %FUNCTION_generic1_tramp");
 }
+
+int eq(int a, int b){
+/*      return a == b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "cmp"
+                "sete_al"
+                "movzx_eax,al"
+                "ret"
+        );
+}
