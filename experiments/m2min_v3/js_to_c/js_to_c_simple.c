@@ -131,12 +131,12 @@ int process_load(int l){
   p=l;
 
   while(neq(ri8(p), '"')){
-    p=p+1;
+    p = add(p, 1);
   }
   p=p+1;
   l=p;
   while(neq(ri8(p), '"')){
-    p=p+1;
+    p = add(p, 1);
   }
   wi8(p, 0);
   if(eq(memcmp(l,"support.js",10), 0)){
@@ -150,21 +150,21 @@ int process_load(int l){
 }
 
 int eat_whitespace(int l){
-  char *o;
+  int o;
   o=l;
   while(eq(memcmp(" ",o,1), 0)){
-    o=o+1;
+    o = add(o, 1);
   }
   return o;
 }
 
 int num_whitespace(int l){
-  char *o;
+  int o;
   o=l;
   while(eq(memcmp(" ",o,1), 0)){
-    o=o+1;
+    o = add(o, 1);
   }
-  return o-l;
+  return sub(o, l);
 }
 
 int process_function(int l){
@@ -178,22 +178,23 @@ int process_function(int l){
   int decl;
   p=l;
   /* FIXME should be dynamic */
-  args=malloc(20*4);
+  args=malloc(mul(20, 4));
   oputs("/* ");
   oputs(l);
   oputs(" */");
   oputs("\n");
-  l=l+9;
-  decl=db+dbo;
+  l = add(l, 9);
+  decl = add(db, dbo);
   dbputs("int ");
   name=l;
-  while(neq((c=p[0]), '(')){
+  while(neq(ri8(p), '(')){
     p=p+1;
   }
   p[0]=0;
   p=p+1;
   args[1]=p;
   while(neq((c=p[0]), ')')){
+    c = ri8(p);
     if(eq(args_n, 0)){
       args_n=1;
     }
