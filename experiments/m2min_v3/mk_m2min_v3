@@ -8,4 +8,4 @@ cat simple_support_tcc.c >> artifacts/m2min_v3_gcc.c
 cat m2min_v3.js >> artifacts/m2min_v3_gcc.c
 
 echo "gcc build"
-gcc -g -m32 -O0 artifacts/m2min_v3_gcc.c.c -o artifacts/m2min_v3_gcc.exe
+gcc -g -m32 -O0 artifacts/m2min_v3_gcc.c -o artifacts/m2min_v3_gcc.exe
