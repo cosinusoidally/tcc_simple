@@ -557,23 +557,10 @@ int int2str(int x, int base, int signed_p) {
 	return add(p, 1);
 }
 
-/* decls for real functions */
-void *malloc(int size);
-int strlen(char *s);
-int fopen(int path, int mode);
-int fclose(int f);
-int fread(int a,int b, int c, int d);
-int puts(char *a);
-int dlsym(int h, int sym);
-int exit(int x);
-int memset(int a, int b, int c);
-int memcpy(int a, int b, int c);
-
 int p_size;
 int verbose;
-void puts_num(int x);
 
-int puts(char *a) {
+int puts(int a) {
   fputs(a,stdout);
   fputs("\n",stdout);
 }
