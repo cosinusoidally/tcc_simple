@@ -23,42 +23,42 @@ int wu8(int o, int v) {
 
 int init_globals(void){
   l_size=4096;
-  ob=calloc(1024*1024,1);
+  ob=calloc(mul(1024, 1024),1);
   obo=0;
-  gib=calloc(1024*1024,1);
+  gib=calloc(mul(1024, 1024),1);
   gibo=0;
-  gdb=calloc(1024*1024,1);
+  gdb=calloc(mul(1024, 1024),1);
   gdbo=0;
-  db=calloc(1024*1024,1);
+  db=calloc(mul(1024, 1024),1);
   dbo=0;
 }
 
 int oputs(int s){
   int l;
   l=strlen(s);
-  memcpy(ob+obo,s,l);
-  obo=obo+l;
+  memcpy(add(ob, obo),s,l);
+  obo = add(obo, l);
 }
 
 int giputs(int s){
   int l;
   l=strlen(s);
   memcpy(gib+gibo,s,l);
-  gibo=gibo+l;
+  gibo = add(gibo, l);
 }
 
 int gdputs(int s){
   int l;
   l=strlen(s);
-  memcpy(gdb+gdbo,s,l);
-  gdbo=gdbo+l;
+  memcpy(add(gdb, gdbo),s,l);
+  gdbo = add(gdbo, l);
 }
 
 int dbputs(int s){
   int l;
   l=strlen(s);
-  memcpy(db+dbo,s,l);
-  dbo=dbo+l;
+  memcpy(add(db, dbo),s,l);
+  dbo = add(dbo, l);
 }
 
 int memcmp(int s1, int s2, int n) {
