@@ -372,11 +372,12 @@ int malloc(int size)
 }
 
 
-int strlen(char* str )
+int strlen(int str)
 {
-	int i = 0;
-	while(0 != str[i]) {
-		i = i + 1;
+	int i;
+	i = 0;
+	while(neq(0, ri8(add(str, i)))) {
+		i = add(i, 1);
 	}
 	return i;
 }
@@ -393,20 +394,21 @@ int memset(int ptr, int value, int num)
 	}
 }
 
-void* calloc(int count, int size)
+int calloc(int count, int size)
 {
-	void* ret = malloc(count * size);
-	if(NULL == ret) return NULL;
-	memset(ret, 0, (count * size));
+	int ret = malloc(mul(count, size));
+	if(eq(NULL, ret)) return NULL;
+	memset(ret, 0, mul(count, size));
 	return ret;
 }
 
-void free(void* l)
+
+int free(int l)
 {
 	return;
 }
 
-void exit(int value)
+int exit(int value)
 {
 	asm("pop_ebx"
 	    "pop_ebx"
@@ -414,34 +416,39 @@ void exit(int value)
 	    "int !0x80");
 }
 
-void require(int bool, char* error)
+int require(int bool, int error)
 {
-	if(!bool)
+	if(eq(0,bool))
 	{
 		fputs(error, stderr);
 		exit(1);
 	}
 }
 
+int match(int a, int b) {
+	int i;
+	if(and(eq(NULL, a), eq(NULL, b))) {
+		return TRUE;
+	}
+	if(eq(NULL, a)) {
+		return FALSE;
+	}
+	if(eq(NULL, b)) {
+		return FALSE;
+	}
 
-int match(char* a, char* b)
-{
-	if((NULL == a) && (NULL == b)) return TRUE;
-	if(NULL == a) return FALSE;
-	if(NULL == b) return FALSE;
-
-	int i = -1;
-	do
-	{
-		i = i + 1;
-		if(a[i] != b[i])
-		{
+	i = sub(0, 1);
+	while(1) {
+		i = add(i, 1);
+		if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
 			return FALSE;
 		}
-	} while((0 != a[i]) && (0 !=b[i]));
+		if(eq(0,and(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
+			break;
+		}
+	}
 	return TRUE;
 }
-
 
 int in_set(int c, char* s)
 {
