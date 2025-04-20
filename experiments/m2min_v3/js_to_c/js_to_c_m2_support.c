@@ -276,7 +276,7 @@ int fgetc(int f)
 	    ":FUNCTION_fgetc_Done");
 }
 
-void fputc(int s, int f)
+int fputc(int s, int f)
 {
 	asm("mov_eax, %4"
 	    "lea_ebx,[esp+DWORD] %4"
@@ -286,16 +286,15 @@ void fputc(int s, int f)
 	    "int !0x80");
 }
 
-void fputs(char* s, FILE* f)
-{
-	while(0 != s[0])
-	{
-		fputc(s[0], f);
-		s = s + 1;
+int fputs(int si, int f) {
+	while(neq(0, ri8(si))) {
+		fputc(ri8(si), f);
+		si = add(si, 1);
 	}
 }
 
-FILE* open(char* name, int flag, int mode)
+
+int open(int name, int flag, int mode)
 {
 	asm("lea_ebx,[esp+DWORD] %12"
 	    "mov_ebx,[ebx]"
