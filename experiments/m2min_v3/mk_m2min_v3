@@ -55,4 +55,11 @@ cat ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifact
 cat ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c artifacts/out.c > artifacts/pnut_m2.c
 
 compile ./artifacts/m2min_v3.exe artifacts/pnut_m2.c artifacts/pnut_js.exe
-./artifacts/pnut_js.exe
+
+pushd .
+cd ..
+./mk_clean
+popd
+cp ./artifacts/pnut_js.exe ../artifacts/pnut-exe
+cd ..
+./mk_tcc-boot-mes
