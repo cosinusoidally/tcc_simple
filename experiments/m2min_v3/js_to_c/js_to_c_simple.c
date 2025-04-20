@@ -237,14 +237,14 @@ int strip_comments(int l) {
   s = l;
   i = 0;
   while(1) {
-    if(eq(s[i], 0)) {
+    if(eq(ri8(add(s, i)), 0)) {
       return;
     }
-    if(eq(s[i], 47) && eq(s[i+1], 47)) {
-      s[i] = 0;
+    if(and(eq(ri8(add(s, i)), 47), eq(ri8(add(s, add(i,1))), 47))) {
+      wi8(add(s, i), 0);
       return;
     }
-    i = i + 1;
+    i = add(i, 1);
   }
 }
 
