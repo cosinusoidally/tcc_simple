@@ -1,0 +1,8 @@
+./mk_clean
+
+set -xe
+
+cat simple_support_js_defs.c > artifacts/m2_min_v3_gcc.c
+cat simple_support_js.c >> artifacts/m2_min_v3_gcc.c
+cat simple_support_tcc.c >> artifacts/m2_min_v3_gcc.c
+cat m2min_v3.js >> artifacts/m2_min_v3_gcc.c
