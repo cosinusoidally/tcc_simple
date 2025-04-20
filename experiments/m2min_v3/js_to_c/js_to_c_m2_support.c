@@ -47,6 +47,22 @@ int neq(int a, int b){
         );
 }
 
+int lt(int a, int b){
+/*      return a < b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "cmp"
+                "setl_al"
+                "movzx_eax,al"
+                "ret"
+        );
+}
+
 int gt(int a, int b){
 /*      return a > b; */
         asm(

@@ -69,11 +69,13 @@ int memcmp(int s1, int s2, int n) {
   r=0;
   p1=s1;
   p2=s2;
-  for(i=0;i<n;i=i+1){
+  i = 0;
+  while(lt(i, n)){
     if(neq(ri8(add(p1, i)), ri8(add(p2, i)))){
 /* FIXME ljw not quite right */
       r=1;
     }
+    i = add(i, 1);
   }
   return r;
 }
