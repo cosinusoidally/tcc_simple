@@ -97,7 +97,7 @@ int process_global_var(int l){
   l=l+4;
   p=l;
   while((c=p[0])!=0){
-    if(c=='='){
+    if(eq(c,'=')){
       giputs("    ");
       giputs(l);
       giputs("\n");
@@ -136,7 +136,7 @@ int process_load(int l){
     p=p+1;
   }
   p[0]=0;
-  if(memcmp(l,"support.js",10)==0){
+  if(eq(memcmp(l,"support.js",10), 0)){
     return;
   }
   oputs("/* load: ");
@@ -149,7 +149,7 @@ int process_load(int l){
 int eat_whitespace(int l){
   char *o;
   o=l;
-  while(memcmp(" ",o,1)==0){
+  while(eq(memcmp(" ",o,1), 0)){
     o=o+1;
   }
   return o;
@@ -158,7 +158,7 @@ int eat_whitespace(int l){
 int num_whitespace(int l){
   char *o;
   o=l;
-  while(memcmp(" ",o,1)==0){
+  while(eq(memcmp(" ",o,1), 0)){
     o=o+1;
   }
   return o-l;
@@ -191,10 +191,10 @@ int process_function(int l){
   p=p+1;
   args[1]=p;
   while((c=p[0])!=')'){
-    if(args_n==0){
+    if(eq(args_n, 0)){
       args_n=1;
     }
-    if(c==','){
+    if(eq(c, ',')){
       args_n=args_n+1;
       p[0]=0;
       p=p+1;
@@ -207,7 +207,7 @@ int process_function(int l){
   p=p+1;
   dbputs(name);
   dbputs("(");
-  if(args_n==0){
+  if(eq(args_n, 0)){
 /* breaks m2min_v3.js */
 /*    dbputs("void"); */
   } else {
@@ -231,10 +231,10 @@ int strip_comments(int l) {
   s = l;
   i = 0;
   while(1) {
-    if(s[i]==0) {
+    if(eq(s[i], 0)) {
       return;
     }
-    if((s[i] == 47) && (s[i+1] == 47)) {
+    if(eq(s[i], 47) && eq(s[i+1], 47)) {
       s[i] = 0;
       return;
     }
@@ -246,27 +246,27 @@ int process_line(int l) {
   int t;
   int n;
   strip_comments(l);
-  if(memcmp("var ",l,4)==0){
+  if(eq(memcmp("var ",l,4), 0)){
     process_global_var(l);
     return;
   }
-  if(memcmp("load(",l,4)==0){
+  if(eq(memcmp("load(",l,4), 0)){
     process_load(l);
     return;
   }
-  if(memcmp("function ",l,9)==0){
+  if(eq(memcmp("function ",l,9), 0)){
     process_function(l);
     return;
   }
   t=eat_whitespace(l);
   n=num_whitespace(l);
-  if(memcmp("// ",t,3)==0){
+  if(eq(memcmp("// ",t,3), 0)){
     return;
   }
-  if(memcmp("print(",t,6)==0){
+  if(eq(memcmp("print(",t,6), 0)){
     return;
   }
-  if(memcmp("var ",t,4)==0){
+  if(eq(memcmp("var ",t,4), 0)){
     process_local_var(t+4,n);
     return;
   }
@@ -284,7 +284,7 @@ int process_file(int name){
   lo=0;
   while((c=fgetc(f)) != (-1)) {
     wu8(lb+lo,c);
-    if(c=='\n'){
+    if(eq(c, '\n')){
       wu8(lb+lo,0);
       lo=0;
       process_line(lb);
@@ -310,18 +310,6 @@ int print_declare_globals(void){
   fputs(gdb, outfd);
 }
 
-int print_init_globals(void){
-  fputs("\n",outfd);
-  fputs("/* init globals */",outfd);
-  fputs("\n",outfd);
-  fputs("void init_globals(void) {",outfd);
-  fputs("\n",outfd);
-  fputs(gib, outfd);
-  fputs("}",outfd);
-  fputs("\n",outfd);
-  fputs("\n",outfd);
-}
-
 int print_converted(void){
   fwrite(ob,1,obo,outfd);
 }
@@ -338,10 +326,8 @@ int main(int argc, int **argv){
   }
   process_file(infile);
 
-/*  fputs("#include \"support.c\"\n",outfd); */
   print_fn_decls();
   print_declare_globals();
-/*  print_init_globals(); */
   print_converted();
   
   return 0;
