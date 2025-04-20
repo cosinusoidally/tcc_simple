@@ -64,8 +64,8 @@ int dbputs(int s){
 int memcmp(int s1, int s2, int n) {
   int i;
   int r;
-  char *p1;
-  char *p2;
+  int p1;
+  int p2;
   r=0;
   p1=s1;
   p2=s2;
@@ -83,7 +83,7 @@ int fwrite(int ptr,int size, int nitems, int stream) {
   int c;
   t = mul(size, nitems);
   c=ptr;
-  while(t>0){
+  while(gt(t, 0)){
     fputc(ri8(c),stream);
     t=sub(t, 1);
     c=add(c, 1);
