@@ -21,7 +21,7 @@ int wu8(int o, int v) {
   wi8(o, v);
 }
 
-int init_globals(void){
+int init_globals(){
   l_size=4096;
   ob=calloc(mul(1024, 1024),1);
   obo=0;
@@ -107,7 +107,7 @@ int process_global_var(int l){
       wi8(add(p, 1), 0);
       break;
     }
-    p=p+1;
+    p = add(p, 1);
   }
   gdputs("int ");
   gdputs(l);
@@ -133,8 +133,8 @@ int process_load(int l){
   while(neq(ri8(p), '"')){
     p = add(p, 1);
   }
-  p=p+1;
-  l=p;
+  p = add(p, 1);
+  l = p;
   while(neq(ri8(p), '"')){
     p = add(p, 1);
   }
@@ -168,8 +168,8 @@ int num_whitespace(int l){
 }
 
 int process_function(int l){
-  char *p;
-  int *args;
+  int p;
+  int args;
   int args_n;
   int c;
   int i;
@@ -233,7 +233,7 @@ int process_function(int l){
 
 int strip_comments(int l) {
   int i;
-  char *s;
+  int s;
   s = l;
   i = 0;
   while(1) {
@@ -291,8 +291,8 @@ int process_file(int name){
   while(neq((c=fgetc(f)), sub(0, 1))) {
     wu8(add(lb, lo),c);
     if(eq(c, '\n')){
-      wu8(lb+lo,0);
-      lo=0;
+      wu8(add(lb, lo),0);
+      lo = 0;
       process_line(lb);
     } else {
       lo = add(lo, 1);
@@ -304,14 +304,14 @@ int process_file(int name){
   return 0;
 }
 
-int print_fn_decls(void){
+int print_fn_decls(){
   fputs("\n",outfd);
   fputs("/* fn decls */",outfd);
   fputs("\n",outfd);
   fputs(db, outfd);
 }
 
-int print_declare_globals(void){
+int print_declare_globals(){
   fputs("/* declare globals */\n",outfd);
   fputs(gdb, outfd);
 }
