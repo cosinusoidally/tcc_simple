@@ -22,4 +22,6 @@ hex2-0 artifacts/js_to_c_cc_x86-0-0.hex2 artifacts/js_to_c.exe
 cat ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifacts/out.js
 ./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
 
+wc artifacts/js_to_c_all.c
+
 sha256sum -c sum_js_to_c

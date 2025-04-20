@@ -188,11 +188,11 @@ int process_function(int l){
   dbputs("int ");
   name=l;
   while(neq(ri8(p), '(')){
-    p=p+1;
+    p = add(p, 1);
   }
-  p[0]=0;
-  p=p+1;
-  args[1]=p;
+  wi8(p, 0);
+  p = add(p, 1);
+  wi32(add(args, 4), p);
   while(neq((c=p[0]), ')')){
     c = ri8(p);
     if(eq(args_n, 0)){

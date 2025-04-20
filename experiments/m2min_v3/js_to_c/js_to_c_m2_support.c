@@ -173,6 +173,83 @@ int mul(int a, int b){
         );
 }
 
+int and(int a, int b){
+/*      return a & b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "and_eax,ebx"
+                "ret"
+        );
+}
+
+int or(int a, int b){
+/*      return a | b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "or_eax,ebx"
+                "ret"
+        );
+}
+
+int shl(int a, int b){
+/*      return a << b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "mov_ecx,eax"
+                "mov_eax,ebx"
+                "sal_eax,cl"
+                "ret"
+        );
+}
+
+int shr(int a, int b){
+/*      return a >> b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "mov_ecx,eax"
+                "mov_eax,ebx"
+                "sar_eax,cl"
+                "ret"
+        );
+}
+
+int ri32(int o) {
+        return or(or(and(ri8(o), 255),
+                shl(and(ri8(add(o, 1)), 255), 8)),
+                or(shl(and(ri8(add(o, 2)), 255), 16),
+                shl(and(ri8(add(o, 3)), 255), 24)));
+}
+
+int wi32(int o, int v) {
+  wi8(o, and(v, 0xFF));
+  v = shr(v, 8);
+  wi8(add(o, 1), and(v, 0xFF));
+  v = shr(v, 8);
+  wi8(add(o, 2), and(v, 0xFF));
+  v = shr(v, 8);
+  wi8(add(o, 3), and(v, 0xFF));
+}
+
 int stdin;
 int stdout;
 int stderr;
