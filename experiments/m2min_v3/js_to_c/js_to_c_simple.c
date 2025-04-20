@@ -72,7 +72,7 @@ int memcmp(int s1, int s2, int n) {
   p1=s1;
   p2=s2;
   for(i=0;i<n;i=i+1){
-    if(p1[i]!=p2[i]){
+    if(neq(p1[i], p2[i])){
 /* FIXME ljw not quite right */
       r=1;
     }
@@ -96,7 +96,7 @@ int process_global_var(int l){
   char c;
   l=l+4;
   p=l;
-  while((c=p[0])!=0){
+  while(neq((c=p[0]), 0)){
     if(eq(c,'=')){
       giputs("    ");
       giputs(l);
@@ -127,12 +127,12 @@ int process_load(int l){
   char c;
   p=l;
 
-  while((c=p[0])!='"'){
+  while(neq((c=p[0]), '"')){
     p=p+1;
   }
   p=p+1;
   l=p;
-  while((c=p[0])!='"'){
+  while(neq((c=p[0]), '"')){
     p=p+1;
   }
   p[0]=0;
@@ -184,13 +184,13 @@ int process_function(int l){
   decl=db+dbo;
   dbputs("int ");
   name=l;
-  while((c=p[0])!='('){
+  while(neq((c=p[0]), '(')){
     p=p+1;
   }
   p[0]=0;
   p=p+1;
   args[1]=p;
-  while((c=p[0])!=')'){
+  while(neq((c=p[0]), ')')){
     if(eq(args_n, 0)){
       args_n=1;
     }
@@ -282,7 +282,7 @@ int process_file(int name){
   lb=malloc(l_size);
   f=fopen(name,"rb");
   lo=0;
-  while((c=fgetc(f)) != (-1)) {
+  while(neq((c=fgetc(f)), (-1))) {
     wu8(lb+lo,c);
     if(eq(c, '\n')){
       wu8(lb+lo,0);
