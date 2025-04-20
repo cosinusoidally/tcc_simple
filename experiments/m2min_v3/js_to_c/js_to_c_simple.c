@@ -218,9 +218,11 @@ int process_function(int l){
     dbputs("int ");
     dbputs(ri32(add(args, 4)));
   }
-  for(i=1;i<args_n;i=i+1){
+  i = 1;
+  while(lt(i, args_n)) {
     dbputs(", int ");
-    dbputs(args[i+1]);
+    dbputs(ri32(add(args, mul(add(i, 1), 4))));
+    i = add(i, 1);
   }
   dbputs(")");
   oputs(decl);
