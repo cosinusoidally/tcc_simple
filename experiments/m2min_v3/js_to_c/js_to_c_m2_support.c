@@ -348,35 +348,29 @@ int brk(int addr)
 	    "int !0x80");
 }
 
-long _malloc_ptr;
-long _brk_ptr;
+int _malloc_ptr;
+int _brk_ptr;
 
-void* malloc(int size)
+int malloc(int size)
 {
-	/* align malloc to 4 bytes */
-	size = 4+ (size & (~3));
-	if(NULL == _brk_ptr)
+	int old_malloc;
+	if(eq(NULL, _brk_ptr))
 	{
 		_brk_ptr = brk(0);
-		_brk_ptr = (((4 + _brk_ptr) >> 2) << 2);
-		_brk_ptr = brk(_brk_ptr);
 		_malloc_ptr = _brk_ptr;
 	}
 
-	if(_brk_ptr < _malloc_ptr + size)
+	if(lt(_brk_ptr, add(_malloc_ptr, size)))
 	{
-		_brk_ptr = brk(_malloc_ptr + size);
-		if(-1 == _brk_ptr) return 0;
+		_brk_ptr = brk(add(_malloc_ptr, size));
+		if(eq(sub(0,1), _brk_ptr)) return 0;
 	}
 
-	long old_malloc = _malloc_ptr;
-	_malloc_ptr = _malloc_ptr + size;
-	if( (old_malloc & 3) !=0) {
-		puts("misalligned malloc");
-		exit(1);
-	}
+	old_malloc = _malloc_ptr;
+	_malloc_ptr = add(_malloc_ptr, size);
 	return old_malloc;
 }
+
 
 int strlen(char* str )
 {
