@@ -127,19 +127,18 @@ int process_local_var(int l,int n){
 }
 
 int process_load(int l){
-  char *p;
-  char c;
+  int p;
   p=l;
 
-  while(neq((c=ri8(p)), '"')){
+  while(neq(ri8(p), '"')){
     p=p+1;
   }
   p=p+1;
   l=p;
-  while(neq((c=p[0]), '"')){
+  while(neq(ri8(p), '"')){
     p=p+1;
   }
-  p[0]=0;
+  wi8(p, 0);
   if(eq(memcmp(l,"support.js",10), 0)){
     return;
   }
