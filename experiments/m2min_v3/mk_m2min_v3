@@ -18,3 +18,19 @@ cat simple_support_js_m2.js >> artifacts/m2min_v3.c
 cat simple_support_js_m2_prims.c >> artifacts/m2min_v3.c
 
 ./artifacts/m2min_v3_gcc.exe ./artifacts/m2min_v3.c ./artifacts/m2min_v3.M1
+
+pushd .
+
+cd ../m2min_v2
+./mk_cc_x86_min
+cd artifacts
+export PATH=$PWD:$PATH
+
+popd
+
+cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/m2min_v3.M1 > artifacts/m2min_v3-0.M1
+M0 artifacts/m2min_v3-0.M1 artifacts/m2min_v3-0.hex2
+cat ../x86/ELF-i386.hex2 artifacts/m2min_v3-0.hex2 > artifacts/m2min_v3-0-0.hex2
+hex2-0 artifacts/m2min_v3-0-0.hex2 artifacts/m2min_v3.exe
+
+chmod +x artifacts/m2min_v3.exe
