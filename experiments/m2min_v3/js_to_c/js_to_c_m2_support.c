@@ -79,6 +79,22 @@ int gt(int a, int b){
         );
 }
 
+int gte(int a, int b){
+/*      return a >= b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "cmp"
+                "setge_al"
+                "movzx_eax,al"
+                "ret"
+        );
+}
+
 int ri8(int o) {
 /*
   char *h = 0;
@@ -169,6 +185,39 @@ int mul(int a, int b){
                 "mov_eax,[eax]"
                 "pop_ebx"
                 "imul_ebx"
+                "ret"
+        );
+}
+
+int div(int a, int b){
+/*      return a / b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "xchg_ebx,eax"
+                "cdq"
+                "idiv_ebx"
+                "ret"
+        );
+}
+
+int mod(int a, int b){
+/*      return a % b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "xchg_ebx,eax"
+                "cdq"
+                "idiv_ebx"
+                "mov_eax,edx"
                 "ret"
         );
 }
@@ -463,44 +512,51 @@ int in_set(int c, char* s)
 	return FALSE;
 }
 
-char* int2str(int x, int base, int signed_p)
-{
-	require(1 < base, "int2str doesn't support a base less than 2\n");
-	require(37 > base, "int2str doesn't support a base more than 36\n");
+int int2str(int x, int base, int signed_p) {
+	int p;
+	int i;
+	int sign_p;
+	int table;
 	/* Be overly conservative and save space for 32binary digits and padding null */
-	char* p = calloc(34, sizeof(char));
+	p = calloc(34, 1);
 	/* if calloc fails return null to let calling code deal with it */
-	if(NULL == p) return p;
-
-	p = p + 32;
-	unsigned i;
-	int sign_p = FALSE;
-	char* table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	if(signed_p && (10 == base) && (0 != (x & 0x80000000)))
-	{
-		/* Truncate to 31bits */
-		i = -x & 0x7FFFFFFF;
-		if(0 == i) return "-2147483648";
-		sign_p = TRUE;
-	} /* Truncate to 32bits */
-	else i = x & (0x7FFFFFFF | (1 << 31));
-
-	do
-	{
-		p[0] = table[i % base];
-		p = p - 1;
-		i = i / base;
-	} while(0 < i);
-
-	if(sign_p)
-	{
-		p[0] = '-';
-		p = p - 1;
+	if(eq(NULL, p)) {
+		return p;
 	}
 
-	return p + 1;
+	p = add(p, 32);
+	sign_p = FALSE;
+	table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	if(and(and(signed_p, eq(10, base)), neq(0, (and(x, 0x80000000))))) {
+		/* Truncate to 31bits */
+		i = and(sub(0, x), 0x7FFFFFFF);
+		if(eq(0, i)) {
+			return "-2147483648";
+		}
+		sign_p = TRUE;
+	} else {
+		/* Truncate to 32bits */
+		i = and(x, or(0x7FFFFFFF, shl(1, 31)));
+	}
+
+	while(1) {
+		wi8(p, ri8(add(table, mod(i, base))));
+		p = sub(p, 1);
+		i = div(i, base);
+		if(gte(0, i)) {
+			break;
+		}
+	}
+
+	if(sign_p) {
+		wi8(p, '-');
+		p = sub(p, 1);
+	}
+
+	return add(p, 1);
 }
+
 /* decls for real functions */
 void *malloc(int size);
 int strlen(char *s);
