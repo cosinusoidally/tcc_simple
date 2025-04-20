@@ -47,3 +47,8 @@ compile ./artifacts/boot0.exe artifacts/m2min_v3.c artifacts/boot1.exe
 compile ./artifacts/boot1.exe artifacts/m2min_v3.c artifacts/boot2.exe
 
 diff -u -s artifacts/m2min_v3.exe artifacts/boot2.exe
+
+cp ../artifacts/pnut_m2.c artifacts
+
+compile ./artifacts/m2min_v3.exe artifacts/pnut_m2.c artifacts/pnut_js.exe
+./artifacts/pnut_js.exe
