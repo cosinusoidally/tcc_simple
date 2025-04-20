@@ -70,7 +70,7 @@ int memcmp(int s1, int s2, int n) {
   p1=s1;
   p2=s2;
   for(i=0;i<n;i=i+1){
-    if(neq(ri8(add(p1, i)), p2[i])){
+    if(neq(ri8(add(p1, i)), ri8(add(p2, i)))){
 /* FIXME ljw not quite right */
       r=1;
     }
@@ -79,12 +79,14 @@ int memcmp(int s1, int s2, int n) {
 }
 
 int fwrite(int ptr,int size, int nitems, int stream) {
-  int t=size*nitems;
-  char *c=ptr;
+  int t;
+  int c;
+  t = mul(size, nitems);
+  c=ptr;
   while(t>0){
-    fputc(c[0],stream);
-    t=t-1;
-    c=c+1;
+    fputc(ri8(c),stream);
+    t=sub(t, 1);
+    c=add(c, 1);
   }
 }
 
