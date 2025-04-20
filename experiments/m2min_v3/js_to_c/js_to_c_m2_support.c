@@ -253,17 +253,14 @@ int wi32(int o, int v) {
 int stdin;
 int stdout;
 int stderr;
-// CONSTANT EOF 0xFFFFFFFF
-// CONSTANT NULL 0
-// CONSTANT EXIT_FAILURE 1
-// CONSTANT EXIT_SUCCESS 0
-// CONSTANT TRUE 1
-// CONSTANT FALSE 0
+int NULL;
+int TRUE;
+int FALSE;
 
-int puts(char *a);
+int puts(int a);
 void exit(int value);
 
-int fgetc(FILE* f)
+int fgetc(int f)
 {
 	asm("mov_eax, %3"
 	    "lea_ebx,[esp+DWORD] %4"
@@ -279,7 +276,7 @@ int fgetc(FILE* f)
 	    ":FUNCTION_fgetc_Done");
 }
 
-void fputc(char s, FILE* f)
+void fputc(int s, int f)
 {
 	asm("mov_eax, %4"
 	    "lea_ebx,[esp+DWORD] %4"
@@ -426,7 +423,7 @@ void require(int bool, char* error)
 	if(!bool)
 	{
 		fputs(error, stderr);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }
 
@@ -616,6 +613,9 @@ int init_c(void) {
   stdin=0;
   stdout=1;
   stderr=3;
+  NULL = 0;
+  TRUE = 1;
+  FALSE = 0;
 }
 
 int memcpy(int a, int b, int c) {
