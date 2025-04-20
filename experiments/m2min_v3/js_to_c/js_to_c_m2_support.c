@@ -576,13 +576,15 @@ int init_c() {
 }
 
 int memcpy(int a, int b, int c) {
-  char *dest;
-  char *src;
+  int dest;
+  int src;
   int i;
   dest=a;
   src=b;
-  for(i=0;i<c;i=i+1){
+  i = 0;
+  while(lt(i, c)) {
     wi8(add(dest, i), ri8(add(src, i)));
+    i = add(i, 1);
   }
 }
 
