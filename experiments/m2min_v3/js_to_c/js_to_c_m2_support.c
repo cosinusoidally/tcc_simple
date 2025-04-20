@@ -15,6 +15,22 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+int eq(int a, int b){
+/*      return a == b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "cmp"
+                "sete_al"
+                "movzx_eax,al"
+                "ret"
+        );
+}
+
 int stdin;
 int stdout;
 int stderr;
@@ -450,54 +466,3 @@ int memcpy(int a, int b, int c) {
   }
 }
 
-int realloc(int ptr, int size) {
-  int r;
-  r=malloc(size);
-  if(ptr!=0) {
-    memcpy(r, ptr, size);
-    free(ptr);
-  }
-  return r;
-}
-
-int open_wrap(int pathname, int flags) {
-  puts("open");
-  puts(pathname);
-  puts_num(flags);
-  return open(pathname, 0, 0);
-}
-
-int fread(int ptr,int size, int nitems, int stream) {
-  int i;
-  int t=size*nitems;
-  if(size!=1) {
-    puts("fread can only handle size 1");
-  }
-  char *c=ptr;
-  int cr;
-  for(i=0;i<t;i=i+1){
-    cr=fgetc(stream);
-    if(cr == -1) {
-      puts("eof");
-      return i;
-    }
-    c[i]=cr;
-  }
-  return nitems;
-}
-
-int eq(int a, int b){
-/*      return a == b; */
-        asm(
-                "lea_eax,[ebp+DWORD] %-4"
-                "mov_eax,[eax]"
-                "push_eax"
-                "lea_eax,[ebp+DWORD] %-8"
-                "mov_eax,[eax]"
-                "pop_ebx"
-                "cmp"
-                "sete_al"
-                "movzx_eax,al"
-                "ret"
-        );
-}
