@@ -9,3 +9,12 @@ cat m2min_v3.js >> artifacts/m2min_v3_gcc.c
 
 echo "gcc build"
 gcc -g -m32 -O0 artifacts/m2min_v3_gcc.c -o artifacts/m2min_v3_gcc.exe
+
+# hack declare stdout (not sure if needed anymore?)
+echo "int stdout;" > artifacts/m2min_v3.c
+cat simple_support_js.c >> artifacts/m2min_v3.c
+cat m2min_v3.js >> artifacts/m2min_v3.c
+cat simple_support_js_m2.js >> artifacts/m2min_v3.c
+cat simple_support_js_m2_prims.c >> artifacts/m2min_v3.c
+
+./artifacts/m2min_v3_gcc.exe ./artifacts/m2min_v3.c ./artifacts/m2min_v3.M1
