@@ -201,30 +201,6 @@ void exit(int value)
 	    "mov_eax, %1"
 	    "int !0x80");
 }
-/* Copyright (C) 2016 Jeremiah Orians
- * This file is part of M2-Planet.
- *
- * M2-Planet is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * M2-Planet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include <stdio.h>
-#include <stdlib.h>
-
-
-#define TRUE 1
-#define FALSE 0
-
 
 void require(int bool, char* error)
 {
@@ -411,41 +387,9 @@ int p_size;
 int verbose;
 void puts_num(int x);
 
-int strcmp (int a1, int b1)
-{
-  char *a;
-  char *b;
-  a = a1;
-  b = b1;
-  while ((a[0] != 0) && (b[0] != 0) && (a[0] == b[0]))
-    {
-      a = a + 1;
-      b = b + 1;
-    }
-
-  return a[0] - b[0];
-}
-
-int call_wrap(FUNCTION t, int a, int b){
-  int r;
-  puts("call_wrap dummy stub");
-  /* FIXME ljw need to properly marshal a and b */
-  /* not args are back to front because of differing calling convention */
-  r = t(b,a);
-  return r;
-}
-
 int puts(char *a) {
   fputs(a,stdout);
   fputs("\n",stdout);
-}
-
-void puts_num(int x){
-  char *s;
-  s=int2str(x,10,0);
-  puts(s);
-  free(s);
-  return;
 }
 
 int init_c(void) {
