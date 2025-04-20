@@ -43,7 +43,7 @@ int oputs(int s){
 int giputs(int s){
   int l;
   l=strlen(s);
-  memcpy(gib+gibo,s,l);
+  memcpy(add(gib, gibo),s,l);
   gibo = add(gibo, l);
 }
 
@@ -94,17 +94,17 @@ int fwrite(int ptr,int size, int nitems, int stream) {
 
 
 int process_global_var(int l){
-  char *p;
-  char c;
-  l=l+4;
+  int p;
+  int c;
+  l=add(l, 4);
   p=l;
-  while(neq((c=p[0]), 0)){
+  while(neq((c=ri8(p)), 0)){
     if(eq(c,'=')){
       giputs("    ");
       giputs(l);
       giputs("\n");
-      p[0]=';';
-      p[1]=0;
+      wi8(p, ';');
+      wi8(add(p, 1), 0);
       break;
     }
     p=p+1;
@@ -116,8 +116,10 @@ int process_global_var(int l){
 
 int process_local_var(int l,int n){
   int i;
-  for(i=0;i<n;i=i+1){
+  i = 0;
+  while(lt(i, n)){
     oputs(" ");
+    i = add(i, 1);
   }
   oputs("int ");
   oputs(l);
@@ -129,7 +131,7 @@ int process_load(int l){
   char c;
   p=l;
 
-  while(neq((c=p[0]), '"')){
+  while(neq((c=ri8(p)), '"')){
     p=p+1;
   }
   p=p+1;
