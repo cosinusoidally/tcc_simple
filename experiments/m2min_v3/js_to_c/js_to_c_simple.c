@@ -193,22 +193,22 @@ int process_function(int l){
   wi8(p, 0);
   p = add(p, 1);
   wi32(add(args, 4), p);
-  while(neq((c=p[0]), ')')){
+  while(neq(ri8(p), ')')){
     c = ri8(p);
     if(eq(args_n, 0)){
       args_n=1;
     }
     if(eq(c, ',')){
-      args_n=args_n+1;
-      p[0]=0;
-      p=p+1;
-      args[args_n]=p;
+      args_n = add(args_n, 1);
+      wi8(p, 0);
+      p = add(p, 1);
+      wi32(add(args, mul(args_n, 4)), p);
     } else {
-      p=p+1;
+      p = add(p, 1);
     }
   }
-  p[0]=0;
-  p=p+1;
+  wi8(p, 0);
+  p = add(p, 1);
   dbputs(name);
   dbputs("(");
   if(eq(args_n, 0)){
@@ -216,7 +216,7 @@ int process_function(int l){
 /*    dbputs("void"); */
   } else {
     dbputs("int ");
-    dbputs(args[1]);
+    dbputs(ri32(add(args, 4)));
   }
   for(i=1;i<args_n;i=i+1){
     dbputs(", int ");
