@@ -1,4 +1,4 @@
-int add(int a, int b){
+function add(a, b){
 /*	return a + b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -12,7 +12,7 @@ int add(int a, int b){
 	);
 }
 
-int sub(int a, int b){
+function sub(a, b){
 /*	return a - b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -27,7 +27,7 @@ int sub(int a, int b){
 	);
 }
 
-int mul(int a, int b){
+function mul(a, b){
 /*	return a * b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -41,7 +41,7 @@ int mul(int a, int b){
 	);
 }
 
-int shl(int a, int b){
+function shl(a, b){
 /*	return a << b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -57,7 +57,7 @@ int shl(int a, int b){
 	);
 }
 
-int shr(int a, int b){
+function shr(a, b){
 /*	return a >> b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -73,7 +73,7 @@ int shr(int a, int b){
 	);
 }
 
-int lt(int a, int b){
+function lt(a, b){
 /*	return a < b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -89,7 +89,7 @@ int lt(int a, int b){
 	);
 }
 
-int gt(int a, int b){
+function gt(a, b){
 /*	return a > b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -105,7 +105,7 @@ int gt(int a, int b){
 	);
 }
 
-int lte(int a, int b){
+function lte(a, b){
 /*	return a <= b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
