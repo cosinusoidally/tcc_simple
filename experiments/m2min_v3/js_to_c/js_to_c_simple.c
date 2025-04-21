@@ -152,7 +152,7 @@ int process_load(int l){
 int eat_whitespace(int l){
   int o;
   o=l;
-  while(eq(memcmp(" ",o,1), 0)){
+  while(or(eq(memcmp(" ",o,1), 0), eq(memcmp("\t",o,1), 0))){
     o = add(o, 1);
   }
   return o;
@@ -161,7 +161,7 @@ int eat_whitespace(int l){
 int num_whitespace(int l){
   int o;
   o=l;
-  while(eq(memcmp(" ",o,1), 0)){
+  while(or(eq(memcmp(" ",o,1), 0), eq(memcmp("\t",o,1), 0))){
     o = add(o, 1);
   }
   return sub(o, l);
