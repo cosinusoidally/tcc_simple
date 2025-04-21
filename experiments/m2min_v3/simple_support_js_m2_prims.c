@@ -1,4 +1,4 @@
-function add(a, b){
+function add(a, b) {
 /*	return a + b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -12,7 +12,7 @@ function add(a, b){
 	);
 }
 
-function sub(a, b){
+function sub(a, b) {
 /*	return a - b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -27,7 +27,7 @@ function sub(a, b){
 	);
 }
 
-function mul(a, b){
+function mul(a, b) {
 /*	return a * b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -41,7 +41,7 @@ function mul(a, b){
 	);
 }
 
-function shl(a, b){
+function shl(a, b) {
 /*	return a << b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -57,7 +57,7 @@ function shl(a, b){
 	);
 }
 
-function shr(a, b){
+function shr(a, b) {
 /*	return a >> b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -73,7 +73,7 @@ function shr(a, b){
 	);
 }
 
-function lt(a, b){
+function lt(a, b) {
 /*	return a < b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -89,7 +89,7 @@ function lt(a, b){
 	);
 }
 
-function gt(a, b){
+function gt(a, b) {
 /*	return a > b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -105,7 +105,7 @@ function gt(a, b){
 	);
 }
 
-function lte(a, b){
+function lte(a, b) {
 /*	return a <= b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -121,7 +121,7 @@ function lte(a, b){
 	);
 }
 
-int gte(int a, int b){
+function gte(a, b) {
 /*	return a >= b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -137,7 +137,7 @@ int gte(int a, int b){
 	);
 }
 
-int and(int a, int b){
+function and(a, b) {
 /*	return a & b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -151,7 +151,7 @@ int and(int a, int b){
 	);
 }
 
-int or(int a, int b){
+function or(a, b) {
 /*	return a | b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -165,7 +165,7 @@ int or(int a, int b){
 	);
 }
 
-int ri8(int o) {
+function ri8(o) {
 /*
   char *h = 0;
   return h[o] & 0xFF;
@@ -190,7 +190,7 @@ int ri8(int o) {
 	);
 }
 
-int eq(int a, int b){
+function eq(a, b) {
 /*	return a == b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -206,7 +206,7 @@ int eq(int a, int b){
 	);
 }
 
-int neq(int a, int b){
+function neq(a, b) {
 /*	return a != b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -222,7 +222,7 @@ int neq(int a, int b){
 	);
 }
 
-int xor(int a, int b){
+function xor(a, b) {
 /*	return a ^ b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -236,7 +236,7 @@ int xor(int a, int b){
 	);
 }
 
-int wi8(int o,int v) {
+function wi8(o, v) {
 /*
   char *h = 0;
   h[o]=v;
@@ -262,7 +262,7 @@ int wi8(int o,int v) {
 	);
 }
 
-int div(int a, int b){
+function div(a, b) {
 /*	return a / b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -278,7 +278,7 @@ int div(int a, int b){
 	);
 }
 
-int mod(int a, int b){
+function mod(a, b) {
 /*	return a % b; */
 	asm(
 		"lea_eax,[ebp+DWORD] %-4"
@@ -295,8 +295,7 @@ int mod(int a, int b){
 	);
 }
 
-int fgetc(int f)
-{
+function fgetc(f) {
 	asm("mov_eax, %3"
 	    "lea_ebx,[esp+DWORD] %4"
 	    "mov_ebx,[ebx]"
@@ -311,8 +310,7 @@ int fgetc(int f)
 	    ":FUNCTION_fgetc_Done");
 }
 
-int fputc(int s, int f)
-{
+function fputc(s, f) {
 	asm("mov_eax, %4"
 	    "lea_ebx,[esp+DWORD] %4"
 	    "mov_ebx,[ebx]"
@@ -321,8 +319,7 @@ int fputc(int s, int f)
 	    "int !0x80");
 }
 
-int open(int name, int flag, int mode)
-{
+function open(name, flag, mode) {
 	asm("lea_ebx,[esp+DWORD] %12"
 	    "mov_ebx,[ebx]"
 	    "lea_ecx,[esp+DWORD] %8"
@@ -333,16 +330,14 @@ int open(int name, int flag, int mode)
 	    "int !0x80");
 }
 
-int close(int fd)
-{
+function close(fd) {
 	asm("lea_ebx,[esp+DWORD] %4"
 	    "mov_ebx,[ebx]"
 	    "mov_eax, %6"
 	    "int !0x80");
 }
 
-int brk(int addr)
-{
+function brk(addr) {
 	asm("mov_eax,[esp+DWORD] %4"
 	    "push_eax"
 	    "mov_eax, %45"
@@ -350,8 +345,7 @@ int brk(int addr)
 	    "int !0x80");
 }
 
-int exit(int value)
-{
+function exit(value) {
 	asm("pop_ebx"
 	    "pop_ebx"
 	    "mov_eax, %1"
