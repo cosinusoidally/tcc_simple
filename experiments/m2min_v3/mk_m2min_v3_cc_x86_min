@@ -36,8 +36,9 @@ cat js_to_c/js_to_c_m2_support.c js_to_c/js_to_c_simple.c > artifacts/js_to_c_si
 
 compile cc_x86_min.exe artifacts/js_to_c_simple.c artifacts/js_to_c.exe
 
-./artifacts/js_to_c.exe artifacts/m2min_v3.c artifacts/m2_min_v3_tmp.c
+./artifacts/js_to_c.exe artifacts/m2min_v3.c artifacts/m2min_v3_tmp.c
 
+compile cc_x86_min.exe artifacts/m2min_v3_tmp.c artifacts/test.exe
 compile ./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe
 compile ./artifacts/boot0.exe artifacts/m2min_v3.c artifacts/boot1.exe
 compile ./artifacts/boot1.exe artifacts/m2min_v3.c artifacts/boot2.exe
