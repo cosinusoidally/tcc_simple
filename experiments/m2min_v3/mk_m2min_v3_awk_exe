@@ -22,7 +22,7 @@ cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/M2_simple_asm_m2
 
 awk $EXTRA -f m0.awk artifacts/M2_simple_asm_m2-0.M1 artifacts/M2_simple_asm_m2-0.hex2
 
-cat ../x86/ELF-i386.hex2 artifacts/M2_simple_asm_m2-0.hex2 > artifacts/M2_simple_asm_m2-0-0.hex2
+cat ./ELF-i386.hex2 artifacts/M2_simple_asm_m2-0.hex2 > artifacts/M2_simple_asm_m2-0-0.hex2
 
 # HACK feed hex2 through m0.awk again to simplify the output we will feed to
 # hex2.awk
