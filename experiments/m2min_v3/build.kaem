@@ -1,0 +1,6 @@
+# make sure your STAGE0_PATH is set to your stage0 build directory
+
+set -ex
+
+PATH=${STAGE0_PATH}/../artifact/
+

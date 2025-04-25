@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./mk_clean
+
+PATH=${STAGE0_PATH}
+
+kaem --file ./build.kaem
