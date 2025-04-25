@@ -18,12 +18,6 @@ export PATH=$PWD:$PATH
 
 popd
 
-cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 m2min_v3.M1 > artifacts/m2min_v3-0.M1
-M0 artifacts/m2min_v3-0.M1 artifacts/m2min_v3-0.hex2
-cat ./ELF-i386.hex2 artifacts/m2min_v3-0.hex2 > artifacts/m2min_v3-0-0.hex2
-hex2-0 artifacts/m2min_v3-0-0.hex2 artifacts/m2min_v3.exe
-
-
 function compile() {
   $1 $2 $3.M1
   cat ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 $3.M1 > $3-0.M1
@@ -40,14 +34,15 @@ compile cc_x86_min.exe artifacts/js_to_c_simple.c artifacts/js_to_c.exe
 
 compile cc_x86_min.exe artifacts/m2min_v3_tmp.c artifacts/boot00.exe
 compile ./artifacts/boot00.exe artifacts/m2min_v3.c artifacts/boot0.exe
-# compile ./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe
 compile ./artifacts/boot0.exe artifacts/m2min_v3.c artifacts/boot1.exe
 compile ./artifacts/boot1.exe artifacts/m2min_v3.c artifacts/boot2.exe
+
+cp artifacts/boot0.exe artifacts/m2min_v3.exe
 
 sha256sum -c sums_m2min_v3
 
 diff -u -s ./m2min_v3.M1 artifacts/boot2.exe.M1
-diff -u -s artifacts/m2min_v3.exe artifacts/boot2.exe
+diff -u -s artifacts/boot0.exe artifacts/boot2.exe
 
 cat ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifacts/out.js
 ./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
