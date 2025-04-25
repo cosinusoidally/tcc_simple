@@ -2,6 +2,8 @@ export LC_ALL=C
 
 EXTRA=$(./check_awk.sh)
 
+./mk_m2min_v3_awk
+
 mkdir artifacts/tmp
 mv artifacts/M2_simple_asm_m2.M1 artifacts/tmp
 rm artifacts/*c
