@@ -18,4 +18,8 @@ awk $EXTRA -f pre.awk | awk $EXTRA -f js_to_awk.awk > artifacts/M2_simple_asm.aw
 
 awk $EXTRA -v my_fname='artifacts/M2_simple_asm_m2.c' -v use_fast_or=1 -v use_fast_and=1 -f artifacts/M2_simple_asm.awk -f m2_lib.awk -f m2.awk
 
-./mk_hex2_awk
+cp artifacts/M2_simple_asm_m2.M1 artifacts/boot0.exe.M1
+
+diff -u -s m2min_v3.M1 artifacts/boot0.exe.M1
+
+sha256sum -c sums_m2min_v3
