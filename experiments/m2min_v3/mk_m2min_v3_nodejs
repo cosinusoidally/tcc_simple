@@ -1,0 +1,8 @@
+set -xe
+
+./mk_clean
+
+nodejs node_compat_min.js test_m2min.js > artifacts/boot0.exe.M1
+
+diff -u -s m2min_v3.M1 artifacts/boot0.exe.M1
+sha256sum -c sums_m2min_v3

@@ -4,6 +4,7 @@ set -ex
 
 PATH=${STAGE0_PATH}/../artifact/
 
+# build m2min_v3 using m2min_v3.M1
 
 catm artifacts/m2min_v3-0.M1 ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 m2min_v3.M1
 M0 artifacts/m2min_v3-0.M1 artifacts/m2min_v3-0.hex2
@@ -12,7 +13,36 @@ hex2-0 artifacts/m2min_v3-0-0.hex2 artifacts/m2min_v3.exe
 
 ${PATH}/../bin/chmod 755 artifacts/m2min_v3.exe
 
+# rebuild m2min_v3 with itself
+
 catm artifacts/m2min_v3.c dummy_head.c simple_support_js.c m2min_v3.js simple_support_js_m2.js simple_support_js_m2_prims.c
 ./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe.M1
 
+# check m2min_v3 built with itself is identical
+
 ${PATH}/../bin/sha256sum -c sums_m2min_v3
+
+# build js_to_c
+
+catm artifacts/js_to_c_simple.c js_to_c/js_to_c_m2_support.c js_to_c/js_to_c_simple.c
+
+
+./artifacts/m2min_v3.exe artifacts/js_to_c_simple.c artifacts/js_to_c.exe.M1
+catm artifacts/js_to_c.exe-0.M1 ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/js_to_c.exe.M1
+M0 artifacts/js_to_c.exe-0.M1 artifacts/js_to_c.exe.hex2
+catm artifacts/js_to_c.exe-0.hex2 ./ELF-i386.hex2 artifacts/js_to_c.exe.hex2
+hex2-0 artifacts/js_to_c.exe-0.hex2 artifacts/js_to_c.exe
+
+# convert pnut.js to C
+
+catm artifacts/out.js ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js
+./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
+catm artifacts/pnut_m2.c ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c artifacts/out.c
+
+# compile pnut.js
+
+./artifacts/m2min_v3.exe artifacts/pnut_m2.c artifacts/pnut_js.exe.M1
+catm artifacts/pnut_js.exe-0.M1 ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 artifacts/pnut_js.exe.M1
+M0 artifacts/pnut_js.exe-0.M1 artifacts/pnut_js.exe.hex2
+catm artifacts/pnut_js.exe-0.hex2 ./ELF-i386.hex2 artifacts/pnut_js.exe.hex2
+hex2-0 artifacts/pnut_js.exe-0.hex2 artifacts/pnut_js.exe

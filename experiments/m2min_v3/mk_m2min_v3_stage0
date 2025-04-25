@@ -1,7 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 ./mk_clean
 
-PATH=${STAGE0_PATH}
+set -xe
 
-kaem --file ./build.kaem
+${STAGE0_PATH}/kaem --file ./build.kaem
+
+pushd .
+cd ..
+./mk_clean
+popd
+
+cp ./artifacts/pnut_js.exe ../artifacts/pnut-exe
+cd ..
+./mk_tcc-boot-mes
