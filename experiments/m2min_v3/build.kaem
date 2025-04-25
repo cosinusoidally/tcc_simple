@@ -4,3 +4,15 @@ set -ex
 
 PATH=${STAGE0_PATH}/../artifact/
 
+
+catm artifacts/m2min_v3-0.M1 ./simple_asm_defs.M1 ./x86_defs.M1 ./libc-core.M1 m2min_v3.M1
+M0 artifacts/m2min_v3-0.M1 artifacts/m2min_v3-0.hex2
+catm artifacts/m2min_v3-0-0.hex2 ./ELF-i386.hex2 artifacts/m2min_v3-0.hex2
+hex2-0 artifacts/m2min_v3-0-0.hex2 artifacts/m2min_v3.exe
+
+${PATH}/../bin/chmod 755 artifacts/m2min_v3.exe
+
+catm artifacts/m2min_v3.c dummy_head.c simple_support_js.c m2min_v3.js simple_support_js_m2.js simple_support_js_m2_prims.c
+./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe.M1
+
+${PATH}/../bin/sha256sum -c sums_m2min_v3

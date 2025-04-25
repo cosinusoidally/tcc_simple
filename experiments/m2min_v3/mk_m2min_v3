@@ -36,6 +36,8 @@ compile ./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe
 compile ./artifacts/boot0.exe artifacts/m2min_v3.c artifacts/boot1.exe
 compile ./artifacts/boot1.exe artifacts/m2min_v3.c artifacts/boot2.exe
 
+sha256sum -c sums_m2min_v3
+
 diff -u -s ./m2min_v3.M1 artifacts/boot2.exe.M1
 diff -u -s artifacts/m2min_v3.exe artifacts/boot2.exe
 
@@ -53,6 +55,7 @@ pushd .
 cd ..
 ./mk_clean
 popd
+
 cp ./artifacts/pnut_js.exe ../artifacts/pnut-exe
 cd ..
 ./mk_tcc-boot-mes
