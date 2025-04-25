@@ -32,6 +32,12 @@ function compile() {
   hex2-0 $3-0.hex2 $3
 }
 
+cat js_to_c/js_to_c_m2_support.c js_to_c/js_to_c_simple.c > artifacts/js_to_c_simple.c
+
+compile cc_x86_min.exe artifacts/js_to_c_simple.c artifacts/js_to_c.exe
+
+./artifacts/js_to_c.exe artifacts/m2min_v3.c artifacts/m2_min_v3_tmp.c
+
 compile ./artifacts/m2min_v3.exe artifacts/m2min_v3.c artifacts/boot0.exe
 compile ./artifacts/boot0.exe artifacts/m2min_v3.c artifacts/boot1.exe
 compile ./artifacts/boot1.exe artifacts/m2min_v3.c artifacts/boot2.exe
@@ -40,10 +46,6 @@ sha256sum -c sums_m2min_v3
 
 diff -u -s ./m2min_v3.M1 artifacts/boot2.exe.M1
 diff -u -s artifacts/m2min_v3.exe artifacts/boot2.exe
-
-cat js_to_c/js_to_c_m2_support.c js_to_c/js_to_c_simple.c > artifacts/js_to_c_simple.c
-
-compile cc_x86_min.exe artifacts/js_to_c_simple.c artifacts/js_to_c.exe
 
 cat ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifacts/out.js
 ./artifacts/js_to_c.exe artifacts/out.js artifacts/out.c
