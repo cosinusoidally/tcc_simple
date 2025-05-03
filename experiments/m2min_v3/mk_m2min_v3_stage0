@@ -4,6 +4,8 @@
 
 set -xe
 
+# should be set to the bin dir in your stage0-posix checkout
+
 ${STAGE0_PATH}/kaem --file ./build.kaem
 
 pushd .

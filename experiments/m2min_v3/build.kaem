@@ -1,4 +1,4 @@
-# make sure your STAGE0_PATH is set to your stage0 build directory
+# make sure your STAGE0_PATH is set to your stage0 bin directory
 
 set -ex
 
