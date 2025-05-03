@@ -1,3 +1,6 @@
+See also docs/ for detailed technical and design info. Information below gives
+a relatively breif overview of the bootstrap modes.
+
 tl;dr
 
 ./mk_m2min_v3
@@ -10,7 +13,18 @@ m2min_v3.js (m2min_v3.M1). The m2min_v3.M1 file is assembled by M0 from the
 stage0-posix project. All dependencies are in tree.
 
 There are alternative diverse bootstrap paths available in this directory if
-you do not wish to trust or manually audit m2min_v3.M1 (detailed below).
+you do not wish to trust or manually audit m2min_v3.M1 (detailed below). Note
+that all bootstrap paths will rebuild m2min_v3.js and so regenerate a bit
+identical version of m2min_v3.M1 that will be deposited in artifacts as the file
+./artifacts/boot0.exe.M1
+
+If you run:
+
+$ sha256sum -c sums_m2min_v3
+m2min_v3.M1: OK
+artifacts/boot0.exe.M1: OK
+
+You will see that the two files are identical.
 
 This default bootstrap path takes us up to tcc-boot-mes, which will be deposited
 in ../artifacts/tcc-boot-mes . tcc-boot-mes is based on:
@@ -31,3 +45,28 @@ https://lilypond.org/janneke/tcc/tcc-0.9.26-1147-gee75a10c.tar.gz 6b8cbd0a5fed06
 
 This version is in tree (../tcc-0.9.26-lb/) and already has the patches applied.
 
+More detailed techincal documentation will be included in the docs/ directory,
+but breifly there are several further bootstrap paths:
+
+mk_m2min_v3_gcc        bootstrap with gcc
+
+mk_m2min_v3_nodejs     bootstrap with nodejs, note this stops after regnerating
+                       m2min_v3.M1
+
+mk_m2min_v3_awk        bootstrap with awk (multiple awk versions are supported).
+                       Again this also stops after regenerating m2min_v3.M1
+
+mk_m2min_v3_awk_exe    run mk_m2min_v3_awk then continue all the way up to
+                       tcc-boot-mes . This relies on awk versions of M0 and hex2
+mk_m2min_v3_stage0     bootstrap up to tcc-boot-mes but using base tools from
+                       an out of tree version of stage0-posix. You need to set
+                       STAGE0_PATH to the bin dir of your stage0-posix build.
+                       This version only depends on stage0-posix tools and uses
+                       m2min_v3.M1 to avoid the need for cc_x86 or M2-Planet
+
+mk_m2min_v3_cc_x86_min bootstrap with cc_x86_min from ../m2min_v2 this builds
+                       m2min_v3.js using cc_x86_min and js_to_c. Note cc_x86_min
+                       is a cut down version of cc_x86 that is only capable of
+                       compiling a very simple subset of C that is very close
+                       to the m2min_v3.js dialect (after it has been fed through
+                       js_to_c).
