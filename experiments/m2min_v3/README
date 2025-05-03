@@ -1,1 +1,33 @@
-readme
+tl;dr
+
+./mk_m2min_v3
+
+will bootstrap from nothing up to a statically linked version of tcc (based on
+the live-bootstrap bootstrappable version of tcc).
+
+This default bootstrap path will use the readable assembly language version of
+m2min_v3.js (m2min_v3.M1). The m2min_v3.M1 file is assembled by M0 from the
+stage0-posix project. All dependencies are in tree.
+
+There are alternative diverse bootstrap paths available in this directory if
+you do not wish to trust or manually audit m2min_v3.M1 (detailed below).
+
+This default bootstrap path takes us up to tcc-boot-mes, which will be deposited
+in ../artifacts/tcc-boot-mes . tcc-boot-mes is based on:
+
+https://gitlab.com/janneke/tinycc/-/tree/mes-0.27?ref_type=heads
+
+with patches from:
+
+https://gitlab.com/janneke/tinycc/-/tree/mes-0.27?ref_type=heads
+
+The actual version of bootstrappable tcc is from:
+
+https://github.com/fosslinux/live-bootstrap/blob/master/steps/tcc-0.9.26/sources
+
+which is currently:
+
+https://lilypond.org/janneke/tcc/tcc-0.9.26-1147-gee75a10c.tar.gz 6b8cbd0a5fed0636d4f0f763a603247bc1935e206e1cc5bda6a2818bab6e819f tcc-0.9.26.tar.gz
+
+This version is in tree (../tcc-0.9.26-lb/) and already has the patches applied.
+
