@@ -70,3 +70,11 @@ mk_m2min_v3_cc_x86_min bootstrap with cc_x86_min from ../m2min_v2 this builds
                        compiling a very simple subset of C that is very close
                        to the m2min_v3.js dialect (after it has been fed through
                        js_to_c).
+
+As you can see, there are multiple diverse bootstrap paths that bootstrap from
+multiple independent languages and independent implementations of those
+languages. The aim of this is to allow us to easily verify that the checked in
+compilation artifact m2min_v3.M1 has not been tampered with and does not contain
+malicious code. m2min_v3.M1 can also be manually verified by hand more easily
+than cc_x86.M1 (at least, in my opinion it is having read the whole of cc_x86.M1
+and created the heavily cut down cc_x86_min.M1 version of cc_x86).
