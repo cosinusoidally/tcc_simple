@@ -33,9 +33,9 @@ function eat_whitespace() {
 
 var c_a = "a".charCodeAt(0);
 var c_z = "z".charCodeAt(0);
-var c_A;
-var c_Z;
-var c__;
+var c_A = "A".charCodeAt(0);
+var c_Z = "Z".charCodeAt(0);
+var c__ = "_".charCodeAt(0);
 
 function is_id() {
   if((ch>=c_a) && (ch<=c_z)) {
@@ -48,8 +48,20 @@ function is_num() {
   return false;
 }
 
-function get_id() {
+function f_str() {
+  var i;
+  for(i=ts; i < te ; i = i + 1) {
+    print("f_str" +" "+ f[i]);
+  }
+}
 
+function get_id() {
+  ts = to - 1;
+  while(is_num() || is_id()) {
+    te = to;
+    nc();
+  }
+  f_str();
 }
 
 nc();

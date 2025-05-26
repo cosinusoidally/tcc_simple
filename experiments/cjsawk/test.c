@@ -1,5 +1,8 @@
 var a;
 
 function foo() {
-  return 1;
+  var b;
+  a = 2;
+  b = add(1,a);
+  return b;
 }
