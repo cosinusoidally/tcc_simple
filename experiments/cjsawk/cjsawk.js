@@ -241,6 +241,7 @@ function emit_out(s) {
 }
 
 function collect_arguments() {
+  var args = [];
   nt();
   while(tok != ")") {
     nt();
