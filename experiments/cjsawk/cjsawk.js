@@ -223,12 +223,30 @@ function nt() {
   return true;
 }
 
+globals_list = [];
+
+function declare_global(t) {
+  globals_list.push(t);
+}
+
+output_list = [];
+
+function declare_function(t) {
+}
+
 function program() {
+  var ltok;
   nc();
 
   while(nt()) {
+    nt(); ltok = tok;
+    nt();
+    if(tok == ";") {
+      declare_global(ltok);
+    } else if(tok == "(") {
+      declare_function(ltok);
+    }
   }
-
 }
 
 program();
