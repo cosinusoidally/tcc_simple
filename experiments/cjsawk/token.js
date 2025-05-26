@@ -8,6 +8,15 @@ ch=f[0];
 
 ln=1;
 
+
+var tt;
+
+tt_identifier = "identifier";
+tt_number = "number";
+tt_char = "char";
+tt_string = "string";
+tt_other = "other";
+
 function nc() {
   ch=f[to];
   to=to+1;
@@ -129,10 +138,11 @@ function f_str() {
   for(i=ts; i < te ; i = i + 1) {
     b.push(f[i]);
   }
-  print("f_str " +b.map(function(x){return String.fromCharCode(x)}).join(""));
+  print("tt: " + tt + " f_str " +b.map(function(x){return String.fromCharCode(x)}).join(""));
 }
 
 function get_id() {
+  tt = tt_identifier;
   ts = to - 1;
   while(is_num() || is_id()) {
     te = to;
@@ -142,6 +152,7 @@ function get_id() {
 }
 
 function get_num() {
+  tt = tt_number;
   ts = to - 1;
   while(is_num()) {
     te = to;
@@ -151,6 +162,7 @@ function get_num() {
 }
 
 function get_other() {
+  tt = tt_other;
   ts = to - 1;
   te = to;
   nc();
@@ -158,6 +170,7 @@ function get_other() {
 }
 
 function get_char() {
+  tt = tt_char;
   ts = to - 1;
   nc();
   nc();
@@ -167,6 +180,7 @@ function get_char() {
 }
 
 function get_string() {
+  tt = tt_string;
   ts = to - 1;
   nc();
   while(ch != c_str) {
@@ -180,6 +194,10 @@ function get_string() {
 nc();
 
 function nt() {
+  if(to >= f.length) {
+    return false;
+  }
+
   if(is_whitespace()) {
     eat_whitespace();
   } else if(is_comment()) {
@@ -199,8 +217,8 @@ function nt() {
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
     throw "error";
   }
+  return true;
 }
 
-while(to < f.length) {
-  nt();
+while(nt()) {
 }
