@@ -201,11 +201,15 @@ function nt() {
     return false;
   }
 
-  if(is_whitespace()) {
-    eat_whitespace();
-  } else if(is_comment()) {
-    eat_comment();
-  } else if(is_id()) {
+  while(is_whitespace() || is_comment()) {
+    if(is_whitespace()) {
+      eat_whitespace();
+    } else if(is_comment()) {
+      eat_comment();
+    }
+  }
+
+  if(is_id()) {
     get_id();
   } else if(is_num()) {
     get_num();
@@ -226,12 +230,14 @@ function nt() {
 globals_list = [];
 
 function declare_global(t) {
+  print("declare_global: " +t);
   globals_list.push(t);
 }
 
 output_list = [];
 
 function declare_function(t) {
+  print("declare_function: " +t);
 }
 
 function program() {
