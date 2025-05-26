@@ -198,8 +198,4 @@ while(to < f.length) {
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
     throw "error";
   }
-/*
-  print(ln+ " " + ch + " " +String.fromCharCode(ch));
-  nc();
-*/
 }
