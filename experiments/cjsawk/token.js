@@ -36,6 +36,8 @@ var c_z = "z".charCodeAt(0);
 var c_A = "A".charCodeAt(0);
 var c_Z = "Z".charCodeAt(0);
 var c__ = "_".charCodeAt(0);
+var c_0 = "0".charCodeAt(0);
+var c_9 = "9".charCodeAt(0);
 
 function is_id() {
   if(((ch>=c_a) && (ch<=c_z) ||
@@ -46,6 +48,9 @@ function is_id() {
 }
 
 function is_num() {
+  if((ch>=c_0) && (ch<=c_9)) {
+    return true;
+  }
   return false;
 }
 
@@ -59,6 +64,15 @@ function f_str() {
 function get_id() {
   ts = to - 1;
   while(is_num() || is_id()) {
+    te = to;
+    nc();
+  }
+  f_str();
+}
+
+function get_num() {
+  ts = to - 1;
+  while(is_num()) {
     te = to;
     nc();
   }
