@@ -165,6 +165,17 @@ function get_char() {
   f_str();
 }
 
+function get_string() {
+  ts = to - 1;
+  nc();
+  while(ch != c_str) {
+    nc();
+  }
+  te = to;
+  nc();
+  f_str();
+}
+
 nc();
 
 while(to < f.length) {

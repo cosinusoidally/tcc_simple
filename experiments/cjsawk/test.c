@@ -10,8 +10,6 @@ function foo() {
   a = 24;
   b = add(1,a);
   c = mkc('c');
-/*
   d = mks("hello world");
-*/
   return b;
 }
