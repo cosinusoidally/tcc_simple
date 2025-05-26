@@ -191,7 +191,6 @@ function get_string() {
   f_str();
 }
 
-nc();
 
 function nt() {
   if(to >= f.length) {
@@ -220,5 +219,12 @@ function nt() {
   return true;
 }
 
-while(nt()) {
+function program() {
+  nc();
+
+  while(nt()) {
+  }
+
 }
+
+program();
