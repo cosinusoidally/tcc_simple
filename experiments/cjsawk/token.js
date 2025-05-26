@@ -33,6 +33,13 @@ function eat_whitespace() {
   }
 }
 
+function is_comment() {
+  if(ch == c_fs) {
+    return true;
+  }
+  return false;
+}
+
 var c_fs = "//".charCodeAt(0);
 var c_star = "*".charCodeAt(0);
 
@@ -151,9 +158,10 @@ function get_char() {
 nc();
 
 while(to < f.length) {
-  eat_comment();
   if(is_whitespace()) {
     eat_whitespace();
+  } else if(is_comment()) {
+    eat_comment();
   } else if(is_id()) {
     get_id();
   } else if(is_num()) {
@@ -165,7 +173,7 @@ while(to < f.length) {
   } else {
     print("unsupported char");
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
-//    throw "error";
+    throw "error";
   }
 /*
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
