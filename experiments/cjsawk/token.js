@@ -155,15 +155,16 @@ while(to < f.length) {
   eat_comment();
   if(is_id()) {
     get_id();
-  }
-  if(is_num()) {
+  } else if(is_num()) {
     get_num();
-  }
-  if(is_other()) {
+  } else if(is_other()) {
     get_other();
-  }
-  if(is_char()) {
+  } else if(is_char()) {
     get_char();
+  } else {
+    print("unsupported char");
+    print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
+//    throw "error";
   }
 /*
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
