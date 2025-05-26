@@ -39,8 +39,13 @@ function eat_comment() {
     nc();
     if(ch == c_star) {
       nc();
+    } else {
+      return;
     }
-    while(ch != c_star) {
+    while(1) {
+      while(ch != c_star) {
+        nc();
+      }
       nc();
       if(ch == c_fs) {
         nc();
