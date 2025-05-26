@@ -236,8 +236,20 @@ function declare_global(t) {
 
 output_list = [];
 
+function collect_arguments() {
+  nt();
+  while(tok != ")") {
+    nt();
+  }
+}
+
 function declare_function(t) {
   print("declare_function: " +t);
+  collect_arguments();
+  nt();
+  if(tok == ";") {
+    print("function_prototype skip");
+  }
 }
 
 function program() {
