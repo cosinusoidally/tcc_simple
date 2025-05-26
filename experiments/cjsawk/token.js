@@ -54,7 +54,19 @@ function is_num() {
   return false;
 }
 
+var c_comma = ",".charCodeAt(0);
+var c_semi = ";".charCodeAt(0);
+var c_lparen = "(".charCodeAt(0);
+var c_rparen = ")".charCodeAt(0);
+var c_lcurly = "{".charCodeAt(0);
+var c_rcurly = "}".charCodeAt(0);
+var c_eq = "=".charCodeAt(0);
+
 function is_other() {
+  if((ch==c_comma) || (ch==c_semi) || (ch==c_lparen) || (ch==c_rparen) ||
+     (ch==c_lcurly) || (ch==c_rcurly) || (ch==c_eq)) {
+    return true;
+  }
   return false;
 }
 
@@ -85,6 +97,13 @@ function get_num() {
   f_str();
 }
 
+function get_other() {
+  ts = to - 1;
+  te = to;
+  nc();
+  f_str();
+}
+
 nc();
 
 while(to < f.length) {
@@ -98,6 +117,8 @@ while(to < f.length) {
   if(is_other()) {
     get_other();
   }
+/*
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
   nc();
+*/
 }
