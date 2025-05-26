@@ -87,6 +87,7 @@ function is_num() {
   return false;
 }
 
+
 var c_comma = ",".charCodeAt(0);
 var c_semi = ";".charCodeAt(0);
 var c_lparen = "(".charCodeAt(0);
@@ -109,6 +110,12 @@ function is_char() {
   if(ch==c_ch) {
     return true;
   }
+  return false;
+}
+
+var c_str = "\"".charCodeAt(0);
+
+function is_string() {
   return false;
 }
 
@@ -170,6 +177,8 @@ while(to < f.length) {
     get_other();
   } else if(is_char()) {
     get_char();
+  } else if(is_string()) {
+    get_string();
   } else {
     print("unsupported char");
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
