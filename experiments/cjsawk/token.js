@@ -139,8 +139,6 @@ function get_other() {
   f_str();
 }
 
-var c_ch=
-
 function get_char() {
   ts = to - 1;
   nc();
