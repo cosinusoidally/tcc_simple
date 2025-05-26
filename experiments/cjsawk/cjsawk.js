@@ -249,6 +249,8 @@ function declare_function(t) {
   nt();
   if(tok == ";") {
     print("function_prototype skip");
+  } else if(tok == "{") {
+    print("function_body");
   }
 }
 
