@@ -256,3 +256,5 @@ function program() {
 }
 
 program();
+
+print(globals_list);
