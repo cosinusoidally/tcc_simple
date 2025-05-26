@@ -236,6 +236,10 @@ function declare_global(t) {
 
 output_list = [];
 
+function emit_out(s) {
+  output_list.push(s);
+}
+
 function collect_arguments() {
   nt();
   while(tok != ")") {
@@ -251,6 +255,9 @@ function declare_function(t) {
     print("function_prototype skip");
   } else if(tok == "{") {
     print("function_body");
+    emit_out(":FUNCTION_");
+    emit_out(t);
+    emit_out("\n");
   }
 }
 
@@ -271,4 +278,5 @@ function program() {
 
 program();
 
-print(globals_list);
+print(JSON.stringify(globals_list));
+print(JSON.stringify(output_list));
