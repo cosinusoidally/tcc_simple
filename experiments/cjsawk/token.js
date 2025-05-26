@@ -99,6 +99,9 @@ function is_other() {
 var c_ch = "'".charCodeAt(0);
 
 function is_char() {
+  if(ch==c_ch) {
+    return true;
+  }
   return false;
 }
 
@@ -146,7 +149,6 @@ function get_char() {
   nc();
   f_str();
 }
-
 
 nc();
 
