@@ -179,7 +179,7 @@ function get_string() {
 
 nc();
 
-while(to < f.length) {
+function nt() {
   if(is_whitespace()) {
     eat_whitespace();
   } else if(is_comment()) {
@@ -199,4 +199,8 @@ while(to < f.length) {
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
     throw "error";
   }
+}
+
+while(to < f.length) {
+  nt();
 }
