@@ -235,7 +235,9 @@ globals_list = [];
 
 function declare_global(t) {
   print("declare_global: " +t);
+  emit(":GLOBAL_" , globals_list);
   emit(t, globals_list);
+  emit("\nNULL\n", globals_list);
 }
 
 output_list = [];
@@ -283,5 +285,5 @@ function program() {
 
 program();
 
-print(JSON.stringify(globals_list));
-print(JSON.stringify(output_list));
+print(globals_list.join(""));
+print(output_list.join(""));
