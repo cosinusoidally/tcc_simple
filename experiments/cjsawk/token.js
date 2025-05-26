@@ -32,6 +32,7 @@ function eat_whitespace() {
 }
 
 var c_fs = "//".charCodeAt(0);
+var c_star = "*".charCodeAt(0);
 
 function eat_comment() {
   if(ch == c_fs) {
