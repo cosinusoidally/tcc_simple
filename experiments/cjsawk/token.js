@@ -31,6 +31,10 @@ function eat_whitespace() {
   }
 }
 
+function eat_comment() {
+
+}
+
 var c_a = "a".charCodeAt(0);
 var c_z = "z".charCodeAt(0);
 var c_A = "A".charCodeAt(0);
@@ -108,6 +112,7 @@ nc();
 
 while(to < f.length) {
   eat_whitespace();
+  eat_comment();
   if(is_id()) {
     get_id();
   }
