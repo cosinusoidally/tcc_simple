@@ -96,6 +96,12 @@ function is_other() {
   return false;
 }
 
+var c_ch = "'".charCodeAt(0);
+
+function is_char() {
+  return false;
+}
+
 function f_str() {
   var i;
   var b = [];
@@ -130,6 +136,18 @@ function get_other() {
   f_str();
 }
 
+var c_ch=
+
+function get_char() {
+  ts = to - 1;
+  nc();
+  nc();
+  te = to;
+  nc();
+  f_str();
+}
+
+
 nc();
 
 while(to < f.length) {
@@ -143,6 +161,9 @@ while(to < f.length) {
   }
   if(is_other()) {
     get_other();
+  }
+  if(is_char()) {
+    get_char();
   }
 /*
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
