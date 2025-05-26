@@ -17,6 +17,8 @@ tt_char = "char";
 tt_string = "string";
 tt_other = "other";
 
+var tok;
+
 function nc() {
   ch=f[to];
   to=to+1;
@@ -138,7 +140,9 @@ function f_str() {
   for(i=ts; i < te ; i = i + 1) {
     b.push(f[i]);
   }
-  print("tt: " + tt + " f_str " +b.map(function(x){return String.fromCharCode(x)}).join(""));
+  b = b.map(function(x){return String.fromCharCode(x)}).join("");
+  print("tt: " + tt + " f_str " + b);
+  tok = b;
 }
 
 function get_id() {
