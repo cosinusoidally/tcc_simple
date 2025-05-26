@@ -116,6 +116,9 @@ function is_char() {
 var c_str = "\"".charCodeAt(0);
 
 function is_string() {
+  if(ch==c_str) {
+    return true;
+  }
   return false;
 }
 
