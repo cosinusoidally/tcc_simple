@@ -56,9 +56,11 @@ function is_num() {
 
 function f_str() {
   var i;
+  var b = [];
   for(i=ts; i < te ; i = i + 1) {
-    print("f_str" +" "+ f[i]);
+    b.push(f[i]);
   }
+  print("f_str " +b.map(function(x){return String.fromCharCode(x)}).join(""));
 }
 
 function get_id() {
