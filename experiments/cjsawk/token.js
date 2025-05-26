@@ -1,4 +1,5 @@
 f=read("test.c","binary");
+// f=read("../m2min_v3/m2min_v3.js","binary");
 
 to=0;
 ts=0;
@@ -74,7 +75,7 @@ var c_9 = "9".charCodeAt(0);
 
 function is_id() {
   if(((ch>=c_a) && (ch<=c_z) ||
-      (ch>=c_a) && (ch<=c_z)) || (ch == c__)) {
+      (ch>=c_A) && (ch<=c_Z)) || (ch == c__)) {
     return true;
   }
   return false;
