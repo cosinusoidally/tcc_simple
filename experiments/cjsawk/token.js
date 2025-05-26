@@ -151,9 +151,10 @@ function get_char() {
 nc();
 
 while(to < f.length) {
-  eat_whitespace();
   eat_comment();
-  if(is_id()) {
+  if(is_whitespace()) {
+    eat_whitespace();
+  } else if(is_id()) {
     get_id();
   } else if(is_num()) {
     get_num();
