@@ -38,7 +38,8 @@ var c_Z = "Z".charCodeAt(0);
 var c__ = "_".charCodeAt(0);
 
 function is_id() {
-  if((ch>=c_a) && (ch<=c_z)) {
+  if(((ch>=c_a) && (ch<=c_z) ||
+      (ch>=c_a) && (ch<=c_z)) || (ch == c__)) {
     return true;
   }
   return false;
