@@ -227,11 +227,15 @@ function nt() {
   return true;
 }
 
+function emit(s, l) {
+  l.push(s);
+}
+
 globals_list = [];
 
 function declare_global(t) {
   print("declare_global: " +t);
-  globals_list.push(t);
+  emit(t, globals_list);
 }
 
 output_list = [];
