@@ -31,8 +31,22 @@ function eat_whitespace() {
   }
 }
 
-function eat_comment() {
+var c_fs = "//".charCodeAt(0);
 
+function eat_comment() {
+  if(ch == c_fs) {
+    nc();
+    if(ch == c_star) {
+      nc();
+    }
+    while(ch != c_star) {
+      nc();
+      if(ch == c_fs) {
+        nc();
+        return;
+      }
+    }
+  }
 }
 
 var c_a = "a".charCodeAt(0);
