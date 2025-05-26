@@ -10,6 +10,9 @@ ln=1;
 function nc() {
   ch=f[to];
   to=to+1;
+  if(ch == 10) {
+    ln = ln + 1;
+  }
 }
 
 function is_whitespace() {
@@ -18,7 +21,6 @@ function is_whitespace() {
   }
 
   if(ch == 10) {
-    ln = ln + 1;
     return true;
   }
 
