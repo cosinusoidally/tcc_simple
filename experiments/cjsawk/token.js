@@ -31,10 +31,37 @@ function eat_whitespace() {
   }
 }
 
+var c_a = "a".charCodeAt(0);
+var c_z = "z".charCodeAt(0);
+var c_A;
+var c_Z;
+var c__;
+
+function is_id() {
+  if((ch>=c_a) && (ch<=c_z)) {
+    return true;
+  }
+  return false;
+}
+
+function is_num() {
+  return false;
+}
+
+function get_id() {
+
+}
+
 nc();
 
 while(to < f.length) {
   eat_whitespace();
+  if(is_id()) {
+    get_id();
+  }
+  if(is_num()) {
+    get_num();
+  }
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
   nc();
 }
