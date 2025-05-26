@@ -54,6 +54,10 @@ function is_num() {
   return false;
 }
 
+function is_other() {
+  return false;
+}
+
 function f_str() {
   var i;
   var b = [];
@@ -90,6 +94,9 @@ while(to < f.length) {
   }
   if(is_num()) {
     get_num();
+  }
+  if(is_other()) {
+    get_other();
   }
   print(ln+ " " + ch + " " +String.fromCharCode(ch));
   nc();
