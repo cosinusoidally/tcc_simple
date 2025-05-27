@@ -293,7 +293,7 @@ function variable_load(a, is_arg) {
   }
 }
 
-function function_call() {
+function function_call(s) {
   var passed;
   passed = 0;
   print("function call");
@@ -301,13 +301,26 @@ function function_call() {
   emit_out("( ");
   if(tok != ")") {
     expression();
+    emit_out("push_arg\n");
     passed = 1;
     while(tok == ",") {
       nt();
       expression();
+      emit_out("push_arg\n");
+      passed = passed + 1;
     }
   }
   nt(); /* skip ) */
+  emit_out("do_call %FUNCTION_");
+  emit_out(s);
+  emit_out(" ");
+
+  if(passed !=0) {
+    emit_out("cleanup_args_bytes %");
+    emit_out(int2str(4*passed, 10, TRUE));
+    emit_out("\n");
+  }
+  emit_out(")\n");
 }
 
 function primary_expr_variable() {
@@ -348,7 +361,7 @@ function primary_expr_variable() {
   }
 
   if(tok == "(") {
-    function_call();
+    function_call(s);
   }
 }
 
