@@ -293,6 +293,20 @@ function variable_load(a, is_arg) {
   }
 }
 
+function function_call() {
+  print("function call");
+  nt();
+  emit_out("( ");
+  if(tok != ")") {
+    expression();
+    while(tok == ",") {
+      nt();
+      expression();
+    }
+  }
+  nt(); /* skip ) */
+}
+
 function primary_expr_variable() {
   var s;
   var i;
@@ -330,6 +344,9 @@ function primary_expr_variable() {
     i = i + 1;
   }
 
+  if(tok == "(") {
+    function_call();
+  }
 }
 
 function primary_expr_number() {
