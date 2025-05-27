@@ -492,12 +492,20 @@ function return_result() {
   nt();
 }
 
+function uniqueID_out(id) {
+  emit_out(func);
+  emit_out("_");
+  emit_out(int2str(id, 10, TRUE));
+  emit_out("\n");
+}
+
 function process_while() {
   var number_string;
   dprint("process_while");
   number_string = int2str(current_count, 10, TRUE);
   current_count = current_count + 1;
   emit_out(":WHILE_");
+  uniqueID_out(number_string);
   nt();
 }
 
