@@ -280,12 +280,41 @@ function collect_arguments() {
   }
 }
 
+
+function to_hex_digit(a) {
+  a = 15  & a;
+  if(a > 9) {
+    a = a - 10 + 65;
+  } else {
+    a = a + 48;
+  }
+  return a;
+}
+
+function to_hex_le(a) {
+  /* FIXME non dummy */
+  return "DEADBEEF";
+  var o;
+  var i;
+  i = 0;
+  o = [];
+  while(i < 4) {
+    o[(i*2) + 1] = to_hex_digit(a);
+    o[(i*2)] = to_hex_digit(a >>> 4);
+    a = a >>> 8;
+    i = i + 1;
+  }
+  return o;
+}
+
+
 function collect_local() {
   nt();
   locals.push(tok);
   emit_out("DEFINE LOCAL_");
   emit_out(tok);
-  emit_out(" DEADBEEF");
+  emit_out(" ");
+  emit_out(to_hex_le(locals.length*4));
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
