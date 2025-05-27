@@ -434,10 +434,7 @@ function primary_expr_string() {
   strings_list.push(tok);
 
   emit_out("constant &STRING_");
-  emit_out(func);
-  emit_out("_");
-  emit_out(number_string);
-  emit_out("\n");
+  uniqueID_out(number_string);
 
   nt();
 }
