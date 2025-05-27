@@ -529,4 +529,4 @@ print("# Program global variables");
 print(globals_list.join(""));
 print("# Program strings");
 print(strings_list.join(""));
-print("ELF_end");
+print(":ELF_end");
