@@ -1,6 +1,9 @@
 f=read("test.c","binary");
 // f=read("../m2min_v3/m2min_v3.js","binary");
 
+FALSE = false;
+TRUE = true;
+
 to=0;
 ts=0;
 te=0;
@@ -275,6 +278,26 @@ function expression() {
   nt();
 }
 
+function int2str(a) {
+  return a.toString(10);
+}
+
+function return_result() {
+  var c;
+  c = 0;
+  nt();
+  if(tok != ";") {
+    expression();
+  }
+  c = locals.length;
+  if(c > 0) {
+    emit_out("cleanup_locals_bytes %");
+    emit_out(int2str(4*c, 10 , TRUE));
+    emit_out(" ");
+  }
+  nt();
+}
+
 function statement() {
   if(tok == "{") {
     print("lcurly");
@@ -285,6 +308,8 @@ function statement() {
     print("rcurly");
   } else if(tok == "var" || tok == "int") {
     collect_local();
+  } else if(tok == "return") {
+    return_result();
   } else {
     expression();
   }
