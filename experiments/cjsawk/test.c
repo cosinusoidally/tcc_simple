@@ -12,6 +12,7 @@ function foo(arg1, arg2) {
   b = add(1,a);
   c = mkc('c');
   d = mks("hello world");
+  arg1 = 7;
   return b;
 }
 
