@@ -260,6 +260,10 @@ function collect_arguments() {
   }
 }
 
+function statement() {
+
+}
+
 function declare_function(t) {
   var i;
   print("declare_function: " +t);
@@ -278,6 +282,10 @@ function declare_function(t) {
       emit_out("DEFINE ARG_");
       emit_out(args[i]);
       emit_out("\n");
+    }
+    statement();
+    if(output_list[output_list.length-1] !== "ret") {
+      emit_out("ret");
     }
   }
 }
@@ -301,7 +309,7 @@ function program() {
 program();
 print("\n# Core program");
 print(output_list.join(""));
-print("# Program global variables");
+print("\n# Program global variables");
 print(globals_list.join(""));
 print("# Program strings");
 print(strings_list.join(""));
