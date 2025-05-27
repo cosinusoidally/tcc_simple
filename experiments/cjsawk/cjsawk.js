@@ -313,17 +313,18 @@ function primary_expr_variable() {
   i = 0;
   while(i < args.length) {
     if(globals[i]==s) {
+      emit_out("global &GLOBAL_");
+      emit_out(s);
+      emit_out(" ");
+      if(tok == "=") {
+        return;
+      }
+      emit_out("load ");
+      return;
     }
     i = i + 1;
   }
 
-  emit_out("global &GLOBAL_");
-  emit_out(s);
-  emit_out(" ");
-  if(tok == "=") {
-    return;
-  }
-  emit_out("load ");
 }
 
 function primary_expr_number() {
