@@ -294,11 +294,14 @@ function variable_load(a, is_arg) {
 }
 
 function function_call() {
+  var passed;
+  passed = 0;
   print("function call");
   nt();
   emit_out("( ");
   if(tok != ")") {
     expression();
+    passed = 1;
     while(tok == ",") {
       nt();
       expression();
