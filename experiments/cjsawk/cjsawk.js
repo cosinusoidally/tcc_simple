@@ -358,6 +358,8 @@ function expression() {
     primary_expr_variable();
   } else if(tt == "number") {
     primary_expr_number();
+  } else if(tt == "char") {
+    primary_expr_char();
   } else {
     nt();
   }
