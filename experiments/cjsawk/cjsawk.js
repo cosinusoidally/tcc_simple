@@ -358,6 +358,13 @@ function primary_expr_string() {
   emit(number_string, strings_list);
   emit("\n", strings_list);
   strings_list.push(tok);
+
+  emit_out("constant &STRING_");
+  emit_out(func);
+  emit_out("_");
+  emit_out(number_string);
+  emit_out("\n");
+
   nt();
 }
 
