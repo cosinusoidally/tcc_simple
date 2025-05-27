@@ -488,6 +488,7 @@ function return_result() {
     expression();
   }
   cleanup_locals();
+  emit_out("ret\n");
   nt();
 }
 
@@ -532,7 +533,8 @@ function declare_function(t) {
       emit_out("\n");
     }
     statement();
-    if(output_list[output_list.length-1] !== "ret") {
+    if(output_list[output_list.length-1] !== "ret\n") {
+      cleanup_locals();
       emit_out("ret\n");
     }
   }
