@@ -472,19 +472,22 @@ function int2str(a) {
   return a.toString(10);
 }
 
-function return_result() {
+function cleanup_locals() {
   var c;
-  c = 0;
-  nt();
-  if(tok != ";") {
-    expression();
-  }
   c = locals.length;
   if(c > 0) {
     emit_out("cleanup_locals_bytes %");
     emit_out(int2str(4*c, 10 , TRUE));
     emit_out(" ");
   }
+}
+
+function return_result() {
+  nt();
+  if(tok != ";") {
+    expression();
+  }
+  cleanup_locals();
   nt();
 }
 
