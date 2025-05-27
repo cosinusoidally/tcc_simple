@@ -339,6 +339,15 @@ function primary_expr_number() {
   nt();
 }
 
+
+function primary_expr_char() {
+  emit_out("constant %");
+  /* fixme this should do the correct char lookup */
+  emit_out(int2str(tok.charCodeAt(1), 1), 10, TRUE);
+  emit_out(" ");
+  nt();
+}
+
 function expression() {
   print("expression");
   if(char0() == "(") {
