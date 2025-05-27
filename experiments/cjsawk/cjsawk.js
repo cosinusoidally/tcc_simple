@@ -427,10 +427,8 @@ function primary_expr_string() {
   number_string = int2str(current_count, 10, TRUE);
   current_count = current_count + 1;
   emit(":STRING_", strings_list);
-  emit(func, strings_list);
-  emit("_", strings_list);
-  emit(number_string, strings_list);
-  emit("\n", strings_list);
+  uniqueID(number_string, strings_list);
+
   strings_list.push(tok);
 
   emit_out("constant &STRING_");
