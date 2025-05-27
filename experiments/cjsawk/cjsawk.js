@@ -511,7 +511,7 @@ function program() {
 program();
 print("\n# Core program");
 print(output_list.join(""));
-print("\n# Program global variables");
+print("# Program global variables");
 print(globals_list.join(""));
 print("# Program strings");
 print(strings_list.join(""));
