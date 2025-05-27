@@ -13,6 +13,7 @@ function foo(arg1, arg2) {
   c = mkc('c');
   d = mks("hello world");
   arg1 = 7;
+  arg2 = 1234;
   return b;
 }
 

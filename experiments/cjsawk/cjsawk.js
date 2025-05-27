@@ -523,7 +523,9 @@ function declare_function(t) {
     for(i = args.length - 1; i > -1; i = i - 1) {
       emit_out("DEFINE ARG_");
       emit_out(args[i]);
-      emit_out(" DEADBEEF");
+      emit_out(" ");
+      /* FIXME explain this frame layout better */
+      emit_out(to_hex_le(-(i+1)*4));
       emit_out("\n");
     }
     statement();
