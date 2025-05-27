@@ -31,6 +31,10 @@ function nc() {
   }
 }
 
+function char0() {
+  return tok[0];
+}
+
 function is_whitespace() {
   if((ch == 32) || (ch == 9)) {
     return true;
@@ -273,9 +277,32 @@ function collect_local() {
   nt();
 }
 
+function primary_expr_variable() {
+  var s;
+  var i;
+  s = tok;
+  nt();
+  i = 0;
+  while(i < locals.length) {
+    i = i + 1;
+  }
+  i = 0;
+  while(i < args.length) {
+    i = i + 1;
+  }
+}
+
 function expression() {
   print("expression");
-  nt();
+  if(char0() == "(") {
+    nt();
+    expression();
+    nt();
+  } else if(tt == "identifier") {
+    primary_expr_variable();
+  } else {
+    nt();
+  }
 }
 
 function int2str(a) {
