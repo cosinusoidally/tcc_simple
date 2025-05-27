@@ -246,6 +246,7 @@ function declare_global(t) {
   emit(":GLOBAL_" , globals_list);
   emit(t, globals_list);
   emit("\nNULL\n", globals_list);
+  globals.push(t);
 }
 
 strings_list = [];
