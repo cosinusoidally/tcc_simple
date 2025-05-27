@@ -348,6 +348,19 @@ function primary_expr_char() {
   nt();
 }
 
+function primary_expr_string() {
+  var number_string;
+  number_string = int2str(current_count, 10, TRUE);
+  current_count = current_count + 1;
+  emit(":STRING_", strings_list);
+  emit(func, strings_list);
+  emit("_", strings_list);
+  emit(number_string, strings_list);
+  emit("\n", strings_list);
+  strings_list.push(tok);
+  nt();
+}
+
 function expression() {
   print("expression");
   if(char0() == "(") {
@@ -360,6 +373,8 @@ function expression() {
     primary_expr_number();
   } else if(tt == "char") {
     primary_expr_char();
+  } else if(tt == "string") {
+    primary_expr_string();
   } else {
     nt();
   }
