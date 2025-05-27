@@ -260,6 +260,7 @@ function collect_arguments() {
 function declare_function(t) {
   print("declare_function: " +t);
   current_count = 0;
+  func = t;
   collect_arguments();
   nt();
   if(tok == ";") {
