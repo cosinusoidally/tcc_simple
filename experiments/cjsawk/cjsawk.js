@@ -277,6 +277,20 @@ function collect_local() {
   nt();
 }
 
+function variable_load(a, is_arg) {
+  emit_out("local ");
+  if(is_arg == TRUE) {
+    emit_out("ARG_");
+  } else {
+    emit_out("LOCAL_");
+  }
+  emit_out(a);
+  emit_out(" ");
+  if(char0() == "=") {
+    emit_out("load ");
+  }
+}
+
 function primary_expr_variable() {
   var s;
   var i;
@@ -290,6 +304,13 @@ function primary_expr_variable() {
   while(i < args.length) {
     i = i + 1;
   }
+  emit_out("global &GLOBAL_");
+  emit_out(s);
+  emit_out(" ");
+  if(tok == "=") {
+    return;
+  }
+  emit_out("load ");
 }
 
 function expression() {
