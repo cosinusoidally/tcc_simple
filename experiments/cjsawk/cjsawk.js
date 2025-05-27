@@ -260,8 +260,26 @@ function collect_arguments() {
   }
 }
 
-function statement() {
+function collect_local() {
 
+}
+
+function expression() {
+  print("expression");
+  nt();
+}
+
+function statement() {
+  if(tok == "{") {
+    print("lcurly");
+    nt();
+    while(tok != "}") {
+      statement();
+    }
+    print("rcurly");
+  } else {
+    expression();
+  }
 }
 
 function declare_function(t) {
@@ -285,7 +303,7 @@ function declare_function(t) {
     }
     statement();
     if(output_list[output_list.length-1] !== "ret") {
-      emit_out("ret");
+      emit_out("ret\n");
     }
   }
 }
