@@ -1,6 +1,18 @@
 f=read("test.c","binary");
 // f=read("../m2min_v3/m2min_v3.js","binary");
 
+var dbg;
+
+if(dbg!=true) {
+  dbg = false;
+}
+
+if(dbg == true) {
+  dprint = print;
+} else {
+  dprint = function (){};
+}
+
 FALSE = false;
 TRUE = true;
 
@@ -149,7 +161,7 @@ function f_str() {
     b.push(f[i]);
   }
   b = b.map(function(x){return String.fromCharCode(x)}).join("");
-  print("tt: " + tt + " f_str " + b);
+  dprint("tt: " + tt + " f_str " + b);
   tok = b;
 }
 
@@ -242,7 +254,7 @@ function emit(s, l) {
 globals_list = [];
 
 function declare_global(t) {
-  print("declare_global: " +t);
+  dprint("declare_global: " +t);
   emit(":GLOBAL_" , globals_list);
   emit(t, globals_list);
   emit("\nNULL\n", globals_list);
@@ -273,10 +285,11 @@ function collect_local() {
   locals.push(tok);
   emit_out("DEFINE LOCAL_");
   emit_out(tok);
+  emit_out(" DEADBEEF");
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
-  print("locals: " +locals);
+  dprint("locals: " +locals);
 }
 
 function variable_load(a, is_arg) {
@@ -296,7 +309,7 @@ function variable_load(a, is_arg) {
 function function_call(s) {
   var passed;
   passed = 0;
-  print("function call");
+  dprint("function call");
   nt();
   emit_out("( ");
   if(tok != ")") {
@@ -402,7 +415,7 @@ function primary_expr_string() {
 }
 
 function expression() {
-  print("expression");
+  dprint("expression");
   if(char0() == "(") {
     nt();
     expression();
@@ -449,12 +462,12 @@ function return_result() {
 
 function statement() {
   if(tok == "{") {
-    print("lcurly");
+    dprint("lcurly");
     nt();
     while(tok != "}") {
       statement();
     }
-    print("rcurly");
+    dprint("rcurly");
   } else if(tok == "var" || tok == "int") {
     collect_local();
   } else if(tok == "return") {
@@ -467,21 +480,22 @@ function statement() {
 function declare_function(t) {
   var i;
   locals = [];
-  print("declare_function: " +t);
+  dprint("declare_function: " +t);
   current_count = 0;
   func = t;
   collect_arguments();
   nt();
   if(tok == ";") {
-    print("function_prototype skip");
+    dprint("function_prototype skip");
   } else if(tok == "{") {
-    print("function_body");
+    dprint("function_body");
     emit_out(":FUNCTION_");
     emit_out(t);
     emit_out("\n");
     for(i = args.length - 1; i > -1; i = i - 1) {
       emit_out("DEFINE ARG_");
       emit_out(args[i]);
+      emit_out(" DEADBEEF");
       emit_out("\n");
     }
     statement();
