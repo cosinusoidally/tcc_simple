@@ -329,6 +329,9 @@ function primary_expr_variable() {
 }
 
 function primary_expr_number() {
+  emit_out("constant %");
+  emit_out(tok);
+  emit_out(" ");
   nt();
 }
 
