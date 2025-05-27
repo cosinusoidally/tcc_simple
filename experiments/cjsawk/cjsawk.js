@@ -309,6 +309,14 @@ function primary_expr_variable() {
   while(i < args.length) {
     i = i + 1;
   }
+
+  i = 0;
+  while(i < args.length) {
+    if(globals[i]==s) {
+    }
+    i = i + 1;
+  }
+
   emit_out("global &GLOBAL_");
   emit_out(s);
   emit_out(" ");
@@ -409,6 +417,7 @@ function declare_function(t) {
 }
 
 function program() {
+  globals = [];
   var ltok;
 
   nc();
