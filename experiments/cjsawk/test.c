@@ -20,3 +20,10 @@ function foo(arg1, arg2) {
 function test2() {
   return 1;
 }
+
+function test3() {
+  var woo;
+  var var2;
+  woo=8;
+  var2=37;
+}
