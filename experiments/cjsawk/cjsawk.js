@@ -240,6 +240,8 @@ function declare_global(t) {
   emit("\nNULL\n", globals_list);
 }
 
+strings_list = [];
+
 output_list = [];
 
 function emit_out(s) {
@@ -284,6 +286,10 @@ function program() {
 }
 
 program();
-
-print(globals_list.join(""));
+print("\n# Core program");
 print(output_list.join(""));
+print("# Program global variables");
+print(globals_list.join(""));
+print("# Program strings");
+print(strings_list.join(""));
+print("ELF_end");
