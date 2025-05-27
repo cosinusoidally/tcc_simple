@@ -489,11 +489,15 @@ function return_result() {
   nt();
 }
 
+function uniqueID(id, l) {
+  emit(func, l);
+  emit("_", l);
+  emit(int2str(id, 10, TRUE), l);
+  emit("\n", l);
+}
+
 function uniqueID_out(id) {
-  emit_out(func);
-  emit_out("_");
-  emit_out(int2str(id, 10, TRUE));
-  emit_out("\n");
+  uniqueID(id, output_list);
 }
 
 function process_while() {
