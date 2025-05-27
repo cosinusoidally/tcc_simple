@@ -308,6 +308,10 @@ function primary_expr_variable() {
   }
   i = 0;
   while(i < args.length) {
+    if(args[i]==s) {
+      variable_load(s, TRUE);
+      return;
+    }
     i = i + 1;
   }
 
