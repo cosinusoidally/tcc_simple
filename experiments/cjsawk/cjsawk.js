@@ -275,6 +275,7 @@ function collect_local() {
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
+  print("locals: " +locals);
 }
 
 function variable_load(a, is_arg) {
@@ -286,7 +287,7 @@ function variable_load(a, is_arg) {
   }
   emit_out(a);
   emit_out(" ");
-  if(char0() == "=") {
+  if(char0() != "=") {
     emit_out("load ");
   }
 }
@@ -298,6 +299,10 @@ function primary_expr_variable() {
   nt();
   i = 0;
   while(i < locals.length) {
+    if(locals[i]==s) {
+      variable_load(s, FALSE);
+      return;
+    }
     i = i + 1;
   }
   i = 0;
@@ -308,7 +313,6 @@ function primary_expr_variable() {
   emit_out(s);
   emit_out(" ");
   if(tok == "=") {
-    emit_out("push_address\n");
     return;
   }
   emit_out("load ");
