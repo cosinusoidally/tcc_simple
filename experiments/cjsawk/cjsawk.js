@@ -508,6 +508,8 @@ function process_while() {
   nt();
   nt(); /* skip ( */
   expression();
+  emit_out("jump_false %END_WHILE_");
+  uniqueID_out(number_string);
 }
 
 function statement() {
