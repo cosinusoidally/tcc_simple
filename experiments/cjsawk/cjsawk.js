@@ -492,6 +492,15 @@ function return_result() {
   nt();
 }
 
+function process_while() {
+  var number_string;
+  dprint("process_while");
+  number_string = int2str(current_count, 10, TRUE);
+  current_count = current_count + 1;
+  emit_out(":WHILE_");
+  nt();
+}
+
 function statement() {
   if(tok == "{") {
     dprint("lcurly");
@@ -502,6 +511,8 @@ function statement() {
     dprint("rcurly");
   } else if(tok == "var" || tok == "int") {
     collect_local();
+  } else if(tok == "while") {
+    process_while();
   } else if(tok == "return") {
     return_result();
   } else {

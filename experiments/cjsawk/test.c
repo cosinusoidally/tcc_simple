@@ -27,3 +27,11 @@ function test3() {
   woo=8;
   var2=37;
 }
+
+function test4() {
+  var a;
+  a = 0;
+  while(lt(a, 100)) {
+    a = add(a,1);
+  }
+}
