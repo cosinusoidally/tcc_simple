@@ -308,6 +308,7 @@ function primary_expr_variable() {
   emit_out(s);
   emit_out(" ");
   if(tok == "=") {
+    emit_out("push_address\n");
     return;
   }
   emit_out("load ");
