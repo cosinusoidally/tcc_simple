@@ -253,6 +253,9 @@ function collect_arguments() {
   args = [];
   nt();
   while(tok != ")") {
+    if(tok != ",") {
+      args.push(tok);
+    }
     nt();
   }
 }
