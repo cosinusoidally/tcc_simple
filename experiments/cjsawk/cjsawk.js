@@ -250,7 +250,7 @@ function emit_out(s) {
 }
 
 function collect_arguments() {
-  var args = [];
+  args = [];
   nt();
   while(tok != ")") {
     nt();
@@ -258,6 +258,7 @@ function collect_arguments() {
 }
 
 function declare_function(t) {
+  var i;
   print("declare_function: " +t);
   current_count = 0;
   func = t;
@@ -270,6 +271,11 @@ function declare_function(t) {
     emit_out(":FUNCTION_");
     emit_out(t);
     emit_out("\n");
+    for(i = args.length - 1; i > -1; i = i - 1) {
+      emit_out("DEFINE ARG_");
+      emit_out(args[i]);
+      emit_out("\n");
+    }
   }
 }
 
