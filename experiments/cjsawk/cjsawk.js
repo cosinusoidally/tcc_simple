@@ -318,6 +318,10 @@ function primary_expr_variable() {
   emit_out("load ");
 }
 
+function primary_expr_number() {
+  nt();
+}
+
 function expression() {
   print("expression");
   if(char0() == "(") {
@@ -326,6 +330,8 @@ function expression() {
     nt();
   } else if(tt == "identifier") {
     primary_expr_variable();
+  } else if(tt == "number") {
+    primary_expr_number();
   } else {
     nt();
   }
