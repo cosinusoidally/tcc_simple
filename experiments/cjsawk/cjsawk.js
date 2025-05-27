@@ -329,6 +329,13 @@ function expression() {
   } else {
     nt();
   }
+
+  if(char0() == "=") {
+    emit_out("push_address\n");
+    nt();
+    expression();
+    emit_out("store\n");
+  }
 }
 
 function int2str(a) {
