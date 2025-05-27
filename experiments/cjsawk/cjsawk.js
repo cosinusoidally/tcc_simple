@@ -8,6 +8,7 @@ ch=f[0];
 
 ln=1;
 
+var current_count;
 
 var tt;
 
@@ -258,6 +259,7 @@ function collect_arguments() {
 
 function declare_function(t) {
   print("declare_function: " +t);
+  current_count = 0;
   collect_arguments();
   nt();
   if(tok == ";") {
@@ -272,6 +274,7 @@ function declare_function(t) {
 
 function program() {
   var ltok;
+
   nc();
 
   while(nt()) {
