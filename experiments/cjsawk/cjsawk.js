@@ -359,7 +359,7 @@ function primary_expr_variable() {
   }
 
   i = 0;
-  while(i < args.length) {
+  while(i < globals.length) {
     if(globals[i]==s) {
       emit_out("global &GLOBAL_");
       emit_out(s);
