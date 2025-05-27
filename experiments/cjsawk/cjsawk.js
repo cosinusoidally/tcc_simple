@@ -261,7 +261,13 @@ function collect_arguments() {
 }
 
 function collect_local() {
-
+  nt();
+  locals.push(tok);
+  emit_out("DEFINE LOCAL_");
+  emit_out(tok);
+  emit_out("\n");
+  emit_out("reserve_stack_slot\n");
+  nt();
 }
 
 function expression() {
@@ -277,6 +283,8 @@ function statement() {
       statement();
     }
     print("rcurly");
+  } else if(tok == "var" || tok == "int") {
+    collect_local();
   } else {
     expression();
   }
@@ -284,6 +292,7 @@ function statement() {
 
 function declare_function(t) {
   var i;
+  locals = [];
   print("declare_function: " +t);
   current_count = 0;
   func = t;
