@@ -506,6 +506,8 @@ function process_while() {
   emit_out(":WHILE_");
   uniqueID_out(number_string);
   nt();
+  nt(); /* skip ( */
+  expression();
 }
 
 function statement() {
