@@ -292,8 +292,6 @@ function to_hex_digit(a) {
 }
 
 function to_hex_le(a) {
-  /* FIXME non dummy */
-  return "DEADBEEF";
   var o;
   var i;
   i = 0;
@@ -304,7 +302,7 @@ function to_hex_le(a) {
     a = a >>> 8;
     i = i + 1;
   }
-  return o;
+  return (o.map(function(x){return String.fromCharCode(x);})).join("");
 }
 
 
@@ -314,7 +312,8 @@ function collect_local() {
   emit_out("DEFINE LOCAL_");
   emit_out(tok);
   emit_out(" ");
-  emit_out(to_hex_le(locals.length*4));
+/* FIXME clarify this calulation for local frame offset */
+  emit_out(to_hex_le(-(1+args.length+locals.length)*4));
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
