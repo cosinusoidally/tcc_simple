@@ -512,6 +512,12 @@ function process_while() {
   uniqueID_out(number_string);
   emit_out("# THEN_while_");
   uniqueID_out(number_string);
+  nt(); /* skip ) */
+  statement();
+  emit_out("jump %WHILE_");
+  uniqueID_out(number_string);
+  emit_out(":END_WHILE_");
+  uniqueID_out(number_string);
 }
 
 function statement() {
