@@ -81,3 +81,18 @@ function test7() {
   a = mkc('\n');
   a = mkc('\'');
 }
+
+/* add funtion to test asm handling */
+function add(a, b) {
+/*      return a + b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "add_eax,ebx"
+                "ret"
+        );
+}
