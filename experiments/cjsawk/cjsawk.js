@@ -252,7 +252,7 @@ function skip(s) {
     nt();
   }
   /* anything else is an error */
-  exit(1);
+  error();
 }
 
 function emit(s, l) {
