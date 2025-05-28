@@ -1,5 +1,6 @@
 // f=read("test.c","binary");
 f=read("../m2min_v3/m2min_v3.js","binary");
+// f=read("../m2min_v3/artifacts/m2min_v3.c","binary");
 
 var dbg;
 
@@ -227,7 +228,6 @@ function get_string() {
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
   tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
-  print("tok_str: " + tok);
 }
 
 eof = false;
