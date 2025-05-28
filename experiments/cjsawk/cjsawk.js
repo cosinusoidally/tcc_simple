@@ -248,8 +248,9 @@ function nt() {
 }
 
 function skip(s) {
-  if(tok == "s") {
+  if(tok == s) {
     nt();
+    return;
   }
   /* anything else is an error */
   error();
@@ -514,7 +515,7 @@ function process_while() {
   emit_out(":WHILE_");
   uniqueID_out(number_string);
   nt();
-  nt(); /* skip ( */
+  skip("(");
   expression();
   emit_out("jump_false %END_WHILE_");
   uniqueID_out(number_string);
