@@ -74,3 +74,9 @@ function test6 () {
     break;
   }
 }
+
+function test7() {
+  var a;
+  a = mkc('\\');
+  a = mkc('\n');
+}
