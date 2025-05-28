@@ -559,6 +559,17 @@ function process_if() {
   uniqueID_out(number_string);
 }
 
+function process_break() {
+  nt();
+  emit_out("jump %");
+  emit_out(break_target_prefix);
+  emit_out(func);
+  emit_out("_");
+  emit_out(break_target_num);
+  emit_out("\n");
+  skip(";");
+}
+
 function statement() {
   if(tok == "{") {
     dprint("lcurly");

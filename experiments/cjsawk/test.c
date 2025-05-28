@@ -55,3 +55,9 @@ function test5() {
     return 2;
   }
 }
+
+function test6 () {
+
+  while(1) {
+  }
+}
