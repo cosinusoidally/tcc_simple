@@ -247,6 +247,14 @@ function nt() {
   return true;
 }
 
+function skip(s) {
+  if(tok == "s") {
+    nt();
+  }
+  /* anything else is an error */
+  exit(1);
+}
+
 function emit(s, l) {
   l.push(s);
 }

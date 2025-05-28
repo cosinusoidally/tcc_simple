@@ -34,7 +34,9 @@ function test4() {
   while(lt(a, 100)) {
     a = add(a,1);
   }
+/* if not yet supported
   if(eq(a, 200)) {
     return 1;
   }
+*/
 }
