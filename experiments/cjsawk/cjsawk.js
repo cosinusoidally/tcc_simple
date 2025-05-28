@@ -435,8 +435,9 @@ function escape_lookup(c) {
   /* fixme this should do the correct char lookup */
   var c0;
   var c1;
-  c0 = c.charCodeAt(1);
+  c0 = c[1];
   if(c0 == "\\") {
+    c1 = c[2];
     if(c1 == 0) {
       return 0;
     } else if(c1 == 'a') {
@@ -464,7 +465,7 @@ function escape_lookup(c) {
     }
     error();
   }
-  return c0;
+  return c0.charCodeAt(0);
 }
 
 
