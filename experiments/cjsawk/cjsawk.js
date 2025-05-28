@@ -533,6 +533,32 @@ function process_while() {
   uniqueID_out(number_string);
 }
 
+function process_if() {
+  var number_string;
+  dprint("process_if");
+  number_string = int2str(current_count, 10, TRUE);
+  current_count = current_count + 1;
+  emit_out("# IF_");
+  uniqueID_out(number_string);
+  nt();
+  skip("(");
+  expression();
+  emit_out("jump_false %ELSE_");
+  uniqueID_out(number_string);
+  skip(")");
+  statement();
+  emit_out("jump %_END_IF_");
+  uniqueID_out(number_string);
+  emit_out(":ELSE_");
+  uniqueID_out(number_string);
+  if(tok == "else") {
+    nt();
+    statement();
+  }
+  emit_out(":_END_IF_");
+  uniqueID_out(number_string);
+}
+
 function statement() {
   if(tok == "{") {
     dprint("lcurly");
