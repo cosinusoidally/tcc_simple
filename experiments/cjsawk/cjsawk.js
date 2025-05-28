@@ -140,6 +140,7 @@ function is_other() {
 }
 
 var c_ch = "'".charCodeAt(0);
+var c_bs = "\\".charCodeAt(0);
 
 function is_char() {
   if(ch==c_ch) {
@@ -200,9 +201,10 @@ function get_char() {
   tt = tt_char;
   ts = to - 1;
   nc();
-  while(ch != c_ch) {
+  if(ch == c_bs) {
     nc();
   }
+  nc();
   te = to;
   nc();
   f_str();
