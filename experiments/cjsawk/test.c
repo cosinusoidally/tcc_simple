@@ -79,4 +79,5 @@ function test7() {
   var a;
   a = mkc('\\');
   a = mkc('\n');
+  a = mkc('\'');
 }
