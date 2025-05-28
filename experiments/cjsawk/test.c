@@ -43,3 +43,15 @@ function test4() {
     return 2;
   }
 }
+
+function test5() {
+  var foo;
+  foo = 0;
+  if(eq(foo, 200)) {
+    return 1;
+  } else if(lt(foo,200)){
+    return 4;
+  } else {
+    return 2;
+  }
+}
