@@ -431,7 +431,38 @@ function primary_expr_number() {
 
 function escape_lookup(c) {
   /* fixme this should do the correct char lookup */
-  return tok.charCodeAt(1);
+  var c0;
+  var c1;
+  c0 = c.charCodeAt(1);
+  if(c0 == "\\") {
+    if(c1 == 0) {
+      return 0;
+    } else if(c1 == 'a') {
+      return 7;
+    } else if(c1 == 'b') {
+      return 8;
+    } else if(c1 == 't') {
+      return 9;
+    } else if(c1 == 'n') {
+      return 10;
+    } else if(c1 == 'v') {
+      return 11;
+    } else if(c1 == 'f') {
+      return 12;
+    } else if(c1 == 'r') {
+      return 13;
+    } else if(c1 == 'e') {
+      return 27;
+    } else if(c1 == '"') {
+      return 34;
+    } else if(c1 == '\'') {
+      return 39;
+    } else if(c1 == '\\') {
+      return 92;
+    }
+    error();
+  }
+  return c0;
 }
 
 
