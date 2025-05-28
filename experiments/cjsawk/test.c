@@ -61,4 +61,16 @@ function test6 () {
   while(1) {
     break;
   }
+
+  while(1) {
+    if(1) {
+      break;
+    }
+    while(1) {
+      if(2) {
+        break;
+      }
+    }
+    break;
+  }
 }
