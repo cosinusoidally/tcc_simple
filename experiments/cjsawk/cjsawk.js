@@ -363,7 +363,7 @@ function function_call(s) {
       passed = passed + 1;
     }
   }
-  nt(); /* skip ) */
+  skip(")");
   emit_out("do_call %FUNCTION_");
   emit_out(s);
   emit_out(" ");
