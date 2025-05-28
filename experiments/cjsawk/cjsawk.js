@@ -516,9 +516,12 @@ function uniqueID_out(id) {
 
 function process_while() {
   var number_string;
+  var nested_break_num;
+  nested_break_num = break_target_num;
   dprint("process_while");
   number_string = int2str(current_count, 10, TRUE);
   current_count = current_count + 1;
+  break_target_num = number_string;
   emit_out(":WHILE_");
   uniqueID_out(number_string);
   nt();
@@ -534,6 +537,7 @@ function process_while() {
   uniqueID_out(number_string);
   emit_out(":END_WHILE_");
   uniqueID_out(number_string);
+  break_target_num = nested_break_num;
 }
 
 function process_if() {
