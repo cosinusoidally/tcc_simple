@@ -224,6 +224,10 @@ function get_string() {
   te = to;
   nc();
   f_str();
+  /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
+     version of this code */
+  tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
+  print("tok_str: " + tok);
 }
 
 eof = false;
