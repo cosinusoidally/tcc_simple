@@ -215,9 +215,11 @@ function get_string() {
   f_str();
 }
 
+eof = false;
 
 function nt() {
   if(to >= f.length) {
+    eof = true;
     return false;
   }
 
@@ -268,6 +270,7 @@ function declare_global(t) {
   emit(t, globals_list);
   emit("\nNULL\n", globals_list);
   globals.push(t);
+  skip(";");
 }
 
 strings_list = [];
@@ -536,6 +539,7 @@ function statement() {
     while(tok != "}") {
       statement();
     }
+    skip("}");
     dprint("rcurly");
   } else if(tok == "var" || tok == "int") {
     collect_local();
@@ -584,21 +588,29 @@ function error() {
   exit(1);
 }
 
+
 function program() {
   globals = [];
   var ltok;
 
   nc();
 
-  while(nt()) {
-    nt(); ltok = tok;
-    nt();
-    if(tok == ";") {
-      declare_global(ltok);
-    } else if(tok == "(") {
-      declare_function(ltok);
-    } else {
+  nt();
+
+  while(!eof) {
+    if((tok == "int") || (tok == "var") || (tok == "function")) {
+      nt(); ltok = tok;
+      nt();
+
+      if(tok == ";") {
+        declare_global(ltok);
+      } else if(tok == "(") {
+        declare_function(ltok);
+      } else {
 //      error();
+      }
+    } else {
+      error();
     }
   }
 }
