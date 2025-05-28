@@ -429,11 +429,15 @@ function primary_expr_number() {
   nt();
 }
 
+function escape_lookup(c) {
+  /* fixme this should do the correct char lookup */
+  return tok.charCodeAt(1);
+}
+
 
 function primary_expr_char() {
   emit_out("constant %");
-  /* fixme this should do the correct char lookup */
-  emit_out(int2str(tok.charCodeAt(1), 1), 10, TRUE);
+  emit_out(int2str(escape_lookup(tok), 1), 10, TRUE);
   emit_out(" ");
   nt();
 }
