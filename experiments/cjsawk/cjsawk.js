@@ -544,6 +544,8 @@ function statement() {
     dprint("rcurly");
   } else if(tok == "var" || tok == "int") {
     collect_local();
+  } else if(tok == "if") {
+    process_if();
   } else if(tok == "while") {
     process_while();
   } else if(tok == "return") {
