@@ -35,6 +35,9 @@ tt_other = "other";
 
 var tok;
 
+var break_target_prefix;
+var break_target_num;
+
 function nc() {
   ch=f[to];
   to=to+1;
@@ -587,6 +590,8 @@ function statement() {
     process_while();
   } else if(tok == "return") {
     return_result();
+  } else if(tok == "break") {
+    process_break();
   } else {
     expression();
     skip(";");
@@ -656,6 +661,11 @@ function program() {
   }
 }
 
+function init_globals() {
+  break_target_prefix = "END_WHILE_";
+}
+
+init_globals();
 program();
 print("\n# Core program");
 print(output_list.join(""));

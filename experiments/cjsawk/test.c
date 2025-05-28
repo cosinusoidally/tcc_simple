@@ -59,5 +59,6 @@ function test5() {
 function test6 () {
 
   while(1) {
+    break;
   }
 }
