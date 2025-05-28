@@ -454,7 +454,7 @@ function expression() {
   if(char0() == "(") {
     nt();
     expression();
-    nt();
+    skip(")");
   } else if(tt == "identifier") {
     primary_expr_variable();
   } else if(tt == "number") {
@@ -464,6 +464,7 @@ function expression() {
   } else if(tt == "string") {
     primary_expr_string();
   } else {
+//    error();
     nt();
   }
 
