@@ -637,7 +637,7 @@ function program() {
       } else if(tok == "(") {
         declare_function(ltok);
       } else {
-//      error();
+        error();
       }
     } else {
       error();
