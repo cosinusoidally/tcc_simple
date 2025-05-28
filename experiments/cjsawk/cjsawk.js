@@ -329,6 +329,7 @@ function collect_local() {
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
+  skip(";");
   dprint("locals: " +locals);
 }
 
