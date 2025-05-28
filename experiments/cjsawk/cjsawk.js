@@ -578,6 +578,11 @@ function declare_function(t) {
   }
 }
 
+function error() {
+  print("line: " + ln + " tok: " + tok);
+  exit(1);
+}
+
 function program() {
   globals = [];
   var ltok;
@@ -591,6 +596,8 @@ function program() {
       declare_global(ltok);
     } else if(tok == "(") {
       declare_function(ltok);
+    } else {
+//      error();
     }
   }
 }
