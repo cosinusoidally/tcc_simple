@@ -39,5 +39,7 @@ function test4() {
   }
   if(eq(a, 200)) {
     return 1;
+  } else {
+    return 2;
   }
 }
