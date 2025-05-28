@@ -1,5 +1,5 @@
-f=read("test.c","binary");
-// f=read("../m2min_v3/m2min_v3.js","binary");
+// f=read("test.c","binary");
+f=read("../m2min_v3/m2min_v3.js","binary");
 
 var dbg;
 
@@ -37,6 +37,10 @@ var tok;
 
 var break_target_prefix;
 var break_target_num;
+
+/* needed since main has an additional number of elements initially on the
+   stack */
+var frame_bias;
 
 function nc() {
   ch=f[to];
@@ -648,6 +652,11 @@ function declare_function(t) {
   dprint("declare_function: " +t);
   current_count = 0;
   func = t;
+  if(t == "main") {
+    frame_bias = 4;
+  } else {
+    frame_bias = 0;
+  }
   collect_arguments();
   nt();
   if(tok == ";") {
