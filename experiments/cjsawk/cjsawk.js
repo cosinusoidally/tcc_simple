@@ -336,7 +336,7 @@ function collect_local() {
   emit_out(tok);
   emit_out(" ");
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(-(1+args.length+locals.length)*4));
+  emit_out(to_hex_le(-(1+args.length+locals.length + frame_bias)*4));
   emit_out("\n");
   emit_out("reserve_stack_slot\n");
   nt();
@@ -653,7 +653,7 @@ function declare_function(t) {
   current_count = 0;
   func = t;
   if(t == "main") {
-    frame_bias = 4;
+    frame_bias = 1;
   } else {
     frame_bias = 0;
   }
