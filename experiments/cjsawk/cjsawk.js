@@ -200,7 +200,9 @@ function get_char() {
   tt = tt_char;
   ts = to - 1;
   nc();
-  nc();
+  while(ch != c_ch) {
+    nc();
+  }
   te = to;
   nc();
   f_str();
