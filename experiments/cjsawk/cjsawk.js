@@ -465,8 +465,7 @@ function expression() {
   } else if(tt == "string") {
     primary_expr_string();
   } else {
-//    error();
-    nt();
+    error();
   }
 
   if(char0() == "=") {
@@ -551,6 +550,7 @@ function statement() {
     return_result();
   } else {
     expression();
+    skip(";");
   }
 }
 
