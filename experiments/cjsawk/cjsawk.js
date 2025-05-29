@@ -625,6 +625,19 @@ function process_break() {
   skip(";");
 }
 
+function process_asm() {
+  nt();
+  skip("(");
+  while(char0() == '"') {
+/* FIXME strip off quotes in a non-js way */
+    emit_out(tok.slice(1,-1));
+    emit_out("\n");
+    nt();
+  }
+  skip(")");
+  skip(";");
+}
+
 function statement() {
   if(tok == "{") {
     dprint("lcurly");
