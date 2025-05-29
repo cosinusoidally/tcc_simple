@@ -640,6 +640,8 @@ function statement() {
     process_if();
   } else if(tok == "while") {
     process_while();
+  } else if(tok == "asm") {
+    process_asm();
   } else if(tok == "return") {
     return_result();
   } else if(tok == "break") {
