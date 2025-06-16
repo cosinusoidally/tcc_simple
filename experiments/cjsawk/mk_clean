@@ -1,0 +1,3 @@
+rm /dev/shm/out.M1
+rm /dev/shm/out.hex2
+rm /dev/shm/out2.hex2
