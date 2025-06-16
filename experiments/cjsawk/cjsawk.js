@@ -398,6 +398,11 @@ function primary_expr_variable() {
   s = tok;
   nt();
   i = 0;
+
+  if(tok == "(") {
+    return function_call(s);
+  }
+
   while(i < locals.length) {
     if(locals[i]==s) {
       variable_load(s, FALSE);
@@ -427,10 +432,6 @@ function primary_expr_variable() {
       return;
     }
     i = i + 1;
-  }
-
-  if(tok == "(") {
-    function_call(s);
   }
 }
 
