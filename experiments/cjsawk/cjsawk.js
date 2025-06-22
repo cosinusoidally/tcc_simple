@@ -56,7 +56,21 @@ function sub(a,b) {
 }
 
 function increase_indent() {
-        indent = add(indent, 2);
+  indent = add(indent, 2);
+}
+
+function indented_emit_out(s) {
+  var c;
+  c = 0;
+  if(no_indent) {
+    no_indent = 0;
+  } else {
+    while(lt(c, indent)) {
+      emit_out(mks(" "));
+      c = add(c, 1);
+    }
+  }
+  emit_out(s);
 }
 
 function decrease_indent() {
