@@ -1,6 +1,6 @@
 // f=read("test.c","binary");
 // f=read("../m2min_v3/m2min_v3.js","binary");
-f=read("../m2min_v3/artifacts/m2min_v3.c","binary");
+f=read("./artifacts/m2min_v3.c","binary");
 
 var dbg;
 
