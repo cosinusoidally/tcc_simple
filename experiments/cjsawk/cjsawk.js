@@ -598,7 +598,7 @@ function return_result() {
     expression();
   }
   cleanup_locals();
-  emit_out("ret\n");
+  indented_emit_out("ret\n");
   nt();
 }
 
@@ -649,7 +649,7 @@ function process_if() {
   nt();
   skip("(");
   expression();
-  emit_out("jump_false %ELSE_");
+  indented_emit_out("jump_false %ELSE_");
   uniqueID_out(number_string);
   skip(")");
   statement();
