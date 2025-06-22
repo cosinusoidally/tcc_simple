@@ -482,6 +482,7 @@ function primary_expr_variable() {
   if(tok == "=") {
     return;
   }
+  no_indent = 1;
   emit_out("load ");
 }
 
@@ -586,9 +587,10 @@ function cleanup_locals() {
   var c;
   c = locals.length;
   if(c > 0) {
-    emit_out("cleanup_locals_bytes %");
+    indented_emit_out("cleanup_locals_bytes %");
     emit_out(int2str(4*c, 10 , TRUE));
     emit_out(" ");
+    no_indent = 1;
   }
 }
 
@@ -632,7 +634,7 @@ function process_while() {
   uniqueID_out(number_string);
   nt(); /* skip ) */
   statement();
-  emit_out("jump %WHILE_");
+  indented_emit_out("jump %WHILE_");
   uniqueID_out(number_string);
   emit_out(":END_WHILE_");
   uniqueID_out(number_string);
@@ -653,7 +655,7 @@ function process_if() {
   uniqueID_out(number_string);
   skip(")");
   statement();
-  emit_out("jump %_END_IF_");
+  indented_emit_out("jump %_END_IF_");
   uniqueID_out(number_string);
   emit_out(":ELSE_");
   uniqueID_out(number_string);
@@ -667,7 +669,7 @@ function process_if() {
 
 function process_break() {
   nt();
-  emit_out("jump %");
+  indented_emit_out("jump %");
   emit_out(break_target_prefix);
   emit_out(func);
   emit_out("_");
