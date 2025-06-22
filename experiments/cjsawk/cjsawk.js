@@ -55,10 +55,6 @@ function sub(a,b) {
   return a - b;
 }
 
-function increase_indent() {
-  indent = add(indent, 2);
-}
-
 function mks(s) {
   // dummy impl
   return s;
@@ -87,6 +83,10 @@ function decrease_indent() {
         if(lt(indent,0)) {
                 indent = 0;
         }
+}
+
+function increase_indent() {
+  indent = add(indent, 2);
 }
 
 function nc() {
