@@ -545,9 +545,10 @@ function primary_expr_string() {
   emit(":STRING_", strings_list);
   uniqueID(number_string, strings_list);
 
-  strings_list.push(tok);
+  emit(tok, strings_list);
+  emit("\n", strings_list);
 
-  emit_out("constant &STRING_");
+  indented_emit_out("constant &STRING_");
   uniqueID_out(number_string);
 
   nt();
