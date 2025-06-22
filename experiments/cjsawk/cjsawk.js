@@ -482,7 +482,6 @@ function primary_expr_variable() {
   if(tok == "=") {
     return;
   }
-  no_indent = 1;
   emit_out("load ");
 }
 
@@ -575,7 +574,7 @@ function expression() {
     emit_out("push_address\n");
     nt();
     expression();
-    emit_out("store\n");
+    indented_emit_out("store\n");
   }
 }
 
@@ -627,7 +626,7 @@ function process_while() {
   nt();
   skip("(");
   expression();
-  emit_out("jump_false %END_WHILE_");
+  indented_emit_out("jump_false %END_WHILE_");
   uniqueID_out(number_string);
   emit_out("# THEN_while_");
   uniqueID_out(number_string);
