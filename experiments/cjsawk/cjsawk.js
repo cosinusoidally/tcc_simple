@@ -59,6 +59,15 @@ function increase_indent() {
   indent = add(indent, 2);
 }
 
+function mks(s) {
+  // dummy impl
+  return s;
+}
+
+function lt(a,b) {
+  return a < b;
+}
+
 function indented_emit_out(s) {
   var c;
   c = 0;
