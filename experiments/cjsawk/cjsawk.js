@@ -736,9 +736,10 @@ function declare_function(t) {
     dprint("function_body");
     emit_out(":FUNCTION_");
     emit_out(t);
+    increase_indent();
     emit_out("\n");
     for(i = args.length - 1; i > -1; i = i - 1) {
-      emit_out("DEFINE ARG_");
+      indented_emit_out("DEFINE ARG_");
       emit_out(args[i]);
       emit_out(" ");
       /* FIXME explain this frame layout better */
@@ -748,8 +749,9 @@ function declare_function(t) {
     statement();
     if(output_list[output_list.length-1] !== "ret\n") {
       cleanup_locals();
-      emit_out("ret\n");
+      indented_emit_out("ret\n");
     }
+    decrease_indent();
   }
 }
 
