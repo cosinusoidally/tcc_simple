@@ -414,7 +414,7 @@ function function_call(s) {
   dprint("function call");
   nt();
 
-  indented_emit_out("( ");
+  indented_emit_out("(");
   increase_indent();
 
   if(tok != ")") {
