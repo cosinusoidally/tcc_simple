@@ -394,7 +394,7 @@ function collect_local() {
 }
 
 function variable_load(a, is_arg) {
-  emit_out("local ");
+  indented_emit_out("local ");
   if(is_arg == TRUE) {
     emit_out("ARG_");
   } else {
@@ -403,6 +403,7 @@ function variable_load(a, is_arg) {
   emit_out(a);
   emit_out(" ");
   if(char0() != "=") {
+    no_indent = 1;
     emit_out("load ");
   }
 }
@@ -475,12 +476,13 @@ function primary_expr_variable() {
 
 
   /* otherwise assume is a global */
-  emit_out("global &GLOBAL_");
+  indented_emit_out("global &GLOBAL_");
   emit_out(s);
   emit_out(" ");
   if(tok == "=") {
     return;
   }
+  no_indent = 1;
   emit_out("load ");
 }
 
