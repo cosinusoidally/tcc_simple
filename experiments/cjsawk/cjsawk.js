@@ -412,20 +412,26 @@ function function_call(s) {
   passed = 0;
   dprint("function call");
   nt();
-  emit_out("( ");
+
+  indented_emit_out("( ");
+  increase_indent();
+
   if(tok != ")") {
+    emit_out(mks(" ")); no_indent = 1;
     expression();
-    emit_out("push_arg\n");
+    indented_emit_out("push_arg\n");
     passed = 1;
     while(tok == ",") {
       nt();
       expression();
-      emit_out("push_arg\n");
+      indented_emit_out("push_arg\n");
       passed = passed + 1;
     }
+  } else {
+    emit_out(mks(" ")); no_indent = 1;
   }
   skip(")");
-  emit_out("do_call %FUNCTION_");
+  indented_emit_out("do_call %FUNCTION_");
   emit_out(s);
   emit_out(" ");
 
@@ -433,8 +439,11 @@ function function_call(s) {
     emit_out("cleanup_args_bytes %");
     emit_out(int2str(4*passed, 10, TRUE));
     emit_out("\n");
+  } else {
+    no_indent = 1;
   }
-  emit_out(")\n");
+  decrease_indent();
+  indented_emit_out(")\n");
 }
 
 function primary_expr_variable() {
