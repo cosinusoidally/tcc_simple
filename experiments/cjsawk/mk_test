@@ -1,7 +1,7 @@
 ./mk_clean
-time js ../m2min_v3/node_compat_min.js cjsawk.js > /dev/shm/out.M1
-../m2min_v2/artifacts/M0 /dev/shm/out.M1 >  /dev/shm/out.hex2
-../m2min_v2/artifacts/M0 ../m2min_v3/m2min_v3.M1 > /dev/shm/out2.hex2
+time js ../m2min_v3/node_compat_min.js cjsawk.js > ./artifacts/out.M1
+../m2min_v2/artifacts/M0 ./artifacts/out.M1 >  ./artifacts/out.hex2
+../m2min_v2/artifacts/M0 ../m2min_v3/m2min_v3.M1 > ./artifacts/out2.hex2
 
-wc /dev/shm/out.hex2
-diff -u -s /dev/shm/out.hex2 /dev/shm/out2.hex2
+wc ./artifacts/out.hex2
+diff -u -s ./artifacts/out.hex2 ./artifacts/out2.hex2

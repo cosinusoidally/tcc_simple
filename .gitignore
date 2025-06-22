@@ -12,3 +12,5 @@
 !experiments/m2min_v2/artifacts/placeholder
 /experiments/m2min_v3/artifacts/*
 !experiments/m2min_v3/artifacts/placeholder
+/experiments/cjsawk/artifacts/*
+!experiments/cjsawk/artifacts/placeholder
