@@ -6,4 +6,5 @@ time js ../m2min_v3/node_compat_min.js cjsawk.js > ./artifacts/out.M1
 
 wc ./artifacts/out.hex2
 diff -u -s ./artifacts/out.hex2 ./artifacts/out2.hex2
+diff -u -s ./artifacts/out.M1 ../m2min_v3/m2min_v3.M1
 echo DONE
