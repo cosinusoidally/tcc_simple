@@ -487,9 +487,9 @@ function primary_expr_variable() {
 }
 
 function primary_expr_number() {
-  emit_out("constant %");
+  indented_emit_out("constant %");
   emit_out(tok);
-  emit_out(" ");
+  emit_out(" "); no_indent = 1;
   nt();
 }
 
