@@ -17,6 +17,9 @@ if(dbg == true) {
 FALSE = false;
 TRUE = true;
 
+var indent = 0;
+var no_indent = 0;
+
 to=0;
 ts=0;
 te=0;
@@ -42,6 +45,26 @@ var break_target_num;
 /* needed since main has an additional number of elements initially on the
    stack */
 var frame_bias;
+
+
+function add(a,b) {
+  return a + b;
+}
+
+function sub(a,b) {
+  return a - b;
+}
+
+function increase_indent() {
+        indent = add(indent, 2);
+}
+
+function decrease_indent() {
+        indent = sub(indent, 2);
+        if(lt(indent,0)) {
+                indent = 0;
+        }
+}
 
 function nc() {
   ch=f[to];
