@@ -381,13 +381,13 @@ function to_hex_le(a) {
 function collect_local() {
   nt();
   locals.push(tok);
-  emit_out("DEFINE LOCAL_");
+  indented_emit_out("DEFINE LOCAL_");
   emit_out(tok);
   emit_out(" ");
 /* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(-(1+args.length+locals.length + frame_bias)*4));
   emit_out("\n");
-  emit_out("reserve_stack_slot\n");
+  indented_emit_out("reserve_stack_slot\n");
   nt();
   skip(";");
   dprint("locals: " +locals);
