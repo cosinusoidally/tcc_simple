@@ -25,7 +25,9 @@ function mks_alt(s) {
 
 mks = function(s) {
   var r;
-  r = mks_alt(s);
+  /* round trip onto virtual c heap */
+  r = mk_c_string(s);
+  r = mk_js_string(r);
   return r;
 }
 
