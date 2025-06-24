@@ -160,11 +160,11 @@ var c_rcurly = "}".charCodeAt(0);
 var c_eq = "=".charCodeAt(0);
 
 function is_other() {
-  if((ch==c_comma) || (ch==c_semi) || (ch==c_lparen) || (ch==c_rparen) ||
-     (ch==c_lcurly) || (ch==c_rcurly) || (ch==c_eq)) {
-    return true;
+  if((ch==mkc(',')) || (ch==mkc(';')) || (ch==mkc('(')) || (ch==mkc(')')) ||
+     (ch==mkc('{')) || (ch==mkc('}')) || (ch==mkc('='))) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 var c_ch = "'".charCodeAt(0);
