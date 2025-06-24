@@ -431,7 +431,7 @@ function primary_expr_variable() {
     return function_call(s);
   }
 
-  while(i < locals.length) {
+  while(lt(i, locals.length)) {
     if(match(locals[i], s)) {
       variable_load(s, FALSE);
       return;
@@ -439,24 +439,24 @@ function primary_expr_variable() {
     i = add(i, 1);
   }
   i = 0;
-  while(i < args.length) {
-    if(args[i]==s) {
+  while(lt(i, args.length)) {
+    if(match(args[i], s)) {
       variable_load(s, TRUE);
       return;
     }
-    i = i + 1;
+    i = add(i, 1);
   }
 
 
   /* otherwise assume is a global */
-  indented_emit_out("global &GLOBAL_");
+  indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
-  emit_out(" ");
-  if(tok == "=") {
+  emit_out(mks(" "));
+  if(match(tok, mks("="))) {
     return;
   }
   no_indent = 1;
-  emit_out("load ");
+  emit_out(mks("load "));
 }
 
 function primary_expr_number() {
