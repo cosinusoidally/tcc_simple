@@ -314,8 +314,8 @@ function emit_out(s) {
 function collect_arguments() {
   args = [];
   nt();
-  while(tok != ")") {
-    if(tok != ",") {
+  while(eq(0, match(tok, mks(")")))) {
+    if(eq(0, match(tok, mks(",")))) {
       args.push(tok);
     }
     nt();
@@ -324,11 +324,11 @@ function collect_arguments() {
 
 
 function to_hex_digit(a) {
-  a = 15  & a;
-  if(a > 9) {
-    a = a - 10 + 65;
+  a = and(15, a);
+  if(gt(a, 9)) {
+    a = add(sub(a, 10), 65);
   } else {
-    a = a + 48;
+    a = add(a, 48);
   }
   return a;
 }
@@ -338,7 +338,7 @@ function to_hex_le(a) {
   var i;
   i = 0;
   o = [];
-  while(i < 4) {
+  while(lt(i, 4)) {
     o[(i*2) + 1] = to_hex_digit(a);
     o[(i*2)] = to_hex_digit(a >>> 4);
     a = a >>> 8;
