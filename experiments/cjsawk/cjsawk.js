@@ -723,9 +723,9 @@ function declare_function(t) {
       emit_out(mks("\n"));
     }
     statement();
-    if(output_list[output_list.length-1] !== "ret\n") {
+    if(eq(0, match(output_list[sub(output_list.length,1)], mks("ret\n")))) {
       cleanup_locals();
-      indented_emit_out("ret\n");
+      indented_emit_out(mks("ret\n"));
     }
     decrease_indent();
   }
@@ -744,7 +744,7 @@ function program() {
 
   nt();
 
-  while(!eof) {
+  while(eq(0,eof)) {
     if((tok == "int") || (tok == "var") || (tok == "function")) {
       nt(); ltok = tok;
       nt();
@@ -763,7 +763,7 @@ function program() {
 }
 
 function init_globals() {
-  break_target_prefix = "END_WHILE_";
+  break_target_prefix = mks("END_WHILE_");
 }
 
 function main() {
