@@ -339,27 +339,30 @@ function to_hex_le(a) {
   i = 0;
   o = [];
   while(lt(i, 4)) {
-    o[(i*2) + 1] = to_hex_digit(a);
-    o[(i*2)] = to_hex_digit(shr(a, 4));
+    o[add(mul(i, 2), 1)] = to_hex_digit(a);
+    o[mul(i, 2)] = to_hex_digit(shr(a, 4));
     a = shr(a, 8);
     i = add(i, 1);
   }
   return (o.map(function(x){return String.fromCharCode(x);})).join("");
 }
 
+function locals_push(s) {
+  locals.push(tok);
+}
 
 function collect_local() {
   nt();
-  locals.push(tok);
-  indented_emit_out("DEFINE LOCAL_");
+  locals_push(tok);
+  indented_emit_out(mks("DEFINE LOCAL_"));
   emit_out(tok);
-  emit_out(" ");
+  emit_out(mks(" "));
 /* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(-(1+args.length+locals.length + frame_bias)*4));
-  emit_out("\n");
-  indented_emit_out("reserve_stack_slot\n");
+  emit_out(mks("\n"));
+  indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
-  skip(";");
+  skip(mks(";"));
   dprint("locals: " +locals);
 }
 
