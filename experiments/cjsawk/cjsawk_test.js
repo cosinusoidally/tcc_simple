@@ -1,6 +1,5 @@
 // f=read("test.c","binary");
 // f=read("../m2min_v3/m2min_v3.js","binary");
-f=read("./artifacts/m2min_v3.c","binary");
 
 var dbg;
 
@@ -14,11 +13,19 @@ if(dbg == true) {
   dprint = function (){};
 }
 
-function mks(s) {
+load("support.js");
+
+f=read("./artifacts/m2min_v3.c","binary");
+
+
+function mks_alt(s) {
   // dummy impl
   return s;
 }
 
+mks = mks_alt;
+
 load("cjsawk.js");
 
+init_support();
 main();
