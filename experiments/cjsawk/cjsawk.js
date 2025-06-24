@@ -405,19 +405,19 @@ function function_call(s) {
     emit_out(mks(" ")); no_indent = 1;
   }
   skip(mks(")"));
-  indented_emit_out("do_call %FUNCTION_");
+  indented_emit_out(mks("do_call %FUNCTION_"));
   emit_out(s);
-  emit_out(" ");
+  emit_out(mks(" "));
 
-  if(passed !=0) {
-    emit_out("cleanup_args_bytes %");
-    emit_out(int2str(4*passed, 10, TRUE));
-    emit_out("\n");
+  if(neq(passed, 0)) {
+    emit_out(mks("cleanup_args_bytes %"));
+    emit_out(int2str(mul(4, passed), 10, TRUE));
+    emit_out(mks("\n"));
   } else {
     no_indent = 1;
   }
   decrease_indent();
-  indented_emit_out(")\n");
+  indented_emit_out(mks(")\n"));
 }
 
 function primary_expr_variable() {
@@ -427,16 +427,16 @@ function primary_expr_variable() {
   nt();
   i = 0;
 
-  if(tok == "(") {
+  if(match(tok, mks("("))) {
     return function_call(s);
   }
 
   while(i < locals.length) {
-    if(locals[i]==s) {
+    if(match(locals[i], s)) {
       variable_load(s, FALSE);
       return;
     }
-    i = i + 1;
+    i = add(i, 1);
   }
   i = 0;
   while(i < args.length) {
