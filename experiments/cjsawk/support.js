@@ -1,4 +1,6 @@
 NULL = 0;
+FALSE = false;
+TRUE = true;
 
 load("support_libc.js");
 

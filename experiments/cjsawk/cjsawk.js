@@ -24,9 +24,6 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-FALSE = false;
-TRUE = true;
-
 var indent = 0;
 var no_indent = 0;
 
