@@ -281,7 +281,7 @@ function nt() {
 }
 
 function skip(s) {
-  if(eq(tok, s)) {
+  if(match(tok, s)) {
     nt();
     return;
   }
@@ -367,17 +367,17 @@ function collect_local() {
 }
 
 function variable_load(a, is_arg) {
-  indented_emit_out("local ");
-  if(is_arg == TRUE) {
+  indented_emit_out(mks("local "));
+  if(eq(is_arg, TRUE)) {
     emit_out("ARG_");
   } else {
-    emit_out("LOCAL_");
+    emit_out(mks("LOCAL_"));
   }
   emit_out(a);
-  emit_out(" ");
-  if(char0() != mkc('=')) {
+  emit_out(mks(" "));
+  if(neq(char0(), mkc('='))) {
     no_indent = 1;
-    emit_out("load ");
+    emit_out(mks("load "));
   }
 }
 
@@ -387,24 +387,24 @@ function function_call(s) {
   dprint("function call");
   nt();
 
-  indented_emit_out("(");
+  indented_emit_out(mks("("));
   increase_indent();
 
-  if(tok != ")") {
+  if(eq(0, match(tok, mks(")")))) {
     emit_out(mks(" ")); no_indent = 1;
     expression();
-    indented_emit_out("push_arg\n");
+    indented_emit_out(mks("push_arg\n"));
     passed = 1;
-    while(tok == ",") {
+    while(match(tok, mks(","))) {
       nt();
       expression();
-      indented_emit_out("push_arg\n");
-      passed = passed + 1;
+      indented_emit_out(mks("push_arg\n"));
+      passed = add(passed, 1);
     }
   } else {
     emit_out(mks(" ")); no_indent = 1;
   }
-  skip(")");
+  skip(mks(")"));
   indented_emit_out("do_call %FUNCTION_");
   emit_out(s);
   emit_out(" ");
