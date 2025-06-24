@@ -188,6 +188,7 @@ function f_str() {
   b = b.map(function(x){return String.fromCharCode(x)}).join("");
   dprint("tt: " + tt + " f_str " + b);
   tok = b;
+  tok_ = mk_c_string(b);
 }
 
 function get_id() {
