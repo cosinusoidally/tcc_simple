@@ -340,9 +340,9 @@ function to_hex_le(a) {
   o = [];
   while(lt(i, 4)) {
     o[(i*2) + 1] = to_hex_digit(a);
-    o[(i*2)] = to_hex_digit(a >>> 4);
-    a = a >>> 8;
-    i = i + 1;
+    o[(i*2)] = to_hex_digit(shr(a, 4));
+    a = shr(a, 8);
+    i = add(i, 1);
   }
   return (o.map(function(x){return String.fromCharCode(x);})).join("");
 }
