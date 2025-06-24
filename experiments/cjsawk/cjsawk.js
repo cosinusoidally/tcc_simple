@@ -53,6 +53,11 @@ var break_target_num;
    stack */
 var frame_bias;
 
+function match(a, b) {
+  /* fix me correct impl */
+  return (a == b) | 0;
+}
+
 function indented_emit_out(s) {
   var c;
   c = 0;
@@ -244,7 +249,7 @@ function get_string() {
 eof = FALSE;
 
 function nt() {
-  if(to >= f.length) {
+  if(gte(to, f.length)) {
     eof = TRUE;
     return FALSE;
   }
