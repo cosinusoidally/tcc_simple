@@ -679,17 +679,17 @@ function statement() {
     collect_local();
   } else if(match(tok, mks("if"))) {
     process_if();
-  } else if(tok == "while") {
+  } else if(match(tok, mks("while"))) {
     process_while();
-  } else if(tok == "asm") {
+  } else if(match(tok, mks("asm"))) {
     process_asm();
-  } else if(tok == "return") {
+  } else if(match(tok, mks("return"))) {
     return_result();
-  } else if(tok == "break") {
+  } else if(match(tok, mks("break"))) {
     process_break();
   } else {
     expression();
-    skip(";");
+    skip(mks(";"));
   }
 }
 
