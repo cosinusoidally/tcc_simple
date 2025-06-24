@@ -115,23 +115,20 @@ function is_comment() {
   return FALSE;
 }
 
-var c_fs = "//".charCodeAt(0);
-var c_star = "*".charCodeAt(0);
-
 function eat_comment() {
-  if(ch == c_fs) {
+  if(ch == mkc('/')) {
     nc();
-    if(ch == c_star) {
+    if(ch == mkc('*')) {
       nc();
     } else {
       return;
     }
     while(1) {
-      while(ch != c_star) {
+      while(ch != mkc('*')) {
         nc();
       }
       nc();
-      if(ch == c_fs) {
+      if(ch == mkc('/')) {
         nc();
         return;
       }
