@@ -160,14 +160,11 @@ function is_other() {
   return FALSE;
 }
 
-var c_ch = "'".charCodeAt(0);
-var c_bs = "\\".charCodeAt(0);
-
 function is_char() {
-  if(ch==c_ch) {
-    return true;
+  if(eq(ch, mkc('\''))) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 var c_str = "\"".charCodeAt(0);
@@ -222,7 +219,7 @@ function get_char() {
   tt = tt_char;
   ts = to - 1;
   nc();
-  if(ch == c_bs) {
+  if(ch == mkc('\\')) {
     nc();
   }
   nc();
