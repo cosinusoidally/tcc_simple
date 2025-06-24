@@ -791,8 +791,13 @@ function init_globals() {
 
 function join_list(l) {
   var o = [];
+  var c;
   for(var i = 0; i < l.length; i++) {
-    o.push(l[i]);
+    c = l[i];
+    if(typeof c == "number") {
+      c = mk_js_string(c);
+    }
+    o.push(c);
   }
   return o.join("");
 }
