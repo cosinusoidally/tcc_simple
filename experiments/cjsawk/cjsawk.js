@@ -53,7 +53,7 @@ var break_target_num;
    stack */
 var frame_bias;
 
-function match(a, b) {
+function match__(a, b) {
   /* fix me correct impl */
   return (a == b) | 0;
 }
@@ -308,7 +308,7 @@ function nt() {
 }
 
 function skip(s) {
-  if(match(tok, s)) {
+  if(match_(tok_, s)) {
     nt();
     return;
   }
@@ -327,7 +327,7 @@ function declare_global(t) {
   emit(mks(":GLOBAL_") , globals_list);
   emit(t, globals_list);
   emit(mks("\nNULL\n"), globals_list);
-  skip(mks(";"));
+  skip(mks_(";"));
 }
 
 strings_list = [];
@@ -389,7 +389,7 @@ function collect_local() {
   emit_out(mks("\n"));
   indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
-  skip(mks(";"));
+  skip(mks_(";"));
   dprint("locals: " +locals);
 }
 
@@ -431,7 +431,7 @@ function function_call(s) {
   } else {
     emit_out(mks(" ")); no_indent = 1;
   }
-  skip(mks(")"));
+  skip(mks_(")"));
   indented_emit_out(mks("do_call %FUNCTION_"));
   emit_out(s);
   emit_out(mks(" "));
@@ -454,12 +454,12 @@ function primary_expr_variable() {
   nt();
   i = 0;
 
-  if(match(tok, mks("("))) {
+  if(match_(tok_, mks_("("))) {
     return function_call(s);
   }
 
   while(lt(i, locals.length)) {
-    if(match(locals[i], s)) {
+    if(match_(mks_(locals[i]), mks_(s))) {
       variable_load(s, FALSE);
       return;
     }
@@ -467,7 +467,7 @@ function primary_expr_variable() {
   }
   i = 0;
   while(lt(i, args.length)) {
-    if(match(args[i], s)) {
+    if(match_(mks_(args[i]), mks_(s))) {
       variable_load(s, TRUE);
       return;
     }
@@ -559,7 +559,7 @@ function expression() {
   if(eq(char0(), mkc('('))) {
     nt();
     expression();
-    skip(mks(")"));
+    skip(mks_(")"));
   } else if(tt == tt_identifier) {
     primary_expr_variable();
   } else if(tt == tt_number) {
@@ -628,7 +628,7 @@ function process_while() {
   emit_out(mks(":WHILE_"));
   uniqueID_out(number_string);
   nt();
-  skip(mks("("));
+  skip(mks_("("));
   expression();
   indented_emit_out(mks("jump_false %END_WHILE_"));
   uniqueID_out(number_string);
@@ -651,17 +651,17 @@ function process_if() {
   emit_out(mks("# IF_"));
   uniqueID_out(number_string);
   nt();
-  skip(mks("("));
+  skip(mks_("("));
   expression();
   indented_emit_out(mks("jump_false %ELSE_"));
   uniqueID_out(number_string);
-  skip(mks(")"));
+  skip(mks_(")"));
   statement();
   indented_emit_out(mks("jump %_END_IF_"));
   uniqueID_out(number_string);
   emit_out(mks(":ELSE_"));
   uniqueID_out(number_string);
-  if(match(tok, mks("else"))) {
+  if(match_(tok_, mks_("else"))) {
     nt();
     statement();
   }
@@ -677,30 +677,30 @@ function process_break() {
   emit_out(mks("_"));
   emit_out(break_target_num);
   emit_out(mks("\n"));
-  skip(mks(";"));
+  skip(mks_(";"));
 }
 
 function process_asm() {
   nt();
-  skip(mks("("));
+  skip(mks_("("));
   while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
     emit_out(tok.slice(1,-1));
     emit_out(mks("\n"));
     nt();
   }
-  skip(mks(")"));
-  skip(mks(";"));
+  skip(mks_(")"));
+  skip(mks_(";"));
 }
 
 function statement() {
-  if(match(tok, mks("{"))) {
+  if(match_(tok_, mks_("{"))) {
     dprint("lcurly");
     nt();
     while(eq(0, match_(tok_, mks_("}")))) {
       statement();
     }
-    skip(mks("}"));
+    skip(mks_("}"));
     dprint("rcurly");
   } else if(or(match_(tok_, mks_("var")), match_(tok_, mks_("int")))) {
     collect_local();
@@ -716,7 +716,7 @@ function statement() {
     process_break();
   } else {
     expression();
-    skip(mks(";"));
+    skip(mks_(";"));
   }
 }
 
