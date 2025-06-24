@@ -744,7 +744,8 @@ function program() {
   nt();
 
   while(eq(0,eof)) {
-    if((tok == "int") || (tok == "var") || (tok == "function")) {
+    if(or(match(tok, mks("int")), or(match(tok, mks("var")),
+          match(tok, mks("function"))))) {
       nt(); ltok = tok;
       nt();
 
