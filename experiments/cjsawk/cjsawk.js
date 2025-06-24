@@ -136,14 +136,6 @@ function eat_comment() {
   }
 }
 
-var c_a = "a".charCodeAt(0);
-var c_z = "z".charCodeAt(0);
-var c_A = "A".charCodeAt(0);
-var c_Z = "Z".charCodeAt(0);
-var c__ = "_".charCodeAt(0);
-var c_0 = "0".charCodeAt(0);
-var c_9 = "9".charCodeAt(0);
-
 function is_id() {
   if(((ch>=mkc('a')) && (ch<=mkc('z')) ||
       (ch>=mkc('A')) && (ch<=mkc('Z'))) || (ch == mkc('_'))) {
@@ -153,12 +145,11 @@ function is_id() {
 }
 
 function is_num() {
-  if((ch>=mkc('0')) && (ch<=c_9)) {
+  if((ch>=mkc('0')) && (ch<=mkc('9'))) {
     return TRUE;
   }
   return FALSE;
 }
-
 
 var c_comma = ",".charCodeAt(0);
 var c_semi = ";".charCodeAt(0);
