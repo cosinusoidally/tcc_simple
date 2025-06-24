@@ -749,9 +749,9 @@ function program() {
       nt(); ltok = tok;
       nt();
 
-      if(tok == ";") {
+      if(match(tok, mks(";"))) {
         declare_global(ltok);
-      } else if(tok == "(") {
+      } else if(match(tok, mks("("))) {
         declare_function(ltok);
       } else {
         error();
@@ -769,11 +769,11 @@ function init_globals() {
 function main() {
   init_globals();
   program();
-  print("\n# Core program");
+  print(mks("\n# Core program"));
   print(output_list.join(""));
-  print("# Program global variables");
+  print(mks("# Program global variables"));
   print(globals_list.join(""));
-  print("# Program strings");
+  print(mks("# Program strings"));
   print(strings_list.join(""));
-  print(":ELF_end");
+  print(mks(":ELF_end"));
 }
