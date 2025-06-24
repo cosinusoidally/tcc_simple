@@ -675,9 +675,9 @@ function statement() {
     }
     skip(mks("}"));
     dprint("rcurly");
-  } else if(or(tok == "var", tok == "int")) {
+  } else if(or(match(tok, mks("var")), match(tok, mks("int")))) {
     collect_local();
-  } else if(tok == "if") {
+  } else if(match(tok, mks("if"))) {
     process_if();
   } else if(tok == "while") {
     process_while();
