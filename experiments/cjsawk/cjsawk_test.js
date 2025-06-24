@@ -23,7 +23,11 @@ function mks_alt(s) {
   return s;
 }
 
-mks = mks_alt;
+mks = function(s) {
+  var r;
+  r = mks_alt(s);
+  return r;
+}
 
 load("cjsawk.js");
 
