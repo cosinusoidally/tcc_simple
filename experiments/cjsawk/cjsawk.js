@@ -292,10 +292,10 @@ globals_list = [];
 
 function declare_global(t) {
   dprint("declare_global: " +t);
-  emit(":GLOBAL_" , globals_list);
+  emit(mks(":GLOBAL_") , globals_list);
   emit(t, globals_list);
-  emit("\nNULL\n", globals_list);
-  skip(";");
+  emit(mks("\nNULL\n"), globals_list);
+  skip(mks(";"));
 }
 
 strings_list = [];
