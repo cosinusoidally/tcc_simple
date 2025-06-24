@@ -152,8 +152,9 @@ function is_num() {
 }
 
 function is_other() {
-  if((ch==mkc(',')) || (ch==mkc(';')) || (ch==mkc('(')) || (ch==mkc(')')) ||
-     (ch==mkc('{')) || (ch==mkc('}')) || (ch==mkc('='))) {
+  if(or(eq(ch,mkc(',')),or(eq(ch,mkc(';')),or(eq(ch,mkc('(')),
+     or(eq(ch,mkc(')')),or(eq(ch,mkc('{')),or(eq(ch,mkc('}')),
+     eq(ch,mkc('='))))))))) {
     return TRUE;
   }
   return FALSE;
