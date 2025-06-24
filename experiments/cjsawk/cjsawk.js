@@ -24,22 +24,6 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// f=read("test.c","binary");
-// f=read("../m2min_v3/m2min_v3.js","binary");
-f=read("./artifacts/m2min_v3.c","binary");
-
-var dbg;
-
-if(dbg!=true) {
-  dbg = false;
-}
-
-if(dbg == true) {
-  dprint = print;
-} else {
-  dprint = function (){};
-}
-
 FALSE = false;
 TRUE = true;
 
@@ -79,11 +63,6 @@ function add(a,b) {
 
 function sub(a,b) {
   return a - b;
-}
-
-function mks(s) {
-  // dummy impl
-  return s;
 }
 
 function lt(a,b) {
