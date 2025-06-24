@@ -808,8 +808,8 @@ function main() {
   print(mks("\n# Core program"));
   print(join_list(output_list));
   print(mks("# Program global variables"));
-  print(globals_list.join(""));
+  print(join_list(globals_list));
   print(mks("# Program strings"));
-  print(strings_list.join(""));
+  print(join_list(strings_list));
   print(mks(":ELF_end"));
 }
