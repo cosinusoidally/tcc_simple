@@ -91,7 +91,7 @@ function nc() {
   }
 }
 
-function char0_() {
+function char0() {
   return mkc(tok[0]);
 }
 
@@ -375,7 +375,7 @@ function variable_load(a, is_arg) {
   }
   emit_out(a);
   emit_out(" ");
-  if(char0_() != mkc('=')) {
+  if(char0() != mkc('=')) {
     no_indent = 1;
     emit_out("load ");
   }
@@ -529,7 +529,7 @@ function primary_expr_string() {
 
 function expression() {
   dprint("expression");
-  if(char0_() == mkc('(')) {
+  if(char0() == mkc('(')) {
     nt();
     expression();
     skip(")");
@@ -545,7 +545,7 @@ function expression() {
     error();
   }
 
-  if(char0_() == mkc('=')) {
+  if(char0() == mkc('=')) {
     emit_out("push_address\n");
     nt();
     expression();
@@ -655,7 +655,7 @@ function process_break() {
 function process_asm() {
   nt();
   skip("(");
-  while(char0_() == mkc('"')) {
+  while(char0() == mkc('"')) {
 /* FIXME strip off quotes in a non-js way */
     emit_out(tok.slice(1,-1));
     emit_out("\n");
