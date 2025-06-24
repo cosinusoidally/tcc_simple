@@ -475,27 +475,27 @@ function escape_lookup(c) {
     c1 = mkc(c[2]);
     if(eq(c1, 0)) {
       return 0;
-    } else if(c1 == mkc('a')) {
+    } else if(eq(c1, mkc('a'))) {
       return 7;
-    } else if(c1 == mkc('b')) {
+    } else if(eq(c1, mkc('b'))) {
       return 8;
-    } else if(c1 == mkc('t')) {
+    } else if(eq(c1, mkc('t'))) {
       return 9;
-    } else if(c1 == mkc('n')) {
+    } else if(eq(c1, mkc('n'))) {
       return 10;
-    } else if(c1 == mkc('v')) {
+    } else if(eq(c1, mkc('v'))) {
       return 11;
-    } else if(c1 == mkc('f')) {
+    } else if(eq(c1, mkc('f'))) {
       return 12;
-    } else if(c1 == mkc('r')) {
+    } else if(eq(c1, mkc('r'))) {
       return 13;
-    } else if(c1 == mkc('e')) {
+    } else if(eq(c1, mkc('e'))) {
       return 27;
-    } else if(c1 == mkc('"')) {
+    } else if(eq(c1, mkc('"'))) {
       return 34;
-    } else if(c1 == mkc('\'')) {
+    } else if(eq(c1, mkc('\''))) {
       return 39;
-    } else if(c1 == mkc('\\')) {
+    } else if(eq(c1, mkc('\\'))) {
       return 92;
     }
     error();
@@ -505,9 +505,9 @@ function escape_lookup(c) {
 
 
 function primary_expr_char() {
-  emit_out("constant %");
+  emit_out(mks("constant %"));
   emit_out(int2str(escape_lookup(tok), 1), 10, TRUE);
-  emit_out(" ");
+  emit_out(mks(" "));
   nt();
 }
 
