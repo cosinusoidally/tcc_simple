@@ -741,7 +741,6 @@ function program() {
   var ltok;
 
   nc();
-
   nt();
 
   while(eq(0,eof)) {
