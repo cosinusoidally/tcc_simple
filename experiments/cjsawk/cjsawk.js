@@ -95,6 +95,10 @@ function char0() {
   return tok[0];
 }
 
+function char0_() {
+  return mkc(tok[0]);
+}
+
 function is_whitespace() {
   if(or(eq(ch, 32), eq(ch, 9))) {
     return TRUE;
@@ -375,7 +379,7 @@ function variable_load(a, is_arg) {
   }
   emit_out(a);
   emit_out(" ");
-  if(char0() != "=") {
+  if(char0_() != mkc('=')) {
     no_indent = 1;
     emit_out("load ");
   }
