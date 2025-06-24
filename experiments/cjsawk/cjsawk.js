@@ -167,13 +167,11 @@ function is_char() {
   return FALSE;
 }
 
-var c_str = "\"".charCodeAt(0);
-
 function is_string() {
-  if(ch==c_str) {
-    return true;
+  if(eq(ch, mkc('"'))) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 function f_str() {
@@ -232,7 +230,7 @@ function get_string() {
   tt = tt_string;
   ts = to - 1;
   nc();
-  while(ch != c_str) {
+  while(ch != mkc('"')) {
     nc();
   }
   te = to;
