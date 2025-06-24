@@ -797,12 +797,14 @@ function init_globals() {
   break_target_prefix = "END_WHILE_";
 }
 
-init_globals();
-program();
-print("\n# Core program");
-print(output_list.join(""));
-print("# Program global variables");
-print(globals_list.join(""));
-print("# Program strings");
-print(strings_list.join(""));
-print(":ELF_end");
+function main() {
+  init_globals();
+  program();
+  print("\n# Core program");
+  print(output_list.join(""));
+  print("# Program global variables");
+  print(globals_list.join(""));
+  print("# Program strings");
+  print(strings_list.join(""));
+  print(":ELF_end");
+}

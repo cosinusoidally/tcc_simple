@@ -20,3 +20,5 @@ function mks(s) {
 }
 
 load("cjsawk.js");
+
+main();
