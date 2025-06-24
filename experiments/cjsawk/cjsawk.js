@@ -699,28 +699,28 @@ function declare_function(t) {
   dprint("declare_function: " +t);
   current_count = 0;
   func = t;
-  if(t == "main") {
+  if(match(t, mks("main"))) {
     frame_bias = 1;
   } else {
     frame_bias = 0;
   }
   collect_arguments();
   nt();
-  if(tok == ";") {
+  if(match(tok, mks(";"))) {
     dprint("function_prototype skip");
-  } else if(tok == "{") {
+  } else if(match(tok, mks("{"))) {
     dprint("function_body");
-    emit_out(":FUNCTION_");
+    emit_out(mks(":FUNCTION_"));
     emit_out(t);
     increase_indent();
-    emit_out("\n");
-    for(i = args.length - 1; i > -1; i = i - 1) {
-      indented_emit_out("DEFINE ARG_");
+    emit_out(mks("\n"));
+    for(i = sub(args.length, 1); gt(i, sub(0,1)); i = sub(i, 1)) {
+      indented_emit_out(mks("DEFINE ARG_"));
       emit_out(args[i]);
-      emit_out(" ");
+      emit_out(mks(" "));
       /* FIXME explain this frame layout better */
-      emit_out(to_hex_le(-(i+1)*4));
-      emit_out("\n");
+      emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
+      emit_out(mks("\n"));
     }
     statement();
     if(output_list[output_list.length-1] !== "ret\n") {
