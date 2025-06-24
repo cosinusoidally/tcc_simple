@@ -91,10 +91,6 @@ function nc() {
   }
 }
 
-function char0() {
-  return tok[0];
-}
-
 function char0_() {
   return mkc(tok[0]);
 }
@@ -533,7 +529,7 @@ function primary_expr_string() {
 
 function expression() {
   dprint("expression");
-  if(char0() == "(") {
+  if(char0_() == mkc('(')) {
     nt();
     expression();
     skip(")");
@@ -549,7 +545,7 @@ function expression() {
     error();
   }
 
-  if(char0() == "=") {
+  if(char0_() == mkc('=')) {
     emit_out("push_address\n");
     nt();
     expression();
@@ -659,7 +655,7 @@ function process_break() {
 function process_asm() {
   nt();
   skip("(");
-  while(char0() == '"') {
+  while(char0_() == mkc('"')) {
 /* FIXME strip off quotes in a non-js way */
     emit_out(tok.slice(1,-1));
     emit_out("\n");
