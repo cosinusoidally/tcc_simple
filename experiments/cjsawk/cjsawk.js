@@ -545,15 +545,16 @@ function expression() {
     error();
   }
 
-  if(char0() == mkc('=')) {
-    emit_out("push_address\n");
+  if(eq(char0(), mkc('='))) {
+    emit_out(mks("push_address\n"));
     nt();
     expression();
-    indented_emit_out("store\n");
+    indented_emit_out(mks("store\n"));
   }
 }
 
 function int2str(a) {
+  /* FIXME this is cheating */
   return a.toString(10);
 }
 
