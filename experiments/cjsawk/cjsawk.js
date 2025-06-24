@@ -58,6 +58,32 @@ function match(a, b) {
   return (a == b) | 0;
 }
 
+function match_(a, b) {
+  var i;
+  if(and(eq(NULL, a), eq(NULL, b))) {
+    return TRUE;
+  }
+  if(eq(NULL, a)) {
+    return FALSE;
+  }
+  if(eq(NULL, b)) {
+    return FALSE;
+  }
+
+  i = sub(0, 1);
+  while(1) {
+    i = add(i, 1);
+    if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
+      return FALSE;
+    }
+    if(eq(0,and(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
+      break;
+    }
+  }
+  return TRUE;
+}
+
+
 function indented_emit_out(s) {
   var c;
   c = 0;
@@ -188,7 +214,7 @@ function f_str() {
   b = b.map(function(x){return String.fromCharCode(x)}).join("");
   dprint("tt: " + tt + " f_str " + b);
   tok = b;
-  tok_ = mk_c_string(b);
+  tok_ = mks_(b);
 }
 
 function get_id() {
@@ -315,7 +341,7 @@ function emit_out(s) {
 function collect_arguments() {
   args = [];
   nt();
-  while(eq(0, match(tok, mks(")")))) {
+  while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match(tok, mks(",")))) {
       args.push(tok);
     }
