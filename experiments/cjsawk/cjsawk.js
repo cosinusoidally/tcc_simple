@@ -460,9 +460,9 @@ function primary_expr_variable() {
 }
 
 function primary_expr_number() {
-  indented_emit_out("constant %");
+  indented_emit_out(mks("constant %"));
   emit_out(tok);
-  emit_out(" "); no_indent = 1;
+  emit_out(mks(" ")); no_indent = 1;
   nt();
 }
 
