@@ -151,14 +151,6 @@ function is_num() {
   return FALSE;
 }
 
-var c_comma = ",".charCodeAt(0);
-var c_semi = ";".charCodeAt(0);
-var c_lparen = "(".charCodeAt(0);
-var c_rparen = ")".charCodeAt(0);
-var c_lcurly = "{".charCodeAt(0);
-var c_rcurly = "}".charCodeAt(0);
-var c_eq = "=".charCodeAt(0);
-
 function is_other() {
   if((ch==mkc(',')) || (ch==mkc(';')) || (ch==mkc('(')) || (ch==mkc(')')) ||
      (ch==mkc('{')) || (ch==mkc('}')) || (ch==mkc('='))) {
