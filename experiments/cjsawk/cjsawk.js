@@ -187,8 +187,8 @@ function f_str() {
 
 function get_id() {
   tt = tt_identifier;
-  ts = to - 1;
-  while(is_num() || is_id()) {
+  ts = sub(to, 1);
+  while(or(is_num(), is_id())) {
     te = to;
     nc();
   }
@@ -197,7 +197,7 @@ function get_id() {
 
 function get_num() {
   tt = tt_number;
-  ts = to - 1;
+  ts = sub(to, 1);
   while(is_num()) {
     te = to;
     nc();
@@ -207,7 +207,7 @@ function get_num() {
 
 function get_other() {
   tt = tt_other;
-  ts = to - 1;
+  ts = sub(to, 1);
   te = to;
   nc();
   f_str();
@@ -215,9 +215,9 @@ function get_other() {
 
 function get_char() {
   tt = tt_char;
-  ts = to - 1;
+  ts = sub(to, 1);
   nc();
-  if(ch == mkc('\\')) {
+  if(eq(ch, mkc('\\'))) {
     nc();
   }
   nc();
@@ -228,9 +228,9 @@ function get_char() {
 
 function get_string() {
   tt = tt_string;
-  ts = to - 1;
+  ts = sub(to, 1);
   nc();
-  while(ch != mkc('"')) {
+  while(neq(ch, mkc('"'))) {
     nc();
   }
   te = to;
@@ -241,15 +241,15 @@ function get_string() {
   tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
 }
 
-eof = false;
+eof = FALSE;
 
 function nt() {
   if(to >= f.length) {
-    eof = true;
-    return false;
+    eof = TRUE;
+    return FALSE;
   }
 
-  while(is_whitespace() || is_comment()) {
+  while(or(is_whitespace(), is_comment())) {
     if(is_whitespace()) {
       eat_whitespace();
     } else if(is_comment()) {
@@ -276,7 +276,7 @@ function nt() {
 }
 
 function skip(s) {
-  if(tok == s) {
+  if(eq(tok, s)) {
     nt();
     return;
   }
