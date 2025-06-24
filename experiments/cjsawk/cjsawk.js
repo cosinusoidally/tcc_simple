@@ -145,18 +145,18 @@ var c_0 = "0".charCodeAt(0);
 var c_9 = "9".charCodeAt(0);
 
 function is_id() {
-  if(((ch>=c_a) && (ch<=c_z) ||
-      (ch>=c_A) && (ch<=c_Z)) || (ch == c__)) {
-    return true;
+  if(((ch>=mkc('a')) && (ch<=mkc('z')) ||
+      (ch>=mkc('A')) && (ch<=mkc('Z'))) || (ch == mkc('_'))) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 function is_num() {
-  if((ch>=c_0) && (ch<=c_9)) {
-    return true;
+  if((ch>=mkc('0')) && (ch<=c_9)) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 
