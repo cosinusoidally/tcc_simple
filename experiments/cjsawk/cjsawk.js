@@ -80,9 +80,9 @@ function increase_indent() {
 
 function nc() {
   ch=f[to];
-  to=to+1;
-  if(ch == 10) {
-    ln = ln + 1;
+  to = add(to, 1);
+  if(eq(ch, 10)) {
+    ln = add(ln, 1);
   }
 }
 
@@ -91,15 +91,15 @@ function char0() {
 }
 
 function is_whitespace() {
-  if((ch == 32) || (ch == 9)) {
-    return true;
+  if(or(eq(ch, 32), eq(ch, 9))) {
+    return TRUE;
   }
 
-  if(ch == 10) {
-    return true;
+  if(eq(ch, 10)) {
+    return TRUE;
   }
 
-  return false;
+  return FALSE;
 }
 
 function eat_whitespace() {
@@ -109,10 +109,10 @@ function eat_whitespace() {
 }
 
 function is_comment() {
-  if(ch == c_fs) {
-    return true;
+  if(eq(ch, mkc('/'))) {
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 var c_fs = "//".charCodeAt(0);
