@@ -470,8 +470,8 @@ function escape_lookup(c) {
   /* fixme this should do the correct char lookup */
   var c0;
   var c1;
-  c0 = c[1];
-  if(c0 == "\\") {
+  c0 = mkc(c[1]);
+  if(eq(c0, mkc('\\'))) {
     c1 = c[2];
     if(c1 == 0) {
       return 0;
@@ -500,7 +500,7 @@ function escape_lookup(c) {
     }
     error();
   }
-  return c0.charCodeAt(0);
+  return c0;
 }
 
 
