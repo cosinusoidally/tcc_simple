@@ -6,6 +6,6 @@ cat ../m2min_v3/m2min_v3.js >> artifacts/m2min_v3.c
 cat ../m2min_v3/simple_support_js_m2.js >> artifacts/m2min_v3.c
 cat ../m2min_v3/simple_support_js_m2_prims.c >> artifacts/m2min_v3.c
 
-time js ../m2min_v3/node_compat_min.js cjsawk.js > ./artifacts/out.M1
+time js ../m2min_v3/node_compat_min.js cjsawk_ref.js > ./artifacts/out.M1
 diff -u -s ./artifacts/out.M1 ../m2min_v3/m2min_v3.M1
 echo DONE
