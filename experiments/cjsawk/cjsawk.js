@@ -733,9 +733,9 @@ function declare_function(t) {
   }
   collect_arguments();
   nt();
-  if(match(tok, mks(";"))) {
+  if(match_(tok_, mks_(";"))) {
     dprint("function_prototype skip");
-  } else if(match(tok, mks("{"))) {
+  } else if(match_(tok_, mks_("{"))) {
     dprint("function_body");
     emit_out(mks(":FUNCTION_"));
     emit_out(func);
@@ -750,7 +750,7 @@ function declare_function(t) {
       emit_out(mks("\n"));
     }
     statement();
-    if(eq(0, match(output_list[sub(output_list.length,1)], mks("ret\n")))) {
+    if(eq(0, match_(mks_(output_list[sub(output_list.length,1)]), mks_("ret\n")))) {
       cleanup_locals();
       indented_emit_out(mks("ret\n"));
     }
@@ -772,14 +772,14 @@ function program() {
   nt();
 
   while(eq(0,eof)) {
-    if(or(match(tok, mks("int")), or(match(tok, mks("var")),
-          match(tok, mks("function"))))) {
+    if(or(match_(tok_, mks_("int")), or(match_(tok_, mks_("var")),
+          match_(tok_, mks_("function"))))) {
       nt(); ltok = tok; ltok_ = tok_;
       nt();
 
-      if(match(tok, mks(";"))) {
+      if(match_(tok_, mks_(";"))) {
         declare_global(ltok);
-      } else if(match(tok, mks("("))) {
+      } else if(match_(tok_, mks_("("))) {
         declare_function(ltok_);
       } else {
         error();
