@@ -596,22 +596,22 @@ function process_while() {
   nested_break_num = break_target_num;
   dprint("process_while");
   number_string = int2str(current_count, 10, TRUE);
-  current_count = current_count + 1;
+  current_count = add(current_count, 1);
   break_target_num = number_string;
-  emit_out(":WHILE_");
+  emit_out(mks(":WHILE_"));
   uniqueID_out(number_string);
   nt();
-  skip("(");
+  skip(mks("("));
   expression();
-  indented_emit_out("jump_false %END_WHILE_");
+  indented_emit_out(mks("jump_false %END_WHILE_"));
   uniqueID_out(number_string);
-  emit_out("# THEN_while_");
+  emit_out(mks("# THEN_while_"));
   uniqueID_out(number_string);
   nt(); /* skip ) */
   statement();
-  indented_emit_out("jump %WHILE_");
+  indented_emit_out(mks("jump %WHILE_"));
   uniqueID_out(number_string);
-  emit_out(":END_WHILE_");
+  emit_out(mks(":END_WHILE_"));
   uniqueID_out(number_string);
   break_target_num = nested_break_num;
 }
@@ -620,8 +620,8 @@ function process_if() {
   var number_string;
   dprint("process_if");
   number_string = int2str(current_count, 10, TRUE);
-  current_count = current_count + 1;
-  emit_out("# IF_");
+  current_count = add(current_count, 1);
+  emit_out(mks("# IF_"));
   uniqueID_out(number_string);
   nt();
   skip("(");
