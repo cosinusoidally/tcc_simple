@@ -137,8 +137,8 @@ function eat_comment() {
 }
 
 function is_id() {
-  if((and(gte(ch, mkc('a')), lte(ch, mkc('z'))) ||
-      gte(ch, mkc('A')) && lte(ch, mkc('Z'))) || eq(ch, mkc('_'))) {
+  if(and(gte(ch, mkc('a')), lte(ch, mkc('z'))) ||
+     and(gte(ch, mkc('A')), lte(ch, mkc('Z'))) || eq(ch, mkc('_'))) {
     return TRUE;
   }
   return FALSE;
