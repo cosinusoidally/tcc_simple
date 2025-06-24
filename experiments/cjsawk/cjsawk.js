@@ -789,11 +789,19 @@ function init_globals() {
   break_target_prefix = mks("END_WHILE_");
 }
 
+function join_list(l) {
+  var o = [];
+  for(var i = 0; i < l.length; i++) {
+    o.push(l[i]);
+  }
+  return o.join("");
+}
+
 function main() {
   init_globals();
   program();
   print(mks("\n# Core program"));
-  print(output_list.join(""));
+  print(join_list(output_list));
   print(mks("# Program global variables"));
   print(globals_list.join(""));
   print(mks("# Program strings"));
