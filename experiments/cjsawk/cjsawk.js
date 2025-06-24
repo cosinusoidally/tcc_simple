@@ -514,14 +514,14 @@ function primary_expr_char() {
 function primary_expr_string() {
   var number_string;
   number_string = int2str(current_count, 10, TRUE);
-  current_count = current_count + 1;
-  emit(":STRING_", strings_list);
+  current_count = add(current_count, 1);
+  emit(mks(":STRING_"), strings_list);
   uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
-  emit("\n", strings_list);
+  emit(mks("\n"), strings_list);
 
-  indented_emit_out("constant &STRING_");
+  indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
 
   nt();
@@ -529,10 +529,10 @@ function primary_expr_string() {
 
 function expression() {
   dprint("expression");
-  if(char0() == mkc('(')) {
+  if(eq(char0(), mkc('('))) {
     nt();
     expression();
-    skip(")");
+    skip(mks(")"));
   } else if(tt == "identifier") {
     primary_expr_variable();
   } else if(tt == "number") {
