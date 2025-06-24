@@ -53,11 +53,6 @@ var break_target_num;
    stack */
 var frame_bias;
 
-function match__(a, b) {
-  /* fix me correct impl */
-  return (a == b) | 0;
-}
-
 function match_(a, b) {
   var i;
   if(and(eq(NULL, a), eq(NULL, b))) {
