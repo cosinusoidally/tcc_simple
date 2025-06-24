@@ -533,13 +533,13 @@ function expression() {
     nt();
     expression();
     skip(mks(")"));
-  } else if(tt == "identifier") {
+  } else if(tt == tt_identifier) {
     primary_expr_variable();
-  } else if(tt == "number") {
+  } else if(tt == tt_number) {
     primary_expr_number();
-  } else if(tt == "char") {
+  } else if(tt == tt_char) {
     primary_expr_char();
-  } else if(tt == "string") {
+  } else if(tt == tt_string) {
     primary_expr_string();
   } else {
     error();
