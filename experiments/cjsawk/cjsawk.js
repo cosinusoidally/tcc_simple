@@ -472,30 +472,30 @@ function escape_lookup(c) {
   var c1;
   c0 = mkc(c[1]);
   if(eq(c0, mkc('\\'))) {
-    c1 = c[2];
-    if(c1 == 0) {
+    c1 = mkc(c[2]);
+    if(eq(c1, 0)) {
       return 0;
-    } else if(c1 == 'a') {
+    } else if(c1 == mkc('a')) {
       return 7;
-    } else if(c1 == 'b') {
+    } else if(c1 == mkc('b')) {
       return 8;
-    } else if(c1 == 't') {
+    } else if(c1 == mkc('t')) {
       return 9;
-    } else if(c1 == 'n') {
+    } else if(c1 == mkc('n')) {
       return 10;
-    } else if(c1 == 'v') {
+    } else if(c1 == mkc('v')) {
       return 11;
-    } else if(c1 == 'f') {
+    } else if(c1 == mkc('f')) {
       return 12;
-    } else if(c1 == 'r') {
+    } else if(c1 == mkc('r')) {
       return 13;
-    } else if(c1 == 'e') {
+    } else if(c1 == mkc('e')) {
       return 27;
-    } else if(c1 == '"') {
+    } else if(c1 == mkc('"')) {
       return 34;
-    } else if(c1 == '\'') {
+    } else if(c1 == mkc('\'')) {
       return 39;
-    } else if(c1 == '\\') {
+    } else if(c1 == mkc('\\')) {
       return 92;
     }
     error();
