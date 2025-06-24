@@ -49,8 +49,7 @@ function gt(a, b){
 function lte(a, b){
   a = a | 0;
   b = b | 0;
-/*	return a <= b; */
-  err();
+  return (a <= b) | 0;
 }
 
 function gte(a, b){

@@ -145,7 +145,7 @@ function is_id() {
 }
 
 function is_num() {
-  if((ch>=mkc('0')) && (ch<=mkc('9'))) {
+  if(and(gte(ch, mkc('0')), lte(ch,mkc('9')))) {
     return TRUE;
   }
   return FALSE;
