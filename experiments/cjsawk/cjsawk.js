@@ -116,19 +116,19 @@ function is_comment() {
 }
 
 function eat_comment() {
-  if(ch == mkc('/')) {
+  if(eq(ch, mkc('/'))) {
     nc();
-    if(ch == mkc('*')) {
+    if(eq(ch, mkc('*'))) {
       nc();
     } else {
       return;
     }
     while(1) {
-      while(ch != mkc('*')) {
+      while(neq(ch, mkc('*'))) {
         nc();
       }
       nc();
-      if(ch == mkc('/')) {
+      if(eq(ch, mkc('/'))) {
         nc();
         return;
       }
