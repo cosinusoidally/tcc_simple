@@ -342,7 +342,7 @@ function collect_arguments() {
   args = [];
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
-    if(eq(0, match(tok, mks(",")))) {
+    if(eq(0, match_(tok_, mks_(",")))) {
       args.push(tok);
     }
     nt();
@@ -417,12 +417,12 @@ function function_call(s) {
   indented_emit_out(mks("("));
   increase_indent();
 
-  if(eq(0, match(tok, mks(")")))) {
+  if(eq(0, match_(tok_, mks_(")")))) {
     emit_out(mks(" ")); no_indent = 1;
     expression();
     indented_emit_out(mks("push_arg\n"));
     passed = 1;
-    while(match(tok, mks(","))) {
+    while(match_(tok_, mks_(","))) {
       nt();
       expression();
       indented_emit_out(mks("push_arg\n"));
@@ -479,7 +479,7 @@ function primary_expr_variable() {
   indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
   emit_out(mks(" "));
-  if(match(tok, mks("="))) {
+  if(match_(tok_, mks_("="))) {
     return;
   }
   no_indent = 1;
@@ -598,7 +598,7 @@ function cleanup_locals() {
 
 function return_result() {
   nt();
-  if(eq(0, match(tok, mks(";")))) {
+  if(eq(0, match_(tok_, mks_(";")))) {
     expression();
   }
   cleanup_locals();
@@ -697,22 +697,22 @@ function statement() {
   if(match(tok, mks("{"))) {
     dprint("lcurly");
     nt();
-    while(eq(0, match(tok, mks("}")))) {
+    while(eq(0, match_(tok_, mks_("}")))) {
       statement();
     }
     skip(mks("}"));
     dprint("rcurly");
-  } else if(or(match(tok, mks("var")), match(tok, mks("int")))) {
+  } else if(or(match_(tok_, mks_("var")), match_(tok_, mks_("int")))) {
     collect_local();
-  } else if(match(tok, mks("if"))) {
+  } else if(match_(tok_, mks_("if"))) {
     process_if();
-  } else if(match(tok, mks("while"))) {
+  } else if(match_(tok_, mks_("while"))) {
     process_while();
-  } else if(match(tok, mks("asm"))) {
+  } else if(match_(tok_, mks_("asm"))) {
     process_asm();
-  } else if(match(tok, mks("return"))) {
+  } else if(match_(tok_, mks_("return"))) {
     return_result();
-  } else if(match(tok, mks("break"))) {
+  } else if(match_(tok_, mks_("break"))) {
     process_break();
   } else {
     expression();
@@ -725,8 +725,8 @@ function declare_function(t) {
   locals = [];
   dprint("declare_function: " +t);
   current_count = 0;
-  func = t;
-  if(match(t, mks("main"))) {
+  func = mk_js_string(t);
+  if(match_(t, mks_("main"))) {
     frame_bias = 1;
   } else {
     frame_bias = 0;
@@ -738,7 +738,7 @@ function declare_function(t) {
   } else if(match(tok, mks("{"))) {
     dprint("function_body");
     emit_out(mks(":FUNCTION_"));
-    emit_out(t);
+    emit_out(func);
     increase_indent();
     emit_out(mks("\n"));
     for(i = sub(args.length, 1); gt(i, sub(0,1)); i = sub(i, 1)) {
@@ -766,6 +766,7 @@ function error() {
 
 function program() {
   var ltok;
+  var ltok_;
 
   nc();
   nt();
@@ -773,13 +774,13 @@ function program() {
   while(eq(0,eof)) {
     if(or(match(tok, mks("int")), or(match(tok, mks("var")),
           match(tok, mks("function"))))) {
-      nt(); ltok = tok;
+      nt(); ltok = tok; ltok_ = tok_;
       nt();
 
       if(match(tok, mks(";"))) {
         declare_global(ltok);
       } else if(match(tok, mks("("))) {
-        declare_function(ltok);
+        declare_function(ltok_);
       } else {
         error();
       }
