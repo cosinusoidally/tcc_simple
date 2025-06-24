@@ -561,7 +561,7 @@ function int2str(a) {
 function cleanup_locals() {
   var c;
   c = locals.length;
-  if(c > 0) {
+  if(gt(c, 0)) {
     indented_emit_out("cleanup_locals_bytes %");
     emit_out(int2str(4*c, 10 , TRUE));
     emit_out(" ");
@@ -571,19 +571,19 @@ function cleanup_locals() {
 
 function return_result() {
   nt();
-  if(tok != ";") {
+  if(eq(0, match(tok, mks(";")))) {
     expression();
   }
   cleanup_locals();
-  indented_emit_out("ret\n");
+  indented_emit_out(mks("ret\n"));
   nt();
 }
 
 function uniqueID(id, l) {
   emit(func, l);
-  emit("_", l);
+  emit(mks("_"), l);
   emit(int2str(id, 10, TRUE), l);
-  emit("\n", l);
+  emit(mks("\n"), l);
 }
 
 function uniqueID_out(id) {
