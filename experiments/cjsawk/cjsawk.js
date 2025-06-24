@@ -624,58 +624,58 @@ function process_if() {
   emit_out(mks("# IF_"));
   uniqueID_out(number_string);
   nt();
-  skip("(");
+  skip(mks("("));
   expression();
-  indented_emit_out("jump_false %ELSE_");
+  indented_emit_out(mks("jump_false %ELSE_"));
   uniqueID_out(number_string);
-  skip(")");
+  skip(mks(")"));
   statement();
-  indented_emit_out("jump %_END_IF_");
+  indented_emit_out(mks("jump %_END_IF_"));
   uniqueID_out(number_string);
-  emit_out(":ELSE_");
+  emit_out(mks(":ELSE_"));
   uniqueID_out(number_string);
-  if(tok == "else") {
+  if(match(tok, mks("else"))) {
     nt();
     statement();
   }
-  emit_out(":_END_IF_");
+  emit_out(mks(":_END_IF_"));
   uniqueID_out(number_string);
 }
 
 function process_break() {
   nt();
-  indented_emit_out("jump %");
+  indented_emit_out(mks("jump %"));
   emit_out(break_target_prefix);
   emit_out(func);
-  emit_out("_");
+  emit_out(mks("_"));
   emit_out(break_target_num);
-  emit_out("\n");
-  skip(";");
+  emit_out(mks("\n"));
+  skip(mks(";"));
 }
 
 function process_asm() {
   nt();
-  skip("(");
-  while(char0() == mkc('"')) {
+  skip(mks("("));
+  while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
     emit_out(tok.slice(1,-1));
-    emit_out("\n");
+    emit_out(mks("\n"));
     nt();
   }
-  skip(")");
-  skip(";");
+  skip(mks(")"));
+  skip(mks(";"));
 }
 
 function statement() {
-  if(tok == "{") {
+  if(match(tok, mks("{"))) {
     dprint("lcurly");
     nt();
-    while(tok != "}") {
+    while(eq(0, match(tok, mks("}")))) {
       statement();
     }
-    skip("}");
+    skip(mks("}"));
     dprint("rcurly");
-  } else if(tok == "var" || tok == "int") {
+  } else if(or(tok == "var", tok == "int")) {
     collect_local();
   } else if(tok == "if") {
     process_if();
