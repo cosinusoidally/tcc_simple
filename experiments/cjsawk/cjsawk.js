@@ -53,19 +53,6 @@ var break_target_num;
    stack */
 var frame_bias;
 
-
-function add(a,b) {
-  return a + b;
-}
-
-function sub(a,b) {
-  return a - b;
-}
-
-function lt(a,b) {
-  return a < b;
-}
-
 function indented_emit_out(s) {
   var c;
   c = 0;
