@@ -291,7 +291,7 @@ function get_string() {
   f_str();
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
-  tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0] + '"');
+  tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0]);
 }
 
 function nt() {
@@ -618,7 +618,7 @@ function primary_expr_string() {
   uniqueID_(number_string, strings_list);
 
   emit(tok, strings_list);
-  emit(mks("\n"), strings_list);
+  emit(mks("\"\n"), strings_list);
 
   indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
@@ -781,8 +781,8 @@ function process_asm() {
   nt();
   skip(mks("("));
   while(eq(char0(), mkc('"'))) {
-/* FIXME strip off quotes in a non-js way */
-    emit_out(mks(mk_js_string(tok).slice(1,-1)));
+    /* strip off leading quote */
+    emit_out(add(tok, 1));
     emit_out(mks("\n"));
     nt();
   }
