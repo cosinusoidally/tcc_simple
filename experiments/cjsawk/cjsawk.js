@@ -30,7 +30,7 @@ var no_indent = 0;
 to=0;
 ts=0;
 te=0;
-ch=f[0];
+var ch;
 
 ln=1;
 
