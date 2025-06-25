@@ -338,21 +338,20 @@ function emit_out(s) {
 }
 
 function args_reset() {
-  args_ = [];
   args_.len = 0;
 }
 
-function args_push(v) {
-  args_.push(v);
-  args_.len = add(args_.len, 1);
+function args_push32(v) {
+  args_[args_.len] = v;
+  args_.len = add(args_.len, 4);
 }
 
-function args_get(o) {
-  return args_[o];
+function args_get32(o) {
+  return args_[mul(o,4)];
 }
 
-function args_length() {
-  return args_.len;
+function args_len32() {
+  return div(args_.len, 4);
 }
 
 function collect_arguments() {
@@ -360,7 +359,7 @@ function collect_arguments() {
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match_(tok_, mks_(",")))) {
-      args_push(tok_);
+      args_push32(tok_);
     }
     nt();
   }
@@ -406,7 +405,7 @@ function collect_local() {
   emit_out(tok_);
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(args_length(),locals.length),frame_bias)),4))));
+  emit_out(to_hex_le(sub(0,mul(add(1,add(add(args_len32(),locals.length),frame_bias)),4))));
   emit_out(mks_("\n"));
   indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
@@ -487,8 +486,8 @@ function primary_expr_variable() {
     i = add(i, 1);
   }
   i = 0;
-  while(lt(i, args_length())) {
-    if(match_(args_get(i), s)) {
+  while(lt(i, args_len32())) {
+    if(match_(args_get32(i), s)) {
       variable_load(s, TRUE);
       return;
     }
@@ -787,10 +786,10 @@ function declare_function(t) {
     emit_out(func);
     increase_indent();
     emit_out(mks_("\n"));
-    i = sub(args_length(), 1);
+    i = sub(args_len32(), 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
-      emit_out(args_get(i));
+      emit_out(args_get32(i));
       emit_out(mks_(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
@@ -839,6 +838,7 @@ function program() {
 
 function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
+  args_ = [];
 }
 
 function join_list(l) {
