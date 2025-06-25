@@ -53,6 +53,23 @@ var break_target_num;
    stack */
 var frame_bias;
 
+function ri32(o) {
+  return or(or(and(ri8(o), 255),
+            shl(and(ri8(add(o, 1)), 255), 8)),
+            or(shl(and(ri8(add(o, 2)), 255), 16),
+            shl(and(ri8(add(o, 3)), 255), 24)));
+}
+
+function wi32(o, v) {
+  wi8(o, and(v, 255));
+  v = shr(v, 8);
+  wi8(add(o, 1), and(v, 255));
+  v = shr(v, 8);
+  wi8(add(o, 2), and(v, 255));
+  v = shr(v, 8);
+  wi8(add(o, 3), and(v, 255));
+}
+
 function match_(a, b) {
   var i;
   if(and(eq(NULL, a), eq(NULL, b))) {
@@ -383,6 +400,7 @@ function ra_push32(r, v) {
     ra_grow(r);
   }
   r.data[r.len] = v;
+  wi32(add(r.data_raw, r.len), v);
   r.len = add(r.len, 4);
 }
 
