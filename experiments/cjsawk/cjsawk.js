@@ -228,7 +228,6 @@ function f_str() {
     wi8(add(b2, sub(i, ts)), f[i]);
     i = add(i, 1);
   }
-  tok = mk_js_string(b2);
   tok_ = b2;
   tok = b2;
 }
