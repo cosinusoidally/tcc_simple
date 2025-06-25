@@ -55,6 +55,12 @@ var frame_bias;
 
 eof = FALSE;
 
+var strings_list;
+var output_list;
+var globals_list;
+var args;
+var locals;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -337,7 +343,6 @@ function emit_(s, l) {
   emit(s,l);
 }
 
-var globals_list;
 
 function declare_global(t) {
   dprint("declare_global: " +t);
@@ -346,11 +351,6 @@ function declare_global(t) {
   emit_(mks("\nNULL\n"), globals_list);
   skip(mks(";"));
 }
-
-var strings_list;
-
-var output_list;
-// output_list = [];
 
 function emit_out(s) {
   emit(s, output_list);
@@ -865,7 +865,6 @@ function error() {
   print("line: " + ln + " tok: " + tok);
   exit(1);
 }
-
 
 function program() {
   var ltok;
