@@ -337,16 +337,24 @@ function emit_out(s) {
   output_list.push(s);
 }
 
-function reset_args() {
+function args_reset() {
   args = [];
 }
 
+function args_push(v) {
+  args.push(v);
+}
+
+function args_get(o) {
+  return args[o];
+}
+
 function collect_arguments() {
-  reset_args();
+  args_reset();
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match_(tok_, mks_(",")))) {
-      args.push(tok_);
+      args_push(tok_);
     }
     nt();
   }
@@ -474,7 +482,7 @@ function primary_expr_variable() {
   }
   i = 0;
   while(lt(i, args.length)) {
-    if(match_(args[i], s)) {
+    if(match_(args_get(i), s)) {
       variable_load(s, TRUE);
       return;
     }
@@ -776,7 +784,7 @@ function declare_function(t) {
     i = sub(args.length, 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
-      emit_out(args[i]);
+      emit_out(args_get(i));
       emit_out(mks_(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
