@@ -723,7 +723,7 @@ function declare_function(t) {
   locals = [];
   dprint("declare_function: " +t);
   current_count = 0;
-  func = mk_js_string(t);
+  func = t;
   if(match_(t, mks_("main"))) {
     frame_bias = 1;
   } else {
@@ -735,17 +735,17 @@ function declare_function(t) {
     dprint("function_prototype skip");
   } else if(match_(tok_, mks_("{"))) {
     dprint("function_body");
-    emit_out(mks(":FUNCTION_"));
+    emit_out(mks_(":FUNCTION_"));
     emit_out(func);
     increase_indent();
-    emit_out(mks("\n"));
+    emit_out(mks_("\n"));
     for(i = sub(args.length, 1); gt(i, sub(0,1)); i = sub(i, 1)) {
-      indented_emit_out(mks("DEFINE ARG_"));
+      indented_emit_out(mks_("DEFINE ARG_"));
       emit_out(args[i]);
       emit_out(mks(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
-      emit_out(mks("\n"));
+      emit_out(mks_("\n"));
     }
     statement();
     if(eq(0, match_(output_list[sub(output_list.length,1)], mks_("ret\n")))) {
