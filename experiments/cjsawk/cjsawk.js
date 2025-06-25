@@ -61,6 +61,8 @@ var globals_list;
 var args;
 var locals;
 
+var hold_string;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -401,12 +403,24 @@ function ra_push32(r, v) {
   r.len = add(r.len, 4);
 }
 
+function ra_push8(r, v) {
+  if(gt(add(r.len, 4), ra_capacity_g(r))) {
+    ra_grow(r);
+  }
+  wi32(add(r.data_raw, r.len), and(v, 255));
+  r.len = add(r.len, 1);
+}
+
 function ra_get32(r, o) {
   return ri32(add(r.data_raw, mul(o,4)));
 }
 
 function ra_len32(r) {
   return div(r.len, 4);
+}
+
+function ra_data_g(r) {
+  return r.data_raw;
 }
 
 function collect_arguments() {
@@ -893,6 +907,7 @@ function init_globals() {
   globals_list = ra_new();
   strings_list = ra_new();
   output_list = ra_new();
+  hold_string = ra_new();
 
   indent = 0;
   no_indent = 0;
