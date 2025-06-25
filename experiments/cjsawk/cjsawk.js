@@ -887,12 +887,30 @@ function program() {
 }
 
 function init_globals() {
-  break_target_prefix = mks("END_WHILE_");
   args = ra_new();
   locals = ra_new();
   globals_list = ra_new();
   strings_list = ra_new();
   output_list = ra_new();
+
+  indent = 0;
+  no_indent = 0;
+
+  to=0;
+  ts=0;
+  te=0;
+
+  ln=1;
+
+  tt_identifier = mks("identifier");
+  tt_number = mks("number");
+  tt_char = mks("char");
+  tt_string = mks("string");
+  tt_other = mks("other");
+
+  break_target_prefix = mks("END_WHILE_");
+
+  eof = FALSE;
 }
 
 function join_list(l) {
