@@ -350,7 +350,6 @@ function declare_global(t) {
   skip(mks_(";"));
 }
 
-strings_list = [];
 var strings_list_;
 
 output_list = [];
@@ -619,11 +618,6 @@ function primary_expr_string() {
   var number_string;
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
-  emit(mks_(":STRING_"), strings_list);
-  uniqueID(number_string, strings_list);
-
-  emit(tok_, strings_list);
-  emit(mks_("\n"), strings_list);
 
   emit_(mks_(":STRING_"), strings_list_);
   uniqueID_(number_string, strings_list_);
