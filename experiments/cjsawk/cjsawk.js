@@ -366,6 +366,7 @@ function to_hex_digit(a) {
 function to_hex_le(a) {
   var o;
   var i;
+  var t;
   i = 0;
   o = [];
   while(lt(i, 4)) {
@@ -374,7 +375,8 @@ function to_hex_le(a) {
     a = shr(a, 8);
     i = add(i, 1);
   }
-  return (o.map(function(x){return String.fromCharCode(x);})).join("");
+  t = mks_(o.map(function(x){return String.fromCharCode(x);}).join(""));
+  return t;
 }
 
 function locals_push(s) {
