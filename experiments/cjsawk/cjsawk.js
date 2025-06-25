@@ -402,6 +402,13 @@ function ra_push32(r, v) {
   r.len = add(r.len, 4);
 }
 
+function ra_get32(r, o) {
+  return ri32(add(r.data_raw, mul(o,4)));
+}
+
+function ra_len32(r) {
+  return div(r.len, 4);
+}
 
 function args_reset() {
   ra_reset(args_);
@@ -412,11 +419,11 @@ function args_push32(v) {
 }
 
 function args_get32(o) {
-  return ri32(add(args_.data_raw, mul(o,4)));
+  return ra_get32(args_, o);
 }
 
 function args_len32() {
-  return div(args_.len, 4);
+  return ra_len32(args_);
 }
 
 function collect_arguments() {
