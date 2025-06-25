@@ -377,11 +377,13 @@ function to_hex_le(a) {
     d1 = add(d2, 1);
     o[d1] = to_hex_digit(a);
     o[d2] = to_hex_digit(shr(a, 4));
+    wi8(add(o2, d1), to_hex_digit(a));
+    wi8(add(o2, d2), to_hex_digit(shr(a, 4)));
     a = shr(a, 8);
     i = add(i, 1);
   }
   t = mks_(o.map(function(x){return String.fromCharCode(x);}).join(""));
-  return t;
+  return o2;
 }
 
 function locals_push(s) {
