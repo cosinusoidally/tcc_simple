@@ -952,6 +952,6 @@ function main() {
   print("# Program global variables");
   print(join_list_(globals_list));
   print("# Program strings");
-  print(join_list(strings_list));
+  print(join_list_(strings_list_));
   print(":ELF_end");
 }
