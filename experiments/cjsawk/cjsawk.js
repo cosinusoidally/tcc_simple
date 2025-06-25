@@ -86,7 +86,7 @@ function indented_emit_out(s) {
     no_indent = 0;
   } else {
     while(lt(c, indent)) {
-      emit_out(mks(" "));
+      emit_out(mks_(" "));
       c = add(c, 1);
     }
   }
@@ -319,9 +319,9 @@ globals_list = [];
 
 function declare_global(t) {
   dprint("declare_global: " +t);
-  emit(mks(":GLOBAL_") , globals_list);
+  emit(mks_(":GLOBAL_") , globals_list);
   emit(t, globals_list);
-  emit(mks("\nNULL\n"), globals_list);
+  emit(mks_("\nNULL\n"), globals_list);
   skip(mks_(";"));
 }
 
@@ -376,9 +376,9 @@ function locals_push(s) {
 function collect_local() {
   nt();
   locals_push(tok);
-  indented_emit_out(mks("DEFINE LOCAL_"));
-  emit_out(tok);
-  emit_out(mks(" "));
+  indented_emit_out(mks_("DEFINE LOCAL_"));
+  emit_out(tok_);
+  emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(sub(0,mul(add(1,add(add(args.length,locals.length),frame_bias)),4))));
   emit_out(mks("\n"));
