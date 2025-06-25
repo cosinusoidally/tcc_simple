@@ -450,18 +450,14 @@ function to_hex_le(a) {
   return o;
 }
 
-function locals_push(s) {
-  locals.push(s);
-}
-
 function collect_local() {
   nt();
-  locals_push(tok_);
+  ra_push32(locals,tok_);
   indented_emit_out(mks_("DEFINE LOCAL_"));
   emit_out(tok_);
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args),locals.length),frame_bias)),4))));
+  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
   emit_out(mks_("\n"));
   indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
@@ -534,8 +530,8 @@ function primary_expr_variable() {
     return function_call(s);
   }
 
-  while(lt(i, locals.length)) {
-    if(match_(locals[i], s)) {
+  while(lt(i, ra_len32(locals))) {
+    if(match_(ra_get32(locals, i), s)) {
       variable_load(s, FALSE);
       return;
     }
@@ -684,7 +680,7 @@ function int_str(a) {
 
 function cleanup_locals() {
   var c;
-  c = locals.length;
+  c = ra_len32(locals);
   if(gt(c, 0)) {
     indented_emit_out(mks_("cleanup_locals_bytes %"));
     emit_out(int_str(mul(4, c)));
@@ -823,7 +819,7 @@ function reset_locals(){
 
 function declare_function(t) {
   var i;
-  reset_locals();
+  ra_reset(locals);
   dprint("declare_function: " +t);
   current_count = 0;
   func = t;
@@ -895,6 +891,7 @@ function program() {
 function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
   args = ra_new();
+  locals = ra_new();
 }
 
 function join_list(l) {
