@@ -737,13 +737,13 @@ function process_while() {
   expression();
   indented_emit_out(mks("jump_false %END_WHILE_"));
   uniqueID_out(number_string);
-  emit_out(mks_("# THEN_while_"));
+  emit_out(mks("# THEN_while_"));
   uniqueID_out(number_string);
   nt(); /* skip ) */
   statement();
-  indented_emit_out(mks_("jump %WHILE_"));
+  indented_emit_out(mks("jump %WHILE_"));
   uniqueID_out(number_string);
-  emit_out(mks_(":END_WHILE_"));
+  emit_out(mks(":END_WHILE_"));
   uniqueID_out(number_string);
   break_target_num = nested_break_num;
 }
@@ -753,75 +753,75 @@ function process_if() {
   dprint("process_if");
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
-  emit_out(mks_("# IF_"));
+  emit_out(mks("# IF_"));
   uniqueID_out(number_string);
   nt();
-  skip(mks_("("));
+  skip(mks("("));
   expression();
-  indented_emit_out(mks_("jump_false %ELSE_"));
+  indented_emit_out(mks("jump_false %ELSE_"));
   uniqueID_out(number_string);
-  skip(mks_(")"));
+  skip(mks(")"));
   statement();
-  indented_emit_out(mks_("jump %_END_IF_"));
+  indented_emit_out(mks("jump %_END_IF_"));
   uniqueID_out(number_string);
-  emit_out(mks_(":ELSE_"));
+  emit_out(mks(":ELSE_"));
   uniqueID_out(number_string);
-  if(match(tok_, mks_("else"))) {
+  if(match(tok_, mks("else"))) {
     nt();
     statement();
   }
-  emit_out(mks_(":_END_IF_"));
+  emit_out(mks(":_END_IF_"));
   uniqueID_out(number_string);
 }
 
 function process_break() {
   nt();
-  indented_emit_out(mks_("jump %"));
+  indented_emit_out(mks("jump %"));
   emit_out(break_target_prefix);
   emit_out(func);
-  emit_out(mks_("_"));
+  emit_out(mks("_"));
   emit_out(break_target_num);
-  emit_out(mks_("\n"));
-  skip(mks_(";"));
+  emit_out(mks("\n"));
+  skip(mks(";"));
 }
 
 function process_asm() {
   nt();
-  skip(mks_("("));
+  skip(mks("("));
   while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
-    emit_out(mks_(mk_js_string(tok_).slice(1,-1)));
-    emit_out(mks_("\n"));
+    emit_out(mks(mk_js_string(tok_).slice(1,-1)));
+    emit_out(mks("\n"));
     nt();
   }
-  skip(mks_(")"));
-  skip(mks_(";"));
+  skip(mks(")"));
+  skip(mks(";"));
 }
 
 function statement() {
-  if(match(tok_, mks_("{"))) {
+  if(match(tok_, mks("{"))) {
     dprint("lcurly");
     nt();
-    while(eq(0, match(tok_, mks_("}")))) {
+    while(eq(0, match(tok_, mks("}")))) {
       statement();
     }
-    skip(mks_("}"));
+    skip(mks("}"));
     dprint("rcurly");
-  } else if(or(match(tok_, mks_("var")), match(tok_, mks_("int")))) {
+  } else if(or(match(tok_, mks("var")), match(tok_, mks("int")))) {
     collect_local();
-  } else if(match(tok_, mks_("if"))) {
+  } else if(match(tok_, mks("if"))) {
     process_if();
-  } else if(match(tok_, mks_("while"))) {
+  } else if(match(tok_, mks("while"))) {
     process_while();
-  } else if(match(tok_, mks_("asm"))) {
+  } else if(match(tok_, mks("asm"))) {
     process_asm();
-  } else if(match(tok_, mks_("return"))) {
+  } else if(match(tok_, mks("return"))) {
     return_result();
-  } else if(match(tok_, mks_("break"))) {
+  } else if(match(tok_, mks("break"))) {
     process_break();
   } else {
     expression();
-    skip(mks_(";"));
+    skip(mks(";"));
   }
 }
 
@@ -831,35 +831,35 @@ function declare_function(t) {
   dprint("declare_function: " +t);
   current_count = 0;
   func = t;
-  if(match(t, mks_("main"))) {
+  if(match(t, mks("main"))) {
     frame_bias = 1;
   } else {
     frame_bias = 0;
   }
   collect_arguments();
   nt();
-  if(match(tok_, mks_(";"))) {
+  if(match(tok_, mks(";"))) {
     dprint("function_prototype skip");
-  } else if(match(tok_, mks_("{"))) {
+  } else if(match(tok_, mks("{"))) {
     dprint("function_body");
-    emit_out(mks_(":FUNCTION_"));
+    emit_out(mks(":FUNCTION_"));
     emit_out(func);
     increase_indent();
-    emit_out(mks_("\n"));
+    emit_out(mks("\n"));
     i = sub(ra_len32(args), 1);
     while(gt(i, sub(0,1))) {
-      indented_emit_out(mks_("DEFINE ARG_"));
+      indented_emit_out(mks("DEFINE ARG_"));
       emit_out(ra_get32(args, i));
-      emit_out(mks_(" "));
+      emit_out(mks(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
-      emit_out(mks_("\n"));
+      emit_out(mks("\n"));
       i = sub(i, 1);
     }
     statement();
-    if(eq(0, match(ra_get32(output_list, sub(ra_len32(output_list),1)), mks_("ret\n")))) {
+    if(eq(0, match(ra_get32(output_list, sub(ra_len32(output_list),1)), mks("ret\n")))) {
       cleanup_locals();
-      indented_emit_out(mks_("ret\n"));
+      indented_emit_out(mks("ret\n"));
     }
     decrease_indent();
   }
@@ -878,14 +878,14 @@ function program() {
   nt();
 
   while(eq(0,eof)) {
-    if(or(match(tok_, mks_("int")), or(match(tok_, mks_("var")),
-          match(tok_, mks_("function"))))) {
+    if(or(match(tok_, mks("int")), or(match(tok_, mks("var")),
+          match(tok_, mks("function"))))) {
       nt(); ltok = tok_;
       nt();
 
-      if(match(tok_, mks_(";"))) {
+      if(match(tok_, mks(";"))) {
         declare_global(ltok);
-      } else if(match(tok_, mks_("("))) {
+      } else if(match(tok_, mks("("))) {
         declare_function(ltok);
       } else {
         error();
@@ -897,7 +897,7 @@ function program() {
 }
 
 function init_globals() {
-  break_target_prefix = mks_("END_WHILE_");
+  break_target_prefix = mks("END_WHILE_");
   args = ra_new();
   locals = ra_new();
   globals_list = ra_new();
