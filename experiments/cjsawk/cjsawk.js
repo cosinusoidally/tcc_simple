@@ -410,22 +410,6 @@ function ra_len32(r) {
   return div(r.len, 4);
 }
 
-function args_reset() {
-  ra_reset(args_);
-}
-
-function args_push32(v) {
-  ra_push32(args_, v);
-}
-
-function args_get32(o) {
-  return ra_get32(args_, o);
-}
-
-function args_len32() {
-  return ra_len32(args_);
-}
-
 function collect_arguments() {
   ra_reset(args_);
   nt();
