@@ -595,7 +595,7 @@ function cleanup_locals() {
   c = locals.length;
   if(gt(c, 0)) {
     indented_emit_out(mks_("cleanup_locals_bytes %"));
-    emit_out(int2str(4*c, 10 , TRUE));
+    emit_out(int2str(mul(4, c), 10 , TRUE));
     emit_out(mks_(" "));
     no_indent = 1;
   }
