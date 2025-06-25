@@ -340,17 +340,13 @@ function emit_(s, l) {
   ra_push32(l, s);
 }
 
-globals_list = [];
-var globals_list_;
+var globals_list;
 
 function declare_global(t) {
   dprint("declare_global: " +t);
-  emit(mks_(":GLOBAL_") , globals_list);
-  emit(t, globals_list);
-  emit(mks_("\nNULL\n"), globals_list);
-  emit_(mks_(":GLOBAL_") , globals_list_);
-  emit_(t, globals_list_);
-  emit_(mks_("\nNULL\n"), globals_list_);
+  emit_(mks_(":GLOBAL_") , globals_list);
+  emit_(t, globals_list);
+  emit_(mks_("\nNULL\n"), globals_list);
   skip(mks_(";"));
 }
 
@@ -900,7 +896,7 @@ function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
   args = ra_new();
   locals = ra_new();
-  globals_list_ = ra_new();
+  globals_list = ra_new();
 }
 
 function join_list(l) {
@@ -939,7 +935,7 @@ function main() {
   print("\n# Core program");
   print(join_list(output_list));
   print("# Program global variables");
-  print(join_list_(globals_list_));
+  print(join_list_(globals_list));
   print("# Program strings");
   print(join_list(strings_list));
   print(":ELF_end");
