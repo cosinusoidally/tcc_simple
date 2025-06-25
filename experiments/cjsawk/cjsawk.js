@@ -53,6 +53,8 @@ var break_target_num;
    stack */
 var frame_bias;
 
+eof = FALSE;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -94,7 +96,6 @@ function match(a, b) {
   }
   return TRUE;
 }
-
 
 function indented_emit_out(s) {
   var c;
@@ -286,8 +287,6 @@ function get_string() {
      version of this code */
   tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0] + '"');
 }
-
-eof = FALSE;
 
 function nt() {
   if(gte(to, f.length)) {
