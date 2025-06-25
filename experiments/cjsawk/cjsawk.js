@@ -742,8 +742,8 @@ function declare_function(t) {
     i = sub(args.length, 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
-      emit_out(args[i]);
-      emit_out(mks(" "));
+      emit_out(mks_(args[i]));
+      emit_out(mks_(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
       emit_out(mks_("\n"));
