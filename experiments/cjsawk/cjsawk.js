@@ -38,11 +38,11 @@ var current_count;
 
 var tt;
 
-tt_identifier = mks("identifier");
-tt_number = mks("number");
-tt_char = mks("char");
-tt_string = mks("string");
-tt_other = mks("other");
+tt_identifier = mks_("identifier");
+tt_number = mks_("number");
+tt_char = mks_("char");
+tt_string = mks_("string");
+tt_other = mks_("other");
 
 var tok;
 
