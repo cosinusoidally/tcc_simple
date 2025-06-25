@@ -230,6 +230,7 @@ function f_str() {
   }
   tok = mk_js_string(b2);
   tok_ = b2;
+//  tok = b2;
 }
 
 function get_id() {
@@ -576,9 +577,9 @@ function escape_lookup(c) {
   /* fixme this should do the correct char lookup */
   var c0;
   var c1;
-  c0 = mkc(c[1]);
+  c0 = ri8(add(c, 1));
   if(eq(c0, mkc('\\'))) {
-    c1 = mkc(c[2]);
+    c1 = ri8(add(c, 2));
     if(eq(c1, 0)) {
       return 0;
     } else if(eq(c1, mkc('a'))) {
@@ -612,7 +613,7 @@ function escape_lookup(c) {
 
 function primary_expr_char() {
   emit_out(mks_("constant %"));
-  emit_out(int_str(escape_lookup(tok), 1));
+  emit_out(int_str(escape_lookup(tok_), 1));
   emit_out(mks_(" "));
   nt();
 }
