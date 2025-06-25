@@ -587,9 +587,9 @@ function cleanup_locals() {
   var c;
   c = locals.length;
   if(gt(c, 0)) {
-    indented_emit_out("cleanup_locals_bytes %");
+    indented_emit_out(mks_("cleanup_locals_bytes %"));
     emit_out(int2str(4*c, 10 , TRUE));
-    emit_out(" ");
+    emit_out(mks_(" "));
     no_indent = 1;
   }
 }
