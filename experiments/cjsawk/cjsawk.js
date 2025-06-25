@@ -24,25 +24,25 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var indent = 0;
-var no_indent = 0;
+var indent;
+var no_indent;
 
-to=0;
-ts=0;
-te=0;
+var to;
+var ts;
+var te;
 var ch;
 
-ln=1;
+var ln;
 
 var current_count;
 
 var tt;
 
-tt_identifier = mks("identifier");
-tt_number = mks("number");
-tt_char = mks("char");
-tt_string = mks("string");
-tt_other = mks("other");
+var tt_identifier;
+var tt_number;
+var tt_char;
+var tt_string;
+var tt_other;
 
 var tok;
 
@@ -53,7 +53,7 @@ var break_target_num;
    stack */
 var frame_bias;
 
-eof = FALSE;
+var eof;
 
 var strings_list;
 var output_list;
