@@ -32,6 +32,7 @@ mks = function(s) {
 }
 
 mks_ = mk_c_string;
+mks = mk_c_string;
 
 load("cjsawk.js");
 

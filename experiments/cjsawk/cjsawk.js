@@ -38,11 +38,11 @@ var current_count;
 
 var tt;
 
-tt_identifier = mks_("identifier");
-tt_number = mks_("number");
-tt_char = mks_("char");
-tt_string = mks_("string");
-tt_other = mks_("other");
+tt_identifier = mks("identifier");
+tt_number = mks("number");
+tt_char = mks("char");
+tt_string = mks("string");
+tt_other = mks("other");
 
 var tok;
 
@@ -103,7 +103,7 @@ function indented_emit_out(s) {
     no_indent = 0;
   } else {
     while(lt(c, indent)) {
-      emit_out(mks_(" "));
+      emit_out(mks(" "));
       c = add(c, 1);
     }
   }
@@ -287,7 +287,7 @@ function get_string() {
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
   tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
-  tok_ = mks_(tok);
+  tok_ = mks(tok);
 }
 
 eof = FALSE;
@@ -345,10 +345,10 @@ var globals_list;
 
 function declare_global(t) {
   dprint("declare_global: " +t);
-  emit_(mks_(":GLOBAL_") , globals_list);
+  emit_(mks(":GLOBAL_") , globals_list);
   emit_(t, globals_list);
-  emit_(mks_("\nNULL\n"), globals_list);
-  skip(mks_(";"));
+  emit_(mks("\nNULL\n"), globals_list);
+  skip(mks(";"));
 }
 
 var strings_list;
@@ -420,8 +420,8 @@ function ra_len32(r) {
 function collect_arguments() {
   ra_reset(args);
   nt();
-  while(eq(0, match(tok_, mks_(")")))) {
-    if(eq(0, match(tok_, mks_(",")))) {
+  while(eq(0, match(tok_, mks(")")))) {
+    if(eq(0, match(tok_, mks(",")))) {
       ra_push32(args, tok_);
     }
     nt();
@@ -460,30 +460,30 @@ function to_hex_le(a) {
 function collect_local() {
   nt();
   ra_push32(locals,tok_);
-  indented_emit_out(mks_("DEFINE LOCAL_"));
+  indented_emit_out(mks("DEFINE LOCAL_"));
   emit_out(tok_);
-  emit_out(mks_(" "));
+  emit_out(mks(" "));
 /* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
-  emit_out(mks_("\n"));
-  indented_emit_out(mks_("reserve_stack_slot\n"));
+  emit_out(mks("\n"));
+  indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
-  skip(mks_(";"));
+  skip(mks(";"));
   dprint("locals: " +locals);
 }
 
 function variable_load(a, is_arg) {
-  indented_emit_out(mks_("local "));
+  indented_emit_out(mks("local "));
   if(eq(is_arg, TRUE)) {
-    emit_out(mks_("ARG_"));
+    emit_out(mks("ARG_"));
   } else {
-    emit_out(mks_("LOCAL_"));
+    emit_out(mks("LOCAL_"));
   }
   emit_out(a);
-  emit_out(mks_(" "));
+  emit_out(mks(" "));
   if(neq(char0(), mkc('='))) {
     no_indent = 1;
-    emit_out(mks_("load "));
+    emit_out(mks("load "));
   }
 }
 
@@ -493,37 +493,37 @@ function function_call(s) {
   dprint("function call");
   nt();
 
-  indented_emit_out(mks_("("));
+  indented_emit_out(mks("("));
   increase_indent();
 
-  if(eq(0, match(tok_, mks_(")")))) {
-    emit_out(mks_(" ")); no_indent = 1;
+  if(eq(0, match(tok_, mks(")")))) {
+    emit_out(mks(" ")); no_indent = 1;
     expression();
-    indented_emit_out(mks_("push_arg\n"));
+    indented_emit_out(mks("push_arg\n"));
     passed = 1;
-    while(match(tok_, mks_(","))) {
+    while(match(tok_, mks(","))) {
       nt();
       expression();
-      indented_emit_out(mks_("push_arg\n"));
+      indented_emit_out(mks("push_arg\n"));
       passed = add(passed, 1);
     }
   } else {
-    emit_out(mks_(" ")); no_indent = 1;
+    emit_out(mks(" ")); no_indent = 1;
   }
-  skip(mks_(")"));
-  indented_emit_out(mks_("do_call %FUNCTION_"));
+  skip(mks(")"));
+  indented_emit_out(mks("do_call %FUNCTION_"));
   emit_out(s);
-  emit_out(mks_(" "));
+  emit_out(mks(" "));
 
   if(neq(passed, 0)) {
-    emit_out(mks_("cleanup_args_bytes %"));
+    emit_out(mks("cleanup_args_bytes %"));
     emit_out(int_str(mul(4, passed)));
-    emit_out(mks_("\n"));
+    emit_out(mks("\n"));
   } else {
     no_indent = 1;
   }
   decrease_indent();
-  indented_emit_out(mks_(")\n"));
+  indented_emit_out(mks(")\n"));
 }
 
 function primary_expr_variable() {
@@ -533,7 +533,7 @@ function primary_expr_variable() {
   nt();
   i = 0;
 
-  if(match(tok_, mks_("("))) {
+  if(match(tok_, mks("("))) {
     return function_call(s);
   }
 
@@ -555,20 +555,20 @@ function primary_expr_variable() {
 
 
   /* otherwise assume is a global */
-  indented_emit_out(mks_("global &GLOBAL_"));
+  indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
-  emit_out(mks_(" "));
-  if(match(tok_, mks_("="))) {
+  emit_out(mks(" "));
+  if(match(tok_, mks("="))) {
     return;
   }
   no_indent = 1;
-  emit_out(mks_("load "));
+  emit_out(mks("load "));
 }
 
 function primary_expr_number() {
-  indented_emit_out(mks_("constant %"));
+  indented_emit_out(mks("constant %"));
   emit_out(tok_);
-  emit_out(mks_(" ")); no_indent = 1;
+  emit_out(mks(" ")); no_indent = 1;
   nt();
 }
 
@@ -611,9 +611,9 @@ function escape_lookup(c) {
 
 
 function primary_expr_char() {
-  emit_out(mks_("constant %"));
+  emit_out(mks("constant %"));
   emit_out(int_str(escape_lookup(tok_), 1));
-  emit_out(mks_(" "));
+  emit_out(mks(" "));
   nt();
 }
 
@@ -622,13 +622,13 @@ function primary_expr_string() {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
 
-  emit_(mks_(":STRING_"), strings_list);
+  emit_(mks(":STRING_"), strings_list);
   uniqueID_(number_string, strings_list);
 
   emit_(tok_, strings_list);
-  emit_(mks_("\n"), strings_list);
+  emit_(mks("\n"), strings_list);
 
-  indented_emit_out(mks_("constant &STRING_"));
+  indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
 
   nt();
@@ -639,7 +639,7 @@ function expression() {
   if(eq(char0(), mkc('('))) {
     nt();
     expression();
-    skip(mks_(")"));
+    skip(mks(")"));
   } else if(eq(tt, tt_identifier)) {
     primary_expr_variable();
   } else if(eq(tt, tt_number)) {
@@ -653,10 +653,10 @@ function expression() {
   }
 
   if(eq(char0(), mkc('='))) {
-    emit_out(mks_("push_address\n"));
+    emit_out(mks("push_address\n"));
     nt();
     expression();
-    indented_emit_out(mks_("store\n"));
+    indented_emit_out(mks("store\n"));
   }
 }
 
@@ -670,7 +670,7 @@ function int_str(a) {
     error();
   }
   if(eq(a,0)) {
-    return mks_("0");
+    return mks("0");
   }
   b = calloc(34,1);
   o = add(b,32);
@@ -690,28 +690,28 @@ function cleanup_locals() {
   var c;
   c = ra_len32(locals);
   if(gt(c, 0)) {
-    indented_emit_out(mks_("cleanup_locals_bytes %"));
+    indented_emit_out(mks("cleanup_locals_bytes %"));
     emit_out(int_str(mul(4, c)));
-    emit_out(mks_(" "));
+    emit_out(mks(" "));
     no_indent = 1;
   }
 }
 
 function return_result() {
   nt();
-  if(eq(0, match(tok_, mks_(";")))) {
+  if(eq(0, match(tok_, mks(";")))) {
     expression();
   }
   cleanup_locals();
-  indented_emit_out(mks_("ret\n"));
+  indented_emit_out(mks("ret\n"));
   nt();
 }
 
 function uniqueID(id, l) {
   emit(func, l);
-  emit(mks_("_"), l);
+  emit(mks("_"), l);
   emit(id, l);
-  emit(mks_("\n"), l);
+  emit(mks("\n"), l);
 }
 
 function uniqueID_(id, l) {
@@ -730,12 +730,12 @@ function process_while() {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
   break_target_num = number_string;
-  emit_out(mks_(":WHILE_"));
+  emit_out(mks(":WHILE_"));
   uniqueID_out(number_string);
   nt();
-  skip(mks_("("));
+  skip(mks("("));
   expression();
-  indented_emit_out(mks_("jump_false %END_WHILE_"));
+  indented_emit_out(mks("jump_false %END_WHILE_"));
   uniqueID_out(number_string);
   emit_out(mks_("# THEN_while_"));
   uniqueID_out(number_string);
