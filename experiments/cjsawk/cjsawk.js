@@ -600,7 +600,7 @@ function return_result() {
     expression();
   }
   cleanup_locals();
-  indented_emit_out(mks("ret\n"));
+  indented_emit_out(mks_("ret\n"));
   nt();
 }
 
@@ -748,9 +748,9 @@ function declare_function(t) {
       emit_out(mks("\n"));
     }
     statement();
-    if(eq(0, match_(mks_(output_list[sub(output_list.length,1)]), mks_("ret\n")))) {
+    if(eq(0, match_(output_list[sub(output_list.length,1)], mks_("ret\n")))) {
       cleanup_locals();
-      indented_emit_out(mks("ret\n"));
+      indented_emit_out(mks_("ret\n"));
     }
     decrease_indent();
   }
