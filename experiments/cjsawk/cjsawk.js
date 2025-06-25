@@ -367,11 +367,16 @@ function to_hex_le(a) {
   var o;
   var i;
   var t;
+  var d1;
+  var d2;
   i = 0;
   o = [];
+  o2 = calloc(17, 1);
   while(lt(i, 4)) {
-    o[add(mul(i, 2), 1)] = to_hex_digit(a);
-    o[mul(i, 2)] = to_hex_digit(shr(a, 4));
+    d2 = mul(i, 2);
+    d1 = add(d2, 1);
+    o[d1] = to_hex_digit(a);
+    o[d2] = to_hex_digit(shr(a, 4));
     a = shr(a, 8);
     i = add(i, 1);
   }
@@ -834,7 +839,7 @@ function join_list(l) {
       c = mk_js_string(c);
     } else {
 // DEBUG
-//      print("string: "+c);
+      print("string: "+c);
     }
     o.push(c);
   }
