@@ -339,16 +339,11 @@ function emit(s, l) {
   ra_push32(l, s);
 }
 
-function emit_(s, l) {
-  emit(s,l);
-}
-
-
 function declare_global(t) {
   dprint("declare_global: " +t);
-  emit_(mks(":GLOBAL_") , globals_list);
-  emit_(t, globals_list);
-  emit_(mks("\nNULL\n"), globals_list);
+  emit(mks(":GLOBAL_") , globals_list);
+  emit(t, globals_list);
+  emit(mks("\nNULL\n"), globals_list);
   skip(mks(";"));
 }
 
@@ -618,11 +613,11 @@ function primary_expr_string() {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
 
-  emit_(mks(":STRING_"), strings_list);
+  emit(mks(":STRING_"), strings_list);
   uniqueID_(number_string, strings_list);
 
-  emit_(tok, strings_list);
-  emit_(mks("\n"), strings_list);
+  emit(tok, strings_list);
+  emit(mks("\n"), strings_list);
 
   indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
