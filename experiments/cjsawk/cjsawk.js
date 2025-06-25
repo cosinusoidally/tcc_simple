@@ -359,7 +359,6 @@ function ra_new() {
   var t = {};
   t.capacity = 4;
   t.len = 4;
-  t.data = [];
   t.data_raw = calloc(t.capacity, 1);
   return t;
 }
@@ -399,7 +398,6 @@ function ra_push32(r, v) {
   if(gt(add(r.len, 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
-  r.data[r.len] = v;
   wi32(add(r.data_raw, r.len), v);
   r.len = add(r.len, 4);
 }
@@ -414,7 +412,7 @@ function args_push32(v) {
 }
 
 function args_get32(o) {
-  return args_.data[mul(o,4)];
+  return ri32(add(args_.data_raw, mul(o,4)));
 }
 
 function args_len32() {
