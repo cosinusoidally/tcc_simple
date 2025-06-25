@@ -285,8 +285,8 @@ function get_string() {
   f_str();
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
-  tok = '"' + JSON.parse("["+mk_js_string(tok_)+"]")[0] + '"';
-  tok_ = mks(tok);
+  tok = mks('"' + JSON.parse("["+mk_js_string(tok_)+"]")[0] + '"');
+  tok_ = tok;
 }
 
 eof = FALSE;
