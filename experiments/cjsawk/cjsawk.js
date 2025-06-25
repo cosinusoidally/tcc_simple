@@ -378,12 +378,12 @@ function to_hex_le(a) {
 }
 
 function locals_push(s) {
-  locals.push(tok);
+  locals.push(s);
 }
 
 function collect_local() {
   nt();
-  locals_push(tok);
+  locals_push(tok_);
   indented_emit_out(mks_("DEFINE LOCAL_"));
   emit_out(tok_);
   emit_out(mks_(" "));
@@ -462,7 +462,7 @@ function primary_expr_variable() {
   }
 
   while(lt(i, locals.length)) {
-    if(match_(mks_(locals[i]), mks_(s))) {
+    if(match_(locals[i], mks_(s))) {
       variable_load(s, FALSE);
       return;
     }
