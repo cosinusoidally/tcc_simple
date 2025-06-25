@@ -228,7 +228,6 @@ function f_str() {
     wi8(add(b2, sub(i, ts)), f[i]);
     i = add(i, 1);
   }
-  tok_ = b2;
   tok = b2;
 }
 
@@ -285,8 +284,7 @@ function get_string() {
   f_str();
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
-  tok = mks('"' + JSON.parse("["+mk_js_string(tok_)+"]")[0] + '"');
-  tok_ = tok;
+  tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0] + '"');
 }
 
 eof = FALSE;
