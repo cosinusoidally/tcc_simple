@@ -386,6 +386,7 @@ function ra_grow(r) {
   }
   r.data_raw = dd;
   ra_capacity_s(r,c2);
+  free(sd);
 }
 
 function ra_reset(r) {
