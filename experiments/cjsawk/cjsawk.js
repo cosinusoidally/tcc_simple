@@ -338,15 +338,19 @@ function emit_out(s) {
 }
 
 function args_reset() {
-  args = [];
+  args_ = [];
 }
 
 function args_push(v) {
-  args.push(v);
+  args_.push(v);
 }
 
 function args_get(o) {
-  return args[o];
+  return args_[o];
+}
+
+function args_length() {
+  return args_.length;
 }
 
 function collect_arguments() {
@@ -400,7 +404,7 @@ function collect_local() {
   emit_out(tok_);
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(args.length,locals.length),frame_bias)),4))));
+  emit_out(to_hex_le(sub(0,mul(add(1,add(add(args_length(),locals.length),frame_bias)),4))));
   emit_out(mks_("\n"));
   indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
@@ -481,7 +485,7 @@ function primary_expr_variable() {
     i = add(i, 1);
   }
   i = 0;
-  while(lt(i, args.length)) {
+  while(lt(i, args_length())) {
     if(match_(args_get(i), s)) {
       variable_load(s, TRUE);
       return;
@@ -781,7 +785,7 @@ function declare_function(t) {
     emit_out(func);
     increase_indent();
     emit_out(mks_("\n"));
-    i = sub(args.length, 1);
+    i = sub(args_length(), 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
       emit_out(args_get(i));
