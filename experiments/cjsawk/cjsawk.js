@@ -336,8 +336,12 @@ function emit_out(s) {
   output_list.push(s);
 }
 
-function collect_arguments() {
+function reset_args() {
   args = [];
+}
+
+function collect_arguments() {
+  reset_args();
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match_(tok_, mks_(",")))) {
@@ -718,9 +722,13 @@ function statement() {
   }
 }
 
+function reset_locals(){
+  locals = [];
+}
+
 function declare_function(t) {
   var i;
-  locals = [];
+  reset_locals();
   dprint("declare_function: " +t);
   current_count = 0;
   func = t;
