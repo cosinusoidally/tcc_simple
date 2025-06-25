@@ -764,7 +764,6 @@ function error() {
 
 function program() {
   var ltok;
-  var ltok_;
 
   nc();
   nt();
@@ -772,13 +771,13 @@ function program() {
   while(eq(0,eof)) {
     if(or(match_(tok_, mks_("int")), or(match_(tok_, mks_("var")),
           match_(tok_, mks_("function"))))) {
-      nt(); ltok = tok; ltok_ = tok_;
+      nt(); ltok = tok_;
       nt();
 
       if(match_(tok_, mks_(";"))) {
         declare_global(ltok);
       } else if(match_(tok_, mks_("("))) {
-        declare_function(ltok_);
+        declare_function(ltok);
       } else {
         error();
       }
