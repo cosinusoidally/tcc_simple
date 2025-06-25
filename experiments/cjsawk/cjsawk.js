@@ -230,7 +230,7 @@ function f_str() {
   }
   tok = mk_js_string(b2);
   tok_ = b2;
-//  tok = b2;
+  tok = b2;
 }
 
 function get_id() {
@@ -286,7 +286,7 @@ function get_string() {
   f_str();
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
-  tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
+  tok = '"' + JSON.parse("["+mk_js_string(tok_)+"]")[0] + '"';
   tok_ = mks(tok);
 }
 
