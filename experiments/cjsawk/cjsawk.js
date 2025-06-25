@@ -427,11 +427,11 @@ function args_len32() {
 }
 
 function collect_arguments() {
-  args_reset();
+  ra_reset(args_);
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match_(tok_, mks_(",")))) {
-      args_push32(tok_);
+      ra_push32(args_, tok_);
     }
     nt();
   }
@@ -477,7 +477,7 @@ function collect_local() {
   emit_out(tok_);
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(args_len32(),locals.length),frame_bias)),4))));
+  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args_),locals.length),frame_bias)),4))));
   emit_out(mks_("\n"));
   indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
@@ -558,8 +558,8 @@ function primary_expr_variable() {
     i = add(i, 1);
   }
   i = 0;
-  while(lt(i, args_len32())) {
-    if(match_(args_get32(i), s)) {
+  while(lt(i, ra_len32(args_))) {
+    if(match_(ra_get32(args_, i), s)) {
       variable_load(s, TRUE);
       return;
     }
@@ -858,10 +858,10 @@ function declare_function(t) {
     emit_out(func);
     increase_indent();
     emit_out(mks_("\n"));
-    i = sub(args_len32(), 1);
+    i = sub(ra_len32(args_), 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
-      emit_out(args_get32(i));
+      emit_out(ra_get32(args_, i));
       emit_out(mks_(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
