@@ -389,25 +389,25 @@ function collect_local() {
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(sub(0,mul(add(1,add(add(args.length,locals.length),frame_bias)),4))));
-  emit_out(mks("\n"));
-  indented_emit_out(mks("reserve_stack_slot\n"));
+  emit_out(mks_("\n"));
+  indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
   skip(mks_(";"));
   dprint("locals: " +locals);
 }
 
 function variable_load(a, is_arg) {
-  indented_emit_out(mks("local "));
+  indented_emit_out(mks_("local "));
   if(eq(is_arg, TRUE)) {
     emit_out("ARG_");
   } else {
-    emit_out(mks("LOCAL_"));
+    emit_out(mks_("LOCAL_"));
   }
   emit_out(a);
-  emit_out(mks(" "));
+  emit_out(mks_(" "));
   if(neq(char0(), mkc('='))) {
     no_indent = 1;
-    emit_out(mks("load "));
+    emit_out(mks_("load "));
   }
 }
 
@@ -417,37 +417,37 @@ function function_call(s) {
   dprint("function call");
   nt();
 
-  indented_emit_out(mks("("));
+  indented_emit_out(mks_("("));
   increase_indent();
 
   if(eq(0, match_(tok_, mks_(")")))) {
-    emit_out(mks(" ")); no_indent = 1;
+    emit_out(mks_(" ")); no_indent = 1;
     expression();
-    indented_emit_out(mks("push_arg\n"));
+    indented_emit_out(mks_("push_arg\n"));
     passed = 1;
     while(match_(tok_, mks_(","))) {
       nt();
       expression();
-      indented_emit_out(mks("push_arg\n"));
+      indented_emit_out(mks_("push_arg\n"));
       passed = add(passed, 1);
     }
   } else {
-    emit_out(mks(" ")); no_indent = 1;
+    emit_out(mks_(" ")); no_indent = 1;
   }
   skip(mks_(")"));
-  indented_emit_out(mks("do_call %FUNCTION_"));
+  indented_emit_out(mks_("do_call %FUNCTION_"));
   emit_out(s);
-  emit_out(mks(" "));
+  emit_out(mks_(" "));
 
   if(neq(passed, 0)) {
-    emit_out(mks("cleanup_args_bytes %"));
+    emit_out(mks_("cleanup_args_bytes %"));
     emit_out(int2str(mul(4, passed), 10, TRUE));
-    emit_out(mks("\n"));
+    emit_out(mks_("\n"));
   } else {
     no_indent = 1;
   }
   decrease_indent();
-  indented_emit_out(mks(")\n"));
+  indented_emit_out(mks_(")\n"));
 }
 
 function primary_expr_variable() {
@@ -479,20 +479,20 @@ function primary_expr_variable() {
 
 
   /* otherwise assume is a global */
-  indented_emit_out(mks("global &GLOBAL_"));
+  indented_emit_out(mks_("global &GLOBAL_"));
   emit_out(s);
-  emit_out(mks(" "));
+  emit_out(mks_(" "));
   if(match_(tok_, mks_("="))) {
     return;
   }
   no_indent = 1;
-  emit_out(mks("load "));
+  emit_out(mks_("load "));
 }
 
 function primary_expr_number() {
-  indented_emit_out(mks("constant %"));
+  indented_emit_out(mks_("constant %"));
   emit_out(tok);
-  emit_out(mks(" ")); no_indent = 1;
+  emit_out(mks_(" ")); no_indent = 1;
   nt();
 }
 
@@ -535,9 +535,9 @@ function escape_lookup(c) {
 
 
 function primary_expr_char() {
-  emit_out(mks("constant %"));
+  emit_out(mks_("constant %"));
   emit_out(int2str(escape_lookup(tok), 1), 10, TRUE);
-  emit_out(mks(" "));
+  emit_out(mks_(" "));
   nt();
 }
 
@@ -551,7 +551,7 @@ function primary_expr_string() {
   emit(tok_, strings_list);
   emit(mks_("\n"), strings_list);
 
-  indented_emit_out(mks("constant &STRING_"));
+  indented_emit_out(mks_("constant &STRING_"));
   uniqueID_out(number_string);
 
   nt();
@@ -576,10 +576,10 @@ function expression() {
   }
 
   if(eq(char0(), mkc('='))) {
-    emit_out(mks("push_address\n"));
+    emit_out(mks_("push_address\n"));
     nt();
     expression();
-    indented_emit_out(mks("store\n"));
+    indented_emit_out(mks_("store\n"));
   }
 }
 
@@ -611,9 +611,9 @@ function return_result() {
 
 function uniqueID(id, l) {
   emit(func, l);
-  emit(mks("_"), l);
+  emit(mks_("_"), l);
   emit(int2str(id, 10, TRUE), l);
-  emit(mks("\n"), l);
+  emit(mks_("\n"), l);
 }
 
 function uniqueID_out(id) {
@@ -628,18 +628,18 @@ function process_while() {
   number_string = int2str(current_count, 10, TRUE);
   current_count = add(current_count, 1);
   break_target_num = number_string;
-  emit_out(mks(":WHILE_"));
+  emit_out(mks_(":WHILE_"));
   uniqueID_out(number_string);
   nt();
   skip(mks_("("));
   expression();
-  indented_emit_out(mks("jump_false %END_WHILE_"));
+  indented_emit_out(mks_("jump_false %END_WHILE_"));
   uniqueID_out(number_string);
-  emit_out(mks("# THEN_while_"));
+  emit_out(mks_("# THEN_while_"));
   uniqueID_out(number_string);
   nt(); /* skip ) */
   statement();
-  indented_emit_out(mks("jump %WHILE_"));
+  indented_emit_out(mks_("jump %WHILE_"));
   uniqueID_out(number_string);
   emit_out(mks(":END_WHILE_"));
   uniqueID_out(number_string);
