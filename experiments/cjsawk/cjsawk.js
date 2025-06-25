@@ -641,7 +641,7 @@ function process_while() {
   statement();
   indented_emit_out(mks_("jump %WHILE_"));
   uniqueID_out(number_string);
-  emit_out(mks(":END_WHILE_"));
+  emit_out(mks_(":END_WHILE_"));
   uniqueID_out(number_string);
   break_target_num = nested_break_num;
 }
@@ -651,35 +651,35 @@ function process_if() {
   dprint("process_if");
   number_string = int2str(current_count, 10, TRUE);
   current_count = add(current_count, 1);
-  emit_out(mks("# IF_"));
+  emit_out(mks_("# IF_"));
   uniqueID_out(number_string);
   nt();
   skip(mks_("("));
   expression();
-  indented_emit_out(mks("jump_false %ELSE_"));
+  indented_emit_out(mks_("jump_false %ELSE_"));
   uniqueID_out(number_string);
   skip(mks_(")"));
   statement();
-  indented_emit_out(mks("jump %_END_IF_"));
+  indented_emit_out(mks_("jump %_END_IF_"));
   uniqueID_out(number_string);
-  emit_out(mks(":ELSE_"));
+  emit_out(mks_(":ELSE_"));
   uniqueID_out(number_string);
   if(match_(tok_, mks_("else"))) {
     nt();
     statement();
   }
-  emit_out(mks(":_END_IF_"));
+  emit_out(mks_(":_END_IF_"));
   uniqueID_out(number_string);
 }
 
 function process_break() {
   nt();
-  indented_emit_out(mks("jump %"));
+  indented_emit_out(mks_("jump %"));
   emit_out(break_target_prefix);
   emit_out(func);
-  emit_out(mks("_"));
+  emit_out(mks_("_"));
   emit_out(break_target_num);
-  emit_out(mks("\n"));
+  emit_out(mks_("\n"));
   skip(mks_(";"));
 }
 
@@ -689,7 +689,7 @@ function process_asm() {
   while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
     emit_out(tok.slice(1,-1));
-    emit_out(mks("\n"));
+    emit_out(mks_("\n"));
     nt();
   }
   skip(mks_(")"));
@@ -799,7 +799,7 @@ function program() {
 }
 
 function init_globals() {
-  break_target_prefix = mks("END_WHILE_");
+  break_target_prefix = mks_("END_WHILE_");
 }
 
 function join_list(l) {
@@ -818,11 +818,11 @@ function join_list(l) {
 function main() {
   init_globals();
   program();
-  print(mks("\n# Core program"));
+  print("\n# Core program");
   print(join_list(output_list));
-  print(mks("# Program global variables"));
+  print("# Program global variables");
   print(join_list(globals_list));
-  print(mks("# Program strings"));
+  print("# Program strings");
   print(join_list(strings_list));
-  print(mks(":ELF_end"));
+  print(":ELF_end");
 }
