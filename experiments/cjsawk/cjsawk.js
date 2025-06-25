@@ -839,7 +839,7 @@ function declare_function(t) {
   nt();
   if(match(tok, mks(";"))) {
     dprint("function_prototype skip");
-  } else if(match(tok_, mks("{"))) {
+  } else if(match(tok, mks("{"))) {
     dprint("function_body");
     emit_out(mks(":FUNCTION_"));
     emit_out(func);
@@ -877,14 +877,14 @@ function program() {
   nt();
 
   while(eq(0,eof)) {
-    if(or(match(tok_, mks("int")), or(match(tok_, mks("var")),
-          match(tok_, mks("function"))))) {
-      nt(); ltok = tok_;
+    if(or(match(tok, mks("int")), or(match(tok, mks("var")),
+          match(tok, mks("function"))))) {
+      nt(); ltok = tok;
       nt();
 
-      if(match(tok_, mks(";"))) {
+      if(match(tok, mks(";"))) {
         declare_global(ltok);
-      } else if(match(tok_, mks("("))) {
+      } else if(match(tok, mks("("))) {
         declare_function(ltok);
       } else {
         error();
