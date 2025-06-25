@@ -586,12 +586,29 @@ function expression() {
 }
 
 function int2str(a) {
+  var b;
+  var d;
+  var o;
+  var t;
   if(typeof a != "number") {
     print("not number: "+a);
     error();
   }
-  /* FIXME this is cheating */
-  return a.toString(10);
+  if(eq(a,0)) {
+    return mks_("0");
+  }
+  b = calloc(34,1);
+  o = add(b,32);
+  while(1) {
+    t = mod(a,10);
+    wi8(o,add(48,t));
+    a = div(sub(a,t),10);
+    if(eq(0,a)){
+      break;
+    }
+    o = sub(o,1);
+  }
+  return o;
 }
 
 function cleanup_locals() {
