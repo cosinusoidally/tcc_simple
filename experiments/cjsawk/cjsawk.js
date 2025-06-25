@@ -269,6 +269,7 @@ function get_string() {
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
   tok = '"' + JSON.parse("["+tok+"]")[0] + '"';
+  tok_ = mks_(tok);
 }
 
 eof = FALSE;
@@ -544,7 +545,7 @@ function primary_expr_string() {
   var number_string;
   number_string = int2str(current_count, 10, TRUE);
   current_count = add(current_count, 1);
-  emit(mks(":STRING_"), strings_list);
+  emit(mks_(":STRING_"), strings_list);
   uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
