@@ -334,12 +334,11 @@ function skip(s) {
 }
 
 function emit(s, l) {
-  return emit_(s,l);
-//  l.push(s);
+  ra_push32(l, s);
 }
 
 function emit_(s, l) {
-  ra_push32(l, s);
+  emit(s,l);
 }
 
 var globals_list;
@@ -716,10 +715,7 @@ function uniqueID(id, l) {
 }
 
 function uniqueID_(id, l) {
-  emit_(func, l);
-  emit_(mks_("_"), l);
-  emit_(id, l);
-  emit_(mks_("\n"), l);
+  uniqueID(id, l);
 }
 
 function uniqueID_out(id) {
@@ -794,7 +790,7 @@ function process_asm() {
   skip(mks_("("));
   while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
-    emit_out(mks_(tok.slice(1,-1)));
+    emit_out(mks_(mk_js_string(tok_).slice(1,-1)));
     emit_out(mks_("\n"));
     nt();
   }
