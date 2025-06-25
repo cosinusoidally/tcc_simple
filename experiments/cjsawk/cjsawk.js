@@ -455,7 +455,7 @@ function function_call(s) {
 function primary_expr_variable() {
   var s;
   var i;
-  s = tok;
+  s = tok_;
   nt();
   i = 0;
 
@@ -464,7 +464,7 @@ function primary_expr_variable() {
   }
 
   while(lt(i, locals.length)) {
-    if(match_(locals[i], mks_(s))) {
+    if(match_(locals[i], s)) {
       variable_load(s, FALSE);
       return;
     }
@@ -472,7 +472,7 @@ function primary_expr_variable() {
   }
   i = 0;
   while(lt(i, args.length)) {
-    if(match_(args[i], mks_(s))) {
+    if(match_(args[i], s)) {
       variable_load(s, TRUE);
       return;
     }
