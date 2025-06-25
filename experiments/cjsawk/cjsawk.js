@@ -350,7 +350,7 @@ function declare_global(t) {
   skip(mks_(";"));
 }
 
-var strings_list_;
+var strings_list;
 
 output_list = [];
 
@@ -619,11 +619,11 @@ function primary_expr_string() {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
 
-  emit_(mks_(":STRING_"), strings_list_);
-  uniqueID_(number_string, strings_list_);
+  emit_(mks_(":STRING_"), strings_list);
+  uniqueID_(number_string, strings_list);
 
-  emit_(tok_, strings_list_);
-  emit_(mks_("\n"), strings_list_);
+  emit_(tok_, strings_list);
+  emit_(mks_("\n"), strings_list);
 
   indented_emit_out(mks_("constant &STRING_"));
   uniqueID_out(number_string);
@@ -905,7 +905,7 @@ function init_globals() {
   args = ra_new();
   locals = ra_new();
   globals_list = ra_new();
-  strings_list_ = ra_new();
+  strings_list = ra_new();
 }
 
 function join_list(l) {
@@ -946,6 +946,6 @@ function main() {
   print("# Program global variables");
   print(join_list_(globals_list));
   print("# Program strings");
-  print(join_list_(strings_list_));
+  print(join_list_(strings_list));
   print(":ELF_end");
 }
