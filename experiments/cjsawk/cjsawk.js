@@ -411,11 +411,11 @@ function ra_len32(r) {
 }
 
 function collect_arguments() {
-  ra_reset(args_);
+  ra_reset(args);
   nt();
   while(eq(0, match_(tok_, mks_(")")))) {
     if(eq(0, match_(tok_, mks_(",")))) {
-      ra_push32(args_, tok_);
+      ra_push32(args, tok_);
     }
     nt();
   }
@@ -461,7 +461,7 @@ function collect_local() {
   emit_out(tok_);
   emit_out(mks_(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args_),locals.length),frame_bias)),4))));
+  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args),locals.length),frame_bias)),4))));
   emit_out(mks_("\n"));
   indented_emit_out(mks_("reserve_stack_slot\n"));
   nt();
@@ -542,8 +542,8 @@ function primary_expr_variable() {
     i = add(i, 1);
   }
   i = 0;
-  while(lt(i, ra_len32(args_))) {
-    if(match_(ra_get32(args_, i), s)) {
+  while(lt(i, ra_len32(args))) {
+    if(match_(ra_get32(args, i), s)) {
       variable_load(s, TRUE);
       return;
     }
@@ -842,10 +842,10 @@ function declare_function(t) {
     emit_out(func);
     increase_indent();
     emit_out(mks_("\n"));
-    i = sub(ra_len32(args_), 1);
+    i = sub(ra_len32(args), 1);
     while(gt(i, sub(0,1))) {
       indented_emit_out(mks_("DEFINE ARG_"));
-      emit_out(ra_get32(args_, i));
+      emit_out(ra_get32(args, i));
       emit_out(mks_(" "));
       /* FIXME explain this frame layout better */
       emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
@@ -894,7 +894,7 @@ function program() {
 
 function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
-  args_ = ra_new();
+  args = ra_new();
 }
 
 function join_list(l) {
