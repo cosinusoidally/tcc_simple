@@ -558,13 +558,13 @@ function expression() {
     nt();
     expression();
     skip(mks_(")"));
-  } else if(tt == tt_identifier) {
+  } else if(eq(tt, tt_identifier)) {
     primary_expr_variable();
-  } else if(tt == tt_number) {
+  } else if(eq(tt, tt_number)) {
     primary_expr_number();
-  } else if(tt == tt_char) {
+  } else if(eq(tt, tt_char)) {
     primary_expr_char();
-  } else if(tt == tt_string) {
+  } else if(eq(tt, tt_string)) {
     primary_expr_string();
   } else {
     error();
