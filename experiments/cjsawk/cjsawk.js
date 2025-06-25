@@ -399,7 +399,7 @@ function collect_local() {
 function variable_load(a, is_arg) {
   indented_emit_out(mks_("local "));
   if(eq(is_arg, TRUE)) {
-    emit_out("ARG_");
+    emit_out(mks_("ARG_"));
   } else {
     emit_out(mks_("LOCAL_"));
   }
@@ -688,7 +688,7 @@ function process_asm() {
   skip(mks_("("));
   while(eq(char0(), mkc('"'))) {
 /* FIXME strip off quotes in a non-js way */
-    emit_out(tok.slice(1,-1));
+    emit_out(mks_(tok.slice(1,-1)));
     emit_out(mks_("\n"));
     nt();
   }
@@ -809,6 +809,9 @@ function join_list(l) {
     c = l[i];
     if(typeof c == "number") {
       c = mk_js_string(c);
+    } else {
+// DEBUG
+//      print("string: "+c);
     }
     o.push(c);
   }
