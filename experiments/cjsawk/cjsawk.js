@@ -366,24 +366,19 @@ function to_hex_digit(a) {
 function to_hex_le(a) {
   var o;
   var i;
-  var t;
-  var d1;
-  var d2;
+  var d1o;
+  var d2o;
   i = 0;
-  o = [];
-  o2 = calloc(17, 1);
+  o = calloc(17, 1);
   while(lt(i, 4)) {
-    d2 = mul(i, 2);
-    d1 = add(d2, 1);
-    o[d1] = to_hex_digit(a);
-    o[d2] = to_hex_digit(shr(a, 4));
-    wi8(add(o2, d1), to_hex_digit(a));
-    wi8(add(o2, d2), to_hex_digit(shr(a, 4)));
+    d2o = mul(i, 2);
+    d1o = add(d2o, 1);
+    wi8(add(o, d1o), to_hex_digit(a));
+    wi8(add(o, d2o), to_hex_digit(shr(a, 4)));
     a = shr(a, 8);
     i = add(i, 1);
   }
-  t = mks_(o.map(function(x){return String.fromCharCode(x);}).join(""));
-  return o2;
+  return o;
 }
 
 function locals_push(s) {
