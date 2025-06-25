@@ -38,4 +38,4 @@ load("cjsawk.js");
 init_support();
 main();
 // print(brk_ptr);
-// print(args_.capacity);
+// print(globals_list.len);
