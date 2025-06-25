@@ -336,13 +336,21 @@ function emit(s, l) {
   l.push(s);
 }
 
+function emit_(s, l) {
+  ra_push32(l, s);
+}
+
 globals_list = [];
+var globals_list_;
 
 function declare_global(t) {
   dprint("declare_global: " +t);
   emit(mks_(":GLOBAL_") , globals_list);
   emit(t, globals_list);
   emit(mks_("\nNULL\n"), globals_list);
+  emit_(mks_(":GLOBAL_") , globals_list_);
+  emit_(t, globals_list_);
+  emit_(mks_("\nNULL\n"), globals_list_);
   skip(mks_(";"));
 }
 
@@ -892,6 +900,7 @@ function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
   args = ra_new();
   locals = ra_new();
+  globals_list_ = ra_new();
 }
 
 function join_list(l) {
@@ -910,13 +919,27 @@ function join_list(l) {
   return o.join("");
 }
 
+function join_list_(l) {
+  var o;
+  var i;
+  var len;
+  o = [];
+  i = 0;
+  len = ra_len32(l);
+  while (lt(i,len)) {
+    o.push(mk_js_string(ra_get32(l, i)));
+    i = add(i,1);
+  }
+  return o.join("");
+}
+
 function main() {
   init_globals();
   program();
   print("\n# Core program");
   print(join_list(output_list));
   print("# Program global variables");
-  print(join_list(globals_list));
+  print(join_list_(globals_list_));
   print("# Program strings");
   print(join_list(strings_list));
   print(":ELF_end");
