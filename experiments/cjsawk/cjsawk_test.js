@@ -23,17 +23,6 @@ function mks_alt(s) {
   return s;
 }
 
-mks = function(s) {
-  var r;
-  /* round trip onto virtual c heap */
-  r = mk_c_string(s);
-  r = mk_js_string(r);
-  return r;
-}
-
-mks_ = mk_c_string;
-mks = mk_c_string;
-
 load("cjsawk.js");
 
 init_support();
