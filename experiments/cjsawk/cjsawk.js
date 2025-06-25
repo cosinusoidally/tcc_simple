@@ -339,10 +339,12 @@ function emit_out(s) {
 
 function args_reset() {
   args_ = [];
+  args_.len = 0;
 }
 
 function args_push(v) {
   args_.push(v);
+  args_.len = add(args_.len, 1);
 }
 
 function args_get(o) {
@@ -350,7 +352,7 @@ function args_get(o) {
 }
 
 function args_length() {
-  return args_.length;
+  return args_.len;
 }
 
 function collect_arguments() {
