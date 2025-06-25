@@ -443,7 +443,7 @@ function function_call(s) {
 
   if(neq(passed, 0)) {
     emit_out(mks_("cleanup_args_bytes %"));
-    emit_out(int2str(mul(4, passed), 10, TRUE));
+    emit_out(int_str(mul(4, passed)));
     emit_out(mks_("\n"));
   } else {
     no_indent = 1;
@@ -538,14 +538,14 @@ function escape_lookup(c) {
 
 function primary_expr_char() {
   emit_out(mks_("constant %"));
-  emit_out(int2str(escape_lookup(tok), 1), 10, TRUE);
+  emit_out(int_str(escape_lookup(tok), 1));
   emit_out(mks_(" "));
   nt();
 }
 
 function primary_expr_string() {
   var number_string;
-  number_string = int2str(current_count, 10, TRUE);
+  number_string = int_str(current_count);
   current_count = add(current_count, 1);
   emit(mks_(":STRING_"), strings_list);
   uniqueID(number_string, strings_list);
@@ -585,7 +585,7 @@ function expression() {
   }
 }
 
-function int2str(a) {
+function int_str(a) {
   var b;
   var d;
   var o;
@@ -616,7 +616,7 @@ function cleanup_locals() {
   c = locals.length;
   if(gt(c, 0)) {
     indented_emit_out(mks_("cleanup_locals_bytes %"));
-    emit_out(int2str(mul(4, c), 10 , TRUE));
+    emit_out(int_str(mul(4, c)));
     emit_out(mks_(" "));
     no_indent = 1;
   }
@@ -648,7 +648,7 @@ function process_while() {
   var nested_break_num;
   nested_break_num = break_target_num;
   dprint("process_while");
-  number_string = int2str(current_count, 10, TRUE);
+  number_string = int_str(current_count);
   current_count = add(current_count, 1);
   break_target_num = number_string;
   emit_out(mks_(":WHILE_"));
@@ -672,7 +672,7 @@ function process_while() {
 function process_if() {
   var number_string;
   dprint("process_if");
-  number_string = int2str(current_count, 10, TRUE);
+  number_string = int_str(current_count);
   current_count = add(current_count, 1);
   emit_out(mks_("# IF_"));
   uniqueID_out(number_string);
