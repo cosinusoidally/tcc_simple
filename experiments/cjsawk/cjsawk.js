@@ -202,14 +202,23 @@ function is_string() {
 
 function f_str() {
   var i;
+  var l;
   var b = [];
+  var b2;
+  l = sub(te , ts);
+  b2 = malloc(add(l, 1));
   for(i=ts; i < te ; i = i + 1) {
     b.push(f[i]);
+    wi8(add(b2, sub(i, ts)), f[i]);
   }
   b = b.map(function(x){return String.fromCharCode(x)}).join("");
   dprint("tt: " + tt + " f_str " + b);
-  tok = b;
-  tok_ = mks_(b);
+  tok = mk_js_string(b2);
+  if(b.length !== l) {
+    print(b.length);
+    exit(1);
+  }
+  tok_ = b2;
 }
 
 function get_id() {
