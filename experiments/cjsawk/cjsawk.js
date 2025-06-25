@@ -333,7 +333,8 @@ function skip(s) {
 }
 
 function emit(s, l) {
-  l.push(s);
+  return emit_(s,l);
+//  l.push(s);
 }
 
 function emit_(s, l) {
@@ -352,10 +353,12 @@ function declare_global(t) {
 
 var strings_list;
 
-output_list = [];
+var output_list;
+// output_list = [];
 
 function emit_out(s) {
-  output_list.push(s);
+  emit(s, output_list);
+//  output_list.push(s);
 }
 
 /* resizable arrays */
@@ -825,10 +828,6 @@ function statement() {
   }
 }
 
-function reset_locals(){
-  locals = [];
-}
-
 function declare_function(t) {
   var i;
   ra_reset(locals);
@@ -861,7 +860,7 @@ function declare_function(t) {
       i = sub(i, 1);
     }
     statement();
-    if(eq(0, match_(output_list[sub(output_list.length,1)], mks_("ret\n")))) {
+    if(eq(0, match_(ra_get32(output_list, sub(ra_len32(output_list),1)), mks_("ret\n")))) {
       cleanup_locals();
       indented_emit_out(mks_("ret\n"));
     }
@@ -906,6 +905,7 @@ function init_globals() {
   locals = ra_new();
   globals_list = ra_new();
   strings_list = ra_new();
+  output_list = ra_new();
 }
 
 function join_list(l) {
@@ -942,7 +942,7 @@ function main() {
   init_globals();
   program();
   print("\n# Core program");
-  print(join_list(output_list));
+  print(join_list_(output_list));
   print("# Program global variables");
   print(join_list_(globals_list));
   print("# Program strings");
