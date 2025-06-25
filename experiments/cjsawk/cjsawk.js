@@ -374,16 +374,25 @@ function ra_grow(r) {
   ra_capacity_s(r,c2);
 }
 
+function ra_reset(r) {
+  r.len = 0;
+}
+
+function ra_push32(r, v) {
+  if(gt(add(r.len, 4), ra_capacity_g(r))) {
+    ra_grow(r);
+  }
+  r.data[r.len] = v;
+  r.len = add(r.len, 4);
+}
+
+
 function args_reset() {
-  args_.len = 0;
+  ra_reset(args_);
 }
 
 function args_push32(v) {
-  if(gt(add(args_.len, 4), ra_capacity_g(args_))) {
-    ra_grow(args_);
-  }
-  args_.data[args_.len] = v;
-  args_.len = add(args_.len, 4);
+  ra_push32(args_, v);
 }
 
 function args_get32(o) {
