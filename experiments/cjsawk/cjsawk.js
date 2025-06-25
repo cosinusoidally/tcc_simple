@@ -347,11 +347,25 @@ function ra_new() {
   return t;
 }
 
+function ra_capacity_g(r) {
+  return r.capacity;
+}
+
 function ra_grow(r) {
-  var td;
+  var sd;
+  var dd;
+  var c1;
   var c2;
-  c2 = mul(r.capacity, 2);
-  td = calloc(c2,1);
+  var o;
+  c1 = ra_capacity(r);
+  c2 = mul(c1, 2);
+  dd = calloc(c2,1);
+  sd = t.data_raw;
+  o = 0;
+  while(lt(o, c1)) {
+    wi8(add(dd,o),ri8(add(sd,o)));
+  }
+  r.data_raw = dd;
 }
 
 function args_reset() {
