@@ -337,17 +337,34 @@ function emit_out(s) {
   output_list.push(s);
 }
 
+/* resizable arrays */
+function ra_new() {
+  var t = {};
+  t.capacity = 4;
+  t.len = 4;
+  t.data = [];
+  t.data_raw = calloc(t.capacity, 1);
+  return t;
+}
+
+function ra_grow(r) {
+  var td;
+  var c2;
+  c2 = mul(r.capacity, 2);
+  td = calloc(c2,1);
+}
+
 function args_reset() {
   args_.len = 0;
 }
 
 function args_push32(v) {
-  args_[args_.len] = v;
+  args_.data[args_.len] = v;
   args_.len = add(args_.len, 4);
 }
 
 function args_get32(o) {
-  return args_[mul(o,4)];
+  return args_.data[mul(o,4)];
 }
 
 function args_len32() {
@@ -838,7 +855,7 @@ function program() {
 
 function init_globals() {
   break_target_prefix = mks_("END_WHILE_");
-  args_ = [];
+  args_ = ra_new();
 }
 
 function join_list(l) {
