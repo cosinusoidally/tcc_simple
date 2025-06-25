@@ -351,21 +351,27 @@ function ra_capacity_g(r) {
   return r.capacity;
 }
 
+function ra_capacity_s(r, v) {
+  r.capacity = v;
+}
+
 function ra_grow(r) {
   var sd;
   var dd;
   var c1;
   var c2;
   var o;
-  c1 = ra_capacity(r);
+  c1 = ra_capacity_g(r);
   c2 = mul(c1, 2);
   dd = calloc(c2,1);
-  sd = t.data_raw;
+  sd = r.data_raw;
   o = 0;
   while(lt(o, c1)) {
     wi8(add(dd,o),ri8(add(sd,o)));
+    o = add(o,1);
   }
   r.data_raw = dd;
+  ra_capacity_s(r,c2);
 }
 
 function args_reset() {
@@ -373,6 +379,9 @@ function args_reset() {
 }
 
 function args_push32(v) {
+  if(gt(add(args_.len, 4), ra_capacity_g(args_))) {
+    ra_grow(args_);
+  }
   args_.data[args_.len] = v;
   args_.len = add(args_.len, 4);
 }
