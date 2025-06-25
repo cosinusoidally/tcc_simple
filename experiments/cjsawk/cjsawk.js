@@ -586,6 +586,10 @@ function expression() {
 }
 
 function int2str(a) {
+  if(typeof a != "number") {
+    print("not number: "+a);
+    error();
+  }
   /* FIXME this is cheating */
   return a.toString(10);
 }
@@ -614,7 +618,7 @@ function return_result() {
 function uniqueID(id, l) {
   emit(func, l);
   emit(mks_("_"), l);
-  emit(int2str(id, 10, TRUE), l);
+  emit(id, l);
   emit(mks_("\n"), l);
 }
 
