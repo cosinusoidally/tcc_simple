@@ -113,7 +113,7 @@ function nc() {
 }
 
 function char0() {
-  return mkc(tok[0]);
+  return ri8(tok_);
 }
 
 function is_whitespace() {
@@ -548,8 +548,8 @@ function primary_expr_string() {
   emit(mks_(":STRING_"), strings_list);
   uniqueID(number_string, strings_list);
 
-  emit(tok, strings_list);
-  emit(mks("\n"), strings_list);
+  emit(tok_, strings_list);
+  emit(mks_("\n"), strings_list);
 
   indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
