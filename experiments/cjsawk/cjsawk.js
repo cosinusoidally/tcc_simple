@@ -351,6 +351,7 @@ function declare_global(t) {
 }
 
 strings_list = [];
+var strings_list_;
 
 output_list = [];
 
@@ -624,6 +625,12 @@ function primary_expr_string() {
   emit(tok_, strings_list);
   emit(mks_("\n"), strings_list);
 
+  emit_(mks_(":STRING_"), strings_list_);
+  uniqueID_(number_string, strings_list_);
+
+  emit_(tok_, strings_list_);
+  emit_(mks_("\n"), strings_list_);
+
   indented_emit_out(mks_("constant &STRING_"));
   uniqueID_out(number_string);
 
@@ -708,6 +715,13 @@ function uniqueID(id, l) {
   emit(mks_("_"), l);
   emit(id, l);
   emit(mks_("\n"), l);
+}
+
+function uniqueID_(id, l) {
+  emit_(func, l);
+  emit_(mks_("_"), l);
+  emit_(id, l);
+  emit_(mks_("\n"), l);
 }
 
 function uniqueID_out(id) {
@@ -897,6 +911,7 @@ function init_globals() {
   args = ra_new();
   locals = ra_new();
   globals_list = ra_new();
+  strings_list_ = ra_new();
 }
 
 function join_list(l) {
