@@ -493,7 +493,7 @@ function primary_expr_variable() {
 
 function primary_expr_number() {
   indented_emit_out(mks_("constant %"));
-  emit_out(tok);
+  emit_out(tok_);
   emit_out(mks_(" ")); no_indent = 1;
   nt();
 }
