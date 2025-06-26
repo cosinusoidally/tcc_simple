@@ -319,6 +319,7 @@ function nt() {
     get_char();
   } else if(is_string()) {
     get_string();
+    return TRUE;
   } else {
     print("unsupported char");
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
