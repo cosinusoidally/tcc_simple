@@ -245,9 +245,11 @@ function get_id() {
   ts = sub(to, 1);
   while(or(is_num(), is_id())) {
     te = to;
+    ra_push8(hold_string, ch);
     nc();
   }
-  f_str();
+/* FIXME this needs to use a proper copy function */
+  tok = mks(mk_js_string(ra_data_g(hold_string)));
 }
 
 function get_num() {
@@ -310,6 +312,8 @@ function nt() {
     }
   }
 
+  ra_reset(hold_string);
+
   if(is_id()) {
     get_id();
   } else if(is_num()) {
@@ -325,6 +329,8 @@ function nt() {
     print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
     throw "error";
   }
+
+//  print("hold_string: "+ mk_js_string(ra_data_g(hold_string)));
   return true;
 }
 
