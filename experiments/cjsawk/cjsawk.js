@@ -274,14 +274,17 @@ function get_other() {
 function get_char() {
   tt = tt_char;
   ts = sub(to, 1);
+  ra_push8(hold_string, ch);
   nc();
   if(eq(ch, mkc('\\'))) {
+    ra_push8(hold_string, ch);
     nc();
   }
+  ra_push8(hold_string, ch);
   nc();
   te = to;
   nc();
-  f_str();
+  tok = ra_data_g(hold_string);
 }
 
 function get_string() {
