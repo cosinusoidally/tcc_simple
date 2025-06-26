@@ -327,6 +327,7 @@ function nt() {
   }
 
 //  print("hold_string: "+ mk_js_string(ra_data_g(hold_string)));
+  tok = ra_data_g(hold_string);
   return TRUE;
 }
 
