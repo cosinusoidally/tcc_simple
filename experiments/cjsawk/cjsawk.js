@@ -138,6 +138,11 @@ function nc() {
   }
 }
 
+function nch() {
+  ra_push8(hold_string, ch);
+  nc();
+}
+
 function char0() {
   return ri8(tok);
 }
