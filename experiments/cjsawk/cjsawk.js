@@ -910,7 +910,7 @@ function init_globals() {
   eof = FALSE;
 }
 
-function join_list_(l) {
+function join_list(l) {
   var o;
   var i;
   var len;
@@ -928,10 +928,10 @@ function main() {
   init_globals();
   program();
   print("\n# Core program");
-  print(join_list_(output_list));
+  print(join_list(output_list));
   print("# Program global variables");
-  print(join_list_(globals_list));
+  print(join_list(globals_list));
   print("# Program strings");
-  print(join_list_(strings_list));
+  print(join_list(strings_list));
   print(":ELF_end");
 }
