@@ -290,13 +290,16 @@ function get_char() {
 function get_string() {
   tt = tt_string;
   ts = sub(to, 1);
+  ra_push8(hold_string, ch);
   nc();
   while(neq(ch, mkc('"'))) {
+    ra_push8(hold_string, ch);
     nc();
   }
   te = to;
+  ra_push8(hold_string, ch);
   nc();
-  f_str();
+  tok = ra_data_g(hold_string);
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
   tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0]);
