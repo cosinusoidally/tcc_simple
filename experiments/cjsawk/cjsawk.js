@@ -326,7 +326,7 @@ function nt() {
   }
 
 //  print("hold_string: "+ mk_js_string(ra_data_g(hold_string)));
-  return true;
+  return TRUE;
 }
 
 function skip(s) {
