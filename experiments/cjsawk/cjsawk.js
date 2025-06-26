@@ -226,20 +226,6 @@ function is_string() {
   return FALSE;
 }
 
-function f_str() {
-  var i;
-  var l;
-  var b2;
-  l = sub(te , ts);
-  b2 = malloc(add(l, 1));
-  i = ts;
-  while(lt(i,te)) {
-    wi8(add(b2, sub(i, ts)), f[i]);
-    i = add(i, 1);
-  }
-  tok = b2;
-}
-
 function get_id() {
   tt = tt_identifier;
   ts = sub(to, 1);
