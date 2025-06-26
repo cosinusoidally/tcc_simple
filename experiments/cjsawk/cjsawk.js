@@ -910,22 +910,6 @@ function init_globals() {
   eof = FALSE;
 }
 
-function join_list(l) {
-  var o = [];
-  var c;
-  for(var i = 0; i < l.length; i++) {
-    c = l[i];
-    if(typeof c == "number") {
-      c = mk_js_string(c);
-    } else {
-// DEBUG
-      print("string: "+c);
-    }
-    o.push(c);
-  }
-  return o.join("");
-}
-
 function join_list_(l) {
   var o;
   var i;
