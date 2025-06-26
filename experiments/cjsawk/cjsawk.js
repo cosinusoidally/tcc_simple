@@ -129,7 +129,7 @@ function increase_indent() {
 }
 
 function nc() {
-  ch=f[to];
+  ch = v_getc();
   to = add(to, 1);
   if(eq(ch, 10)) {
     ln = add(ln, 1);
@@ -273,7 +273,8 @@ function get_string() {
 }
 
 function nt() {
-  if(gte(to, f.length)) {
+  /* FIXME shouldn't use f_len, nc should indicate if eof */
+  if(gte(to, f_len)) {
     eof = TRUE;
     return FALSE;
   }

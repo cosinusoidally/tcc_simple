@@ -17,6 +17,17 @@ load("support.js");
 
 f=read("./artifacts/m2min_v3.c","binary");
 
+v_o = 0;
+
+f_len=f.length;
+
+function v_getc() {
+  var r;
+  r=f[v_o];
+  v_o=v_o + 1;
+  return r;
+}
+
 
 function mks_alt(s) {
   // dummy impl
