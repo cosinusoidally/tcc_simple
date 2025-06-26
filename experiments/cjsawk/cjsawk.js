@@ -28,8 +28,6 @@ var indent;
 var no_indent;
 
 var to;
-var ts;
-var te;
 var ch;
 
 var ln;
@@ -899,8 +897,6 @@ function init_globals() {
   no_indent = 0;
 
   to=0;
-  ts=0;
-  te=0;
 
   ln=1;
 
