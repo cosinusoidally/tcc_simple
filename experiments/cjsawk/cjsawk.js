@@ -260,7 +260,6 @@ function get_char() {
 
 function get_string() {
   tt = tt_string;
-  ts = sub(to, 1);
   nch();
   while(neq(ch, mkc('"'))) {
     nch();
