@@ -234,7 +234,6 @@ function get_id() {
     ra_push8(hold_string, ch);
     nc();
   }
-  tok = ra_data_g(hold_string);
 }
 
 function get_num() {
@@ -245,7 +244,6 @@ function get_num() {
     ra_push8(hold_string, ch);
     nc();
   }
-  tok = ra_data_g(hold_string);
 }
 
 function get_other() {
@@ -254,7 +252,6 @@ function get_other() {
   te = to;
   ra_push8(hold_string, ch);
   nc();
-  tok = ra_data_g(hold_string);
 }
 
 function get_char() {
@@ -270,7 +267,6 @@ function get_char() {
   nc();
   te = to;
   nc();
-  tok = ra_data_g(hold_string);
 }
 
 function get_string() {
