@@ -248,8 +248,7 @@ function get_id() {
     ra_push8(hold_string, ch);
     nc();
   }
-/* FIXME this needs to use a proper copy function */
-  tok = mks(mk_js_string(ra_data_g(hold_string)));
+  tok = ra_data_g(hold_string);
 }
 
 function get_num() {
@@ -260,8 +259,7 @@ function get_num() {
     ra_push8(hold_string, ch);
     nc();
   }
-/* FIXME this needs to use a proper copy function */
-  tok = mks(mk_js_string(ra_data_g(hold_string)));
+  tok = ra_data_g(hold_string);
 }
 
 function get_other() {
