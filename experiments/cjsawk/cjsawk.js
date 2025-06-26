@@ -335,7 +335,6 @@ function declare_global(t) {
 
 function emit_out(s) {
   emit(s, output_list);
-//  output_list.push(s);
 }
 
 /* resizable arrays */
