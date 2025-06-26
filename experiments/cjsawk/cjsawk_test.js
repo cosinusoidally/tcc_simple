@@ -29,3 +29,4 @@ init_support();
 main();
 // print(brk_ptr);
 // print(globals_list.len);
+ print(hold_string.capacity);

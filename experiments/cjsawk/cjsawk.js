@@ -257,9 +257,11 @@ function get_num() {
   ts = sub(to, 1);
   while(is_num()) {
     te = to;
+    ra_push8(hold_string, ch);
     nc();
   }
-  f_str();
+/* FIXME this needs to use a proper copy function */
+  tok = mks(mk_js_string(ra_data_g(hold_string)));
 }
 
 function get_other() {
@@ -364,7 +366,7 @@ function emit_out(s) {
 function ra_new() {
   var t = {};
   t.capacity = 4;
-  t.len = 4;
+  t.len = 0;
   t.data_raw = calloc(t.capacity, 1);
   return t;
 }
