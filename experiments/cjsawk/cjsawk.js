@@ -314,7 +314,9 @@ function nt() {
     }
   }
 
-  ra_reset(hold_string);
+/* FIXME probably memory inefficient */
+//  ra_reset(hold_string);
+  hold_string = ra_new();
 
   if(is_id()) {
     get_id();
