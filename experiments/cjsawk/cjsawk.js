@@ -266,8 +266,9 @@ function get_other() {
   tt = tt_other;
   ts = sub(to, 1);
   te = to;
+  ra_push8(hold_string, ch);
   nc();
-  f_str();
+  tok = ra_data_g(hold_string);
 }
 
 function get_char() {
