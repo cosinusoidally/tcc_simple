@@ -612,7 +612,7 @@ function primary_expr_string() {
   current_count = add(current_count, 1);
 
   emit(mks(":STRING_"), strings_list);
-  uniqueID_(number_string, strings_list);
+  uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
   emit(mks("\"\n"), strings_list);
@@ -701,10 +701,6 @@ function uniqueID(id, l) {
   emit(mks("_"), l);
   emit(id, l);
   emit(mks("\n"), l);
-}
-
-function uniqueID_(id, l) {
-  uniqueID(id, l);
 }
 
 function uniqueID_out(id) {
