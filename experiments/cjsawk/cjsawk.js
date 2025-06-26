@@ -236,8 +236,7 @@ function get_id() {
   ts = sub(to, 1);
   while(or(is_num(), is_id())) {
     te = to;
-    ra_push8(hold_string, ch);
-    nc();
+    nch();
   }
 }
 
@@ -246,8 +245,7 @@ function get_num() {
   ts = sub(to, 1);
   while(is_num()) {
     te = to;
-    ra_push8(hold_string, ch);
-    nc();
+    nch();
   }
 }
 
@@ -255,21 +253,17 @@ function get_other() {
   tt = tt_other;
   ts = sub(to, 1);
   te = to;
-  ra_push8(hold_string, ch);
-  nc();
+  nch();
 }
 
 function get_char() {
   tt = tt_char;
   ts = sub(to, 1);
-  ra_push8(hold_string, ch);
-  nc();
+  nch();
   if(eq(ch, mkc('\\'))) {
-    ra_push8(hold_string, ch);
-    nc();
+    nch();
   }
-  ra_push8(hold_string, ch);
-  nc();
+  nch();
   te = to;
   nc();
 }
@@ -277,15 +271,12 @@ function get_char() {
 function get_string() {
   tt = tt_string;
   ts = sub(to, 1);
-  ra_push8(hold_string, ch);
-  nc();
+  nch();
   while(neq(ch, mkc('"'))) {
-    ra_push8(hold_string, ch);
-    nc();
+    nch();
   }
   te = to;
-  ra_push8(hold_string, ch);
-  nc();
+  nch();
   tok = ra_data_g(hold_string);
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
