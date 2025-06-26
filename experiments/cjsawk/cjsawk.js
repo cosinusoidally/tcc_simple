@@ -118,10 +118,10 @@ function indented_emit_out(s) {
 }
 
 function decrease_indent() {
-        indent = sub(indent, 2);
-        if(lt(indent,0)) {
-                indent = 0;
-        }
+  indent = sub(indent, 2);
+  if(lt(indent,0)) {
+    indent = 0;
+  }
 }
 
 function increase_indent() {
