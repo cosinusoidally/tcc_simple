@@ -66,6 +66,8 @@ var ra_capacity_o;
 var ra_len8_o;
 var ra_data_o;
 
+var fo;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -938,6 +940,7 @@ function main() {
   init_support();
   init_globals();
   program();
+  fo = fopen(mks("./artifacts/blah.M1"),mks("w"));
   print("\n# Core program");
   print(join_list(output_list));
   print("# Program global variables");
