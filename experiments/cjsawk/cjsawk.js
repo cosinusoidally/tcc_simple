@@ -935,6 +935,7 @@ function join_list(l) {
 }
 
 function main() {
+  init_support();
   init_globals();
   program();
   print("\n# Core program");
