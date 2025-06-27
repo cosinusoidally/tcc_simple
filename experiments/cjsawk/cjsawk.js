@@ -404,6 +404,16 @@ function ra_data_s_(r, v) {
   wi32(add(r,ra_data_o), v);
 }
 
+function ra_data_g(r) {
+  return r.data_raw;
+}
+
+function ra_data_s(r, v) {
+  r.data_raw = v;
+  ra_data_s_(r, v);
+}
+
+
 function ra_grow(r) {
   var sd;
   var dd;
@@ -413,7 +423,7 @@ function ra_grow(r) {
   c1 = ra_capacity_g(r);
   c2 = mul(c1, 2);
   dd = calloc(c2,1);
-  sd = r.data_raw;
+  sd = ra_data_g(r);
   o = 0;
   while(lt(o, c1)) {
     wi8(add(dd,o),ri8(add(sd,o)));
@@ -450,10 +460,6 @@ function ra_get32(r, o) {
 
 function ra_len32(r) {
   return div(r.len, 4);
-}
-
-function ra_data_g(r) {
-  return r.data_raw;
 }
 
 function collect_arguments() {
