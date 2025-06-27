@@ -349,12 +349,9 @@ function ra_new() {
   var t = {};
   o = calloc(ra_sizeof, 1);
   d = calloc(4, 1);
-  ra_capacity_s_(o, 4);
-  ra_len8_s_(o, 0);
-  ra_data_s_(o, d);
   t.o = o;
   ra_capacity_s(t, 4);
-  t.len = 0;
+  ra_len8_s_(t, 0);
   ra_data_s(t, d);
   return t;
 }
@@ -386,6 +383,16 @@ function ra_capacity_g_(r) {
 
 function ra_capacity_s_(r, v) {
   wi32(add(r,ra_capacity_o), v);
+}
+
+function ra_len8_g(r) {
+  return r.len;
+}
+
+function ra_len8_s(r, v) {
+  r.len8=v;
+  r = r.o;
+  ra_len8_s_(r, v);
 }
 
 function ra_len8_g_(r) {
