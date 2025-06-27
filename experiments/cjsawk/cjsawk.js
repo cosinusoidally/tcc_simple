@@ -400,38 +400,22 @@ function ra_capacity_s_(r, v) {
 
 function ra_len8_g(r) {
   r = r.o;
-  return ra_len8_g_(r);
+  return ri32(add(r,ra_len8_o));
 }
 
 function ra_len8_s(r, v) {
   r = r.o;
-  ra_len8_s_(r, v);
-}
-
-function ra_len8_g_(r) {
-  return ri32(add(r,ra_len8_o));
-}
-
-function ra_len8_s_(r, v) {
   wi32(add(r,ra_len8_o), v);
-}
-
-function ra_data_g_(r) {
-  return ri32(add(r,ra_data_o));
-}
-
-function ra_data_s_(r, v) {
-  wi32(add(r,ra_data_o), v);
 }
 
 function ra_data_g(r) {
   r = r.o;
-  return ra_data_g_(r);
+  return ri32(add(r,ra_data_o));
 }
 
 function ra_data_s(r, v) {
   r = r.o;
-  ra_data_s_(r, v);
+  wi32(add(r,ra_data_o), v);
 }
 
 
