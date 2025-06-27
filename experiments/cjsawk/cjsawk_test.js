@@ -29,6 +29,9 @@ f_len=f.length;
 
 function v_getc() {
   var r;
+  if(v_o >=f.length) {
+    return -1;
+  }
   r=f[v_o];
   v_o=v_o + 1;
   return r;
