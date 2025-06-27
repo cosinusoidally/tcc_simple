@@ -63,7 +63,7 @@ var hold_string;
 
 var ra_sizeof;
 var ra_capacity_o;
-var ra_len_o;
+var ra_len8_o;
 var ra_data_o;
 
 function ri32(o) {
@@ -348,6 +348,7 @@ function ra_new() {
   var t = {};
   o = calloc(ra_sizeof, 1);
   ra_capacity_s_(o, 4);
+  ra_len8_s_(o, 0);
   t.o = o;
   t.capacity = 4;
   t.len = 0;
@@ -379,6 +380,14 @@ function ra_capacity_g_(r) {
 
 function ra_capacity_s_(r, v) {
   wi32(add(r,ra_capacity_o), v);
+}
+
+function ra_len8_g_(r) {
+  return ri32(add(r,ra_len8_o));
+}
+
+function ra_len8_s_(r, v) {
+  wi32(add(r,ra_len8_o), v);
 }
 
 function ra_grow(r) {
@@ -933,7 +942,7 @@ function init_globals() {
   eof = FALSE;
 
   ra_capacity_o = 0;
-  ra_len_o = 4;
+  ra_len8_o = 4;
   ra_data_o = 8;
   ra_sizeof = 12;
 }
