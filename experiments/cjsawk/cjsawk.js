@@ -351,9 +351,14 @@ function ra_new() {
   d = calloc(4, 1);
   t.o = o;
   ra_capacity_s(t, 4);
-  ra_len8_s_(t, 0);
+  ra_len8_s(t, 0);
   ra_data_s(t, d);
+//  ra_head_check(t);
   return t;
+}
+
+function ra_head_check(r) {
+  print("ra_len8: "+ ra_len8_g(r)+" "+ra_len8_g_(r.o));
 }
 
 function ra_capacity_g(r) {
@@ -386,7 +391,7 @@ function ra_capacity_s_(r, v) {
 }
 
 function ra_len8_g(r) {
-  return r.len;
+  return r.len8;
 }
 
 function ra_len8_s(r, v) {
@@ -449,23 +454,23 @@ function ra_grow(r) {
 }
 
 function ra_reset(r) {
-  r.len = 0;
+  ra_len8_s(r, 0);
 }
 
 function ra_push32(r, v) {
-  if(gte(add(r.len, 4), ra_capacity_g(r))) {
+  if(gte(add(ra_len8_g(r), 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
-  wi32(add(ra_data_g(r), r.len), v);
-  r.len = add(r.len, 4);
+  wi32(add(ra_data_g(r), ra_len8_g(r)), v);
+  ra_len8_s(r, add(ra_len8_g(r), 4));
 }
 
 function ra_push8(r, v) {
-  if(gte(add(r.len, 4), ra_capacity_g(r))) {
+  if(gte(add(ra_len8_g(r), 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
-  wi32(add(ra_data_g(r), r.len), and(v, 255));
-  r.len = add(r.len, 1);
+  wi32(add(ra_data_g(r), ra_len8_g(r)), and(v, 255));
+  ra_len8_s(r, add(ra_len8_g(r), 1));
 }
 
 function ra_get32(r, o) {
@@ -473,7 +478,7 @@ function ra_get32(r, o) {
 }
 
 function ra_len32(r) {
-  return div(r.len, 4);
+  return div(ra_len8_g(r), 4);
 }
 
 function collect_arguments() {
