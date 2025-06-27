@@ -381,22 +381,11 @@ function ra_head_check(r) {
 }
 
 function ra_capacity_g(r) {
-//  print("r.capacity: "+r.capacity + " ra_capacity_g: " +ra_capacity_g_(r.o));
-/*
-  if(r.capacity != ra_capacity_g_(r.o)) {
-    error();
-    throw "error cap get";
-  }
-*/
-  return r.capacity;
-/*
   r = r.o;
   return ra_capacity_g_(r);
-*/
 }
 
 function ra_capacity_s(r, v) {
-  r.capacity=v;
   r = r.o;
   ra_capacity_s_(r, v);
 }
@@ -410,7 +399,8 @@ function ra_capacity_s_(r, v) {
 }
 
 function ra_len8_g(r) {
-  return r.len8;
+  r = r.o;
+  return ra_len8_g_(r);
 }
 
 function ra_len8_s(r, v) {
