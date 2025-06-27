@@ -922,7 +922,7 @@ function init_globals() {
   eof = FALSE;
 }
 
-function join_list(l) {
+function print_list(l) {
   var o;
   var i;
   var len;
@@ -931,9 +931,10 @@ function join_list(l) {
   len = ra_len32(l);
   while (lt(i,len)) {
     o.push(mk_js_string(ra_get32(l, i)));
+    fputs(ra_get32(l, i), fo);
     i = add(i,1);
   }
-  return o.join("");
+  print(o.join(""));
 }
 
 function main() {
@@ -942,10 +943,10 @@ function main() {
   program();
   fo = fopen(mks("./artifacts/blah.M1"),mks("w"));
   print("\n# Core program");
-  print(join_list(output_list));
+  print_list(output_list);
   print("# Program global variables");
-  print(join_list(globals_list));
+  print_list(globals_list);
   print("# Program strings");
-  print(join_list(strings_list));
+  print_list(strings_list);
   print(":ELF_end");
 }
