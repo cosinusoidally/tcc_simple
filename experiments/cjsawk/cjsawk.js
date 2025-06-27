@@ -350,11 +350,11 @@ function ra_new() {
   o = calloc(ra_sizeof, 1);
   d = calloc(4, 1);
   t.o = o;
-  ra_capacity_s(t, 4);
-  ra_len8_s(t, 0);
-  ra_data_s(t, d);
+  ra_capacity_s(o, 4);
+  ra_len8_s(o, 0);
+  ra_data_s(o, d);
 //  ra_head_check(t);
-  return t;
+  return o;
 }
 
 function ra_head_check(r) {
@@ -381,32 +381,26 @@ function ra_head_check(r) {
 }
 
 function ra_capacity_g(r) {
-  r = r.o;
   return ri32(add(r,ra_capacity_o));
 }
 
 function ra_capacity_s(r, v) {
-  r = r.o;
   wi32(add(r,ra_capacity_o), v);
 }
 
 function ra_len8_g(r) {
-  r = r.o;
   return ri32(add(r,ra_len8_o));
 }
 
 function ra_len8_s(r, v) {
-  r = r.o;
   wi32(add(r,ra_len8_o), v);
 }
 
 function ra_data_g(r) {
-  r = r.o;
   return ri32(add(r,ra_data_o));
 }
 
 function ra_data_s(r, v) {
-  r = r.o;
   wi32(add(r,ra_data_o), v);
 }
 
