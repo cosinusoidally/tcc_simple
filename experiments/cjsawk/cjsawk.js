@@ -346,14 +346,11 @@ function emit_out(s) {
 function ra_new() {
   var o;
   var d;
-  var t = {};
   o = calloc(ra_sizeof, 1);
   d = calloc(4, 1);
-  t.o = o;
   ra_capacity_s(o, 4);
   ra_len8_s(o, 0);
   ra_data_s(o, d);
-//  ra_head_check(t);
   return o;
 }
 
