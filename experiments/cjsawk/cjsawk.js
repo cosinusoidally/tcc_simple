@@ -356,6 +356,7 @@ function ra_new() {
 }
 
 function ra_capacity_g(r) {
+//  print("r.capacity: "+r.capacity + " ra_capacity_g: " +ra_capacity_g_(r.o));
   return r.capacity;
 /*
   r = r.o;
@@ -364,6 +365,9 @@ function ra_capacity_g(r) {
 }
 
 function ra_capacity_s(r, v) {
+  if(v == 0) {
+    throw "error blah";
+  }
   r.capacity=v;
   r = r.o;
   ra_capacity_s_(r, v);
@@ -402,7 +406,7 @@ function ra_reset(r) {
 }
 
 function ra_push32(r, v) {
-  if(gt(add(r.len, 4), ra_capacity_g(r))) {
+  if(gte(add(r.len, 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
   wi32(add(r.data_raw, r.len), v);
@@ -410,7 +414,7 @@ function ra_push32(r, v) {
 }
 
 function ra_push8(r, v) {
-  if(gt(add(r.len, 4), ra_capacity_g(r))) {
+  if(gte(add(r.len, 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
   wi32(add(r.data_raw, r.len), and(v, 255));
