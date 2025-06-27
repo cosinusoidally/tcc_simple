@@ -358,7 +358,26 @@ function ra_new() {
 }
 
 function ra_head_check(r) {
-  print("ra_len8: "+ ra_len8_g(r)+" "+ra_len8_g_(r.o));
+  var l1;
+  var l2;
+  var c1;
+  var c2;
+  var d1;
+  var d2;
+  var o;
+  o = r.o;
+  l1 = ra_len8_g(r);
+  l2 = ra_len8_g_(o);
+  c1 = ra_capacity_g(r);
+  c2 = ra_capacity_g_(o);
+  d1 = ra_data_g(r);
+  d2 = ra_data_g_(o);
+  if(l1 != l2 || c1 != c2) {
+    print("header:");
+    print("ra_len8: "+ l1+" "+l2);
+    print("ra_capacity: "+ c1+" "+c2);
+    print("ra_data: "+ d1+" "+d2);
+  }
 }
 
 function ra_capacity_g(r) {
