@@ -42,6 +42,9 @@ function mks_alt(s) {
 
 function HACK_string_escape(s) {
   /* FIXME remove this hack */
+  if(dbg) {
+    print("string_escape: "+mk_js_string(s));
+  }
   return mks('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
 }
 
