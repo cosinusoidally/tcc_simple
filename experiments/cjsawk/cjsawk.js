@@ -345,12 +345,10 @@ function emit_out(s) {
 /* resizable arrays */
 function ra_new() {
   var o;
-  var d;
   o = calloc(ra_sizeof, 1);
-  d = calloc(4, 1);
   ra_capacity_s(o, 4);
   ra_len8_s(o, 0);
-  ra_data_s(o, d);
+  ra_data_s(o, calloc(ra_capacity_g(o)));
   return o;
 }
 
