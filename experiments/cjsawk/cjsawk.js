@@ -345,6 +345,7 @@ function emit_out(s) {
 /* resizable arrays */
 function ra_new() {
   var o;
+  var d;
   var t = {};
   o = calloc(ra_sizeof, 1);
   ra_capacity_s_(o, 4);
@@ -352,7 +353,9 @@ function ra_new() {
   t.o = o;
   t.capacity = 4;
   t.len = 0;
-  t.data_raw = calloc(4, 1);
+  d = calloc(4, 1);
+  t.data_raw = d;
+  ra_data_s_(d);
   return t;
 }
 
@@ -391,6 +394,14 @@ function ra_len8_g_(r) {
 
 function ra_len8_s_(r, v) {
   wi32(add(r,ra_len8_o), v);
+}
+
+function ra_data_g_(r) {
+  return ri32(add(r,ra_data_o));
+}
+
+function ra_data_s_(r, v) {
+  wi32(add(r,ra_data_o), v);
 }
 
 function ra_grow(r) {
