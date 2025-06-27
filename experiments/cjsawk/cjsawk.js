@@ -358,6 +358,12 @@ function ra_new() {
 
 function ra_capacity_g(r) {
 //  print("r.capacity: "+r.capacity + " ra_capacity_g: " +ra_capacity_g_(r.o));
+/*
+  if(r.capacity != ra_capacity_g_(r.o)) {
+    error();
+    throw "error cap get";
+  }
+*/
   return r.capacity;
 /*
   r = r.o;
@@ -366,9 +372,6 @@ function ra_capacity_g(r) {
 }
 
 function ra_capacity_s(r, v) {
-  if(v == 0) {
-    throw "error blah";
-  }
   r.capacity=v;
   r = r.o;
   ra_capacity_s_(r, v);
