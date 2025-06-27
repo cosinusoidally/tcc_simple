@@ -150,6 +150,10 @@ function nc() {
   if(eq(ch, 10)) {
     ln = add(ln, 1);
   }
+
+  if(eq(ch, sub(0,1))) {
+    eof = TRUE;
+  }
 }
 
 function nch() {
@@ -288,12 +292,6 @@ function get_string() {
 }
 
 function nt() {
-  /* FIXME shouldn't use f_len, nc should indicate if eof */
-  if(gte(to, f_len)) {
-    eof = TRUE;
-    return FALSE;
-  }
-
   while(or(is_whitespace(), is_comment())) {
     if(is_whitespace()) {
       eat_whitespace();
@@ -317,6 +315,8 @@ function nt() {
   } else if(is_string()) {
     get_string();
     return TRUE;
+  } else if(eof){
+    return FALSE;
   } else {
     error();
   }
