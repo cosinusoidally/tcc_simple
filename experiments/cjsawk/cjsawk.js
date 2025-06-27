@@ -855,8 +855,7 @@ function declare_function(t) {
 }
 
 function error() {
-  print("line: " + ln + " tok: " + tok);
-  exit(1);
+  exit(200);
 }
 
 function program() {
