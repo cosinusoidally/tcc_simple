@@ -68,7 +68,7 @@ var ra_data_o;
 
 var fo;
 
-var str_quote;
+var str_dquote;
 
 function ri32(o) {
   return or(or(and(ri8(o), 255),
@@ -632,7 +632,8 @@ function primary_expr_string() {
   uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
-  emit(mks("\""), strings_list);
+  /* can't handle double quotes in strings */
+  emit(str_dquote, strings_list);
   emit(mks("\n"), strings_list);
 
   indented_emit_out(mks("constant &STRING_"));
@@ -916,8 +917,8 @@ function init_globals() {
 
   eof = FALSE;
 
-  str_quote = calloc(2,1);
-  wi8(str_quote, mkc('"'));
+  str_dquote = calloc(2,1);
+  wi8(str_dquote, mkc('"'));
 }
 
 function print_list(l) {
