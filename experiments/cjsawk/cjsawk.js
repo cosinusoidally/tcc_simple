@@ -382,19 +382,11 @@ function ra_head_check(r) {
 
 function ra_capacity_g(r) {
   r = r.o;
-  return ra_capacity_g_(r);
+  return ri32(add(r,ra_capacity_o));
 }
 
 function ra_capacity_s(r, v) {
   r = r.o;
-  ra_capacity_s_(r, v);
-}
-
-function ra_capacity_g_(r) {
-  return ri32(add(r,ra_capacity_o));
-}
-
-function ra_capacity_s_(r, v) {
   wi32(add(r,ra_capacity_o), v);
 }
 
