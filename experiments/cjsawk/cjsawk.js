@@ -630,7 +630,8 @@ function primary_expr_string() {
   uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
-  emit(mks("\"\n"), strings_list);
+  emit(mks("\""), strings_list);
+  emit(mks("\n"), strings_list);
 
   indented_emit_out(mks("constant &STRING_"));
   uniqueID_out(number_string);
