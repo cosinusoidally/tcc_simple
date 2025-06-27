@@ -61,6 +61,11 @@ var locals;
 
 var hold_string;
 
+var ra_sizeof;
+var ra_capacity_o;
+var ra_len_o;
+var ra_data_o;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -904,6 +909,11 @@ function init_globals() {
   break_target_prefix = mks("END_WHILE_");
 
   eof = FALSE;
+
+  ra_capacity_o = 0;
+  ra_len_o = 4;
+  ra_data_o = 8;
+  ra_sizeof = 12;
 }
 
 function join_list(l) {
