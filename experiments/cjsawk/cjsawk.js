@@ -24,6 +24,11 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var TRUE;
+var FALSE;
+
+var NULL;
+
 var indent;
 var no_indent;
 
@@ -33,6 +38,8 @@ var ch;
 var ln;
 
 var current_count;
+
+var func;
 
 var tt;
 
@@ -295,8 +302,8 @@ function nt() {
     }
   }
 
+/*  ra_reset(hold_string); */
 /* FIXME probably memory inefficient */
-//  ra_reset(hold_string);
   hold_string = ra_new();
 
   if(is_id()) {
@@ -348,7 +355,7 @@ function ra_new() {
   o = calloc(ra_sizeof, 1);
   ra_capacity_s(o, 4);
   ra_len8_s(o, 0);
-  ra_data_s(o, calloc(ra_capacity_g(o)));
+  ra_data_s(o, calloc(ra_capacity_g(o), 1));
   return o;
 }
 
@@ -888,6 +895,11 @@ function program() {
 }
 
 function init_globals() {
+  NULL = 0;
+
+  FALSE = 0;
+  TRUE = 1;
+
   ra_capacity_o = 0;
   ra_len8_o = 4;
   ra_data_o = 8;
