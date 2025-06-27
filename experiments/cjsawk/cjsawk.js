@@ -348,19 +348,25 @@ function ra_new() {
   var t = {};
   o = calloc(ra_sizeof, 1);
   ra_capacity_s_(o, 4);
-  t.obj = o;
+  t.o = o;
   t.capacity = 4;
   t.len = 0;
-  t.data_raw = calloc(t.capacity, 1);
+  t.data_raw = calloc(4, 1);
   return t;
 }
 
 function ra_capacity_g(r) {
   return r.capacity;
+/*
+  r = r.o;
+  return ra_capacity_g_(r);
+*/
 }
 
 function ra_capacity_s(r, v) {
-  r.capacity = v;
+  r.capacity=v;
+  r = r.o;
+  ra_capacity_s_(r, v);
 }
 
 function ra_capacity_g_(r) {
