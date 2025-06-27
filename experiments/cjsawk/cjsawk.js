@@ -404,7 +404,6 @@ function ra_len8_g(r) {
 }
 
 function ra_len8_s(r, v) {
-  r.len8=v;
   r = r.o;
   ra_len8_s_(r, v);
 }
@@ -426,17 +425,11 @@ function ra_data_s_(r, v) {
 }
 
 function ra_data_g(r) {
-/*
-  if(r.data_raw != ra_data_g_(r.o)) {
-    print("r.data_raw: "+r.data_raw);
-    print("ra_data_g_: "+ra_data_g_(r.o));
-  }
-*/
-  return r.data_raw;
+  r = r.o;
+  return ra_data_g_(r);
 }
 
 function ra_data_s(r, v) {
-  r.data_raw = v;
   r = r.o;
   ra_data_s_(r, v);
 }
