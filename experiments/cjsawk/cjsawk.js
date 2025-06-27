@@ -423,7 +423,8 @@ function ra_data_g(r) {
 
 function ra_data_s(r, v) {
   r.data_raw = v;
-  ra_data_s_(r.o, v);
+  r = r.o;
+  ra_data_s_(r, v);
 }
 
 
