@@ -68,6 +68,8 @@ var ra_data_o;
 
 var fo;
 
+var str_quote;
+
 function ri32(o) {
   return or(or(and(ri8(o), 255),
             shl(and(ri8(add(o, 1)), 255), 8)),
@@ -913,6 +915,9 @@ function init_globals() {
   break_target_prefix = mks("END_WHILE_");
 
   eof = FALSE;
+
+  str_quote = calloc(2,1);
+  wi8(str_quote, mkc('"'));
 }
 
 function print_list(l) {
