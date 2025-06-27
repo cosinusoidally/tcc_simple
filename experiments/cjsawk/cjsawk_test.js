@@ -34,6 +34,11 @@ function mks_alt(s) {
   return s;
 }
 
+function HACK_string_escape(s) {
+  /* FIXME remove this hack */
+  return mks('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
+}
+
 load("cjsawk.js");
 
 init_support();

@@ -275,7 +275,7 @@ function get_string() {
   tok = ra_data_g(hold_string);
   /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
      version of this code */
-  tok = mks('"' + JSON.parse("["+mk_js_string(tok)+"]")[0]);
+  tok = HACK_string_escape(tok);
 }
 
 function nt() {
@@ -309,12 +309,9 @@ function nt() {
     get_string();
     return TRUE;
   } else {
-    print("unsupported char");
-    print("line: " + ln + " char: " + ch + " " +String.fromCharCode(ch));
-    throw "error";
+    error();
   }
 
-//  print("hold_string: "+ mk_js_string(ra_data_g(hold_string)));
   tok = ra_data_g(hold_string);
   return TRUE;
 }
@@ -671,10 +668,6 @@ function int_str(a) {
   var d;
   var o;
   var t;
-  if(typeof a != "number") {
-    print("not number: "+a);
-    error();
-  }
   if(eq(a,0)) {
     return mks("0");
   }
