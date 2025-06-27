@@ -348,14 +348,14 @@ function ra_new() {
   var d;
   var t = {};
   o = calloc(ra_sizeof, 1);
+  d = calloc(4, 1);
   ra_capacity_s_(o, 4);
   ra_len8_s_(o, 0);
+  ra_data_s_(o, d);
   t.o = o;
   t.capacity = 4;
   t.len = 0;
-  d = calloc(4, 1);
   ra_data_s(t, d);
-  ra_data_s_(d);
   return t;
 }
 
@@ -405,12 +405,18 @@ function ra_data_s_(r, v) {
 }
 
 function ra_data_g(r) {
+/*
+  if(r.data_raw != ra_data_g_(r.o)) {
+    print("r.data_raw: "+r.data_raw);
+    print("ra_data_g_: "+ra_data_g_(r.o));
+  }
+*/
   return r.data_raw;
 }
 
 function ra_data_s(r, v) {
   r.data_raw = v;
-  ra_data_s_(r, v);
+  ra_data_s_(r.o, v);
 }
 
 
