@@ -841,6 +841,7 @@ function declare_function(t) {
   nt();
   if(match(tok, mks(";"))) {
     /* nothing */
+    nt();
   } else if(match(tok, mks("{"))) {
     emit_out(mks(":FUNCTION_"));
     emit_out(func);

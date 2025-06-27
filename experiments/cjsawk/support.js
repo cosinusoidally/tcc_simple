@@ -221,6 +221,7 @@ function brk(addr) {
 }
 
 function exit(value) {
+  print("exit: "+value + " ln: "+ln);
   err();
 }
 
