@@ -331,7 +331,6 @@ function emit(s, l) {
 }
 
 function declare_global(t) {
-  dprint("declare_global: " +t);
   emit(mks(":GLOBAL_") , globals_list);
   emit(t, globals_list);
   emit(mks("\nNULL\n"), globals_list);
@@ -477,7 +476,6 @@ function collect_local() {
   indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
   skip(mks(";"));
-  dprint("locals: " +locals);
 }
 
 function variable_load(a, is_arg) {
@@ -498,7 +496,6 @@ function variable_load(a, is_arg) {
 function function_call(s) {
   var passed;
   passed = 0;
-  dprint("function call");
   nt();
 
   indented_emit_out(mks("("));
@@ -643,7 +640,6 @@ function primary_expr_string() {
 }
 
 function expression() {
-  dprint("expression");
   if(eq(char0(), mkc('('))) {
     nt();
     expression();
@@ -730,7 +726,6 @@ function process_while() {
   var number_string;
   var nested_break_num;
   nested_break_num = break_target_num;
-  dprint("process_while");
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
   break_target_num = number_string;
@@ -754,7 +749,6 @@ function process_while() {
 
 function process_if() {
   var number_string;
-  dprint("process_if");
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
   emit_out(mks("# IF_"));
@@ -804,13 +798,11 @@ function process_asm() {
 
 function statement() {
   if(match(tok, mks("{"))) {
-    dprint("lcurly");
     nt();
     while(eq(0, match(tok, mks("}")))) {
       statement();
     }
     skip(mks("}"));
-    dprint("rcurly");
   } else if(or(match(tok, mks("var")), match(tok, mks("int")))) {
     collect_local();
   } else if(match(tok, mks("if"))) {
@@ -832,7 +824,6 @@ function statement() {
 function declare_function(t) {
   var i;
   ra_reset(locals);
-  dprint("declare_function: " +t);
   current_count = 0;
   func = t;
   if(match(t, mks("main"))) {
@@ -843,9 +834,8 @@ function declare_function(t) {
   collect_arguments();
   nt();
   if(match(tok, mks(";"))) {
-    dprint("function_prototype skip");
+    /* nothing */
   } else if(match(tok, mks("{"))) {
-    dprint("function_body");
     emit_out(mks(":FUNCTION_"));
     emit_out(func);
     increase_indent();
