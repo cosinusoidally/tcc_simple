@@ -353,7 +353,7 @@ function ra_new() {
   ra_len8_s_(o, 0);
   ra_data_s_(o, d);
   t.o = o;
-  t.capacity = 4;
+  ra_capacity_s(t, 4);
   t.len = 0;
   ra_data_s(t, d);
   return t;
