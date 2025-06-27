@@ -3,6 +3,8 @@
 
 var dbg;
 
+var fname;
+
 if(dbg!=true) {
   dbg = false;
 }
@@ -15,7 +17,11 @@ if(dbg == true) {
 
 load("support.js");
 
-f=read("./artifacts/m2min_v3.c","binary");
+if(fname === undefined) {
+  fname = "./artifacts/m2min_v3.c";
+}
+
+f=read(fname, "binary");
 
 v_o = 0;
 
