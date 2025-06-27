@@ -926,15 +926,12 @@ function print_list(l) {
   var o;
   var i;
   var len;
-  o = [];
   i = 0;
   len = ra_len32(l);
   while (lt(i,len)) {
-    o.push(mk_js_string(ra_get32(l, i)));
     fputs(ra_get32(l, i), fo);
     i = add(i,1);
   }
-  print(o.join(""));
 }
 
 function main() {
@@ -942,11 +939,11 @@ function main() {
   init_globals();
   program();
   fo = fopen(mks("./artifacts/blah.M1"),mks("w"));
-  print("\n# Core program");
+  fputs(mks("\n# Core program\n"),fo);
   print_list(output_list);
-  print("# Program global variables");
+  fputs(mks("\n# Program global variables\n"), fo);
   print_list(globals_list);
-  print("# Program strings");
+  fputs(mks("\n# Program strings\n"), fo);
   print_list(strings_list);
-  print(":ELF_end");
+  fputs(mks("\n:ELF_end\n"), fo);
 }
