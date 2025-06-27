@@ -429,7 +429,7 @@ function ra_grow(r) {
     wi8(add(dd,o),ri8(add(sd,o)));
     o = add(o,1);
   }
-  r.data_raw = dd;
+  ra_data_s(r, dd);
   ra_capacity_s(r,c2);
   free(sd);
 }
