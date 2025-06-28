@@ -965,7 +965,7 @@ function print_list(l) {
   i = 0;
   len = ra_len32(l);
   while (lt(i,len)) {
-    fputs(ra_get32(l, i), fo);
+    v_fputs(ra_get32(l, i), fo);
     i = add(i,1);
   }
 }
@@ -974,12 +974,12 @@ function main() {
   init_support();
   init_globals();
   program();
-  fo = fopen(mks("./artifacts/blah.M1"),mks("w"));
-  fputs(mks("\n# Core program\n"),fo);
+  fo = v_fopen(mks("./artifacts/blah.M1"),mks("w"));
+  v_fputs(mks("\n# Core program\n"),fo);
   print_list(output_list);
-  fputs(mks("\n# Program global variables\n"), fo);
+  v_fputs(mks("\n# Program global variables\n"), fo);
   print_list(globals_list);
-  fputs(mks("\n# Program strings\n"), fo);
+  v_fputs(mks("\n# Program strings\n"), fo);
   print_list(strings_list);
-  fputs(mks("\n:ELF_end\n"), fo);
+  v_fputs(mks("\n:ELF_end\n"), fo);
 }

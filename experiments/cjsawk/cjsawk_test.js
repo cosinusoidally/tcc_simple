@@ -68,6 +68,14 @@ function v_free(a) {
   return free(a);
 }
 
+function v_fopen(a, b) {
+  return fopen(a, b);
+}
+
+function v_fputs(a, b) {
+  return fputs(a, b);
+}
+
 load("cjsawk.js");
 
 init_support();
