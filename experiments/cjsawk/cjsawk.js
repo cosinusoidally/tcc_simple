@@ -436,7 +436,9 @@ function collect_arguments() {
   nt();
   while(eq(0, match(tok, mks(")")))) {
     if(eq(0, match(tok, mks(",")))) {
-      ra_push32(args, tok);
+      if(eq(0, match(tok, mks("int")))) {
+        ra_push32(args, tok);
+      }
     }
     nt();
   }
