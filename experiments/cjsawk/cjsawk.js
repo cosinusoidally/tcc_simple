@@ -583,6 +583,32 @@ function primary_expr_number() {
   nt();
 }
 
+function string_escape(s) {
+  var c;
+  var c2;
+  var t;
+  t = ra_new();
+  ra_push8(t, mkc('"'));
+  s = add(s,1);
+  while(1) {
+    c = ri8(s);
+    if(eq(mkc('"'),c)) {
+      break;
+    }
+    if(eq(c, mkc('\\'))) {
+      c2 = escape_lookup(s);
+      if(neq(c, c2)) {
+        s = add(s, 1);
+        c = c2;
+      } else {
+      }
+    }
+    ra_push8(t, c);
+    s = add(s, 1);
+  }
+  return ra_data_g(t);
+}
+
 function escape_lookup(c) {
   /* fixme this should do the correct char lookup */
   var c0;
