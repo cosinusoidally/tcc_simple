@@ -69,6 +69,7 @@ function string_escape(s) {
   return ra_data_g(t);
 }
 
+/* not used, kept for reference */
 function HACK_string_escape(s) {
   var r;
   /* FIXME remove this hack */

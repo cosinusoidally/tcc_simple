@@ -286,9 +286,7 @@ function get_string() {
   }
   nch();
   tok = ra_data_g(hold_string);
-  /* FIXME hack to parse escape codes from JS, replace with cjsawk dialect
-     version of this code */
-  tok = HACK_string_escape(tok);
+  tok = string_escape(tok);
 }
 
 function nt() {
