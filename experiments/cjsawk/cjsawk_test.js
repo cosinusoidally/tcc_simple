@@ -76,6 +76,10 @@ function v_fputs(a, b) {
   return fputs(a, b);
 }
 
+function v_exit(a) {
+  exit(a);
+}
+
 load("cjsawk.js");
 
 init_support();

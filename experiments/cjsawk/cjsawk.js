@@ -891,7 +891,7 @@ function declare_function(t) {
 }
 
 function error() {
-  exit(200);
+  v_exit(200);
 }
 
 function program() {
