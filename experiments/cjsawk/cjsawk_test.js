@@ -43,10 +43,25 @@ function mks_alt(s) {
   return s;
 }
 
+function string_escape(s) {
+  var c;
+  var t;
+  t = ra_new();
+  while(1) {
+    c = ri8(s);
+    if(eq(0,c)) {
+      break;
+    }
+    s = add(s, 1);
+  }
+  return ra_data_g(t);
+}
+
 function HACK_string_escape(s) {
   /* FIXME remove this hack */
   if(dbg) {
     print("string_escape: "+mk_js_string(s));
+    print("string_escape2:"+mk_js_string(string_escape(s)));
   }
   return mks('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
 }
