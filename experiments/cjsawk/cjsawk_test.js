@@ -45,6 +45,7 @@ function mks_alt(s) {
 
 function string_escape(s) {
   var c;
+  var c2;
   var t;
   t = ra_new();
   ra_push8(t, mkc('"'));
@@ -53,6 +54,14 @@ function string_escape(s) {
     c = ri8(s);
     if(eq(mkc('"'),c)) {
       break;
+    }
+    if(eq(c, mkc('\\'))) {
+      c2 = escape_lookup(s);
+      if(neq(c, c2)) {
+        s = add(s, 1);
+        c = c2;
+      } else {
+      }
     }
     ra_push8(t, c);
     s = add(s, 1);
@@ -68,11 +77,9 @@ function HACK_string_escape(s) {
     print("string_escape2:"+mk_js_string(string_escape(s)));
   }
   r = ('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
-  if(dbg) {
-    if(r!==mk_js_string(string_escape(s))) {
-      print("string_escape3:"+r);
-      throw "string error";
-    }
+  if(r!==mk_js_string(string_escape(s))) {
+    print("string_escape3:"+r);
+    throw "string error";
   }
   return mks(r);
 }
