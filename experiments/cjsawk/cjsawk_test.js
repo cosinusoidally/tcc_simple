@@ -64,6 +64,10 @@ function v_calloc(a,b){
   return calloc(a,b);
 }
 
+function v_free(a) {
+  return free(a);
+}
+
 load("cjsawk.js");
 
 init_support();

@@ -399,7 +399,7 @@ function ra_grow(r) {
   }
   ra_data_s(r, dd);
   ra_capacity_s(r,c2);
-  free(sd);
+  v_free(sd);
 }
 
 function ra_reset(r) {
