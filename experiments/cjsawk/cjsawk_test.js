@@ -47,23 +47,34 @@ function string_escape(s) {
   var c;
   var t;
   t = ra_new();
+  ra_push8(t, mkc('"'));
+  s = add(s,1);
   while(1) {
     c = ri8(s);
-    if(eq(0,c)) {
+    if(eq(mkc('"'),c)) {
       break;
     }
+    ra_push8(t, c);
     s = add(s, 1);
   }
   return ra_data_g(t);
 }
 
 function HACK_string_escape(s) {
+  var r;
   /* FIXME remove this hack */
   if(dbg) {
     print("string_escape: "+mk_js_string(s));
     print("string_escape2:"+mk_js_string(string_escape(s)));
   }
-  return mks('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
+  r = ('"' + JSON.parse("["+mk_js_string(s)+"]")[0]);
+  if(dbg) {
+    if(r!==mk_js_string(string_escape(s))) {
+      print("string_escape3:"+r);
+      throw "string error";
+    }
+  }
+  return mks(r);
 }
 
 load("cjsawk.js");
