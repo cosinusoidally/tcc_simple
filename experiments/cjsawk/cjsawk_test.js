@@ -59,6 +59,11 @@ function HACK_string_escape(s) {
   return mks(r);
 }
 
+/* calloc wrapper */
+function v_calloc(a,b){
+  return calloc(a,b);
+}
+
 load("cjsawk.js");
 
 init_support();

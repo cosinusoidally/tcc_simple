@@ -350,10 +350,10 @@ function emit_out(s) {
 /* resizable arrays */
 function ra_new() {
   var o;
-  o = calloc(ra_sizeof, 1);
+  o = v_calloc(ra_sizeof, 1);
   ra_capacity_s(o, 4);
   ra_len8_s(o, 0);
-  ra_data_s(o, calloc(ra_capacity_g(o), 1));
+  ra_data_s(o, v_calloc(ra_capacity_g(o), 1));
   return o;
 }
 
@@ -390,7 +390,7 @@ function ra_grow(r) {
   var o;
   c1 = ra_capacity_g(r);
   c2 = mul(c1, 2);
-  dd = calloc(c2,1);
+  dd = v_calloc(c2,1);
   sd = ra_data_g(r);
   o = 0;
   while(lt(o, c1)) {
@@ -458,7 +458,7 @@ function to_hex_le(a) {
   var d1o;
   var d2o;
   i = 0;
-  o = calloc(17, 1);
+  o = v_calloc(17, 1);
   while(lt(i, 4)) {
     d2o = mul(i, 2);
     d1o = add(d2o, 1);
@@ -706,7 +706,7 @@ function int_str(a) {
   if(eq(a,0)) {
     return mks("0");
   }
-  b = calloc(34,1);
+  b = v_calloc(34,1);
   o = add(b,32);
   while(1) {
     t = mod(a,10);
@@ -954,7 +954,7 @@ function init_globals() {
 
   eof = FALSE;
 
-  str_dquote = calloc(2,1);
+  str_dquote = v_calloc(2,1);
   wi8(str_dquote, mkc('"'));
 }
 
