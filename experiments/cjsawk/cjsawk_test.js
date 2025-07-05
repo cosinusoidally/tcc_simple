@@ -37,6 +37,9 @@ function v_getc() {
   return r;
 }
 
+function v_fgetc(f) {
+  return fgetc(f);
+}
 
 function mks_alt(s) {
   // dummy impl

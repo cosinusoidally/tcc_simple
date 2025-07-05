@@ -145,7 +145,7 @@ function increase_indent() {
 }
 
 function nc() {
-  ch = v_getc();
+  ch = v_fgetc(fi);
   to = add(to, 1);
   if(eq(ch, 10)) {
     ln = add(ln, 1);
