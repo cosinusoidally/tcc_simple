@@ -3,8 +3,6 @@
 
 var dbg;
 
-var fname;
-
 if(dbg!=true) {
   dbg = false;
 }
@@ -16,26 +14,6 @@ if(dbg == true) {
 }
 
 load("support.js");
-
-if(fname === undefined) {
-  fname = "./artifacts/m2min_v3.c";
-}
-
-f=read(fname, "binary");
-
-v_o = 0;
-
-f_len=f.length;
-
-function v_getc() {
-  var r;
-  if(v_o >=f.length) {
-    return -1;
-  }
-  r=f[v_o];
-  v_o=v_o + 1;
-  return r;
-}
 
 function v_fgetc(f) {
   return fgetc(f);
