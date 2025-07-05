@@ -45,11 +45,9 @@ function v_exit(v) {
 }
 
 function init_support() {
-  puts("support_runtime not impl");
-  error();
+  puts("support_runtime called");
 }
 
 function init_runtime() {
-  puts("init_runtime not impl");
-  error();
+  puts("init_runtime called");
 }
