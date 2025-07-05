@@ -973,9 +973,12 @@ function print_list(l) {
   }
 }
 
-function main() {
+function main(argc, argv) {
   init_support();
   init_globals();
+  if(neq(argc, 3)) {
+    error();
+  }
   program();
   fo = v_fopen(mks("./artifacts/blah.M1"),mks("w"));
   v_fputs(mks("\n# Core program\n"),fo);
