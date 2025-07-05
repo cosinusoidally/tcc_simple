@@ -87,7 +87,9 @@ function init_runtime() {
 load("cjsawk.js");
 
 function go() {
-  main(3, 0);
+  var args;
+  args=mk_args("cjsawk.exe ./artifacts/m2min_v3.c ./artifacts/blah.M1");
+  main(args[0], args[1]);
   print(gen_out());
 // print(brk_ptr);
 // print(globals_list.len);
