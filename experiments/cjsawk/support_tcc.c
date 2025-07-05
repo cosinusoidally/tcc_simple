@@ -6,14 +6,15 @@ function mks(s) {
   return s;
 }
 
-function ri8(o) {
-  puts("ri8 not impl");
-  error();
+int ri8(int o) {
+        char *h = 0;
+        return h[o] & 0xFF;
 }
 
-function wi8(o, v) {
-  puts("wi8 not impl");
-  error();
+int wi8(int o,int v) {
+        char *h = 0;
+        h[o]=v;
+        return;
 }
 
 function v_fopen(a, b) {
