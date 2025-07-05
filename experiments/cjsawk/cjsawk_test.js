@@ -82,8 +82,12 @@ function v_exit(a) {
 
 load("cjsawk.js");
 
-main(3, 0);
-print(gen_out());
+function go() {
+  main(3, 0);
+  print(gen_out());
 // print(brk_ptr);
 // print(globals_list.len);
 // print(hold_string.capacity);
+}
+
+go();
