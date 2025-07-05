@@ -82,7 +82,6 @@ function v_exit(a) {
 
 load("cjsawk.js");
 
-init_support();
 main(3, 0);
 print(gen_out());
 // print(brk_ptr);
