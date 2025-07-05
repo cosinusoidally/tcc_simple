@@ -80,6 +80,10 @@ function v_exit(a) {
   exit(a);
 }
 
+function init_runtime() {
+/* dummy */
+}
+
 load("cjsawk.js");
 
 function go() {

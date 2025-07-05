@@ -974,6 +974,7 @@ function print_list(l) {
 }
 
 function main(argc, argv) {
+  init_runtime();
   init_support();
   init_globals();
   if(neq(argc, 3)) {
