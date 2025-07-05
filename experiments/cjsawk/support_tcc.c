@@ -8,10 +8,12 @@ function mks(s) {
 
 function ri8(o) {
   puts("ri8 not impl");
+  error();
 }
 
 function wi8(o, v) {
   puts("wi8 not impl");
+  error();
 }
 
 function v_fopen(a, b) {
@@ -40,4 +42,14 @@ function v_free(a) {
 
 function v_exit(v) {
   exit(v);
+}
+
+function init_support() {
+  puts("support_runtime not impl");
+  error();
+}
+
+function init_runtime() {
+  puts("init_runtime not impl");
+  error();
 }
