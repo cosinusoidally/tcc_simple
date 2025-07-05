@@ -73,6 +73,7 @@ var ra_capacity_o;
 var ra_len8_o;
 var ra_data_o;
 
+var fi;
 var fo;
 
 var str_dquote;
