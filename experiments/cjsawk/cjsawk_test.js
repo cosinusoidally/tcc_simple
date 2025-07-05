@@ -80,6 +80,10 @@ function v_exit(a) {
   exit(a);
 }
 
+function v_fclose(f) {
+  return fclose(f);
+}
+
 function init_runtime() {
 /* dummy */
 }

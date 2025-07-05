@@ -980,8 +980,10 @@ function main(argc, argv) {
   if(neq(argc, 3)) {
     error();
   }
+  fi = v_fopen(ri32(add(4,argv)),mks("r"));
   program();
-  fo = v_fopen(mks("./artifacts/blah.M1"),mks("w"));
+  v_fclose(fi);
+  fo = v_fopen(ri32(add(8,argv)),mks("w"));
   v_fputs(mks("\n# Core program\n"),fo);
   print_list(output_list);
   v_fputs(mks("\n# Program global variables\n"), fo);
@@ -989,4 +991,5 @@ function main(argc, argv) {
   v_fputs(mks("\n# Program strings\n"), fo);
   print_list(strings_list);
   v_fputs(mks("\n:ELF_end\n"), fo);
+  v_fclose(fo);
 }
