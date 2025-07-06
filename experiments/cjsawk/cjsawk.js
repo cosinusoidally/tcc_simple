@@ -653,10 +653,9 @@ function escape_lookup(c) {
   return c0;
 }
 
-
 function primary_expr_char() {
   emit_out(mks("constant %"));
-  emit_out(int_str(escape_lookup(add(tok, 1)), 1));
+  emit_out(int_str(escape_lookup(add(tok, 1))));
   emit_out(mks(" "));
   nt();
 }
