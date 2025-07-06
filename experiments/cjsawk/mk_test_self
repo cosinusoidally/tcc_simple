@@ -21,5 +21,6 @@ function compile() {
 }
 
 compile ./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/boot0.exe
+compile ./artifacts/boot0.exe ./artifacts/cjsawk_full.c ./artifacts/boot1.exe
 
 echo DONE
