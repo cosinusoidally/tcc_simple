@@ -1,6 +1,8 @@
 ./mk_test_gcc
 set -xe
 
-time ./artifacts/cjsawk.exe ./cjsawk.js ./artifacts/cjsawk.M1
+cat cjsawk.js support_libc.js ../m2min_v3/simple_support_js_m2_prims.c > ./artifacts/cjsawk_full.c
+
+./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/cjsawk.M1
 
 echo DONE
