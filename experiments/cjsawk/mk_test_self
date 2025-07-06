@@ -1,8 +1,25 @@
 ./mk_test_gcc
 set -xe
 
-cat cjsawk.js support_libc.js ../m2min_v3/simple_support_js_m2_prims.c > ./artifacts/cjsawk_full.c
+cat cjsawk.js support_libc.js ../m2min_v3/simple_support_js_m2_prims.c support_m2.c > ./artifacts/cjsawk_full.c
 
-./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/cjsawk.M1
+pushd .
+
+cd ../m2min_v2
+./mk_cc_x86_min
+cd artifacts
+export PATH=$PWD:$PATH
+
+popd
+
+function compile() {
+  $1 $2 $3.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
+  M0 $3-0.M1 $3.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
+  hex2-0 $3-0.hex2 $3
+}
+
+compile ./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/boot0.exe
 
 echo DONE
