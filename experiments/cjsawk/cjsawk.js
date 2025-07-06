@@ -979,7 +979,9 @@ function print_list(l) {
 
 function here() {
   if(d2) {
-    v_fputs(mks("here\n"), 1); exit(1);
+    v_fputs(mks("here "), 1);
+    v_fputs(int_str(ln), 1);
+    v_fputs(mks("\n"), 1);
   }
 }
 
