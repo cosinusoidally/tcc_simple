@@ -35,5 +35,6 @@ function v_exit(v) {
 }
 
 function init_runtime() {
+d2=1;
 /* dummy */
 }

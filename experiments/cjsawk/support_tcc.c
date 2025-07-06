@@ -49,6 +49,9 @@ function init_support() {
   puts("support_runtime called");
 }
 
+extern int d2;
+
 function init_runtime() {
+  d2=0;
   puts("init_runtime called");
 }
