@@ -1,0 +1,6 @@
+./mk_test_gcc
+set -xe
+
+time ./artifacts/cjsawk.exe ./cjsawk.js ./artifacts/cjsawk.M1
+
+echo DONE
