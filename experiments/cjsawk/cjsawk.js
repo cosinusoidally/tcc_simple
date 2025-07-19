@@ -94,7 +94,7 @@ function wi32(o, v) {
   wi8(add(o, 3), and(v, 255));
 }
 
-function match(a, b,    i) {
+function match(a, b) {
   return match_(a, b, 0);
 }
 function match_(a, b,    i) {

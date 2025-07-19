@@ -1,0 +1,8 @@
+set -xe
+./mk_test_self
+
+cp cjsawk.js artifacts/cjsawk_awk.c
+gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
+gawk -W posix -f artifacts/cjsawk.awk
+
+echo "DONE awk"
