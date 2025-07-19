@@ -96,13 +96,9 @@ function wi32(o, v) {
 
 /* match is a awk builtin so instead call the function smatch */
 function smatch(a, b) {
-  return match(a, b);
+  return smatch_(a, b, 0);
 }
-
-function match(a, b) {
-  return match_(a, b, 0);
-}
-function match_(a, b,    i) {
+function smatch_(a, b,    i) {
   if(and(eq(NULL, a), eq(NULL, b))) {
     return TRUE;
   }
