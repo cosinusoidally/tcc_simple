@@ -862,7 +862,9 @@ function statement() {
 }
 
 function declare_function(t) {
-  var i;
+  return declare_function_(t, 0);
+}
+function declare_function_(t,    i) {
   ra_reset(locals);
   current_count = 0;
   func = t;
