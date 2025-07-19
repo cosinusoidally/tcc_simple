@@ -174,11 +174,9 @@ function is_whitespace() {
   if(or(eq(ch, 32), eq(ch, 9))) {
     return TRUE;
   }
-
   if(eq(ch, 10)) {
     return TRUE;
   }
-
   return FALSE;
 }
 
