@@ -542,6 +542,12 @@ function function_call_(s,    passed) {
 function find_var(ra, s) {
   var i;
   i = 0;
+  while(lt(i, ra_len32(ra))) {
+    if(match(ra_get32(ra, i), s)) {
+      return TRUE;
+    }
+    i = add(i, 1);
+  }
   return FALSE;
 }
 
@@ -556,11 +562,11 @@ function primary_expr_variable() {
     return function_call(s);
   }
 
-  if(find_var(args)) {
-    variable_load(s, FALSE);
+  if(find_var(args, s)) {
+    variable_load(s, TRUE);
     return;
   }
-  if(find_var(locals)) {
+  if(find_var(locals, s)) {
     variable_load(s, FALSE);
     return;
   }
