@@ -494,7 +494,7 @@ function variable_load(a, is_arg) {
   }
   emit_out(a);
   emit_out(mks(" "));
-  if(neq(char0(), mkc('='))) {
+  if(neq(char0(), mkC("="))) {
     no_indent = 1;
     emit_out(mks("load "));
   }
@@ -593,7 +593,7 @@ function string_escape(s) {
 }
 function string_escape_(s,    c, c2, t) {
   t = ra_new();
-  ra_push8(t, mkc('"'));
+  ra_push8(t, ch_dquote);
   s = add(s,1);
   while(1) {
     c = ri8(s);
