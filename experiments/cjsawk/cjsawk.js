@@ -726,7 +726,9 @@ function int_str_(a,    b, d, o, t) {
 }
 
 function cleanup_locals() {
-  var c;
+  return cleanup_locals_(0);
+}
+function cleanup_locals_(    c) {
   c = ra_len32(locals);
   if(gt(c, 0)) {
     indented_emit_out(mks("cleanup_locals_bytes %"));
