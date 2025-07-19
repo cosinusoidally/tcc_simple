@@ -540,9 +540,9 @@ function function_call_(s,    passed) {
 }
 
 function find_var(ra, s) {
-  var i;
-  var l;
-  i = 0;
+  return find_var_(ra, s , 0, 0);
+}
+function find_var_(ra, s,    i, l) {
   l = ra_len32(ra);
   while(lt(i, l)) {
     if(match(ra_get32(ra, i), s)) {
