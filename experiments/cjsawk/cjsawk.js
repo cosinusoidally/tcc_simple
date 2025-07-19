@@ -615,9 +615,9 @@ function string_escape_(s,    c, c2, t) {
 }
 
 function escape_lookup(c) {
-  /* fixme this should do the correct char lookup */
-  var c0;
-  var c1;
+  return escape_lookup_(c, 0, 0);
+}
+function escape_lookup_(c,    c0, c1) {
   c0 = ri8(add(c, 0));
   if(eq(c0, mkc('\\'))) {
     c1 = ri8(add(c, 1));
