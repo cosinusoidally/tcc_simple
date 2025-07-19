@@ -597,10 +597,10 @@ function string_escape_(s,    c, c2, t) {
   s = add(s,1);
   while(1) {
     c = ri8(s);
-    if(eq(mkc('"'),c)) {
+    if(eq(ch_dquote, c)) {
       break;
     }
-    if(eq(c, mkc('\\'))) {
+    if(eq(c, ch_backslash)) {
       c2 = escape_lookup(s);
       if(neq(c, c2)) {
         s = add(s, 1);
@@ -619,7 +619,7 @@ function escape_lookup(c) {
 }
 function escape_lookup_(c,    c0, c1) {
   c0 = ri8(add(c, 0));
-  if(eq(c0, mkc('\\'))) {
+  if(eq(c0, ch_backslash)) {
     c1 = ri8(add(c, 1));
     if(eq(c1, 0)) {
       return 0;
