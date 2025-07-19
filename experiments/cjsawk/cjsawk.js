@@ -539,6 +539,12 @@ function function_call_(s,    passed) {
   indented_emit_out(mks(")\n"));
 }
 
+function find_var(ra, s) {
+  var i;
+  i = 0;
+  return FALSE;
+}
+
 function primary_expr_variable() {
   var s;
   var i;
@@ -550,6 +556,14 @@ function primary_expr_variable() {
     return function_call(s);
   }
 
+  if(find_var(args)) {
+    variable_load(s, FALSE);
+    return;
+  }
+  if(find_var(locals)) {
+    variable_load(s, FALSE);
+    return;
+  }
   while(lt(i, ra_len32(locals))) {
     if(match(ra_get32(locals, i), s)) {
       variable_load(s, FALSE);
