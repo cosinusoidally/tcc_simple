@@ -623,23 +623,23 @@ function escape_lookup_(c,    c0, c1) {
     c1 = ri8(add(c, 1));
     if(eq(c1, 0)) {
       return 0;
-    } else if(eq(c1, mkc('a'))) {
+    } else if(eq(c1, mkC("a"))) {
       return 7;
-    } else if(eq(c1, mkc('b'))) {
+    } else if(eq(c1, mkC("b"))) {
       return 8;
-    } else if(eq(c1, mkc('t'))) {
+    } else if(eq(c1, mkC("t"))) {
       return 9;
-    } else if(eq(c1, mkc('n'))) {
+    } else if(eq(c1, mkC("n"))) {
       return 10;
-    } else if(eq(c1, mkc('v'))) {
+    } else if(eq(c1, mkC("v"))) {
       return 11;
-    } else if(eq(c1, mkc('f'))) {
+    } else if(eq(c1, mkC("f"))) {
       return 12;
-    } else if(eq(c1, mkc('r'))) {
+    } else if(eq(c1, mkC("r"))) {
       return 13;
-    } else if(eq(c1, mkc('e'))) {
+    } else if(eq(c1, mkC("e"))) {
       return 27;
-    } else if(eq(c1, mkc('"'))) {
+    } else if(eq(c1, ch_dquote)) {
       return 34;
     } else if(eq(c1, mkc('\''))) {
       return 39;
