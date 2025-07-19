@@ -353,7 +353,9 @@ function emit_out(s) {
 
 /* resizable arrays */
 function ra_new() {
-  var o;
+  return ra_new_(0);
+}
+function ra_new_(o) {
   o = v_calloc(ra_sizeof, 1);
   ra_capacity_s(o, 4);
   ra_len8_s(o, 0);
@@ -384,7 +386,6 @@ function ra_data_g(r) {
 function ra_data_s(r, v) {
   wi32(add(r,ra_data_o), v);
 }
-
 
 function ra_grow(r) {
   var sd;
