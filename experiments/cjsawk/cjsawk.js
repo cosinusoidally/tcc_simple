@@ -213,15 +213,15 @@ function eat_comment() {
 }
 
 function is_id() {
-  if(or(and(gte(ch, mkc('a')), lte(ch, mkc('z'))),
-     or(and(gte(ch, mkc('A')), lte(ch, mkc('Z'))), eq(ch, mkc('_'))))) {
+  if(or(and(gte(ch, mkC("a")), lte(ch, mkC("z"))),
+     or(and(gte(ch, mkC("A")), lte(ch, mkC("Z"))), eq(ch, mkC("_"))))) {
     return TRUE;
   }
   return FALSE;
 }
 
 function is_num() {
-  if(and(gte(ch, mkc('0')), lte(ch,mkc('9')))) {
+  if(and(gte(ch, mkC("0")), lte(ch,mkC("9")))) {
     return TRUE;
   }
   return FALSE;
