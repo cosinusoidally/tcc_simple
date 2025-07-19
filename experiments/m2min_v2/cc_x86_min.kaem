@@ -52,8 +52,8 @@
 ###############################
 # Phase-3 Build M0 from hex2  #
 ###############################
-./artifacts/catm ./M0.hex2 ./ELF-i386.hex2 ./M0_x86.hex2
-./artifacts/hex2-0 ./M0.hex2 ./artifacts/M0
+./artifacts/catm ./artifacts/M0.hex2 ./ELF-i386.hex2 ./M0_x86.hex2
+./artifacts/hex2-0 ./artifacts/M0.hex2 ./artifacts/M0
 # M0 is the architecture specific version of M1 and is by design single
 # architecture only and will be replaced by the C code version of M1
 
