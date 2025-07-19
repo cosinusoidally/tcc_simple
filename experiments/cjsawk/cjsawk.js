@@ -388,16 +388,13 @@ function ra_data_s(r, v) {
 }
 
 function ra_grow(r) {
-  var sd;
-  var dd;
-  var c1;
-  var c2;
-  var o;
+  return ra_grow_(r, 0, 0, 0, 0, 0);
+}
+function ra_grow_(r,    sd, dd, c1, c2, o) {
   c1 = ra_capacity_g(r);
   c2 = mul(c1, 2);
   dd = v_calloc(c2,1);
   sd = ra_data_g(r);
-  o = 0;
   while(lt(o, c1)) {
     wi8(add(dd,o),ri8(add(sd,o)));
     o = add(o,1);
