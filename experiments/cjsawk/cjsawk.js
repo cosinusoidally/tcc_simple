@@ -786,7 +786,9 @@ function process_while_(    number_string, nested_break_num) {
 }
 
 function process_if() {
-  var number_string;
+  return process_if_(0);
+}
+function process_if_(    number_string) {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
   emit_out(mks("# IF_"));
