@@ -589,9 +589,9 @@ function primary_expr_number() {
 }
 
 function string_escape(s) {
-  var c;
-  var c2;
-  var t;
+  return string_escape_(s, 0, 0, 0);
+}
+function string_escape_(s,    c, c2, t) {
   t = ra_new();
   ra_push8(t, mkc('"'));
   s = add(s,1);
