@@ -563,14 +563,11 @@ function primary_expr_variable() {
   if(match(tok, mks("("))) {
     return function_call(s);
   }
-
   if(find_var(args, s)) {
-    variable_load(s, TRUE);
-    return;
+    return variable_load(s, TRUE);
   }
   if(find_var(locals, s)) {
-    variable_load(s, FALSE);
-    return;
+    return variable_load(s, FALSE);
   }
 
   /* otherwise assume is a global */
