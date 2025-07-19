@@ -238,7 +238,7 @@ function is_other() {
 }
 
 function is_char() {
-  if(eq(ch, mkC("\'"))) {
+  if(eq(ch, mkC("'"))) {
     return TRUE;
   }
   return FALSE;
