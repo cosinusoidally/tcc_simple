@@ -516,7 +516,7 @@ function function_call_(s,    passed) {
     expression();
     indented_emit_out(mks("push_arg\n"));
     passed = 1;
-    while(match(tok, mks(","))) {
+    while(smatch(tok, mks(","))) {
       nt();
       expression();
       indented_emit_out(mks("push_arg\n"));
@@ -547,7 +547,7 @@ function find_var(ra, s) {
 function find_var_(ra, s,    i, l) {
   l = ra_len32(ra);
   while(lt(i, l)) {
-    if(match(ra_get32(ra, i), s)) {
+    if(smatch(ra_get32(ra, i), s)) {
       return TRUE;
     }
     i = add(i, 1);
@@ -562,7 +562,7 @@ function primary_expr_variable_(    s, i) {
   s = tok;
   nt();
 
-  if(match(tok, mks("("))) {
+  if(smatch(tok, mks("("))) {
     return function_call(s);
   }
   if(find_var(args, s)) {
@@ -576,7 +576,7 @@ function primary_expr_variable_(    s, i) {
   indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
   emit_out(mks(" "));
-  if(match(tok, mks("="))) {
+  if(smatch(tok, mks("="))) {
     return;
   }
   no_indent = 1;
@@ -742,7 +742,7 @@ function cleanup_locals_(    c) {
 
 function return_result() {
   nt();
-  if(eq(0, match(tok, mks(";")))) {
+  if(eq(0, smatch(tok, mks(";")))) {
     expression();
   }
   cleanup_locals();
@@ -806,7 +806,7 @@ function process_if_(    number_string) {
   uniqueID_out(number_string);
   emit_out(mks(":ELSE_"));
   uniqueID_out(number_string);
-  if(match(tok, mks("else"))) {
+  if(smatch(tok, mks("else"))) {
     nt();
     statement();
   }
@@ -839,23 +839,23 @@ function process_asm() {
 }
 
 function statement() {
-  if(match(tok, mks("{"))) {
+  if(smatch(tok, mks("{"))) {
     nt();
-    while(eq(0, match(tok, mks("}")))) {
+    while(eq(0, smatch(tok, mks("}")))) {
       statement();
     }
     skip(mks("}"));
-  } else if(or(match(tok, mks("var")), match(tok, mks("int")))) {
+  } else if(or(smatch(tok, mks("var")), smatch(tok, mks("int")))) {
     collect_local();
-  } else if(match(tok, mks("if"))) {
+  } else if(smatch(tok, mks("if"))) {
     process_if();
-  } else if(match(tok, mks("while"))) {
+  } else if(smatch(tok, mks("while"))) {
     process_while();
-  } else if(match(tok, mks("asm"))) {
+  } else if(smatch(tok, mks("asm"))) {
     process_asm();
-  } else if(match(tok, mks("return"))) {
+  } else if(smatch(tok, mks("return"))) {
     return_result();
-  } else if(match(tok, mks("break"))) {
+  } else if(smatch(tok, mks("break"))) {
     process_break();
   } else {
     expression();
@@ -870,17 +870,17 @@ function declare_function_(t,    i) {
   ra_reset(locals);
   current_count = 0;
   func = t;
-  if(match(t, mks("main"))) {
+  if(smatch(t, mks("main"))) {
     frame_bias = 1;
   } else {
     frame_bias = 0;
   }
   collect_arguments();
   nt();
-  if(match(tok, mks(";"))) {
+  if(smatch(tok, mks(";"))) {
     /* nothing */
     nt();
-  } else if(match(tok, mks("{"))) {
+  } else if(smatch(tok, mks("{"))) {
     emit_out(mks(":FUNCTION_"));
     emit_out(func);
     increase_indent();
@@ -896,7 +896,7 @@ function declare_function_(t,    i) {
       i = sub(i, 1);
     }
     statement();
-    if(eq(0, match(ra_get32(output_list, sub(ra_len32(output_list),1)), mks("ret\n")))) {
+    if(eq(0, smatch(ra_get32(output_list, sub(ra_len32(output_list),1)), mks("ret\n")))) {
       cleanup_locals();
       indented_emit_out(mks("ret\n"));
     }
@@ -916,14 +916,14 @@ function program_(    ltok) {
   nt();
 
   while(eq(0,eof)) {
-    if(or(match(tok, mks("int")), or(match(tok, mks("var")),
-          match(tok, mks("function"))))) {
+    if(or(smatch(tok, mks("int")), or(smatch(tok, mks("var")),
+          smatch(tok, mks("function"))))) {
       nt(); ltok = tok;
       nt();
 
-      if(match(tok, mks(";"))) {
+      if(smatch(tok, mks(";"))) {
         declare_global(ltok);
-      } else if(match(tok, mks("("))) {
+      } else if(smatch(tok, mks("("))) {
         declare_function(ltok);
       } else {
         error();
