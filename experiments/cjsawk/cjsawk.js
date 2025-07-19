@@ -705,10 +705,9 @@ function expression() {
 }
 
 function int_str(a) {
-  var b;
-  var d;
-  var o;
-  var t;
+  return int_str_(a, 0, 0, 0, 0);
+}
+function int_str_(a,    b, d, o, t) {
   if(eq(a,0)) {
     return mks("0");
   }
