@@ -185,26 +185,26 @@ function eat_whitespace() {
 }
 
 function is_comment() {
-  if(eq(ch, mkc('/'))) {
+  if(eq(ch, mkC("/"))) {
     return TRUE;
   }
   return FALSE;
 }
 
 function eat_comment() {
-  if(eq(ch, mkc('/'))) {
+  if(eq(ch, mkC("/"))) {
     nc();
-    if(eq(ch, mkc('*'))) {
+    if(eq(ch, mkC("*"))) {
       nc();
     } else {
       return;
     }
     while(1) {
-      while(neq(ch, mkc('*'))) {
+      while(neq(ch, mkC("*"))) {
         nc();
       }
       nc();
-      if(eq(ch, mkc('/'))) {
+      if(eq(ch, mkC("/"))) {
         nc();
         return;
       }
