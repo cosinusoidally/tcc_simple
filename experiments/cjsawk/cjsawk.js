@@ -24,9 +24,6 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* temp debugging d2 */
-var d2;
-
 var TRUE;
 var FALSE;
 
@@ -977,14 +974,6 @@ function print_list_(l,    o, i, len) {
   while (lt(i,len)) {
     v_fputs(ra_get32(l, i), fo);
     i = add(i,1);
-  }
-}
-
-function here() {
-  if(d2) {
-    v_fputs(mks("here "), 1);
-    v_fputs(int_str(ln), 1);
-    v_fputs(mks("\n"), 1);
   }
 }
 
