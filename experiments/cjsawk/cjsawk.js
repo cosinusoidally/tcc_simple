@@ -556,7 +556,7 @@ function find_var_(ra, s,    i, l) {
 function primary_expr_variable() {
   return primary_expr_variable_(0, 0);
 }
-function primary_expr_variable_(s, i) {
+function primary_expr_variable_(    s, i) {
   s = tok;
   nt();
 
@@ -659,7 +659,9 @@ function primary_expr_char() {
 }
 
 function primary_expr_string() {
-  var number_string;
+  return primary_expr_string_(0);
+}
+function primary_expr_string_(    number_string) {
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
 
