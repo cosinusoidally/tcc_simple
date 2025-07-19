@@ -228,9 +228,9 @@ function is_num() {
 }
 
 function is_other() {
-  if(or(eq(ch,mkc(',')),or(eq(ch,mkc(';')),or(eq(ch,mkc('(')),
-     or(eq(ch,mkc(')')),or(eq(ch,mkc('{')),or(eq(ch,mkc('}')),
-     eq(ch,mkc('='))))))))) {
+  if(or(eq(ch,mkC(",")),or(eq(ch,mkC(";")),or(eq(ch,mkC("(")),
+     or(eq(ch,mkC(")")),or(eq(ch,mkC("{")),or(eq(ch,mkC("}")),
+     eq(ch,mkC("="))))))))) {
     return TRUE;
   }
   return FALSE;
