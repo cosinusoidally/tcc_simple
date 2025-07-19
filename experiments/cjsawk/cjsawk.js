@@ -245,7 +245,7 @@ function is_char() {
 }
 
 function is_string() {
-  if(eq(ch, mkc('"'))) {
+  if(eq(ch, ch_dquote)) {
     return TRUE;
   }
   return FALSE;
