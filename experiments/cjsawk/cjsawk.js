@@ -125,8 +125,9 @@ function match_(a, b,    i) {
 }
 
 function indented_emit_out(s) {
-  var c;
-  c = 0;
+  return indented_emit_out_(s, 0);
+}
+function indented_emit_out_(s,    c) {
   if(no_indent) {
     no_indent = 0;
   } else {
