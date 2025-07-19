@@ -570,22 +570,6 @@ function primary_expr_variable() {
     variable_load(s, FALSE);
     return;
   }
-  while(lt(i, ra_len32(locals))) {
-    if(match(ra_get32(locals, i), s)) {
-      variable_load(s, FALSE);
-      return;
-    }
-    i = add(i, 1);
-  }
-  i = 0;
-  while(lt(i, ra_len32(args))) {
-    if(match(ra_get32(args, i), s)) {
-      variable_load(s, TRUE);
-      return;
-    }
-    i = add(i, 1);
-  }
-
 
   /* otherwise assume is a global */
   indented_emit_out(mks("global &GLOBAL_"));
