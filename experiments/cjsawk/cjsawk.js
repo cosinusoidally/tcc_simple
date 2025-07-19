@@ -35,7 +35,6 @@ var NULL;
 var indent;
 var no_indent;
 
-var to;
 var ch;
 
 var ln;
@@ -150,7 +149,6 @@ function increase_indent() {
 
 function nc() {
   ch = v_fgetc(fi);
-  to = add(to, 1);
   if(eq(ch, 10)) {
     ln = add(ln, 1);
   }
@@ -945,8 +943,6 @@ function init_globals() {
 
   indent = 0;
   no_indent = 0;
-
-  to=0;
 
   ln=1;
 
