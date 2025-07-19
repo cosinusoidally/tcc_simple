@@ -75,6 +75,7 @@ var ra_data_o;
 var fi;
 var fo;
 
+var ch_quote;
 var ch_dquote;
 var str_dquote;
 
@@ -964,6 +965,7 @@ function init_globals() {
 
   eof = FALSE;
 
+  ch_quote = 39; /* char code for ' */
   ch_dquote = 34; /* char code for " */
   str_dquote = v_calloc(2,1);
   wi8(str_dquote, ch_dquote);
