@@ -285,7 +285,7 @@ function get_char() {
 function get_string() {
   tt = tt_string;
   nch();
-  while(neq(ch, mkc('"'))) {
+  while(neq(ch, ch_dquote)) {
     nch();
   }
   nch();
