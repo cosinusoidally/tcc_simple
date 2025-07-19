@@ -541,8 +541,10 @@ function function_call_(s,    passed) {
 
 function find_var(ra, s) {
   var i;
+  var l;
   i = 0;
-  while(lt(i, ra_len32(ra))) {
+  l = ra_len32(ra);
+  while(lt(i, l)) {
     if(match(ra_get32(ra, i), s)) {
       return TRUE;
     }
