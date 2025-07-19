@@ -554,11 +554,11 @@ function find_var_(ra, s,    i, l) {
 }
 
 function primary_expr_variable() {
-  var s;
-  var i;
+  return primary_expr_variable_(0, 0);
+}
+function primary_expr_variable_(s, i) {
   s = tok;
   nt();
-  i = 0;
 
   if(match(tok, mks("("))) {
     return function_call(s);
