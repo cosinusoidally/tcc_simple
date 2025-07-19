@@ -760,8 +760,9 @@ function uniqueID_out(id) {
 }
 
 function process_while() {
-  var number_string;
-  var nested_break_num;
+  return process_while_(0, 0);
+}
+function process_while_(    number_string, nested_break_num) {
   nested_break_num = break_target_num;
   number_string = int_str(current_count);
   current_count = add(current_count, 1);
