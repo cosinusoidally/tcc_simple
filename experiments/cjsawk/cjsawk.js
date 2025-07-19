@@ -97,8 +97,10 @@ function wi32(o, v) {
   wi8(add(o, 3), and(v, 255));
 }
 
-function match(a, b) {
-  var i;
+function match(a, b,    i) {
+  return match_(a, b, 0);
+}
+function match_(a, b,    i) {
   if(and(eq(NULL, a), eq(NULL, b))) {
     return TRUE;
   }
