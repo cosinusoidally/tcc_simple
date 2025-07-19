@@ -680,7 +680,7 @@ function primary_expr_string_(    number_string) {
 }
 
 function expression() {
-  if(eq(char0(), mkc('('))) {
+  if(eq(char0(), mkC("("))) {
     nt();
     expression();
     skip(mks(")"));
@@ -696,7 +696,7 @@ function expression() {
     error();
   }
 
-  if(eq(char0(), mkc('='))) {
+  if(eq(char0(), mkC("="))) {
     emit_out(mks("push_address\n"));
     nt();
     expression();
@@ -826,7 +826,7 @@ function process_break() {
 function process_asm() {
   nt();
   skip(mks("("));
-  while(eq(char0(), mkc('"'))) {
+  while(eq(char0(), ch_dquote)) {
     /* strip off leading quote */
     emit_out(add(tok, 1));
     emit_out(mks("\n"));
