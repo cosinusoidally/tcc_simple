@@ -445,7 +445,6 @@ function collect_arguments() {
   }
 }
 
-
 function to_hex_digit(a) {
   a = and(15, a);
   if(gt(a, 9)) {
@@ -457,11 +456,9 @@ function to_hex_digit(a) {
 }
 
 function to_hex_le(a) {
-  var o;
-  var i;
-  var d1o;
-  var d2o;
-  i = 0;
+  return to_hex_le_(a, 0, 0, 0, 0);
+}
+function to_hex_le_(a,    o, i, d1o, d2o) {
   o = v_calloc(17, 1);
   while(lt(i, 4)) {
     d2o = mul(i, 2);
