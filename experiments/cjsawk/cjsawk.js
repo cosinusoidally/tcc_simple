@@ -640,11 +640,11 @@ function escape_lookup_(c,    c0, c1) {
     } else if(eq(c1, mkC("e"))) {
       return 27;
     } else if(eq(c1, ch_dquote)) {
-      return 34;
-    } else if(eq(c1, mkc('\''))) {
+      return ch_dquote;
+    } else if(eq(c1, mkC("'"))) {
       return 39;
-    } else if(eq(c1, mkc('\\'))) {
-      return 92;
+    } else if(eq(c1, ch_backslash)) {
+      return ch_backslash;
     }
     error();
   }
