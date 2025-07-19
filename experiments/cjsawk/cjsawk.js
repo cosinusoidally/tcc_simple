@@ -501,8 +501,9 @@ function variable_load(a, is_arg) {
 }
 
 function function_call(s) {
-  var passed;
-  passed = 0;
+  return function_call_(s, 0);
+}
+function function_call_(s,    passed) {
   nt();
 
   indented_emit_out(mks("("));
