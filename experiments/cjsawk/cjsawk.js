@@ -907,8 +907,9 @@ function error() {
 }
 
 function program() {
-  var ltok;
-
+  return program_(0);
+}
+function program_(    ltok) {
   nc();
   nt();
 
