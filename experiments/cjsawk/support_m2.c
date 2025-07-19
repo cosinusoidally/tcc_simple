@@ -2,6 +2,10 @@ function mkc(c) {
   return c;
 }
 
+function mkC(s) {
+  return ri8(s);
+}
+
 function mks(s) {
   return s;
 }

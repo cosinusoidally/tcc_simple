@@ -133,6 +133,10 @@ function mkc(c) {
   return c.charCodeAt(0) & 0xFF;
 }
 
+function mkC(s) {
+  return mkc(s[0]);
+}
+
 function mk_c_string(s){
   var r;
   r = malloc(s.length + 1);
