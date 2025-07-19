@@ -970,10 +970,9 @@ function init_globals() {
 }
 
 function print_list(l) {
-  var o;
-  var i;
-  var len;
-  i = 0;
+  return print_list_(l, 0, 0, 0);
+}
+function print_list_(l,    o, i, len) {
   len = ra_len32(l);
   while (lt(i,len)) {
     v_fputs(ra_get32(l, i), fo);
