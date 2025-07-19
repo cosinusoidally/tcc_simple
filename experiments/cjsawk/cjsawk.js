@@ -330,7 +330,7 @@ function nt() {
 }
 
 function skip(s) {
-  if(match(tok, s)) {
+  if(smatch(tok, s)) {
     nt();
     return;
   }
@@ -437,9 +437,9 @@ function ra_len32(r) {
 function collect_arguments() {
   ra_reset(args);
   nt();
-  while(eq(0, match(tok, mks(")")))) {
-    if(eq(0, match(tok, mks(",")))) {
-      if(eq(0, match(tok, mks("int")))) {
+  while(eq(0, smatch(tok, mks(")")))) {
+    if(eq(0, smatch(tok, mks(",")))) {
+      if(eq(0, smatch(tok, mks("int")))) {
         ra_push32(args, tok);
       }
     }
@@ -511,7 +511,7 @@ function function_call_(s,    passed) {
   indented_emit_out(mks("("));
   increase_indent();
 
-  if(eq(0, match(tok, mks(")")))) {
+  if(eq(0, smatch(tok, mks(")")))) {
     emit_out(mks(" ")); no_indent = 1;
     expression();
     indented_emit_out(mks("push_arg\n"));
