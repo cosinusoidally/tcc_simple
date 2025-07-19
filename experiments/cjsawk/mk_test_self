@@ -1,5 +1,6 @@
-./mk_test_gcc
 set -xe
+./mk_test
+./mk_test_gcc
 
 cat cjsawk.js support_libc.js ../m2min_v3/simple_support_js_m2_prims.c support_m2.c > ./artifacts/cjsawk_full.c
 
@@ -43,5 +44,7 @@ echo "you need to have built m2min_v3 for this to pass"
 ./artifacts/boot0.exe ../m2min_v3/artifacts/pnut_m2.c artifacts/pnut_m2.M1
 
 diff -u -s  artifacts/pnut_m2.M1 ../m2min_v3/artifacts/pnut_js.exe.M1
+
+wc cjsawk.js
 
 echo DONE
