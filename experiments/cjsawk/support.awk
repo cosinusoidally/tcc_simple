@@ -273,13 +273,15 @@ function mul(a, b) {
 }
 
 function div(a, b) {
-  print "div not impl"
-  exit 1
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a / b), 0);
 }
 
 function mod(a, b) {
-  print "mod not impl"
-  exit 1
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return a % b;
 }
 
 function wi8(o,v){
