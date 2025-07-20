@@ -49,6 +49,20 @@ function join(a,j \
   return res;
 }
 
+function append_in_line(l \
+, chars \
+, i \
+){
+  i=1;
+  split(l, chars,"");
+  while(chars[i]!=""){
+    in_data[in_off++]=mkC(chars[i]);
+    i=i+1;
+  }
+  in_data[in_off++]=mkC("\n");
+#  print "\n";
+}
+
 function mk_awk_str(s \
 , reta \
 , i \
@@ -348,6 +362,37 @@ function v_exit(a) {
 function v_fclose(a) {
   print "v_fclose not impl"
   exit 1
+}
+
+function v_open(pathname, flags, mode \
+, myline \
+) {
+  pathname = mk_awk_str(pathname);
+  print("open name: " pathname " flag: " flags " mode: " mode);
+
+  if((flags == 0 ) && (mode == 0)){
+    print "open for read";
+    if(in_file == "") {
+      print "opening in_file";
+      while((getline < pathname)) {
+        append_in_line($0);
+      }
+      in_len=in_off;
+      in_off=0;
+#      print_infile();
+      return in_file_num;
+    } else {
+      print("ERROR in_file already loaded");
+      exit 1;
+    }
+  } else if((flags == 577 ) && (mode == 384)){
+    print "opening for write";
+    out_filename = pathname;
+    return out_file_num;
+  } else {
+    print "open unsuported mode";
+  }
+  exit 1;
 }
 
 function v_fopen(filename, mode \
