@@ -843,7 +843,6 @@ function declare_function_(t,    i) {
   collect_arguments();
   nt();
   if(smatch(tok, mks(";"))) {
-    /* nothing */
     nt();
   } else if(smatch(tok, mks("{"))) {
     emit_out(mks(":FUNCTION_"));
