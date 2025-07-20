@@ -78,3 +78,7 @@ The nt is to skip the ";" eg for this:
 int foo(a);
 it will skip that line.
 
+Also in declare_function we emit code to define offsets of our args on the
+stack. This is done in rerverse order to match what m2min_v3 does.
+
+

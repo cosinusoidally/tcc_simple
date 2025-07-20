@@ -854,7 +854,6 @@ function declare_function_(t,    i) {
       indented_emit_out(mks("DEFINE ARG_"));
       emit_out(ra_get32(args, i));
       emit_out(mks(" "));
-      /* FIXME explain this frame layout better */
       emit_out(to_hex_le(SUB(0,mul(add(i,1),4))));
       emit_out(mks("\n"));
       i = SUB(i, 1);
