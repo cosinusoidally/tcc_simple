@@ -146,9 +146,60 @@ function do_bitwise(a, b, tt \
   return uint32_to_int32(r);
 }
 
-function fast_and(a, b) {
-  print "fast_and not impl"
-  exit 1
+function init_fast_and(){
+  if(use_fast_and) {
+    print "init fast and";
+    for(a=0;a<256;a=a+1) {
+      for(b=0;b<256;b=b+1) {
+        and_cache[(256*a)+b]=slow_and(a,b);
+      }
+    }
+  }
+}
+
+function cache_and(a,b) {
+  return and_cache[(256*a+b)];
+}
+
+function fast_and(a,b \
+, t1, t2, r, v) {
+  and_count++;
+
+  v=1/256;
+  a=to_uint32(a);
+  b=to_uint32(b);
+
+# fast path for single byte and
+  if((a < 256) && (b < 256)) {
+    return cache_and(a,b);
+  }
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = cache_and(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 256*cache_and(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 65536*cache_and(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 16777216*cache_and(t1,t2);
+
+  return uint32_to_int32(r);
 }
 
 function init_and_tt(){
@@ -175,9 +226,60 @@ function and(a, b) {
   }
 }
 
-function fast_or(a, b) {
-  print "fast_or not impl"
-  exit 1
+function init_fast_or(){
+  if(use_fast_or) {
+    print "init fast or";
+    for(a=0;a<256;a=a+1) {
+      for(b=0;b<256;b=b+1) {
+        or_cache[(256*a)+b]=slow_or(a,b);
+      }
+    }
+  }
+}
+
+function cache_or(a,b) {
+  return or_cache[(256*a+b)];
+}
+
+function fast_or(a,b \
+, t1, t2, r, v) {
+  or_count++;
+
+  v=1/256;
+  a=to_uint32(a);
+  b=to_uint32(b);
+
+# fast path for single byte or
+  if((a < 256) && (b < 256)) {
+    return cache_or(a,b);
+  }
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = cache_or(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 256*cache_or(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 65536*cache_or(t1,t2);
+
+  a=(a-t1)*v;
+  b=(b-t2)*v;
+
+  t1 = a % 256;
+  t2 = b % 256;
+  r = r + 16777216*cache_or(t1,t2);
+
+  return uint32_to_int32(r);
 }
 
 function init_or_tt(){
@@ -543,6 +645,6 @@ function init_runtime() {
   in_file_num = 5;
   out_file_num = 6;
 
-#  init_fast_or();
-#  init_fast_and();
+  init_fast_or();
+  init_fast_and();
 }

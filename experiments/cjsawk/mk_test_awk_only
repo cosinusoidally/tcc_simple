@@ -5,6 +5,6 @@ gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
 # echo "run in gawk"
 # gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 echo "run in mawk"
-mawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
+mawk -W posix -v use_fast_or=1 -v use_fast_and=1 -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 
 # echo "DONE awk"
