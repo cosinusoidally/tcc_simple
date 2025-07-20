@@ -111,7 +111,7 @@ function smatch_(a, b,    i) {
     return FALSE;
   }
 
-  i = sub(0, 1);
+  i = SUB(0, 1);
   while(1) {
     i = add(i, 1);
     if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
@@ -140,7 +140,7 @@ function indented_emit_out_(s,    c) {
 }
 
 function decrease_indent() {
-  indent = sub(indent, 2);
+  indent = SUB(indent, 2);
   if(lt(indent,0)) {
     indent = 0;
   }
@@ -156,7 +156,7 @@ function nc() {
     ln = add(ln, 1);
   }
 
-  if(eq(ch, sub(0,1))) {
+  if(eq(ch, SUB(0,1))) {
     eof = TRUE;
   }
 }
@@ -448,7 +448,7 @@ function collect_arguments() {
 function to_hex_digit(a) {
   a = and(15, a);
   if(gt(a, 9)) {
-    a = add(sub(a, 10), 65);
+    a = add(SUB(a, 10), 65);
   } else {
     a = add(a, 48);
   }
@@ -478,7 +478,7 @@ function collect_local() {
   emit_out(tok);
   emit_out(mks(" "));
 /* FIXME clarify this calulation for local frame offset */
-  emit_out(to_hex_le(sub(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
+  emit_out(to_hex_le(SUB(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
   emit_out(mks("\n"));
   indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
@@ -716,7 +716,7 @@ function int_str_(a,    b, d, o, t) {
   while(1) {
     t = mod(a,10);
     wi8(o,add(48,t));
-    a = div(sub(a,t),10);
+    a = div(SUB(a,t),10);
     if(eq(0,a)){
       break;
     }
