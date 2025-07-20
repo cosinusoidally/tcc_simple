@@ -13,6 +13,11 @@ function add(a, b) {
   exit 1
 }
 
+function SUB(a, b) {
+  print "SUB not impl"
+  exit 1
+}
+
 function neq(a, b) {
   print "neq not impl"
   exit 1
