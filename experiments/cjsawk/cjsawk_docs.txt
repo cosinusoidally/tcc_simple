@@ -57,3 +57,7 @@ resetting).
 In collect_local we have to handle the frame_bias. The calculation looks
 complex. We should explain that better (basically if the function is main the
 the layout is slightly different).
+
+function primary_expr_variable if anything is not a function call, an argument,
+or a local variable we then assume it is a global (hence the "global &GLOBAL_")
+

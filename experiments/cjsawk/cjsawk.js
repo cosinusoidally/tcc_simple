@@ -540,7 +540,6 @@ function primary_expr_variable_(    s, i) {
     return variable_load(s, FALSE);
   }
 
-  /* otherwise assume is a global */
   indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
   emit_out(mks(" "));
