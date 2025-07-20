@@ -129,11 +129,21 @@ function v_fputs(a, b) {
 }
 
 function init_support() {
-  print "init_support not impl"
-  exit 1
+  print "init_support dummy"
 }
 
 function init_runtime() {
-  print "init_runtime not impl"
-  exit 1
+  print "init_runtime";
+  stdin = 0;
+  stdout = 1;
+  stderr = 2;
+#  init_or_tt();
+#  init_and_tt();
+#  init_mkc();
+  brk_ptr = 128*1024;
+  in_file_num = 5;
+  out_file_num = 6;
+
+#  init_fast_or();
+#  init_fast_and();
 }
