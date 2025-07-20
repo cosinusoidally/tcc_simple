@@ -243,8 +243,9 @@ function gt(a,b,c){
 }
 
 function gte(a, b) {
-  print "gte not impl"
-  exit 1
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a >= b), 0);
 }
 
 function lt(a,b) {
@@ -254,8 +255,9 @@ function lt(a,b) {
 }
 
 function lte(a, b) {
-  print "lte not impl"
-  exit 1
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a <= b), 0);
 }
 
 function eq(a, b){
