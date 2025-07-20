@@ -4,6 +4,8 @@ set -xe
 # cp cjsawk.js artifacts/cjsawk_awk.c
 # gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
 # gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
-mawk -W posix -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+# mawk -W posix -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+
+./mk_test_awk_only
 
 echo "DONE awk"

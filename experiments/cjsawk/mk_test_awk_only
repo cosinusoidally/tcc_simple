@@ -1,13 +1,11 @@
-# set -xe
-
 rm artifacts/out_awk.M1
-cp cjsawk.js artifacts/cjsawk_awk.c
-gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
+
+set -xe
 # echo "run in gawk"
 # gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 echo "run in mawk"
-mawk -W posix -v use_fast_or=1 -v use_fast_and=1 -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
+mawk -W posix -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
 
 diff -u -s artifacts/boot0.exe.M1 artifacts/out_awk.M1
 
-# echo "DONE awk"
+echo "DONE awk only"
