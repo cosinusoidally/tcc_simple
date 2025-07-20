@@ -33,3 +33,13 @@ License block for cjsawk.js:
 
 frame_bias: this variable exists since main has an additional number of
             elements initially on the stack.
+
+We have a function called "smatch" rather than "match" as match is a builtin
+function in AWK and cannot be overriden. In general builin functions in AWK
+cannot be redefined, this affects us in multiple places, eg there was a
+function called "sub" which had to be changed to "SUB". Placeholder for builins:
+
+
+* FIXME put list of builtins here *
+
+

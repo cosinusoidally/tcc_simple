@@ -73,7 +73,6 @@ function wi32(o, v) {
   wi8(add(o, 3), and(v, 255));
 }
 
-/* match is a awk builtin so instead call the function smatch */
 function smatch(a, b) {
   return smatch_(a, b, 0);
 }
