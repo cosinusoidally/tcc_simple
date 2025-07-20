@@ -448,7 +448,6 @@ function collect_local() {
   indented_emit_out(mks("DEFINE LOCAL_"));
   emit_out(tok);
   emit_out(mks(" "));
-/* FIXME clarify this calulation for local frame offset */
   emit_out(to_hex_le(SUB(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
   emit_out(mks("\n"));
   indented_emit_out(mks("reserve_stack_slot\n"));
