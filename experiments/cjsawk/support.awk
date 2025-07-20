@@ -84,6 +84,12 @@ function fast_or(a, b) {
   exit 1
 }
 
+function init_or_tt(){
+  or_tt[0]=0;
+  or_tt[1]=1;
+  or_tt[2]=1;
+}
+
 function slow_or(a,b \
 , r) {
   a=to_uint32(a);
@@ -264,7 +270,7 @@ function init_runtime() {
   NULL = 0;
   FALSE = 0;
   TRUE = 1;
-#  init_or_tt();
+  init_or_tt();
 #  init_and_tt();
 #  init_mkc();
   brk_ptr = 128*1024;
