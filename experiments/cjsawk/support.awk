@@ -15,8 +15,9 @@ function add(a,b) {
 }
 
 function SUB(a, b) {
-  print "SUB not impl"
-  exit 1
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return a - b;
 }
 
 function neq(a, b) {
@@ -133,9 +134,10 @@ function gte(a, b) {
   exit 1
 }
 
-function lt(a, b) {
-  print "lt not impl"
-  exit 1
+function lt(a,b) {
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a < b), 0);
 }
 
 function lte(a, b) {
