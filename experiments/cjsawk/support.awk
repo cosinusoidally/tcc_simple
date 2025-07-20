@@ -329,6 +329,22 @@ function init_support() {
   print "init_support dummy"
 }
 
+function init_mkC( \
+i, \
+c, \
+t) {
+  print("init_mkc");
+  for(i=0;i<256;i++){
+    t=sprintf("%c",i);
+    mkc_table[t]=i;
+  }
+  mkc_table["\'"]=39;
+  for(i in mkc_table){
+    c=mkc_table[i];
+    charcode_to_str_arr[c] = i;
+  }
+}
+
 function init_runtime() {
   print "init_runtime";
   stdin = 0;
@@ -340,7 +356,7 @@ function init_runtime() {
   TRUE = 1;
   init_or_tt();
   init_and_tt();
-#  init_mkc();
+  init_mkC();
   brk_ptr = 128*1024;
   in_file_num = 5;
   out_file_num = 6;
