@@ -30,6 +30,39 @@ function mkC(a \
   return c;
 }
 
+function join(a,j \
+, i \
+, res \
+) {
+  i=1;
+  if(j!="") {
+    print "can only joing with the empty string"
+    exit 1;
+  }
+  while(a[i]!=""){
+    # FIXME this is quadratic probably not an issue but not sure if can fix in
+    # awk
+    res = res a[i];
+    i=i+1;
+  }
+  print "joined to: " res;
+  return res;
+}
+
+function mk_awk_str(s \
+, reta \
+, i \
+, ret) {
+  i=1;
+  while(heap[s]!=0) {
+    reta[i]=charcode_to_str(ri8(s));
+    i=i+1;
+    s=s+1;
+  }
+  ret=join(reta,"");
+  return ret;
+}
+
 function add(a,b) {
   a = OR(a, 0);
   b = OR(b, 0);
@@ -317,9 +350,30 @@ function v_fclose(a) {
   exit 1
 }
 
-function v_fopen(a, b) {
-  print "v_fopen not impl"
-  exit 1
+function v_fopen(filename, mode \
+, filename_s \
+, mode_s \
+, f) {
+  filename_s=mk_awk_str(filename);
+  mode_s=mk_awk_str(mode);
+  print("fopen filename: " filename_s " mode: " mode_s);
+
+  if(eq(mkC("w"), ri8(mode))) {
+    # 577 is O_WRONLY|O_CREAT|O_TRUNC, 384 is 600 in octal
+    f = v_open(filename, 577 , 384);
+  } else {
+    # Everything else is a read
+    f = v_open(filename, 0, 0);
+  }
+
+  # Negative numbers are error codes */
+  if(gt(0, f)) {
+    return 0;
+  }
+  return f;
+
+  print "fopen not impl"
+  exit
 }
 
 function v_fgetc(a) {
@@ -350,6 +404,16 @@ t) {
     c=mkc_table[i];
     charcode_to_str_arr[c] = i;
   }
+}
+
+function charcode_to_str(a \
+, c){
+  c = charcode_to_str_arr[a];
+  if(c!="") {
+    return c;
+  }
+  print "charcode_to_str invalid: "+a;
+  exit 1;
 }
 
 function mk_args(si \

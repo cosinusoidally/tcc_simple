@@ -1,6 +1,7 @@
 BEGIN {
   print "testing cjsawk"
   init_runtime();
+  my_fname = "./artifacts/cjsawk_full.c";
   if(!my_fname) {
     my_fname = "test.c"
   }
