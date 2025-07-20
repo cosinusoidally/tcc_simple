@@ -42,4 +42,10 @@ function called "sub" which had to be changed to "SUB". Placeholder for builins:
 
 * FIXME put list of builtins here *
 
+functon get_num doesn't actually parse numbers, it just passes them through to
+M0. The function is lax enough to handle hex literals (which is needed to parse
+pnut_js). Note that cjsawk itself is not allowed to use hex literals as that is
+not valid AWK.
 
+The ra_* functions are for resizable arrays. These are used as the primary
+data structure within the compiler.

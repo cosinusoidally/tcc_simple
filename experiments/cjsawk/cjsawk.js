@@ -237,7 +237,6 @@ function get_id() {
 
 function get_num() {
   tt = tt_number;
-/* more lax so can parse hex literals */
   while(or(is_num(), is_id())) {
     nch();
   }
