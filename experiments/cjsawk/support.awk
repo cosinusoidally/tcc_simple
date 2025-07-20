@@ -113,6 +113,11 @@ function v_fopen(a, b) {
   exit 1
 }
 
+function v_fgetc(a) {
+  print "v_fgetc not impl"
+  exit 1
+}
+
 function v_fputs(a, b) {
   print "v_fputs not impl"
   exit 1
