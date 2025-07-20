@@ -76,9 +76,33 @@ function do_bitwise(a, b, tt \
   return uint32_to_int32(r);
 }
 
-function and(a, b) {
-  print "and not impl"
+function fast_and(a, b) {
+  print "fast_and not impl"
   exit 1
+}
+
+function init_and_tt(){
+  and_tt[0]=0;
+  and_tt[1]=0;
+  and_tt[2]=1;
+}
+
+function slow_and(a,b \
+, r) {
+  a=to_uint32(a);
+  b=to_uint32(b);
+
+  r=do_bitwise(a, b, and_tt);
+#  print "r: " r;
+  return r;
+}
+
+function and(a, b) {
+  if(use_fast_and){
+    return fast_and(a,b);
+  } else {
+    return slow_and(a,b);
+  }
 }
 
 function fast_or(a, b) {
@@ -278,7 +302,7 @@ function init_runtime() {
   FALSE = 0;
   TRUE = 1;
   init_or_tt();
-#  init_and_tt();
+  init_and_tt();
 #  init_mkc();
   brk_ptr = 128*1024;
   in_file_num = 5;
