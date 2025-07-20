@@ -24,6 +24,11 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+function docs() {
+  mks("This file must be valid C, JS, and AWK. See cjsawk_docs.txt since");
+  mks("AWK does not support C style comments so we can't use comments here.");
+}
+
 var TRUE;
 var FALSE;
 
