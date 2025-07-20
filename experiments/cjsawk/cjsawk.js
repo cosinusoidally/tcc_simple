@@ -277,8 +277,6 @@ function nt() {
     }
   }
 
-/*  ra_reset(hold_string); */
-/* FIXME probably memory inefficient */
   hold_string = ra_new();
 
   if(is_id()) {
@@ -307,7 +305,6 @@ function skip(s) {
     nt();
     return;
   }
-  /* anything else is an error */
   error();
 }
 

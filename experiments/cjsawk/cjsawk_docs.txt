@@ -49,3 +49,7 @@ not valid AWK.
 
 The ra_* functions are for resizable arrays. These are used as the primary
 data structure within the compiler.
+
+Note nt uses ra_new to create a new hold string each call. It may be more memory
+efficient if instead we use ra_reset (but copy out the string via memcpy before
+resetting).
