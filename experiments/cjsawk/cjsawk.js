@@ -744,7 +744,7 @@ function process_while_(    number_string, nested_break_num) {
   uniqueID_out(number_string);
   emit_out(mks("# THEN_while_"));
   uniqueID_out(number_string);
-  nt(); /* skip ) */
+  skip(mks(")"));
   statement();
   indented_emit_out(mks("jump %WHILE_"));
   uniqueID_out(number_string);
