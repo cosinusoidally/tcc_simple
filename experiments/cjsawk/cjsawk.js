@@ -323,7 +323,6 @@ function emit_out(s) {
   emit(s, output_list);
 }
 
-/* resizable arrays */
 function ra_new() {
   return ra_new_(0);
 }
