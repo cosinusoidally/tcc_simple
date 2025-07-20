@@ -19,9 +19,15 @@ function mks(s \
   return r;
 }
 
-function mkC(s) {
-  print "mkC not impl"
-  exit 1
+function mkC(a \
+, c) {
+  c=mkc_table[a];
+  if(c==""){
+    print("mkc char not defined: "a);
+    exit 1;
+  }
+#  print("mkc: " a " charcode: " c);
+  return c;
 }
 
 function add(a,b) {
@@ -36,9 +42,10 @@ function SUB(a, b) {
   return a - b;
 }
 
-function neq(a, b) {
-  print "neq not impl"
-  exit 1
+function neq(a,b,c){
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a != b), 0);
 }
 
 function uint32_to_int32(x){
