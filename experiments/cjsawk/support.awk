@@ -1,6 +1,22 @@
-function mks(s) {
-  print "mks not impl"
-  exit 1
+function mks(s \
+, i \
+, l \
+, cs \
+, r) {
+  r = string_cache[s];
+  if(r) {
+    return r;
+  }
+  l = length(s);
+  r = v_malloc(l+1);
+  split(s, cs, "");
+#  print "mks s: " s " length: " length(s);
+
+  for(i =0; i<l; i++){
+    wi8(r + i, mkC(cs[i+1]));
+  }
+  string_cache[s]=r;
+  return r;
 }
 
 function mkC(s) {
