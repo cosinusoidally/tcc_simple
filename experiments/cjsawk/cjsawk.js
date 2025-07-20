@@ -638,7 +638,6 @@ function primary_expr_string_(    number_string) {
   uniqueID(number_string, strings_list);
 
   emit(tok, strings_list);
-  /* can't handle double quotes in strings */
   emit(str_dquote, strings_list);
   emit(mks("\n"), strings_list);
 
