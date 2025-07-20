@@ -64,3 +64,6 @@ or a local variable we then assume it is a global (hence the "global &GLOBAL_")
 function primary_expr_string we can't handle double quotes in strings, so we
 call emit(str_dquote, strings_list) to emit a manually constructed string that
 contains a single double quote character.
+
+function process_asm will strip off the leading quote, hence:
+emit_out(add(tok, 1));

@@ -795,7 +795,6 @@ function process_asm() {
   nt();
   skip(mks("("));
   while(eq(char0(), ch_dquote)) {
-    /* strip off leading quote */
     emit_out(add(tok, 1));
     emit_out(mks("\n"));
     nt();
