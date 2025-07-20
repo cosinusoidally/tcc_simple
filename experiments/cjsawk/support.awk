@@ -353,8 +353,8 @@ function v_calloc(nmemb, size \
 }
 
 function v_free(a) {
-  print "v_free not impl"
-  exit 1
+# noop
+  return 0;
 }
 
 function v_exit(a) {
