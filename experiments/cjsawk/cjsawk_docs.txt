@@ -1,0 +1,6 @@
+This file contains documentation for cjsawk.js . Since we want cjsawk.js to
+simultaneously be valid C, JS, and AWK we cannot use C style comments (since
+AWK comments are single line and start with a # symbol, which is not valid
+JS or C).
+
+License block for cjsawk.js:
