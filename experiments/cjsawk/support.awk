@@ -461,9 +461,19 @@ function v_fgetc(f \
   return eax;
 }
 
-function v_fputs(a, b) {
-  print "v_fputs not impl"
-  exit 1
+function v_fputc(c, stream) {
+#  print "fputc c: " c " stream: " stream;
+  if(out_filename != "") {
+#    print "fputc filename: " out_filename;
+    printf("%c", c) >> out_filename;
+  }
+}
+
+function v_fputs(si, f) {
+  while(neq(0, ri8(si))) {
+    v_fputc(ri8(si), f);
+    si = add(si, 1);
+  }
 }
 
 function init_support() {
