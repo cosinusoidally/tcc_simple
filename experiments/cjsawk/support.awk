@@ -93,9 +93,48 @@ function ri8(a) {
   exit 1
 }
 
-function v_calloc(a, b) {
-  print "v_calloc not impl"
-  exit 1
+function v_malloc(size \
+, old_malloc) {
+#  print "malloc: " size;
+  if(eq(NULL, _brk_ptr)) {
+    _brk_ptr = brk(0);
+    _malloc_ptr = _brk_ptr;
+  }
+
+  if(lt(_brk_ptr, add(_malloc_ptr, size))) {
+    _brk_ptr = brk(add(_malloc_ptr, size));
+    if(eq(SUB(0,1), _brk_ptr)) {
+      return 0;
+    }
+  }
+
+  old_malloc = _malloc_ptr;
+  _malloc_ptr = add(_malloc_ptr, size);
+#  print("malloc old_malloc: " old_malloc);
+  return old_malloc;
+}
+
+function v_memset(ptr, value, num \
+, s) {
+  s = ptr;
+#  print "memset ptr: " ptr " value: " value " num: " num;
+  while(lt(0, num)) {
+#    print "num: " num;
+    wi8(s, value);
+    s = add(s, 1);
+    num = SUB(num, 1);
+  }
+}
+
+function v_calloc(nmemb, size \
+, ret) {
+#  print "calloc nmemb: " nmemb " size: " size;
+  ret = v_malloc(mul(nmemb, size));
+  if(eq(NULL, ret)) {
+    return NULL;
+  }
+  v_memset(ret, 0, mul(nmemb, size));
+  return ret;
 }
 
 function v_free(a) {
@@ -137,6 +176,10 @@ function init_runtime() {
   stdin = 0;
   stdout = 1;
   stderr = 2;
+
+  NULL = 0;
+  FALSE = 0;
+  TRUE = 1;
 #  init_or_tt();
 #  init_and_tt();
 #  init_mkc();
