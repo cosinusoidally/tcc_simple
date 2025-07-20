@@ -167,9 +167,12 @@ function mod(a, b) {
   exit 1
 }
 
-function wi8(a, b) {
-  print "wi8 not impl"
-  exit 1
+function wi8(o,v){
+  if(v==""){
+    print("wrong use of wi8");
+    exit 1;
+  }
+  heap[o] = and(v, 255);
 }
 
 function ri8(a) {
