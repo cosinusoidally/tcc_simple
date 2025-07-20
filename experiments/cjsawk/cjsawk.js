@@ -889,12 +889,12 @@ function declare_function_(t,    i) {
       emit_out(ra_get32(args, i));
       emit_out(mks(" "));
       /* FIXME explain this frame layout better */
-      emit_out(to_hex_le(sub(0,mul(add(i,1),4))));
+      emit_out(to_hex_le(SUB(0,mul(add(i,1),4))));
       emit_out(mks("\n"));
-      i = sub(i, 1);
+      i = SUB(i, 1);
     }
     statement();
-    if(eq(0, smatch(ra_get32(output_list, sub(ra_len32(output_list),1)), mks("ret\n")))) {
+    if(eq(0, smatch(ra_get32(output_list, SUB(ra_len32(output_list),1)), mks("ret\n")))) {
       cleanup_locals();
       indented_emit_out(mks("ret\n"));
     }
