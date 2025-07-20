@@ -4,3 +4,30 @@ AWK comments are single line and start with a # symbol, which is not valid
 JS or C).
 
 License block for cjsawk.js:
+
+/* cjsawk partially based on a heavily cut down version of M2-Planet
+ * Modifications Copyright (C) 2025 Liam Wilson (under same license)
+ * original authors of M2-Planet and original copyright notice:
+ * Copyright (C) 2016 Jeremiah Orians
+ * Copyright (C) 2018 Jan (janneke) Nieuwenhuizen <janneke@gnu.org>
+ * Copyright (C) 2020 deesix <deesix@tuta.io>
+ * FIXME (Liam Wilson) I've mangled andrius name as gawk doesn't like the "S"
+ * Copyright (C) 2021 Andrius Stikonas <andrius@stikonas.eu>
+ * Copyright (C) 2021 Sanne Wouda
+ * Copyright (C) 2022 Jan (janneke) Nieuwenhuizen <janneke@gnu.org>
+ * This file is part of M2-Planet.
+ *
+ * M2-Planet is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * M2-Planet is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
