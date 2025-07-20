@@ -81,4 +81,6 @@ it will skip that line.
 Also in declare_function we emit code to define offsets of our args on the
 stack. This is done in rerverse order to match what m2min_v3 does.
 
-
+function init_globals does what it says. We need this since we cannot initialise
+globals statically. Here we also define some character values with ch_*
+variables (eg ch_dquote for ").
