@@ -23,6 +23,57 @@ function neq(a, b) {
   exit 1
 }
 
+function uint32_to_int32(x){
+  x=int(x);
+  if(x>2147483647) {
+    x=x-4294967296;
+  }
+  return x;
+}
+
+function to_uint32(x) {
+#  print("to_uint32 x: " x);
+  x=int(x);
+  if((x<0)){
+    if(x<-2147483648) {
+      print("to_uint32 less than -2147483648 not supported");
+      exit 1;
+    }
+    x=4294967296+x;
+#    print("to_uint32 x: " _or(x,0));
+  }
+  if(x>4294967295) {
+    print "to_uint32 too big";
+  }
+  return x;
+}
+
+function do_bitwise(a, b, tt \
+, ba \
+, bb \
+, i \
+, r \
+, t \
+, v) {
+  r=0;
+#  print "a: " a;
+#  print "b: " b;
+  for(i=0;i<32;i++){
+    r=r*0.5;
+    ba=(a % 2);
+    bb=(b % 2);
+    t = ba+bb;
+#    print "t: " t;
+    v=tt[t];
+#    print ba " " bb " " v;
+    a=a-ba; a=a * 0.5;
+    b=b-bb; b=b * 0.5;
+    r=r+(v*2147483648);
+  }
+#  print "r: " r;
+  return uint32_to_int32(r);
+}
+
 function and(a, b) {
   print "and not impl"
   exit 1
@@ -33,9 +84,14 @@ function fast_or(a, b) {
   exit 1
 }
 
-function slow_or(a, b) {
-  print "slow_or not impl"
-  exit 1
+function slow_or(a,b \
+, r) {
+  a=to_uint32(a);
+  b=to_uint32(b);
+
+  r=do_bitwise(a, b, or_tt);
+#  print "r: " r;
+  return r;
 }
 
 function OR(a, b) {
