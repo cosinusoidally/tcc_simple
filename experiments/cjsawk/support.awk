@@ -93,16 +93,26 @@ function ri8(a) {
   exit 1
 }
 
+function v_brk(addr) {
+  addr = or(addr,0);
+  if(addr==0){
+    return brk_ptr;
+  } else {
+    brk_ptr = addr;
+    return addr;
+  }
+}
+
 function v_malloc(size \
 , old_malloc) {
 #  print "malloc: " size;
   if(eq(NULL, _brk_ptr)) {
-    _brk_ptr = brk(0);
+    _brk_ptr = v_brk(0);
     _malloc_ptr = _brk_ptr;
   }
 
   if(lt(_brk_ptr, add(_malloc_ptr, size))) {
-    _brk_ptr = brk(add(_malloc_ptr, size));
+    _brk_ptr = v_brk(add(_malloc_ptr, size));
     if(eq(SUB(0,1), _brk_ptr)) {
       return 0;
     }
