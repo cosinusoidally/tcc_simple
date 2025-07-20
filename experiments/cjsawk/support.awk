@@ -208,9 +208,12 @@ function wi8(o,v){
   heap[o] = and(v, 255);
 }
 
-function ri8(a) {
-  print "ri8 not impl"
-  exit 1
+function ri8(o, dummy){
+  if(dummy!=""){
+    print("wrong use of ri8");
+    exit 1;
+  }
+  return and(heap[o], 255);
 }
 
 function v_brk(addr) {
