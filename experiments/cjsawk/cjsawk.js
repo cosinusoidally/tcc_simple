@@ -720,7 +720,7 @@ function int_str_(a,    b, d, o, t) {
     if(eq(0,a)){
       break;
     }
-    o = sub(o,1);
+    o = SUB(o,1);
   }
   return o;
 }
@@ -883,8 +883,8 @@ function declare_function_(t,    i) {
     emit_out(func);
     increase_indent();
     emit_out(mks("\n"));
-    i = sub(ra_len32(args), 1);
-    while(gt(i, sub(0,1))) {
+    i = SUB(ra_len32(args), 1);
+    while(gt(i, SUB(0,1))) {
       indented_emit_out(mks("DEFINE ARG_"));
       emit_out(ra_get32(args, i));
       emit_out(mks(" "));
