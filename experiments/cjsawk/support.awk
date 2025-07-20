@@ -33,8 +33,33 @@ function or(a, b) {
   exit 1
 }
 
+function gt(a, b) {
+  print "gt not impl"
+  exit 1
+}
+
 function lt(a, b) {
   print "lt not impl"
+  exit 1
+}
+
+function eq(a, b) {
+  print "eq not impl"
+  exit 1
+}
+
+function mul(a, b) {
+  print "mul not impl"
+  exit 1
+}
+
+function div(a, b) {
+  print "div not impl"
+  exit 1
+}
+
+function mod(a, b) {
+  print "mod not impl"
   exit 1
 }
 
