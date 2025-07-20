@@ -236,9 +236,10 @@ function shr(a,b \
   return ret;
 }
 
-function gt(a, b) {
-  print "gt not impl"
-  exit 1
+function gt(a,b,c){
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a > b), 0);
 }
 
 function gte(a, b) {
