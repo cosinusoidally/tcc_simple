@@ -352,6 +352,27 @@ t) {
   }
 }
 
+function mk_args(si \
+, i \
+, s \
+, ret \
+){
+  i = 1;
+  print "mk_args si: " si;
+  split(si, s, " ");
+  while(s[i]!="") {
+    print i " : " s[i];
+    argva[i-1]=s[i];
+    argc = i;
+    i=i+1;
+  }
+  print "argc : " argc;
+  argv = v_malloc(argc * 4);
+  for(i = 0; i < argc ; i++){
+    wi32(argv+(4*i), mks(s[i+1]));
+  }
+}
+
 function init_runtime() {
   print "init_runtime";
   stdin = 0;
