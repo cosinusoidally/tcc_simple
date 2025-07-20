@@ -38,6 +38,11 @@ function v_exit(v) {
   exit(v);
 }
 
+/* wrapper for sub since sub is a builtin word in AWK */
+function SUB(a, b) {
+  return sub(a, b);
+}
+
 function init_runtime() {
 /* dummy */
 }
