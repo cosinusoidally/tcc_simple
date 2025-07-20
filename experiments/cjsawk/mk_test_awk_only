@@ -1,5 +1,6 @@
 # set -xe
 
+rm artifacts/out_awk.M1
 cp cjsawk.js artifacts/cjsawk_awk.c
 gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
 # echo "run in gawk"
