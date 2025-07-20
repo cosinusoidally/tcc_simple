@@ -31,3 +31,5 @@ License block for cjsawk.js:
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+frame_bias: this variable exists since main has an additional number of
+            elements initially on the stack.

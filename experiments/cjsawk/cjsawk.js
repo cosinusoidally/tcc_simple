@@ -32,8 +32,6 @@ var tok;
 var break_target_prefix;
 var break_target_num;
 
-/* needed since main has an additional number of elements initially on the
-   stack */
 var frame_bias;
 
 var eof;
