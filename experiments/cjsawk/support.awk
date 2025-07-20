@@ -28,9 +28,26 @@ function and(a, b) {
   exit 1
 }
 
-function or(a, b) {
-  print "or not impl"
+function fast_or(a, b) {
+  print "fast_or not impl"
   exit 1
+}
+
+function slow_or(a, b) {
+  print "slow_or not impl"
+  exit 1
+}
+
+function OR(a, b) {
+  if(use_fast_or){
+    return fast_or(a,b);
+  } else {
+    return slow_or(a,b);
+  }
+}
+
+function or(a, b) {
+  return OR(a, b);
 }
 
 function shl(a, b) {
@@ -69,8 +86,9 @@ function eq(a, b) {
 }
 
 function mul(a, b) {
-  print "mul not impl"
-  exit 1
+  a = OR(a,0);
+  b = OR(b,0);
+  return a*b;
 }
 
 function div(a, b) {
