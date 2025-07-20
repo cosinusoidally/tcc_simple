@@ -930,8 +930,8 @@ function init_globals() {
 
   eof = FALSE;
 
-  ch_backslash = 92; /* char code for \  */
-  ch_dquote = 34; /* char code for " */
+  ch_backslash = 92;
+  ch_dquote = 34;
   str_dquote = v_calloc(2,1);
   wi8(str_dquote, ch_dquote);
 }
