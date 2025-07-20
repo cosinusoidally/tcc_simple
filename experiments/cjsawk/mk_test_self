@@ -45,6 +45,10 @@ echo "you need to have built m2min_v3 for this to pass"
 
 diff -u -s  artifacts/pnut_m2.M1 ../m2min_v3/artifacts/pnut_js.exe.M1
 
+echo "check self hosted under js"
+js ../m2min_v3/node_compat_min.js cjsawk_test2.js > ./artifacts/out_js.M1
+diff -u -s  ./artifacts/out_js.M1 ./artifacts/boot0.exe.M1
+
 wc cjsawk.js
 
 echo DONE
