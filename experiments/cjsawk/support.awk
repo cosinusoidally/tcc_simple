@@ -364,9 +364,15 @@ function v_exit(a) {
   exit 1
 }
 
-function v_fclose(a) {
-  print "v_fclose not impl"
-  exit 1
+function v_close(fd) {
+  print("close(" fd ")");
+  return 0;
+}
+
+function v_fclose(stream \
+, err) {
+        err = v_close(stream);
+        return err;
 }
 
 function v_open(pathname, flags, mode \

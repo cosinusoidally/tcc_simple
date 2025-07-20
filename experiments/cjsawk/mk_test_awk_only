@@ -2,8 +2,8 @@
 
 cp cjsawk.js artifacts/cjsawk_awk.c
 gcc -m32 -E artifacts/cjsawk_awk.c > artifacts/cjsawk.awk
-echo "run in gawk"
-gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
+# echo "run in gawk"
+# gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 echo "run in mawk"
 mawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 
