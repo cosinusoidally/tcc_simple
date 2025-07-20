@@ -8,9 +8,10 @@ function mkC(s) {
   exit 1
 }
 
-function add(a, b) {
-  print "add not impl"
-  exit 1
+function add(a,b) {
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return a + b;
 }
 
 function SUB(a, b) {
@@ -142,9 +143,10 @@ function lte(a, b) {
   exit 1
 }
 
-function eq(a, b) {
-  print "eq not impl"
-  exit 1
+function eq(a, b){
+  a = OR(a, 0);
+  b = OR(b, 0);
+  return OR((a == b), 0);
 }
 
 function mul(a, b) {
