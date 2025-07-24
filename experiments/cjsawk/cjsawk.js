@@ -17,7 +17,7 @@ var ln;
 
 var current_count;
 
-var func;
+var current_function;
 
 var tt;
 
@@ -717,7 +717,7 @@ function return_result() {
 }
 
 function uniqueID(id, l) {
-  emit(func, l);
+  emit(current_function, l);
   emit(mks("_"), l);
   emit(id, l);
   emit(mks("\n"), l);
@@ -784,7 +784,7 @@ function process_break() {
   nt();
   indented_emit_out(mks("jump %"));
   emit_out(break_target_prefix);
-  emit_out(func);
+  emit_out(current_function);
   emit_out(mks("_"));
   emit_out(break_target_num);
   emit_out(mks("\n"));
@@ -834,7 +834,7 @@ function declare_function(t) {
 function declare_function_(t,    i) {
   ra_reset(locals);
   current_count = 0;
-  func = t;
+  current_function = t;
   if(smatch(t, mks("main"))) {
     frame_bias = 1;
   } else {
@@ -846,7 +846,7 @@ function declare_function_(t,    i) {
     nt();
   } else if(smatch(tok, mks("{"))) {
     emit_out(mks(":FUNCTION_"));
-    emit_out(func);
+    emit_out(current_function);
     increase_indent();
     emit_out(mks("\n"));
     i = SUB(ra_len32(args), 1);
