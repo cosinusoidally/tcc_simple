@@ -323,7 +323,7 @@ function shl(a,b \
   }
   b = to_uint32(b);
   p = 2 ^ b;
-  ret = and(a*p,4294967295);
+  ret = AND(a*p,4294967295);
 #  print "shl a: " a " b: " b " multiplier: " p " ret: " ret;
   return ret;
 }
@@ -395,7 +395,7 @@ function wi8(o,v){
     print("wrong use of wi8");
     exit 1;
   }
-  heap[o] = and(v, 255);
+  heap[o] = AND(v, 255);
 }
 
 function ri8(o, dummy){
@@ -403,7 +403,7 @@ function ri8(o, dummy){
     print("wrong use of ri8");
     exit 1;
   }
-  return and(heap[o], 255);
+  return AND(heap[o], 255);
 }
 
 function v_brk(addr) {
