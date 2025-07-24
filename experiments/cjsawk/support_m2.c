@@ -43,9 +43,14 @@ function SUB(a, b) {
   return sub(a, b);
 }
 
-/* wrapper for and since sub is a builtin word in AWK */
+/* wrapper for and since and is a builtin word in non-posix mode AWK */
 function AND(a, b) {
   return and(a, b);
+}
+
+/* wrapper for and since or is a builtin word in non-posix mode AWK */
+function OR(a, b) {
+  return or(a, b);
 }
 
 function init_runtime() {

@@ -57,9 +57,9 @@ var ch_dquote;
 var str_dquote;
 
 function ri32(o) {
-  return or(or(AND(ri8(o), 255),
+  return OR(OR(AND(ri8(o), 255),
             shl(AND(ri8(add(o, 1)), 255), 8)),
-            or(shl(AND(ri8(add(o, 2)), 255), 16),
+            OR(shl(AND(ri8(add(o, 2)), 255), 16),
             shl(AND(ri8(add(o, 3)), 255), 24)));
 }
 
@@ -147,7 +147,7 @@ function char0() {
 }
 
 function is_whitespace() {
-  if(or(eq(ch, 32), eq(ch, 9))) {
+  if(OR(eq(ch, 32), eq(ch, 9))) {
     return TRUE;
   }
   if(eq(ch, 10)) {
@@ -191,8 +191,8 @@ function eat_comment() {
 }
 
 function is_id() {
-  if(or(AND(gte(ch, mkC("a")), lte(ch, mkC("z"))),
-     or(AND(gte(ch, mkC("A")), lte(ch, mkC("Z"))), eq(ch, mkC("_"))))) {
+  if(OR(AND(gte(ch, mkC("a")), lte(ch, mkC("z"))),
+     OR(AND(gte(ch, mkC("A")), lte(ch, mkC("Z"))), eq(ch, mkC("_"))))) {
     return TRUE;
   }
   return FALSE;
@@ -206,7 +206,7 @@ function is_num() {
 }
 
 function is_other() {
-  if(or(eq(ch,mkC(",")),or(eq(ch,mkC(";")),or(eq(ch,mkC("(")),
+  if(OR(eq(ch,mkC(",")),OR(eq(ch,mkC(";")),OR(eq(ch,mkC("(")),
      or(eq(ch,mkC(")")),or(eq(ch,mkC("{")),or(eq(ch,mkC("}")),
      eq(ch,mkC("="))))))))) {
     return TRUE;
