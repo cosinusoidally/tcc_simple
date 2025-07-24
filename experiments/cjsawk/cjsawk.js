@@ -207,7 +207,7 @@ function is_num() {
 
 function is_other() {
   if(OR(eq(ch,mkC(",")),OR(eq(ch,mkC(";")),OR(eq(ch,mkC("(")),
-     or(eq(ch,mkC(")")),or(eq(ch,mkC("{")),or(eq(ch,mkC("}")),
+     OR(eq(ch,mkC(")")),OR(eq(ch,mkC("{")),OR(eq(ch,mkC("}")),
      eq(ch,mkC("="))))))))) {
     return TRUE;
   }
@@ -230,14 +230,14 @@ function is_string() {
 
 function get_id() {
   tt = tt_identifier;
-  while(or(is_num(), is_id())) {
+  while(OR(is_num(), is_id())) {
     nch();
   }
 }
 
 function get_num() {
   tt = tt_number;
-  while(or(is_num(), is_id())) {
+  while(OR(is_num(), is_id())) {
     nch();
   }
 }
@@ -269,7 +269,7 @@ function get_string() {
 }
 
 function nt() {
-  while(or(is_whitespace(), is_comment())) {
+  while(OR(is_whitespace(), is_comment())) {
     if(is_whitespace()) {
       eat_whitespace();
     } else if(is_comment()) {
@@ -879,7 +879,7 @@ function program_(    ltok) {
   nt();
 
   while(eq(0,eof)) {
-    if(or(smatch(tok, mks("int")), or(smatch(tok, mks("var")),
+    if(OR(smatch(tok, mks("int")), OR(smatch(tok, mks("var")),
           smatch(tok, mks("function"))))) {
       nt(); ltok = tok;
       nt();
