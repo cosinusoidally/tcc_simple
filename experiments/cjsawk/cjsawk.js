@@ -57,27 +57,27 @@ var ch_dquote;
 var str_dquote;
 
 function ri32(o) {
-  return or(or(and(ri8(o), 255),
-            shl(and(ri8(add(o, 1)), 255), 8)),
-            or(shl(and(ri8(add(o, 2)), 255), 16),
-            shl(and(ri8(add(o, 3)), 255), 24)));
+  return or(or(AND(ri8(o), 255),
+            shl(AND(ri8(add(o, 1)), 255), 8)),
+            or(shl(AND(ri8(add(o, 2)), 255), 16),
+            shl(AND(ri8(add(o, 3)), 255), 24)));
 }
 
 function wi32(o, v) {
-  wi8(o, and(v, 255));
+  wi8(o, AND(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 1), and(v, 255));
+  wi8(add(o, 1), AND(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 2), and(v, 255));
+  wi8(add(o, 2), AND(v, 255));
   v = shr(v, 8);
-  wi8(add(o, 3), and(v, 255));
+  wi8(add(o, 3), AND(v, 255));
 }
 
 function smatch(a, b) {
   return smatch_(a, b, 0);
 }
 function smatch_(a, b,    i) {
-  if(and(eq(NULL, a), eq(NULL, b))) {
+  if(AND(eq(NULL, a), eq(NULL, b))) {
     return TRUE;
   }
   if(eq(NULL, a)) {
@@ -93,7 +93,7 @@ function smatch_(a, b,    i) {
     if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
       return FALSE;
     }
-    if(eq(0,and(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
+    if(eq(0,AND(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
       break;
     }
   }
@@ -191,15 +191,15 @@ function eat_comment() {
 }
 
 function is_id() {
-  if(or(and(gte(ch, mkC("a")), lte(ch, mkC("z"))),
-     or(and(gte(ch, mkC("A")), lte(ch, mkC("Z"))), eq(ch, mkC("_"))))) {
+  if(or(AND(gte(ch, mkC("a")), lte(ch, mkC("z"))),
+     or(AND(gte(ch, mkC("A")), lte(ch, mkC("Z"))), eq(ch, mkC("_"))))) {
     return TRUE;
   }
   return FALSE;
 }
 
 function is_num() {
-  if(and(gte(ch, mkC("0")), lte(ch,mkC("9")))) {
+  if(AND(gte(ch, mkC("0")), lte(ch,mkC("9")))) {
     return TRUE;
   }
   return FALSE;
@@ -391,7 +391,7 @@ function ra_push8(r, v) {
   if(gte(add(ra_len8_g(r), 4), ra_capacity_g(r))) {
     ra_grow(r);
   }
-  wi32(add(ra_data_g(r), ra_len8_g(r)), and(v, 255));
+  wi32(add(ra_data_g(r), ra_len8_g(r)), AND(v, 255));
   ra_len8_s(r, add(ra_len8_g(r), 1));
 }
 
@@ -417,7 +417,7 @@ function collect_arguments() {
 }
 
 function to_hex_digit(a) {
-  a = and(15, a);
+  a = AND(15, a);
   if(gt(a, 9)) {
     a = add(SUB(a, 10), 65);
   } else {

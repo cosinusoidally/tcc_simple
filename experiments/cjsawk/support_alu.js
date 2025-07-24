@@ -15,6 +15,11 @@ function SUB(a, b) {
   return sub(a, b);
 }
 
+/* wrapper for and since sub is a builtin word in AWK */
+function AND(a, b) {
+  return and(a, b);
+}
+
 function mul(a, b){
   a = a | 0;
   b = b | 0;

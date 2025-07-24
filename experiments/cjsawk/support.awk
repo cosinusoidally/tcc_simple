@@ -219,10 +219,6 @@ function slow_and(a,b \
 }
 
 function AND(a, b) {
-  return and(a, b);
-}
-
-function and(a, b) {
   if(use_fast_and){
     return fast_and(a,b);
   } else {
