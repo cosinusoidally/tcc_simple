@@ -4,7 +4,7 @@ set -xe
 # echo "run in gawk"
 # gawk -W posix -f artifacts/cjsawk.awk -f support.awk -f cjsawk_test.awk
 echo "run in mawk"
-gawk -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+busybox awk -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
 
 diff -u -s artifacts/boot0.exe.M1 artifacts/out_awk.M1
 

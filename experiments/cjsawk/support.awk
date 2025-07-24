@@ -306,6 +306,21 @@ function OR(a, b) {
   }
 }
 
+function pow(a, b,    r) {
+  if(b == 0) {
+    return 1;
+  }
+  r = 1;
+  while(b > 0) {
+    r = r * a;
+    b = b - 1;
+  }
+# Math disabled builds of busybox awk don't support power
+#  return a ^ b;
+#  print "ret a: " a " b: " b " r: " r
+  return r;
+}
+
 function shl(a,b \
 , p \
 , ret) {
@@ -314,7 +329,8 @@ function shl(a,b \
     print("shl cannot be a negative shift");
   }
   b = to_uint32(b);
-  p = 2 ^ b;
+#  p = 2 ^ b;
+  p = pow(2, b);
   ret = AND(a*p,4294967295);
 #  print "shl a: " a " b: " b " multiplier: " p " ret: " ret;
   return ret;
@@ -328,7 +344,8 @@ function shr(a,b \
     print("shr cannot be a negative shift");
   }
   b = to_uint32(b);
-  p = 2 ^ b;
+#  p = 2 ^ b;
+  p = pow(2, b);
   ret=int(a/p);
 #  print "shr a: " a " b: " b " multiplier: " p " ret: " ret;
   return ret;
