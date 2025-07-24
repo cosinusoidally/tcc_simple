@@ -306,10 +306,6 @@ function OR(a, b) {
   }
 }
 
-function or(a, b) {
-  return OR(a, b);
-}
-
 function shl(a,b \
 , p \
 , ret) {

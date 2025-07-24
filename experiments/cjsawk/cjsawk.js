@@ -810,7 +810,7 @@ function statement() {
       statement();
     }
     skip(mks("}"));
-  } else if(or(smatch(tok, mks("var")), smatch(tok, mks("int")))) {
+  } else if(OR(smatch(tok, mks("var")), smatch(tok, mks("int")))) {
     collect_local();
   } else if(smatch(tok, mks("if"))) {
     process_if();
