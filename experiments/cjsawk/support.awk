@@ -403,7 +403,7 @@ function ri8(o, dummy){
 }
 
 function v_brk(addr) {
-  addr = or(addr,0);
+  addr = OR(addr,0);
   if(addr==0){
     return brk_ptr;
   } else {
