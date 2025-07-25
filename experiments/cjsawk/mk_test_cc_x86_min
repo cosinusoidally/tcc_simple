@@ -24,9 +24,9 @@ function compile() {
   hex2-0 $3-0.hex2 $3
 }
 
-cp ../m2min_v3/artifacts/js_to_c_simple.c artifacts
+cat ../m2min_v3/js_to_c/js_to_c_m2_support.c ../m2min_v3/js_to_c/js_to_c_simple.c > artifacts/js_to_c_simple_all.c
 
-compile cc_x86_min.exe ./artifacts/js_to_c_simple.c ./artifacts/js_to_c.exe
+compile cc_x86_min.exe ./artifacts/js_to_c_simple_all.c ./artifacts/js_to_c.exe
 
 ./artifacts/js_to_c.exe ./artifacts/cjsawk_full.c ./artifacts/cjsawk_full_cc_x86.c
 
