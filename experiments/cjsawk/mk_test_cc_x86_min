@@ -1,0 +1,53 @@
+./mk_clean
+set -xe
+
+pushd .
+cd ../m2min_v2/
+./mk_cc_x86_min
+cd artifacts
+export PATH=$PWD:$PATH
+popd
+
+echo "int stdout;" > artifacts/m2min_v3.c
+cat ../m2min_v3/simple_support_js.c >> artifacts/m2min_v3.c
+cat ../m2min_v3/m2min_v3.js >> artifacts/m2min_v3.c
+cat ../m2min_v3/simple_support_js_m2.js >> artifacts/m2min_v3.c
+cat ../m2min_v3/simple_support_js_m2_prims.c >> artifacts/m2min_v3.c
+
+cat cjsawk.js support_libc.js ../m2min_v3/simple_support_js_m2_prims.c support_m2.c > ./artifacts/cjsawk_full.c
+
+function compile() {
+  $1 $2 $3.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
+  M0 $3-0.M1 $3.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
+  hex2-0 $3-0.hex2 $3
+}
+
+cp ../m2min_v3/artifacts/js_to_c_simple.c artifacts
+
+compile cc_x86_min.exe ./artifacts/js_to_c_simple.c ./artifacts/js_to_c.exe
+
+./artifacts/js_to_c.exe ./artifacts/cjsawk_full.c ./artifacts/cjsawk_full_cc_x86.c
+
+compile cc_x86 ./artifacts/cjsawk_full_cc_x86.c ./artifacts/cjsawk.exe
+
+compile ./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/boot0.exe
+compile ./artifacts/boot0.exe ./artifacts/cjsawk_full.c ./artifacts/boot1.exe
+compile ./artifacts/boot1.exe ./artifacts/cjsawk_full.c ./artifacts/boot2.exe
+
+compile ./artifacts/boot2.exe ./artifacts/m2min_v3.c ./artifacts/m2_boot0.exe
+compile ./artifacts/m2_boot0.exe ./artifacts/m2min_v3.c ./artifacts/m2_boot1.exe
+compile ./artifacts/m2_boot1.exe ./artifacts/m2min_v3.c ./artifacts/m2_boot2.exe
+
+compile ./artifacts/m2_boot2.exe ./artifacts/cjsawk_full.c ./artifacts/boot3.exe
+
+diff -u -s ./artifacts/boot0.exe ./artifacts/boot2.exe
+diff -u -s ./artifacts/m2_boot0.exe ./artifacts/m2_boot2.exe
+
+diff -u -s ./artifacts/m2_boot0.exe.M1 ../m2min_v3/m2min_v3.M1
+
+diff -u -s ./artifacts/boot0.exe.M1 ./artifacts/boot2.exe.M1
+diff -u -s ./artifacts/boot0.exe.M1 ./artifacts/boot3.exe.M1
+
+echo DONE
