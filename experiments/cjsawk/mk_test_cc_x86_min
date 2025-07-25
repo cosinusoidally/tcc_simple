@@ -30,7 +30,7 @@ compile cc_x86_min.exe ./artifacts/js_to_c_simple.c ./artifacts/js_to_c.exe
 
 ./artifacts/js_to_c.exe ./artifacts/cjsawk_full.c ./artifacts/cjsawk_full_cc_x86.c
 
-compile cc_x86 ./artifacts/cjsawk_full_cc_x86.c ./artifacts/cjsawk.exe
+compile cc_x86_min.exe ./artifacts/cjsawk_full_cc_x86.c ./artifacts/cjsawk.exe
 
 compile ./artifacts/cjsawk.exe ./artifacts/cjsawk_full.c ./artifacts/boot0.exe
 compile ./artifacts/boot0.exe ./artifacts/cjsawk_full.c ./artifacts/boot1.exe
