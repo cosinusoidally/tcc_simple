@@ -1,6 +1,7 @@
 ./mk_clean
 
 set -xe
+source common.sh
 
 pushd .
 cd artifacts
@@ -32,11 +33,12 @@ cat ../../../m2min_v3/js_to_c/js_to_c_m2_support.c ../../../m2min_v3/js_to_c/js_
 
 cat ../../../pnut_refactor/simple_support_js_m2.js ../../../pnut_refactor/pnut.js > pnut_full.js
 
+mkdir js_to_c
+cd js_to_c
+compile cc_x86_min.exe ../js_to_c_simple_all.c js_to_c.exe
+
 popd
 
-source common.sh
-
-compile cc_x86_min.exe artifacts/deps/js_to_c_simple_all.c artifacts/deps/js_to_c.exe
 
 js_to_c.exe artifacts/deps/pnut_full.js artifacts/deps/pnut_full.c
 

@@ -2,4 +2,6 @@ set -xe
 
 ./mk_deps
 
+./mk_cc_x86_min
+
 echo "DONE ALL"

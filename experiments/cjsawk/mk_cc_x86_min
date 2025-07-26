@@ -1,0 +1,15 @@
+rm -r artifacts/builds/cc_x86
+set -xe
+source common.sh
+mkdir artifacts/builds/cc_x86
+cd artifacts/builds/cc_x86
+
+js_to_c.exe ../../deps/cjsawk_full.c cjsawk_cc_x86_min.c
+
+compile cc_x86_min.exe cjsawk_cc_x86_min.c cjsawk_cc_x86_min.exe
+
+compile ./cjsawk_cc_x86_min.exe ../../deps/cjsawk_full.c boot0.exe
+compile ./boot0.exe ../../deps/cjsawk_full.c boot1.exe
+compile ./boot1.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+echo "DONE cc_x86_min"
