@@ -1,0 +1,23 @@
+rm -r artifacts/builds/jsshell
+set -xe
+source common.sh
+
+pushd .
+
+cd ../../../jsshell/
+export PATH=$PWD:$PATH
+export LD_LIBRARY_PATH=$PWD
+
+popd
+
+mkdir artifacts/builds/jsshell
+js cjsawk_nodejs.js > artifacts/builds/jsshell/cjsawk_jsshell.exe.M1
+
+cd artifacts/builds/jsshell
+assemble_link cjsawk_jsshell.exe
+
+compile ./cjsawk_jsshell.exe ../../deps/cjsawk_full.c boot0.exe
+compile ./boot0.exe ../../deps/cjsawk_full.c boot1.exe
+compile ./boot1.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+echo "DONE jsshell"
