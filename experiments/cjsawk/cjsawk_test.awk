@@ -1,9 +1,8 @@
 BEGIN {
   print "testing cjsawk"
   init_runtime();
-  my_fname = "./artifacts/cjsawk_full.c";
   if(!my_fname) {
-    my_fname = "test.c"
+    my_fname = "./artifacts/cjsawk_full.c";
   }
 
   mk_args("./artifacts/cjsawk.exe " my_fname " artifacts/out_awk.M1")

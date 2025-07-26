@@ -1,0 +1,17 @@
+export DIRNAME=awk
+
+rm -r artifacts/builds/$DIRNAME
+set -xe
+source common.sh
+
+mkdir artifacts/builds/$DIRNAME
+awk -W posix -v fname="artifacts/deps/cjsawk_full.c" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk artifacts/builds/$DIRNAME/cjsawk_awk.exe.M1
+
+cd artifacts/builds/$DIRNAME
+assemble_link cjsawk_awk.exe
+
+compile ./cjsawk_nodejs.exe ../../deps/cjsawk_full.c boot0.exe
+compile ./boot0.exe ../../deps/cjsawk_full.c boot1.exe
+compile ./boot1.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+echo "DONE nodejs"
