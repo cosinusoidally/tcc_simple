@@ -3,6 +3,7 @@ set -xe
 ./mk_deps
 
 ./mk_cc_x86_min
+./mk_gcc
 
 shasum artifacts/builds/*/cjsawk.exe
 
