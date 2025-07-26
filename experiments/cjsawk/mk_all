@@ -4,6 +4,7 @@ set -xe
 
 ./mk_cc_x86_min
 ./mk_gcc
+./mk_nodejs
 
 shasum artifacts/builds/*/cjsawk.exe
 

@@ -1,0 +1,15 @@
+rm -r artifacts/builds/nodejs
+set -xe
+source common.sh
+
+mkdir artifacts/builds/nodejs
+nodejs ../m2min_v3/node_compat_min.js cjsawk_nodejs.js > artifacts/builds/nodejs/cjsawk_nodejs.exe.M1
+
+cd artifacts/builds/nodejs
+assemble_link cjsawk_nodejs.exe
+
+compile ./cjsawk_nodejs.exe ../../deps/cjsawk_full.c boot0.exe
+compile ./boot0.exe ../../deps/cjsawk_full.c boot1.exe
+compile ./boot1.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+echo "DONE nodejs"
