@@ -5,7 +5,7 @@ set -xe
 source common.sh
 
 mkdir artifacts/builds/$DIRNAME
-awk -W posix -v my_fname="artifacts/deps/cjsawk_full.c" -v my_fout="artifacts/builds/$DIRNAME/cjsawk_awk.exe.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+awk -v my_fname="artifacts/deps/cjsawk_full.c" -v my_fout="artifacts/builds/$DIRNAME/cjsawk_awk.exe.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
 # artifacts/builds/$DIRNAME/cjsawk_awk.exe.M1
 
 cd artifacts/builds/$DIRNAME
