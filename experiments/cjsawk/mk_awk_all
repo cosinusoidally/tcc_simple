@@ -1,0 +1,9 @@
+set -xe
+
+./mk_awk gawk
+./mk_awk mawk
+# one true awk
+./mk_awk nawk
+# busybox awk (needs wrapper)
+./mk_awk bawk
+./mk_awk wak
