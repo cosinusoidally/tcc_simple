@@ -1,0 +1,5 @@
+set -xe
+
+./mk_deps
+
+echo "DONE ALL"
