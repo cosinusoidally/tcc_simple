@@ -5,7 +5,11 @@ BEGIN {
     my_fname = "./artifacts/cjsawk_full.c";
   }
 
-  mk_args("./artifacts/cjsawk.exe " my_fname " artifacts/out_awk.M1")
+  if(!my_fout) {
+    my_fout = "./artifacts/out_awk.M1";
+  }
+
+  mk_args("./artifacts/cjsawk.exe " my_fname " " my_fout)
   print "argc: " argc;
   print "argv: " argv;
 
