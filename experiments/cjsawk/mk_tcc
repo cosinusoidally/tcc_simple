@@ -1,0 +1,15 @@
+rm -r artifacts/builds/tcc
+set -xe
+source common.sh
+
+mkdir artifacts/builds/tcc
+tcc -nostdinc -c cjsawk_test.c -o artifacts/builds/tcc/cjsawk_tcc.o
+gcc -m32 artifacts/builds/tcc/cjsawk_tcc.o -o artifacts/builds/tcc/cjsawk_tcc.exe
+
+cd artifacts/builds/tcc
+
+compile ./cjsawk_tcc.exe ../../deps/cjsawk_full.c boot0.exe
+compile ./boot0.exe ../../deps/cjsawk_full.c boot1.exe
+compile ./boot1.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+echo "DONE tcc"
