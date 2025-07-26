@@ -1,12 +1,24 @@
 ./mk_clean
 
-push .
 set -xe
+
+pushd .
 cd artifacts
 
 mkdir deps
 mkdir builds
+
+pushd .
+
+cd ../../m2min_v2/
+./mk_cc_x86_min
+
+popd
 cd deps
+
+cp ../../../m2min_v2/artifacts/cc_x86_min.exe .
+cp ../../../m2min_v2/artifacts/M0 .
+cp ../../../m2min_v2/artifacts/hex2-0 .
 
 echo "int stdout;" > m2min_v3.c
 cat ../../../m2min_v3/simple_support_js.c >> m2min_v3.c
@@ -17,3 +29,7 @@ cat ../../../m2min_v3/simple_support_js_m2_prims.c >> m2min_v3.c
 cat ../../cjsawk.js ../../support_libc.js ../../../m2min_v3/simple_support_js_m2_prims.c ../../support_m2.c > cjsawk_full.c
 
 cat ../../../m2min_v3/js_to_c/js_to_c_m2_support.c ../../../m2min_v3/js_to_c/js_to_c_simple.c > js_to_c_simple_all.c
+
+popd
+
+echo "DONE deps"
