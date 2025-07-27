@@ -1,8 +1,8 @@
-rm -r artifacts/builds/cc_x86
+rm -r artifacts/builds/cc_x86_min
 set -xe
 source common.sh
-mkdir artifacts/builds/cc_x86
-cd artifacts/builds/cc_x86
+mkdir artifacts/builds/cc_x86_min
+cd artifacts/builds/cc_x86_min
 
 js_to_c.exe ../../deps/cjsawk_full.c cjsawk_cc_x86_min.c
 

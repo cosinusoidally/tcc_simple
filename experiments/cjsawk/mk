@@ -1,0 +1,10 @@
+set -xe
+
+./mk_deps
+
+./mk_cc_x86_min
+./mk_fuller
+
+shasum artifacts/builds/*/cjsawk.exe
+
+echo "DONE ALL"

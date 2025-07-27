@@ -1,0 +1,11 @@
+rm -r artifacts/builds/fuller
+set -xe
+source common.sh
+mkdir artifacts/builds/fuller
+cd artifacts/builds/fuller
+
+compile ../cc_x86_min/cjsawk.exe ../../deps/m2min_v3.c m2min_v3.exe
+
+diff -u -s m2min_v3.exe.M1 ../../../../m2min_v3/m2min_v3.M1
+
+echo "DONE fuller"
