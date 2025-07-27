@@ -7,4 +7,13 @@ set -xe
 
 shasum artifacts/builds/*/cjsawk.exe
 
+pushd .
+cd ..
+./mk_clean
+popd
+
+cp ./artifacts/builds/fuller/pnut_js.exe ../artifacts/pnut-exe
+cd ..
+./mk_tcc-boot-mes
+
 echo "DONE ALL"
