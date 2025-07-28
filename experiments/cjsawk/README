@@ -1,0 +1,49 @@
+cjsawk: a self-hosted compiler for a subset of C, JavaScript, and AWK
+
+How to build:
+
+./mk
+
+This will build the Linux executable version of cjsawk.exe via the following
+bootstrap path:
+
+hex0
+hex1
+hex2
+M0
+cc_x86_min (see ../m2min_v2/cc_x86_min.M1)
+js_to_c (see ../m2min_v3/js_to_c/js_to_c_simple.c)
+cjsawk.js (via cc_x86_min.exe and js_to_c.exe)
+
+cjsawk.js is then used to rebuild itself twice to reach a fixed point.
+
+The mk script then proceeds to build pnut_js (see ../pnut_refactor/pnut.js) and
+then builds tcc-boot-mes (see ../mk_tcc-boot-mes). tcc-boot-mes is capable
+of building tcc-0.9.27 with some assitance from my tcc_bootstrap_alt project.
+
+The above is essentially the "bootstrap from nothing" approach. There are
+several other supported paths:
+
+./mk_all
+
+This is the most thorough path. This bootstraps cjsawk.exe via:
+
+These C Compilers:
+
+cc_x86_min
+GCC
+tcc (the Tiny C Compiler)
+
+The following JavaScript VMs:
+
+nodejs
+jsshell (the Mozilla Spidermonkey JS VM, version 45 is used)
+
+The following AWK VMs:
+
+gawk (GNU AWK)
+mawk (the Michael Brennan AWK, common on debian systems)
+nawk (One true AWK, common on BSD systems, and Android)
+busybox awk (the version of AWK included in busybox)
+wak (a new AWK implementation intended to fit a similar niche to busybox awk)
+
