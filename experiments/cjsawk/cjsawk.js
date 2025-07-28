@@ -174,6 +174,11 @@ function eat_comment() {
     nc();
     if(eq(ch, mkC("*"))) {
       nc();
+    } else if(eq(ch, mkC("/"))){
+      while(neq(ch, mkC("\n"))) {
+        nc();
+      }
+      return;
     } else {
       return;
     }

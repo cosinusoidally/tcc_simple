@@ -39,7 +39,6 @@ compile cc_x86_min.exe ../js_to_c_simple_all.c js_to_c.exe
 
 popd
 
-js_to_c.exe artifacts/deps/pnut_tmp.js artifacts/deps/pnut_tmp.c
-cat ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c artifacts/deps/pnut_tmp.c > artifacts/deps/pnut_m2.c
+cat ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c artifacts/deps/pnut_tmp.js > artifacts/deps/pnut_js_m2.c
 
 echo "DONE deps"
