@@ -47,3 +47,6 @@ nawk (One true AWK, common on BSD systems, and Android)
 busybox awk (the version of AWK included in busybox)
 wak (a new AWK implementation intended to fit a similar niche to busybox awk)
 
+Each of the above paths build bit identical versions of cjsawk.exe so we can be
+sure that any path is capable of building pnut_js and then use pnut_js to build
+tcc-boot-mes.
