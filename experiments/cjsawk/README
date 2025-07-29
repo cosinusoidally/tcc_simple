@@ -54,3 +54,30 @@ tcc-boot-mes.
 There is also a shorter version of ./mk_all called ./mk_all_quick . This version
 only tests 1 version of awk (mawk) and completes much quicker (on my machine
 around 40 seconds, rather than 7 mins).
+
+Web version:
+============
+
+There is also a web based version. If you start up a web server in this
+directory and visit in a web browser it will build cjsawk.exe.M1 which will be
+bit identical to the version built via any of the other bootstrap paths.
+
+
+eg:
+
+python2 -m SimpleHTTPServer
+
+and then vist http://127.0.0.1:8000
+
+This has been tested in Firefox, Chrome, and Safari.
+
+Other paths
+===========
+
+Note this bootstrap will also work with duktape, with the version that is
+included in my mishmashvm project (but note that it will prepend some junk at
+the start of the output as that copy of duktape dumps some debug info to
+stdout).
+
+It's likely it will also build with mujs, eg the copy in ../mujs_min but I have
+not tested it yet.
