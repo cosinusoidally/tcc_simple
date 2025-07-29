@@ -9,8 +9,7 @@
 /*jslint bitwise: true */
 AMD=true;
 var root;
-sha256=(function () {
-  'use strict';
+function sha256_init() {
 
   var ERROR = 'input is invalid type';
   var WINDOW = typeof window === 'object';
@@ -518,4 +517,4 @@ sha256=(function () {
       });
     }
   }
-})();
+};

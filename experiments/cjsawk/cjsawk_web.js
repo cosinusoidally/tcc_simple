@@ -18,6 +18,7 @@ window.onload=function() {
   };
   setTimeout(check_ready, 100);
 
+  sha256_init();
 }
 
 function load(x){
