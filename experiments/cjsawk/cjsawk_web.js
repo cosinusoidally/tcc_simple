@@ -70,12 +70,17 @@ function start() {
   var st = Date.now();
   load("cjsawk_test.js");
   var fin = Date.now();
-  console.log("compile took: "+(fin-st)+"ms");
 
   out_area.textContent = pout[0];
 
-  console.log("cjsawk.exe.M1 sha256sum:");
-  console.log(sha256([pout[0], "\n"].join("")));
+  var o=[];
+
+  o.push("compile took: "+(fin-st)+"ms.");
+  o.push("cjsawk.exe.M1 sha256sum:");
+  o.push(sha256([pout[0], "\n"].join("")));
+  o = o.join("\n");
+  console.log(o);
+  document.getElementById("output").textContent = o;
 }
 
 function check_ready() {
