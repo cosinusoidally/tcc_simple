@@ -2,6 +2,9 @@ window.onload=function() {
   console.log("cjsawk hello world");
   getfile("cjsawk_test.js");
   getfile("support.js");
+  getfile("support_libc.js");
+  getfile("support_alu.js");
+  getfile("cjsawk.js");
   print=function(x){
     console.log(x);
   };
@@ -29,7 +32,7 @@ function read(x,y){
 
 
 function start() {
-  eval(read("cjsawk_test.js"));
+  load("cjsawk_test.js");
 }
 
 function check_ready() {
