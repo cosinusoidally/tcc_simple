@@ -17,6 +17,7 @@ window.onload=function() {
     pout.push(x);
   };
   setTimeout(check_ready, 100);
+
 }
 
 function load(x){
@@ -52,7 +53,21 @@ function start() {
     ].join("")
   }
 
+  in_area = document.createElement("textarea");
+  in_area.style.width="50%";
+  in_area.style.height="100%";
+  in_area.textContent = read("./artifacts/cjsawk_full.c");
+
+  out_area = document.createElement("textarea");
+  out_area.style.width="50%";
+  out_area.style.height="100%";
+
+  document.body.appendChild(in_area);
+  document.body.appendChild(out_area);
+
   load("cjsawk_test.js");
+
+  out_area.textContent = pout[0];
 }
 
 function check_ready() {
