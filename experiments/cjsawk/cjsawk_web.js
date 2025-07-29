@@ -69,6 +69,8 @@ function start() {
   load("cjsawk_test.js");
 
   out_area.textContent = pout[0];
+
+  console.log(sha256([pout[0], "\n"].join("")));
 }
 
 function check_ready() {
