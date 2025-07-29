@@ -1,3 +1,5 @@
+pout = [];
+
 window.onload=function() {
   console.log("cjsawk hello world");
   getfile("cjsawk_test.js");
@@ -6,15 +8,13 @@ window.onload=function() {
   getfile("support_alu.js");
   getfile("cjsawk.js");
 
-  vfs["./artifacts/cjsawk_full.c"] = {
-    ready: true,
-    file: "test"
-  }
+  getfile("simple_support_js_m2_prims.c");
+  getfile("support_m2.c");
 
   fname="./artifacts/cjsawk_full.c";
 
   print=function(x){
-    console.log(x);
+    pout.push(x);
   };
   setTimeout(check_ready, 100);
 }
@@ -36,12 +36,22 @@ function read(x,y){
   if(vfs[x] !== undefined) {
     return vfs[x].file;
   }
-  print("file read error " + x);
+  console.log("file read error " + x);
   throw "error";
 };
 
 
 function start() {
+  vfs["./artifacts/cjsawk_full.c"] = {
+    ready: true,
+    file: [
+        read("cjsawk.js"),
+        read("support_libc.js"),
+        read("simple_support_js_m2_prims.c"),
+        read("support_m2.c"),
+    ].join("")
+  }
+
   load("cjsawk_test.js");
 }
 
