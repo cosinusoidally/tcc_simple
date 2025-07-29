@@ -5,6 +5,9 @@ window.onload=function() {
   getfile("support_libc.js");
   getfile("support_alu.js");
   getfile("cjsawk.js");
+
+  fname="./artifacts/cjsawk_full.c";
+
   print=function(x){
     console.log(x);
   };
@@ -19,8 +22,10 @@ function load(x){
 function read(x,y){
   if(arguments.length>1){
     if(y==="binary"){
-      var b=fs.readFileSync(x);
-      return new Uint8Array(b.buffer, b.byteOffset, b.byteLength / Uint8Array.BYTES_PER_ELEMENT);
+      var b=read(x);
+      b=b.split("");
+      b=b.map(function(x) {return x.charCodeAt(0);});
+      return new Uint8Array(b);
     };
   };
   if(vfs[x] !== undefined) {
