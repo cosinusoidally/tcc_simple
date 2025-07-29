@@ -50,3 +50,7 @@ wak (a new AWK implementation intended to fit a similar niche to busybox awk)
 Each of the above paths build bit identical versions of cjsawk.exe so we can be
 sure that any path is capable of building pnut_js and then use pnut_js to build
 tcc-boot-mes.
+
+There is also a shorter version of ./mk_all called ./mk_all_quick . This version
+only tests 1 version of awk (mawk) and completes much quicker (on my machine
+around 40 seconds, rather than 7 mins).
