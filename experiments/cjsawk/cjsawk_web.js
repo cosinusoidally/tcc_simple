@@ -66,10 +66,15 @@ function start() {
   document.body.appendChild(in_area);
   document.body.appendChild(out_area);
 
+
+  var st = Date.now();
   load("cjsawk_test.js");
+  var fin = Date.now();
+  console.log("compile took: "+(fin-st)+"ms");
 
   out_area.textContent = pout[0];
 
+  console.log("cjsawk.exe.M1 sha256sum:");
   console.log(sha256([pout[0], "\n"].join("")));
 }
 
