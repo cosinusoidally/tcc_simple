@@ -1,11 +1,35 @@
 window.onload=function() {
   console.log("cjsawk hello world");
-  getfile("cjsawk.js");
+  getfile("cjsawk_test.js");
+  getfile("support.js");
+  print=function(x){
+    console.log(x);
+  };
   setTimeout(check_ready, 100);
 }
 
-function go() {
-  load("cjsawk.js");
+function load(x){
+  var code = read(x);
+  eval.call(this,code);
+};
+
+function read(x,y){
+  if(arguments.length>1){
+    if(y==="binary"){
+      var b=fs.readFileSync(x);
+      return new Uint8Array(b.buffer, b.byteOffset, b.byteLength / Uint8Array.BYTES_PER_ELEMENT);
+    };
+  };
+  if(vfs[x] !== undefined) {
+    return vfs[x].file;
+  }
+  print("file read error " + x);
+  throw "error";
+};
+
+
+function start() {
+  eval(read("cjsawk_test.js"));
 }
 
 function check_ready() {
@@ -17,7 +41,7 @@ function check_ready() {
   }
   if(ready) {
     console.log("ready now");
-    go();
+    start();
   } else {
     console.log("not ready");
     setTimeout(check_ready, 100);
@@ -34,7 +58,7 @@ function getfile(f) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
     // Typical action to be performed when the document is ready:
-    fd.response = xhttp.responseText;
+    fd.file = xhttp.responseText;
     fd.ready = true;
   }
   };
