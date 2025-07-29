@@ -6,6 +6,11 @@ window.onload=function() {
   getfile("support_alu.js");
   getfile("cjsawk.js");
 
+  vfs["./artifacts/cjsawk_full.c"] = {
+    ready: true,
+    file: "test"
+  }
+
   fname="./artifacts/cjsawk_full.c";
 
   print=function(x){
