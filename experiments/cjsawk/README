@@ -76,6 +76,7 @@ https://cosinusoidally.github.io/tcc_simple/experiments/cjsawk/
 or locally, eg:
 
 python2 -m SimpleHTTPServer
+python3 -mhttp.server
 
 and then vist http://127.0.0.1:8000
 
