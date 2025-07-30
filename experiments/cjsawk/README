@@ -1,5 +1,9 @@
 cjsawk: a self-hosted compiler for a subset of C, JavaScript, and AWK
 
+live web version:
+
+https://cosinusoidally.github.io/tcc_simple/experiments/cjsawk/
+
 How to build:
 
 ./mk
@@ -62,8 +66,11 @@ There is also a web based version. If you start up a web server in this
 directory and visit in a web browser it will build cjsawk.exe.M1 which will be
 bit identical to the version built via any of the other bootstrap paths.
 
+There's a live github version here:
 
-eg:
+https://cosinusoidally.github.io/tcc_simple/experiments/cjsawk/
+
+or locally, eg:
 
 python2 -m SimpleHTTPServer
 
