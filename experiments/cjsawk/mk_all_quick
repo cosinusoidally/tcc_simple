@@ -9,4 +9,6 @@ set -xe
 
 shasum artifacts/builds/*/cjsawk.exe
 
+sha256sum artifacts/builds/cc_x86_min/cjsawk.exe.M1
+
 echo "DONE ALL"
