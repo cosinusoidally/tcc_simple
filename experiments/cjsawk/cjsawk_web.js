@@ -56,12 +56,12 @@ function start() {
 
   in_area = document.createElement("textarea");
   in_area.style.width="50%";
-  in_area.style.height="100%";
+  in_area.style.height="90%";
   in_area.textContent = read("./artifacts/cjsawk_full.c");
 
   out_area = document.createElement("textarea");
   out_area.style.width="50%";
-  out_area.style.height="100%";
+  out_area.style.height="90%";
 
   document.body.appendChild(in_area);
   document.body.appendChild(out_area);
