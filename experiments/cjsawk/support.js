@@ -137,12 +137,20 @@ function mkC(s) {
   return mkc(s[0]);
 }
 
+/* caching to avoid wasting memory each time mks is called */
+var string_cache = {};
+
 function mk_c_string(s){
   var r;
+  r = string_cache[s];
+  if(r !== undefined) {
+    return r;
+  }
   r = malloc(s.length + 1);
   for(var i =0; i<s.length; i++){
     wi8(r + i, s.charCodeAt(i));
   }
+  string_cache[s] = r;
   return r;
 }
 
