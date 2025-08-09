@@ -1,4 +1,9 @@
 rm artifacts/m0.exe
+rm artifacts/out.hex2
+rm artifacts/out-0.hex2
+rm artifacts/out.exe
 set -xe
 gcc -m32 m0.c -o artifacts/m0.exe
-./artifacts/m0.exe
+./artifacts/m0.exe --architecture x86 --little-endian -f artifacts/boot0.exe-0.M1 -o artifacts/out.hex2
+cat ../m2min_v3/ELF-i386.hex2 artifacts/out.hex2 > artifacts/out-0.hex2
+../m2min_v2/artifacts/hex2-0 artifacts/out-0.hex2 artifacts/out.exe
