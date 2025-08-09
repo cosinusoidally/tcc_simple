@@ -1,0 +1,4 @@
+rm artifacts/m0.exe
+set -xe
+gcc -m32 m0.c -o artifacts/m0.exe
+./artifacts/m0.exe
