@@ -1042,7 +1042,7 @@ void print_hex(struct Token* p)
 		else if(NULL != i->contents->Expression)
 		{
 			fputs(i->contents->Expression, destination_file);
-			if(NEWLINE != i->next->contents->type) fputc(' ', destination_file);
+			if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
 		}
 		else
 		{
