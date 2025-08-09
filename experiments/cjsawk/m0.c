@@ -703,8 +703,8 @@ void hexify_string(struct blob* p)
 			S = S + 1;
 			d[0] = table[S[0] >> 4];
 			d[1] = table[S[0] & 0xF];
-			d[2] = ' ';
-			d = d + 3;
+			d[2] = 0;
+			d = d + 2;
 		}
 	}
 	else if(OCTAL == ByteMode)
