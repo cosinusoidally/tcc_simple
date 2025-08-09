@@ -45,6 +45,9 @@ The following JavaScript VMs:
 
 nodejs
 jsshell (the Mozilla Spidermonkey JS VM, version 45 is used)
+mujs eg the version in ../mujs_min but note that version is modified with some
+     perf hacks. Will also work with a stock version so long as JS_STACKSIZE has
+     been changed to 4096 in jsi.h . Use ./cjsawk_mujs.js to test.
 
 The following AWK VMs:
 
@@ -89,6 +92,3 @@ Note this bootstrap will also work with duktape, with the version that is
 included in my mishmashvm project (but note that it will prepend some junk at
 the start of the output as that copy of duktape dumps some debug info to
 stdout).
-
-It's likely it will also build with mujs, eg the copy in ../mujs_min but I have
-not tested it yet.
