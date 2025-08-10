@@ -72,8 +72,7 @@ int hex2char(int c) {
 	}
 }
 
-int stringify(char* s, int digits, int divisor, int value, int shift)
-{
+int stringify(char* s, int digits, int divisor, int value, int shift) {
 	int i = value;
 	if(digits > 1)
 	{
