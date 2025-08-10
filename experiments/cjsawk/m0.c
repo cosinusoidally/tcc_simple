@@ -339,7 +339,7 @@ void purge_lineComment() {
 	}
 }
 
-struct Token* append_newline(struct Token* head, char* filename) {
+struct Token* append_newline(struct Token* head) {
 	linenumber = linenumber + 1;
 	if(NULL == head) {
 		return NULL;
@@ -376,7 +376,7 @@ struct Token* store_atom(struct Token* head, char c, char* filename) {
 	}
 
 	if('\n' == ch) {
-		return append_newline(head, filename);
+		return append_newline(head);
 	}
 	return head;
 }
@@ -420,7 +420,7 @@ restart:
 
 		if(in_set(c, ";#")) {
 			purge_lineComment();
-			head = append_newline(head, filename);
+			head = append_newline(head);
 			goto restart;
 		}
 
@@ -429,12 +429,12 @@ restart:
 		}
 
 		if('\n' == c) {
-			head = append_newline(head, filename);
+			head = append_newline(head);
 			goto restart;
 		}
 
 		if(EOF == c) {
-			head = append_newline(head, filename);
+			head = append_newline(head);
 			goto done;
 		}
 
