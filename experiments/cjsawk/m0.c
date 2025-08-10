@@ -47,8 +47,6 @@ struct Token
 {
 	struct Token* next;
 	struct blob* contents;
-	char* filename;
-	int linenumber;
 };
 
 /* Globals */
