@@ -449,10 +449,18 @@ function to_hex_le_(a,    o, i, d1o, d2o) {
   return o;
 }
 
+function emit_m1_strict_prefix() {
+  if(m1_strict) {
+
+  }
+}
+
 function collect_local() {
   nt();
   ra_push32(locals,tok);
-  indented_emit_out(mks("DEFINE LOCAL_"));
+  indented_emit_out(mks("DEFINE "));
+  emit_m1_strict_prefix();
+  emit_out(mks("LOCAL_"));
   emit_out(tok);
   emit_out(mks(" "));
   emit_out(to_hex_le(SUB(0,mul(add(1,add(add(ra_len32(args),ra_len32(locals)),frame_bias)),4))));
