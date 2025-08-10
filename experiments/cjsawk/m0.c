@@ -122,7 +122,12 @@ char* hex_to_str_le(int value, int digits) {
 	char *s2 = calloc(42, sizeof(char));
 	stringify_(s2, digits, value);
 	int i;
+	int v = value;
 	for(i = 0; i < digits; i=i+2) {
+		s2[i + 1] = hex2char(v & 15);
+		v = v >> 4;
+		s2[i] = hex2char(v & 15);
+		v = v >> 4;
 	}
 	stringify_(s, digits, value);
 	LittleEndian(s);
