@@ -867,7 +867,9 @@ function declare_function_(t,    i) {
     emit_out(mks("\n"));
     i = SUB(ra_len32(args), 1);
     while(gt(i, SUB(0,1))) {
-      indented_emit_out(mks("DEFINE ARG_"));
+      indented_emit_out(mks("DEFINE "));
+      emit_m1_strict_prefix();
+      emit_out(mks("ARG_"));
       emit_out(ra_get32(args, i));
       emit_out(mks(" "));
       emit_out(to_hex_le(SUB(0,mul(add(i,1),4))));
