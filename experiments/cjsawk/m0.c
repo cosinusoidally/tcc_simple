@@ -478,20 +478,18 @@ struct Token* append_newline(struct Token* head, char* filename)
 }
 
 
-struct Token* store_atom(struct Token* head, char c, char* filename)
-{
+struct Token* store_atom(struct Token* head, char c, char* filename) {
 	ClearScratch();
 	int ch = c;
 	int i = 0;
-	do
-	{
+	while(1) {
 		SCRATCH[i] = ch;
 		ch = fgetc(source_file);
 		i = i + 1;
-		if(EOF == ch) {
+		if((EOF == ch) || in_set(ch, "\t\n ")) {
 			break;
 		}
-	} while (!in_set(ch, "\t\n "));
+	}
 
 	head->contents = FindBlob();
 	if(NULL == head->contents) {
