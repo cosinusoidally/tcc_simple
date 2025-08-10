@@ -435,7 +435,7 @@ restart:
 
 		if(EOF == c) {
 			head = append_newline(head);
-			goto done;
+			break;
 		}
 
 		p = newToken();
@@ -448,7 +448,6 @@ restart:
 
 		head = p;
 	}
-done:
 	return head;
 }
 
