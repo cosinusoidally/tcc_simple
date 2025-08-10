@@ -28,12 +28,7 @@
 #define TRUE 1
 #define FALSE 0
 
-// CONSTANT HEX 16
 #define HEX 16
-// CONSTANT OCTAL 8
-#define OCTAL 8
-// CONSTANT BINARY 2
-#define BINARY 2
 
 /***********************************************************
  * Needed for current implementation of little endian      *
@@ -41,19 +36,17 @@
  * sets if we ever find one that might be useful           *
  * But I seriously doubt it                                *
  ***********************************************************/
-void reverseBitOrder(char* c, int ByteMode)
-{
+void reverseBitOrder(char* c) {
 	if(NULL == c) return;
 	if(0 == c[1]) return;
 	int hold = c[0];
 
 	c[0] = c[1];
 	c[1] = hold;
-	reverseBitOrder(c+2, ByteMode);
+	reverseBitOrder(c+2);
 }
 
-void LittleEndian(char* start, int ByteMode)
-{
+void LittleEndian(char* start) {
 	char* end = start;
 	char* c = start;
 	while(0 != end[0]) end = end + 1;
@@ -67,7 +60,7 @@ void LittleEndian(char* start, int ByteMode)
 	}
 
 	/* The above makes a reversed bit order */
-	reverseBitOrder(c, ByteMode);
+	reverseBitOrder(c);
 }
 
 int hex2char(int c)
@@ -264,14 +257,6 @@ char* int2str(int x, int base, int signed_p)
 #define STR 2
 #define NEWLINE 3
 
-/* How do you want that output? */
-// CONSTANT HEX 16
-#define HEX 16
-// CONSTANT OCTAL 8
-#define OCTAL 8
-// CONSTANT BINARY 2
-#define BINARY 2
-
 struct blob
 {
 	struct blob* next;
@@ -292,7 +277,6 @@ struct Token
 /* Globals */
 FILE* source_file;
 FILE* destination_file;
-int ByteMode;
 int linenumber;
 struct Token* token_list;
 struct blob* blob_list;
@@ -613,9 +597,9 @@ char* express_number(int value, char c) {
 	size = number_of_bytes * 2;
 	shift = 4;
 
-	stringify(ch, size, ByteMode, value, shift);
+	stringify(ch, size, 16, value, shift);
 
-	LittleEndian(ch, ByteMode);
+	LittleEndian(ch);
 	return ch;
 }
 
@@ -659,9 +643,7 @@ void print_hex(struct Token* p) {
 /* Standard C main program */
 int main(int argc, char **argv) {
 	destination_file = stdout;
-	ByteMode = HEX;
 	char* filename;
-	char* arch;
 	blob_count = 2;
 	hash_table = calloc(65537, sizeof(struct blob*));
 	require(NULL != hash_table, "failed to allocate hash_table\n");
