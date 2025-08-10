@@ -973,27 +973,22 @@ char* express_word(int value, char c)
 
 	stringify(ch, size, ByteMode, immediate, shift);
 
-	if(!BigEndian) LittleEndian(ch, ByteMode);
+	LittleEndian(ch, ByteMode);
 	return s;
 }
 
-void eval_immediates(struct blob* p)
-{
+void eval_immediates(struct blob* p) {
 	struct blob* i;
 	int value;
-	for(i = p; NULL != i; i = i->next)
-	{
+	for(i = p; NULL != i; i = i->next) {
 		if(PROCESSED == i->type) continue;
 		else if(NEWLINE == i->type) continue;
 		else if('<' == i->Text[0]) continue;
-		else if(NULL == i->Expression)
-		{
-			if(in_set(i->Text[0], "%~@!"))
-			{
+		else if(NULL == i->Expression) {
+			if(in_set(i->Text[0], "%~@!")) {
 				value = strtoint(i->Text + 1);
 
-				if(('0' == i->Text[1]) || (0 != value))
-				{
+				if(('0' == i->Text[1]) || (0 != value)) {
 					i->Expression = express_number(value, i->Text[0]);
 				}
 			}
@@ -1001,23 +996,16 @@ void eval_immediates(struct blob* p)
 	}
 }
 
-void print_hex(struct Token* p)
-{
+void print_hex(struct Token* p) {
 	struct Token* i;
-	for(i = p; NULL != i; i = i->next)
-	{
-		if(NEWLINE == i->contents->type)
-		{
+	for(i = p; NULL != i; i = i->next) {
+		if(NEWLINE == i->contents->type) {
 			if(NULL == i->next) fputc('\n', destination_file);
 			else if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
-		}
-		else if(NULL != i->contents->Expression)
-		{
+		} else if(NULL != i->contents->Expression) {
 			fputs(i->contents->Expression, destination_file);
 			if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
-		}
-		else
-		{
+		} else {
 			line_error(i->filename, i->linenumber);
 			fputs("Received invalid other; ", stderr);
 			fputs(i->contents->Text, stderr);
@@ -1028,8 +1016,7 @@ void print_hex(struct Token* p)
 }
 
 /* Standard C main program */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	BigEndian = FALSE;
 	Architecture = X86;
 	destination_file = stdout;
