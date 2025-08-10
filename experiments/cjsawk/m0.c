@@ -720,27 +720,6 @@ void process_string(struct blob* p)
 	}
 }
 
-char* pad_nulls(int size, char* nil)
-{
-	if(0 == size) return nil;
-	require(size > 0, "negative null padding not possible\n");
-	if(HEX == ByteMode) size = size * 2;
-	else if (OCTAL == ByteMode) size = size * 3;
-	else if (BINARY == ByteMode) size = size * 8;
-
-	char* s = calloc(size + 1, sizeof(char));
-	require(NULL != s, "Exhausted available memory\n");
-
-	int i = 0;
-	while(i < size)
-	{
-		s[i] = '0';
-		i = i + 1;
-	}
-
-	return s;
-}
-
 void preserve_other(struct blob* p)
 {
 	struct blob* i;
@@ -754,10 +733,6 @@ void preserve_other(struct blob* p)
 			if(in_set(c, "!@$~%&:^"))
 			{
 				i->Expression = i->Text;
-			}
-			else if('<' == c)
-			{
-				i->Expression = pad_nulls(strtoint(i->Text + 1), i->Text);
 			}
 		}
 	}
