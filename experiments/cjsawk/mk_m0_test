@@ -1,0 +1,25 @@
+rm -r artifacts/builds/m0_test
+set -xe
+source common.sh
+mkdir artifacts/builds/m0_test
+cd artifacts/builds/m0_test
+
+gcc -O0 -g3 -m32 ../../../m0.c -o m0.exe
+
+function compile_strict() {
+  $1 --m1-strict $2 $3.M1
+  cat ../../../../m2min_v3/simple_asm_defs.M1 ../../../../m2min_v3/x86_defs.M1 ../../../../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
+  ./m0.exe --architecture x86 --little-endian -f $3-0.M1 -o $3.hex2
+  cat ../../../../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
+  hex2-0 $3-0.hex2 $3
+}
+
+compile_strict ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+compile ./cjsawk.exe ../../deps/m2min_v3.c m2min_v3.exe
+diff -u -s m2min_v3.exe.M1 ../../../../m2min_v3/m2min_v3.M1
+
+compile ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js.exe
+compile_strict ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
+
+echo "DONE m0_test"
