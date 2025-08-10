@@ -564,11 +564,16 @@ void print_hex(struct Token* p) {
 	struct Token* i;
 	for(i = p; NULL != i; i = i->next) {
 		if(NEWLINE == i->contents->type) {
-			if(NULL == i->next) fputc('\n', destination_file);
-			else if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
+			if(NULL == i->next) {
+				fputc('\n', destination_file);
+			} else if(NEWLINE != i->next->contents->type) {
+				fputc('\n', destination_file);
+			}
 		} else if(NULL != i->contents->Expression) {
 			fputs(i->contents->Expression, destination_file);
-			if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
+			if(NEWLINE != i->next->contents->type) {
+				fputc('\n', destination_file);
+			}
 		} else {
 			line_error();
 			fputs("Received invalid other; ", stderr);
