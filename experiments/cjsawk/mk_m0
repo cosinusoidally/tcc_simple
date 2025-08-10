@@ -9,5 +9,7 @@ artifacts/cjsawk.exe --m1-strict artifacts/cjsawk_full.c artifacts/cjsawk_strict
 cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 artifacts/cjsawk_strict.M1 > artifacts/cjsawk_strict-0.M1
 gcc -m32 m0.c -o artifacts/m0.exe
 ./artifacts/m0.exe --architecture x86 --little-endian -f artifacts/cjsawk_strict-0.M1 -o artifacts/out.hex2
+# hack since m0.c prepends a newline
+sed -i '1d' artifacts/out.hex2
 cat ../m2min_v3/ELF-i386.hex2 artifacts/out.hex2 > artifacts/out-0.hex2
 ../m2min_v2/artifacts/hex2-0 artifacts/out-0.hex2 artifacts/out.exe
