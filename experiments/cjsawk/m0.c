@@ -1095,10 +1095,6 @@ int main(int argc, char **argv)
 		{
 			option_index = option_index + 1;
 		}
-		else if(match(argv[option_index], "--little-endian"))
-		{
-			option_index = option_index + 1;
-		}
 		else if(match(argv[option_index], "-A") || match(argv[option_index], "--architecture"))
 		{
 			arch = argv[option_index + 1];
