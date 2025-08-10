@@ -28,8 +28,6 @@
 #define TRUE 1
 #define FALSE 0
 
-#define HEX 16
-
 /***********************************************************
  * Needed for current implementation of little endian      *
  * Can be used to support little bit endian instruction    *
@@ -454,38 +452,31 @@ struct Token* Tokenize_Line(struct Token* head, char* filename) {
 restart:
 		c = fgetc(source_file);
 
-		if(in_set(c, ";#"))
-		{
+		if(in_set(c, ";#")) {
 			purge_lineComment();
 			head = append_newline(head, filename);
 			goto restart;
 		}
 
-		if(in_set(c, "\t "))
-		{
+		if(in_set(c, "\t ")) {
 			goto restart;
 		}
 
-		if('\n' == c)
-		{
+		if('\n' == c) {
 			head = append_newline(head, filename);
 			goto restart;
 		}
 
-		if(EOF == c)
-		{
+		if(EOF == c) {
 			head = append_newline(head, filename);
 			goto done;
 		}
 
 		p = newToken(filename, linenumber);
 		p->next = head;
-		if(in_set(c, "'\""))
-		{
+		if(in_set(c, "'\"")) {
 			p->contents = store_string(c, filename);
-		}
-		else
-		{
+		} else {
 			p = store_atom(p, c, filename);
 		}
 
