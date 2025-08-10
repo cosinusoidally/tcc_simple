@@ -1100,27 +1100,6 @@ int main(int argc, char **argv)
 
 	destination_file = fopen(argv[option_index + 1], "w");
 
-	if(NULL == destination_file)
-	{
-		fputs("The file: ", stderr);
-		fputs(argv[option_index + 1], stderr);
-		fputs(" can not be opened!\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	option_index = option_index + 2;
-	while(option_index <= argc)
-	{
-		if(NULL == argv[option_index])
-		{
-			option_index = option_index + 1;
-		}
-		else
-		{
-			fputs("Unknown option\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-	}
-
 	token_list = reverse_list(token_list);
 	line_macro(token_list);
 	process_string(blob_list);
