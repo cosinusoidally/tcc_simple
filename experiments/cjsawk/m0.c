@@ -28,6 +28,41 @@
 #define TRUE 1
 #define FALSE 0
 
+/* Internal processing Constants */
+#define max_string 4096
+#define PROCESSED 1
+#define STR 2
+#define NEWLINE 3
+
+struct blob
+{
+	struct blob* next;
+	int type;
+	char* Text;
+	char* Expression;
+	struct blob* hash_next;
+};
+
+struct Token
+{
+	struct Token* next;
+	struct blob* contents;
+	char* filename;
+	int linenumber;
+};
+
+/* Globals */
+FILE* source_file;
+FILE* destination_file;
+int linenumber;
+struct Token* token_list;
+struct blob* blob_list;
+struct blob* define_blob;
+struct blob* newline_blob;
+int blob_count;
+char* SCRATCH;
+struct blob** hash_table;
+
 /***********************************************************
  * Needed for current implementation of little endian      *
  * Can be used to support little bit endian instruction    *
@@ -249,41 +284,6 @@ char* int2str(int x, int base, int signed_p)
 	return p + 1;
 }
 
-/* Internal processing Constants */
-#define max_string 4096
-#define PROCESSED 1
-#define STR 2
-#define NEWLINE 3
-
-struct blob
-{
-	struct blob* next;
-	int type;
-	char* Text;
-	char* Expression;
-	struct blob* hash_next;
-};
-
-struct Token
-{
-	struct Token* next;
-	struct blob* contents;
-	char* filename;
-	int linenumber;
-};
-
-/* Globals */
-FILE* source_file;
-FILE* destination_file;
-int linenumber;
-struct Token* token_list;
-struct blob* blob_list;
-struct blob* define_blob;
-struct blob* newline_blob;
-int blob_count;
-char* SCRATCH;
-struct blob** hash_table;
-
 void line_error(char* filename, int linenumber) {
 	fputs(filename, stderr);
 	fputs(":", stderr);
@@ -366,8 +366,7 @@ struct Token* reverse_list(struct Token* head) {
 
 void purge_lineComment() {
 	int c = fgetc(source_file);
-	while(!in_set(c, "\n\r"))
-	{
+	while(!in_set(c, "\n\r")) {
 		if(EOF == c) break;
 		c = fgetc(source_file);
 	}
