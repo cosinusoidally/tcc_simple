@@ -813,10 +813,8 @@ void eval_immediates(struct blob* p) {
 	struct blob* i;
 	int value;
 	for(i = p; NULL != i; i = i->next) {
-		if(PROCESSED == i->type) {
-			continue;
-		} else if(NEWLINE == i->type) {
-			continue;
+		if((PROCESSED == i->type) || (NEWLINE == i->type)) {
+			/* nothing */
 		} else if(NULL == i->Expression) {
 			if(in_set(i->Text[0], "%~@!")) {
 				value = strtoint(i->Text + 1);
