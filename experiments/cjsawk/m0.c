@@ -565,7 +565,6 @@ char* express_number(int value, char c) {
 	require(NULL != ch, "Exhausted available memory\n");
 	int size;
 	int number_of_bytes;
-	int shift;
 	if('!' == c) {
 		number_of_bytes = 1;
 		value = value & 0xFF;
@@ -585,7 +584,6 @@ char* express_number(int value, char c) {
 	}
 
 	size = number_of_bytes * 2;
-	shift = 4;
 
 	stringify(ch, size, value);
 
