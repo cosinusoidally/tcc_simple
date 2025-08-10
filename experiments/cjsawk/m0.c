@@ -47,33 +47,9 @@ void reverseBitOrder(char* c, int ByteMode)
 	if(0 == c[1]) return;
 	int hold = c[0];
 
-	if(HEX == ByteMode)
-	{
-		c[0] = c[1];
-		c[1] = hold;
-		reverseBitOrder(c+2, ByteMode);
-	}
-	else if(OCTAL == ByteMode)
-	{
-		c[0] = c[2];
-		c[2] = hold;
-		reverseBitOrder(c+3, ByteMode);
-	}
-	else if(BINARY == ByteMode)
-	{
-		c[0] = c[7];
-		c[7] = hold;
-		hold = c[1];
-		c[1] = c[6];
-		c[6] = hold;
-		hold = c[2];
-		c[2] = c[5];
-		c[5] = hold;
-		hold = c[3];
-		c[3] = c[4];
-		c[4] = hold;
-		reverseBitOrder(c+8, ByteMode);
-	}
+	c[0] = c[1];
+	c[1] = hold;
+	reverseBitOrder(c+2, ByteMode);
 }
 
 void LittleEndian(char* start, int ByteMode)
@@ -343,9 +319,7 @@ struct Token
 /* Globals */
 FILE* source_file;
 FILE* destination_file;
-int BigEndian;
 int ByteMode;
-int Architecture;
 int linenumber;
 struct Token* token_list;
 struct blob* blob_list;
@@ -711,8 +685,6 @@ void print_hex(struct Token* p) {
 
 /* Standard C main program */
 int main(int argc, char **argv) {
-	BigEndian = FALSE;
-	Architecture = X86;
 	destination_file = stdout;
 	ByteMode = HEX;
 	char* filename;
