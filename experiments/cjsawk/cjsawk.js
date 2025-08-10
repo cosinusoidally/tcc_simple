@@ -472,6 +472,7 @@ function collect_local() {
 
 function variable_load(a, is_arg) {
   indented_emit_out(mks("local "));
+  emit_m1_strict_prefix();
   if(eq(is_arg, TRUE)) {
     emit_out(mks("ARG_"));
   } else {
