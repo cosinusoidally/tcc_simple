@@ -720,8 +720,7 @@ void process_string(struct blob* p)
 	}
 }
 
-void preserve_other(struct blob* p)
-{
+void preserve_other(struct blob* p) {
 	struct blob* i;
 	char c;
 	for(i = p; NULL != i; i = i->next)
@@ -736,42 +735,6 @@ void preserve_other(struct blob* p)
 			}
 		}
 	}
-}
-
-void bound_values(int displacement, int number_of_bytes, int low, int high)
-{
-	if((high < displacement) || (displacement < low))
-	{
-		fputs("A displacement of ", stderr);
-		fputs(int2str(displacement, 10, TRUE), stderr);
-		fputs(" does not fit in ", stderr);
-		fputs(int2str(number_of_bytes, 10, TRUE), stderr);
-		fputs(" bytes\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-}
-
-void range_check(int displacement, int number_of_bytes)
-{
-	if(4 == number_of_bytes) return;
-	else if(3 == number_of_bytes)
-	{
-		bound_values(displacement, number_of_bytes, -8388608, 16777216);
-		return;
-	}
-	else if(2 == number_of_bytes)
-	{
-		bound_values(displacement, number_of_bytes, -32768, 65535);
-		return;
-	}
-	else if(1 == number_of_bytes)
-	{
-		bound_values(displacement, number_of_bytes, -128, 255);
-		return;
-	}
-
-	fputs("Received an invalid number of bytes in range_check\n", stderr);
-	exit(EXIT_FAILURE);
 }
 
 char* express_number(int value, char c) {
@@ -797,8 +760,6 @@ char* express_number(int value, char c) {
 		fputc('\n', stderr);
 		exit(EXIT_FAILURE);
 	}
-
-	range_check(value, number_of_bytes);
 
 	size = number_of_bytes * 2;
 	shift = 4;
