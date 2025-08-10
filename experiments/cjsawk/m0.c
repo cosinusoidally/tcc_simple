@@ -316,7 +316,6 @@ struct Token* newToken(char* filename, int linenumber) {
 	struct Token* p;
 
 	p = calloc (1, sizeof (struct Token));
-	p->filename = filename;
 	p->linenumber = linenumber;
 	return p;
 }
