@@ -988,42 +988,14 @@ void eval_immediates(struct blob* p)
 		else if('<' == i->Text[0]) continue;
 		else if(NULL == i->Expression)
 		{
-			if((X86 == Architecture) || (AMD64 == Architecture) || (ARMV7L == Architecture) || (AARM64 == Architecture) || (PPC64LE == Architecture))
+			if(in_set(i->Text[0], "%~@!"))
 			{
-				if(in_set(i->Text[0], "%~@!"))
-				{
-					value = strtoint(i->Text + 1);
+				value = strtoint(i->Text + 1);
 
-					if(('0' == i->Text[1]) || (0 != value))
-					{
-						i->Expression = express_number(value, i->Text[0]);
-					}
-				}
-			}
-			else if((RISCV32 == Architecture) || (RISCV64 == Architecture))
-			{
-				if(in_set(i->Text[0], "%~@!"))
+				if(('0' == i->Text[1]) || (0 != value))
 				{
-					value = strtoint(i->Text + 1);
-
-					if(('0' == i->Text[1]) || (0 != value))
-					{
-						i->Expression = express_word(value, i->Text[0]);
-					}
+					i->Expression = express_number(value, i->Text[0]);
 				}
-			}
-			else if(KNIGHT == Architecture)
-			{
-				value = strtoint(i->Text);
-				if(('0' == i->Text[0]) || (0 != value))
-				{
-					i->Expression = express_number(value, '@');
-				}
-			}
-			else
-			{
-				fputs("Unknown architecture received in eval_immediates\n", stderr);
-				exit(EXIT_FAILURE);
 			}
 		}
 	}
