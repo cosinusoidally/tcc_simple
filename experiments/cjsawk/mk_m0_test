@@ -1,6 +1,9 @@
 rm -r artifacts/builds/m0_test
 set -xe
 source common.sh
+
+pushd .
+
 mkdir artifacts/builds/m0_test
 cd artifacts/builds/m0_test
 
@@ -32,5 +35,9 @@ compile_strict ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
 
 diff -u -s pnut_js.exe pnut_js_strict.exe
 diff -u -s pnut_js.exe.hex2 pnut_js_strict.exe.hex2
+
+popd
+
+wc m0.c m0_orig.c
 
 echo "DONE m0_test"

@@ -1058,7 +1058,7 @@ void print_hex(struct Token* p)
 /* Standard C main program */
 int main(int argc, char **argv)
 {
-	BigEndian = TRUE;
+	BigEndian = FALSE;
 	Architecture = KNIGHT;
 	destination_file = stdout;
 	ByteMode = HEX;
@@ -1095,14 +1095,8 @@ int main(int argc, char **argv)
 		{
 			option_index = option_index + 1;
 		}
-		else if(match(argv[option_index], "--big-endian"))
-		{
-			BigEndian = TRUE;
-			option_index = option_index + 1;
-		}
 		else if(match(argv[option_index], "--little-endian"))
 		{
-			BigEndian = FALSE;
 			option_index = option_index + 1;
 		}
 		else if(match(argv[option_index], "-A") || match(argv[option_index], "--architecture"))
