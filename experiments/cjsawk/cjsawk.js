@@ -56,6 +56,8 @@ var ch_backslash;
 var ch_dquote;
 var str_dquote;
 
+var m1_strict;
+
 function ri32(o) {
   return OR(OR(AND(ri8(o), 255),
             shl(AND(ri8(add(o, 1)), 255), 8)),
@@ -955,6 +957,15 @@ function print_list_(l,    o, i, len) {
 function main(argc, argv) {
   init_support();
   init_globals();
+
+  if(smatch(ri32(add(4,argv)),mks("--m1-strict"))) {
+    m1_strict = TRUE;
+    argc = SUB(argc, 1);
+    argv = add(argv, 4);
+  } else {
+    m1_strict = FALSE;
+  }
+
   if(neq(argc, 3)) {
     error();
   }
