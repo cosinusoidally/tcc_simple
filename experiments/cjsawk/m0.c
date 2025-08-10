@@ -1095,26 +1095,6 @@ int main(int argc, char **argv)
 		{
 			option_index = option_index + 1;
 		}
-		else if(match(argv[option_index], "-A") || match(argv[option_index], "--architecture"))
-		{
-			arch = argv[option_index + 1];
-			if(match("knight-native", arch) || match("knight-posix", arch)) Architecture = KNIGHT;
-			else if(match("x86", arch)) Architecture = X86;
-			else if(match("amd64", arch)) Architecture = AMD64;
-			else if(match("armv7l", arch)) Architecture = ARMV7L;
-			else if(match("aarch64", arch)) Architecture = AARM64;
-			else if(match("ppc64le", arch)) Architecture = PPC64LE;
-			else if(match("riscv32", arch)) Architecture = RISCV32;
-			else if(match("riscv64", arch)) Architecture = RISCV64;
-			else
-			{
-				fputs("Unknown architecture: ", stderr);
-				fputs(arch, stderr);
-				fputs(" know values are: knight-native, knight-posix, x86, amd64, armv7l, aarch64, ppc64le, riscv32 and riscv64", stderr);
-				exit(EXIT_FAILURE);
-			}
-			option_index = option_index + 2;
-		}
 		else if(match(argv[option_index], "-b") || match(argv[option_index], "--binary"))
 		{
 			ByteMode = BINARY;
