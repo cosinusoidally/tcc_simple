@@ -116,25 +116,15 @@ int stringify_(char* s, int digits, int value) {
 	return (i >> 4);
 }
 
-/* testing replacing impl */
 char* hex_to_str_le(int value, int digits) {
-	char *s = calloc(42, sizeof(char));
-	char *s2 = calloc(42, sizeof(char));
-	stringify_(s2, digits, value);
 	int i;
 	int v = value;
+	char *s = calloc(42, sizeof(char));
 	for(i = 0; i < digits; i=i+2) {
-		s2[i + 1] = hex2char(v & 15);
+		s[i + 1] = hex2char(v & 15);
 		v = v >> 4;
-		s2[i] = hex2char(v & 15);
+		s[i] = hex2char(v & 15);
 		v = v >> 4;
-	}
-	stringify_(s, digits, value);
-	LittleEndian(s);
-	if(!match(s, s2)) {
-		printf("=====================\n");
-		printf("stringify : %s\n", s);
-		printf("stringify2: %s\n", s2);
 	}
 	return s;
 }
