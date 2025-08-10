@@ -701,19 +701,13 @@ void hexify_string(struct blob* p)
 	}
 }
 
-void process_string(struct blob* p)
-{
+void process_string(struct blob* p) {
 	struct blob* i;
-	for(i = p; NULL != i; i = i->next)
-	{
-		if(STR == i->type)
-		{
-			if('\'' == i->Text[0])
-			{
+	for(i = p; NULL != i; i = i->next) {
+		if(STR == i->type) {
+			if('\'' == i->Text[0]) {
 				i->Expression = i->Text + 1;
-			}
-			else if('"' == i->Text[0])
-			{
+			} else if('"' == i->Text[0]) {
 				hexify_string(i);
 			}
 		}
@@ -723,14 +717,11 @@ void process_string(struct blob* p)
 void preserve_other(struct blob* p) {
 	struct blob* i;
 	char c;
-	for(i = p; NULL != i; i = i->next)
-	{
-		if((NULL == i->Expression) && !(i->type & PROCESSED))
-		{
+	for(i = p; NULL != i; i = i->next) {
+		if((NULL == i->Expression) && !(i->type & PROCESSED)) {
 			c = i->Text[0];
 
-			if(in_set(c, "!@$~%&:^"))
-			{
+			if(in_set(c, "!@$~%&:^")) {
 				i->Expression = i->Text;
 			}
 		}
