@@ -61,11 +61,14 @@ void LittleEndian(char* start) {
 	reverseBitOrder(c);
 }
 
-int hex2char(int c)
-{
-	if((c >= 0) && (c <= 9)) return (c + 48);
-	else if((c >= 10) && (c <= 15)) return (c + 55);
-	else return -1;
+int hex2char(int c) {
+	if((c >= 0) && (c <= 9)) {
+		return (c + 48);
+	} else if((c >= 10) && (c <= 15)) {
+		return (c + 55);
+	} else {
+		return -1;
+	}
 }
 
 int stringify(char* s, int digits, int divisor, int value, int shift)
