@@ -259,33 +259,10 @@ char* int2str(int x, int base, int signed_p)
 }
 
 /* Internal processing Constants */
-// CONSTANT max_string 4096
 #define max_string 4096
-// CONSTANT PROCESSED 1
 #define PROCESSED 1
-// CONSTANT STR 2
 #define STR 2
-// CONSTANT NEWLINE 3
 #define NEWLINE 3
-
-/* Unique code for each architecture */
-// CONSTANT KNIGHT 0
-#define KNIGHT 0
-// CONSTANT X86 3
-#define X86 0x03
-// CONSTANT AMD64 62
-#define AMD64 0x3E
-// CONSTANT ARMV7L 40
-#define ARMV7L 0x28
-// CONSTANT AARM64 183
-#define AARM64 0xB7
-// CONSTANT PPC64LE 21
-#define PPC64LE 0x15
-// CONSTANT RISCV32 243
-#define RISCV32 0xF3
-// CONSTANT RISCV64 65779
-#define RISCV64 0x100F3 /* Because RISC-V unlike all other architectures does get a seperate e_machine when changing from 32 to 64bit */
-
 
 /* How do you want that output? */
 // CONSTANT HEX 16
@@ -294,10 +271,6 @@ char* int2str(int x, int base, int signed_p)
 #define OCTAL 8
 // CONSTANT BINARY 2
 #define BINARY 2
-
-/* Imported from stringify.c */
-int stringify(char* s, int digits, int divisor, int value, int shift);
-void LittleEndian(char* start, int ByteMode);
 
 struct blob
 {
