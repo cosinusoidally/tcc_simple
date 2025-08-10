@@ -117,7 +117,7 @@ int stringify_(char* s, int digits, int value) {
 }
 
 /* testing replacing impl */
-char* stringify(int value, int digits) {
+char* hex_to_str_le(int value, int digits) {
 	char *s = calloc(42, sizeof(char));
 	stringify_(s, digits, value);
 	LittleEndian(s);
@@ -594,7 +594,7 @@ char* express_number(int value, char c) {
 
 	size = number_of_bytes * 2;
 
-	ch = stringify(value, size);
+	ch = hex_to_str_le(value, size);
 
 	return ch;
 }
