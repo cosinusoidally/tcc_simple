@@ -1097,24 +1097,22 @@ int main(int argc, char **argv)
 	fclose(source_file);
 
 	option_index = option_index + 2;
+
+	destination_file = fopen(argv[option_index + 1], "w");
+
+	if(NULL == destination_file)
+	{
+		fputs("The file: ", stderr);
+		fputs(argv[option_index + 1], stderr);
+		fputs(" can not be opened!\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+	option_index = option_index + 2;
 	while(option_index <= argc)
 	{
 		if(NULL == argv[option_index])
 		{
 			option_index = option_index + 1;
-		}
-		else if(match(argv[option_index], "-o") || match(argv[option_index], "--output"))
-		{
-			destination_file = fopen(argv[option_index + 1], "w");
-
-			if(NULL == destination_file)
-			{
-				fputs("The file: ", stderr);
-				fputs(argv[option_index + 1], stderr);
-				fputs(" can not be opened!\n", stderr);
-				exit(EXIT_FAILURE);
-			}
-			option_index = option_index + 2;
 		}
 		else
 		{
