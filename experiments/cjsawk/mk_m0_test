@@ -12,7 +12,7 @@ gcc -O0 -g3 -m32 ../../../m0.c -o m0.exe
 function compile_strict() {
   $1 --m1-strict $2 $3.M1
   cat ../../../../m2min_v3/simple_asm_defs.M1 ../../../../m2min_v3/x86_defs.M1 ../../../../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
-  ./m0.exe -f $3-0.M1 -o $3.hex2
+  ./m0.exe $3-0.M1 $3.hex2
 # hack since mo.c inserts a leading newline
   sed -i '1d' $3.hex2
   cat ../../../../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
