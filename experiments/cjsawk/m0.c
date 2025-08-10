@@ -63,40 +63,6 @@ int blob_count;
 char* SCRATCH;
 struct blob** hash_table;
 
-/***********************************************************
- * Needed for current implementation of little endian      *
- * Can be used to support little bit endian instruction    *
- * sets if we ever find one that might be useful           *
- * But I seriously doubt it                                *
- ***********************************************************/
-void reverseBitOrder(char* c) {
-	if(NULL == c) return;
-	if(0 == c[1]) return;
-	int hold = c[0];
-
-	c[0] = c[1];
-	c[1] = hold;
-	reverseBitOrder(c+2);
-}
-
-void LittleEndian(char* start) {
-	char* end = start;
-	char* c = start;
-	int hold;
-	while(0 != end[0]) {
-		end = end + 1;
-	}
-	for(end = end - 1; start < end; start = start + 1) {
-		hold = start[0];
-		start[0] = end[0];
-		end[0] = hold;
-		end = end - 1;
-	}
-
-	/* The above makes a reversed bit order */
-	reverseBitOrder(c);
-}
-
 int hex2char(int c) {
 	if((c >= 0) && (c <= 9)) {
 		return (c + 48);
@@ -105,15 +71,6 @@ int hex2char(int c) {
 	} else {
 		return -1;
 	}
-}
-
-int stringify_(char* s, int digits, int value) {
-	int i = value;
-	if(digits > 1) {
-		i = stringify_(s+1, (digits - 1), value);
-	}
-	s[0] = hex2char(i & (15));
-	return (i >> 4);
 }
 
 char* hex_to_str_le(int value, int digits) {
@@ -135,7 +92,6 @@ void require(int bool, char* error) {
 		exit(EXIT_FAILURE);
 	}
 }
-
 
 int match(char* a, char* b)
 {
