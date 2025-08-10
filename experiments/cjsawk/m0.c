@@ -75,9 +75,9 @@ int hex2char(int c) {
 int stringify(char* s, int digits, int divisor, int value) {
 	int i = value;
 	if(digits > 1) {
-		i = stringify(s+1, (digits - 1), divisor, value);
+		i = stringify(s+1, (digits - 1), 16, value);
 	}
-	s[0] = hex2char(i & (divisor - 1));
+	s[0] = hex2char(i & (15));
 	return (i >> 4);
 }
 
