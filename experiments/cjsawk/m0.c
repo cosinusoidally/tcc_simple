@@ -355,59 +355,49 @@ int blob_count;
 char* SCRATCH;
 struct blob** hash_table;
 
-void line_error(char* filename, int linenumber)
-{
+void line_error(char* filename, int linenumber) {
 	fputs(filename, stderr);
 	fputs(":", stderr);
 	fputs(int2str(linenumber,10, FALSE), stderr);
 	fputs(" :", stderr);
 }
 
-void ClearScratch()
-{
+void ClearScratch() {
 	int i = 0;
 	int c = SCRATCH[i];
-	while(0 != c)
-	{
+	while(0 != c) {
 		SCRATCH[i] = 0;
 		i = i + 1;
 		c = SCRATCH[i];
 	}
 }
 
-int GetHash(char* s)
-{
+int GetHash(char* s) {
 	int i = 5381;
-	while(0 != s[0])
-	{
+	while(0 != s[0]) {
 		i = (i << 5) + i + s[0];
 		s = s + 1;
 	}
 	return i & 0xFFFF;
 }
 
-struct blob* FindBlob()
-{
+struct blob* FindBlob() {
 	int hash = GetHash(SCRATCH);
 	struct blob* i = hash_table[hash];
-	while(NULL != i)
-	{
+	while(NULL != i) {
 		if(match(SCRATCH, i->Text)) return i;
 		i = i->hash_next;
 	}
-
 	return NULL;
 }
 
-void AddHash(struct blob* a, char* s)
-{
+void AddHash(struct blob* a, char* s) {
 	int i = GetHash(s);
 	a->hash_next = hash_table[i];
 	hash_table[i] = a;
 }
 
-void NewBlob(int size)
-{
+void NewBlob(int size) {
 	blob_count = blob_count + 1;
 	struct blob* a = calloc(1, sizeof(struct blob));
 	require(NULL != a, "Exhausted available memory\n");
@@ -415,8 +405,7 @@ void NewBlob(int size)
 	require(NULL != a->Text, "Exhausted available memory\n");
 
 	int i = 0;
-	while(i <= size)
-	{
+	while(i <= size) {
 		a->Text[i] = SCRATCH[i];
 		i = i + 1;
 	}
@@ -425,25 +414,19 @@ void NewBlob(int size)
 	AddHash(a, SCRATCH);
 }
 
-struct Token* newToken(char* filename, int linenumber)
-{
+struct Token* newToken(char* filename, int linenumber) {
 	struct Token* p;
 
 	p = calloc (1, sizeof (struct Token));
-	require(NULL != p, "Exhausted available memory\n");
-
 	p->filename = filename;
 	p->linenumber = linenumber;
-
 	return p;
 }
 
-struct Token* reverse_list(struct Token* head)
-{
+struct Token* reverse_list(struct Token* head) {
 	struct Token* root = NULL;
 	struct Token* next;
-	while(NULL != head)
-	{
+	while(NULL != head) {
 		next = head->next;
 		head->next = root;
 		root = head;
