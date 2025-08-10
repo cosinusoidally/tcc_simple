@@ -1089,6 +1089,22 @@ int main(int argc, char **argv)
 	require(NULL != SCRATCH, "failed to allocate SCRATCH buffer");
 
 	int option_index = 1;
+	filename = argv[option_index + 1];
+	source_file = fopen(filename, "r");
+
+	if(NULL == source_file)
+	{
+		fputs("The file: ", stderr);
+		fputs(argv[option_index + 1], stderr);
+		fputs(" can not be opened!\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	token_list = Tokenize_Line(token_list, filename);
+
+	fclose(source_file);
+
+	option_index = option_index + 2;
 	while(option_index <= argc)
 	{
 		if(NULL == argv[option_index])
