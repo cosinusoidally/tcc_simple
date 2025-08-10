@@ -1127,27 +1127,11 @@ int main(int argc, char **argv)
 			}
 			option_index = option_index + 2;
 		}
-		else if(match(argv[option_index], "-O") || match(argv[option_index], "--octal"))
-		{
-			ByteMode = OCTAL;
-			option_index = option_index + 1;
-		}
-		else if(match(argv[option_index], "-V") || match(argv[option_index], "--version"))
-		{
-			fputs("M1 1.4.0\n", stdout);
-			exit(EXIT_SUCCESS);
-		}
 		else
 		{
 			fputs("Unknown option\n", stderr);
 			exit(EXIT_FAILURE);
 		}
-	}
-
-	if(NULL == token_list)
-	{
-		fputs("Either no input files were given or they were empty\n", stderr);
-		exit(EXIT_FAILURE);
 	}
 
 	token_list = reverse_list(token_list);
