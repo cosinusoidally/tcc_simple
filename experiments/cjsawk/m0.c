@@ -1059,7 +1059,7 @@ void print_hex(struct Token* p)
 int main(int argc, char **argv)
 {
 	BigEndian = FALSE;
-	Architecture = KNIGHT;
+	Architecture = X86;
 	destination_file = stdout;
 	ByteMode = HEX;
 	char* filename;
