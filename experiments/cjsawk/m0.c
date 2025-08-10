@@ -1,7 +1,11 @@
 /* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
 /* Copyright (C) 2016 Jeremiah Orians
  * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file is part of mescc-tools.
+ * This file a mix of files from:
+ *   mescc-tools
+ *   M2-Planet
+ *
+ * with modifications (C) 2025 Liam Wilson
  *
  * mescc-tools is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,10 +18,15 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TRUE 1
+#define FALSE 0
 
 // CONSTANT HEX 16
 #define HEX 16
@@ -102,30 +111,6 @@ int stringify(char* s, int digits, int divisor, int value, int shift)
 	s[0] = hex2char(i & (divisor - 1));
 	return (i >> shift);
 }
-/* Copyright (C) 2016 Jeremiah Orians
- * This file is part of M2-Planet.
- *
- * M2-Planet is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * M2-Planet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include <stdio.h>
-#include <stdlib.h>
-
-
-#define TRUE 1
-#define FALSE 0
-
 
 void require(int bool, char* error)
 {
@@ -296,28 +281,6 @@ char* int2str(int x, int base, int signed_p)
 
 	return p + 1;
 }
-/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
-/* Copyright (C) 2016 Jeremiah Orians
- * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file is part of mescc-tools.
- *
- * mescc-tools is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * mescc-tools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 /* Internal processing Constants */
 // CONSTANT max_string 4096
