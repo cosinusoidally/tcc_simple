@@ -117,11 +117,13 @@ int stringify_(char* s, int digits, int value) {
 }
 
 /* testing replacing impl */
-int stringify(char* s, int digits, int value) {
+char* stringify(int value, int digits) {
+	char *s = calloc(42, sizeof(char));
 	stringify_(s, digits, value);
 	LittleEndian(s);
 	printf("=====================\n");
 	printf("stringify: %s\n", s);
+	return s;
 }
 
 void require(int bool, char* error) {
@@ -592,8 +594,7 @@ char* express_number(int value, char c) {
 
 	size = number_of_bytes * 2;
 
-	ch = calloc(42, sizeof(char));
-	stringify(ch, size, value);
+	ch = stringify(value, size);
 
 	return ch;
 }
