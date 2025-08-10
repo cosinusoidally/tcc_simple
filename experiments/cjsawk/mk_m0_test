@@ -14,12 +14,19 @@ function compile_strict() {
   hex2-0 $3-0.hex2 $3
 }
 
-compile_strict ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk.exe
+compile_strict ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk_strict.exe
+compile_strict ./cjsawk_strict.exe ../../deps/cjsawk_full.c cjsawk.exe
+
+compile ./cjsawk_strict.exe ../../deps/cjsawk_full.c cjsawk2.exe
+
+diff -u -s cjsawk_strict.exe cjsawk.exe
 
 compile ./cjsawk.exe ../../deps/m2min_v3.c m2min_v3.exe
 diff -u -s m2min_v3.exe.M1 ../../../../m2min_v3/m2min_v3.M1
 
 compile ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js.exe
 compile_strict ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
+
+diff -u -s pnut_js.exe pnut_js_strict.exe
 
 echo "DONE m0_test"
