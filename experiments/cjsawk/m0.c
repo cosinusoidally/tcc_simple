@@ -1095,20 +1095,6 @@ int main(int argc, char **argv)
 		{
 			option_index = option_index + 1;
 		}
-		else if(match(argv[option_index], "-b") || match(argv[option_index], "--binary"))
-		{
-			ByteMode = BINARY;
-			option_index = option_index + 1;
-		}
-		else if(match(argv[option_index], "-h") || match(argv[option_index], "--help"))
-		{
-			fputs("Usage: ", stderr);
-			fputs(argv[0], stderr);
-			fputs(" --file FILENAME1 {-f FILENAME2} (--big-endian|--little-endian) ", stderr);
-			fputs("[--architecture name]\nArchitectures: knight-native, knight-posix, x86, amd64, armv7, riscv32 and riscv64\n", stderr);
-			fputs("To leverage octal or binary output: --octal, --binary\n", stderr);
-			exit(EXIT_SUCCESS);
-		}
 		else if(match(argv[option_index], "-f") || match(argv[option_index], "--file"))
 		{
 			filename = argv[option_index + 1];
