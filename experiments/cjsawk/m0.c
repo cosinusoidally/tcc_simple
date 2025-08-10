@@ -47,10 +47,11 @@ void reverseBitOrder(char* c) {
 void LittleEndian(char* start) {
 	char* end = start;
 	char* c = start;
-	while(0 != end[0]) end = end + 1;
 	int hold;
-	for(end = end - 1; start < end; start = start + 1)
-	{
+	while(0 != end[0]) {
+		end = end + 1;
+	}
+	for(end = end - 1; start < end; start = start + 1) {
 		hold = start[0];
 		start[0] = end[0];
 		end[0] = hold;
