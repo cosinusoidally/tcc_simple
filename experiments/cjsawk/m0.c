@@ -817,9 +817,6 @@ void eval_immediates(struct blob* p) {
 			continue;
 		} else if(NEWLINE == i->type) {
 			continue;
-		} else if('<' == i->Text[0]) {
-exit(1);
-			continue;
 		} else if(NULL == i->Expression) {
 			if(in_set(i->Text[0], "%~@!")) {
 				value = strtoint(i->Text + 1);
