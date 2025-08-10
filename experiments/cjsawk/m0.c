@@ -415,18 +415,14 @@ struct Token* Tokenize_Line(struct Token* head) {
 	linenumber = 1;
 
 	while(1) {
-restart:
 		c = fgetc(source_file);
-
 		if(in_set(c, ";#")) {
 			purge_lineComment();
 			head = append_newline(head);
-			goto restart;
 		} else if(in_set(c, "\t ")) {
-			goto restart;
+			/* nothing */
 		} else if('\n' == c) {
 			head = append_newline(head);
-			goto restart;
 		} else if(EOF == c) {
 			head = append_newline(head);
 			break;
