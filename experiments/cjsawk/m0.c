@@ -107,13 +107,20 @@ int hex2char(int c) {
 	}
 }
 
-int stringify(char* s, int digits, int value) {
+int stringify_(char* s, int digits, int value) {
 	int i = value;
 	if(digits > 1) {
-		i = stringify(s+1, (digits - 1), value);
+		i = stringify_(s+1, (digits - 1), value);
 	}
 	s[0] = hex2char(i & (15));
 	return (i >> 4);
+}
+
+/* testing replacing impl */
+int stringify(char* s, int digits, int value) {
+	stringify_(s, digits, value);
+	printf("=====================\n");
+	printf("stringify: %s\n", s);
 }
 
 void require(int bool, char* error) {
@@ -561,8 +568,7 @@ void preserve_other(struct blob* p) {
 }
 
 char* express_number(int value, char c) {
-	char* ch = calloc(42, sizeof(char));
-	require(NULL != ch, "Exhausted available memory\n");
+	char* ch;
 	int size;
 	int number_of_bytes;
 	if('!' == c) {
@@ -585,6 +591,7 @@ char* express_number(int value, char c) {
 
 	size = number_of_bytes * 2;
 
+	ch = calloc(42, sizeof(char));
 	stringify(ch, size, value);
 
 	LittleEndian(ch);
