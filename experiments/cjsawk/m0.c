@@ -72,19 +72,17 @@ int hex2char(int c) {
 	}
 }
 
-int stringify(char* s, int digits, int divisor, int value) {
+int stringify(char* s, int digits, int value) {
 	int i = value;
 	if(digits > 1) {
-		i = stringify(s+1, (digits - 1), 16, value);
+		i = stringify(s+1, (digits - 1), value);
 	}
 	s[0] = hex2char(i & (15));
 	return (i >> 4);
 }
 
-void require(int bool, char* error)
-{
-	if(!bool)
-	{
+void require(int bool, char* error) {
+	if(!bool) {
 		fputs(error, stderr);
 		exit(EXIT_FAILURE);
 	}
@@ -590,7 +588,7 @@ char* express_number(int value, char c) {
 	size = number_of_bytes * 2;
 	shift = 4;
 
-	stringify(ch, size, 16, value);
+	stringify(ch, size, value);
 
 	LittleEndian(ch);
 	return ch;
