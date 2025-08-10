@@ -119,6 +119,7 @@ int stringify_(char* s, int digits, int value) {
 /* testing replacing impl */
 int stringify(char* s, int digits, int value) {
 	stringify_(s, digits, value);
+	LittleEndian(s);
 	printf("=====================\n");
 	printf("stringify: %s\n", s);
 }
@@ -594,7 +595,6 @@ char* express_number(int value, char c) {
 	ch = calloc(42, sizeof(char));
 	stringify(ch, size, value);
 
-	LittleEndian(ch);
 	return ch;
 }
 
