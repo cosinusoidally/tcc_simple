@@ -55,6 +55,7 @@ struct Token
 FILE* source_file;
 FILE* destination_file;
 int linenumber;
+char* filename;
 struct Token* token_list;
 struct blob* blob_list;
 struct blob* define_blob;
@@ -253,7 +254,7 @@ char* int2str(int x, int base, int signed_p)
 	return p + 1;
 }
 
-void line_error(char* filename, int linenumber) {
+void line_error() {
 	fputs(filename, stderr);
 	fputs(":", stderr);
 	fputs(int2str(linenumber,10, FALSE), stderr);
@@ -460,7 +461,7 @@ void line_macro(struct Token* p) {
 			require(NULL != i->next, "Macro name must exist\n");
 			require(NULL != i->next->next, "Macro value must exist\n");
 			if(PROCESSED == i->next->contents->type) {
-				line_error(i->filename, i->linenumber);
+				line_error();
 				fputs("Multiple definitions for macro ", stderr);
 				fputs(i->next->contents->Text, stderr);
 				fputs("\n", stderr);
@@ -585,7 +586,7 @@ void print_hex(struct Token* p) {
 			fputs(i->contents->Expression, destination_file);
 			if(NEWLINE != i->next->contents->type) fputc('\n', destination_file);
 		} else {
-			line_error(i->filename, i->linenumber);
+			line_error();
 			fputs("Received invalid other; ", stderr);
 			fputs(i->contents->Text, stderr);
 			fputs("\n", stderr);
@@ -597,7 +598,6 @@ void print_hex(struct Token* p) {
 /* Standard C main program */
 int main(int argc, char **argv) {
 	destination_file = stdout;
-	char* filename;
 	blob_count = 2;
 	hash_table = calloc(65537, sizeof(struct blob*));
 	require(NULL != hash_table, "failed to allocate hash_table\n");
