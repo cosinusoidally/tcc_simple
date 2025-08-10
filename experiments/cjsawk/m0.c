@@ -422,18 +422,12 @@ restart:
 			purge_lineComment();
 			head = append_newline(head);
 			goto restart;
-		}
-
-		if(in_set(c, "\t ")) {
+		} else if(in_set(c, "\t ")) {
 			goto restart;
-		}
-
-		if('\n' == c) {
+		} else if('\n' == c) {
 			head = append_newline(head);
 			goto restart;
-		}
-
-		if(EOF == c) {
+		} else if(EOF == c) {
 			head = append_newline(head);
 			break;
 		}
