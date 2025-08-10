@@ -547,14 +547,12 @@ struct blob* store_string(char c, char* filename)
 	return a;
 }
 
-struct Token* Tokenize_Line(struct Token* head, char* filename)
-{
+struct Token* Tokenize_Line(struct Token* head, char* filename) {
 	int c;
 	struct Token* p;
 	linenumber = 1;
 
-	do
-	{
+	while(1) {
 restart:
 		c = fgetc(source_file);
 
@@ -594,22 +592,18 @@ restart:
 		}
 
 		head = p;
-	} while(TRUE);
+	}
 done:
 	return head;
 }
 
-void line_macro(struct Token* p)
-{
+void line_macro(struct Token* p) {
 	struct Token* i;
-	for(i = p; NULL != i; i = i->next)
-	{
-		if(define_blob == i->contents)
-		{
+	for(i = p; NULL != i; i = i->next) {
+		if(define_blob == i->contents) {
 			require(NULL != i->next, "Macro name must exist\n");
 			require(NULL != i->next->next, "Macro value must exist\n");
-			if(PROCESSED == i->next->contents->type)
-			{
+			if(PROCESSED == i->next->contents->type) {
 				line_error(i->filename, i->linenumber);
 				fputs("Multiple definitions for macro ", stderr);
 				fputs(i->next->contents->Text, stderr);
@@ -619,12 +613,9 @@ void line_macro(struct Token* p)
 
 			i->contents = newline_blob;
 
-			if (STR == i->next->next->contents->type)
-			{
+			if (STR == i->next->next->contents->type) {
 				i->contents->Expression = i->next->next->contents->Text + 1;
-			}
-			else
-			{
+			} else {
 				i->next->contents->Expression = i->next->next->contents->Text;
 			}
 			i->next = i->next->next->next;
