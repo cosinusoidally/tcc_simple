@@ -848,9 +848,6 @@ char* express_number(int value, char c) {
 	} else if('@' == c) {
 		number_of_bytes = 2;
 		value = value & 0xFFFF;
-	} else if('~' == c) {
-		number_of_bytes = 3;
-		value = value & 0xFFFFFF;
 	} else if('%' == c) {
 		number_of_bytes = 4;
 		value = value & 0xFFFFFFFF;
@@ -865,30 +862,12 @@ char* express_number(int value, char c) {
 
 	range_check(value, number_of_bytes);
 
-	if(HEX == ByteMode)
-	{
-		size = number_of_bytes * 2;
-		shift = 4;
-	}
-	else if(OCTAL == ByteMode)
-	{
-		size = number_of_bytes * 3;
-		shift = 3;
-	}
-	else if(BINARY == ByteMode)
-	{
-		size = number_of_bytes * 8;
-		shift = 1;
-	}
-	else
-	{
-		fputs("Got invalid ByteMode in express_number\n", stderr);
-		exit(EXIT_FAILURE);
-	}
+	size = number_of_bytes * 2;
+	shift = 4;
 
 	stringify(ch, size, ByteMode, value, shift);
 
-	if(!BigEndian) LittleEndian(ch, ByteMode);
+	LittleEndian(ch, ByteMode);
 	return ch;
 }
 
