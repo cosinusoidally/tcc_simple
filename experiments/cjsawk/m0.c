@@ -430,17 +430,16 @@ restart:
 		} else if(EOF == c) {
 			head = append_newline(head);
 			break;
-		}
-
-		p = newToken();
-		p->next = head;
-		if(in_set(c, "'\"")) {
-			p->contents = store_string(c);
 		} else {
-			p = store_atom(p, c);
+			p = newToken();
+			p->next = head;
+			if(in_set(c, "'\"")) {
+				p->contents = store_string(c);
+			} else {
+				p = store_atom(p, c);
+			}
+			head = p;
 		}
-
-		head = p;
 	}
 	return head;
 }
