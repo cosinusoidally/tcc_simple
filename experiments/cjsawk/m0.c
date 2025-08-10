@@ -452,8 +452,7 @@ struct Token* reverse_list(struct Token* head)
 	return root;
 }
 
-void purge_lineComment()
-{
+void purge_lineComment() {
 	int c = fgetc(source_file);
 	while(!in_set(c, "\n\r"))
 	{
@@ -462,12 +461,13 @@ void purge_lineComment()
 	}
 }
 
-struct Token* append_newline(struct Token* head, char* filename)
-{
+struct Token* append_newline(struct Token* head, char* filename) {
 	linenumber = linenumber + 1;
-	if(NULL == head) return NULL;
-	if(NEWLINE == head->contents->type)
-	{/* Don't waste whitespace*/
+	if(NULL == head) {
+		return NULL;
+	}
+	if(NEWLINE == head->contents->type) {
+		/* Don't waste whitespace*/
 		return head;
 	}
 
