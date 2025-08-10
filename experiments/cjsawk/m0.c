@@ -356,7 +356,7 @@ struct Token* append_newline(struct Token* head) {
 }
 
 
-struct Token* store_atom(struct Token* head, char c, char* filename) {
+struct Token* store_atom(struct Token* head, char c) {
 	ClearScratch();
 	int ch = c;
 	int i = 0;
@@ -381,7 +381,7 @@ struct Token* store_atom(struct Token* head, char c, char* filename) {
 	return head;
 }
 
-struct blob* store_string(char c, char* filename) {
+struct blob* store_string(char c) {
 	ClearScratch();
 
 	int ch = c;
@@ -441,9 +441,9 @@ restart:
 		p = newToken();
 		p->next = head;
 		if(in_set(c, "'\"")) {
-			p->contents = store_string(c, filename);
+			p->contents = store_string(c);
 		} else {
-			p = store_atom(p, c, filename);
+			p = store_atom(p, c);
 		}
 
 		head = p;
