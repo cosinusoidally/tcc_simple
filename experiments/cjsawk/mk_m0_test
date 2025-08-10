@@ -38,6 +38,8 @@ diff -u -s pnut_js.exe.hex2 pnut_js_strict.exe.hex2
 
 popd
 
+shasum -c sums_m0
+
 wc m0.c m0_orig.c
 
 echo "DONE m0_test"
