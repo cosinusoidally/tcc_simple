@@ -313,11 +313,9 @@ void NewBlob(int size) {
 	AddHash(a, SCRATCH);
 }
 
-struct Token* newToken(char* filename, int linenumber) {
+struct Token* newToken() {
 	struct Token* p;
-
 	p = calloc (1, sizeof (struct Token));
-	p->linenumber = linenumber;
 	return p;
 }
 
@@ -351,7 +349,7 @@ struct Token* append_newline(struct Token* head, char* filename) {
 		return head;
 	}
 
-	struct Token* lf = newToken(filename, linenumber);
+	struct Token* lf = newToken();
 	lf->contents = newline_blob;
 	lf->next = head;
 	return lf;
@@ -411,7 +409,7 @@ struct blob* store_string(char c, char* filename) {
 	return a;
 }
 
-struct Token* Tokenize_Line(struct Token* head, char* filename) {
+struct Token* Tokenize_Line(struct Token* head) {
 	int c;
 	struct Token* p;
 	linenumber = 1;
@@ -440,7 +438,7 @@ restart:
 			goto done;
 		}
 
-		p = newToken(filename, linenumber);
+		p = newToken();
 		p->next = head;
 		if(in_set(c, "'\"")) {
 			p->contents = store_string(c, filename);
@@ -625,7 +623,7 @@ int main(int argc, char **argv) {
 	filename = argv[1];
 	source_file = fopen(filename, "r");
 
-	token_list = Tokenize_Line(token_list, filename);
+	token_list = Tokenize_Line(token_list);
 
 	fclose(source_file);
 
