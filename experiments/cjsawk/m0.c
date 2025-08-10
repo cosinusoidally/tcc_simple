@@ -495,7 +495,9 @@ struct Token* store_atom(struct Token* head, char c, char* filename)
 			fputc('\n', stderr);
 			exit(EXIT_FAILURE);
 		}
-		if(EOF == ch) break;
+		if(EOF == ch) {
+			break;
+		}
 	} while (!in_set(ch, "\t\n "));
 
 	head->contents = FindBlob();
@@ -512,33 +514,26 @@ struct Token* store_atom(struct Token* head, char c, char* filename)
 	return head;
 }
 
-struct blob* store_string(char c, char* filename)
-{
+struct blob* store_string(char c, char* filename) {
 	ClearScratch();
 
 	int ch = c;
 	int i = 0;
-	do
-	{
+	while(1) {
 		SCRATCH[i] = ch;
 		i = i + 1;
-		if('\n' == ch) linenumber = linenumber + 1;
+		if('\n' == ch) {
+			linenumber = linenumber + 1;
+		}
 		ch = fgetc(source_file);
 		require(EOF != ch, "Unmatched \"!\n");
-
-		if(max_string == i)
-		{
-			line_error(filename, linenumber);
-			fputs("String: ", stderr);
-			fputs(SCRATCH, stderr);
-			fputs(" exceeds max string size\n", stderr);
-			exit(EXIT_FAILURE);
+		if(ch == c) {
+			break;
 		}
-	} while(ch != c);
+	}
 
 	struct blob* a = FindBlob();
-	if(NULL == a)
-	{
+	if(NULL == a) {
 		NewBlob(i);
 		a = blob_list;
 		a->type = STR;
