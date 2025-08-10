@@ -632,32 +632,18 @@ void line_macro(struct Token* p)
 	}
 }
 
-void hexify_string(struct blob* p)
-{
+void hexify_string(struct blob* p) {
 	char* table = "0123456789ABCDEF";
 	int i = strlen(p->Text);
 	int size;
 
-	if(HEX == ByteMode) size = (((i << 1) + i) + 12);
-	else if(OCTAL == ByteMode) size = (i << 2) + 1;
-	else if(BINARY == ByteMode) size = (i << 3) + i + 1;
-	else size = 1;
+	size = (((i << 1) + i) + 12);
 
 	require(1 != size, "hexify_string lacked a valid bytemode\n");
 	char* d = calloc(size, sizeof(char));
 	require(NULL != d, "Exhausted available memory\n");
 	p->Expression = d;
 	char* S = p->Text;
-
-	if((KNIGHT == Architecture) && (HEX == ByteMode))
-	{
-		i = (((((i - 1) >> 2) + 1) << 3) + i);
-		while( 0 < i)
-		{
-			i = i - 1;
-			d[i] = '0';
-		}
-	}
 
 	if(HEX == ByteMode)
 	{
