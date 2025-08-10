@@ -451,7 +451,8 @@ function to_hex_le_(a,    o, i, d1o, d2o) {
 
 function emit_m1_strict_prefix() {
   if(m1_strict) {
-    emit_out(mks("foo_"));
+    emit_out(current_function);
+    emit_out(mks("_"));
   }
 }
 
