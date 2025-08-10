@@ -645,45 +645,12 @@ void hexify_string(struct blob* p) {
 	p->Expression = d;
 	char* S = p->Text;
 
-	if(HEX == ByteMode)
-	{
-		while(0 != S[0])
-		{
-			S = S + 1;
-			d[0] = table[S[0] >> 4];
-			d[1] = table[S[0] & 0xF];
-			d[2] = 0;
-			d = d + 2;
-		}
-	}
-	else if(OCTAL == ByteMode)
-	{
-		while(0 != S[0])
-		{
-			S = S + 1;
-			d[0] = table[S[0] >> 6];
-			d[1] = table[(S[0] >> 3) & 0x7];
-			d[2] = table[S[0] & 0x7];
-			d[3] = ' ';
-			d = d + 4;
-		}
-	}
-	else if(BINARY == ByteMode)
-	{
-		while(0 != S[0])
-		{
-			S = S + 1;
-			d[0] = table[S[0] >> 7];
-			d[1] = table[(S[0] >> 6) & 0x1];
-			d[2] = table[(S[0] >> 5) & 0x1];
-			d[3] = table[(S[0] >> 4) & 0x1];
-			d[4] = table[(S[0] >> 3) & 0x1];
-			d[5] = table[(S[0] >> 2) & 0x1];
-			d[6] = table[(S[0] >> 1) & 0x1];
-			d[7] = table[S[0] & 0x1];
-			d[8] = ' ';
-			d = d + 9;
-		}
+	while(0 != S[0]) {
+		S = S + 1;
+		d[0] = table[S[0] >> 4];
+		d[1] = table[S[0] & 0xF];
+		d[2] = 0;
+		d = d + 2;
 	}
 }
 
