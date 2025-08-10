@@ -1088,17 +1088,14 @@ int main(int argc, char **argv)
 	SCRATCH = calloc(max_string + 1, sizeof(char));
 	require(NULL != SCRATCH, "failed to allocate SCRATCH buffer");
 
-	int option_index = 1;
-	filename = argv[option_index];
+	filename = argv[1];
 	source_file = fopen(filename, "r");
 
 	token_list = Tokenize_Line(token_list, filename);
 
 	fclose(source_file);
 
-	option_index = option_index + 1;
-
-	destination_file = fopen(argv[option_index], "w");
+	destination_file = fopen(argv[2], "w");
 
 	token_list = reverse_list(token_list);
 	line_macro(token_list);
