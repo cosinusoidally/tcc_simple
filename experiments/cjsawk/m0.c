@@ -836,35 +836,25 @@ void range_check(int displacement, int number_of_bytes)
 	exit(EXIT_FAILURE);
 }
 
-char* express_number(int value, char c)
-{
+char* express_number(int value, char c) {
 	char* ch = calloc(42, sizeof(char));
 	require(NULL != ch, "Exhausted available memory\n");
 	int size;
 	int number_of_bytes;
 	int shift;
-	if('!' == c)
-	{
+	if('!' == c) {
 		number_of_bytes = 1;
 		value = value & 0xFF;
-	}
-	else if('@' == c)
-	{
+	} else if('@' == c) {
 		number_of_bytes = 2;
 		value = value & 0xFFFF;
-	}
-	else if('~' == c)
-	{
+	} else if('~' == c) {
 		number_of_bytes = 3;
 		value = value & 0xFFFFFF;
-	}
-	else if('%' == c)
-	{
+	} else if('%' == c) {
 		number_of_bytes = 4;
 		value = value & 0xFFFFFFFF;
-	}
-	else
-	{
+	} else {
 		fputs("Given symbol ", stderr);
 		fputc(c, stderr);
 		fputs(" to express immediate value ", stderr);
