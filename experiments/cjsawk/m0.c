@@ -119,10 +119,16 @@ int stringify_(char* s, int digits, int value) {
 /* testing replacing impl */
 char* hex_to_str_le(int value, int digits) {
 	char *s = calloc(42, sizeof(char));
+	char *s2 = calloc(42, sizeof(char));
 	stringify_(s, digits, value);
 	LittleEndian(s);
-	printf("=====================\n");
-	printf("stringify: %s\n", s);
+	stringify_(s2, digits, value);
+	LittleEndian(s2);
+	if(!match(s, s2)) {
+		printf("=====================\n");
+		printf("stringify : %s\n", s);
+		printf("stringify2: %s\n", s2);
+	}
 	return s;
 }
 
