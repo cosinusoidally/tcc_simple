@@ -65,13 +65,10 @@ struct blob** hash_table;
 int define_state = 0;
 
 int hex2char(int c) {
-	if((c >= 0) && (c <= 9)) {
+	if(c <= 9) {
 		return (c + 48);
-	} else if((c >= 10) && (c <= 15)) {
-		return (c + 55);
-	} else {
-		return -1;
 	}
+	return (c + 55);
 }
 
 char* hex_to_str_le(int value, int digits) {
@@ -94,8 +91,7 @@ void require(int bool, char* error) {
 	}
 }
 
-int match(char* a, char* b)
-{
+int match(char* a, char* b) {
 	if((NULL == a) && (NULL == b)) return TRUE;
 	if(NULL == a) return FALSE;
 	if(NULL == b) return FALSE;
