@@ -488,7 +488,7 @@ void hexify_string(struct blob* p) {
 	int i = strlen(p->Text);
 	int size;
 
-	size = (((i << 1) + i) + 12);
+	size = (i * 2) + 1;
 
 	require(1 != size, "hexify_string lacked a valid bytemode\n");
 	char* d = calloc(size, sizeof(char));
