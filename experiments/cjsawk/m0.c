@@ -649,7 +649,6 @@ int main(int argc, char **argv) {
 
 	token_list = reverse_list(token_list);
 	line_macro(token_list);
-	process_string(blob_list);
 	eval_immediates(blob_list);
 	preserve_other(blob_list);
 	print_hex(token_list);
