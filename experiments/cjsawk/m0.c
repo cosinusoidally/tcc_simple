@@ -486,7 +486,7 @@ char* express_number(int value, char c) {
 	return ch;
 }
 
-void line_macro(struct Token* p) {
+void process_tokens(struct Token* p) {
 	struct Token* i;
 	struct blob* co;
 	int value;
@@ -622,7 +622,7 @@ int main(int argc, char **argv) {
 	destination_file = fopen(argv[2], "w");
 
 	token_list = reverse_list(token_list);
-	line_macro(token_list);
+	process_tokens(token_list);
 
 	print_hex(token_list);
 
