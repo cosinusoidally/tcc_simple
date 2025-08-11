@@ -109,27 +109,27 @@ int match(char* a, char* b) {
 }
 
 
-int in_set(int c, char* s)
-{
+int in_set(int c, char* s) {
 	/* NULL set is always false */
 	if(NULL == s) return FALSE;
 
-	while(0 != s[0])
-	{
-		if(c == s[0]) return TRUE;
+	while(0 != s[0]) {
+		if(c == s[0]) {
+			return TRUE;
+		}
 		s = s + 1;
 	}
 	return FALSE;
 }
 
 /* INTERNAL ONLY */
-int __index_number(char* s, char c)
-{
+int __index_number(char* s, char c) {
 	int i = 0;
-	while(s[i] != c)
-	{
+	while(s[i] != c) {
 		i = i + 1;
-		if(0 == s[i]) return -1;
+		if(0 == s[i]) {
+			return -1;
+		}
 	}
 	return i;
 }
