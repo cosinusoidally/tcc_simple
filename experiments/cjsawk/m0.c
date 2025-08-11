@@ -637,7 +637,7 @@ int main(int argc, char **argv) {
 
 	token_list = reverse_list(token_list);
 	line_macro(token_list);
-	preserve_other(blob_list);
+
 	print_hex(token_list);
 
 	fclose(destination_file);
