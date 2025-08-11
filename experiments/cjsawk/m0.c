@@ -567,24 +567,6 @@ void preserve_other(struct blob* p) {
 	}
 }
 
-void eval_immediates(struct blob* p) {
-	struct blob* i;
-	int value;
-	for(i = p; NULL != i; i = i->next) {
-		if((PROCESSED == i->type) || (NEWLINE == i->type)) {
-			/* nothing */
-		} else if(NULL == i->Expression) {
-			if(in_set(i->Text[0], "%~@!")) {
-				value = strtoint(i->Text + 1);
-
-				if(('0' == i->Text[1]) || (0 != value)) {
-					i->Expression = express_number(value, i->Text[0]);
-				}
-			}
-		}
-	}
-}
-
 void print_hex(struct Token* p) {
 	struct Token* i;
 	for(i = p; NULL != i; i = i->next) {
