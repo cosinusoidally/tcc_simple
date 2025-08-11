@@ -561,20 +561,6 @@ void hexify_string(struct blob* p) {
 	}
 }
 
-void preserve_other(struct blob* p) {
-	struct blob* i;
-	char c;
-	for(i = p; NULL != i; i = i->next) {
-		if((NULL == i->Expression) && !(i->type & PROCESSED)) {
-			c = i->Text[0];
-
-			if(in_set(c, "!@$~%&:^")) {
-				i->Expression = i->Text;
-			}
-		}
-	}
-}
-
 void print_hex(struct Token* p) {
 	struct Token* i;
 	for(i = p; NULL != i; i = i->next) {
