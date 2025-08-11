@@ -9,8 +9,8 @@ cd artifacts/builds/m0_test
 
 gcc -O0 -g3 -m32 ../../../m0.c -o m0.exe
 
-function compile_strict() {
-  $1 --m1-strict $2 $3.M1
+function compile_alt() {
+  $1 $2 $3.M1
   cat ../../../../m2min_v3/simple_asm_defs.M1 ../../../../m2min_v3/x86_defs.M1 ../../../../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
   ./m0.exe $3-0.M1 $3.hex2
 # hack since mo.c inserts a leading newline
@@ -19,19 +19,19 @@ function compile_strict() {
   hex2-0 $3-0.hex2 $3
 }
 
-compile_strict ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk_strict.exe
-compile_strict ./cjsawk_strict.exe ../../deps/cjsawk_full.c cjsawk.exe
+compile_alt ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk_alt.exe
+compile_alt ./cjsawk_alt.exe ../../deps/cjsawk_full.c cjsawk.exe
 
-compile ./cjsawk_strict.exe ../../deps/cjsawk_full.c cjsawk2.exe
+compile ./cjsawk_alt.exe ../../deps/cjsawk_full.c cjsawk2.exe
 
-diff -u -s cjsawk_strict.exe cjsawk.exe
+diff -u -s cjsawk_alt.exe cjsawk.exe
 diff -u -s cjsawk.exe.hex2 cjsawk2.exe.hex2
 
 compile ./cjsawk.exe ../../deps/m2min_v3.c m2min_v3.exe
 diff -u -s m2min_v3.exe.M1 ../../../../m2min_v3/m2min_v3.M1
 
 compile ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js.exe
-compile_strict ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
+compile_alt ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
 
 diff -u -s pnut_js.exe pnut_js_strict.exe
 diff -u -s pnut_js.exe.hex2 pnut_js_strict.exe.hex2
