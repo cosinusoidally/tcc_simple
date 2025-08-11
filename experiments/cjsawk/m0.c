@@ -488,8 +488,20 @@ char* express_number(int value, char c) {
 
 void hexify_string(struct blob* p) {
 	char* table = "0123456789ABCDEF";
-	int i = strlen(p->Text);
+	int i2 = strlen(p->Text);
+	int i = 0;
 	int size;
+	char c;
+
+	while(1) {
+		c = p->Text[i];
+		if(c == 0) {
+			break;
+		}
+		i = i + 1;
+	}
+
+	require(i == i2, "on no");
 
 	size = (i * 2) + 1;
 
