@@ -62,6 +62,8 @@ int blob_count;
 char* SCRATCH;
 struct blob** hash_table;
 
+int define_state = 0;
+
 int hex2char(int c) {
 	if((c >= 0) && (c <= 9)) {
 		return (c + 48);
@@ -281,6 +283,16 @@ int GetHash(char* s) {
 struct blob* FindBlob() {
 	int hash = GetHash(SCRATCH);
 	struct blob* i = hash_table[hash];
+
+	if(define_state>0) {
+		define_state=define_state - 1;
+		if(define_state == 1) {
+			printf("DEFINE key: %s ", SCRATCH);
+		} else {
+			printf("value: %s\n", SCRATCH);
+		}
+	}
+
 	while(NULL != i) {
 		if(match(SCRATCH, i->Text)) return i;
 		i = i->hash_next;
@@ -368,6 +380,11 @@ struct Token* store_atom(struct Token* head, char c) {
 	}
 
 	head->contents = FindBlob();
+
+	if(define_blob == head->contents) {
+		define_state = 2;
+	}
+
 	if(NULL == head->contents) {
 		NewBlob(i);
 		head->contents = blob_list;
