@@ -287,11 +287,10 @@ struct blob* FindBlob() {
 	if(define_state>0) {
 		define_state=define_state - 1;
 		if(define_state == 1) {
-			printf("DEFINE key: %s ", SCRATCH);
-			/* this allows redefinitions of DEFINEs */
+			/* this allows redefinitions of DEFINEs since
+			   returning NULL will cause a new definition to be
+                           inserted */
 			return NULL;
-		} else {
-			printf("value: %s\n", SCRATCH);
 		}
 	}
 
@@ -384,6 +383,7 @@ struct Token* store_atom(struct Token* head, char c) {
 	head->contents = FindBlob();
 
 	if(define_blob == head->contents) {
+		/* see also FindBlob as this modifies its behaviour */
 		define_state = 2;
 	}
 
