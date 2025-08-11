@@ -490,6 +490,7 @@ void line_macro(struct Token* p) {
 	struct Token* i;
 	struct blob* co;
 	int value;
+	char c;
 	for(i = p; NULL != i; i = i->next) {
 		co = i->contents;
 		if(define_blob == co) {
@@ -525,6 +526,13 @@ void line_macro(struct Token* p) {
 
 				if(('0' == co->Text[1]) || (0 != value)) {
 					co->Expression = express_number(value, co->Text[0]);
+				}
+			}
+			if((NULL == co->Expression) && !(co->type & PROCESSED)) {
+				c = co->Text[0];
+
+				if(in_set(c, "!@$~%&:^")) {
+					co->Expression = co->Text;
 				}
 			}
 		}
