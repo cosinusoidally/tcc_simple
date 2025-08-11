@@ -362,7 +362,6 @@ struct Token* append_newline(struct Token* head) {
 	return lf;
 }
 
-
 struct Token* store_atom(struct Token* head, char c) {
 	ClearScratch();
 	int ch = c;
