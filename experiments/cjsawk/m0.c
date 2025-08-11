@@ -513,19 +513,6 @@ void hexify_string(struct blob* p) {
 	}
 }
 
-void process_string(struct blob* p) {
-	struct blob* i;
-	for(i = p; NULL != i; i = i->next) {
-		if(STR == i->type) {
-			if('\'' == i->Text[0]) {
-				i->Expression = i->Text + 1;
-			} else if('"' == i->Text[0]) {
-				hexify_string(i);
-			}
-		}
-	}
-}
-
 void preserve_other(struct blob* p) {
 	struct blob* i;
 	char c;
