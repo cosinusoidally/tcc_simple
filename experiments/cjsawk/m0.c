@@ -457,9 +457,39 @@ struct Token* Tokenize_Line(struct Token* head) {
 	return head;
 }
 
+char* express_number(int value, char c) {
+	char* ch;
+	int size;
+	int number_of_bytes;
+	if('!' == c) {
+		number_of_bytes = 1;
+		value = value & 0xFF;
+	} else if('@' == c) {
+		number_of_bytes = 2;
+		value = value & 0xFFFF;
+	} else if('%' == c) {
+		number_of_bytes = 4;
+		value = value & 0xFFFFFFFF;
+	} else {
+		fputs("Given symbol ", stderr);
+		fputc(c, stderr);
+		fputs(" to express immediate value ", stderr);
+		fputs(int2str(value, 10, TRUE), stderr);
+		fputc('\n', stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	size = number_of_bytes * 2;
+
+	ch = hex_to_str_le(value, size);
+
+	return ch;
+}
+
 void line_macro(struct Token* p) {
 	struct Token* i;
 	struct blob* co;
+	int value;
 	for(i = p; NULL != i; i = i->next) {
 		co = i->contents;
 		if(define_blob == co) {
@@ -486,6 +516,16 @@ void line_macro(struct Token* p) {
 				co->Expression = co->Text + 1;
 			} else if('"' == co->Text[0]) {
 				hexify_string(co);
+			}
+		} else if((PROCESSED == co->type) || (NEWLINE == co->type)) {
+			/* nothing */
+		} else if(NULL == co->Expression) {
+			if(in_set(co->Text[0], "%~@!")) {
+				value = strtoint(co->Text + 1);
+
+				if(('0' == co->Text[1]) || (0 != value)) {
+					co->Expression = express_number(value, co->Text[0]);
+				}
 			}
 		}
 	}
@@ -525,35 +565,6 @@ void preserve_other(struct blob* p) {
 			}
 		}
 	}
-}
-
-char* express_number(int value, char c) {
-	char* ch;
-	int size;
-	int number_of_bytes;
-	if('!' == c) {
-		number_of_bytes = 1;
-		value = value & 0xFF;
-	} else if('@' == c) {
-		number_of_bytes = 2;
-		value = value & 0xFFFF;
-	} else if('%' == c) {
-		number_of_bytes = 4;
-		value = value & 0xFFFFFFFF;
-	} else {
-		fputs("Given symbol ", stderr);
-		fputc(c, stderr);
-		fputs(" to express immediate value ", stderr);
-		fputs(int2str(value, 10, TRUE), stderr);
-		fputc('\n', stderr);
-		exit(EXIT_FAILURE);
-	}
-
-	size = number_of_bytes * 2;
-
-	ch = hex_to_str_le(value, size);
-
-	return ch;
 }
 
 void eval_immediates(struct blob* p) {
