@@ -486,6 +486,28 @@ char* express_number(int value, char c) {
 	return ch;
 }
 
+void hexify_string(struct blob* p) {
+	char* table = "0123456789ABCDEF";
+	int i = strlen(p->Text);
+	int size;
+
+	size = (i * 2) + 1;
+
+	require(1 != size, "hexify_string lacked a valid bytemode\n");
+	char* d = calloc(size, sizeof(char));
+	require(NULL != d, "Exhausted available memory\n");
+	p->Expression = d;
+	char* S = p->Text;
+
+	while(0 != S[0]) {
+		S = S + 1;
+		d[0] = table[S[0] >> 4];
+		d[1] = table[S[0] & 0xF];
+		d[2] = 0;
+		d = d + 2;
+	}
+}
+
 void process_tokens(struct Token* p) {
 	struct Token* i;
 	struct blob* co;
@@ -494,18 +516,7 @@ void process_tokens(struct Token* p) {
 	for(i = p; NULL != i; i = i->next) {
 		co = i->contents;
 		if(define_blob == co) {
-			require(NULL != i->next, "Macro name must exist\n");
-			require(NULL != i->next->next, "Macro value must exist\n");
-			if(PROCESSED == i->next->contents->type) {
-				line_error();
-				fputs("Multiple definitions for macro ", stderr);
-				fputs(i->next->contents->Text, stderr);
-				fputs("\n", stderr);
-				exit(EXIT_FAILURE);
-			}
-
 			i->contents = newline_blob;
-
 			if (STR == i->next->next->contents->type) {
 				i->contents->Expression = i->next->next->contents->Text + 1;
 			} else {
@@ -536,28 +547,6 @@ void process_tokens(struct Token* p) {
 				}
 			}
 		}
-	}
-}
-
-void hexify_string(struct blob* p) {
-	char* table = "0123456789ABCDEF";
-	int i = strlen(p->Text);
-	int size;
-
-	size = (i * 2) + 1;
-
-	require(1 != size, "hexify_string lacked a valid bytemode\n");
-	char* d = calloc(size, sizeof(char));
-	require(NULL != d, "Exhausted available memory\n");
-	p->Expression = d;
-	char* S = p->Text;
-
-	while(0 != S[0]) {
-		S = S + 1;
-		d[0] = table[S[0] >> 4];
-		d[1] = table[S[0] & 0xF];
-		d[2] = 0;
-		d = d + 2;
 	}
 }
 
