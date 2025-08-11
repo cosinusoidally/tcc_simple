@@ -459,8 +459,10 @@ struct Token* Tokenize_Line(struct Token* head) {
 
 void line_macro(struct Token* p) {
 	struct Token* i;
+	struct blob* co;
 	for(i = p; NULL != i; i = i->next) {
-		if(define_blob == i->contents) {
+		co = i->contents;
+		if(define_blob == co) {
 			require(NULL != i->next, "Macro name must exist\n");
 			require(NULL != i->next->next, "Macro value must exist\n");
 			if(PROCESSED == i->next->contents->type) {
@@ -479,6 +481,12 @@ void line_macro(struct Token* p) {
 				i->next->contents->Expression = i->next->next->contents->Text;
 			}
 			i->next = i->next->next->next;
+		} else if(STR == co->type) {
+			if('\'' == co->Text[0]) {
+				co->Expression = co->Text + 1;
+			} else if('"' == co->Text[0]) {
+				hexify_string(co);
+			}
 		}
 	}
 }
