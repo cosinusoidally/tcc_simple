@@ -288,6 +288,8 @@ struct blob* FindBlob() {
 		define_state=define_state - 1;
 		if(define_state == 1) {
 			printf("DEFINE key: %s ", SCRATCH);
+			/* this allows redefinitions of DEFINEs */
+			return NULL;
 		} else {
 			printf("value: %s\n", SCRATCH);
 		}
