@@ -529,17 +529,9 @@ void process_tokens(struct Token* p) {
 void print_hex(struct Token* p) {
 	struct Token* i;
 	for(i = p; NULL != i; i = i->next) {
-		if(PROCESSED == i->contents->type) {
-/* nothing */
-		} else if(NULL != i->contents->Expression) {
+		if(NULL != i->contents->Expression) {
 			fputs(i->contents->Expression, destination_file);
 			fputc('\n', destination_file);
-		} else {
-			line_error();
-			fputs("Received invalid other; ", stderr);
-			fputs(i->contents->Text, stderr);
-			fputs("\n", stderr);
-			exit(EXIT_FAILURE);
 		}
 	}
 }
