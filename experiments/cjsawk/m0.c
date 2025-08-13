@@ -497,7 +497,6 @@ void process_tokens(struct Token* p) {
 	for(i = p; NULL != i; i = i->next) {
 		co = i->contents;
 		if(define_blob == co) {
-			i->contents = newline_blob;
 			if (STR == i->next->next->contents->type) {
 				i->contents->Expression = i->next->next->contents->Text + 1;
 			} else {
@@ -552,7 +551,7 @@ void print_hex(struct Token* p) {
 /* Standard C main program */
 int main(int argc, char **argv) {
 	destination_file = stdout;
-	blob_count = 2;
+	blob_count = 1;
 	hash_table = calloc(65537, sizeof(struct blob*));
 	require(NULL != hash_table, "failed to allocate hash_table\n");
 
@@ -566,10 +565,10 @@ int main(int argc, char **argv) {
 
 	/* Start the blob list with DEFINE and newline */
 	blob_list = calloc(1, sizeof(struct blob));
-	require(NULL != blob_list, "failed to allocate DEFINE blob\n");
-	blob_list->Text = "DEFINE";
 	define_blob = blob_list;
-	blob_list->next = newline_blob;
+	define_blob->Text = "DEFINE";
+	define_blob->Expression = "DEFINE";
+	define_blob->type = NEWLINE;
 	AddHash(define_blob, "DEFINE");
 
 	/* Initialize scratch */
