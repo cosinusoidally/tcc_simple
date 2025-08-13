@@ -30,7 +30,6 @@
 
 /* Internal processing Constants */
 #define max_string 4096
-#define PROCESSED 1
 #define STR 2
 
 struct blob
@@ -159,10 +158,7 @@ int strtoint(char *a) {
 	/* If NULL string */
 	if(0 == a[0]) {
 		result = 0;
-	}
-	/* Deal with binary */
-	else if ('0' == a[0] && 'b' == a[1])
-	{
+	} /* Deal with binary */ else if ('0' == a[0] && 'b' == a[1]) {
 		result = __set_reader("01", 2, a+2);
 	}
 	/* Deal with hex */
@@ -465,7 +461,7 @@ void process_tokens(struct Token* p) {
 					co->Expression = express_number(value, co->Text[0]);
 				}
 			}
-			if((NULL == co->Expression) && !(co->type & PROCESSED)) {
+			if(NULL == co->Expression) {
 				c = co->Text[0];
 
 				if(in_set(c, "!@$~%&:^")) {
@@ -495,7 +491,6 @@ int main(int argc, char **argv) {
 	blob_list = calloc(1, sizeof(struct blob));
 	define_blob = blob_list;
 	define_blob->Text = "DEFINE";
-	define_blob->type = PROCESSED;
 	AddHash(define_blob, "DEFINE");
 
 	/* Initialize scratch */
