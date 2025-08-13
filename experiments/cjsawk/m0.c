@@ -57,7 +57,6 @@ char* filename;
 struct Token* token_list;
 struct blob* blob_list;
 struct blob* define_blob;
-struct blob* newline_blob;
 int blob_count;
 char* SCRATCH;
 struct blob** hash_table;
@@ -555,19 +554,10 @@ int main(int argc, char **argv) {
 	hash_table = calloc(65537, sizeof(struct blob*));
 	require(NULL != hash_table, "failed to allocate hash_table\n");
 
-	/* Create newline blob */
-	newline_blob = calloc(1, sizeof(struct blob));
-	require(NULL != newline_blob, "failed to allocate newline_blob\n");
-	newline_blob->Text = "\n";
-	newline_blob->Expression = "\n";
-	newline_blob->type = NEWLINE;
-	AddHash(newline_blob, "\n");
-
-	/* Start the blob list with DEFINE and newline */
+	/* Start the blob list with DEFINE */
 	blob_list = calloc(1, sizeof(struct blob));
 	define_blob = blob_list;
 	define_blob->Text = "DEFINE";
-	define_blob->Expression = "DEFINE";
 	define_blob->type = NEWLINE;
 	AddHash(define_blob, "DEFINE");
 
