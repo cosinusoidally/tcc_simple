@@ -223,13 +223,6 @@ char* int2str(int x, int base, int signed_p) {
 	return p + 1;
 }
 
-void line_error() {
-	fputs(filename, stderr);
-	fputs(":", stderr);
-	fputs(int2str(linenumber,10, FALSE), stderr);
-	fputs(" :", stderr);
-}
-
 void ClearScratch() {
 	int i = 0;
 	int c = SCRATCH[i];
@@ -414,13 +407,6 @@ char* express_number(int value, char c) {
 	} else if('%' == c) {
 		number_of_bytes = 4;
 		value = value & 0xFFFFFFFF;
-	} else {
-		fputs("Given symbol ", stderr);
-		fputc(c, stderr);
-		fputs(" to express immediate value ", stderr);
-		fputs(int2str(value, 10, TRUE), stderr);
-		fputc('\n', stderr);
-		exit(EXIT_FAILURE);
 	}
 
 	size = number_of_bytes * 2;
