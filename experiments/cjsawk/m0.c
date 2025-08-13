@@ -508,8 +508,6 @@ void process_tokens(struct Token* p) {
 			} else if('"' == co->Text[0]) {
 				hexify_string(co);
 			}
-		} else if((PROCESSED == co->type) || (NEWLINE == co->type)) {
-			/* nothing */
 		} else if(NULL == co->Expression) {
 			if(in_set(co->Text[0], "%~@!")) {
 				value = strtoint(co->Text + 1);
@@ -532,7 +530,7 @@ void process_tokens(struct Token* p) {
 void print_hex(struct Token* p) {
 	struct Token* i;
 	for(i = p; NULL != i; i = i->next) {
-		if(NEWLINE == i->contents->type) {
+		if(PROCESSED == i->contents->type) {
 /* nothing */
 		} else if(NULL != i->contents->Expression) {
 			fputs(i->contents->Expression, destination_file);
@@ -552,18 +550,16 @@ int main(int argc, char **argv) {
 	destination_file = stdout;
 	blob_count = 1;
 	hash_table = calloc(65537, sizeof(struct blob*));
-	require(NULL != hash_table, "failed to allocate hash_table\n");
 
 	/* Start the blob list with DEFINE */
 	blob_list = calloc(1, sizeof(struct blob));
 	define_blob = blob_list;
 	define_blob->Text = "DEFINE";
-	define_blob->type = NEWLINE;
+	define_blob->type = PROCESSED;
 	AddHash(define_blob, "DEFINE");
 
 	/* Initialize scratch */
 	SCRATCH = calloc(max_string + 1, sizeof(char));
-	require(NULL != SCRATCH, "failed to allocate SCRATCH buffer");
 
 	filename = argv[1];
 	source_file = fopen(filename, "r");
