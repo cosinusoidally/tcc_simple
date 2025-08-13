@@ -51,8 +51,6 @@ struct Token
 /* Globals */
 FILE* source_file;
 FILE* destination_file;
-int linenumber;
-char* filename;
 struct Token* token_list;
 struct blob* blob_list;
 struct blob* define_blob;
@@ -347,9 +345,6 @@ struct blob* store_string(char c) {
 	while(1) {
 		SCRATCH[i] = ch;
 		i = i + 1;
-		if('\n' == ch) {
-			linenumber = linenumber + 1;
-		}
 		ch = fgetc(source_file);
 		if(ch == c) {
 			break;
@@ -369,7 +364,6 @@ struct blob* store_string(char c) {
 struct Token* Tokenize_Line(struct Token* head) {
 	int c;
 	struct Token* p;
-	linenumber = 1;
 
 	while(1) {
 		c = fgetc(source_file);
@@ -507,8 +501,7 @@ int main(int argc, char **argv) {
 	/* Initialize scratch */
 	SCRATCH = calloc(max_string + 1, sizeof(char));
 
-	filename = argv[1];
-	source_file = fopen(filename, "r");
+	source_file = fopen(argv[1], "r");
 
 	token_list = Tokenize_Line(token_list);
 
