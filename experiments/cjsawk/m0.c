@@ -149,8 +149,7 @@ int __set_reader(char* set, int mult, char* input) {
 	/* loop exited before NULL and thus invalid input */
 	if(0 != input[i]) return 0;
 
-	if(negative_p)
-	{
+	if(negative_p) {
 		n = 0 - n;
 	}
 
@@ -440,7 +439,6 @@ void hexify_string(struct blob* p) {
 		S = S + 1;
 		d[0] = table[S[0] >> 4];
 		d[1] = table[S[0] & 15];
-		d[2] = 0;
 		d = d + 2;
 	}
 }
@@ -496,7 +494,6 @@ void print_hex(struct Token* p) {
 
 /* Standard C main program */
 int main(int argc, char **argv) {
-	destination_file = stdout;
 	blob_count = 1;
 	hash_table = calloc(65537, sizeof(struct blob*));
 
