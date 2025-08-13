@@ -126,28 +126,24 @@ int __index_number(char* s, char c) {
 }
 
 /* INTERNAL ONLY */
-int __toupper(int c)
-{
+int __toupper(int c) {
 	if(in_set(c, "abcdefghijklmnopqrstuvwxyz")) return (c & 0xDF);
 	return c;
 }
 
 /* INTERNAL ONLY */
-int __set_reader(char* set, int mult, char* input)
-{
+int __set_reader(char* set, int mult, char* input) {
 	int n = 0;
 	int i = 0;
 	int hold;
 	int negative_p = FALSE;
 
-	if(input[0] == '-')
-	{
+	if(input[0] == '-') {
 		negative_p = TRUE;
 		i = i + 1;
 	}
 
-	while(in_set(input[i], set))
-	{
+	while(in_set(input[i], set)) {
 		n = n * mult;
 		hold = __index_number(set, __toupper(input[i]));
 
@@ -168,12 +164,10 @@ int __set_reader(char* set, int mult, char* input)
 	return n;
 }
 
-int strtoint(char *a)
-{
+int strtoint(char *a) {
 	int result = 0;
 	/* If NULL string */
-	if(0 == a[0])
-	{
+	if(0 == a[0]) {
 		result = 0;
 	}
 	/* Deal with binary */
@@ -202,14 +196,9 @@ int strtoint(char *a)
 	return result;
 }
 
-char* int2str(int x, int base, int signed_p)
-{
-	require(1 < base, "int2str doesn't support a base less than 2\n");
-	require(37 > base, "int2str doesn't support a base more than 36\n");
+char* int2str(int x, int base, int signed_p) {
 	/* Be overly conservative and save space for 32binary digits and padding null */
 	char* p = calloc(34, sizeof(char));
-	/* if calloc fails return null to let calling code deal with it */
-	if(NULL == p) return p;
 
 	p = p + 32;
 	unsigned i;
@@ -282,7 +271,9 @@ struct blob* FindBlob() {
 	}
 
 	while(NULL != i) {
-		if(match(SCRATCH, i->Text)) return i;
+		if(match(SCRATCH, i->Text)) {
+			return i;
+		}
 		i = i->hash_next;
 	}
 	return NULL;
@@ -297,9 +288,7 @@ void AddHash(struct blob* a, char* s) {
 void NewBlob(int size) {
 	blob_count = blob_count + 1;
 	struct blob* a = calloc(1, sizeof(struct blob));
-	require(NULL != a, "Exhausted available memory\n");
 	a->Text = calloc(size + 1, sizeof(char));
-	require(NULL != a->Text, "Exhausted available memory\n");
 
 	int i = 0;
 	while(i <= size) {
@@ -465,16 +454,14 @@ void hexify_string(struct blob* p) {
 
 	size = (i * 2) + 1;
 
-	require(1 != size, "hexify_string lacked a valid bytemode\n");
 	char* d = calloc(size, sizeof(char));
-	require(NULL != d, "Exhausted available memory\n");
 	p->Expression = d;
 	char* S = p->Text;
 
 	while(0 != S[0]) {
 		S = S + 1;
 		d[0] = table[S[0] >> 4];
-		d[1] = table[S[0] & 0xF];
+		d[1] = table[S[0] & 15];
 		d[2] = 0;
 		d = d + 2;
 	}
