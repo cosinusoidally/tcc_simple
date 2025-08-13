@@ -82,13 +82,6 @@ char* hex_to_str_le(int value, int digits) {
 	return s;
 }
 
-void require(int bool, char* error) {
-	if(!bool) {
-		fputs(error, stderr);
-		exit(EXIT_FAILURE);
-	}
-}
-
 int match(char* a, char* b) {
 	int i = -1;
 	do
@@ -366,7 +359,6 @@ struct blob* store_string(char c) {
 			linenumber = linenumber + 1;
 		}
 		ch = fgetc(source_file);
-		require(EOF != ch, "Unmatched \"!\n");
 		if(ch == c) {
 			break;
 		}
