@@ -346,22 +346,6 @@ void purge_lineComment() {
 	}
 }
 
-struct Token* append_newline(struct Token* head) {
-	linenumber = linenumber + 1;
-	if(NULL == head) {
-		return NULL;
-	}
-	if(NEWLINE == head->contents->type) {
-		/* Don't waste whitespace*/
-		return head;
-	}
-
-	struct Token* lf = newToken();
-	lf->contents = newline_blob;
-	lf->next = head;
-	return lf;
-}
-
 struct Token* store_atom(struct Token* head, char c) {
 	ClearScratch();
 	int ch = c;
@@ -387,9 +371,6 @@ struct Token* store_atom(struct Token* head, char c) {
 		head->contents = blob_list;
 	}
 
-	if('\n' == ch) {
-		return append_newline(head);
-	}
 	return head;
 }
 
