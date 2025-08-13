@@ -32,7 +32,6 @@
 #define max_string 4096
 #define PROCESSED 1
 #define STR 2
-#define NEWLINE 3
 
 struct blob
 {
