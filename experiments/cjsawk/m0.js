@@ -440,7 +440,7 @@ function hexify_string_(p,    i, size, c, S, d) {
 	}
 }
 
-void process_tokens(struct Token* p) {
+function process_tokens(struct Token* p) {
 	struct Token* i;
 	struct blob* co;
 	int value;
