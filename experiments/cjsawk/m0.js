@@ -135,9 +135,9 @@ function parse_int_(input, base,    n, i, hold, t, negative_p) {
 
 int strtoint(char *a) {
 	int result = 0;
-	if(0 == a[0]) {
+	if(eq(0, ri8(a))) {
 		result = 0;
-	} else if ('0' == a[0] &&  'x' == a[1]) {
+	} else if (AND(eq(mkC("0"), ri8(a)),  eq(mkC("x"), ri8(add(a, 1))))) {
 		result = parse_int(a+2, 16);
 	} else if ((('0' <= a[0]) &&  ('9' >= a[0])) || ('-' == a[0])) {
 		result = parse_int(a, 10);
