@@ -377,21 +377,21 @@ function store_string_(c,    ch, i, a) {
 	return a;
 }
 
-struct Token* Tokenize_Line(struct Token* head) {
-	int c;
-	struct Token* p;
-
+function Tokenize_Line(head) {
+	Tokenize_Line_(head, 0, 0);
+}
+function Tokenize_Line_(head,    c, p) {
 	while(1) {
 		c = fgetc(source_file);
-		if(in_set(c, ";#")) {
+		if(in_set(c, mks(";#"))) {
 			purge_lineComment();
-		} else if(EOF == c) {
+		} else if(eq(EOF, c)) {
 			break;
-		} else if(!in_set(c, "\t \n")) {
+		} else if(eq(0, in_set(c, mks("\t \n")))) {
 			p = newToken();
-			p->next = head;
-			if(in_set(c, "'\"")) {
-				p->contents = store_string(c);
+			Token_next_s(p, head);
+			if(in_set(c, mks("'\""))) {
+				Token_contents_s(p, store_string(c));
 			} else {
 				p = store_atom(p, c);
 			}
