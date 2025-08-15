@@ -63,16 +63,17 @@ function hex2char(c) {
 	return (c + 55);
 }
 
-char* hex_to_str_le(v, digits) {
-	int i;
-	char *s;
 
+function hex_to_str_le(v, digits) {
+	return hex_to_str_le_(v, digits, 0, 0);
+}
+function hex_to_str_le_(v, digits,    i, s) {
 	s = v_calloc(42, 1);
 	i = 0;
 	while(lt(i, digits)) {
-		s[add(i, 1)] = hex2char(AND(v, 15));
+		wi8(add(s, add(i, 1)), hex2char(AND(v, 15)));
 		v = shr(v, 4);
-		s[i] = hex2char(AND(v, 15));
+		wi8(add(s, i), hex2char(AND(v, 15)));
 		v = shr(v, 4);
 		i = add(i, 2);
 	}
