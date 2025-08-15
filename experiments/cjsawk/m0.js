@@ -39,21 +39,6 @@ var hash_table;
 
 var define_state;
 
-struct blob
-{
-	struct blob* next;
-	int type;
-	char* Text;
-	char* Expression;
-	struct blob* hash_next;
-};
-
-struct Token
-{
-	struct Token* next;
-	struct blob* contents;
-};
-
 var blob_next_o;
 var blob_type_o;
 var blob_Text_o;
@@ -297,9 +282,11 @@ function NewBlob_(size,    i, a) {
 	AddHash(a, SCRATCH);
 }
 
-struct Token* newToken() {
-	struct Token* p;
-	p = calloc (1, sizeof (struct Token));
+function newToken() {
+	newToken_(0);
+}
+function newToken_(    p) {
+	p = v_calloc(1, sizeof_Token);
 	return p;
 }
 
