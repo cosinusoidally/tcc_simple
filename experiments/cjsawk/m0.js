@@ -120,16 +120,16 @@ function parse_int(char* input, int base) {
 	while(neq(input[i], 0)) {
 		n = mul(n, base);
 		t = ri8(add(input, i));
-		if((t - '0') < 10) {
-			hold = t - '0';
+		if(lt(SUB(t, mkC("0")), 10)) {
+			hold = SUB(t, mkC("0"));
 		} else {
-			hold = 10 + (t - 'A');
+			hold = add(10, SUB(t, mkC("A")));
 		}
-		n = n + hold;
-		i = i + 1;
+		n = add(n, hold);
+		i = add(i, 1);
 	}
 	if(negative_p) {
-		n = 0 - n;
+		n = SUB(0, n);
 	}
 	return n;
 }
