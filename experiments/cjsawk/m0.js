@@ -43,6 +43,10 @@ var blob_Expression_o;
 var blob_hash_next_o;
 var sizeof_blob;
 
+function blob_Text_g(o) {
+	return ri32(add(o, blob_Text_o));
+}
+
 var TRUE;
 var FALSE;
 
