@@ -347,11 +347,14 @@ function store_atom_(head, c,    ch, i) {
 	return head;
 }
 
-struct blob* store_string(char c) {
+function store_string(char c) {
+	int ch;
+	int i;
+	struct blob* a;
 	ClearScratch();
 
-	int ch = c;
-	int i = 0;
+	ch = c;
+	i = 0;
 	while(1) {
 		SCRATCH[i] = ch;
 		i = i + 1;
@@ -360,14 +363,12 @@ struct blob* store_string(char c) {
 			break;
 		}
 	}
-
-	struct blob* a = FindBlob();
+	a = FindBlob();
 	if(NULL == a) {
 		NewBlob(i);
 		a = blob_list;
 		a->type = STR;
 	}
-
 	return a;
 }
 
