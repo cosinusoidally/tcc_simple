@@ -22,8 +22,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -419,5 +417,5 @@ int main(int argc, char **argv) {
 	print_hex(token_list);
 	fclose(destination_file);
 
-	return EXIT_SUCCESS;
+	return 0;
 }
