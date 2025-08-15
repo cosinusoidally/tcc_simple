@@ -138,13 +138,18 @@ int __set_reader(char* set, int mult, char* input) {
 		hold = __index_number(set, __toupper(input[i]));
 
 		/* Input managed to change between in_set and index_number */
-		if(-1 == hold) return 0;
+		if(-1 == hold) {
+			return 0;
+		}
 		n = n + hold;
 		i = i + 1;
 	}
 
 	/* loop exited before NULL and thus invalid input */
-	if(0 != input[i]) return 0;
+	if(0 != input[i]) {
+// printf("invalid base: %d string: %s\n", mult, input);
+		return 0;
+	}
 
 	if(negative_p) {
 		n = 0 - n;
@@ -159,50 +164,18 @@ int strtoint(char *a) {
 	if(0 == a[0]) {
 		result = 0;
 	} /* Deal with binary */ else if ('0' == a[0] && 'b' == a[1]) {
+exit(1);
 		result = __set_reader("01", 2, a+2);
 	} /* Deal with hex */ else if ('0' == a[0] &&  'x' == a[1]) {
 		result = __set_reader("0123456789ABCDEFabcdef", 16, a+2);
 	} /* Deal with octal */ else if('0' == a[0]) {
+printf("octal: %s\n", a);
 		result = __set_reader("01234567", 8, a+1);
 	} /* Deal with decimal */ else {
 		result = __set_reader("0123456789", 10, a);
 	}
 
-	/* Deal with sign extension for 64bit hosts */
-	if(0 != (0x80000000 & result)) result = (0xFFFFFFFF << 31) | result;
 	return result;
-}
-
-char* int2str(int x, int base, int signed_p) {
-	/* Be overly conservative and save space for 32binary digits and padding null */
-	char* p = calloc(34, sizeof(char));
-
-	p = p + 32;
-	unsigned i;
-	int sign_p = FALSE;
-	char* table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	if(signed_p && (10 == base) && (0 != (x & 0x80000000))) {
-		/* Truncate to 31bits */
-		i = -x & 0x7FFFFFFF;
-		if(0 == i) return "-2147483648";
-		sign_p = TRUE;
-	} /* Truncate to 32bits */ else {
-		i = x & (0x7FFFFFFF | (1 << 31));
-	}
-
-	do {
-		p[0] = table[i % base];
-		p = p - 1;
-		i = i / base;
-	} while(0 < i);
-
-	if(sign_p) {
-		p[0] = '-';
-		p = p - 1;
-	}
-
-	return p + 1;
 }
 
 void ClearScratch() {
