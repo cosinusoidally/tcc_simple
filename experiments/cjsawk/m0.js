@@ -21,6 +21,24 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var TRUE;
+var FALSE;
+var NULL;
+var EOF;
+
+var max_string;
+var STR;
+
+var source_file;
+var destination_file;
+var token_list;
+var blob_list;
+var define_blob;
+var SCRATCH;
+var hash_table;
+
+var define_state;
+
 struct blob
 {
 	struct blob* next;
@@ -92,24 +110,6 @@ function Token_contents_g(o) {
 function Token_contents_s(o, v) {
 	wi32(add(o, Token_contents_o), v);
 }
-
-var TRUE;
-var FALSE;
-
-var max_string;
-var STR;
-
-int source_file;
-int destination_file;
-struct Token* token_list;
-struct blob* blob_list;
-struct blob* define_blob;
-char* SCRATCH;
-struct blob** hash_table;
-
-var define_state;
-var EOF;
-var NULL;
 
 /* FIXME split ri32 and wi32 into separate files */
 
