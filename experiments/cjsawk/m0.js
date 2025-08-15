@@ -46,6 +46,9 @@ var sizeof_blob;
 function blob_Text_g(o) {
 	return ri32(add(o, blob_Text_o));
 }
+function blob_Text_s(o, v) {
+	wi32(add(o, blob_Text_o), v);
+}
 
 function blob_Expression_s(o, v) {
 	wi32(add(o, blob_Expression_o), v);
@@ -253,8 +256,8 @@ function NewBlob(size) {
 function NewBlob_(size,    i) {
 	struct blob* a = v_calloc(1, sizeof_blob);
 	a->Text = v_calloc(add(size, 1), 1);
-	while(i <= size) {
-		a->Text[i] = SCRATCH[i];
+	while(lte(i, size)) {
+		a->Text[i] = ri8(add(SCRATCH, i));
 		i = add(i, 1);
 	}
 	a->next = blob_list;
