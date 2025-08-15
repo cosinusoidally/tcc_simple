@@ -103,7 +103,7 @@ int in_set(int c, char* s) {
 	return FALSE;
 }
 
-int __set_reader(char* set, int base, char* input) {
+int parse_int(char* input, int base) {
 	int n = 0;
 	int i = 0;
 	int hold;
@@ -137,9 +137,9 @@ int strtoint(char *a) {
 	if(0 == a[0]) {
 		result = 0;
 	} else if ('0' == a[0] &&  'x' == a[1]) {
-		result = __set_reader("0123456789ABCDEFabcdef", 16, a+2);
+		result = parse_int(a+2, 16);
 	} else if ((('0' <= a[0]) &&  ('9' >= a[0])) || ('-' == a[0])) {
-		result = __set_reader("0123456789", 10, a);
+		result = parse_int(a, 10);
 	} else {
 		result = 0;
 	}
