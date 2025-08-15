@@ -70,11 +70,13 @@ char* hex_to_str_le(int value, int digits) {
 	int i;
 	int v = value;
 	char *s = calloc(42, sizeof(char));
-	for(i = 0; i < digits; i=i+2) {
+	i = 0;
+	while(i < digits) {
 		s[i + 1] = hex2char(v & 15);
 		v = v >> 4;
 		s[i] = hex2char(v & 15);
 		v = v >> 4;
+		i = i + 2;
 	}
 	return s;
 }
