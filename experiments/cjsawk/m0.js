@@ -465,10 +465,10 @@ function process_tokens(struct Token* p) {
 				value = strtoint(add(blob_Text_g(co), 1));
 
 				if(OR(eq(mkC("0"),ri8(add(blob_Text_g(co), 1))),neq(0,value))) {
-					co->Expression = express_number(value, co->Text[0]);
+					blob_Expression_s(co, express_number(value, ri8(blob_Text_g(co))));
 				}
 			}
-			if(NULL == co->Expression) {
+			if(eq(NULL, co->Expression)) {
 				c = co->Text[0];
 
 				if(in_set(c, "!%&:")) {
