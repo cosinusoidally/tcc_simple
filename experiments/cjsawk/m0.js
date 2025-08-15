@@ -56,7 +56,7 @@ int define_state = 0;
 int EOF = -1;
 int NULL = 0;
 
-int hex2char(int c) {
+function hex2char(c) {
 	if(c <= 9) {
 		return (c + 48);
 	}
@@ -65,8 +65,10 @@ int hex2char(int c) {
 
 char* hex_to_str_le(int value, int digits) {
 	int i;
+	char *s;
 	int v = value;
-	char *s = calloc(42, sizeof(char));
+
+	s = calloc(42, sizeof(char));
 	i = 0;
 	while(i < digits) {
 		s[i + 1] = hex2char(v & 15);

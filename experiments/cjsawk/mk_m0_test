@@ -39,6 +39,6 @@ popd
 
 shasum -c sums_m0
 
-wc m0.c m0_orig.c
+wc m0.js m0.c m0_orig.c
 
 echo "DONE m0_test"
