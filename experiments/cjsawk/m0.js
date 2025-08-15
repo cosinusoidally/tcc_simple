@@ -354,14 +354,12 @@ function store_atom_(head, c,    ch, i) {
 	return head;
 }
 
-function store_string(char c) {
-	int ch;
-	int i;
-	struct blob* a;
+function store_string(c) {
+	store_string_(c, 0, 0, 0);
+}
+function store_string_(c,    ch, i, a) {
 	ClearScratch();
-
 	ch = c;
-	i = 0;
 	while(1) {
 		wi8(add(SCRATCH, i), ch);
 		i = add(i, 1);
@@ -374,7 +372,7 @@ function store_string(char c) {
 	if(eq(NULL, a)) {
 		NewBlob(i);
 		a = blob_list;
-		a->type = STR;
+		blob_type_s(a, STR);
 	}
 	return a;
 }
