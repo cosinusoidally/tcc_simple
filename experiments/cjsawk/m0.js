@@ -239,7 +239,10 @@ function FindBlob_(    hash, i) {
 }
 
 function AddHash(a, s) {
-	int i = GetHash(s);
+	AddHash_(a, s, 0);
+}
+function AddHash_(a, s,    i) {
+	i = GetHash(s);
 	blob_hash_next_s(a, ri32(add(hash_table, mul(i, 4))));
 	wi32(add(hash_table, mul(i, 4)),a);
 }
