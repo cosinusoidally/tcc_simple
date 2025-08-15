@@ -71,9 +71,9 @@ char* hex_to_str_le(int value, int digits) {
 	s = v_calloc(42, 1);
 	i = 0;
 	while(i < digits) {
-		s[i + 1] = hex2char(AND(v, 15));
+		s[add(i, 1)] = hex2char(AND(v, 15));
 		v = shr(v, 4);
-		s[i] = hex2char(v & 15);
+		s[i] = hex2char(AND(v, 15));
 		v = shr(v, 4);
 		i = add(i, 2);
 	}
