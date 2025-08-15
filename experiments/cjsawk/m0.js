@@ -56,6 +56,25 @@ int define_state = 0;
 int EOF = -1;
 int NULL = 0;
 
+/* FIXME split ri32 and wi32 into separate files */
+
+function ri32(o) {
+	return OR(OR(AND(ri8(o), 255),
+		shl(AND(ri8(add(o, 1)), 255), 8)),
+		OR(shl(AND(ri8(add(o, 2)), 255), 16),
+		shl(AND(ri8(add(o, 3)), 255), 24)));
+}
+
+function wi32(o, v) {
+	wi8(o, AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 1), AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 2), AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 3), AND(v, 255));
+}
+
 function hex2char(c) {
 	if(c <= 9) {
 		return (c + 48);
