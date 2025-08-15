@@ -107,11 +107,10 @@ function in_set(c, s) {
 }
 
 function parse_int(input, base) {
-	int n = 0;
-	int i = 0;
-	int hold;
-	int t;
-	int negative_p = FALSE;
+	return parse_int_(input, base, 0, 0 ,0, 0, 0);
+}
+function parse_int_(input, base,    n, i, hold, t, negative_p) {
+	negative_p = FALSE;
 
 	if(eq(ri8(input), mkC("-"))) {
 		negative_p = TRUE;
