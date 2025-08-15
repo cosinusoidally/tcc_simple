@@ -360,11 +360,7 @@ void process_tokens(struct Token* p) {
 	while(NULL != i) {
 		co = i->contents;
 		if(define_blob == co) {
-			if (STR == i->next->next->contents->type) {
-				i->contents->Expression = i->next->next->contents->Text + 1;
-			} else {
-				i->next->contents->Expression = i->next->next->contents->Text;
-			}
+			i->next->contents->Expression = i->next->next->contents->Text;
 			i->next = i->next->next->next;
 		} else if(STR == co->type) {
 			if('\'' == co->Text[0]) {
