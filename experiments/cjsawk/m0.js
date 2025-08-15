@@ -263,8 +263,6 @@ function reverse_list(head) {
 	return reverse_list_(head, 0, 0);
 }
 function reverse_list_(head,    root, next) {
-	root = NULL;
-	next;
 	while(neq(NULL, head)) {
 		next = Token_next_g(head);
 		Token_next_s(head, root);
