@@ -284,7 +284,7 @@ function newToken_(    p) {
 }
 
 function reverse_list(head) {
-	reverse_list_(head, 0, 0);
+	return reverse_list_(head, 0, 0);
 }
 function reverse_list_(head,    root, next) {
 	root = NULL;
@@ -312,7 +312,7 @@ function purge_lineComment_(    c) {
 }
 
 function store_atom(head, c) {
-	store_atom_(head, c, 0, 0);
+	return store_atom_(head, c, 0, 0);
 }
 function store_atom_(head, c,    ch, i) {
 	ClearScratch();
@@ -337,7 +337,7 @@ function store_atom_(head, c,    ch, i) {
 }
 
 function store_string(c) {
-	store_string_(c, 0, 0, 0);
+	return store_string_(c, 0, 0, 0);
 }
 function store_string_(c,    ch, i, a) {
 	ClearScratch();
@@ -359,7 +359,7 @@ function store_string_(c,    ch, i, a) {
 }
 
 function Tokenize_Line(head) {
-	Tokenize_Line_(head, 0, 0);
+	return Tokenize_Line_(head, 0, 0);
 }
 function Tokenize_Line_(head,    c, p) {
 	while(1) {
