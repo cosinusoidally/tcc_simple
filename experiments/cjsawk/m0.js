@@ -520,19 +520,19 @@ int main(int argc, char **argv) {
 	init_support();
 	init_globals();
 
-	hash_table = calloc(65537, sizeof_blob);
-	SCRATCH = calloc(max_string + 1, sizeof(char));
+	hash_table = v_calloc(65537, sizeof_blob);
+	SCRATCH = v_calloc(add(max_string, 1), 1);
 
-	blob_list = calloc(1, sizeof(struct blob));
+	blob_list = v_calloc(1, sizeof_blob);
 	define_blob = blob_list;
-	define_blob->Text = "DEFINE";
-	AddHash(define_blob, "DEFINE");
+	blob_Text_s(define_blob, mks("DEFINE"));
+	AddHash(define_blob, mks("DEFINE"));
 
-	source_file = fopen(argv[1], "r");
+	source_file = fopen(argv[1],mks("r"));
 	token_list = Tokenize_Line(token_list);
 	fclose(source_file);
 
-	destination_file = fopen(argv[2], "w");
+	destination_file = fopen(argv[2], mks("w"));
 	token_list = reverse_list(token_list);
 	process_tokens(token_list);
 	print_hex(token_list);
