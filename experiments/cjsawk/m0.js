@@ -443,11 +443,10 @@ function hexify_string_(p,    i, size, c, S, d) {
 	}
 }
 
-function process_tokens(struct Token* p) {
-	struct Token* i;
-	struct blob* co;
-	int value;
-	char c;
+function process_tokens(p) {
+	process_tokens_(p, 0, 0, 0, 0);
+}
+function process_tokens_(p,    i, co, value, c) {
 	i = p;
 	while(neq(NULL, i)) {
 		co = Token_contents_g(i);
