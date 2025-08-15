@@ -365,13 +365,10 @@ char* express_number(int value, char c) {
 	return ch;
 }
 
-function hexify_string(struct blob* p) {
-	int i = 0;
-	int size;
-	int c;
-	int S;
-	int d;
-
+function hexify_string(p) {
+	hexify_string_(p, 0, 0, 0, 0, 0);
+}
+function hexify_string_(p,    i, size, c, S, d) {
 	while(1) {
 		c = ri8(add(blob_Text_g(p), i));
 		if(eq(c, 0)) {
