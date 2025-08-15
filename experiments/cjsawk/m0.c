@@ -316,22 +316,13 @@ struct Token* Tokenize_Line(struct Token* head) {
 
 char* express_number(int value, char c) {
 	char* ch;
-	int size;
-	int number_of_bytes;
+	int digits;
+	digits = 8;
 	if('!' == c) {
-		number_of_bytes = 1;
+		digits = 2;
 		value = value & 255;
-	} else if('@' == c) {
-		number_of_bytes = 2;
-		value = value & 65535;
-	} else if('%' == c) {
-		number_of_bytes = 4;
 	}
-
-	size = number_of_bytes * 2;
-
-	ch = hex_to_str_le(value, size);
-
+	ch = hex_to_str_le(value, digits);
 	return ch;
 }
 
