@@ -255,16 +255,16 @@ function AddHash_(a, s,    i) {
 }
 
 function NewBlob(size) {
-	NewBlob_(size, 0);
+	NewBlob_(size, 0, 0);
 }
-function NewBlob_(size,    i) {
-	struct blob* a = v_calloc(1, sizeof_blob);
+function NewBlob_(size,    i, a) {
+	a = v_calloc(1, sizeof_blob);
 	blob_Text_s(a, v_calloc(add(size, 1), 1));
 	while(lte(i, size)) {
 		wi8(add(blob_Text_g(a), i), ri8(add(SCRATCH, i)));
 		i = add(i, 1);
 	}
-	a->next = blob_list;
+	blob_next_s(a, blob_list);
 	blob_list = a;
 	AddHash(a, SCRATCH);
 }
