@@ -293,12 +293,15 @@ struct Token* newToken() {
 	return p;
 }
 
-struct Token* reverse_list(struct Token* head) {
-	struct Token* root = NULL;
-	struct Token* next;
-	while(NULL != head) {
-		next = head->next;
-		head->next = root;
+function reverse_list(head) {
+	reverse_list_(head, 0, 0);
+}
+function reverse_list_(head,    root, next) {
+	root = NULL;
+	next;
+	while(neq(NULL, head)) {
+		next = Token_next_g(head);
+		Token_next_s(head, root);
 		root = head;
 		head = next;
 	}
