@@ -133,8 +133,11 @@ function parse_int_(input, base,    n, i, hold, t, negative_p) {
 	return n;
 }
 
-int strtoint(char *a) {
-	int result = 0;
+function strtoint(a) {
+	return strtoint_(a, 0);
+}
+function strtoint_(a,    result) {
+	result = 0;
 	if(eq(0, ri8(a))) {
 		result = 0;
 	} else if (AND(eq(mkC("0"), ri8(a)),  eq(mkC("x"), ri8(add(a, 1))))) {
