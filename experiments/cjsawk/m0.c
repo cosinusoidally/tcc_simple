@@ -135,7 +135,6 @@ int parse_int(char* input, int base) {
 
 int strtoint(char *a) {
 	int result = 0;
-	/* If NULL string */
 	if(0 == a[0]) {
 		result = 0;
 	} else if ('0' == a[0] &&  'x' == a[1]) {
@@ -180,7 +179,6 @@ struct blob* FindBlob() {
 			return NULL;
 		}
 	}
-
 	while(NULL != i) {
 		if(match(SCRATCH, i->Text)) {
 			return i;
@@ -197,11 +195,12 @@ void AddHash(struct blob* a, char* s) {
 }
 
 void NewBlob(int size) {
+	int i;
 	blob_count = blob_count + 1;
 	struct blob* a = calloc(1, sizeof(struct blob));
 	a->Text = calloc(size + 1, sizeof(char));
 
-	int i = 0;
+	i = 0;
 	while(i <= size) {
 		a->Text[i] = SCRATCH[i];
 		i = i + 1;
@@ -232,7 +231,9 @@ struct Token* reverse_list(struct Token* head) {
 void purge_lineComment() {
 	int c = fgetc(source_file);
 	while(!in_set(c, "\n\r")) {
-		if(EOF == c) break;
+		if(EOF == c) {
+			break;
+		}
 		c = fgetc(source_file);
 	}
 }
@@ -297,11 +298,9 @@ struct Token* Tokenize_Line(struct Token* head) {
 		c = fgetc(source_file);
 		if(in_set(c, ";#")) {
 			purge_lineComment();
-		} else if(in_set(c, "\t \n")) {
-			/* nothing */
 		} else if(EOF == c) {
 			break;
-		} else {
+		} else if(!in_set(c, "\t \n")) {
 			p = newToken();
 			p->next = head;
 			if(in_set(c, "'\"")) {
