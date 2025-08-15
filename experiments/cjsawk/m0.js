@@ -61,6 +61,9 @@ function blob_Text_s(o, v) {
 	wi32(add(o, blob_Text_o), v);
 }
 
+function blob_Expression_g(o) {
+	return ri32(add(o, blob_Expression_o));
+}
 function blob_Expression_s(o, v) {
 	wi32(add(o, blob_Expression_o), v);
 }
@@ -453,11 +456,11 @@ function process_tokens(struct Token* p) {
 			Token_next_s(i, Token_next_g(Token_next_g(Token_next_g(i))));
 		} else if(eq(STR, blob_type_g(co))) {
 			if(eq(mkC("'"), ri8(blob_Text_g(co)))) {
-				co->Expression = co->Text + 1;
-			} else if('"' == co->Text[0]) {
+				blob_Expression_s(co, add(blob_Text_g(co), 1));
+			} else if(eq(mkC("\""), ri8(blob_Text_g(co)))) {
 				hexify_string(co);
 			}
-		} else if(NULL == co->Expression) {
+		} else if(eq(NULL, blob_Expression_g(co))) {
 			if(in_set(co->Text[0], "%!")) {
 				value = strtoint(co->Text + 1);
 
