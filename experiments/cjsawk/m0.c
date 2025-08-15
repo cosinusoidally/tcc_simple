@@ -119,6 +119,7 @@ int __set_reader(char* set, int base, char* input) {
 	int n = 0;
 	int i = 0;
 	int hold;
+	int t;
 	int negative_p = FALSE;
 
 	if(input[0] == '-') {
@@ -127,7 +128,12 @@ int __set_reader(char* set, int base, char* input) {
 	}
 	while(input[i] != 0) {
 		n = n * base;
-		hold = __index_number("0123456789ABCDEF", input[i]);
+		t = input[i];
+		if((t - '0') < 10) {
+			hold = t - '0';
+		} else {
+			hold = 10 + (t - 'A');
+		}
 		n = n + hold;
 		i = i + 1;
 	}
