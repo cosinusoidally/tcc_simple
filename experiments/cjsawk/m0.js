@@ -106,20 +106,20 @@ function in_set(c, s) {
 	return FALSE;
 }
 
-int parse_int(char* input, int base) {
+function parse_int(char* input, int base) {
 	int n = 0;
 	int i = 0;
 	int hold;
 	int t;
 	int negative_p = FALSE;
 
-	if(input[0] == mkC("-")) {
+	if(eq(ri8(input), mkC("-"))) {
 		negative_p = TRUE;
-		i = i + 1;
+		i = add(i, 1);
 	}
-	while(input[i] != 0) {
-		n = n * base;
-		t = input[i];
+	while(neq(input[i], 0)) {
+		n = mul(n, base);
+		t = ri8(add(input, i));
 		if((t - '0') < 10) {
 			hold = t - '0';
 		} else {
