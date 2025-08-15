@@ -139,6 +139,7 @@ int __set_reader(char* set, int mult, char* input) {
 
 		/* Input managed to change between in_set and index_number */
 		if(-1 == hold) {
+exit(1);
 			return 0;
 		}
 		n = n + hold;
@@ -163,18 +164,11 @@ int strtoint(char *a) {
 	/* If NULL string */
 	if(0 == a[0]) {
 		result = 0;
-	} /* Deal with binary */ else if ('0' == a[0] && 'b' == a[1]) {
-exit(1);
-		result = __set_reader("01", 2, a+2);
-	} /* Deal with hex */ else if ('0' == a[0] &&  'x' == a[1]) {
+	} else if ('0' == a[0] &&  'x' == a[1]) {
 		result = __set_reader("0123456789ABCDEFabcdef", 16, a+2);
-	} /* Deal with octal */ else if('0' == a[0]) {
-printf("octal: %s\n", a);
-		result = __set_reader("01234567", 8, a+1);
-	} /* Deal with decimal */ else {
+	} else {
 		result = __set_reader("0123456789", 10, a);
 	}
-
 	return result;
 }
 
