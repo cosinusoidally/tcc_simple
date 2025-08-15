@@ -462,9 +462,9 @@ function process_tokens(struct Token* p) {
 			}
 		} else if(eq(NULL, blob_Expression_g(co))) {
 			if(in_set(ri8(blob_Text_g(co)), mks("%!"))) {
-				value = strtoint(co->Text + 1);
+				value = strtoint(add(blob_Text_g(co), 1));
 
-				if(('0' == co->Text[1]) || (0 != value)) {
+				if(OR(eq(mkC("0"),ri8(add(blob_Text_g(co), 1))),neq(0,value))) {
 					co->Expression = express_number(value, co->Text[0]);
 				}
 			}
