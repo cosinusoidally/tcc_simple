@@ -47,6 +47,13 @@ function blob_next_s(o, v) {
 	wi32(add(o, blob_next_o), v);
 }
 
+function blob_type_g(o) {
+	return ri32(add(o, blob_type_o));
+}
+function blob_type_s(o, v) {
+	wi32(add(o, blob_type_o), v);
+}
+
 function blob_Text_g(o) {
 	return ri32(add(o, blob_Text_o));
 }
