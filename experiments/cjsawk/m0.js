@@ -63,14 +63,13 @@ function hex2char(c) {
 	return (c + 55);
 }
 
-char* hex_to_str_le(int value, int digits) {
+char* hex_to_str_le(v, digits) {
 	int i;
 	char *s;
-	int v = value;
 
 	s = v_calloc(42, 1);
 	i = 0;
-	while(i < digits) {
+	while(lt(i, digits)) {
 		s[add(i, 1)] = hex2char(AND(v, 15));
 		v = shr(v, 4);
 		s[i] = hex2char(AND(v, 15));
