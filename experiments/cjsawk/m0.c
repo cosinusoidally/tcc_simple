@@ -103,18 +103,6 @@ int in_set(int c, char* s) {
 	return FALSE;
 }
 
-/* INTERNAL ONLY */
-int __index_number(char* s, char c) {
-	int i = 0;
-	while(s[i] != c) {
-		i = i + 1;
-		if(0 == s[i]) {
-			return -1;
-		}
-	}
-	return i;
-}
-
 int __set_reader(char* set, int base, char* input) {
 	int n = 0;
 	int i = 0;
