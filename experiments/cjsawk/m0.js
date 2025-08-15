@@ -216,7 +216,7 @@ struct blob* FindBlob() {
 		}
 	}
 	while(neq(NULL, i)) {
-		if(smatch(SCRATCH, i->Text)) {
+		if(smatch(SCRATCH, blob_Text_g(i))) {
 			return i;
 		}
 		i = i->hash_next;
@@ -365,20 +365,21 @@ void hexify_string(struct blob* p) {
 	int i = 0;
 	int size;
 	char c;
+	char* S;
 
 	while(1) {
-		c = p->Text[i];
+		c = ri8(add(blob_Text_g(p), i));
 		if(c == 0) {
 			break;
 		}
-		i = i + 1;
+		i = add(i, 1);
 	}
 
-	size = (i * 2) + 1;
+	size = add(mul(i, 2), 1);
 
-	char* d = calloc(size, sizeof(char));
+	char* d = v_calloc(size, 1);
 	p->Expression = d;
-	char* S = p->Text;
+	S = blob_Text_g(p);
 
 	while(0 != S[0]) {
 		S = S + 1;
