@@ -29,3 +29,6 @@ DEFINEs since returning NULL will cause a new definition to be inserted.
 
 In store_atom we set define_state to 2 if we are in a DEFINE. This modifies the
 behaviour of FindBlob as mentioned above.
+
+in reverse_list we have a variable called NEXT because "next" is a reserved
+word in awk.

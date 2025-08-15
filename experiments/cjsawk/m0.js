@@ -262,12 +262,12 @@ function newToken_(    p) {
 function reverse_list(head) {
 	return reverse_list_(head, 0, 0);
 }
-function reverse_list_(head,    root, next) {
+function reverse_list_(head,    root, NEXT) {
 	while(neq(NULL, head)) {
-		next = Token_next_g(head);
+		NEXT = Token_next_g(head);
 		Token_next_s(head, root);
 		root = head;
-		head = next;
+		head = NEXT;
 	}
 	return root;
 }
