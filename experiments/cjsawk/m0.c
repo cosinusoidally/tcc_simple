@@ -166,8 +166,10 @@ int strtoint(char *a) {
 		result = 0;
 	} else if ('0' == a[0] &&  'x' == a[1]) {
 		result = __set_reader("0123456789ABCDEFabcdef", 16, a+2);
-	} else {
+	} else if ((('0' <= a[0]) &&  ('9' >= a[0])) || ('-' == a[0])) {
 		result = __set_reader("0123456789", 10, a);
+	} else {
+		result = 0;
 	}
 	return result;
 }
