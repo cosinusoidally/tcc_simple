@@ -479,15 +479,15 @@ function process_tokens_(p,    i, co, value, c) {
 	}
 }
 
-void print_hex(struct Token* p) {
+function print_hex(p) {
 	struct Token* i;
 	i = p;
-	while(NULL != i) {
-		if(NULL != i->contents->Expression) {
-			fputs(i->contents->Expression, destination_file);
-			fputc('\n', destination_file);
+	while(neq(NULL, i)) {
+		if(neq(NULL, blob_Expression_g(Token_contents_g(i)))) {
+			fputs(blob_Expression_g(Token_contents_g(i)), destination_file);
+			fputc(mkC("\n"), destination_file);
 		}
-		i = i->next;
+		i = Token_next_g(i);
 	}
 }
 
