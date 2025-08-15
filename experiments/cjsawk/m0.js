@@ -476,7 +476,7 @@ function process_tokens(struct Token* p) {
 				}
 			}
 		}
-		i = i->next;
+		i = Token_next_g(i);
 	}
 }
 
