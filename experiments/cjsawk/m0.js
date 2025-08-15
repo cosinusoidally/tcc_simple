@@ -54,6 +54,9 @@ function blob_Expression_s(o, v) {
 function blob_hash_next_g(o) {
 	return ri32(add(o, blob_hash_next_o));
 }
+function blob_hash_next_s(o, v) {
+	wi32(add(o, blob_hash_next_o), v);
+}
 
 var TRUE;
 var FALSE;
