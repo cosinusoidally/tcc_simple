@@ -196,18 +196,17 @@ function GetHash_(s,    i) {
 
 struct blob* FindBlob() {
 	int hash = GetHash(SCRATCH);
-	struct blob* i = hash_table[hash];
-
-	if(define_state>0) {
-		define_state=define_state - 1;
-		if(define_state == 1) {
+	struct blob* i = ri32(add(hash_table, mul(hash, 4)));
+	if(gt(define_state, 0)) {
+		define_state = SUB(define_state, 1);
+		if(eq(define_state, 1)) {
 			/* this allows redefinitions of DEFINEs since
 			   returning NULL will cause a new definition to be
                            inserted */
 			return NULL;
 		}
 	}
-	while(NULL != i) {
+	while(neq(NULL, i)) {
 		if(smatch(SCRATCH, i->Text)) {
 			return i;
 		}
