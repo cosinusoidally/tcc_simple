@@ -327,7 +327,6 @@ char* express_number(int value, char c) {
 }
 
 void hexify_string(struct blob* p) {
-	char* table = "0123456789ABCDEF";
 	int i = 0;
 	int size;
 	char c;
@@ -348,8 +347,8 @@ void hexify_string(struct blob* p) {
 
 	while(0 != S[0]) {
 		S = S + 1;
-		d[0] = table[S[0] >> 4];
-		d[1] = table[S[0] & 15];
+		d[0] = hex2char(S[0] >> 4);
+		d[1] = hex2char(S[0] & 15);
 		d = d + 2;
 	}
 }
