@@ -96,13 +96,12 @@ function smatch_(a, b, i) {
 	}
 }
 
-
-int in_set(int c, char* s) {
-	while(0 != s[0]) {
-		if(c == s[0]) {
+function in_set(c, s) {
+	while(neq(0, ri8(s))) {
+		if(eq(c, ri8(s))) {
 			return TRUE;
 		}
-		s = s + 1;
+		s = add(s, 1);
 	}
 	return FALSE;
 }
@@ -114,7 +113,7 @@ int parse_int(char* input, int base) {
 	int t;
 	int negative_p = FALSE;
 
-	if(input[0] == '-') {
+	if(input[0] == mkC("-")) {
 		negative_p = TRUE;
 		i = i + 1;
 	}
