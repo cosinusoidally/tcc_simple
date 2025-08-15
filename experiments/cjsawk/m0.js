@@ -80,14 +80,17 @@ function hex_to_str_le_(v, digits,    i, s) {
 	return s;
 }
 
-int smatch(char* a, char* b) {
-	int i = -1;
+function smatch(a, b) {
+	return smatch_(a, b, 0);
+}
+function smatch_(a, b, i) {
+	i = SUB(0, 1);
 	while(1) {
-		i = i + 1;
-		if(a[i] != b[i]) {
+		i = add(i, 1);
+		if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
 			return FALSE;
 		}
-		if((0 == a[i]) && (0 ==b[i])) {
+		if(eq(0, ri8(add(a, i))) && eq(0, ri8(add(b, i)))) {
 			return TRUE;
 		}
 	}
