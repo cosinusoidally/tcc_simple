@@ -32,7 +32,6 @@ var STR;
 var source_file;
 var destination_file;
 var token_list;
-var current_blob;
 var define_blob;
 var SCRATCH;
 var hash_table;
@@ -263,7 +262,7 @@ function AddHash_(a, s,    i) {
 }
 
 function NewBlob(size) {
-	NewBlob_(size, 0, 0);
+	return NewBlob_(size, 0, 0);
 }
 function NewBlob_(size,    i, a) {
 	a = v_calloc(1, sizeof_blob);
@@ -272,8 +271,8 @@ function NewBlob_(size,    i, a) {
 		wi8(add(blob_Text_g(a), i), ri8(add(SCRATCH, i)));
 		i = add(i, 1);
 	}
-	current_blob = a;
 	AddHash(a, SCRATCH);
+	return a;
 }
 
 function newToken() {
@@ -332,8 +331,7 @@ function store_atom_(head, c,    ch, i) {
 		define_state = 2;
 	}
 	if(eq(NULL, Token_contents_g(head))) {
-		NewBlob(i);
-		Token_contents_s(head, current_blob);
+		Token_contents_s(head, NewBlob(i));
 	}
 	return head;
 }
@@ -354,8 +352,7 @@ function store_string_(c,    ch, i, a) {
 	}
 	a = FindBlob();
 	if(eq(NULL, a)) {
-		NewBlob(i);
-		a = current_blob;
+		a = NewBlob(i);
 		blob_type_s(a, STR);
 	}
 	return a;
@@ -503,8 +500,7 @@ function main(argc, argv) {
 	hash_table = v_calloc(65537, sizeof_blob);
 	SCRATCH = v_calloc(add(max_string, 1), 1);
 
-	current_blob = v_calloc(1, sizeof_blob);
-	define_blob = current_blob;
+	define_blob = v_calloc(1, sizeof_blob);
 	blob_Text_s(define_blob, mks("DEFINE"));
 	AddHash(define_blob, mks("DEFINE"));
 
