@@ -96,7 +96,6 @@ function hex2char(c) {
 	return (c + 55);
 }
 
-
 function hex_to_str_le(v, digits) {
 	return hex_to_str_le_(v, digits, 0, 0);
 }
@@ -217,9 +216,6 @@ function FindBlob_(    hash, i) {
 	if(gt(define_state, 0)) {
 		define_state = SUB(define_state, 1);
 		if(eq(define_state, 1)) {
-			/* this allows redefinitions of DEFINEs since
-			   returning NULL will cause a new definition to be
-                           inserted */
 			return NULL;
 		}
 	}

@@ -23,3 +23,7 @@ Copyright notice:
  */
 
 I should move ri32 and wi32 into a common support file.
+
+
+In FindBlob notice the define_state behaviour this allows redefinitions of
+DEFINEs since returning NULL will cause a new definition to be inserted.
