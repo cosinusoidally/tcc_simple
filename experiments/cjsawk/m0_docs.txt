@@ -22,3 +22,4 @@ Copyright notice:
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+I should move ri32 and wi32 into a common support file.

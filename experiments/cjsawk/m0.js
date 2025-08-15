@@ -72,8 +72,6 @@ function Token_contents_s(o, v) {
 	wi32(add(o, Token_contents_o), v);
 }
 
-/* FIXME split ri32 and wi32 into separate files */
-
 function ri32(o) {
 	return OR(OR(AND(ri8(o), 255),
 		shl(AND(ri8(add(o, 1)), 255), 8)),
