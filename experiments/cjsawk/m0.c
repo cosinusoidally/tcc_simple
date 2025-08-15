@@ -53,7 +53,6 @@ FILE* destination_file;
 struct Token* token_list;
 struct blob* blob_list;
 struct blob* define_blob;
-int blob_count;
 char* SCRATCH;
 struct blob** hash_table;
 
@@ -196,7 +195,6 @@ void AddHash(struct blob* a, char* s) {
 
 void NewBlob(int size) {
 	int i;
-	blob_count = blob_count + 1;
 	struct blob* a = calloc(1, sizeof(struct blob));
 	a->Text = calloc(size + 1, sizeof(char));
 
@@ -407,7 +405,6 @@ void print_hex(struct Token* p) {
 }
 
 int main(int argc, char **argv) {
-	blob_count = 1;
 	hash_table = calloc(65537, sizeof(struct blob*));
 
 	blob_list = calloc(1, sizeof(struct blob));
