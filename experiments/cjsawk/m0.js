@@ -247,15 +247,15 @@ function AddHash_(a, s,    i) {
 	wi32(add(hash_table, mul(i, 4)),a);
 }
 
-void NewBlob(int size) {
-	int i;
-	struct blob* a = calloc(1, sizeof(struct blob));
-	a->Text = calloc(size + 1, sizeof(char));
-
-	i = 0;
+function NewBlob(size) {
+	NewBlob_(size, 0);
+}
+function NewBlob_(size,    i) {
+	struct blob* a = v_calloc(1, sizeof_blob);
+	a->Text = v_calloc(add(size, 1), 1);
 	while(i <= size) {
 		a->Text[i] = SCRATCH[i];
-		i = i + 1;
+		i = add(i, 1);
 	}
 	a->next = blob_list;
 	blob_list = a;
