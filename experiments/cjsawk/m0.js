@@ -516,7 +516,7 @@ function init_globals() {
 	sizeof_Token = 8;
 }
 
-int main(int argc, char **argv) {
+function main(argc, argv) {
 	init_support();
 	init_globals();
 
@@ -528,11 +528,11 @@ int main(int argc, char **argv) {
 	blob_Text_s(define_blob, mks("DEFINE"));
 	AddHash(define_blob, mks("DEFINE"));
 
-	source_file = fopen(argv[1],mks("r"));
+	source_file = fopen(ri32(add(argv, 4)),mks("r"));
 	token_list = Tokenize_Line(token_list);
 	fclose(source_file);
 
-	destination_file = fopen(argv[2], mks("w"));
+	destination_file = fopen(ri32(add(argv, 8)), mks("w"));
 	token_list = reverse_list(token_list);
 	process_tokens(token_list);
 	print_hex(token_list);
