@@ -81,15 +81,15 @@ char* hex_to_str_le(int value, int digits) {
 
 int match(char* a, char* b) {
 	int i = -1;
-	do
-	{
+	while(1) {
 		i = i + 1;
-		if(a[i] != b[i])
-		{
+		if(a[i] != b[i]) {
 			return FALSE;
 		}
-	} while((0 != a[i]) && (0 !=b[i]));
-	return TRUE;
+		if((0 == a[i]) && (0 ==b[i])) {
+			return TRUE;
+		}
+	}
 }
 
 
