@@ -36,6 +36,13 @@ struct Token
 	struct blob* contents;
 };
 
+var blob_next_o;
+var blob_type_o;
+var blob_Text_o;
+var blob_Expression_o;
+var blob_hash_next_o;
+var sizeof_blob;
+
 var TRUE;
 var FALSE;
 
@@ -436,6 +443,13 @@ function init_globals() {
 	define_state = 0;
 	EOF = SUB(0, 1);
 	NULL = 0;
+
+	blob_next_o = 0;
+	blob_type_o = 4;
+	blob_Text_o = 8;
+	blob_Expression_o = 12;
+	blob_hash_next_o = 16;
+	sizeof_blob = 20;
 }
 
 int main(int argc, char **argv) {
