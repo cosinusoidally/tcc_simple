@@ -368,7 +368,8 @@ void process_tokens(struct Token* p) {
 	struct blob* co;
 	int value;
 	char c;
-	for(i = p; NULL != i; i = i->next) {
+	i = p;
+	while(NULL != i) {
 		co = i->contents;
 		if(define_blob == co) {
 			if (STR == i->next->next->contents->type) {
@@ -399,6 +400,7 @@ void process_tokens(struct Token* p) {
 				}
 			}
 		}
+		i = i->next;
 	}
 }
 
