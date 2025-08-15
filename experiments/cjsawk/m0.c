@@ -115,13 +115,6 @@ int __index_number(char* s, char c) {
 	return i;
 }
 
-/* INTERNAL ONLY */
-int __toupper(int c) {
-	if(in_set(c, "abcdefghijklmnopqrstuvwxyz")) return (c & 0xDF);
-	return c;
-}
-
-/* INTERNAL ONLY */
 int __set_reader(char* set, int mult, char* input) {
 	int n = 0;
 	int i = 0;
