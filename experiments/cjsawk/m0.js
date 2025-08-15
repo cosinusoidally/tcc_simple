@@ -303,7 +303,6 @@ function store_atom_(head, c,    ch, i) {
 	}
 	Token_contents_s(head, FindBlob());
 	if(eq(define_blob, Token_contents_g(head))) {
-		/* see also FindBlob as this modifies its behaviour */
 		define_state = 2;
 	}
 	if(eq(NULL, Token_contents_g(head))) {
