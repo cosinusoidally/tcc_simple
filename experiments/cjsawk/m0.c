@@ -320,13 +320,12 @@ char* express_number(int value, char c) {
 	int number_of_bytes;
 	if('!' == c) {
 		number_of_bytes = 1;
-		value = value & 0xFF;
+		value = value & 255;
 	} else if('@' == c) {
 		number_of_bytes = 2;
-		value = value & 0xFFFF;
+		value = value & 65535;
 	} else if('%' == c) {
 		number_of_bytes = 4;
-		value = value & 0xFFFFFFFF;
 	}
 
 	size = number_of_bytes * 2;
