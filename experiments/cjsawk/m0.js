@@ -211,9 +211,12 @@ function GetHash_(s,    i) {
 	return AND(i, 65535);
 }
 
-struct blob* FindBlob() {
-	int hash = GetHash(SCRATCH);
-	struct blob* i = ri32(add(hash_table, mul(hash, 4)));
+function FindBlob() {
+	return FindBlob_(0, 0);
+}
+function FindBlob_(    hash, i) {
+	hash = GetHash(SCRATCH);
+	i = ri32(add(hash_table, mul(hash, 4)));
 	if(gt(define_state, 0)) {
 		define_state = SUB(define_state, 1);
 		if(eq(define_state, 1)) {
