@@ -160,7 +160,7 @@ int GetHash(char* s) {
 		i = (i << 5) + i + s[0];
 		s = s + 1;
 	}
-	return i & 0xFFFF;
+	return i & 65535;
 }
 
 struct blob* FindBlob() {
