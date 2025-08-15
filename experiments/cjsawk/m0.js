@@ -321,10 +321,12 @@ function purge_lineComment_(    c) {
 	}
 }
 
-struct Token* store_atom(struct Token* head, char c) {
+function store_atom(head, c) {
+	store_atom_(head, c, 0, 0);
+}
+function store_atom_(head, c,    ch, i) {
 	ClearScratch();
-	int ch = c;
-	int i = 0;
+	ch = c;
 	while(1) {
 		wi8(add(SCRATCH, i), ch);
 		ch = fgetc(source_file);
@@ -333,14 +335,14 @@ struct Token* store_atom(struct Token* head, char c) {
 			break;
 		}
 	}
-	head->contents = FindBlob();
-	if(eq(define_blob, head->contents)) {
+	Token_contents_s(head, FindBlob());
+	if(eq(define_blob, Token_contents_g(head))) {
 		/* see also FindBlob as this modifies its behaviour */
 		define_state = 2;
 	}
-	if(eq(NULL, head->contents)) {
+	if(eq(NULL, Token_contents_g(head))) {
 		NewBlob(i);
-		head->contents = blob_list;
+		Token_contents_s(head, blob_list);
 	}
 	return head;
 }
