@@ -446,10 +446,10 @@ function process_tokens(struct Token* p) {
 	int value;
 	char c;
 	i = p;
-	while(NULL != i) {
-		co = i->contents;
-		if(define_blob == co) {
-			i->next->contents->Expression = i->next->next->contents->Text;
+	while(neq(NULL, i)) {
+		co = Token_contents_g(i);
+		if(eq(define_blob, co)) {
+			blob_Expression_s(Token_contents_g(Token_next_g(i)), blob_Text_g(Token_contents_g(Token_next_g(Token_next_g(i)))));
 			i->next = i->next->next->next;
 		} else if(STR == co->type) {
 			if('\'' == co->Text[0]) {
