@@ -132,7 +132,6 @@ int __set_reader(char* set, int mult, char* input) {
 		negative_p = TRUE;
 		i = i + 1;
 	}
-
 	while(in_set(input[i], set)) {
 		n = n * mult;
 		hold = __index_number(set, __toupper(input[i]));
@@ -145,17 +144,9 @@ exit(1);
 		n = n + hold;
 		i = i + 1;
 	}
-
-	/* loop exited before NULL and thus invalid input */
-	if(0 != input[i]) {
-// printf("invalid base: %d string: %s\n", mult, input);
-		return 0;
-	}
-
 	if(negative_p) {
 		n = 0 - n;
 	}
-
 	return n;
 }
 
