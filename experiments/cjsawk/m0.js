@@ -238,10 +238,10 @@ function FindBlob_(    hash, i) {
 	return NULL;
 }
 
-void AddHash(struct blob* a, char* s) {
+function AddHash(a, s) {
 	int i = GetHash(s);
-	a->hash_next = hash_table[i];
-	hash_table[i] = a;
+	blob_hash_next_s(a, ri32(add(hash_table, mul(i, 4))));
+	wi32(add(hash_table, mul(i, 4)),a);
 }
 
 void NewBlob(int size) {
