@@ -81,7 +81,7 @@ char* hex_to_str_le(int value, int digits) {
 	return s;
 }
 
-int match(char* a, char* b) {
+int smatch(char* a, char* b) {
 	int i = -1;
 	while(1) {
 		i = i + 1;
@@ -180,7 +180,7 @@ struct blob* FindBlob() {
 		}
 	}
 	while(NULL != i) {
-		if(match(SCRATCH, i->Text)) {
+		if(smatch(SCRATCH, i->Text)) {
 			return i;
 		}
 		i = i->hash_next;
