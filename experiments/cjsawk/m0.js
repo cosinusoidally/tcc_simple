@@ -69,6 +69,20 @@ var Token_next_o;
 var Token_contents_o;
 var sizeof_Token;
 
+function Token_next_g(o) {
+	return ri32(add(o, Token_next_o));
+}
+function Token_next_s(o, v) {
+	wi32(add(o, Token_next_o), v);
+}
+
+function Token_contents_g(o) {
+	return ri32(add(o, Token_contents_o));
+}
+function Token_contents_s(o, v) {
+	wi32(add(o, Token_contents_o), v);
+}
+
 var TRUE;
 var FALSE;
 
