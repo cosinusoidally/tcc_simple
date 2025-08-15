@@ -255,9 +255,9 @@ function NewBlob(size) {
 }
 function NewBlob_(size,    i) {
 	struct blob* a = v_calloc(1, sizeof_blob);
-	a->Text = v_calloc(add(size, 1), 1);
+	blob_Text_s(a, v_calloc(add(size, 1), 1));
 	while(lte(i, size)) {
-		a->Text[i] = ri8(add(SCRATCH, i));
+		wi8(add(blob_Text_g(a), i), ri8(add(SCRATCH, i)));
 		i = add(i, 1);
 	}
 	a->next = blob_list;
