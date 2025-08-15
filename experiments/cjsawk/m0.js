@@ -480,7 +480,9 @@ function process_tokens_(p,    i, co, value, c) {
 }
 
 function print_hex(p) {
-	struct Token* i;
+	print_hex_(p, 0);
+}
+function print_hex_(p,    i) {
 	i = p;
 	while(neq(NULL, i)) {
 		if(neq(NULL, blob_Expression_g(Token_contents_g(i)))) {
@@ -518,7 +520,7 @@ int main(int argc, char **argv) {
 	init_support();
 	init_globals();
 
-	hash_table = calloc(65537, sizeof(struct blob*));
+	hash_table = calloc(65537, sizeof_blob);
 	SCRATCH = calloc(max_string + 1, sizeof(char));
 
 	blob_list = calloc(1, sizeof(struct blob));
