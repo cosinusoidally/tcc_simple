@@ -450,7 +450,7 @@ function process_tokens(struct Token* p) {
 		co = Token_contents_g(i);
 		if(eq(define_blob, co)) {
 			blob_Expression_s(Token_contents_g(Token_next_g(i)), blob_Text_g(Token_contents_g(Token_next_g(Token_next_g(i)))));
-			i->next = i->next->next->next;
+			Token_next_s(i, Token_next_g(Token_next_g(Token_next_g(i))));
 		} else if(STR == co->type) {
 			if('\'' == co->Text[0]) {
 				co->Expression = co->Text + 1;
