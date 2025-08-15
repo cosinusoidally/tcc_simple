@@ -356,15 +356,15 @@ function store_string(char c) {
 	ch = c;
 	i = 0;
 	while(1) {
-		SCRATCH[i] = ch;
-		i = i + 1;
+		wi8(add(SCRATCH, i), ch);
+		i = add(i, 1);
 		ch = fgetc(source_file);
-		if(ch == c) {
+		if(eq(ch, c)) {
 			break;
 		}
 	}
 	a = FindBlob();
-	if(NULL == a) {
+	if(eq(NULL, a)) {
 		NewBlob(i);
 		a = blob_list;
 		a->type = STR;
