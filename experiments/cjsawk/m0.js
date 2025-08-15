@@ -305,26 +305,22 @@ struct Token* store_atom(struct Token* head, char c) {
 	int ch = c;
 	int i = 0;
 	while(1) {
-		SCRATCH[i] = ch;
+		wi8(add(SCRATCH, i), ch);
 		ch = fgetc(source_file);
-		i = i + 1;
-		if((EOF == ch) || in_set(ch, "\t\n ")) {
+		i = add(i, 1);
+		if(OR(eq(EOF, ch), in_set(ch, mks("\t\n ")))) {
 			break;
 		}
 	}
-
 	head->contents = FindBlob();
-
-	if(define_blob == head->contents) {
+	if(eq(define_blob, head->contents)) {
 		/* see also FindBlob as this modifies its behaviour */
 		define_state = 2;
 	}
-
-	if(NULL == head->contents) {
+	if(eq(NULL, head->contents)) {
 		NewBlob(i);
 		head->contents = blob_list;
 	}
-
 	return head;
 }
 
