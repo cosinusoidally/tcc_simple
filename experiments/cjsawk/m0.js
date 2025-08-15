@@ -361,15 +361,16 @@ char* express_number(int value, char c) {
 	return ch;
 }
 
-void hexify_string(struct blob* p) {
+function hexify_string(struct blob* p) {
 	int i = 0;
 	int size;
-	char c;
-	char* S;
+	int c;
+	int S;
+	int d;
 
 	while(1) {
 		c = ri8(add(blob_Text_g(p), i));
-		if(c == 0) {
+		if(eq(c, 0)) {
 			break;
 		}
 		i = add(i, 1);
@@ -377,15 +378,15 @@ void hexify_string(struct blob* p) {
 
 	size = add(mul(i, 2), 1);
 
-	char* d = v_calloc(size, 1);
+	d = v_calloc(size, 1);
 	p->Expression = d;
 	S = blob_Text_g(p);
 
-	while(0 != S[0]) {
-		S = S + 1;
-		d[0] = hex2char(S[0] >> 4);
-		d[1] = hex2char(S[0] & 15);
-		d = d + 2;
+	while(neq(0, ri8(S))) {
+		S = add(S, 1);
+		wi8(d, hex2char(shr(ri8(S), 4)));
+		wi8(add(d, 1), hex2char(AND(ri8(S), 15)));
+		d = add(d, 2);
 	}
 }
 
