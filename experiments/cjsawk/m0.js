@@ -287,10 +287,13 @@ struct Token* reverse_list(struct Token* head) {
 	return root;
 }
 
-void purge_lineComment() {
-	int c = fgetc(source_file);
-	while(!in_set(c, "\n\r")) {
-		if(EOF == c) {
+function purge_lineComment() {
+	purge_lineComment_(0);
+}
+function purge_lineComment_(    c) {
+	c = fgetc(source_file);
+	while(eq(0, in_set(c, mks("\n\r")))) {
+		if(eq(EOF, c)) {
 			break;
 		}
 		c = fgetc(source_file);
