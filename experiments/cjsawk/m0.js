@@ -150,13 +150,16 @@ function strtoint_(a,    result) {
 	return result;
 }
 
-void ClearScratch() {
-	int i = 0;
-	int c = SCRATCH[i];
-	while(0 != c) {
-		SCRATCH[i] = 0;
-		i = i + 1;
-		c = SCRATCH[i];
+function ClearScratch(    i, c) {
+	return ClearScratch_(0, 0);
+}
+function ClearScratch_(    i, c) {
+	i = 0;
+	c = ri8(add(SCRATCH, i));
+	while(neq(0, c)) {
+		wi8(add(SCRATCH, i), 0);
+		i = add(i, 1);
+		c = ri8(add(SCRATCH, i));
 	}
 }
 
