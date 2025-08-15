@@ -468,11 +468,11 @@ function process_tokens(struct Token* p) {
 					blob_Expression_s(co, express_number(value, ri8(blob_Text_g(co))));
 				}
 			}
-			if(eq(NULL, co->Expression)) {
-				c = co->Text[0];
+			if(eq(NULL, blob_Expression_g(co))) {
+				c = ri8(blob_Text_g(co));
 
-				if(in_set(c, "!%&:")) {
-					co->Expression = co->Text;
+				if(in_set(c, mks("!%&:"))) {
+					blob_Expression_s(co, blob_Text_g(co));
 				}
 			}
 		}
