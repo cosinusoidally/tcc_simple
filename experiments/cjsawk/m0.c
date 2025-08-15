@@ -135,12 +135,6 @@ int __set_reader(char* set, int mult, char* input) {
 	while(in_set(input[i], set)) {
 		n = n * mult;
 		hold = __index_number(set, __toupper(input[i]));
-
-		/* Input managed to change between in_set and index_number */
-		if(-1 == hold) {
-exit(1);
-			return 0;
-		}
 		n = n + hold;
 		i = i + 1;
 	}
