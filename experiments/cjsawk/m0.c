@@ -413,18 +413,15 @@ void print_hex(struct Token* p) {
 	}
 }
 
-/* Standard C main program */
 int main(int argc, char **argv) {
 	blob_count = 1;
 	hash_table = calloc(65537, sizeof(struct blob*));
 
-	/* Start the blob list with DEFINE */
 	blob_list = calloc(1, sizeof(struct blob));
 	define_blob = blob_list;
 	define_blob->Text = "DEFINE";
 	AddHash(define_blob, "DEFINE");
 
-	/* Initialize scratch */
 	SCRATCH = calloc(max_string + 1, sizeof(char));
 
 	source_file = fopen(argv[1], "r");
