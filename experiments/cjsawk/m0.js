@@ -21,13 +21,6 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define TRUE 1
-#define FALSE 0
-
-/* Internal processing Constants */
-#define max_string 4096
-#define STR 2
-
 struct blob
 {
 	struct blob* next;
@@ -43,7 +36,12 @@ struct Token
 	struct blob* contents;
 };
 
-/* Globals */
+var TRUE;
+var FALSE;
+
+var max_string;
+var STR;
+
 int source_file;
 int destination_file;
 struct Token* token_list;
@@ -52,9 +50,9 @@ struct blob* define_blob;
 char* SCRATCH;
 struct blob** hash_table;
 
-int define_state = 0;
-int EOF = -1;
-int NULL = 0;
+var define_state;
+var EOF;
+var NULL;
 
 /* FIXME split ri32 and wi32 into separate files */
 
@@ -428,7 +426,22 @@ void print_hex(struct Token* p) {
 	}
 }
 
+function init_globals() {
+	TRUE = 1;
+	FALSE = 0;
+
+	max_string = 4096;
+	STR = 2;
+
+	define_state = 0;
+	EOF = SUB(0, 1);
+	NULL = 0;
+}
+
 int main(int argc, char **argv) {
+	init_support();
+	init_globals();
+
 	hash_table = calloc(65537, sizeof(struct blob*));
 	SCRATCH = calloc(max_string + 1, sizeof(char));
 
