@@ -115,7 +115,7 @@ int __index_number(char* s, char c) {
 	return i;
 }
 
-int __set_reader(char* set, int mult, char* input) {
+int __set_reader(char* set, int base, char* input) {
 	int n = 0;
 	int i = 0;
 	int hold;
@@ -125,9 +125,9 @@ int __set_reader(char* set, int mult, char* input) {
 		negative_p = TRUE;
 		i = i + 1;
 	}
-	while(in_set(input[i], set)) {
-		n = n * mult;
-		hold = __index_number(set, input[i]);
+	while(input[i] != 0) {
+		n = n * base;
+		hold = __index_number("0123456789ABCDEF", input[i]);
 		n = n + hold;
 		i = i + 1;
 	}
