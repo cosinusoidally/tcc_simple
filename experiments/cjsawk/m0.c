@@ -21,8 +21,6 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-
 #define TRUE 1
 #define FALSE 0
 
@@ -46,8 +44,8 @@ struct Token
 };
 
 /* Globals */
-FILE* source_file;
-FILE* destination_file;
+int source_file;
+int destination_file;
 struct Token* token_list;
 struct blob* blob_list;
 struct blob* define_blob;
@@ -55,6 +53,8 @@ char* SCRATCH;
 struct blob** hash_table;
 
 int define_state = 0;
+int EOF = -1;
+int NULL = 0;
 
 int hex2char(int c) {
 	if(c <= 9) {
