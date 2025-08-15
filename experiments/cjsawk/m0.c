@@ -402,27 +402,21 @@ void print_hex(struct Token* p) {
 
 int main(int argc, char **argv) {
 	hash_table = calloc(65537, sizeof(struct blob*));
+	SCRATCH = calloc(max_string + 1, sizeof(char));
 
 	blob_list = calloc(1, sizeof(struct blob));
 	define_blob = blob_list;
 	define_blob->Text = "DEFINE";
 	AddHash(define_blob, "DEFINE");
 
-	SCRATCH = calloc(max_string + 1, sizeof(char));
-
 	source_file = fopen(argv[1], "r");
-
 	token_list = Tokenize_Line(token_list);
-
 	fclose(source_file);
 
 	destination_file = fopen(argv[2], "w");
-
 	token_list = reverse_list(token_list);
 	process_tokens(token_list);
-
 	print_hex(token_list);
-
 	fclose(destination_file);
 
 	return EXIT_SUCCESS;
