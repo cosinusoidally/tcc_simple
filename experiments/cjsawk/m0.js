@@ -39,16 +39,11 @@ var hash_table;
 
 var define_state;
 
-var blob_next_o;
 var blob_type_o;
 var blob_Text_o;
 var blob_Expression_o;
 var blob_hash_next_o;
 var sizeof_blob;
-
-function blob_next_s(o, v) {
-	wi32(add(o, blob_next_o), v);
-}
 
 function blob_type_g(o) {
 	return ri32(add(o, blob_type_o));
@@ -277,7 +272,6 @@ function NewBlob_(size,    i, a) {
 		wi8(add(blob_Text_g(a), i), ri8(add(SCRATCH, i)));
 		i = add(i, 1);
 	}
-	blob_next_s(a, blob_list);
 	blob_list = a;
 	AddHash(a, SCRATCH);
 }
@@ -491,12 +485,11 @@ function init_globals() {
 	EOF = SUB(0, 1);
 	NULL = 0;
 
-	blob_next_o = 0;
-	blob_type_o = 4;
-	blob_Text_o = 8;
-	blob_Expression_o = 12;
-	blob_hash_next_o = 16;
-	sizeof_blob = 20;
+	blob_type_o = 0;
+	blob_Text_o = 4;
+	blob_Expression_o = 8;
+	blob_hash_next_o = 12;
+	sizeof_blob = 16;
 
 	Token_next_o = 0;
 	Token_contents_o = 4;
