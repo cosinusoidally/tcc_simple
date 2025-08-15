@@ -47,6 +47,10 @@ function blob_Text_g(o) {
 	return ri32(add(o, blob_Text_o));
 }
 
+function blob_Expression_s(o, v) {
+	wi32(add(o, blob_Expression_o), v);
+}
+
 var TRUE;
 var FALSE;
 
