@@ -401,13 +401,14 @@ function Tokenize_Line_(head,    c, p) {
 	return head;
 }
 
-char* express_number(int value, char c) {
-	char* ch;
-	int digits;
+function express_number(value, c) {
+	express_number_(value, c, 0, 0);
+}
+function express_number_(value, c,    ch, digits) {
 	digits = 8;
-	if('!' == c) {
+	if(eq(mkC("!"), c)) {
 		digits = 2;
-		value = value & 255;
+		value = AND(value, 255);
 	}
 	ch = hex_to_str_le(value, digits);
 	return ch;
