@@ -5,9 +5,10 @@ source common.sh
 pushd .
 
 mkdir artifacts/builds/m0_test
-cd artifacts/builds/m0_test
 
-gcc -O0 -g3 -m32 ../../../m0.c -o m0.exe
+gcc -O0 -g3 -m32 m0.c -o artifacts/builds/m0_test/m0.exe
+
+cd artifacts/builds/m0_test
 
 function compile_alt() {
   $1 $2 $3.M1
