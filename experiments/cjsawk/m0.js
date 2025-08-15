@@ -51,6 +51,10 @@ function blob_Expression_s(o, v) {
 	wi32(add(o, blob_Expression_o), v);
 }
 
+function blob_hash_next_g(o) {
+	return ri32(add(o, blob_hash_next_o));
+}
+
 var TRUE;
 var FALSE;
 
@@ -223,7 +227,7 @@ struct blob* FindBlob() {
 		if(smatch(SCRATCH, blob_Text_g(i))) {
 			return i;
 		}
-		i = i->hash_next;
+		i = blob_hash_next_g(i);
 	}
 	return NULL;
 }
