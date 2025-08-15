@@ -65,6 +65,10 @@ function blob_hash_next_s(o, v) {
 	wi32(add(o, blob_hash_next_o), v);
 }
 
+var Token_next_o;
+var Token_contents_o;
+var sizeof_Token;
+
 var TRUE;
 var FALSE;
 
@@ -476,6 +480,10 @@ function init_globals() {
 	blob_Expression_o = 12;
 	blob_hash_next_o = 16;
 	sizeof_blob = 20;
+
+	Token_next_o = 0;
+	Token_contents_o = 4;
+	sizeof_Token = 8;
 }
 
 int main(int argc, char **argv) {
