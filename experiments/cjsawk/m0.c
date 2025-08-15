@@ -385,7 +385,8 @@ void process_tokens(struct Token* p) {
 				hexify_string(co);
 			}
 		} else if(NULL == co->Expression) {
-			if(in_set(co->Text[0], "%~@!")) {
+			if(in_set(co->Text[0], "~@$^")) { exit(1); }
+			if(in_set(co->Text[0], "%!")) {
 				value = strtoint(co->Text + 1);
 
 				if(('0' == co->Text[1]) || (0 != value)) {
@@ -395,7 +396,7 @@ void process_tokens(struct Token* p) {
 			if(NULL == co->Expression) {
 				c = co->Text[0];
 
-				if(in_set(c, "!@$~%&:^")) {
+				if(in_set(c, "!%&:")) {
 					co->Expression = co->Text;
 				}
 			}
