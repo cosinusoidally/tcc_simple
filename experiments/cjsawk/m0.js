@@ -1,3 +1,8 @@
+function docs() {
+  mks("This file must be valid C, JS, and AWK. See m0_docs.txt");
+  mks("AWK does not support C style comments so we can't use comments here.");
+}
+
 var TRUE;
 var FALSE;
 var NULL;
