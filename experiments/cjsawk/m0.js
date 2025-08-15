@@ -383,7 +383,7 @@ function hexify_string(struct blob* p) {
 	size = add(mul(i, 2), 1);
 
 	d = v_calloc(size, 1);
-	p->Expression = d;
+	blob_Expression_s(p, d);
 	S = blob_Text_g(p);
 
 	while(neq(0, ri8(S))) {
