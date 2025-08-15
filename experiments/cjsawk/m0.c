@@ -404,11 +404,13 @@ void process_tokens(struct Token* p) {
 
 void print_hex(struct Token* p) {
 	struct Token* i;
-	for(i = p; NULL != i; i = i->next) {
+	i = p;
+	while(NULL != i) {
 		if(NULL != i->contents->Expression) {
 			fputs(i->contents->Expression, destination_file);
 			fputc('\n', destination_file);
 		}
+		i = i->next;
 	}
 }
 
