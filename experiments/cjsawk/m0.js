@@ -461,7 +461,7 @@ function process_tokens(struct Token* p) {
 				hexify_string(co);
 			}
 		} else if(eq(NULL, blob_Expression_g(co))) {
-			if(in_set(co->Text[0], "%!")) {
+			if(in_set(ri8(blob_Text_g(co)), mks("%!"))) {
 				value = strtoint(co->Text + 1);
 
 				if(('0' == co->Text[1]) || (0 != value)) {
