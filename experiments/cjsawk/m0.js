@@ -451,8 +451,8 @@ function process_tokens(struct Token* p) {
 		if(eq(define_blob, co)) {
 			blob_Expression_s(Token_contents_g(Token_next_g(i)), blob_Text_g(Token_contents_g(Token_next_g(Token_next_g(i)))));
 			Token_next_s(i, Token_next_g(Token_next_g(Token_next_g(i))));
-		} else if(STR == co->type) {
-			if('\'' == co->Text[0]) {
+		} else if(eq(STR, blob_type_g(co))) {
+			if(eq(mkC("'"), ri8(blob_Text_g(co)))) {
 				co->Expression = co->Text + 1;
 			} else if('"' == co->Text[0]) {
 				hexify_string(co);
