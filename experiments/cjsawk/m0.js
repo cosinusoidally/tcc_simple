@@ -253,7 +253,7 @@ function FindBlob_(    hash, i) {
 }
 
 function AddHash(a, s) {
-	AddHash_(a, s, 0);
+	return AddHash_(a, s, 0);
 }
 function AddHash_(a, s,    i) {
 	i = GetHash(s);
@@ -276,7 +276,7 @@ function NewBlob_(size,    i, a) {
 }
 
 function newToken() {
-	newToken_(0);
+	return newToken_(0);
 }
 function newToken_(    p) {
 	p = v_calloc(1, sizeof_Token);
@@ -299,7 +299,7 @@ function reverse_list_(head,    root, next) {
 }
 
 function purge_lineComment() {
-	purge_lineComment_(0);
+	return purge_lineComment_(0);
 }
 function purge_lineComment_(    c) {
 	c = fgetc(source_file);
@@ -383,7 +383,7 @@ function Tokenize_Line_(head,    c, p) {
 }
 
 function express_number(value, c) {
-	express_number_(value, c, 0, 0);
+	return express_number_(value, c, 0, 0);
 }
 function express_number_(value, c,    ch, digits) {
 	digits = 8;
@@ -396,7 +396,7 @@ function express_number_(value, c,    ch, digits) {
 }
 
 function hexify_string(p) {
-	hexify_string_(p, 0, 0, 0, 0, 0);
+	return hexify_string_(p, 0, 0, 0, 0, 0);
 }
 function hexify_string_(p,    i, size, c, S, d) {
 	while(1) {
@@ -422,7 +422,7 @@ function hexify_string_(p,    i, size, c, S, d) {
 }
 
 function process_tokens(p) {
-	process_tokens_(p, 0, 0, 0, 0);
+	return process_tokens_(p, 0, 0, 0, 0);
 }
 function process_tokens_(p,    i, co, value, c) {
 	i = p;
@@ -458,7 +458,7 @@ function process_tokens_(p,    i, co, value, c) {
 }
 
 function print_hex(p) {
-	print_hex_(p, 0);
+	return print_hex_(p, 0);
 }
 function print_hex_(p,    i) {
 	i = p;
