@@ -91,6 +91,10 @@ function wi32(o, v) {
 	wi8(add(o, 3), AND(v, 255));
 }
 
+function nc() {
+	return v_fgetc(source_file);
+}
+
 function hex2char(c) {
 	if(lte(c, 9)) {
 		return (add(c, 48));
