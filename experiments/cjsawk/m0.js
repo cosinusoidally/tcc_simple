@@ -481,15 +481,15 @@ function main(argc, argv) {
 	blob_Text_s(define_blob, mks("DEFINE"));
 	AddHash(define_blob, mks("DEFINE"));
 
-	source_file = fopen(ri32(add(argv, 4)),mks("r"));
+	source_file = v_fopen(ri32(add(argv, 4)),mks("r"));
 	token_list = Tokenize_Line(token_list);
-	fclose(source_file);
+	v_fclose(source_file);
 
-	destination_file = fopen(ri32(add(argv, 8)), mks("w"));
+	destination_file = v_fopen(ri32(add(argv, 8)), mks("w"));
 	token_list = reverse_list(token_list);
 	process_tokens(token_list);
 	print_hex(token_list);
-	fclose(destination_file);
+	v_fclose(destination_file);
 
 	return 0;
 }
