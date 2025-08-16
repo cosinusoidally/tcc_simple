@@ -2,7 +2,7 @@ if [ ! -z $1 ]
 then
   export AWKNAME=$1
 else
-  export AWKNAME=awk
+  export AWKNAME=mawk
 fi
 
 rm -r artifacts/builds/m0_$AWKNAME
