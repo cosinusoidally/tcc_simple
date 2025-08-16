@@ -188,7 +188,7 @@ function strtoint_(a,    result) {
 	return result;
 }
 
-function ClearScratch(    i, c) {
+function ClearScratch() {
 	return ClearScratch_(0, 0);
 }
 function ClearScratch_(    i, c) {
