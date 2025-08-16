@@ -1,0 +1,10 @@
+rm -r artifacts/builds/m0_nodejs/
+mkdir artifacts/builds/m0_nodejs/
+set -xe
+source common.sh
+
+nodejs ../m2min_v3/node_compat_min.js m0_test.js > artifacts/builds/m0_nodejs/cjsawk.hex2
+
+diff -u -s artifacts/builds/m0_nodejs/cjsawk.hex2 artifacts/builds/m0_test/cjsawk.exe.hex2
+
+echo "DONE m0 nodejs"

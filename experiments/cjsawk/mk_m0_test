@@ -54,6 +54,8 @@ diff -u -s pnut_js.exe.hex2 pnut_js_strict2.exe.hex2
 
 popd
 
+./mk_m0_js
+
 shasum -c sums_m0
 
 wc m0.js m0.c m0_orig.c
