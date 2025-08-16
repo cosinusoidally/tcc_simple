@@ -346,7 +346,7 @@ function Tokenize_Line_(head,    c, p) {
 		} else if(eq(0, in_set(c, mks("\t \n")))) {
 			p = newToken();
 			Token_next_s(p, head);
-			if(OR(eq(c, mkC("'")),eq(c, mkC("\"")))) {
+			if(OR(eq(c, mkC("'")),eq(c, ch_dquote))) {
 				Token_contents_s(p, store_string(c));
 			} else {
 				p = store_atom(p, c);
@@ -409,7 +409,7 @@ function process_tokens_(p,    i, co, value, c) {
 		} else if(eq(STR, blob_type_g(co))) {
 			if(eq(mkC("'"), ri8(blob_Text_g(co)))) {
 				blob_Expression_s(co, add(blob_Text_g(co), 1));
-			} else if(eq(mkC("\""), ri8(blob_Text_g(co)))) {
+			} else if(eq(ch_dquote, ri8(blob_Text_g(co)))) {
 				hexify_string(co);
 			}
 		} else if(eq(NULL, blob_Expression_g(co))) {
