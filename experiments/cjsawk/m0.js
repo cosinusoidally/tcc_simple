@@ -90,10 +90,10 @@ function wi32(o, v) {
 }
 
 function hex2char(c) {
-	if(c <= 9) {
-		return (c + 48);
+	if(lte(c, 9)) {
+		return (add(c, 48));
 	}
-	return (c + 55);
+	return (add(c, 55));
 }
 
 function hex_to_str_le(v, digits) {
