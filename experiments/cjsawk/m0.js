@@ -91,7 +91,7 @@ function wi32(o, v) {
 	wi8(add(o, 3), AND(v, 255));
 }
 
-function nc() {
+function nextc() {
 	return v_fgetc(source_file);
 }
 
@@ -282,12 +282,12 @@ function purge_lineComment() {
 	return purge_lineComment_(0);
 }
 function purge_lineComment_(    c) {
-	c = fgetc(source_file);
+	c = nextc();
 	while(eq(0, in_set(c, mks("\n\r")))) {
 		if(eq(EOF, c)) {
 			break;
 		}
-		c = fgetc(source_file);
+		c = nextc();
 	}
 }
 
