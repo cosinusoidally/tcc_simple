@@ -18,22 +18,39 @@ function compile_alt() {
   hex2-0 $3-0.hex2 $3
 }
 
+function compile_alt2() {
+  $1 $2 $3.M1
+  cat ../../../../m2min_v3/simple_asm_defs.M1 ../../../../m2min_v3/x86_defs.M1 ../../../../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
+  ./m0_self.exe $3-0.M1 $3.hex2
+  cat ../../../../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
+  hex2-0 $3-0.hex2 $3
+}
+
 compile_alt ../cc_x86_min/cjsawk.exe ../../deps/cjsawk_full.c cjsawk_alt.exe
 compile_alt ./cjsawk_alt.exe ../../deps/cjsawk_full.c cjsawk.exe
 
+# also build m0.js with cjsawk
+cat ../../../m0.js ../../../support_libc.js ../../../simple_support_js_m2_prims.c ../../../support_m2.c > m0_self.c
+
+compile ./cjsawk.exe m0_self.c m0_self.exe
+
 compile ./cjsawk_alt.exe ../../deps/cjsawk_full.c cjsawk2.exe
+compile_alt2 ./cjsawk.exe ../../deps/cjsawk_full.c cjsawk3.exe
 
 diff -u -s cjsawk_alt.exe cjsawk.exe
 diff -u -s cjsawk.exe.hex2 cjsawk2.exe.hex2
+diff -u -s cjsawk2.exe.hex2 cjsawk3.exe.hex2
 
 compile ./cjsawk.exe ../../deps/m2min_v3.c m2min_v3.exe
 diff -u -s m2min_v3.exe.M1 ../../../../m2min_v3/m2min_v3.M1
 
 compile ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js.exe
 compile_alt ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict.exe
+compile_alt2 ./cjsawk.exe ../../deps/pnut_js_m2.c pnut_js_strict2.exe
 
 diff -u -s pnut_js.exe pnut_js_strict.exe
 diff -u -s pnut_js.exe.hex2 pnut_js_strict.exe.hex2
+diff -u -s pnut_js.exe.hex2 pnut_js_strict2.exe.hex2
 
 popd
 
