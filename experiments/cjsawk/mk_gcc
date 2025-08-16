@@ -3,7 +3,7 @@ set -xe
 source common.sh
 
 mkdir artifacts/builds/gcc
-gcc -O0 -m32 cjsawk_test.c -o artifacts/builds/gcc/cjsawk_gcc.exe
+gcc -O0 -g3 -m32 cjsawk_test.c -o artifacts/builds/gcc/cjsawk_gcc.exe
 
 cd artifacts/builds/gcc
 
