@@ -26,6 +26,8 @@ var blob_Expression_o;
 var blob_hash_next_o;
 var sizeof_blob;
 
+var ch_dquote;
+
 function blob_type_g(o) {
 	return ri32(add(o, blob_type_o));
 }
@@ -344,7 +346,7 @@ function Tokenize_Line_(head,    c, p) {
 		} else if(eq(0, in_set(c, mks("\t \n")))) {
 			p = newToken();
 			Token_next_s(p, head);
-			if(in_set(c, mks("'\""))) {
+			if(OR(eq(c, mkC("'")),eq(c, mkC("\"")))) {
 				Token_contents_s(p, store_string(c));
 			} else {
 				p = store_atom(p, c);
@@ -464,6 +466,8 @@ function init_globals() {
 	Token_next_o = 0;
 	Token_contents_o = 4;
 	sizeof_Token = 8;
+
+	ch_dquote = 34;
 }
 
 function main(argc, argv) {
