@@ -124,7 +124,7 @@ function smatch_(a, b, i) {
 		if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
 			return FALSE;
 		}
-		if(eq(0, ri8(add(a, i))) && eq(0, ri8(add(b, i)))) {
+		if(AND(eq(0, ri8(add(a, i))), eq(0, ri8(add(b, i))))) {
 			return TRUE;
 		}
 	}
