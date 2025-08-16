@@ -108,7 +108,7 @@ function to_uint32(x) {
   x=int(x);
   if((x<0)){
     if(x<-2147483648) {
-      print("to_uint32 less than -2147483648 not supported");
+      print("to_uint32 less than -2147483648 not supported, was: " x);
       exit 1;
     }
     x=4294967296+x;
