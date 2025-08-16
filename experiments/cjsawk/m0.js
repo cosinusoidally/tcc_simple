@@ -440,7 +440,7 @@ function print_hex_(p,    i) {
 	while(neq(NULL, i)) {
 		if(neq(NULL, blob_Expression_g(Token_contents_g(i)))) {
 			v_fputs(blob_Expression_g(Token_contents_g(i)), destination_file);
-			v_fputc(mkC("\n"), destination_file);
+			v_fputs(mks("\n"), destination_file);
 		}
 		i = Token_next_g(i);
 	}
