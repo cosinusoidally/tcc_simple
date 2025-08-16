@@ -173,7 +173,7 @@ function strtoint_(a,    result) {
 	if(eq(0, ri8(a))) {
 		result = 0;
 	} else if (AND(eq(mkC("0"), ri8(a)),  eq(mkC("x"), ri8(add(a, 1))))) {
-		result = parse_int(a+2, 16);
+		result = parse_int(add(a, 2), 16);
 	} else if (OR(AND(lte(mkC("0"),ri8(a)),gte(mkC("9"),ri8(a))),eq(mkC("-"),ri8(a)))) {
 		result = parse_int(a, 10);
 	} else {
