@@ -299,7 +299,7 @@ function store_atom_(head, c,    ch, i) {
 	ch = c;
 	while(1) {
 		wi8(add(SCRATCH, i), ch);
-		ch = nextc(source_file);
+		ch = nextc();
 		i = add(i, 1);
 		if(OR(eq(EOF, ch), in_set(ch, mks("\t\n ")))) {
 			break;
@@ -324,7 +324,7 @@ function store_string_(c,    ch, i, a) {
 	while(1) {
 		wi8(add(SCRATCH, i), ch);
 		i = add(i, 1);
-		ch = nextc(source_file);
+		ch = nextc();
 		if(eq(ch, c)) {
 			break;
 		}
@@ -342,7 +342,7 @@ function Tokenize_Line(head) {
 }
 function Tokenize_Line_(head,    c, p) {
 	while(1) {
-		c = nextc(source_file);
+		c = nextc();
 		if(in_set(c, mks(";#"))) {
 			purge_lineComment();
 		} else if(eq(EOF, c)) {

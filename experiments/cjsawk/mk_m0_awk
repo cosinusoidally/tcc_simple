@@ -1,0 +1,16 @@
+if [ ! -z $1 ]
+then
+  export AWKNAME=$1
+else
+  export AWKNAME=awk
+fi
+
+rm -r artifacts/builds/m0_$AWKNAME
+set -xe
+source common.sh
+
+mkdir artifacts/builds/m0_$AWKNAME
+$AWKNAME -v my_fname="artifacts/builds/m0_test/cjsawk.exe-0.M1" -v my_fout="artifacts/builds/m0_$AWKNAME/cjsawk_awk.exe.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
+# artifacts/builds/$AWKNAME/cjsawk_awk.exe.M1
+
+echo "DONE m0 $1"
