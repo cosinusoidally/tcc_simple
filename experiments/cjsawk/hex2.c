@@ -626,8 +626,7 @@ int binary(int c, FILE* source_file)
 	return -1;
 }
 
-void process_byte(char c, FILE* source_file, int write)
-{
+void process_byte(char c, FILE* source_file, int write) {
 	if(HEX == ByteMode)
 	{
 		if(0 <= hex(c, source_file))
@@ -647,6 +646,7 @@ void process_byte(char c, FILE* source_file, int write)
 	}
 	else if(OCTAL ==ByteMode)
 	{
+exit(1);
 		if(0 <= octal(c, source_file))
 		{
 			if(2 == toggle)
@@ -670,6 +670,7 @@ void process_byte(char c, FILE* source_file, int write)
 	}
 	else if(BINARY == ByteMode)
 	{
+exit(1);
 		if(0 <= binary(c, source_file))
 		{
 			if(7 == toggle)
@@ -701,7 +702,8 @@ void first_pass() {
 		}
 
 		/* check for and deal with relative/absolute pointers to labels */
-		if(in_set(c, "!@$~%&")) { /* deal with 1byte pointer !; 2byte pointers (@ and $); 3byte pointers ~; 4byte pointers (% and &) */
+		if(in_set(c, "!@$~%&")) {
+			/* deal with 1byte pointer !; 2byte pointers (@ and $); 3byte pointers ~; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token(source_file);
 			if ('>' == c) { /* deal with label>base */
@@ -724,9 +726,9 @@ void second_pass() {
 	int c;
 	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
 		if(':' == c) {
-			c = Throwaway_token(source_file); /* Deal with : */
+			c = Throwaway_token(source_file);
 		} else if(in_set(c, "!@$~%&")) {
-			storePointer(c, source_file);  /* Deal with !, @, $, ~, % and & */
+			storePointer(c, source_file);
 		} else {
 			process_byte(c, source_file, TRUE);
 		}
