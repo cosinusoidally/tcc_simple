@@ -10,8 +10,8 @@ gcc -O0 -g3 -m32 hex2.c -o artifacts/builds/hex2_test/hex2.exe
 
 cd artifacts/builds/hex2_test
 
-./hex2.exe --architecture x86 --little-endian --base-address 0x8048000 -f ../m0_test/cjsawk.exe-0.hex2 -o cjsawk.exe
-./hex2.exe --architecture x86 --little-endian --base-address 0x8048000 -f ../m0_test/m0_self.exe-0.hex2 -o m0_self.exe
+./hex2.exe --base-address 0x8048000 -f ../m0_test/cjsawk.exe-0.hex2 -o cjsawk.exe
+./hex2.exe --base-address 0x8048000 -f ../m0_test/m0_self.exe-0.hex2 -o m0_self.exe
 
 diff -u -s ../m0_test/cjsawk.exe cjsawk.exe
 diff -u -s ../m0_test/m0_self.exe m0_self.exe
