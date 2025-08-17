@@ -137,13 +137,16 @@ void Copy_String(char* a, char* b) {
 	}
 }
 
-int GetHash(char* s) {
-	int i = 5381;
-	while(0 != s[0]) {
-		i = i * 31 + s[0];
-		s = s + 1;
+function GetHash(s) {
+	return GetHash_(s, 0);
+}
+function GetHash_(s,    i) {
+	i = 5381;
+	while(neq(0, ri8(s))) {
+		i = add(shl(i, 5), add(i, ri8(s)));
+		s = add(s, 1);
 	}
-	return (i & 0xFFFF);
+	return AND(i, 65535);
 }
 
 unsigned GetTarget(char* c) {
