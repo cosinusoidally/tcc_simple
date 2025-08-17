@@ -16,6 +16,76 @@
  * You should have received a copy of the GNU General Public License
  * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
  */
+/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
+/* Copyright (C) 2017 Jeremiah Orians
+ * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
+ * This file is part of mescc-tools
+ *
+ * mescc-tools is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mescc-tools is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
+/* Copyright (C) 2017 Jeremiah Orians
+ * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
+ * This file is part of mescc-tools
+ *
+ * mescc-tools is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mescc-tools is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (C) 2016 Jeremiah Orians
+ * This file is part of M2-Planet.
+ *
+ * M2-Planet is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * M2-Planet is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
+/* Copyright (C) 2017 Jeremiah Orians
+ * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
+ * This file is part of mescc-tools
+ *
+ * mescc-tools is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mescc-tools is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,24 +125,6 @@ void pad_to_align(int write);
 int hex(int c, FILE* source_file);
 int octal(int c, FILE* source_file);
 int binary(int c, FILE* source_file);
-/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
-/* Copyright (C) 2017 Jeremiah Orians
- * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file is part of mescc-tools
- *
- * mescc-tools is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * mescc-tools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 #define max_string 4096
 #define TRUE 1
@@ -104,23 +156,6 @@ struct entry
 	unsigned target;
 	char* name;
 };
-
-/* Copyright (C) 2016 Jeremiah Orians
- * This file is part of M2-Planet.
- *
- * M2-Planet is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * M2-Planet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -299,25 +334,6 @@ char* int2str(int x, int base, int signed_p)
 
 	return p + 1;
 }
-/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
-/* Copyright (C) 2017 Jeremiah Orians
- * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file is part of mescc-tools
- *
- * mescc-tools is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * mescc-tools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 
 /* Globals */
 FILE* output;
@@ -784,26 +800,6 @@ void second_pass() {
 	}
 	fclose(source_file);
 }
-
-/* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
-/* Copyright (C) 2017 Jeremiah Orians
- * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file is part of mescc-tools
- *
- * mescc-tools is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * mescc-tools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 
 unsigned shiftregister;
 unsigned tempword;
