@@ -739,28 +739,6 @@ void process_byte(char c, FILE* source_file, int write)
 	}
 }
 
-void pad_to_align(int write)
-{
-exit(1);
-	if((ARMV7L == Architecture) || (AARM64 == Architecture) || (RISCV32 == Architecture) || (RISCV64 == Architecture))
-	{
-		if(1 == (ip & 0x1))
-		{
-			ip = ip + 1;
-			if(write) fputc('\0', output);
-		}
-		if(2 == (ip & 0x2))
-		{
-			ip = ip + 2;
-			if(write)
-			{
-				fputc('\0', output);
-				fputc('\0', output);
-			}
-		}
-	}
-}
-
 void first_pass() {
 	linenumber = 1;
 	FILE* source_file = fopen(source_filename, "r");
