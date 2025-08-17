@@ -741,6 +741,7 @@ void process_byte(char c, FILE* source_file, int write)
 
 void pad_to_align(int write)
 {
+exit(1);
 	if((ARMV7L == Architecture) || (AARM64 == Architecture) || (RISCV32 == Architecture) || (RISCV64 == Architecture))
 	{
 		if(1 == (ip & 0x1))
@@ -783,17 +784,9 @@ void first_pass() {
 			{ /* deal with label>base */
 				c = Throwaway_token(source_file);
 			}
+		} else {
+			process_byte(c, source_file, FALSE);
 		}
-		else if('<' == c)
-		{
-			pad_to_align(FALSE);
-		}
-		else if('^' == c)
-		{
-			/* Just ignore */
-			continue;
-		}
-		else process_byte(c, source_file, FALSE);
 	}
 	fclose(source_file);
 }
@@ -808,11 +801,13 @@ void second_pass() {
 	int c;
 	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
 	{
-		if(':' == c) c = Throwaway_token(source_file); /* Deal with : */
-		else if(in_set(c, "!@$~%&")) storePointer(c, source_file);  /* Deal with !, @, $, ~, % and & */
-		else if('<' == c) pad_to_align(TRUE);
-		else if('^' == c) ALIGNED = TRUE;
-		else process_byte(c, source_file, TRUE);
+		if(':' == c) {
+			c = Throwaway_token(source_file); /* Deal with : */
+		} else if(in_set(c, "!@$~%&")) {
+			storePointer(c, source_file);  /* Deal with !, @, $, ~, % and & */
+		} else {
+			process_byte(c, source_file, TRUE);
+		}
 	}
 
 	fclose(source_file);
