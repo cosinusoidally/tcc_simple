@@ -510,8 +510,7 @@ void Update_Pointer(char ch)
 	}
 }
 
-void storePointer(char ch, FILE* source_file)
-{
+void storePointer(char ch, FILE* source_file) {
 	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
@@ -524,17 +523,14 @@ void storePointer(char ch, FILE* source_file)
 	int base = ip;
 
 	/* Change relative base address to :<base> */
-	if ('>' == base_sep_p)
-	{
+	if ('>' == base_sep_p) {
 		Clear_Scratch(scratch);
 		consume_token (source_file);
 		base = GetTarget (scratch);
 
 		/* Force universality of behavior */
 		displacement = (target - base);
-	}
-	else
-	{
+	} else {
 		displacement = Architectural_displacement(target, base);
 	}
 
@@ -555,11 +551,9 @@ void storePointer(char ch, FILE* source_file)
 	}
 }
 
-void line_Comment(FILE* source_file)
-{
+void line_Comment(FILE* source_file) {
 	int c = fgetc(source_file);
-	while(!in_set(c, "\n\r"))
-	{
+	while(!in_set(c, "\n\r")) {
 		if(EOF == c) break;
 		c = fgetc(source_file);
 	}
