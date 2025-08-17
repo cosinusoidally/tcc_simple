@@ -22,11 +22,11 @@
 
 /* Globals */
 int output;
-struct entry** jump_tables;
+int jump_tables;
 int Base_Address;
 int ip;
-char* scratch;
-char* filename;
+int scratch;
+int filename;
 int linenumber;
 int source_file;
 
@@ -372,7 +372,7 @@ function first_pass_(    c) {
 }
 
 function second_pass() {
-	second_pass_(0);
+	return second_pass_(0);
 }
 function second_pass_(    c) {
 	linenumber = 1;
@@ -395,7 +395,14 @@ function second_pass_(    c) {
 	fclose(source_file);
 }
 
+function init_globals() {
+
+}
+
 function main(argc, argv) {
+	init_support();
+	init_globals();
+
 	jump_tables = v_calloc(65537, 4);
 	Base_Address = 0x8048000;
 	char* output_filename;
