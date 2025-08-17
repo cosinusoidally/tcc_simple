@@ -749,8 +749,7 @@ void outOfRange(char* s, int value)
 	exit(EXIT_FAILURE);
 }
 
-unsigned sr_nextb()
-{
+unsigned sr_nextb() {
 	unsigned rv = shiftregister & 0xff;
 	shiftregister = shiftregister >> 8;
 	return rv;
@@ -759,7 +758,9 @@ unsigned sr_nextb()
 void DoByte(char c, FILE* source_file, int write, int update) {
 	if(0 <= hex(c, source_file)) {
 		if(toggle) {
-			if(write) fputc(((hold * 16)) + hex(c, source_file) ^ sr_nextb(), output);
+			if(write) {
+				fputc(((hold * 16)) + hex(c, source_file) ^ sr_nextb(), output);
+			}
 			ip = ip + 1;
 			if(update) {
 				hold = (hold * 16) + hex(c, source_file);
