@@ -200,7 +200,7 @@ function GetTarget(c) {
 	GetTarget_(c, 0);
 }
 function GetTarget_(c,    i) {
-	i = jump_tables[GetHash(c)];
+	i = ri32(add(jump_tables, mul(4, GetHash(c))));
 	while(neq(NULL, i)) {
 		if(smatch(c, entry_name_g(i))) {
 			return entry_target_g(i);
