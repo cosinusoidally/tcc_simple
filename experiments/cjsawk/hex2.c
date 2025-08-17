@@ -1134,22 +1134,13 @@ int main(int argc, char **argv)
 	int option_index = 1;
 	temp = calloc(1, sizeof(struct input_files));
 	require(NULL != temp, "failed to allocate file for processing\n");
-	temp->filename = argv[option_index];
+	temp->filename = argv[1];
 	temp->next = input;
 	input = temp;
 	option_index = option_index + 1;
 
-	output_file = argv[option_index];
+	output_file = argv[2];
 	output = fopen(output_file, "w");
-
-	if(NULL == output)
-	{
-		fputs("The file: ", stderr);
-		fputs(argv[option_index + 1], stderr);
-		fputs(" can not be opened!\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-	option_index = option_index + 1;
 
 	/* Get all of the labels */
 	ip = Base_Address;
