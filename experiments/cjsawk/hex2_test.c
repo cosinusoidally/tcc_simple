@@ -1,0 +1,6 @@
+#define var int
+#define function int
+
+#include "support_tcc.c"
+#include "support_alu.js"
+#include "hex2.js"
