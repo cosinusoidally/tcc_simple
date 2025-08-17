@@ -46,7 +46,7 @@ int NULL=0;
 struct entry
 {
 	struct entry* next;
-	unsigned target;
+	int target;
 	char* name;
 };
 
