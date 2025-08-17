@@ -20,9 +20,6 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <sys/stat.h>
-
 /* Globals */
 int output;
 struct entry** jump_tables;
@@ -43,6 +40,7 @@ char* source_filename;
 #define FALSE 0
 
 int EOF=-1;
+int NULL=0;
 
 struct input_files
 {
@@ -152,7 +150,7 @@ unsigned GetTarget(char* c) {
 			return i->target;
 		}
 	}
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 int storeLabel(int source_file, int ip) {
@@ -193,7 +191,7 @@ void Update_Pointer(char ch) {
 	} else if('!' == ch) {
 		ip = ip + 1; /* Deal with ! */
 	} else {
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }
 
@@ -225,7 +223,7 @@ void storePointer(char ch, int source_file) {
 	} else if('%' == ch) {
 		outputPointer(displacement, 4);  /* Deal with % */
 	} else {
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }
 
@@ -339,5 +337,5 @@ int main(int argc, char **argv) {
 
 	chmod(output_filename, 0750);
 
-	return EXIT_SUCCESS;
+	return 0;
 }
