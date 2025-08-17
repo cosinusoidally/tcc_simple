@@ -113,16 +113,17 @@ function consume_token_(    i, c) {
 	return c;
 }
 
-int Throwaway_token(int source_file) {
-	int c;
-	do
-	{
+function Throwaway_token() {
+	Throwaway_token_(0);
+}
+function Throwaway_token_(c) {
+	c = nextc();
+	while(eq(0,in_set(c, mks(" \t\n>")))) {
 		c = nextc();
-		if(EOF == c) {
+		if(eq(EOF, c)) {
 			break;
 		}
-	} while(!in_set(c, " \t\n>"));
-
+	}
 	return c;
 }
 
