@@ -97,7 +97,7 @@ function in_set(c, s) {
 	return FALSE;
 }
 
-int consume_token(int source_file) {
+int consume_token() {
 	int i = 0;
 	int c = nextc();
 	while(!in_set(c, " \t\n>")) {
@@ -182,7 +182,7 @@ int storeLabel(int source_file, int ip) {
 	entry->target = ip;
 
 	/* Store string */
-	int c = consume_token(source_file);
+	int c = consume_token();
 	entry->name = calloc(length(scratch) + 1, sizeof(char));
 	Copy_String(scratch, entry->name);
 	Clear_Scratch(scratch);
@@ -221,7 +221,7 @@ void storePointer(char ch, int source_file) {
 	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
-	int base_sep_p = consume_token(source_file);
+	int base_sep_p = consume_token();
 
 	/* Lookup token */
 	int target = GetTarget(scratch);
@@ -232,7 +232,7 @@ void storePointer(char ch, int source_file) {
 	/* Change relative base address to :<base> */
 	if ('>' == base_sep_p) {
 		Clear_Scratch(scratch);
-		consume_token (source_file);
+		consume_token();
 		base = GetTarget (scratch);
 	}
 	displacement = (target - base);
