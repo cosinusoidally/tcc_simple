@@ -246,12 +246,12 @@ function outputPointer_(displacement, number_of_bytes,    byte, value) {
 	}
 }
 
-void Update_Pointer(char ch) {
+function Update_Pointer(ch) {
 	/* Calculate pointer size*/
-	if(in_set(ch, "%&")) {
-		ip = ip + 4; /* Deal with % and & */
-	} else if('!' == ch) {
-		ip = ip + 1; /* Deal with ! */
+	if(in_set(ch, mks("%&"))) {
+		ip = add(ip, 4); /* Deal with % and & */
+	} else if(eq(mkC("!"), ch)) {
+		ip = add(ip, 1); /* Deal with ! */
 	} else {
 		exit(1);
 	}
@@ -344,9 +344,9 @@ void first_pass() {
 		if(in_set(c, "!%&")) {
 			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
-			c = Throwaway_token(source_file);
+			c = Throwaway_token();
 			if ('>' == c) { /* deal with label>base */
-				c = Throwaway_token(source_file);
+				c = Throwaway_token();
 			}
 		} else {
 			process_byte(c, source_file, FALSE);
@@ -366,7 +366,7 @@ function second_pass() {
 	c = nextc();
 	while(neq(EOF, c)) {
 		if(eq(mkC(":"), c)) {
-			c = Throwaway_token(source_file);
+			c = Throwaway_token();
 		} else if(in_set(c, mks("!%&"))) {
 			storePointer(c, source_file);
 		} else {
