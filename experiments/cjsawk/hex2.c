@@ -1159,20 +1159,12 @@ int main(int argc, char **argv)
 	ip = Base_Address;
 	second_pass(input);
 
-	/* flush all writes */
-	fflush(output);
+	fclose(output);
 
 	/* Set file as executable */
-	if(exec_enable && (output != stdout))
-	{
-		/* Close output file */
-		fclose(output);
-
-		if(0 != chmod(output_file, 0750))
-		{
+	if(0 != chmod(output_file, 0750)) {
 			fputs("Unable to change permissions\n", stderr);
 			exit(EXIT_FAILURE);
-		}
 	}
 
 	return EXIT_SUCCESS;
