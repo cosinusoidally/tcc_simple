@@ -341,7 +341,9 @@ function process_byte(c, write) {
 }
 
 function first_pass() {
-	int c;
+	return first_pass_(0);
+}
+function first_pass_(    c) {
 	linenumber = 1;
 	source_file = fopen(source_filename, mks("r"));
 
@@ -358,7 +360,7 @@ function first_pass() {
 			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token();
-			if ('>' == c) { /* deal with label>base */
+			if (eq(mkC(">"), c)) { /* deal with label>base */
 				c = Throwaway_token();
 			}
 		} else {
@@ -370,13 +372,15 @@ function first_pass() {
 }
 
 function second_pass() {
+	second_pass_(0);
+}
+function second_pass_(    c) {
 	linenumber = 1;
 	source_file = fopen(source_filename, mks("r"));
 
 	toggle = FALSE;
 	hold = 0;
 
-	int c;
 	c = nextc();
 	while(neq(EOF, c)) {
 		if(eq(mkC(":"), c)) {
