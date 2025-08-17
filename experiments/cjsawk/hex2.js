@@ -28,6 +28,7 @@ int ip;
 char* scratch;
 char* filename;
 int linenumber;
+int source_file;
 
 /* For processing bytes */
 int hold;
@@ -54,6 +55,10 @@ struct entry
 	unsigned target;
 	char* name;
 };
+
+function nextc() {
+	return v_fgetc(source_file);
+}
 
 function smatch(a, b) {
 	return smatch_(a, b, 0);
@@ -274,7 +279,7 @@ void process_byte(char c, int source_file, int write) {
 
 void first_pass() {
 	linenumber = 1;
-	int source_file = fopen(source_filename, "r");
+	source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	int c;
@@ -301,7 +306,7 @@ void first_pass() {
 
 void second_pass() {
 	linenumber = 1;
-	int source_file = fopen(source_filename, "r");
+	source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	hold = 0;
