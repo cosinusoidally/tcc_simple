@@ -340,20 +340,21 @@ function process_byte(c, write) {
 	}
 }
 
-void first_pass() {
+function first_pass() {
+	int c;
 	linenumber = 1;
-	source_file = fopen(source_filename, "r");
+	source_file = fopen(source_filename, mks("r"));
 
 	toggle = FALSE;
-	int c;
-	for(c = nextc(); EOF != c; c = nextc()) {
+	c = nextc();
+	while(neq(EOF, c)) {
 		/* Check for and deal with label */
-		if(':' == c) {
+		if(eq(mkC(":"), c)) {
 			c = storeLabel(ip);
 		}
 
 		/* check for and deal with relative/absolute pointers to labels */
-		if(in_set(c, "!%&")) {
+		if(in_set(c, mks("!%&"))) {
 			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token();
@@ -363,6 +364,7 @@ void first_pass() {
 		} else {
 			process_byte(c, FALSE);
 		}
+		c = nextc();
 	}
 	fclose(source_file);
 }
