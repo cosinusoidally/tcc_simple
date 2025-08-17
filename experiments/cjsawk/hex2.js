@@ -127,10 +127,12 @@ function Throwaway_token_(c) {
 	return c;
 }
 
-int length(char* s) {
-	int i = 0;
-	while(0 != s[i]) {
-		i = i + 1;
+function length(s) {
+	length_(s, 0);
+}
+function length_(s,    i) {
+	while(neq(0, ri8(add(s, i)))) {
+		i = add(i, 1);
 	}
 	return i;
 }
