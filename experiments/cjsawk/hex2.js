@@ -292,13 +292,18 @@ function storePointer_(ch,    base_sep_p, base) {
 	}
 }
 
-void line_Comment(int source_file) {
-	int c = nextc();
-	while(!in_set(c, "\n\r")) {
-		if(EOF == c) break;
+function line_Comment() {
+	return line_Comment_(0);
+}
+function line_Comment_(    c) {
+	c = nextc();
+	while(eq(0, in_set(c, mks("\n\r")))) {
+		if(eq(EOF, c)) {
+			break;
+		}
 		c = nextc();
 	}
-	linenumber = linenumber + 1;
+	linenumber = add(linenumber, 1);
 }
 
 int hex(int c, int source_file) {
@@ -309,7 +314,7 @@ int hex(int c, int source_file) {
 	} else if (in_set(c, "ABCDEF")) {
 		return (c - 55);
 	} else if (in_set(c, "#;")) {
-		line_Comment(source_file);
+		line_Comment();
 	} else if ('\n' == c) {
 		linenumber = linenumber + 1;
 	}
