@@ -55,31 +55,28 @@ struct entry
 	char* name;
 };
 
-int match(char* a, char* b) {
-	if((NULL == a) && (NULL == b)) return TRUE;
-	if(NULL == a) return FALSE;
-	if(NULL == b) return FALSE;
-
-	int i = -1;
-	do
-	{
-		i = i + 1;
-		if(a[i] != b[i])
-		{
+function smatch(a, b) {
+	return smatch_(a, b, 0);
+}
+function smatch_(a, b, i) {
+	i = SUB(0, 1);
+	while(1) {
+		i = add(i, 1);
+		if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
 			return FALSE;
 		}
-	} while((0 != a[i]) && (0 !=b[i]));
-	return TRUE;
+		if(AND(eq(0, ri8(add(a, i))), eq(0, ri8(add(b, i))))) {
+			return TRUE;
+		}
+	}
 }
 
-
-int in_set(int c, char* s) {
-	/* NULL set is always false */
-	if(NULL == s) return FALSE;
-
-	while(0 != s[0]) {
-		if(c == s[0]) return TRUE;
-		s = s + 1;
+function in_set(c, s) {
+	while(neq(0, ri8(s))) {
+		if(eq(c, ri8(s))) {
+			return TRUE;
+		}
+		s = add(s, 1);
 	}
 	return FALSE;
 }
@@ -146,7 +143,7 @@ int GetHash(char* s) {
 unsigned GetTarget(char* c) {
 	struct entry* i;
 	for(i = jump_tables[GetHash(c)]; NULL != i; i = i->next) {
-		if(match(c, i->name)) {
+		if(smatch(c, i->name)) {
 			return i->target;
 		}
 	}
