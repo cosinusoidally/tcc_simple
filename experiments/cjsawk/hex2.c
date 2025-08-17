@@ -40,6 +40,8 @@ extern int linenumber;
 extern int toggle;
 extern struct entry** jump_tables;
 
+char* source_filename;
+
 /* Function prototypes */
 int Architectural_displacement(int target, int base);
 int Throwaway_token(FILE* source_file);
@@ -764,7 +766,7 @@ void first_pass(struct input_files* input)
 	first_pass(input->next);
 	filename = input->filename;
 	linenumber = 1;
-	FILE* source_file = fopen(filename, "r");
+	FILE* source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	int c;
@@ -1121,7 +1123,8 @@ int main(int argc, char **argv)
 
 	temp = calloc(1, sizeof(struct input_files));
 	require(NULL != temp, "failed to allocate file for processing\n");
-	temp->filename = argv[1];
+	source_filename = argv[1];
+	temp->filename = source_filename;
 	temp->next = input;
 	input = temp;
 
