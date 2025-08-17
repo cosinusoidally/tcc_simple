@@ -1117,27 +1117,21 @@ int main(int argc, char **argv)
 	ALIGNED = FALSE;
 	BigEndian = FALSE;
 	jump_tables = calloc(65537, sizeof(struct entry*));
-	require(NULL != jump_tables, "Failed to allocate our jump_tables\n");
 
 	Architecture = X86;
 	Base_Address = 0x8048000;
 	struct input_files* input = NULL;
-	output = stdout;
-	char* output_file = "";
+	char* output_file;
 	exec_enable = TRUE;
 	ByteMode = HEX;
 	scratch = calloc(max_string + 1, sizeof(char));
-	require(NULL != scratch, "failed to allocate our scratch buffer\n");
-	char* arch;
 	struct input_files* temp;
 
-	int option_index = 1;
 	temp = calloc(1, sizeof(struct input_files));
 	require(NULL != temp, "failed to allocate file for processing\n");
 	temp->filename = argv[1];
 	temp->next = input;
 	input = temp;
-	option_index = option_index + 1;
 
 	output_file = argv[2];
 	output = fopen(output_file, "w");
