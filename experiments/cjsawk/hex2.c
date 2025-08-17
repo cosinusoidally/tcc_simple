@@ -260,62 +260,57 @@ void line_error()
 	fputs(" :", stderr);
 }
 
-int consume_token(FILE* source_file)
-{
+int consume_token(FILE* source_file) {
 	int i = 0;
 	int c = fgetc(source_file);
-	while(!in_set(c, " \t\n>"))
-	{
+	while(!in_set(c, " \t\n>")) {
 		scratch[i] = c;
 		i = i + 1;
 		c = fgetc(source_file);
-		require(max_string > i, "Consumed token exceeds length restriction\n");
-		if(EOF == c) break;
+		if(EOF == c) {
+			break;
+		}
 	}
-
 	return c;
 }
 
-int Throwaway_token(FILE* source_file)
-{
+int Throwaway_token(FILE* source_file) {
 	int c;
 	do
 	{
 		c = fgetc(source_file);
-		if(EOF == c) break;
+		if(EOF == c) {
+			break;
+		}
 	} while(!in_set(c, " \t\n>"));
 
 	return c;
 }
 
-int length(char* s)
-{
+int length(char* s) {
 	int i = 0;
-	while(0 != s[i]) i = i + 1;
+	while(0 != s[i]) {
+		i = i + 1;
+	}
 	return i;
 }
 
-void Clear_Scratch(char* s)
-{
-	do
-	{
+void Clear_Scratch(char* s) {
+	do {
 		s[0] = 0;
 		s = s + 1;
 	} while(0 != s[0]);
 }
 
-void Copy_String(char* a, char* b)
-{
-	while(0 != a[0])
-	{
+void Copy_String(char* a, char* b) {
+	while(0 != a[0]) {
 		b[0] = a[0];
 		a = a + 1;
 		b = b + 1;
 	}
 }
 
-int GetHash(char* s)
-{
+int GetHash(char* s) {
 	int i = 5381;
 	while(0 != s[0])
 	{
@@ -325,13 +320,10 @@ int GetHash(char* s)
 	return (i & 0xFFFF);
 }
 
-unsigned GetTarget(char* c)
-{
+unsigned GetTarget(char* c) {
 	struct entry* i;
-	for(i = jump_tables[GetHash(c)]; NULL != i; i = i->next)
-	{
-		if(match(c, i->name))
-		{
+	for(i = jump_tables[GetHash(c)]; NULL != i; i = i->next) {
+		if(match(c, i->name)) {
 			return i->target;
 		}
 	}
@@ -352,7 +344,6 @@ int storeLabel(FILE* source_file, int ip)
 	/* Store string */
 	int c = consume_token(source_file);
 	entry->name = calloc(length(scratch) + 1, sizeof(char));
-	require(NULL != entry->name, "failed to allocate entry->name\n");
 	Copy_String(scratch, entry->name);
 	Clear_Scratch(scratch);
 
@@ -386,8 +377,6 @@ void Update_Pointer(char ch) {
 	} else if('!' == ch) {
 		ip = ip + 1; /* Deal with ! */
 	} else {
-		line_error();
-		fputs("storePointer given unknown\n", stderr);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -424,10 +413,6 @@ void storePointer(char ch, FILE* source_file) {
 	} else if('%' == ch) {
 		outputPointer(displacement, 4);  /* Deal with % */
 	} else {
-		line_error();
-		fputs("error: storePointer reached impossible case: ch=", stderr);
-		fputc(ch, stderr);
-		fputs("\n", stderr);
 		exit(EXIT_FAILURE);
 	}
 }
