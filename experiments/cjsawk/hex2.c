@@ -535,14 +535,13 @@ void storePointer(char ch, FILE* source_file) {
 	}
 
 	/* output calculated difference */
-	if('!' == ch) outputPointer(displacement, 1); /* Deal with ! */
-	else if('$' == ch) outputPointer(target, 2); /* Deal with $ */
-	else if('@' == ch) outputPointer(displacement, 2); /* Deal with @ */
-	else if('~' == ch) outputPointer(displacement, 3); /* Deal with ~ */
-	else if('&' == ch) outputPointer(target, 4); /* Deal with & */
-	else if('%' == ch) outputPointer(displacement, 4);  /* Deal with % */
-	else
-	{
+	if('!' == ch) {
+		outputPointer(displacement, 1); /* Deal with ! */
+	} else if('&' == ch) {
+		outputPointer(target, 4); /* Deal with & */
+	} else if('%' == ch) {
+		outputPointer(displacement, 4);  /* Deal with % */
+	} else {
 		line_error();
 		fputs("error: storePointer reached impossible case: ch=", stderr);
 		fputc(ch, stderr);
