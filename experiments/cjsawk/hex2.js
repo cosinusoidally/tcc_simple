@@ -396,7 +396,7 @@ function second_pass_(    c) {
 }
 
 function main(argc, argv) {
-	jump_tables = v_calloc(65537, sizeof(struct entry*));
+	jump_tables = v_calloc(65537, 4);
 	Base_Address = 0x8048000;
 	char* output_filename;
 	scratch = v_calloc(add(max_string, 1), 1);

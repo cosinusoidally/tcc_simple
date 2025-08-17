@@ -478,7 +478,7 @@ function main(argc, argv) {
 	init_support();
 	init_globals();
 
-	hash_table = v_calloc(65537, sizeof_blob);
+	hash_table = v_calloc(65537, 4);
 	SCRATCH = v_calloc(add(max_string, 1), 1);
 
 	define_blob = v_calloc(1, sizeof_blob);
