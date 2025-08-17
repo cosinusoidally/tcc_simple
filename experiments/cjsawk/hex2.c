@@ -323,18 +323,13 @@ int main(int argc, char **argv) {
 	jump_tables = calloc(65537, sizeof(struct entry*));
 	Base_Address = 0x8048000;
 	struct input_files* input = NULL;
-	char* output_file;
+	char* output_filename;
 	scratch = calloc(max_string + 1, sizeof(char));
 	struct input_files* temp;
 
-	temp = calloc(1, sizeof(struct input_files));
 	source_filename = argv[1];
-	temp->filename = source_filename;
-	temp->next = input;
-	input = temp;
-
-	output_file = argv[2];
-	output = fopen(output_file, "w");
+	output_filename = argv[2];
+	output = fopen(output_filename, "w");
 
 	/* Get all of the labels */
 	ip = Base_Address;
@@ -346,7 +341,7 @@ int main(int argc, char **argv) {
 
 	fclose(output);
 
-	chmod(output_file, 0750);
+	chmod(output_filename, 0750);
 
 	return EXIT_SUCCESS;
 }
