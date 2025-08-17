@@ -1257,6 +1257,12 @@ int main(int argc, char **argv)
 	struct input_files* temp;
 
 	int option_index = 1;
+	temp = calloc(1, sizeof(struct input_files));
+	require(NULL != temp, "failed to allocate file for processing\n");
+	temp->filename = argv[option_index];
+	temp->next = input;
+	input = temp;
+	option_index = option_index + 1;
 	while(option_index <= argc)
 	{
 		if(NULL == argv[option_index])
