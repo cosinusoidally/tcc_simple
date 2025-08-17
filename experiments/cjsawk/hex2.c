@@ -1276,33 +1276,6 @@ int main(int argc, char **argv)
 	}
 	option_index = option_index + 1;
 
-	if((Architecture == RISCV32) || (Architecture == RISCV64))
-	{
-		/* Forcing me to use words instead of just byting into the problem */
-		InsaneArchitecture = TRUE;
-	}
-
-	/* Catch a common mistake */
-	if((KNIGHT != Architecture) && (0 == Base_Address))
-	{
-		fputs(">> WARNING <<\n>> WARNING <<\n>> WARNING <<\n", stderr);
-		fputs("If you are not generating a ROM image this binary will likely not work\n", stderr);
-	}
-
-	/* Catch implicitly false assumptions */
-	if(BigEndian && ((X86 == Architecture) || ( AMD64 == Architecture) || (ARMV7L == Architecture) || (AARM64 == Architecture) || (RISCV32 == Architecture) || (RISCV64 == Architecture)))
-	{
-		fputs(">> WARNING <<\n>> WARNING <<\n>> WARNING <<\n", stderr);
-		fputs("You have specified big endian output on likely a little endian processor\n", stderr);
-		fputs("if this is a mistake please pass --little-endian next time\n", stderr);
-	}
-
-	/* Make sure we have a program tape to run */
-	if (NULL == input)
-	{
-		return EXIT_FAILURE;
-	}
-
 	/* Get all of the labels */
 	ip = Base_Address;
 	if(InsaneArchitecture) WordFirstPass(input);
