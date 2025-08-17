@@ -20,7 +20,6 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Globals */
 int output;
 int jump_tables;
 int Base_Address;
@@ -30,7 +29,6 @@ int filename;
 int linenumber;
 int source_file;
 
-/* For processing bytes */
 int hold;
 int toggle;
 
@@ -44,17 +42,10 @@ var FALSE;
 var EOF;
 var NULL;
 
-struct entry
-{
-	struct entry* next;
-	int target;
-	char* name;
-};
-
-var entry_next_o = 0;
-var entry_target_o = 4;
-var entry_name_o = 8;
-var sizeof_entry = 12;
+var entry_next_o;
+var entry_target_o;
+var entry_name_o;
+var sizeof_entry;
 
 function entry_next_g(o) {
 	return ri32(add(o, entry_next_o));
@@ -404,6 +395,11 @@ function init_globals() {
 
 	EOF = SUB(0, 1);
 	NULL = 0;
+
+	entry_next_o = 0;
+	entry_target_o = 4;
+	entry_name_o = 8;
+	sizeof_entry = 12;
 }
 
 function main(argc, argv) {
