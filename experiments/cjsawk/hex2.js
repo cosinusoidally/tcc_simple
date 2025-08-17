@@ -198,9 +198,9 @@ function GetHash_(s,    i) {
 
 function GetTarget(c) {
 	struct entry* i;
-	for(i = jump_tables[GetHash(c)]; NULL != i; i = i->next) {
-		if(smatch(c, i->name)) {
-			return i->target;
+	for(i = jump_tables[GetHash(c)]; NULL != i; i = entry_next_g(i)) {
+		if(smatch(c, entry_name_g(i))) {
+			return entry_target_g(i);
 		}
 	}
 	exit(1);
