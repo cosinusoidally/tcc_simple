@@ -88,11 +88,11 @@ function in_set(c, s) {
 
 int consume_token(int source_file) {
 	int i = 0;
-	int c = fgetc(source_file);
+	int c = nextc();
 	while(!in_set(c, " \t\n>")) {
 		scratch[i] = c;
 		i = i + 1;
-		c = fgetc(source_file);
+		c = nextc();
 		if(EOF == c) {
 			break;
 		}
@@ -104,7 +104,7 @@ int Throwaway_token(int source_file) {
 	int c;
 	do
 	{
-		c = fgetc(source_file);
+		c = nextc();
 		if(EOF == c) {
 			break;
 		}
@@ -239,10 +239,10 @@ void storePointer(char ch, int source_file) {
 }
 
 void line_Comment(int source_file) {
-	int c = fgetc(source_file);
+	int c = nextc();
 	while(!in_set(c, "\n\r")) {
 		if(EOF == c) break;
-		c = fgetc(source_file);
+		c = nextc();
 	}
 	linenumber = linenumber + 1;
 }
@@ -283,7 +283,7 @@ void first_pass() {
 
 	toggle = FALSE;
 	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
+	for(c = nextc(); EOF != c; c = nextc()) {
 		/* Check for and deal with label */
 		if(':' == c) {
 			c = storeLabel(source_file, ip);
@@ -312,7 +312,7 @@ void second_pass() {
 	hold = 0;
 
 	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
+	for(c = nextc(); EOF != c; c = nextc()) {
 		if(':' == c) {
 			c = Throwaway_token(source_file);
 		} else if(in_set(c, "!%&")) {
