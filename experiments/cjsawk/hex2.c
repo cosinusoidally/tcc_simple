@@ -798,22 +798,9 @@ void first_pass() {
 	fclose(source_file);
 }
 
-void second_pass(struct input_files* input)
-{
-	if(NULL == input) return;
-	second_pass(input->next);
-	filename = input->filename;
+void second_pass(struct input_files* input) {
 	linenumber = 1;
-	FILE* source_file = fopen(filename, "r");
-
-	/* Something that should never happen */
-	if(NULL == source_file)
-	{
-		fputs("The file: ", stderr);
-		fputs(input->filename, stderr);
-		fputs(" can not be opened!\nWTF-pass2\n", stderr);
-		exit(EXIT_FAILURE);
-	}
+	FILE* source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	hold = 0;
