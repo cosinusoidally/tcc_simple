@@ -745,21 +745,17 @@ void first_pass() {
 
 	toggle = FALSE;
 	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
-	{
+	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
 		/* Check for and deal with label */
-		if(':' == c)
-		{
+		if(':' == c) {
 			c = storeLabel(source_file, ip);
 		}
 
 		/* check for and deal with relative/absolute pointers to labels */
-		if(in_set(c, "!@$~%&"))
-		{ /* deal with 1byte pointer !; 2byte pointers (@ and $); 3byte pointers ~; 4byte pointers (% and &) */
+		if(in_set(c, "!@$~%&")) { /* deal with 1byte pointer !; 2byte pointers (@ and $); 3byte pointers ~; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token(source_file);
-			if ('>' == c)
-			{ /* deal with label>base */
+			if ('>' == c) { /* deal with label>base */
 				c = Throwaway_token(source_file);
 			}
 		} else {
@@ -777,8 +773,7 @@ void second_pass() {
 	hold = 0;
 
 	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
-	{
+	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
 		if(':' == c) {
 			c = Throwaway_token(source_file); /* Deal with : */
 		} else if(in_set(c, "!@$~%&")) {
@@ -787,9 +782,9 @@ void second_pass() {
 			process_byte(c, source_file, TRUE);
 		}
 	}
-
 	fclose(source_file);
 }
+
 /* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
 /* Copyright (C) 2017 Jeremiah Orians
  * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
