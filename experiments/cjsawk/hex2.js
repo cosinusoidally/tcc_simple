@@ -321,18 +321,22 @@ function hex(c) {
 	return SUB(0, 1);
 }
 
-void process_byte(char c, int source_file, int write) {
-	if(0 <= hex(c)) {
+function process_byte(c, write) {
+	if(lte(0, hex(c))) {
 		if(toggle) {
 			if(write) {
-				fputc(((hold * 16)) + hex(c), output);
+				fputc(add(mul(hold, 16), hex(c)), output);
 			}
-			ip = ip + 1;
+			ip = add(ip, 1);
 			hold = 0;
 		} else {
 			hold = hex(c);
 		}
-		toggle = !toggle;
+		if(toggle) {
+			toggle = FALSE;
+		} else {
+			toggle = TRUE;
+		}
 	}
 }
 
@@ -357,7 +361,7 @@ void first_pass() {
 				c = Throwaway_token();
 			}
 		} else {
-			process_byte(c, source_file, FALSE);
+			process_byte(c, FALSE);
 		}
 	}
 	fclose(source_file);
@@ -378,7 +382,7 @@ function second_pass() {
 		} else if(in_set(c, mks("!%&"))) {
 			storePointer(c);
 		} else {
-			process_byte(c, source_file, TRUE);
+			process_byte(c, TRUE);
 		}
 		c = nextc();
 	}
