@@ -1086,61 +1086,6 @@ void DoByte(char c, FILE* source_file, int write, int update)
 	}
 }
 
-void WordSecondPass(struct input_files* input)
-{
-	shiftregister = 0;
-	tempword = 0;
-
-	if(NULL == input) return;
-	WordSecondPass(input->next);
-	filename = input->filename;
-	linenumber = 1;
-	FILE* source_file = fopen(filename, "r");
-
-	/* Something that should never happen */
-	if(NULL == source_file)
-	{
-		fputs("The file: ", stderr);
-		fputs(input->filename, stderr);
-		fputs(" can not be opened!\nWTF-pass2\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-
-	toggle = FALSE;
-	hold = 0;
-
-	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
-	{
-		if(':' == c) c = Throwaway_token(source_file); /* Deal with : */
-		else if('.' == c)
-		{
-			/* Read architecture specific number of bytes for what is defined as a word */
-			/* 4bytes in RISC-V's case */
-			updates = 0;
-			tempword = 0;
-			while (updates < 4)
-			{
-				c = fgetc(source_file);
-				DoByte(c, source_file, FALSE, TRUE);
-			}
-			UpdateShiftRegister('.', tempword);
-			ip = ip - 4;
-		}
-		else if(in_set(c, "%&")) WordStorePointer(c, source_file);  /* Deal with % and & */
-		else if(in_set(c, "!@$~"))
-		{
-			Clear_Scratch(scratch);
-			consume_token(source_file);
-			UpdateShiftRegister(c, Architectural_displacement(GetTarget(scratch), ip)); /* Play with shift register */
-		}
-		else if('<' == c) pad_to_align(TRUE);
-		else if('^' == c) ALIGNED = TRUE;
-		else DoByte(c, source_file, TRUE, FALSE);
-	}
-
-	fclose(source_file);
-}
 /* -*- c-file-style: "linux";indent-tabs-mode:t -*- */
 /* Copyright (C) 2017 Jeremiah Orians
  * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
@@ -1164,7 +1109,6 @@ void WordSecondPass(struct input_files* input)
 /* The essential functions */
 void first_pass(struct input_files* input);
 void second_pass(struct input_files* input);
-void WordSecondPass(struct input_files* input);
 
 /* Standard C main program */
 int main(int argc, char **argv)
@@ -1213,8 +1157,7 @@ int main(int argc, char **argv)
 
 	/* Fix all the references*/
 	ip = Base_Address;
-	if(InsaneArchitecture) WordSecondPass(input);
-	else second_pass(input);
+	second_pass(input);
 
 	/* flush all writes */
 	fflush(output);
