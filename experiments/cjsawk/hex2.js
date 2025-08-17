@@ -33,6 +33,7 @@ var hold;
 var toggle;
 
 var source_filename;
+var output_filename;
 
 var max_string;
 
@@ -408,7 +409,6 @@ function main(argc, argv) {
 
 	jump_tables = v_calloc(65537, 4);
 	Base_Address = 0x8048000;
-	char* output_filename;
 	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = ri32(add(argv, 4));
