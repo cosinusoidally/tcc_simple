@@ -6,9 +6,11 @@ pushd .
 
 mkdir artifacts/builds/hex2_test
 
+
 gcc -O0 -g3 -m32 hex2.c -o artifacts/builds/hex2_test/hex2.exe
 
 cd artifacts/builds/hex2_test
+ls -lh
 
 ./hex2.exe ../m0_test/cjsawk.exe-0.hex2 cjsawk.exe
 ./hex2.exe ../m0_test/m0_self.exe-0.hex2 m0_self.exe
