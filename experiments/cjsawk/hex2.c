@@ -798,7 +798,7 @@ void first_pass() {
 	fclose(source_file);
 }
 
-void second_pass(struct input_files* input) {
+void second_pass() {
 	linenumber = 1;
 	FILE* source_file = fopen(source_filename, "r");
 
@@ -1100,7 +1100,6 @@ int main(int argc, char **argv)
 	struct input_files* temp;
 
 	temp = calloc(1, sizeof(struct input_files));
-	require(NULL != temp, "failed to allocate file for processing\n");
 	source_filename = argv[1];
 	temp->filename = source_filename;
 	temp->next = input;
@@ -1115,7 +1114,7 @@ int main(int argc, char **argv)
 
 	/* Fix all the references*/
 	ip = Base_Address;
-	second_pass(input);
+	second_pass();
 
 	fclose(output);
 
