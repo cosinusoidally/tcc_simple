@@ -766,14 +766,6 @@ void first_pass(struct input_files* input)
 	linenumber = 1;
 	FILE* source_file = fopen(filename, "r");
 
-	if(NULL == source_file)
-	{
-		fputs("The file: ", stderr);
-		fputs(input->filename, stderr);
-		fputs(" can not be opened!\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-
 	toggle = FALSE;
 	int c;
 	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
