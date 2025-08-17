@@ -1086,74 +1086,6 @@ void DoByte(char c, FILE* source_file, int write, int update)
 	}
 }
 
-void WordFirstPass(struct input_files* input)
-{
-	if(NULL == input) return;
-	WordFirstPass(input->next);
-	filename = input->filename;
-	linenumber = 1;
-	FILE* source_file = fopen(filename, "r");
-
-	if(NULL == source_file)
-	{
-		fputs("The file: ", stderr);
-		fputs(input->filename, stderr);
-		fputs(" can not be opened!\n", stderr);
-		exit(EXIT_FAILURE);
-	}
-
-	toggle = FALSE;
-	int c;
-	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file))
-	{
-		/* Check for and deal with label */
-		if(':' == c)
-		{
-			c = storeLabel(source_file, ip);
-		}
-
-		/* check for and deal with relative/absolute pointers to labels */
-		if('.' == c)
-		{
-			/* Read architecture specific number of bytes for what is defined as a word */
-			/* 4bytes in RISC-V's case */
-			updates = 0;
-			tempword = 0;
-			while (updates < 4)
-			{
-				c = fgetc(source_file);
-				DoByte(c, source_file, FALSE, TRUE);
-			}
-			ip = ip - 4;
-		}
-		else if(in_set(c, "!@$~"))
-		{
-			/* Don't update IP */
-			c = Throwaway_token(source_file);
-		}
-		else if(in_set(c, "%&"))
-		{
-			ip = ip + 4;
-			c = Throwaway_token(source_file);
-			if ('>' == c)
-			{ /* deal with label>base */
-				c = Throwaway_token(source_file);
-			}
-		}
-		else if('<' == c)
-		{
-			pad_to_align(FALSE);
-		}
-		else if('^' == c)
-		{
-			/* Just ignore */
-			continue;
-		}
-		else DoByte(c, source_file, FALSE, FALSE);
-	}
-	fclose(source_file);
-}
-
 void WordSecondPass(struct input_files* input)
 {
 	shiftregister = 0;
@@ -1232,7 +1164,6 @@ void WordSecondPass(struct input_files* input)
 /* The essential functions */
 void first_pass(struct input_files* input);
 void second_pass(struct input_files* input);
-void WordFirstPass(struct input_files* input);
 void WordSecondPass(struct input_files* input);
 
 /* Standard C main program */
@@ -1278,8 +1209,7 @@ int main(int argc, char **argv)
 
 	/* Get all of the labels */
 	ip = Base_Address;
-	if(InsaneArchitecture) WordFirstPass(input);
-	else first_pass(input);
+	first_pass(input);
 
 	/* Fix all the references*/
 	ip = Base_Address;
