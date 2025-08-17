@@ -337,15 +337,15 @@ void second_pass() {
 	fclose(source_file);
 }
 
-int main(int argc, char **argv) {
+function main(argc, argv) {
 	jump_tables = v_calloc(65537, sizeof(struct entry*));
 	Base_Address = 0x8048000;
 	char* output_filename;
 	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = ri32(add(argv, 4));
-	output_filename = argv[2];
-	output = fopen(output_filename, "w");
+	output_filename = ri32(add(argv, 8));
+	output = fopen(output_filename, mks("w"));
 
 	/* Get all of the labels */
 	ip = Base_Address;
@@ -357,7 +357,7 @@ int main(int argc, char **argv) {
 
 	fclose(output);
 
-	chmod(output_filename, 0750);
+	chmod(output_filename, 488); /* 0750 */
 
 	return 0;
 }
