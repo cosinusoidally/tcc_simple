@@ -97,14 +97,16 @@ function in_set(c, s) {
 	return FALSE;
 }
 
-int consume_token() {
-	int i = 0;
-	int c = nextc();
-	while(!in_set(c, " \t\n>")) {
-		scratch[i] = c;
-		i = i + 1;
+function consume_token() {
+	consume_token_(0, 0);
+}
+function consume_token_(    i, c) {
+	c = nextc();
+	while(eq(0,in_set(c, mks(" \t\n>")))) {
+		wi8(add(scratch, i), c);
+		i = add(i, 1);
 		c = nextc();
-		if(EOF == c) {
+		if(eq(EOF, c)) {
 			break;
 		}
 	}
