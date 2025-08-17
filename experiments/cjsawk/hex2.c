@@ -32,10 +32,8 @@ extern FILE* output;
 extern char* filename;
 extern char* scratch;
 extern int ALIGNED;
-extern int Architecture;
 extern int Base_Address;
 extern int BigEndian;
-extern int ByteMode;
 extern int exec_enable;
 extern int hold;
 extern int ip;
@@ -132,8 +130,6 @@ FILE* output;
 struct entry** jump_tables;
 int BigEndian;
 int Base_Address;
-int Architecture;
-int ByteMode;
 int exec_enable;
 int ip;
 char* scratch;
@@ -423,12 +419,10 @@ int main(int argc, char **argv) {
 	BigEndian = FALSE;
 	jump_tables = calloc(65537, sizeof(struct entry*));
 
-	Architecture = X86;
 	Base_Address = 0x8048000;
 	struct input_files* input = NULL;
 	char* output_file;
 	exec_enable = TRUE;
-	ByteMode = HEX;
 	scratch = calloc(max_string + 1, sizeof(char));
 	struct input_files* temp;
 
