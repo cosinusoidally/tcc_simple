@@ -124,7 +124,7 @@ function in_set(c, s) {
 }
 
 function consume_token() {
-	consume_token_(0, 0);
+	return consume_token_(0, 0);
 }
 function consume_token_(    i, c) {
 	c = nextc();
@@ -140,7 +140,7 @@ function consume_token_(    i, c) {
 }
 
 function Throwaway_token() {
-	Throwaway_token_(0);
+	return Throwaway_token_(0);
 }
 function Throwaway_token_(c) {
 	c = nextc();
@@ -154,7 +154,7 @@ function Throwaway_token_(c) {
 }
 
 function length(s) {
-	length_(s, 0);
+	return length_(s, 0);
 }
 function length_(s,    i) {
 	while(neq(0, ri8(add(s, i)))) {
@@ -197,7 +197,7 @@ function GetHash_(s,    i) {
 }
 
 function GetTarget(c) {
-	GetTarget_(c, 0);
+	return GetTarget_(c, 0);
 }
 function GetTarget_(c,    i) {
 	i = ri32(add(jump_tables, mul(GetHash(c), 4)));
@@ -211,7 +211,7 @@ function GetTarget_(c,    i) {
 }
 
 function storeLabel(ip) {
-	storeLabel_(ip, 0, 0, 0);
+	return storeLabel_(ip, 0, 0, 0);
 }
 function storeLabel_(ip,    c, h, entry) {
 	entry = v_calloc(1, sizeof_entry);
@@ -234,7 +234,7 @@ function storeLabel_(ip,    c, h, entry) {
 }
 
 function outputPointer(displacement, number_of_bytes) {
-	outputPointer_(displacement, number_of_bytes, 0, 0);
+	return outputPointer_(displacement, number_of_bytes, 0, 0);
 }
 function outputPointer_(displacement, number_of_bytes,    byte, value) {
 	value = displacement;
