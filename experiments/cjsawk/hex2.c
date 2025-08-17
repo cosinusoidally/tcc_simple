@@ -346,11 +346,7 @@ int main(int argc, char **argv) {
 
 	fclose(output);
 
-	/* Set file as executable */
-	if(0 != chmod(output_file, 0750)) {
-			fputs("Unable to change permissions\n", stderr);
-			exit(EXIT_FAILURE);
-	}
+	chmod(output_file, 0750);
 
 	return EXIT_SUCCESS;
 }
