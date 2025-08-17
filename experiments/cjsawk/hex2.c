@@ -1245,7 +1245,7 @@ int main(int argc, char **argv)
 	require(NULL != jump_tables, "Failed to allocate our jump_tables\n");
 
 	Architecture = X86;
-	Base_Address = 0;
+	Base_Address = 0x8048000;
 	struct input_files* input = NULL;
 	output = stdout;
 	char* output_file = "";
