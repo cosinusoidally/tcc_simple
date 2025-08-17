@@ -208,7 +208,7 @@ void outputPointer(int displacement, int number_of_bytes) {
 		byte = value % 256;
 		value = value / 256;
 		fputc(byte, output);
-		number_of_bytes = number_of_bytes - 1;
+		number_of_bytes = SUB(number_of_bytes, 1);
 	}
 }
 
