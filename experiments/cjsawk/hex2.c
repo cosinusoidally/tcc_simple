@@ -20,14 +20,11 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <sys/stat.h>
 
 /* Globals */
-FILE* output;
+int output;
 struct entry** jump_tables;
 int Base_Address;
 int ip;
@@ -44,6 +41,8 @@ char* source_filename;
 #define max_string 4096
 #define TRUE 1
 #define FALSE 0
+
+int EOF=-1;
 
 struct input_files
 {
@@ -87,7 +86,7 @@ int in_set(int c, char* s) {
 	return FALSE;
 }
 
-int consume_token(FILE* source_file) {
+int consume_token(int source_file) {
 	int i = 0;
 	int c = fgetc(source_file);
 	while(!in_set(c, " \t\n>")) {
@@ -101,7 +100,7 @@ int consume_token(FILE* source_file) {
 	return c;
 }
 
-int Throwaway_token(FILE* source_file) {
+int Throwaway_token(int source_file) {
 	int c;
 	do
 	{
@@ -153,13 +152,10 @@ unsigned GetTarget(char* c) {
 			return i->target;
 		}
 	}
-	fputs("Target label ", stderr);
-	fputs(c, stderr);
-	fputs(" is not valid\n", stderr);
 	exit(EXIT_FAILURE);
 }
 
-int storeLabel(FILE* source_file, int ip) {
+int storeLabel(int source_file, int ip) {
 	struct entry* entry = calloc(1, sizeof(struct entry));
 
 	/* Ensure we have target address */
@@ -201,7 +197,7 @@ void Update_Pointer(char ch) {
 	}
 }
 
-void storePointer(char ch, FILE* source_file) {
+void storePointer(char ch, int source_file) {
 	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
@@ -233,7 +229,7 @@ void storePointer(char ch, FILE* source_file) {
 	}
 }
 
-void line_Comment(FILE* source_file) {
+void line_Comment(int source_file) {
 	int c = fgetc(source_file);
 	while(!in_set(c, "\n\r")) {
 		if(EOF == c) break;
@@ -242,7 +238,7 @@ void line_Comment(FILE* source_file) {
 	linenumber = linenumber + 1;
 }
 
-int hex(int c, FILE* source_file) {
+int hex(int c, int source_file) {
 	if (in_set(c, "0123456789")) {
 		return (c - 48);
 	} else if (in_set(c, "abcdef")) {
@@ -257,7 +253,7 @@ int hex(int c, FILE* source_file) {
 	return -1;
 }
 
-void process_byte(char c, FILE* source_file, int write) {
+void process_byte(char c, int source_file, int write) {
 	if(0 <= hex(c, source_file)) {
 		if(toggle) {
 			if(write) {
@@ -274,7 +270,7 @@ void process_byte(char c, FILE* source_file, int write) {
 
 void first_pass() {
 	linenumber = 1;
-	FILE* source_file = fopen(source_filename, "r");
+	int source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	int c;
@@ -301,7 +297,7 @@ void first_pass() {
 
 void second_pass() {
 	linenumber = 1;
-	FILE* source_file = fopen(source_filename, "r");
+	int source_file = fopen(source_filename, "r");
 
 	toggle = FALSE;
 	hold = 0;
