@@ -26,51 +26,25 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+/* Globals */
+FILE* output;
+struct entry** jump_tables;
+int Base_Address;
+int exec_enable;
+int ip;
+char* scratch;
+char* filename;
+int linenumber;
 
-/* Global variables */
-extern FILE* output;
-extern char* filename;
-extern char* scratch;
-extern int Base_Address;
-extern int exec_enable;
-extern int hold;
-extern int ip;
-extern int linenumber;
-extern int toggle;
-extern struct entry** jump_tables;
+/* For processing bytes */
+int hold;
+int toggle;
 
 char* source_filename;
-
-/* Function prototypes */
-int Architectural_displacement(int target, int base);
-int Throwaway_token(FILE* source_file);
-int consume_token(FILE* source_file);
-int storeLabel(FILE* source_file, int ip);
-unsigned GetTarget(char* c);
-void Clear_Scratch(char* s);
-void outputPointer(int displacement, int number_of_bytes);
-void pad_to_align(int write);
-int hex(int c, FILE* source_file);
-int octal(int c, FILE* source_file);
-int binary(int c, FILE* source_file);
 
 #define max_string 4096
 #define TRUE 1
 #define FALSE 0
-
-#define KNIGHT 0
-#define X86 0x03
-#define AMD64 0x3E
-#define ARMV7L 0x28
-#define AARM64 0xB7
-#define PPC64LE 0x15
-#define RISCV32 0xF3
-#define RISCV64 0x100F3 /* Because RISC-V unlike all other architectures does get a seperate e_machine when changing from 32 to 64bit */
-
-#define HEX 16
-#define OCTAL 8
-#define BINARY 2
-
 
 struct input_files
 {
@@ -84,13 +58,6 @@ struct entry
 	unsigned target;
 	char* name;
 };
-
-#include <stdio.h>
-#include <stdlib.h>
-
-
-#define TRUE 1
-#define FALSE 0
 
 int match(char* a, char* b) {
 	if((NULL == a) && (NULL == b)) return TRUE;
@@ -122,20 +89,6 @@ int in_set(int c, char* s)
 	}
 	return FALSE;
 }
-
-/* Globals */
-FILE* output;
-struct entry** jump_tables;
-int Base_Address;
-int exec_enable;
-int ip;
-char* scratch;
-char* filename;
-int linenumber;
-
-/* For processing bytes */
-int hold;
-int toggle;
 
 int consume_token(FILE* source_file) {
 	int i = 0;
