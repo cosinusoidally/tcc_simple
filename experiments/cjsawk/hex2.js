@@ -278,7 +278,7 @@ function storePointer_(ch,    base_sep_p, base, target, displacement) {
 		outputPointer(displacement, 1); /* Deal with ! */
 	} else if(eq(mkC("&"), ch)) {
 		outputPointer(target, 4); /* Deal with & */
-	} else if(mkC("%"), ch) {
+	} else if(eq(mkC("%"), ch)) {
 		outputPointer(displacement, 4);  /* Deal with % */
 	} else {
 		v_exit(1);
