@@ -31,9 +31,7 @@
 extern FILE* output;
 extern char* filename;
 extern char* scratch;
-extern int ALIGNED;
 extern int Base_Address;
-extern int BigEndian;
 extern int exec_enable;
 extern int hold;
 extern int ip;
@@ -128,14 +126,12 @@ int in_set(int c, char* s)
 /* Globals */
 FILE* output;
 struct entry** jump_tables;
-int BigEndian;
 int Base_Address;
 int exec_enable;
 int ip;
 char* scratch;
 char* filename;
 int linenumber;
-int ALIGNED;
 
 /* For processing bytes */
 int hold;
@@ -415,8 +411,6 @@ void DoByte(char c, FILE* source_file, int write, int update) {
 
 int main(int argc, char **argv) {
 	int InsaneArchitecture = FALSE;
-	ALIGNED = FALSE;
-	BigEndian = FALSE;
 	jump_tables = calloc(65537, sizeof(struct entry*));
 
 	Base_Address = 0x8048000;
