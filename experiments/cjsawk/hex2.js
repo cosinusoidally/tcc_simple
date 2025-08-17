@@ -50,6 +50,32 @@ struct entry
 	char* name;
 };
 
+var entry_next_o = 0;
+var entry_target_o = 4;
+var entry_name_o = 8;
+var sizeof_entry = 12;
+
+function entry_next_g(o) {
+	return ri32(add(o, entry_next_o));
+}
+function entry_next_s(o, v) {
+	wi32(add(o, entry_next_o), v);
+}
+
+function entry_target_g(o) {
+	return ri32(add(o, entry_target_o));
+}
+function entry_target_s(o, v) {
+	wi32(add(o, entry_target_o), v);
+}
+
+function entry_name_g(o) {
+	return ri32(add(o, entry_name_o));
+}
+function entry_name_s(o, v) {
+	wi32(add(o, entry_name_o), v);
+}
+
 function ri32(o) {
 	return OR(OR(AND(ri8(o), 255),
 		shl(AND(ri8(add(o, 1)), 255), 8)),
