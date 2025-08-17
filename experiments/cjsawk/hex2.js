@@ -315,7 +315,7 @@ void first_pass() {
 	fclose(source_file);
 }
 
-void second_pass() {
+function second_pass() {
 	linenumber = 1;
 	source_file = fopen(source_filename, mks("r"));
 
