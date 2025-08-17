@@ -29,10 +29,10 @@ var filename;
 var linenumber;
 var source_file;
 
-int hold;
-int toggle;
+var hold;
+var toggle;
 
-int source_filename;
+var source_filename;
 
 var max_string;
 
