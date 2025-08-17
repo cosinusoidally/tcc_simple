@@ -34,14 +34,15 @@ int source_file;
 int hold;
 int toggle;
 
-char* source_filename;
+int source_filename;
 
-#define max_string 4096
-#define TRUE 1
-#define FALSE 0
+var max_string;
 
-int EOF=-1;
-int NULL=0;
+var TRUE;
+var FALSE;
+
+var EOF;
+var NULL;
 
 struct entry
 {
@@ -396,7 +397,13 @@ function second_pass_(    c) {
 }
 
 function init_globals() {
+	max_string  = 4096;
 
+	TRUE = 1;
+	FALSE = 0;
+
+	EOF = SUB(0, 1);
+	NULL = 0;
 }
 
 function main(argc, argv) {
