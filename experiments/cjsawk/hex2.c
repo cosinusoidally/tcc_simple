@@ -77,13 +77,11 @@ int match(char* a, char* b) {
 }
 
 
-int in_set(int c, char* s)
-{
+int in_set(int c, char* s) {
 	/* NULL set is always false */
 	if(NULL == s) return FALSE;
 
-	while(0 != s[0])
-	{
+	while(0 != s[0]) {
 		if(c == s[0]) return TRUE;
 		s = s + 1;
 	}
@@ -142,8 +140,7 @@ void Copy_String(char* a, char* b) {
 
 int GetHash(char* s) {
 	int i = 5381;
-	while(0 != s[0])
-	{
+	while(0 != s[0]) {
 		i = i * 31 + s[0];
 		s = s + 1;
 	}
@@ -163,8 +160,7 @@ unsigned GetTarget(char* c) {
 	exit(EXIT_FAILURE);
 }
 
-int storeLabel(FILE* source_file, int ip)
-{
+int storeLabel(FILE* source_file, int ip) {
 	struct entry* entry = calloc(1, sizeof(struct entry));
 
 	/* Ensure we have target address */
@@ -195,10 +191,6 @@ void outputPointer(int displacement, int number_of_bytes) {
 	}
 }
 
-int Architectural_displacement(int target, int base) {
-	return (target - base);
-}
-
 void Update_Pointer(char ch) {
 	/* Calculate pointer size*/
 	if(in_set(ch, "%&")) {
@@ -227,12 +219,8 @@ void storePointer(char ch, FILE* source_file) {
 		Clear_Scratch(scratch);
 		consume_token (source_file);
 		base = GetTarget (scratch);
-
-		/* Force universality of behavior */
-		displacement = (target - base);
-	} else {
-		displacement = Architectural_displacement(target, base);
 	}
+	displacement = (target - base);
 
 	/* output calculated difference */
 	if('!' == ch) {
