@@ -195,40 +195,6 @@ int __set_reader(char* set, int mult, char* input)
 	return n;
 }
 
-int strtoint(char *a)
-{
-	int result = 0;
-	/* If NULL string */
-	if(0 == a[0])
-	{
-		result = 0;
-	}
-	/* Deal with binary */
-	else if ('0' == a[0] && 'b' == a[1])
-	{
-		result = __set_reader("01", 2, a+2);
-	}
-	/* Deal with hex */
-	else if ('0' == a[0] &&  'x' == a[1])
-	{
-		result = __set_reader("0123456789ABCDEFabcdef", 16, a+2);
-	}
-	/* Deal with octal */
-	else if('0' == a[0])
-	{
-		result = __set_reader("01234567", 8, a+1);
-	}
-	/* Deal with decimal */
-	else
-	{
-		result = __set_reader("0123456789", 10, a);
-	}
-
-	/* Deal with sign extension for 64bit hosts */
-	if(0 != (0x80000000 & result)) result = (0xFFFFFFFF << 31) | result;
-	return result;
-}
-
 char* int2str(int x, int base, int signed_p)
 {
 	require(1 < base, "int2str doesn't support a base less than 2\n");
@@ -600,29 +566,18 @@ void line_Comment(FILE* source_file)
 	linenumber = linenumber + 1;
 }
 
-int hex(int c, FILE* source_file)
-{
-	if (in_set(c, "0123456789")) return (c - 48);
-	else if (in_set(c, "abcdef")) return (c - 87);
-	else if (in_set(c, "ABCDEF")) return (c - 55);
-	else if (in_set(c, "#;")) line_Comment(source_file);
-	else if ('\n' == c) linenumber = linenumber + 1;
-	return -1;
-}
-
-int octal(int c, FILE* source_file)
-{
-	if (in_set(c, "01234567")) return (c - 48);
-	else if (in_set(c, "#;")) line_Comment(source_file);
-	else if ('\n' == c) linenumber = linenumber + 1;
-	return -1;
-}
-
-int binary(int c, FILE* source_file)
-{
-	if (in_set(c, "01")) return (c - 48);
-	else if (in_set(c, "#;")) line_Comment(source_file);
-	else if ('\n' == c) linenumber = linenumber + 1;
+int hex(int c, FILE* source_file) {
+	if (in_set(c, "0123456789")) {
+		return (c - 48);
+	} else if (in_set(c, "abcdef")) {
+		return (c - 87);
+	} else if (in_set(c, "ABCDEF")) {
+		return (c - 55);
+	} else if (in_set(c, "#;")) {
+		line_Comment(source_file);
+	} else if ('\n' == c) {
+		linenumber = linenumber + 1;
+	}
 	return -1;
 }
 
