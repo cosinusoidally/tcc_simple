@@ -760,11 +760,7 @@ void pad_to_align(int write)
 	}
 }
 
-void first_pass(struct input_files* input)
-{
-	if(NULL == input) return;
-	first_pass(input->next);
-	filename = input->filename;
+void first_pass() {
 	linenumber = 1;
 	FILE* source_file = fopen(source_filename, "r");
 
@@ -1101,7 +1097,6 @@ void DoByte(char c, FILE* source_file, int write, int update)
 
 
 /* The essential functions */
-void first_pass(struct input_files* input);
 void second_pass(struct input_files* input);
 
 /* Standard C main program */
@@ -1133,7 +1128,7 @@ int main(int argc, char **argv)
 
 	/* Get all of the labels */
 	ip = Base_Address;
-	first_pass(input);
+	first_pass();
 
 	/* Fix all the references*/
 	ip = Base_Address;
