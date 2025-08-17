@@ -1082,10 +1082,6 @@ void DoByte(char c, FILE* source_file, int write, int update)
  * along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/* The essential functions */
-void second_pass(struct input_files* input);
-
 /* Standard C main program */
 int main(int argc, char **argv)
 {
