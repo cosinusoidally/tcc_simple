@@ -18,10 +18,31 @@ ls -lh
 diff -u -s ../m0_test/cjsawk.exe cjsawk.exe
 diff -u -s ../m0_test/m0_self.exe m0_self.exe
 
-# also build hex2.js with cjsawk
+# prepare to build hex2.js with cjsawk
 cat ../../../hex2.js ../../../support_libc.js ../../../simple_support_js_m2_prims.c ../../../support_m2.c > hex2_self.c
 
-compile ./cjsawk.exe hex2_self.c hex2_self2.exe
+compile ./cjsawk.exe hex2_self.c hex2_self.exe
+
+function compile_alt() {
+  $1 $2 $3.M1
+  cat ../../../../m2min_v3/simple_asm_defs.M1 ../../../../m2min_v3/x86_defs.M1 ../../../../m2min_v3/libc-core.M1 $3.M1 > $3-0.M1
+  ./m0_self$4.exe $3-0.M1 $3.hex2
+  cat ../../../../m2min_v3/ELF-i386.hex2 $3.hex2 > $3-0.hex2
+  ./hex2_self$4.exe $3-0.hex2 $3
+# hack since chmod is not implemented yet in C support code
+  chmod +x $3
+}
+
+
+compile_alt ./cjsawk.exe ../../deps/cjsawk_full.c cjsawk2.exe
+compile_alt ./cjsawk2.exe ../m0_test/m0_self.c m0_self2.exe
+compile_alt ./cjsawk2.exe ./hex2_self.c hex2_self2.exe
+
+compile_alt ./cjsawk2.exe ../../deps/cjsawk_full.c cjsawk3.exe 2
+compile_alt ./cjsawk3.exe ../m0_test/m0_self.c m0_self3.exe 2
+compile_alt ./cjsawk3.exe ./hex2_self.c hex2_self3.exe 2
+
+shasum *exe | sort
 
 popd
 
