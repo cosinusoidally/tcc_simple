@@ -200,7 +200,7 @@ function GetTarget_(c,    i) {
 		}
 		i = entry_next_g(i);
 	}
-	exit(1);
+	v_exit(1);
 }
 
 function storeLabel(ip) {
@@ -246,7 +246,7 @@ function Update_Pointer(ch) {
 	} else if(eq(mkC("!"), ch)) {
 		ip = add(ip, 1); /* Deal with ! */
 	} else {
-		exit(1);
+		v_exit(1);
 	}
 }
 
@@ -281,7 +281,7 @@ function storePointer_(ch,    base_sep_p, base, target, displacement) {
 	} else if(mkC("%"), ch) {
 		outputPointer(displacement, 4);  /* Deal with % */
 	} else {
-		exit(1);
+		v_exit(1);
 	}
 }
 
