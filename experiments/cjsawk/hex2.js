@@ -210,24 +210,25 @@ function GetTarget_(c,    i) {
 	exit(1);
 }
 
-int storeLabel(ip) {
-	int c;
-	int h;
-	struct entry* entry = v_calloc(1, sizeof_entry);
+function storeLabel(ip) {
+	storeLabel_(ip, 0, 0, 0);
+}
+function storeLabel_(ip,    c, h, entry) {
+	entry = v_calloc(1, sizeof_entry);
 
 	/* Ensure we have target address */
-	entry->target = ip;
+	entry_target_s(entry, ip);
 
 	/* Store string */
 	c = consume_token();
-	entry->name = v_calloc(add(length(scratch), 1), 1);
+	entry_name_s(entry, v_calloc(add(length(scratch), 1), 1));
 	Copy_String(scratch, entry_name_g(entry));
 	Clear_Scratch(scratch);
 
 	/* Prepend to list */
-	h = GetHash(entry->name);
-	entry->next = ri32(add(jump_tables, mul(h, 4)));
-	jump_tables[h] = entry;
+	h = GetHash(entry_name_g(entry));
+	entry_next_s(entry, ri32(add(jump_tables, mul(h, 4))));
+	wi32(add(jump_tables, mul(h, 4)), entry);
 
 	return c;
 }
