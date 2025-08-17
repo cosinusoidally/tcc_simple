@@ -1240,11 +1240,11 @@ int main(int argc, char **argv)
 {
 	int InsaneArchitecture = FALSE;
 	ALIGNED = FALSE;
-	BigEndian = TRUE;
+	BigEndian = FALSE;
 	jump_tables = calloc(65537, sizeof(struct entry*));
 	require(NULL != jump_tables, "Failed to allocate our jump_tables\n");
 
-	Architecture = KNIGHT;
+	Architecture = X86;
 	Base_Address = 0;
 	struct input_files* input = NULL;
 	output = stdout;
