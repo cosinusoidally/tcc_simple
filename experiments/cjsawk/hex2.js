@@ -306,31 +306,31 @@ function line_Comment_(    c) {
 	linenumber = add(linenumber, 1);
 }
 
-int hex(int c, int source_file) {
-	if (in_set(c, "0123456789")) {
-		return (c - 48);
-	} else if (in_set(c, "abcdef")) {
-		return (c - 87);
-	} else if (in_set(c, "ABCDEF")) {
-		return (c - 55);
-	} else if (in_set(c, "#;")) {
+function hex(c) {
+	if (in_set(c, mks("0123456789"))) {
+		return SUB(c, 48);
+	} else if (in_set(c, mks("abcdef"))) {
+		return SUB(c, 87);
+	} else if (in_set(c, mks("ABCDEF"))) {
+		return SUB(c, 55);
+	} else if (in_set(c, mks("#;"))) {
 		line_Comment();
-	} else if ('\n' == c) {
-		linenumber = linenumber + 1;
+	} else if (eq(mkC("\n"), c)) {
+		linenumber = add(linenumber, 1);
 	}
-	return -1;
+	return SUB(0, 1);
 }
 
 void process_byte(char c, int source_file, int write) {
-	if(0 <= hex(c, source_file)) {
+	if(0 <= hex(c)) {
 		if(toggle) {
 			if(write) {
-				fputc(((hold * 16)) + hex(c, source_file), output);
+				fputc(((hold * 16)) + hex(c), output);
 			}
 			ip = ip + 1;
 			hold = 0;
 		} else {
-			hold = hex(c, source_file);
+			hold = hex(c);
 		}
 		toggle = !toggle;
 	}
