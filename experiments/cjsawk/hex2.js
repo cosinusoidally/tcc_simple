@@ -234,8 +234,10 @@ function storeLabel_(ip,    c, h, entry) {
 }
 
 function outputPointer(displacement, number_of_bytes) {
-	int byte;
-	unsigned value = displacement;
+	outputPointer_(displacement, number_of_bytes, 0, 0);
+}
+function outputPointer_(displacement, number_of_bytes,    byte, value) {
+	value = displacement;
 	while(gt(number_of_bytes, 0)) {
 		byte = mod(value, 256);
 		value = AND(shr(value, 8), 0xFFFFFF);
