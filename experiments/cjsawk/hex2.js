@@ -250,17 +250,17 @@ function Update_Pointer(ch) {
 }
 
 function storePointer(ch) {
-	return storePointer_(ch, 0, 0);
+	return storePointer_(ch, 0, 0, 0, 0);
 }
-function storePointer_(ch,    base_sep_p, base) {
+function storePointer_(ch,    base_sep_p, base, target, displacement) {
 	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
 	base_sep_p = consume_token();
 
 	/* Lookup token */
-	int target = GetTarget(scratch);
-	int displacement;
+	target = GetTarget(scratch);
+	displacement;
 
 	base = ip;
 
