@@ -52,7 +52,6 @@ int consume_token(FILE* source_file);
 int storeLabel(FILE* source_file, int ip);
 unsigned GetTarget(char* c);
 void Clear_Scratch(char* s);
-void line_error();
 void outputPointer(int displacement, int number_of_bytes);
 void pad_to_align(int write);
 int hex(int c, FILE* source_file);
@@ -97,19 +96,7 @@ struct entry
 #define TRUE 1
 #define FALSE 0
 
-
-void require(int bool, char* error)
-{
-	if(!bool)
-	{
-		fputs(error, stderr);
-		exit(EXIT_FAILURE);
-	}
-}
-
-
-int match(char* a, char* b)
-{
+int match(char* a, char* b) {
 	if((NULL == a) && (NULL == b)) return TRUE;
 	if(NULL == a) return FALSE;
 	if(NULL == b) return FALSE;
@@ -140,100 +127,6 @@ int in_set(int c, char* s)
 	return FALSE;
 }
 
-/* INTERNAL ONLY */
-int __index_number(char* s, char c)
-{
-	int i = 0;
-	while(s[i] != c)
-	{
-		i = i + 1;
-		if(0 == s[i]) return -1;
-	}
-	return i;
-}
-
-/* INTERNAL ONLY */
-int __toupper(int c)
-{
-	if(in_set(c, "abcdefghijklmnopqrstuvwxyz")) return (c & 0xDF);
-	return c;
-}
-
-/* INTERNAL ONLY */
-int __set_reader(char* set, int mult, char* input)
-{
-	int n = 0;
-	int i = 0;
-	int hold;
-	int negative_p = FALSE;
-
-	if(input[0] == '-')
-	{
-		negative_p = TRUE;
-		i = i + 1;
-	}
-
-	while(in_set(input[i], set))
-	{
-		n = n * mult;
-		hold = __index_number(set, __toupper(input[i]));
-
-		/* Input managed to change between in_set and index_number */
-		if(-1 == hold) return 0;
-		n = n + hold;
-		i = i + 1;
-	}
-
-	/* loop exited before NULL and thus invalid input */
-	if(0 != input[i]) return 0;
-
-	if(negative_p)
-	{
-		n = 0 - n;
-	}
-
-	return n;
-}
-
-char* int2str(int x, int base, int signed_p)
-{
-	require(1 < base, "int2str doesn't support a base less than 2\n");
-	require(37 > base, "int2str doesn't support a base more than 36\n");
-	/* Be overly conservative and save space for 32binary digits and padding null */
-	char* p = calloc(34, sizeof(char));
-	/* if calloc fails return null to let calling code deal with it */
-	if(NULL == p) return p;
-
-	p = p + 32;
-	unsigned i;
-	int sign_p = FALSE;
-	char* table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	if(signed_p && (10 == base) && (0 != (x & 0x80000000)))
-	{
-		/* Truncate to 31bits */
-		i = -x & 0x7FFFFFFF;
-		if(0 == i) return "-2147483648";
-		sign_p = TRUE;
-	} /* Truncate to 32bits */
-	else i = x & (0x7FFFFFFF | (1 << 31));
-
-	do
-	{
-		p[0] = table[i % base];
-		p = p - 1;
-		i = i / base;
-	} while(0 < i);
-
-	if(sign_p)
-	{
-		p[0] = '-';
-		p = p - 1;
-	}
-
-	return p + 1;
-}
-
 /* Globals */
 FILE* output;
 struct entry** jump_tables;
@@ -251,14 +144,6 @@ int ALIGNED;
 /* For processing bytes */
 int hold;
 int toggle;
-
-void line_error()
-{
-	fputs(filename, stderr);
-	fputs(":", stderr);
-	fputs(int2str(linenumber, 10, FALSE), stderr);
-	fputs(" :", stderr);
-}
 
 int consume_token(FILE* source_file) {
 	int i = 0;
@@ -336,7 +221,6 @@ unsigned GetTarget(char* c) {
 int storeLabel(FILE* source_file, int ip)
 {
 	struct entry* entry = calloc(1, sizeof(struct entry));
-	require(NULL != entry, "failed to allocate entry\n");
 
 	/* Ensure we have target address */
 	entry->target = ip;
