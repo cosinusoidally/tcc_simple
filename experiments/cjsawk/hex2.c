@@ -738,17 +738,6 @@ unsigned shiftregister;
 unsigned tempword;
 int updates;
 
-void outOfRange(char* s, int value)
-{
-	line_error();
-	fputs("error: value ", stderr);
-	fputs(int2str(value, 10, TRUE), stderr);
-	fputs(" out of range for field type ", stderr);
-	fputs(s, stderr);
-	fputs("\n", stderr);
-	exit(EXIT_FAILURE);
-}
-
 unsigned sr_nextb() {
 	unsigned rv = shiftregister & 0xff;
 	shiftregister = shiftregister >> 8;
