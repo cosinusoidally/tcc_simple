@@ -150,11 +150,11 @@ function Clear_Scratch_(s,    i, c) {
 	}
 }
 
-void Copy_String(char* a, char* b) {
-	while(0 != a[0]) {
-		b[0] = a[0];
-		a = a + 1;
-		b = b + 1;
+function Copy_String(a, b) {
+	while(neq(0, ri8(a))) {
+		wi8(b, ri8(a));
+		a = add(a, 1);
+		b = add(b, 1);
 	}
 }
 
@@ -170,7 +170,7 @@ function GetHash_(s,    i) {
 	return AND(i, 65535);
 }
 
-unsigned GetTarget(char* c) {
+function GetTarget(c) {
 	struct entry* i;
 	for(i = jump_tables[GetHash(c)]; NULL != i; i = i->next) {
 		if(smatch(c, i->name)) {
@@ -180,15 +180,16 @@ unsigned GetTarget(char* c) {
 	exit(1);
 }
 
-int storeLabel(int source_file, int ip) {
-	struct entry* entry = calloc(1, sizeof(struct entry));
+int storeLabel(ip) {
+	int c;
+	struct entry* entry = v_calloc(1, sizeof(struct entry));
 
 	/* Ensure we have target address */
 	entry->target = ip;
 
 	/* Store string */
-	int c = consume_token();
-	entry->name = calloc(length(scratch) + 1, sizeof(char));
+	c = consume_token();
+	entry->name = v_calloc(add(length(scratch), 1), 1);
 	Copy_String(scratch, entry->name);
 	Clear_Scratch(scratch);
 
@@ -302,7 +303,7 @@ void first_pass() {
 	for(c = nextc(); EOF != c; c = nextc()) {
 		/* Check for and deal with label */
 		if(':' == c) {
-			c = storeLabel(source_file, ip);
+			c = storeLabel(ip);
 		}
 
 		/* check for and deal with relative/absolute pointers to labels */
