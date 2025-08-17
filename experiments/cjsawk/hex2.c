@@ -285,7 +285,7 @@ void first_pass() {
 		}
 
 		/* check for and deal with relative/absolute pointers to labels */
-		if(in_set(c, "!@$~%&")) {
+		if(in_set(c, "!%&")) {
 			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token(source_file);
@@ -310,7 +310,7 @@ void second_pass() {
 	for(c = fgetc(source_file); EOF != c; c = fgetc(source_file)) {
 		if(':' == c) {
 			c = Throwaway_token(source_file);
-		} else if(in_set(c, "!@$~%&")) {
+		} else if(in_set(c, "!%&")) {
 			storePointer(c, source_file);
 		} else {
 			process_byte(c, source_file, TRUE);
