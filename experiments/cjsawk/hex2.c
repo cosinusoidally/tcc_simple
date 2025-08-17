@@ -756,83 +756,21 @@ unsigned sr_nextb()
 	return rv;
 }
 
-void DoByte(char c, FILE* source_file, int write, int update)
-{
-	if(HEX == ByteMode)
-	{
-		if(0 <= hex(c, source_file))
-		{
-			if(toggle)
-			{
-				if(write) fputc(((hold * 16)) + hex(c, source_file) ^ sr_nextb(), output);
-				ip = ip + 1;
-				if(update)
-				{
-					hold = (hold * 16) + hex(c, source_file);
-					tempword = (tempword << 8) ^ hold;
-					updates = updates + 1;
-				}
-				hold = 0;
+void DoByte(char c, FILE* source_file, int write, int update) {
+	if(0 <= hex(c, source_file)) {
+		if(toggle) {
+			if(write) fputc(((hold * 16)) + hex(c, source_file) ^ sr_nextb(), output);
+			ip = ip + 1;
+			if(update) {
+				hold = (hold * 16) + hex(c, source_file);
+				tempword = (tempword << 8) ^ hold;
+				updates = updates + 1;
 			}
-			else
-			{
-				hold = hex(c, source_file);
-			}
-			toggle = !toggle;
+			hold = 0;
+		} else {
+			hold = hex(c, source_file);
 		}
-	}
-	else if(OCTAL ==ByteMode)
-	{
-		if(0 <= octal(c, source_file))
-		{
-			if(2 == toggle)
-			{
-				if(write) fputc(((hold * 8)) + octal(c, source_file) ^ sr_nextb(), output);
-				ip = ip + 1;
-				if(update)
-				{
-					hold = ((hold * 8) + octal(c, source_file));
-					tempword = (tempword << 8) ^ hold;
-					updates = updates + 1;
-				}
-				hold = 0;
-				toggle = 0;
-			}
-			else if(1 == toggle)
-			{
-				hold = ((hold * 8) + octal(c, source_file));
-				toggle = 2;
-			}
-			else
-			{
-				hold = octal(c, source_file);
-				toggle = 1;
-			}
-		}
-	}
-	else if(BINARY == ByteMode)
-	{
-		if(0 <= binary(c, source_file))
-		{
-			if(7 == toggle)
-			{
-				if(write) fputc((hold * 2) + binary(c, source_file) ^ sr_nextb(), output);
-				ip = ip + 1;
-				if(update)
-				{
-					hold = ((hold * 2) + binary(c, source_file));
-					tempword = (tempword << 8) ^ hold;
-					updates = updates + 1;
-				}
-				hold = 0;
-				toggle = 0;
-			}
-			else
-			{
-				hold = ((hold * 2) + binary(c, source_file));
-				toggle = toggle + 1;
-			}
-		}
+		toggle = !toggle;
 	}
 }
 
