@@ -116,11 +116,17 @@ int length(char* s) {
 	return i;
 }
 
-void Clear_Scratch(char* s) {
-	do {
-		s[0] = 0;
-		s = s + 1;
-	} while(0 != s[0]);
+function Clear_Scratch(s) {
+	return Clear_Scratch_(s,0, 0);
+}
+function Clear_Scratch_(s,    i, c) {
+	i = 0;
+	c = ri8(add(s, i));
+	while(neq(0, c)) {
+		wi8(add(s, i), 0);
+		i = add(i, 1);
+		c = ri8(add(s, i));
+	}
 }
 
 void Copy_String(char* a, char* b) {
