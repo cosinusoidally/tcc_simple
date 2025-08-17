@@ -197,11 +197,15 @@ function GetHash_(s,    i) {
 }
 
 function GetTarget(c) {
-	struct entry* i;
-	for(i = jump_tables[GetHash(c)]; NULL != i; i = entry_next_g(i)) {
+	GetTarget_(c, 0);
+}
+function GetTarget_(c,    i) {
+	i = jump_tables[GetHash(c)];
+	while(neq(NULL, i)) {
 		if(smatch(c, entry_name_g(i))) {
 			return entry_target_g(i);
 		}
+		i = entry_next_g(i);
 	}
 	exit(1);
 }
