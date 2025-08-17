@@ -50,6 +50,23 @@ struct entry
 	char* name;
 };
 
+function ri32(o) {
+	return OR(OR(AND(ri8(o), 255),
+		shl(AND(ri8(add(o, 1)), 255), 8)),
+		OR(shl(AND(ri8(add(o, 2)), 255), 16),
+		shl(AND(ri8(add(o, 3)), 255), 24)));
+}
+
+function wi32(o, v) {
+	wi8(o, AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 1), AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 2), AND(v, 255));
+	v = shr(v, 8);
+	wi8(add(o, 3), AND(v, 255));
+}
+
 function nextc() {
 	return v_fgetc(source_file);
 }
@@ -321,12 +338,12 @@ void second_pass() {
 }
 
 int main(int argc, char **argv) {
-	jump_tables = calloc(65537, sizeof(struct entry*));
+	jump_tables = v_calloc(65537, sizeof(struct entry*));
 	Base_Address = 0x8048000;
 	char* output_filename;
 	scratch = v_calloc(add(max_string, 1), 1);
 
-	source_filename = argv[1];
+	source_filename = ri32(add(argv, 4));
 	output_filename = argv[2];
 	output = fopen(output_filename, "w");
 
