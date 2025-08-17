@@ -1263,6 +1263,19 @@ int main(int argc, char **argv)
 	temp->next = input;
 	input = temp;
 	option_index = option_index + 1;
+
+	output_file = argv[option_index];
+	output = fopen(output_file, "w");
+
+	if(NULL == output)
+	{
+		fputs("The file: ", stderr);
+		fputs(argv[option_index + 1], stderr);
+		fputs(" can not be opened!\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+	option_index = option_index + 1;
+
 	while(option_index <= argc)
 	{
 		if(NULL == argv[option_index])
