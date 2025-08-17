@@ -43,12 +43,6 @@ char* source_filename;
 int EOF=-1;
 int NULL=0;
 
-struct input_files
-{
-	struct input_files* next;
-	char* filename;
-};
-
 struct entry
 {
 	struct entry* next;
@@ -306,20 +300,22 @@ void first_pass() {
 
 void second_pass() {
 	linenumber = 1;
-	source_file = fopen(source_filename, "r");
+	source_file = fopen(source_filename, mks("r"));
 
 	toggle = FALSE;
 	hold = 0;
 
 	int c;
-	for(c = nextc(); EOF != c; c = nextc()) {
-		if(':' == c) {
+	c = nextc();
+	while(neq(EOF, c)) {
+		if(eq(mkC(":"), c)) {
 			c = Throwaway_token(source_file);
-		} else if(in_set(c, "!%&")) {
+		} else if(in_set(c, mks("!%&"))) {
 			storePointer(c, source_file);
 		} else {
 			process_byte(c, source_file, TRUE);
 		}
+		c = nextc();
 	}
 	fclose(source_file);
 }
@@ -327,10 +323,8 @@ void second_pass() {
 int main(int argc, char **argv) {
 	jump_tables = calloc(65537, sizeof(struct entry*));
 	Base_Address = 0x8048000;
-	struct input_files* input = NULL;
 	char* output_filename;
-	scratch = calloc(max_string + 1, sizeof(char));
-	struct input_files* temp;
+	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = argv[1];
 	output_filename = argv[2];
