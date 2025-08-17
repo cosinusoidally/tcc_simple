@@ -233,10 +233,10 @@ function storeLabel_(ip,    c, h, entry) {
 	return c;
 }
 
-void outputPointer(int displacement, int number_of_bytes) {
-	unsigned byte;
+function outputPointer(displacement, number_of_bytes) {
+	int byte;
 	unsigned value = displacement;
-	while(number_of_bytes > 0) {
+	while(gt(number_of_bytes, 0)) {
 		byte = value % 256;
 		value = value / 256;
 		fputc(byte, output);
