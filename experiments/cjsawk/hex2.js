@@ -20,14 +20,14 @@
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-int output;
-int jump_tables;
-int Base_Address;
-int ip;
-int scratch;
-int filename;
-int linenumber;
-int source_file;
+var output;
+var jump_tables;
+var Base_Address;
+var ip;
+var scratch;
+var filename;
+var linenumber;
+var source_file;
 
 int hold;
 int toggle;
