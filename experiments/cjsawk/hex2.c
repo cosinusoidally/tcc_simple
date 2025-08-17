@@ -627,65 +627,17 @@ int binary(int c, FILE* source_file)
 }
 
 void process_byte(char c, FILE* source_file, int write) {
-	if(HEX == ByteMode)
-	{
-		if(0 <= hex(c, source_file))
-		{
-			if(toggle)
-			{
-				if(write) fputc(((hold * 16)) + hex(c, source_file), output);
-				ip = ip + 1;
-				hold = 0;
+	if(0 <= hex(c, source_file)) {
+		if(toggle) {
+			if(write) {
+				fputc(((hold * 16)) + hex(c, source_file), output);
 			}
-			else
-			{
-				hold = hex(c, source_file);
-			}
-			toggle = !toggle;
+			ip = ip + 1;
+			hold = 0;
+		} else {
+			hold = hex(c, source_file);
 		}
-	}
-	else if(OCTAL ==ByteMode)
-	{
-exit(1);
-		if(0 <= octal(c, source_file))
-		{
-			if(2 == toggle)
-			{
-				if(write) fputc(((hold * 8)) + octal(c, source_file), output);
-				ip = ip + 1;
-				hold = 0;
-				toggle = 0;
-			}
-			else if(1 == toggle)
-			{
-				hold = ((hold * 8) + octal(c, source_file));
-				toggle = 2;
-			}
-			else
-			{
-				hold = octal(c, source_file);
-				toggle = 1;
-			}
-		}
-	}
-	else if(BINARY == ByteMode)
-	{
-exit(1);
-		if(0 <= binary(c, source_file))
-		{
-			if(7 == toggle)
-			{
-				if(write) fputc((hold * 2) + binary(c, source_file), output);
-				ip = ip + 1;
-				hold = 0;
-				toggle = 0;
-			}
-			else
-			{
-				hold = ((hold * 2) + binary(c, source_file));
-				toggle = toggle + 1;
-			}
-		}
+		toggle = !toggle;
 	}
 }
 
