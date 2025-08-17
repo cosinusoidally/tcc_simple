@@ -30,7 +30,6 @@
 FILE* output;
 struct entry** jump_tables;
 int Base_Address;
-int exec_enable;
 int ip;
 char* scratch;
 char* filename;
@@ -287,7 +286,7 @@ void first_pass() {
 
 		/* check for and deal with relative/absolute pointers to labels */
 		if(in_set(c, "!@$~%&")) {
-			/* deal with 1byte pointer !; 2byte pointers (@ and $); 3byte pointers ~; 4byte pointers (% and &) */
+			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token(source_file);
 			if ('>' == c) { /* deal with label>base */
@@ -320,44 +319,11 @@ void second_pass() {
 	fclose(source_file);
 }
 
-unsigned shiftregister;
-unsigned tempword;
-int updates;
-
-unsigned sr_nextb() {
-	unsigned rv = shiftregister & 0xff;
-	shiftregister = shiftregister >> 8;
-	return rv;
-}
-
-void DoByte(char c, FILE* source_file, int write, int update) {
-	if(0 <= hex(c, source_file)) {
-		if(toggle) {
-			if(write) {
-				fputc(((hold * 16)) + hex(c, source_file) ^ sr_nextb(), output);
-			}
-			ip = ip + 1;
-			if(update) {
-				hold = (hold * 16) + hex(c, source_file);
-				tempword = (tempword << 8) ^ hold;
-				updates = updates + 1;
-			}
-			hold = 0;
-		} else {
-			hold = hex(c, source_file);
-		}
-		toggle = !toggle;
-	}
-}
-
 int main(int argc, char **argv) {
-	int InsaneArchitecture = FALSE;
 	jump_tables = calloc(65537, sizeof(struct entry*));
-
 	Base_Address = 0x8048000;
 	struct input_files* input = NULL;
 	char* output_file;
-	exec_enable = TRUE;
 	scratch = calloc(max_string + 1, sizeof(char));
 	struct input_files* temp;
 
