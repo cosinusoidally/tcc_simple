@@ -364,146 +364,28 @@ int storeLabel(FILE* source_file, int ip)
 	return c;
 }
 
-void range_check(int displacement, int number_of_bytes)
-{
-	if(4 == number_of_bytes) return;
-	else if (3 == number_of_bytes)
-	{
-		if((8388607 < displacement) || (displacement < -8388608))
-		{
-			fputs("A displacement of ", stderr);
-			fputs(int2str(displacement, 10, TRUE), stderr);
-			fputs(" does not fit in 3 bytes\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		return;
-	}
-	else if (2 == number_of_bytes)
-	{
-		if((32767 < displacement) || (displacement < -32768))
-		{
-			fputs("A displacement of ", stderr);
-			fputs(int2str(displacement, 10, TRUE), stderr);
-			fputs(" does not fit in 2 bytes\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		return;
-	}
-	else if (1 == number_of_bytes)
-	{
-		if((127 < displacement) || (displacement < -128))
-		{
-			fputs("A displacement of ", stderr);
-			fputs(int2str(displacement, 10, TRUE), stderr);
-			fputs(" does not fit in 1 byte\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		return;
-	}
-
-	fputs("Invalid number of bytes given\n", stderr);
-	exit(EXIT_FAILURE);
-}
-
-void outputPointer(int displacement, int number_of_bytes)
-{
+void outputPointer(int displacement, int number_of_bytes) {
+	unsigned byte;
 	unsigned value = displacement;
-
-	/* HALT HARD if we are going to do something BAD*/
-	range_check(displacement, number_of_bytes);
-
-	if(BigEndian)
-	{ /* Deal with BigEndian */
-		if(4 == number_of_bytes) fputc((value >> 24), output);
-		if(3 <= number_of_bytes) fputc(((value >> 16)%256), output);
-		if(2 <= number_of_bytes) fputc(((value >> 8)%256), output);
-		if(1 <= number_of_bytes) fputc((value % 256), output);
-	}
-	else
-	{ /* Deal with LittleEndian */
-		unsigned byte;
-		while(number_of_bytes > 0)
-		{
-			byte = value % 256;
-			value = value / 256;
-			fputc(byte, output);
-			number_of_bytes = number_of_bytes - 1;
-		}
+	while(number_of_bytes > 0) {
+		byte = value % 256;
+		value = value / 256;
+		fputc(byte, output);
+		number_of_bytes = number_of_bytes - 1;
 	}
 }
 
-int Architectural_displacement(int target, int base)
-{
-	if(KNIGHT == Architecture) return (target - base);
-	else if(X86 == Architecture) return (target - base);
-	else if(AMD64 == Architecture) return (target - base);
-	else if(ALIGNED && (ARMV7L == Architecture))
-	{
-		ALIGNED = FALSE;
-		/* Note: Branch displacements on ARM are in number of instructions to skip, basically. */
-		if (target & 3)
-		{
-			line_error();
-			fputs("error: Unaligned branch target: ", stderr);
-			fputs(scratch, stderr);
-			fputs(", aborting\n", stderr);
-			exit(EXIT_FAILURE);
-		}
-		/*
-		 * The "fetch" stage already moved forward by 8 from the
-		 * beginning of the instruction because it is already
-		 * prefetching the next instruction.
-		 * Compensate for it by subtracting the space for
-		 * two instructions (including the branch instruction).
-		 * and the size of the aligned immediate.
-		 */
-		return (((target - base + (base & 3)) >> 2) - 2);
-	}
-	else if(ARMV7L == Architecture)
-	{
-		/*
-		 * The size of the offset is 8 according to the spec but that value is
-		 * based on the end of the immediate, which the documentation gets wrong
-		 * and needs to be adjusted to the size of the immediate.
-		 * Eg 1byte immediate => -8 + 1 = -7
-		 */
-		return ((target - base) - 8 + (3 & base));
-	}
-	else if(ALIGNED && (AARM64 == Architecture))
-	{
-			ALIGNED = FALSE;
-			return (target - (~3 & base)) >> 2;
-	}
-	else if (AARM64 == Architecture)
-	{
-		return ((target - base) - 8 + (3 & base));
-	}
-	else if(ALIGNED && (PPC64LE == Architecture))
-	{
-		ALIGNED = FALSE;
-		/* set Link register with branch */
-		return (target - (base & 0xFFFFFFFC )) | 1;
-	}
-	else if(PPC64LE == Architecture)
-	{
-		/* DO *NOT* set link register with branch */
-		return (target - (base & 0xFFFFFFFC));
-	}
-	else if(RISCV32 == Architecture || RISCV64 == Architecture) return (target - base);
-
-	fputs("Unknown Architecture, aborting before harm is done\n", stderr);
-	exit(EXIT_FAILURE);
+int Architectural_displacement(int target, int base) {
+	return (target - base);
 }
 
-void Update_Pointer(char ch)
-{
+void Update_Pointer(char ch) {
 	/* Calculate pointer size*/
-	if(in_set(ch, "%&")) ip = ip + 4; /* Deal with % and & */
-	else if(in_set(ch, "@$")) ip = ip + 2; /* Deal with @ and $ */
-	else if('~' == ch) ip = ip + 3; /* Deal with ~ */
-	else if('!' == ch) ip = ip + 1; /* Deal with ! */
-	else
-	{
+	if(in_set(ch, "%&")) {
+		ip = ip + 4; /* Deal with % and & */
+	} else if('!' == ch) {
+		ip = ip + 1; /* Deal with ! */
+	} else {
 		line_error();
 		fputs("storePointer given unknown\n", stderr);
 		exit(EXIT_FAILURE);
