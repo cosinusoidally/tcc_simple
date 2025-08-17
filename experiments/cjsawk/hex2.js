@@ -200,7 +200,7 @@ function GetTarget(c) {
 	GetTarget_(c, 0);
 }
 function GetTarget_(c,    i) {
-	i = ri32(add(jump_tables, mul(4, GetHash(c))));
+	i = ri32(add(jump_tables, mul(GetHash(c), 4)));
 	while(neq(NULL, i)) {
 		if(smatch(c, entry_name_g(i))) {
 			return entry_target_g(i);
@@ -212,7 +212,8 @@ function GetTarget_(c,    i) {
 
 int storeLabel(ip) {
 	int c;
-	struct entry* entry = v_calloc(1, sizeof(struct entry));
+	int h;
+	struct entry* entry = v_calloc(1, sizeof_entry);
 
 	/* Ensure we have target address */
 	entry->target = ip;
@@ -220,12 +221,12 @@ int storeLabel(ip) {
 	/* Store string */
 	c = consume_token();
 	entry->name = v_calloc(add(length(scratch), 1), 1);
-	Copy_String(scratch, entry->name);
+	Copy_String(scratch, entry_name_g(entry));
 	Clear_Scratch(scratch);
 
 	/* Prepend to list */
-	int h = GetHash(entry->name);
-	entry->next = jump_tables[h];
+	h = GetHash(entry->name);
+	entry->next = ri32(add(jump_tables, mul(h, 4)));
 	jump_tables[h] = entry;
 
 	return c;
