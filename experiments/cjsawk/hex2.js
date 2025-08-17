@@ -257,32 +257,35 @@ function Update_Pointer(ch) {
 	}
 }
 
-void storePointer(char ch, int source_file) {
+function storePointer(ch) {
+	return storePointer_(ch, 0, 0);
+}
+function storePointer_(ch,    base_sep_p, base) {
 	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
-	int base_sep_p = consume_token();
+	base_sep_p = consume_token();
 
 	/* Lookup token */
 	int target = GetTarget(scratch);
 	int displacement;
 
-	int base = ip;
+	base = ip;
 
 	/* Change relative base address to :<base> */
-	if ('>' == base_sep_p) {
+	if (eq(mkC(">"), base_sep_p)) {
 		Clear_Scratch(scratch);
 		consume_token();
 		base = GetTarget (scratch);
 	}
-	displacement = (target - base);
+	displacement = SUB(target, base);
 
 	/* output calculated difference */
-	if('!' == ch) {
+	if(eq(mkC("!"), ch)) {
 		outputPointer(displacement, 1); /* Deal with ! */
-	} else if('&' == ch) {
+	} else if(eq(mkC("&"), ch)) {
 		outputPointer(target, 4); /* Deal with & */
-	} else if('%' == ch) {
+	} else if(mkC("%"), ch) {
 		outputPointer(displacement, 4);  /* Deal with % */
 	} else {
 		exit(1);
@@ -368,7 +371,7 @@ function second_pass() {
 		if(eq(mkC(":"), c)) {
 			c = Throwaway_token();
 		} else if(in_set(c, mks("!%&"))) {
-			storePointer(c, source_file);
+			storePointer(c);
 		} else {
 			process_byte(c, source_file, TRUE);
 		}
