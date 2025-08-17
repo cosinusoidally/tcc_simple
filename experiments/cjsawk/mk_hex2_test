@@ -18,6 +18,11 @@ ls -lh
 diff -u -s ../m0_test/cjsawk.exe cjsawk.exe
 diff -u -s ../m0_test/m0_self.exe m0_self.exe
 
+# also build hex2.js with cjsawk
+cat ../../../hex2.js ../../../support_libc.js ../../../simple_support_js_m2_prims.c ../../../support_m2.c > hex2_self.c
+
+compile ./cjsawk.exe hex2_self.c hex2_self2.exe
+
 popd
 
 wc hex2.js hex2.c hex2_orig.c

@@ -351,3 +351,8 @@ function exit(value) {
 	    "mov_eax, %1"
 	    "int !0x80");
 }
+
+function chmod(path, mode) {
+	/* FIXME impl */
+	return 0;
+}
