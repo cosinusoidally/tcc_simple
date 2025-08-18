@@ -1,0 +1,8 @@
+rm -r artifacts/builds/hex2_nodejs/
+mkdir artifacts/builds/hex2_nodejs/
+set -xe
+source common.sh
+
+nodejs ../m2min_v3/node_compat_min.js hex2_test.js | base64 -d > artifacts/builds/hex2_nodejs/cjsawk.exe
+
+echo "DONE hex2 nodejs"
