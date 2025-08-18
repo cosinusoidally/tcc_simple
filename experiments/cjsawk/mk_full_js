@@ -20,6 +20,8 @@ cat ../../cjsawk.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../
 
 cat ../../m0.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > m0_full.c
 
+cat ../../hex2.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > hex2_full.c
+
 cat ../../../m2min_v3/js_to_c/js_to_c_m2_support.c ../../../m2min_v3/js_to_c/js_to_c_simple.c > js_to_c_simple_all.c
 
 
@@ -80,6 +82,9 @@ function compile_js {
   chmod +x $2
 }
 
-compile_js artifacts/deps/m0_full.c artifacts/builds/full_js/m0.exe
+compile_js artifacts/deps/m0_full.c $BLD_DIR/m0.exe
+compile_js artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+
+shasum $BLD_DIR/*exe | sort
 
 echo "DONE js deps"
