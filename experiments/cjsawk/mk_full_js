@@ -44,5 +44,8 @@ echo "append definitions to make cjsawk.exe-0.M1"
 
 cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/cjsawk.exe.M1 > $BLD_DIR/cjsawk.exe-0.M1
 
+echo "build cjsawk.exe.hex2"
+echo "fname=\"$BLD_DIR/cjsawk.exe-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
+js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $BLD_DIR/cjsawk.exe.M1
 
 echo "DONE js deps"
