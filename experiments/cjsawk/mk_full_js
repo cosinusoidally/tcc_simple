@@ -46,6 +46,13 @@ cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core
 
 echo "build cjsawk.exe.hex2"
 echo "fname=\"$BLD_DIR/cjsawk.exe-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
-js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $BLD_DIR/cjsawk.exe.M1
+js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $BLD_DIR/cjsawk.exe.hex2
+
+echo "generate cjsawk.exe-0.hex2"
+cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/cjsawk.exe.hex2 > $BLD_DIR/cjsawk.exe-0.hex2
+
+echo "build cjsawk.exe"
+echo "fname=\"$BLD_DIR/cjsawk.exe-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
+js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $BLD_DIR/cjsawk.exe
 
 echo "DONE js deps"
