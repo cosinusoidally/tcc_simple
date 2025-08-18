@@ -82,6 +82,7 @@ function compile_js {
   chmod +x $2
 }
 
+compile_js artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk2.exe
 compile_js artifacts/deps/m0_full.c $BLD_DIR/m0.exe
 compile_js artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
 
