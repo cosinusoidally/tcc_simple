@@ -55,4 +55,6 @@ echo "build cjsawk.exe"
 echo "fname=\"$BLD_DIR/cjsawk.exe-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
 js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $BLD_DIR/cjsawk.exe
 
+chmod +x $BLD_DIR/cjsawk.exe
+
 echo "DONE js deps"
