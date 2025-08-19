@@ -24,7 +24,6 @@ cat ../../hex2.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../..
 
 cat ../../../m2min_v3/js_to_c/js_to_c_m2_support.c ../../../m2min_v3/js_to_c/js_to_c_simple.c > js_to_c_simple_all.c
 
-
 mkdir js_to_c
 cd js_to_c
 # compile cc_x86_min.exe ../js_to_c_simple_all.c js_to_c.exe
@@ -37,27 +36,6 @@ BLD_DIR=artifacts/builds/full_js
 SRC_DIR=artifacts/deps
 
 mkdir $BLD_DIR
-
-echo "build cjsawk.exe.M1"
-echo "fname=\"$SRC_DIR/cjsawk_full.c\";load(\"cjsawk_test.js\");" > $BLD_DIR/mk_cjsawk.js
-js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $BLD_DIR/cjsawk.exe.M1
-
-echo "append definitions to make cjsawk.exe-0.M1"
-
-cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/cjsawk.exe.M1 > $BLD_DIR/cjsawk.exe-0.M1
-
-echo "build cjsawk.exe.hex2"
-echo "fname=\"$BLD_DIR/cjsawk.exe-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
-js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $BLD_DIR/cjsawk.exe.hex2
-
-echo "generate cjsawk.exe-0.hex2"
-cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/cjsawk.exe.hex2 > $BLD_DIR/cjsawk.exe-0.hex2
-
-echo "build cjsawk.exe"
-echo "fname=\"$BLD_DIR/cjsawk.exe-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
-js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $BLD_DIR/cjsawk.exe
-
-chmod +x $BLD_DIR/cjsawk.exe
 
 function compile_js {
   echo "build $2.M1"
@@ -82,9 +60,19 @@ function compile_js {
   chmod +x $2
 }
 
-compile_js artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk2.exe
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+}
+
+compile_js artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
 compile_js artifacts/deps/m0_full.c $BLD_DIR/m0.exe
 compile_js artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+
+compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk2.exe
 
 shasum $BLD_DIR/*exe | sort
 
