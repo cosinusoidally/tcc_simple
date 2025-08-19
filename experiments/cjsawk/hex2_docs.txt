@@ -21,3 +21,19 @@ License text
  * You should have received a copy of the GNU General Public License
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+In function storePointer if we encounter a '>' , eg like this:
+
+%ELF_program_headers>ELF_base
+
+we insert the address of ELF_program_headers relative to ELF_base
+
+In first_pass we detect lables (those start with ':'). We also deal with
+pointers of different sizes:
+
+1byte relative pointer !
+4byte pointers: % for relative and & for absolute
+
+The original version of hex2 can handle 2 byte and 3 byte pointers. I should
+probably add back in support for 2 byte pointers as this will allow me to also
+handle 16 bit x86 code.

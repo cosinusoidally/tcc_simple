@@ -242,7 +242,6 @@ function storePointer_(ch,    base_sep_p, base, target, displacement) {
 
 	base = ip;
 
-	/* Change relative base address to :<base> */
 	if (eq(mkC(">"), base_sep_p)) {
 		Clear_Scratch(scratch);
 		consume_token();
@@ -250,13 +249,12 @@ function storePointer_(ch,    base_sep_p, base, target, displacement) {
 	}
 	displacement = SUB(target, base);
 
-	/* output calculated difference */
 	if(eq(mkC("!"), ch)) {
-		outputPointer(displacement, 1); /* Deal with ! */
+		outputPointer(displacement, 1);
 	} else if(eq(mkC("&"), ch)) {
-		outputPointer(target, 4); /* Deal with & */
+		outputPointer(target, 4);
 	} else if(eq(mkC("%"), ch)) {
-		outputPointer(displacement, 4);  /* Deal with % */
+		outputPointer(displacement, 4);
 	} else {
 		v_exit(1);
 	}
@@ -320,7 +318,6 @@ function first_pass_(    c) {
 	toggle = FALSE;
 	c = nextc();
 	while(neq(EOF, c)) {
-		/* Check for and deal with label */
 		if(eq(mkC(":"), c)) {
 			c = storeLabel(ip);
 		}
