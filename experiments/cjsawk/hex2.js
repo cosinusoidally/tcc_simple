@@ -245,7 +245,7 @@ function storePointer_(ch,    base_sep_p, base, target, displacement) {
 	if (eq(mkC(">"), base_sep_p)) {
 		Clear_Scratch(scratch);
 		consume_token();
-		base = GetTarget (scratch);
+		base = GetTarget(scratch);
 	}
 	displacement = SUB(target, base);
 
