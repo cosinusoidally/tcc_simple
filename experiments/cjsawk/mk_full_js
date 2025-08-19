@@ -80,4 +80,4 @@ compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
 
 shasum $BLD_DIR/*exe | sort
 
-echo "DONE js deps"
+echo "DONE full js"
