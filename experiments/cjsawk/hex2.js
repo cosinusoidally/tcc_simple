@@ -129,10 +129,10 @@ function Throwaway_token_(c) {
 	return c;
 }
 
-function length(s) {
-	return length_(s, 0);
+function LENGTH(s) {
+	return LENGTH_(s, 0);
 }
-function length_(s,    i) {
+function LENGTH_(s,    i) {
 	while(neq(0, ri8(add(s, i)))) {
 		i = add(i, 1);
 	}
@@ -195,7 +195,7 @@ function storeLabel_(ip,    c, h, entry) {
 	entry_target_s(entry, ip);
 
 	c = consume_token();
-	entry_name_s(entry, v_calloc(add(length(scratch), 1), 1));
+	entry_name_s(entry, v_calloc(add(LENGTH(scratch), 1), 1));
 	Copy_String(scratch, entry_name_g(entry));
 	Clear_Scratch(scratch);
 

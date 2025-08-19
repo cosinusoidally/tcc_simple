@@ -50,3 +50,5 @@ second_pass: Fix all the references
 We then chmod:
 
 Note we use chmod(output_filename, 488); /* 0750 */ as awk can't handle octal.
+
+Note there is a function called LENGTH since length is a builtin in awk.
