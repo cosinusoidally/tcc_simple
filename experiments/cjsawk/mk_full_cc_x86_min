@@ -1,0 +1,70 @@
+./mk_clean
+
+set -xe
+
+pushd .
+cd ../m2min_v2/
+./mk_cc_x86_min
+
+popd
+
+
+pushd .
+cd artifacts
+
+mkdir deps
+mkdir builds
+
+cd deps
+
+echo "int stdout;" > m2min_v3.c
+cat ../../../m2min_v3/simple_support_js.c >> m2min_v3.c
+cat ../../../m2min_v3/m2min_v3.js >> m2min_v3.c
+cat ../../../m2min_v3/simple_support_js_m2.js >> m2min_v3.c
+cat ../../../m2min_v3/simple_support_js_m2_prims.c >> m2min_v3.c
+
+cat ../../cjsawk.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > cjsawk_full.c
+
+cat ../../m0.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > m0_full.c
+
+cat ../../hex2.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > hex2_full.c
+
+cat ../../../m2min_v3/js_to_c/js_to_c_m2_support.c ../../../m2min_v3/js_to_c/js_to_c_simple.c > js_to_c_simple_all.c
+
+popd
+
+cat ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifacts/deps/pnut_js_m2.c
+
+BLD_DIR=artifacts/builds/full_cc_x86_min
+SRC_DIR=artifacts/deps
+
+mkdir $BLD_DIR
+
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+function compile_cc_x86_min {
+  compile_native ../m2min_v2/artifacts/cc_x86_min.exe ../m2min_v2/artifacts/M0 ../m2min_v2/artifacts/hex2-0 $1 $2
+}
+
+function compile_self {
+  compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe $1 $2
+}
+
+compile_cc_x86_min artifacts/deps/cjsawk_full_js_to_c.c $BLD_DIR/cjsawk_boot.exe
+compile_cc_x86_min artifacts/deps/m0_full_js_to_c.c $BLD_DIR/m0_boot.exe
+compile_cc_x86_min artifacts/deps/hex2_full_js_to_c.c $BLD_DIR/hex2_boot.exe
+
+compile_boot artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
+compile_boot artifacts/deps/m0_full.c $BLD_DIR/m0.exe
+compile_boot artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+
+shasum $BLD_DIR/*exe | sort
+
+echo "DONE full js"
