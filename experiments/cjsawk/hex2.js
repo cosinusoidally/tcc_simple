@@ -1,24 +1,7 @@
-/* Copyright (C) 2016,2017 Jeremiah Orians
- * Copyright (C) 2017 Jan Nieuwenhuizen <janneke@gnu.org>
- * This file a mix of files from:
- *   mescc-tools
- *   M2-Planet
- *
- * with modifications (C) 2025 Liam Wilson
- *
- * mescc-tools is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * mescc-tools is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this file.  If not, see <http://www.gnu.org/licenses/>.
- */
+function docs() {
+  mks("This file must be valid C, JS, and AWK. See m0_docs.txt");
+  mks("AWK does not support C style comments so we can't use comments here.");
+}
 
 var output;
 var jump_tables;
@@ -209,16 +192,13 @@ function storeLabel(ip) {
 function storeLabel_(ip,    c, h, entry) {
 	entry = v_calloc(1, sizeof_entry);
 
-	/* Ensure we have target address */
 	entry_target_s(entry, ip);
 
-	/* Store string */
 	c = consume_token();
 	entry_name_s(entry, v_calloc(add(length(scratch), 1), 1));
 	Copy_String(scratch, entry_name_g(entry));
 	Clear_Scratch(scratch);
 
-	/* Prepend to list */
 	h = GetHash(entry_name_g(entry));
 	entry_next_s(entry, ri32(add(jump_tables, mul(h, 4))));
 	wi32(add(jump_tables, mul(h, 4)), entry);
@@ -240,11 +220,10 @@ function outputPointer_(displacement, number_of_bytes,    byte, value) {
 }
 
 function Update_Pointer(ch) {
-	/* Calculate pointer size*/
 	if(in_set(ch, mks("%&"))) {
-		ip = add(ip, 4); /* Deal with % and & */
+		ip = add(ip, 4);
 	} else if(eq(mkC("!"), ch)) {
-		ip = add(ip, 1); /* Deal with ! */
+		ip = add(ip, 1);
 	} else {
 		v_exit(1);
 	}
@@ -254,12 +233,10 @@ function storePointer(ch) {
 	return storePointer_(ch, 0, 0, 0, 0);
 }
 function storePointer_(ch,    base_sep_p, base, target, displacement) {
-	/* Get string of pointer */
 	Clear_Scratch(scratch);
 	Update_Pointer(ch);
 	base_sep_p = consume_token();
 
-	/* Lookup token */
 	target = GetTarget(scratch);
 	displacement;
 
