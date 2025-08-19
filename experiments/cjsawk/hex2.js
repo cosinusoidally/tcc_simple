@@ -321,13 +321,10 @@ function first_pass_(    c) {
 		if(eq(mkC(":"), c)) {
 			c = storeLabel(ip);
 		}
-
-		/* check for and deal with relative/absolute pointers to labels */
 		if(in_set(c, mks("!%&"))) {
-			/* deal with 1byte pointer !; 4byte pointers (% and &) */
 			Update_Pointer(c);
 			c = Throwaway_token();
-			if (eq(mkC(">"), c)) { /* deal with label>base */
+			if (eq(mkC(">"), c)) {
 				c = Throwaway_token();
 			}
 		} else {
@@ -389,17 +386,15 @@ function main(argc, argv) {
 	output_filename = ri32(add(argv, 8));
 	output = fopen(output_filename, mks("w"));
 
-	/* Get all of the labels */
 	ip = Base_Address;
 	first_pass();
 
-	/* Fix all the references*/
 	ip = Base_Address;
 	second_pass();
 
 	fclose(output);
 
-	chmod(output_filename, 488); /* 0750 */
+	chmod(output_filename, 488);
 
 	return 0;
 }
