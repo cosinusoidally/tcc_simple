@@ -313,7 +313,7 @@ function first_pass() {
 }
 function first_pass_(    c) {
 	linenumber = 1;
-	source_file = fopen(source_filename, mks("r"));
+	source_file = v_fopen(source_filename, mks("r"));
 
 	toggle = FALSE;
 	c = nextc();
@@ -392,7 +392,7 @@ function main(argc, argv) {
 	ip = Base_Address;
 	second_pass();
 
-	fclose(output);
+	v_fclose(output);
 
 	chmod(output_filename, 488);
 
