@@ -332,7 +332,7 @@ function first_pass_(    c) {
 		}
 		c = nextc();
 	}
-	fclose(source_file);
+	v_fclose(source_file);
 }
 
 function second_pass() {
@@ -340,7 +340,7 @@ function second_pass() {
 }
 function second_pass_(    c) {
 	linenumber = 1;
-	source_file = fopen(source_filename, mks("r"));
+	source_file = v_fopen(source_filename, mks("r"));
 
 	toggle = FALSE;
 	hold = 0;
@@ -356,7 +356,7 @@ function second_pass_(    c) {
 		}
 		c = nextc();
 	}
-	fclose(source_file);
+	v_fclose(source_file);
 }
 
 function init_globals() {
@@ -384,7 +384,7 @@ function main(argc, argv) {
 
 	source_filename = ri32(add(argv, 4));
 	output_filename = ri32(add(argv, 8));
-	output = fopen(output_filename, mks("w"));
+	output = v_fopen(output_filename, mks("w"));
 
 	ip = Base_Address;
 	first_pass();
