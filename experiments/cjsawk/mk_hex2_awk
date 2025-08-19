@@ -1,0 +1,15 @@
+if [ ! -z $1 ]
+then
+  export AWKNAME=$1
+else
+  export AWKNAME=mawk
+fi
+
+rm -r artifacts/builds/hex2_$AWKNAME
+set -xe
+source common.sh
+
+mkdir artifacts/builds/hex2_$AWKNAME
+$AWKNAME -v my_fname="artifacts/builds/full_js/cjsawk.exe-0.M1" -v my_fout="artifacts/builds/hex2_$AWKNAME/cjsawk_awk.exe.hex2" -v use_fast_or=1 -v use_fast_and=1 -f hex2.js -f support.awk -f hex2_test.awk
+
+echo "DONE m0 $1"
