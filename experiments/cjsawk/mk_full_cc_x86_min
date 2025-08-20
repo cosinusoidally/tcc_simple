@@ -37,8 +37,8 @@ function compile_self {
 compile_cc_x86_min artifacts/deps/js_to_c_simple_all.c $BLD_DIR/js_to_c.exe
 
 $BLD_DIR/js_to_c.exe $SRC_DIR/cjsawk_full.c $SRC_DIR/cjsawk_full_js_to_c.c
-$BLD_DIR/js_to_c.exe $SRC_DIR/m0_full.c $SRC_DIR/m0_full_js_to_c.c
-$BLD_DIR/js_to_c.exe $SRC_DIR/hex2_full.c $SRC_DIR/hex2_full_js_to_c.c
+# $BLD_DIR/js_to_c.exe $SRC_DIR/m0_full.c $SRC_DIR/m0_full_js_to_c.c
+# $BLD_DIR/js_to_c.exe $SRC_DIR/hex2_full.c $SRC_DIR/hex2_full_js_to_c.c
 
 compile_cc_x86_min $SRC_DIR/cjsawk_full_js_to_c.c $BLD_DIR/cjsawk_boot.exe
 
