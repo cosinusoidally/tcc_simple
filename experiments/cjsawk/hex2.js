@@ -76,7 +76,7 @@ function nextc() {
 function smatch(a, b) {
 	return smatch_(a, b, 0);
 }
-function smatch_(a, b, i) {
+function smatch_(a, b,    i) {
 	i = SUB(0, 1);
 	while(1) {
 		i = add(i, 1);
