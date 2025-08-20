@@ -1,11 +1,11 @@
 rm -r artifacts/builds/full_cc_x86_min
 
+set -xe
+
 BLD_DIR=artifacts/builds/full_cc_x86_min
 SRC_DIR=artifacts/deps
 
 mkdir $BLD_DIR
-
-set -xe
 
 pushd .
 cd ../m2min_v2/
