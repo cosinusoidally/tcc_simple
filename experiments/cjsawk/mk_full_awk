@@ -33,20 +33,32 @@ mkdir $BLD_DIR
 
 function compile_awk {
   echo "build $2.M1"
-  time mawk -v my_fname="$1" -v my_fout="$2.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+  if [ -f $BLD_DIR/cjsawk.exe ]; then
+    $BLD_DIR/cjsawk.exe $1 $2.M1
+  else
+    time mawk -v my_fname="$1" -v my_fout="$2.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+  fi
 
   echo "append definitions to make $2-0.M1"
 
   cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $2.M1 > $2-0.M1
 
   echo "build $2.hex2"
-  time mawk -v my_fname="$2-0.M1" -v my_fout="$2.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
+  if [ -f $BLD_DIR/m0.exe ]; then
+    $BLD_DIR/m0.exe $2-0.M1 $2.hex2
+  else
+    time mawk -v my_fname="$2-0.M1" -v my_fout="$2.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
+  fi
 
   echo "generate $2-0.hex2"
   cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
 
   echo "build $2"
-  time mawk -v my_fname="$2-0.hex2" -v my_fout="$2" -v use_fast_or=1 -v use_fast_and=1 -f hex2.js -f support.awk -f hex2_test.awk
+  if [ -f $BLD_DIR/hex2.exe ]; then
+    $BLD_DIR/hex2.exe $2-0.hex2 $2
+  else
+    time mawk -v my_fname="$2-0.hex2" -v my_fout="$2" -v use_fast_or=1 -v use_fast_and=1 -f hex2.js -f support.awk -f hex2_test.awk
+  fi
 
   chmod +x $2
 }
@@ -71,9 +83,9 @@ compile_awk artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
 
 # compile_js artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut1.exe
 
-compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
-compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
-compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
+# compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
+# compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
+# compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
 
 # compile_self artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut2.exe
 
