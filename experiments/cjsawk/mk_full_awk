@@ -78,14 +78,14 @@ function compile_self {
 }
 
 compile_awk artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
-compile_awk artifacts/deps/m0_full.c $BLD_DIR/m0.exe
 compile_awk artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+compile_awk artifacts/deps/m0_full.c $BLD_DIR/m0.exe
 
 # compile_js artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut1.exe
 
-# compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
-# compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
-# compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
+compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
+compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
+compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
 
 # compile_self artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut2.exe
 
