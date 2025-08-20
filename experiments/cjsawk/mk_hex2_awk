@@ -12,4 +12,4 @@ source common.sh
 mkdir artifacts/builds/hex2_$AWKNAME
 $AWKNAME -v my_fname="artifacts/builds/full_js/cjsawk.exe-0.hex2" -v my_fout="artifacts/builds/hex2_$AWKNAME/cjsawk_awk.exe" -v use_fast_or=1 -v use_fast_and=1 -f hex2.js -f support.awk -f hex2_test.awk
 
-echo "DONE m0 $1"
+echo "DONE hex2 $AWKNAME"
