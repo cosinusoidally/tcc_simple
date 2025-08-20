@@ -56,3 +56,6 @@ We then chmod:
 Note we use chmod(output_filename, 488); /* 0750 */ as awk can't handle octal.
 
 Note there is a function called LENGTH since length is a builtin in awk.
+
+In main we set Base_Address = 134512640; this is the decimal version of the
+standard: 0x8048000 base address.

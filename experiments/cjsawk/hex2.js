@@ -379,7 +379,7 @@ function main(argc, argv) {
 	init_globals();
 
 	jump_tables = v_calloc(65537, 4);
-	Base_Address = 0x8048000;
+	Base_Address = 134512640;
 	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = ri32(add(argv, 4));
