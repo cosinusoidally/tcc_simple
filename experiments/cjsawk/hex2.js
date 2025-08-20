@@ -213,7 +213,7 @@ function outputPointer_(displacement, number_of_bytes,    byte, value) {
 	value = displacement;
 	while(gt(number_of_bytes, 0)) {
 		byte = mod(value, 256);
-		value = AND(shr(value, 8), 0xFFFFFF);
+		value = AND(shr(value, 8), 16777215);
 		fputc(byte, output);
 		number_of_bytes = SUB(number_of_bytes, 1);
 	}

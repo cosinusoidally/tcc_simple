@@ -22,6 +22,10 @@ License text
  * along with this file.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+In outputPointer note we and with 16777215, this is 0xFFFFFF (as the original
+version of outputPointer uses an insiged value so we don't want shr to sign
+extend). awk doesn't support hex litterals, hence we need to use a decimal.
+
 In function storePointer if we encounter a '>' , eg like this:
 
 %ELF_program_headers>ELF_base
