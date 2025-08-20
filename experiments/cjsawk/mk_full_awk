@@ -35,7 +35,7 @@ function compile_awk {
   echo "build $2.M1"
 #  echo "fname=\"$1\";load(\"cjsawk_test.js\");" > $BLD_DIR/mk_cjsawk.js
 #  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $2.M1
-  mawk -v my_fname="$1" -v my_fout="$BLD_DIR/cjsawk_awk.exe.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+  time mawk -v my_fname="$1" -v my_fout="$2.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
 
   echo "append definitions to make $2-0.M1"
 
@@ -44,6 +44,7 @@ function compile_awk {
   echo "build $2.hex2"
   echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
   js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
+#  time mawk -v my_fname="$2-0.M1" -v my_fout="$2.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
 
   echo "generate $2-0.hex2"
   cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
@@ -70,13 +71,13 @@ function compile_self {
 }
 
 compile_awk artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
-# compile_js artifacts/deps/m0_full.c $BLD_DIR/m0.exe
-# compile_js artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+compile_awk artifacts/deps/m0_full.c $BLD_DIR/m0.exe
+compile_awk artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
 
 # compile_js artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut1.exe
 
-# compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
-# compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
+compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
+compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
 compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
 
 # compile_self artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut2.exe
