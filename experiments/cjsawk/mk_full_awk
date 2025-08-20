@@ -42,16 +42,17 @@ function compile_awk {
   cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $2.M1 > $2-0.M1
 
   echo "build $2.hex2"
-  echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
-  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
-#  time mawk -v my_fname="$2-0.M1" -v my_fout="$2.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
+#  echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
+#  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
+  time mawk -v my_fname="$2-0.M1" -v my_fout="$2.hex2" -v use_fast_or=1 -v use_fast_and=1 -f m0.js -f support.awk -f m0_test.awk
 
   echo "generate $2-0.hex2"
   cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
 
   echo "build $2"
-  echo "fname=\"$2-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
-  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
+#  echo "fname=\"$2-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
+#  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
+  time mawk -v my_fname="$2-0.hex2" -v my_fout="$2" -v use_fast_or=1 -v use_fast_and=1 -f hex2.js -f support.awk -f hex2_test.awk
 
   chmod +x $2
 }
