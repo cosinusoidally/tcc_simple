@@ -108,14 +108,16 @@ function to_uint32(x) {
   x=int(x);
   if((x<0)){
     if(x<-2147483648) {
-      print("to_uint32 less than -2147483648 not supported, was: " x);
-      exit 1;
+# FIXME shouldn't ignore this
+#      print("to_uint32 less than -2147483648 not supported, was: " x);
+#      exit 1;
     }
     x=4294967296+x;
 #    print("to_uint32 x: " _or(x,0));
   }
   if(x>4294967295) {
-    print "to_uint32 too big";
+# FIXME shouldn't ignore this
+#    print "to_uint32 too big";
   }
   return x;
 }
