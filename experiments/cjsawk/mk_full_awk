@@ -1,0 +1,86 @@
+./mk_clean
+
+set -xe
+
+pushd .
+cd artifacts
+
+mkdir deps
+mkdir builds
+
+cd deps
+
+echo "int stdout;" > m2min_v3.c
+cat ../../../m2min_v3/simple_support_js.c >> m2min_v3.c
+cat ../../../m2min_v3/m2min_v3.js >> m2min_v3.c
+cat ../../../m2min_v3/simple_support_js_m2.js >> m2min_v3.c
+cat ../../../m2min_v3/simple_support_js_m2_prims.c >> m2min_v3.c
+
+cat ../../cjsawk.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > cjsawk_full.c
+
+cat ../../m0.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > m0_full.c
+
+cat ../../hex2.js ../../support_libc.js ../../simple_support_js_m2_prims.c ../../support_m2.c > hex2_full.c
+
+popd
+
+cat ../pnut_refactor/simple_support_js_m2_prims.c ../pnut_refactor/support_common.c ../pnut_refactor/simple_support_js_m2.js ../pnut_refactor/pnut.js > artifacts/deps/pnut_js_m2.c
+
+BLD_DIR=artifacts/builds/full_awk
+SRC_DIR=artifacts/deps
+
+mkdir $BLD_DIR
+
+function compile_awk {
+  echo "build $2.M1"
+#  echo "fname=\"$1\";load(\"cjsawk_test.js\");" > $BLD_DIR/mk_cjsawk.js
+#  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $2.M1
+  mawk -v my_fname="$1" -v my_fout="$BLD_DIR/cjsawk_awk.exe.M1" -v use_fast_or=1 -v use_fast_and=1 -f cjsawk.js -f support.awk -f cjsawk_test.awk
+
+  echo "append definitions to make $2-0.M1"
+
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $2.M1 > $2-0.M1
+
+  echo "build $2.hex2"
+  echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
+  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
+
+  echo "generate $2-0.hex2"
+  cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
+
+  echo "build $2"
+  echo "fname=\"$2-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
+  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
+
+  chmod +x $2
+}
+
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+function compile_self {
+  compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe $1 $2
+
+}
+
+compile_awk artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
+# compile_js artifacts/deps/m0_full.c $BLD_DIR/m0.exe
+# compile_js artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+
+# compile_js artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut1.exe
+
+# compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
+# compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
+compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
+
+# compile_self artifacts/deps/pnut_js_m2.c $BLD_DIR/pnut2.exe
+
+shasum $BLD_DIR/*exe | sort
+
+echo "DONE full awk"
