@@ -1,0 +1,41 @@
+rm -r artifacts/builds/full_gcc
+
+set -xe
+
+BLD_DIR=artifacts/builds/full_gcc
+SRC_DIR=artifacts/deps
+
+mkdir $BLD_DIR
+
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+function compile_boot {
+  compile_native $BLD_DIR/cjsawk_gcc.exe $BLD_DIR/m0_gcc.exe $BLD_DIR/hex2_gcc.exe $1 $2
+}
+
+function compile_self {
+  compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe $1 $2
+}
+
+gcc -m32 -O0 -g3 cjsawk_test.c -o $BLD_DIR/cjsawk_gcc.exe
+gcc -m32 -O0 -g3 m0_test.c -o $BLD_DIR/m0_gcc.exe
+gcc -m32 -O0 -g3 hex2_test.c -o $BLD_DIR/hex2_gcc.exe
+
+compile_boot artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
+compile_boot artifacts/deps/m0_full.c $BLD_DIR/m0.exe
+compile_boot artifacts/deps/hex2_full.c $BLD_DIR/hex2.exe
+
+compile_self artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk_2.exe
+compile_self artifacts/deps/m0_full.c $BLD_DIR/m0_2.exe
+compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
+
+sha1sum $BLD_DIR/*exe | sort
+
+echo "DONE full gcc"
