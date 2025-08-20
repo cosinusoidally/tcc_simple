@@ -2,6 +2,11 @@ function chmod(a,b) {
 # dummy for now
 }
 
+function fputc(a,b) {
+# dummy impl
+  print a
+}
+
 BEGIN {
   print "testing hex2 awk"
   init_runtime();
