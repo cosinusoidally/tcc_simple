@@ -1,5 +1,5 @@
 function docs() {
-  mks("This file must be valid C, JS, and AWK. See m0_docs.txt");
+  mks("This file must be valid C, JS, and AWK. See hex2_docs.txt");
   mks("AWK does not support C style comments so we can't use comments here.");
 }
 
