@@ -3,8 +3,7 @@ function chmod(a,b) {
 }
 
 function fputc(a,b) {
-# dummy impl
-  print a
+  v_fputc(a, b);
 }
 
 BEGIN {
