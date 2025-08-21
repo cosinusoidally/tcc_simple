@@ -27,8 +27,10 @@ function compile_self {
 clang -c -Dmain=v_main -m32 -O0 -g3 cjsawk_test.c -o $BLD_DIR/cjsawk_clang.o
 clang -m32 -O0 -g3 test_clang.c $BLD_DIR/cjsawk_clang.o -o $BLD_DIR/cjsawk_clang.exe
 
+clang -c -Dmain=v_main -m32 -O0 -g3 m0_test.c -o $BLD_DIR/m0_clang.o
+clang -m32 -O0 -g3 test_clang.c $BLD_DIR/m0_clang.o -o $BLD_DIR/m0_clang.exe
+
 exit 1
-#clang -m32 -O0 -g3 m0_test.c -o $BLD_DIR/m0_clang.exe
 # clang -m32 -O0 -g3 hex2_test.c -o $BLD_DIR/hex2_clang.exe
 
 compile_boot artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
