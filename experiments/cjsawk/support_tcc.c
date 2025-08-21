@@ -18,7 +18,7 @@ int ri8(int o) {
 int wi8(int o,int v) {
         char *h = 0;
         h[o]=v;
-        return;
+        return 0;
 }
 
 function v_fopen(a, b) {

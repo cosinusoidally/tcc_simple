@@ -180,9 +180,9 @@ function eat_comment() {
       while(neq(ch, mkC("\n"))) {
         nc();
       }
-      return;
+      return 0;
     } else {
-      return;
+      return 0;
     }
     while(1) {
       while(neq(ch, mkC("*"))) {
@@ -191,7 +191,7 @@ function eat_comment() {
       nc();
       if(eq(ch, mkC("/"))) {
         nc();
-        return;
+        return 0;
       }
     }
   }
@@ -310,7 +310,7 @@ function nt() {
 function skip(s) {
   if(smatch(tok, s)) {
     nt();
-    return;
+    return 0;
   }
   error();
 }
@@ -561,7 +561,7 @@ function primary_expr_variable_(    s, i) {
   emit_out(s);
   emit_out(mks(" "));
   if(smatch(tok, mks("="))) {
-    return;
+    return 0;
   }
   no_indent = 1;
   emit_out(mks("load "));
