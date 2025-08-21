@@ -1,0 +1,26 @@
+set -xe
+for i in $(ls artifacts/builds/*/cjsawk.exe |head -n 1); do
+ CJSAWK=$i;
+done
+
+for i in $(ls artifacts/builds/*/m0.exe |head -n 1); do
+  M0=$i
+done
+
+for i in $(ls artifacts/builds/*/hex2.exe |head -n 1); do
+  HEX2=$i
+done
+
+for i in $(ls artifacts/builds/*/cjsawk.exe); do
+  diff -u -s $i $CJSAWK;
+done
+
+for i in $(ls artifacts/builds/*/m0.exe); do
+  diff -u -s $i $M0;
+done
+
+for i in $(ls artifacts/builds/*/hex2.exe); do
+  diff -u -s $i $HEX2;
+done
+
+echo "DONE check"
