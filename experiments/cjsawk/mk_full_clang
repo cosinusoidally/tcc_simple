@@ -17,7 +17,7 @@ function compile_native {
 }
 
 function compile_boot {
-  compile_native $BLD_DIR/cjsawk_gcc.exe $BLD_DIR/m0_gcc.exe $BLD_DIR/hex2_gcc.exe $1 $2
+  compile_native $BLD_DIR/cjsawk_clang.exe $BLD_DIR/m0_clang.exe $BLD_DIR/hex2_clang.exe $1 $2
 }
 
 function compile_self {
@@ -30,8 +30,8 @@ clang -m32 -O0 -g3 test_clang.c $BLD_DIR/cjsawk_clang.o -o $BLD_DIR/cjsawk_clang
 clang -c -Dmain=v_main -m32 -O0 -g3 m0_test.c -o $BLD_DIR/m0_clang.o
 clang -m32 -O0 -g3 test_clang.c $BLD_DIR/m0_clang.o -o $BLD_DIR/m0_clang.exe
 
-exit 1
-# clang -m32 -O0 -g3 hex2_test.c -o $BLD_DIR/hex2_clang.exe
+clang -c -Dmain=v_main -m32 -O0 -g3 hex2_test.c -o $BLD_DIR/hex2_clang.o
+clang -m32 -O0 -g3 test_clang.c $BLD_DIR/hex2_clang.o -o $BLD_DIR/hex2_clang.exe
 
 compile_boot artifacts/deps/cjsawk_full.c $BLD_DIR/cjsawk.exe
 compile_boot artifacts/deps/m0_full.c $BLD_DIR/m0.exe

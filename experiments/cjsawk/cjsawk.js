@@ -993,4 +993,6 @@ function main(argc, argv) {
   print_list(strings_list);
   v_fputs(mks("\n:ELF_end\n"), fo);
   v_fclose(fo);
+
+  return 0;
 }
