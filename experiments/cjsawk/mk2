@@ -2,9 +2,11 @@ rm -r artifacts/builds/pnut_js
 
 set -xe
 
+BUILD_COMMAND=./mk_full_cc_x86_min
+
 ./mk_full_deps
 
-./mk_full_cc_x86_min
+$BUILD_COMMAND
 
 BLD_DIR=artifacts/builds/pnut_js
 SRC_DIR=artifacts/deps
