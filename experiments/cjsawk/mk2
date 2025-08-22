@@ -26,6 +26,10 @@ function compile_cjsawk {
   compile_native $CJSAWK $M0 $HEX2 $1 $2
 }
 
+compile_cjsawk $SRC_DIR/m2min_v3.c $BLD_DIR/m2min_v3.exe
+
+diff -u -s $BLD_DIR/m2min_v3.exe.M1 ../m2min_v3/m2min_v3.M1
+
 compile_cjsawk $SRC_DIR/pnut_js_m2.c $BLD_DIR/pnut_js.exe
 
 pushd .
