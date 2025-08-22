@@ -1,18 +1,50 @@
+rm -r artifacts/builds/pnut_js
+
 set -xe
 
-./mk_deps
+if [ ! -z $1 ]
+then
+  BUILD_COMMAND=$1
+else
+  BUILD_COMMAND=./mk_full_cc_x86_min
+fi
 
-./mk_cc_x86_min
-./mk_fuller
+./mk_full_deps
 
-shasum artifacts/builds/*/cjsawk.exe
+$BUILD_COMMAND
+
+BLD_DIR=artifacts/builds/pnut_js
+SRC_DIR=artifacts/deps
+
+mkdir $BLD_DIR
+
+source ./mk_check
+
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+function compile_cjsawk {
+  compile_native $CJSAWK $M0 $HEX2 $1 $2
+}
+
+compile_cjsawk $SRC_DIR/m2min_v3.c $BLD_DIR/m2min_v3.exe
+
+diff -u -s $BLD_DIR/m2min_v3.exe.M1 ../m2min_v3/m2min_v3.M1
+
+compile_cjsawk $SRC_DIR/pnut_js_m2.c $BLD_DIR/pnut_js.exe
 
 pushd .
 cd ..
 ./mk_clean
 popd
 
-cp ./artifacts/builds/fuller/pnut_js.exe ../artifacts/pnut-exe
+cp ./artifacts/builds/pnut_js/pnut_js.exe ../artifacts/pnut-exe
 cd ..
 ./mk_tcc-boot-mes
 
