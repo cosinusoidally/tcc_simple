@@ -2,7 +2,12 @@ rm -r artifacts/builds/pnut_js
 
 set -xe
 
-BUILD_COMMAND=./mk_full_cc_x86_min
+if [ ! -z $1 ]
+then
+  BUILD_COMMAND=$1
+else
+  BUILD_COMMAND=./mk_full_cc_x86_min
+fi
 
 ./mk_full_deps
 
