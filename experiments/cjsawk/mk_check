@@ -23,4 +23,16 @@ for i in $(ls artifacts/builds/*/hex2.exe); do
   diff -u -s $i $HEX2;
 done
 
+for i in $(ls artifacts/builds/|grep -v pnut_js); do
+  diff -u -s artifacts/builds/$i/cjsawk.exe artifacts/builds/$i/cjsawk_2.exe;
+done
+
+for i in $(ls artifacts/builds/|grep -v pnut_js); do
+  diff -u -s artifacts/builds/$i/m0.exe artifacts/builds/$i/m0_2.exe;
+done
+
+for i in $(ls artifacts/builds/|grep -v pnut_js); do
+  diff -u -s artifacts/builds/$i/hex2.exe artifacts/builds/$i/hex2_2.exe;
+done
+
 echo "DONE check"
