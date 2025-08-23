@@ -4,7 +4,7 @@ set -xe
 ./mk_full_deps
 ./mk_full_gcc
 ./mk_full_cc_x86_min
-./mk_full_js
+./mk_full_nodejs
 ./mk_full_awk
 
 sha1sum artifacts/builds/*/cjsawk*.exe|sort

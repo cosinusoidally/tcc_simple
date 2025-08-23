@@ -10,7 +10,7 @@ mkdir $BLD_DIR
 function compile_js {
   echo "build $2.M1"
   echo "fname=\"$1\";load(\"cjsawk_test.js\");" > $BLD_DIR/mk_cjsawk.js
-  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $2.M1
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $2.M1
 
   echo "append definitions to make $2-0.M1"
 
@@ -18,14 +18,14 @@ function compile_js {
 
   echo "build $2.hex2"
   echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
-  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
 
   echo "generate $2-0.hex2"
   cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
 
   echo "build $2"
   echo "fname=\"$2-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
-  js ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
 
   chmod +x $2
 }
