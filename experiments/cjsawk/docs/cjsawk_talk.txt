@@ -69,7 +69,7 @@ var stdout;
 function hello_world(s){
   return hello_world_(s, 0){
 }
-function hello_world(s,    foo){
+function hello_world_(s,    foo){
   foo = 123;
   v_fputs(mks("Hello "), stdout);
   v_fputs(s, stdout);
@@ -80,6 +80,8 @@ function hello_world(s,    foo){
 }
 
 mks C version:
+
+Take a string and place it on the virtual heap
 
 int mks(char *s) {
   return (int)s;
@@ -99,7 +101,7 @@ function mks(s){
   if(r !== undefined) {
     return r;
   }
-  r = v_calloc(s.length + 1);
+  r = v_calloc(s.length + 1, 1);
   for(var i =0; i<s.length; i++){
     wi8(r + i, s.charCodeAt(i));
   }
