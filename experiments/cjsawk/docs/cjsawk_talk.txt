@@ -1,0 +1,219 @@
+Start with a hello world:
+
+int hello_world(char* s){
+  int foo = 123;
+  printf("Hello %s %d\n", s, foo);
+}
+
+function hello_world(s) {
+  var foo = 123;
+  console.log("Hello "+s+" "+foo);
+}
+
+function hello_world(s,    foo) {
+  foo = 123;
+  print "Hello " s " " foo;
+}
+
+All look very similar but different.
+
+Things to note:
+
+JS does string concatinaion with +, AWK with space.
+
+Focus on the C version:
+
+int hello_world(char* s){
+  int foo = 123;
+  printf("Hello %s %d\n", s, foo);
+}
+
+
+#define function int
+#define var int
+
+function hello_world(char* s){
+  var foo = 123;
+  printf("Hello %s %d\n", s, foo);
+}
+
+#define function int
+#define var int
+
+extern *FILE stdout;
+
+function hello_world(char* s){
+  var foo = 123;
+  fputs(mks("Hello "), stdout);
+  fputs(s, stdout);
+  fputs(" ", stdout);
+  fputs(int_str(foo), stdout);
+  fputs("\n", stdout);
+}
+
+var stdout;
+
+function hello_world(s){
+  var foo = 123;
+  v_fputs(mks("Hello "), stdout);
+  v_fputs(s, stdout);
+  v_fputs(mks(" "), stdout);
+  v_fputs(int_str(foo), stdout);
+  v_fputs(mks("\n"), stdout);
+}
+
+Valid C/JS/AWK:
+
+var stdout;
+
+function hello_world(s){
+  return hello_world_(s, 0){
+}
+function hello_world(s,    foo){
+  foo = 123;
+  v_fputs(mks("Hello "), stdout);
+  v_fputs(s, stdout);
+  v_fputs(mks(" "), stdout);
+  v_fputs(int_str(foo), stdout);
+  v_fputs(mks("\n"), stdout);
+  return 0;
+}
+
+mks C version:
+
+int mks(char *s) {
+  return (int)s;
+}
+
+yes I know converting a pointer to int bad. We get around that by just
+supporting m32.
+
+JS version of mks:
+
+/* caching to avoid wasting memory each time mks is called */
+var string_cache = {};
+
+function mks(s){
+  var r;
+  r = string_cache[s];
+  if(r !== undefined) {
+    return r;
+  }
+  r = v_calloc(s.length + 1);
+  for(var i =0; i<s.length; i++){
+    wi8(r + i, s.charCodeAt(i));
+  }
+  string_cache[s] = r;
+  return r;
+}
+
+AWK version of mks:
+
+function mks(s    ,i , l , cs , r) {
+  r = string_cache[s];
+  if(r) {
+    return r;
+  }
+  l = length(s); # like JS l.length
+  r = v_calloc(l+1, 1);
+  split(s, cs, ""); # like JS cs = s.split("")
+#  print "mks s: " s " length: " length(s);
+
+  for(i =0; i<l; i++){
+    wi8(r + i, mkC(cs[i+1]));
+  }
+  string_cache[s]=r;
+  return r;
+}
+
+
+cjsawk version of int_str:
+
+function int_str(a) {
+  return int_str_(a, 0, 0, 0, 0);
+}
+function int_str_(a,    b, d, o, t) {
+  if(eq(a,0)) {
+    return mks("0");
+  }
+  b = v_calloc(34,1);
+  o = add(b,32);
+  while(1) {
+    t = mod(a,10);
+    wi8(o,add(48,t));
+    a = div(SUB(a,t),10);
+    if(eq(0,a)){
+      break;
+    }
+    o = SUB(o,1);
+  }
+  return o;
+}
+
+cjsawk.js is the self hosted implementation of the compiler:
+
+  < 1000 lines of code that is:
+    simulateiously valid C, JS, and AWK
+    outputs macro assembly
+
+m0.js is the macro asembler
+
+  < 500 lines of cjsawk dialect code
+
+    outputs hex2 "object code"
+
+hex2.js is the "linker"
+
+  ~ 400 lines of code
+   outputs executables
+
+The bootstrap process:
+
+From C (approximate process, shortened for clarity):
+
+gcc -m32 cjsawk_test.c -o cjsawk_gcc.exe
+gcc -m32 m0_test.c -o m0_gcc.exe
+gcc -m32 hex2_test.c -o hex2_gcc.exe
+
+cat $SUPPORT_CODE cjsawk.js > cjsawk_self.c
+cat $SUPPORT_CODE m0.js > m0_self.c
+cat $SUPPORT_CODE hex2.js > hex2_self.c
+
+for i in cjsawk m0 hex2; do
+  ./cjsawk_gcc.exe $i_self.c $i.M1
+  ./m0_gcc.exe $i.M1 $i.hex2
+  ./hex2_gcc.exe $i.hex2 $i.exe
+done
+
+Then rebuild cjsawk/m0/hex2 with themselves:
+
+for i in cjsawk m0 hex2 ; do
+  ./cjsawk.exe $i_self.c $i_2.M1
+  ./m0.exe $i.M1 $i_2.hex2
+  ./hex2.exe $i.hex2 $i_2.exe
+done
+
+After this we check the sha1sum of all the binaries:
+
+dccd5ebd43112c31f8352ff5dcb92459a608ecde  cjsawk.exe
+dccd5ebd43112c31f8352ff5dcb92459a608ecde  cjsawk_2.exe
+
+04b11563645c891fc6cc80908ffeffd760d8f4d8  m0_2.exe
+04b11563645c891fc6cc80908ffeffd760d8f4d8  m0.exe
+
+09f40c8087af0279c282a15be6d76c7851e421c1  hex2_2.exe
+09f40c8087af0279c282a15be6d76c7851e421c1  hex2.exe
+
+ie rebuild cjsawk with itself will produce the same binary (so it is self
+hosted and reproducably buildable).
+
+Similar invocations for nodejs and awk. Can also build in a web browser:
+
+# build with gcc:
+./mk mk_full_gcc
+
+# build with nodejs:
+./mk mk_full_nodejs
+
+# build with awk
+./mk mk_full_awk
