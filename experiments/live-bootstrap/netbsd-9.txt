@@ -1,14 +1,13 @@
 Building netbsd-9 with live-bootstrap
 
-
 grab internal_pass2_image from here
 https://github.com/fosslinux/live-bootstrap/actions/runs/17082086787
 
-If the github ci artifact has expired then rebuild it by using this
+If the github ci artifact has expired then either try a later build (note, later
+versions might not work as I have not tested them) or rebuild it by using this
+revision:
 
 https://github.com/fosslinux/live-bootstrap/commit/14937efcb2cc99205299f92808fec1b331de543d
-
-revision of live-bootstrap
 
 extract internal_pass2_image.zip then extract the tarball it contains.
 
