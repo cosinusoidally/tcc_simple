@@ -10,7 +10,7 @@ https://github.com/fosslinux/live-bootstrap/commit/14937efcb2cc99205299f92808fec
 
 revision of live-bootstrap
 
-extract internal_pass2_image.zip then extract the tarball in contains.
+extract internal_pass2_image.zip then extract the tarball it contains.
 
 Grab a git clone of https://github.com/NetBSD/src
 
@@ -19,6 +19,13 @@ and place it in the /src directory of the extracted tarball
 git checkout netbsd-9
 
 to change into the netbsd 9 branch.
+
+Note I actually use a git archive:
+
+git checkout netbsd-9
+git archive -o ../src-9.tar.gz HEAD
+
+and then extract src-9.tar.gz into /src but either way should work.
 
 For completeness the commit I tested would have been:
 
