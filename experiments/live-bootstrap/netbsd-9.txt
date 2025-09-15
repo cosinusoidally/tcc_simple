@@ -30,7 +30,7 @@ For completeness the commit I tested would have been:
 
 https://github.com/NetBSD/src/commit/7c602ecbf36988123885fcf51b595c1af1b212bf
 
-Apply the following patches:
+Apply the following patches (in the root of the extracted target):
 
 --- a/src/usr.bin/xlint/lint1/scan.l
 +++ b/src/usr.bin/xlint/lint1/scan.l
@@ -74,7 +74,6 @@ Apply the following patches:
  #define _Int64 long long
 
 
-
 In the / directory of target create a "go.sh" script:
 
 ```
@@ -96,6 +95,16 @@ mount --bind /proc proc
 and then kick off the build with
 
 chroot . /go.sh
+
+Note you can also run incrementally if you change it to something like:
+```
+#!/bin/sh
+
+cd /src
+./build.sh -U -u -O /tmp/obj -m i386 -j4 tools
+./build.sh -U -u -O /tmp/obj -m i386 -j4 release
+./build.sh -U -u -O /tmp/obj -m i386 -j4 iso-image
+```
 
 You might need to:
 
