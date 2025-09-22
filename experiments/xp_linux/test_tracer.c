@@ -361,13 +361,20 @@ int main(int argc, char *argv[])
 					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
-				if(REG(regs, SYSARG_NUM) > 65535) {
-					printf("Syscall wrapper\n");
-					regs.esp = regs.esp - 4;
-					ptrace(PTRACE_POKEDATA, pid, regs.esp, regs.eip);
-					regs.eip = regs.ebx;
-					regs.orig_eax=20;
-					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+				if(trap_on) {
+					if(REG(regs, SYSARG_NUM) > 65535) {
+					} else {
+						printf("blocked syscall\n");
+					}
+				} else {
+					if(REG(regs, SYSARG_NUM) > 65535) {
+						printf("Syscall wrapper\n");
+						regs.esp = regs.esp - 4;
+						ptrace(PTRACE_POKEDATA, pid, regs.esp, regs.eip);
+						regs.eip = regs.ebx;
+						regs.orig_eax=20;
+						status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+					}
 				}
 				if (status < 0) {
 					fprintf(stderr,
