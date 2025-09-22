@@ -344,6 +344,8 @@ int main(int argc, char *argv[])
 				status = ptrace(PTRACE_GETREGS, pid, NULL, &regs);
 				if(REG(regs, SYSARG_NUM) == 65535) {
 					printf("Special Syscall\n");
+					regs.orig_eax=4;
+					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if (status < 0) {
 					fprintf(stderr,
