@@ -12,7 +12,7 @@ int wrap_syscall() {
   char *b="wrap_syscall called\n";
   int r;
   syscall(65533);
-  printf("wrap_syscall eax: %d ebx: %d ecx: %d \n", regs_data[0], regs_data[1], regs_data[2]);
+  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   syscall(65534, wrap_syscall, regs_data);
   return r;
