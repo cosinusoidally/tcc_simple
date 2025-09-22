@@ -14,3 +14,5 @@
 !experiments/m2min_v3/artifacts/placeholder
 /experiments/cjsawk/artifacts/*
 !experiments/cjsawk/artifacts/placeholder
+/experiments/xp_linux/artifacts/*
+!experiments/xp_linux/artifacts/placeholder
