@@ -363,8 +363,9 @@ int main(int argc, char *argv[])
 				}
 				if(trap_on) {
 					if(REG(regs, SYSARG_NUM) > 65535) {
+						regs.orig_eax = regs.orig_eax & 0xFFFF;
 					} else {
-						printf("blocked syscall\n");
+						printf("blocked syscall %d\n", regs.orig_eax);
 					}
 				} else {
 					if(REG(regs, SYSARG_NUM) > 65535) {
