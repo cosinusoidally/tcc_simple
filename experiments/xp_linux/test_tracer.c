@@ -367,6 +367,7 @@ int main(int argc, char *argv[])
 					} else {
 						if(regs.orig_eax != 20) {
 							printf("blocked syscall %d\n", regs.orig_eax);
+							regs.orig_eax=20;
 						}
 					}
 				} else {
