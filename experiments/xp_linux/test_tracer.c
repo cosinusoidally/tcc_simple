@@ -347,12 +347,12 @@ int main(int argc, char *argv[])
 					regs.orig_eax=4;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
-				if(REG(regs, SYSARG_NUM) == 65536) {
+				if(REG(regs, SYSARG_NUM) > 65535) {
 					printf("Syscall wrapper\n");
-					regs.orig_eax=20;
 					regs.esp = regs.esp - 4;
 					ptrace(PTRACE_POKEDATA, pid, regs.esp, regs.eip);
 					regs.eip = regs.ebx;
+					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if (status < 0) {
