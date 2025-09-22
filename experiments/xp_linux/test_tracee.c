@@ -18,6 +18,14 @@ int wrap_syscall() {
   return r;
 }
 
+int trap_syscalls_on() {
+  syscall(65534, wrap_syscall, regs_data);
+}
+
+int trap_syscalls_off() {
+  syscall(65533);
+}
+
 main(){
   char *a="Test syscall\n";
   char *b="test_trap blah\n";
