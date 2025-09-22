@@ -178,6 +178,8 @@ typedef enum {
 
 #endif
 
+int trap_on = 0;
+
 int main(int argc, char *argv[])
 {
 	enum __ptrace_request restart_how;
@@ -345,6 +347,18 @@ int main(int argc, char *argv[])
 				if(REG(regs, SYSARG_NUM) == 65535) {
 					printf("Special Syscall\n");
 					regs.orig_eax=4;
+					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+				}
+				if(REG(regs, SYSARG_NUM) == 65534) {
+					printf("TRAP_ON\n");
+					trap_on = 1;
+					regs.orig_eax=20;
+					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+				}
+				if(REG(regs, SYSARG_NUM) == 65533) {
+					printf("TRAP_OFF\n");
+					trap_on = 0;
+					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if(REG(regs, SYSARG_NUM) > 65535) {
