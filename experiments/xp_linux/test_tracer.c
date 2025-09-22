@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 				}
 				/* Fall through. */
 			case SIGTRAP | 0x80:
-				fprintf(stderr, "sid %d: PTRACE_EVENT_SYSGOOD\n", sid);
+//				fprintf(stderr, "sid %d: PTRACE_EVENT_SYSGOOD\n", sid);
 				signal = 0;
 
 				status = ptrace(PTRACE_GETREGS, pid, NULL, &regs);
