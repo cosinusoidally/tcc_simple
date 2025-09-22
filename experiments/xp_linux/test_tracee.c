@@ -10,15 +10,17 @@ int wrap_syscall2() {
 
 int wrap_syscall() {
   char *b="wrap_syscall called\n";
+  int r;
   syscall(65533);
-  printf("wrap_syscall %d %s\n", regs_data[0], regs_data[2]);
+  printf("wrap_syscall eax: %d ebx: %d ecx: %d \n", regs_data[0], regs_data[1], regs_data[2]);
+  r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3]);
   syscall(65534, wrap_syscall, regs_data);
-  return 0;
+  return r;
 }
 
 main(){
   char *a="Test syscall\n";
-  char *b="test_trap\n";
+  char *b="test_trap blah\n";
   fputs("hello world\n", stdout);
   printf("a: %d\n",a);
   printf("stdout: %d\n", stdout);
@@ -26,6 +28,7 @@ main(){
   syscall(65536, wrap_syscall2);
   syscall(65534, wrap_syscall, regs_data);
   syscall(4, 0, b, strlen(b));
+  syscall(4, 0, a, strlen(a));
   syscall(65533);
   fputs("more\n", stdout);
   return 0;
