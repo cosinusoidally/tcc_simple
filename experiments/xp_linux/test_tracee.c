@@ -1,11 +1,17 @@
 extern int stdout;
 
+int wrap_syscall() {
+  printf("wrap_syscall called\n");
+  return 0;
+}
+
 main(){
   char *a="Test syscall\n";
   fputs("hello world\n", stdout);
   printf("a: %d\n",a);
   printf("stdout: %d\n", stdout);
   syscall(65535, 0, a, strlen(a));
+  syscall(65536, wrap_syscall);
   fputs("more\n", stdout);
   return 0;
 }

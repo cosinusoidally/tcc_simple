@@ -347,6 +347,11 @@ int main(int argc, char *argv[])
 					regs.orig_eax=4;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
+				if(REG(regs, SYSARG_NUM) == 65536) {
+					printf("Syscall wrapper\n");
+					regs.orig_eax=20;
+					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+				}
 				if (status < 0) {
 					fprintf(stderr,
 						"syscall(?) = ?\n");
