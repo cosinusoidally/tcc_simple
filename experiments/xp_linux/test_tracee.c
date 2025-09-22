@@ -1,5 +1,7 @@
 extern int stdout;
 
+int syscall_no = 0;
+
 int wrap_syscall2() {
   printf("wrap_syscall2 called\n");
   return 0;
@@ -17,7 +19,7 @@ main(){
   printf("stdout: %d\n", stdout);
   syscall(65535, 0, a, strlen(a));
   syscall(65536, wrap_syscall2);
-  syscall(65534, wrap_syscall);
+  syscall(65534, wrap_syscall, syscall_no);
   fputs("test_trap\n", stdout);
   syscall(65533);
   fputs("more\n", stdout);
