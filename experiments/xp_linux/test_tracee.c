@@ -12,7 +12,7 @@ int wrap_syscall() {
   char *b="wrap_syscall called\n";
   syscall(65533);
   printf("wrap_syscall %d %s\n", regs_data[0], regs_data[1]);
-  syscall(65534, wrap_syscall, &syscall_no, regs_data);
+  syscall(65534, wrap_syscall, regs_data);
   return 0;
 }
 
@@ -24,7 +24,7 @@ main(){
   printf("stdout: %d\n", stdout);
   syscall(65535, 0, a, strlen(a));
   syscall(65536, wrap_syscall2);
-  syscall(65534, wrap_syscall, &syscall_no, regs_data);
+  syscall(65534, wrap_syscall, regs_data);
   syscall(4, 0, b, strlen(b));
   syscall(65533);
   fputs("more\n", stdout);

@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
 					printf("TRAP_ON\n");
 					trap_on = 1;
 					syscall_addr = regs.ebx;
-					regs_data = regs.edx;
+					regs_data = regs.ecx;
 					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
