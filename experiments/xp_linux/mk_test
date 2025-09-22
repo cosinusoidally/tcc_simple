@@ -1,8 +1,8 @@
 ./mk_clean
 set -xe
 
-gcc -m32 test_tracer.c -o artifacts/test_tracer.exe
-gcc -m32 test_tracee.c -o artifacts/test_tracee.exe
+gcc -g3 -O0 -m32 test_tracer.c -o artifacts/test_tracer.exe
+gcc -g3 -O0 -m32 test_tracee.c -o artifacts/test_tracee.exe
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe
 
