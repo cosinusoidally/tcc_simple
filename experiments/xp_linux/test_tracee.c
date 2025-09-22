@@ -8,7 +8,7 @@ int wrap_syscall2() {
 }
 
 int wrap_syscall() {
-  printf("wrap_syscall called\n");
+  printf("wrap_syscall called %d\n", syscall_no);
   return 0;
 }
 
