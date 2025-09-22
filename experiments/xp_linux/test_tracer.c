@@ -350,6 +350,7 @@ int main(int argc, char *argv[])
 				if(REG(regs, SYSARG_NUM) == 65536) {
 					printf("Syscall wrapper\n");
 					regs.orig_eax=20;
+					regs.eip = regs.ebx;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if (status < 0) {
