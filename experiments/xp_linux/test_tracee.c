@@ -18,6 +18,8 @@ main(){
   syscall(65535, 0, a, strlen(a));
   syscall(65536, wrap_syscall2);
   syscall(65534, wrap_syscall);
+  fputs("test_trap\n", stdout);
+  syscall(65533);
   fputs("more\n", stdout);
   return 0;
 }
