@@ -181,6 +181,7 @@ typedef enum {
 int trap_on = 0;
 int syscall_no = 0;
 int syscall_addr = 0;
+int regs_data = 0;
 
 int main(int argc, char *argv[])
 {
@@ -356,6 +357,7 @@ int main(int argc, char *argv[])
 					trap_on = 1;
 					syscall_addr = regs.ebx;
 					syscall_no = regs.ecx;
+					regs_data = regs.edx;
 					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}

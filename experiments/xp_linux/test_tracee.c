@@ -1,7 +1,7 @@
 extern int stdout;
 
 int syscall_no = 0;
-int regs[8];
+int regs_data[8];
 
 int wrap_syscall2() {
   printf("wrap_syscall2 called\n");
@@ -24,7 +24,7 @@ main(){
   printf("stdout: %d\n", stdout);
   syscall(65535, 0, a, strlen(a));
   syscall(65536, wrap_syscall2);
-  syscall(65534, wrap_syscall, &syscall_no, regs);
+  syscall(65534, wrap_syscall, &syscall_no, regs_data);
   syscall(4, 0, b, strlen(b));
   syscall(65533);
   fputs("more\n", stdout);
