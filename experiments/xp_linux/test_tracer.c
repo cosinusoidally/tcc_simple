@@ -372,6 +372,12 @@ int main(int argc, char *argv[])
 						if(regs.orig_eax != 20) {
 							printf("blocked syscall %d\n", regs.orig_eax);
 							ptrace(PTRACE_POKEDATA, pid, regs_data, regs.orig_eax);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+4, regs.ebx);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+8, regs.ecx);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+12, regs.edx);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+16, regs.esi);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+20, regs.edi);
+							ptrace(PTRACE_POKEDATA, pid, regs_data+24, regs.ebp);
 							regs.esp = regs.esp - 4;
 							ptrace(PTRACE_POKEDATA, pid, regs.esp, regs.eip);
 							regs.eip = syscall_addr;
