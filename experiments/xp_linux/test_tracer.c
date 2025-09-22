@@ -179,7 +179,6 @@ typedef enum {
 #endif
 
 int trap_on = 0;
-int syscall_no = 0;
 int syscall_addr = 0;
 int regs_data = 0;
 
@@ -356,7 +355,6 @@ int main(int argc, char *argv[])
 					printf("TRAP_ON\n");
 					trap_on = 1;
 					syscall_addr = regs.ebx;
-					syscall_no = regs.ecx;
 					regs_data = regs.edx;
 					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
@@ -373,7 +371,6 @@ int main(int argc, char *argv[])
 					} else {
 						if(regs.orig_eax != 20) {
 							printf("blocked syscall %d\n", regs.orig_eax);
-							ptrace(PTRACE_POKEDATA, pid, syscall_no, regs.orig_eax);
 							ptrace(PTRACE_POKEDATA, pid, regs_data, regs.orig_eax);
 							regs.esp = regs.esp - 4;
 							ptrace(PTRACE_POKEDATA, pid, regs.esp, regs.eip);

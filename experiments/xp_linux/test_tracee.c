@@ -11,8 +11,8 @@ int wrap_syscall2() {
 int wrap_syscall() {
   char *b="wrap_syscall called\n";
   syscall(65533);
-  printf("wrap_syscall %d\n", regs_data[0]);
-  syscall(65534, wrap_syscall, &syscall_no);
+  printf("wrap_syscall %d %s\n", regs_data[0], regs_data[1]);
+  syscall(65534, wrap_syscall, &syscall_no, regs_data);
   return 0;
 }
 
