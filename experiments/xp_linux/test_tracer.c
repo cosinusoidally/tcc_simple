@@ -365,7 +365,9 @@ int main(int argc, char *argv[])
 					if(REG(regs, SYSARG_NUM) > 65535) {
 						regs.orig_eax = regs.orig_eax & 0xFFFF;
 					} else {
-						printf("blocked syscall %d\n", regs.orig_eax);
+						if(regs.orig_eax != 20) {
+							printf("blocked syscall %d\n", regs.orig_eax);
+						}
 					}
 				} else {
 					if(REG(regs, SYSARG_NUM) > 65535) {

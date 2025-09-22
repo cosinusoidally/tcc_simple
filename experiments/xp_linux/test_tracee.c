@@ -1,5 +1,10 @@
 extern int stdout;
 
+int wrap_syscall2() {
+  printf("wrap_syscall2 called\n");
+  return 0;
+}
+
 int wrap_syscall() {
   printf("wrap_syscall called\n");
   return 0;
@@ -11,7 +16,8 @@ main(){
   printf("a: %d\n",a);
   printf("stdout: %d\n", stdout);
   syscall(65535, 0, a, strlen(a));
-  syscall(65536, wrap_syscall);
+  syscall(65536, wrap_syscall2);
+  syscall(65534, wrap_syscall);
   fputs("more\n", stdout);
   return 0;
 }
