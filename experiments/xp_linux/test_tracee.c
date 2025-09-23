@@ -9,6 +9,12 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
+int wi8(int o,int v) {
+        char *h = 0;
+        h[o]=v;
+        return 0;
+}
+
 int wrap_syscall2() {
   printf("wrap_syscall2 called\n");
   return 0;
@@ -54,5 +60,13 @@ main(){
   syscall(4, 0, a, strlen(a));
   trap_syscalls_off();
   fputs("more\n", stdout);
+  int foo=fopen("../cjsawk/artifacts/hello.exe", "r");
+  int c;
+  int o = 0x8048000;
+  while((c=fgetc(foo))!=-1) {
+    wi8(o,c);
+    o = o + 1;
+  }
+  printf("o: %x\n", o);
   return 0;
 }
