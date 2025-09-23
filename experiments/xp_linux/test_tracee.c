@@ -60,7 +60,7 @@ main(){
   syscall(4, 0, a, strlen(a));
   trap_syscalls_off();
   fputs("more\n", stdout);
-  int foo=fopen("../cjsawk/artifacts/hello.exe", "r");
+  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
   int c;
   int o = 0x8048000;
   while((c=fgetc(foo))!=-1) {
@@ -68,5 +68,9 @@ main(){
     o = o + 1;
   }
   printf("o: %x\n", o);
+  /* mov    eax,0x8048054 */
+  asm(".byte 0xB8\n" ".byte 0x54\n" ".byte 0x80\n" ".byte 0x04\n" ".byte 0x08");
+  /* call   eax */
+  asm(".byte 0xFF"); asm(".byte 0xD0");
   return 0;
 }
