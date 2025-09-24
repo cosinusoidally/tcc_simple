@@ -25,11 +25,34 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
+int vm_brk() {
+  return syscall(45, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+}
+
+int vm_read() {
+  return syscall(3, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+}
+
+int vm_write() {
+  return syscall(4, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+}
+
 int wrap_syscall() {
   int r;
+  int n;
   trap_syscalls_off();
   printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
-  r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  n = regs_data[0];
+  if(n == 45) {
+    r = vm_brk();
+  } else if(n == 3) {
+    r = vm_read();
+  } else if(n == 4) {
+    r = vm_write();
+  } else {
+    printf("unsupported syscall: %d\n",n);
+    r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  }
   trap_syscalls_on();
   return r;
 }
