@@ -52,8 +52,12 @@ int vm_close() {
 }
 
 int vm_exit() {
+  int r;
+  trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
-  return syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  r = syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_on();
+  return r;
 }
 
 int wrap_syscall() {
