@@ -28,7 +28,11 @@ int trap_syscalls_off() {
 int brk_ptr=0;
 
 int vm_brk() {
-  return syscall(45, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  int p=regs_data[1];
+  if(p!=0) {
+    brk_ptr=p;
+  }
+  return brk_ptr;
 }
 
 int vm_read() {
@@ -47,6 +51,11 @@ int vm_close() {
   return syscall(6, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
 }
 
+int vm_exit() {
+  printf("brk_ptr: %x\n", brk_ptr);
+  return syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+}
+
 int wrap_syscall() {
   int r;
   int n;
@@ -63,6 +72,8 @@ int wrap_syscall() {
     r = vm_open();
   } else if(n == 6) {
     r = vm_close();
+  } else if(n == 1) {
+    r = vm_exit();
   } else {
     printf("unsupported syscall: %d\n",n);
     exit(1);
