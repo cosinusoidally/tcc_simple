@@ -182,6 +182,8 @@ int trap_on = 0;
 int syscall_addr = 0;
 int regs_data = 0;
 
+int dbg = 0;
+
 int main(int argc, char *argv[])
 {
 	enum __ptrace_request restart_how;
@@ -352,7 +354,7 @@ int main(int argc, char *argv[])
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if(REG(regs, SYSARG_NUM) == 65534) {
-					printf("TRAP_ON\n");
+					if(dbg) {printf("TRAP_ON\n");}
 					trap_on = 1;
 					syscall_addr = regs.ebx;
 					regs_data = regs.ecx;
@@ -360,7 +362,7 @@ int main(int argc, char *argv[])
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
 				}
 				if(REG(regs, SYSARG_NUM) == 65533) {
-					printf("TRAP_OFF\n");
+					if(dbg) {printf("TRAP_OFF\n");}
 					trap_on = 0;
 					regs.orig_eax=20;
 					status = ptrace(PTRACE_SETREGS, pid, NULL, &regs);
@@ -370,7 +372,7 @@ int main(int argc, char *argv[])
 						regs.orig_eax = regs.orig_eax & 0xFFFF;
 					} else {
 						if(regs.orig_eax != 20) {
-							printf("blocked syscall %d\n", regs.orig_eax);
+							if(dbg) {printf("blocked syscall %d\n", regs.orig_eax);}
 							ptrace(PTRACE_POKEDATA, pid, regs_data, regs.orig_eax);
 							ptrace(PTRACE_POKEDATA, pid, regs_data+4, regs.ebx);
 							ptrace(PTRACE_POKEDATA, pid, regs_data+8, regs.ecx);
@@ -399,9 +401,11 @@ int main(int argc, char *argv[])
 					fprintf(stderr,
 						"syscall(?) = ?\n");
 				} else {
-					fprintf(stderr, "syscall(%ld) == 0 ? %d\n",
-						REG(regs, SYSARG_NUM),
-						REG(regs, SYSARG_RESULT) == 0);
+					if(dbg) {
+						fprintf(stderr, "syscall(%ld) == 0 ? %d\n",
+							REG(regs, SYSARG_NUM),
+							REG(regs, SYSARG_RESULT) == 0);
+					}
 				}
 				break;
 
