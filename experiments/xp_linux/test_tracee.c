@@ -15,11 +15,6 @@ int wi8(int o,int v) {
         return 0;
 }
 
-int wrap_syscall2() {
-  printf("wrap_syscall2 called\n");
-  return 0;
-}
-
 int wrap_syscall();
 
 int trap_syscalls_on() {
@@ -40,8 +35,6 @@ int wrap_syscall() {
 }
 
 main(){
-  char *a="Test syscall\n";
-  char *b="test_trap blah\n";
 /* big mapping for our heap */
   int res = 0;
   res = mmap(0x20000, 7*512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
@@ -50,16 +43,6 @@ main(){
     printf("mmap error\n");
     exit(1);
   }
-  fputs("hello world\n", stdout);
-  printf("a: %d\n",a);
-  printf("stdout: %d\n", stdout);
-  syscall(65535, 0, a, strlen(a));
-  syscall(65536, wrap_syscall2);
-  trap_syscalls_on();
-  syscall(4, 0, b, strlen(b));
-  syscall(4, 0, a, strlen(a));
-  trap_syscalls_off();
-  fputs("more\n", stdout);
 //  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
   int foo=fopen("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "r");
   int c;
