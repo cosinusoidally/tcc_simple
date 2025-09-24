@@ -78,10 +78,8 @@ main(){
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
-  /* mov    eax,0x8048054 */
-  asm(".byte 0xB8\n" ".byte 0x54\n" ".byte 0x80\n" ".byte 0x04\n" ".byte 0x08");
-  /* call   eax */
-  asm(".byte 0xFF"); asm(".byte 0xD0");
+  asm("mov $0x8048054,%eax");
+  asm("jmp %eax");
   trap_syscalls_off();
   return 0;
 }
