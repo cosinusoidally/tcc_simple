@@ -37,6 +37,10 @@ int vm_write() {
   return syscall(4, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
 }
 
+int vm_open() {
+  return syscall(5, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+}
+
 int wrap_syscall() {
   int r;
   int n;
@@ -49,6 +53,8 @@ int wrap_syscall() {
     r = vm_read();
   } else if(n == 4) {
     r = vm_write();
+  } else if(n == 5) {
+    r = vm_open();
   } else {
     printf("unsupported syscall: %d\n",n);
     r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
