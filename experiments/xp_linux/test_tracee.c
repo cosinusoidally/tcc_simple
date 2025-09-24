@@ -63,7 +63,7 @@ int wrap_syscall() {
     r = vm_close();
   } else {
     printf("unsupported syscall: %d\n",n);
-    r = syscall(regs_data[0],regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+    exit(1);
   }
   trap_syscalls_on();
   return r;
