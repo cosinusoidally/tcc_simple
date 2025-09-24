@@ -79,7 +79,6 @@ int vm_exit() {
 int wrap_syscall() {
   int r;
   int n;
-  trap_syscalls_off();
 //  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   n = regs_data[0];
   if(n == 45) {
@@ -95,10 +94,10 @@ int wrap_syscall() {
   } else if(n == 1) {
     r = vm_exit();
   } else {
+    trap_syscalls_off();
     printf("unsupported syscall: %d\n",n);
     exit(1);
   }
-  trap_syscalls_on();
   return r;
 }
 
