@@ -25,6 +25,8 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
+int brk_ptr=0;
+
 int vm_brk() {
   return syscall(45, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
 }
@@ -94,6 +96,9 @@ main(){
   args[1] = "cjsawk.exe";
   args[2] = "../cjsawk/hello.c";
   args[3] = "artifacts/out.M1";
+
+  brk_ptr = 4096+4096*(o/4096);
+  printf("brk_ptr: %x\n", brk_ptr);
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
