@@ -37,25 +37,33 @@ int vm_brk() {
 
 int vm_read() {
   int r;
+  trap_syscalls_off();
   r = syscall(3, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_on();
   return r;
 }
 
 int vm_write() {
   int r;
+  trap_syscalls_off();
   r = syscall(4, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_on();
   return r;
 }
 
 int vm_open() {
   int r;
+  trap_syscalls_off();
   r = syscall(5, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_on();
   return r;
 }
 
 int vm_close() {
   int r;
+  trap_syscalls_off();
   r = syscall(6, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_on();
   return r;
 }
 
