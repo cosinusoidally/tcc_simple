@@ -6,4 +6,6 @@ gcc -Wl,-Ttext-segment,0x10000 -no-pie -g3 -O0 -m32 test_tracee.c -o artifacts/t
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe
 
+sha1sum -c sum_hello
+
 echo DONE
