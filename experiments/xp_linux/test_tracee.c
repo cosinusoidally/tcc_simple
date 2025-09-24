@@ -60,7 +60,8 @@ main(){
   syscall(4, 0, a, strlen(a));
   trap_syscalls_off();
   fputs("more\n", stdout);
-  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
+//  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
+  int foo=fopen("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "r");
   int c;
   int o = 0x8048000;
   while((c=fgetc(foo))!=-1) {
