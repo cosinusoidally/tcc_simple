@@ -68,6 +68,14 @@ main(){
     o = o + 1;
   }
   printf("o: %x\n", o);
+
+  int *args;
+  args = 0x8047F80;
+  args[0] = 3;
+  args[1] = "cjsawk.exe";
+  args[2] = "../cjsawk/hello.c";
+  args[3] = "artifacts/out.M1";
+
   trap_syscalls_on();
   /* mov    eax,0x8048054 */
   asm(".byte 0xB8\n" ".byte 0x54\n" ".byte 0x80\n" ".byte 0x04\n" ".byte 0x08");
