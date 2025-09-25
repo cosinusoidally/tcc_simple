@@ -66,3 +66,7 @@ write (partial)
 open (partial)
 close (partial)
 exit (complete, but also does some custom clean/extracts result files).
+
+As much as is practically possible the memory layout of xp_linux will match
+that of builder-hex0 (though this may have to be changed to support win32).
+Data structures should also match when possible.
