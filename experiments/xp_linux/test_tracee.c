@@ -52,14 +52,18 @@ int vm_read() {
   int buf = regs_data[2];
   int count = regs_data[3];
   trap_syscalls_off();
+  r = syscall(3, fd, buf, count, 0, 0, 0);
   if(file_offset == file_length) {
     printf("EOF\n");
     c = -1;
   } else {
     c = ri8(file_addr+file_offset);
     file_offset = file_offset + 1;
+    if(c != ri8(buf)) {
+     printf("error");
+    }
+    wi8(buf, c);
   }
-  r = syscall(3, fd, buf, count, 0, 0, 0);
   trap_syscalls_on();
   return r;
 }
