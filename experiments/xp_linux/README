@@ -15,4 +15,45 @@ to run under qemu, or on bare metal).
 
 https://github.com/ironmeld/builder-hex0/
 
+xp_linux is still very WIP. At the moment what it can do is:
 
+intercept int 0x80 syscalls.
+load ../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe
+run cjsawk.exe and compile ../cjsawk/hello.c into artifacts/out.M1
+
+test_tracee.c is the prototype version of xp_linux. It loads cjsawk.exe, runs
+it and intercepts all syscalls. It uses its own "vm_ " version of each syscall
+to emulate linux syscalls.
+
+test_tracee.c is run by test_tracer.c with some ptrace syscall hooks in place.
+
+test_tracer.exe traps all calls to int 0x80 (syscalls). It has 2 modes:
+
+trap_off: with trap_off each time test_tracee.exe calls a syscall it is
+          processed by the OS as normal.
+
+trap_on: when test_tracee.exe calls a syscall test_tracer.exe translated the
+         syscall into a function call in test_tracee.exe
+
+test_tracee enables and disables the trap mode as follows:
+
+To enable we call syscall 65534 (which is an unused syscall that the tracer
+intercepts and replaces). wrap_syscall is the function within the tracee that
+will get called on each int 0x80 syscall. When a syscall occurs the tracer will
+poke the contents of all the registers into the regs_data array within the
+address space of the tracee.
+
+int trap_syscalls_on() {
+  syscall(65534, wrap_syscall, regs_data);
+}
+
+To disable the trapping of syscalls we call:
+
+int trap_syscalls_off() {
+  syscall(65533);
+}
+
+This is another custom syscall implemented by the tracer.
+
+Having this ability to toggle allows the tracee to freely use the system libc
+to implement any required support functionality for the emulated syscalls.
