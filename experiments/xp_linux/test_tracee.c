@@ -84,6 +84,8 @@ int vm_write() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
+  wi8(file_addr+file_offset, ri8(buf));
+  file_offset = file_offset + 1;
   trap_syscalls_off();
   r = syscall(4, fd, buf, count, 0, 0, 0);
   trap_syscalls_on();
@@ -126,6 +128,7 @@ int vm_exit() {
   int r;
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
+  printf("file_offset: %d\n", file_offset);
   r = syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   trap_syscalls_on();
   return r;
