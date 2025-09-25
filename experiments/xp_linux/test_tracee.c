@@ -57,17 +57,15 @@ int vm_read() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-  r = syscall(3, fd, buf, count, 0, 0, 0);
+/* disabled direct syscall */
+//  r = syscall(3, fd, buf, count, 0, 0, 0);
   if(file_offset == file_length) {
-    printf("EOF\n");
-    c = -1;
+    r = 0;
   } else {
     c = ri8(file_addr+file_offset);
     file_offset = file_offset + 1;
-    if(c != ri8(buf)) {
-     printf("error");
-    }
     wi8(buf, c);
+    r = 1;
   }
   trap_syscalls_on();
   return r;
