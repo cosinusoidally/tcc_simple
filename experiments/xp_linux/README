@@ -1,0 +1,18 @@
+XP Linux (cross platform Linux)
+
+The aim is to essentially create a "usermode linux lite" operating system that
+is able to run a subset of Linux executables across a range of 32 bit x86
+operating systems (including under win32).
+
+Specifically I want to be able to run the initial stages of live-bootstrap all
+the way up to fiwix in order to be able to emit a copy of the Tiny C compiler
+and the fiwix kernel/bootdisk.
+
+The initial stages of live-bootstrap run under an operating system written in
+assembly language that is called builder-hex0. My first goal is to create a
+usermode version of builder-hex0 that can run under Linux (rather than needing
+to run under qemu, or on bare metal).
+
+https://github.com/ironmeld/builder-hex0/
+
+
