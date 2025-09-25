@@ -53,8 +53,11 @@ int vm_write() {
 
 int vm_open() {
   int r;
+  int filename = regs_data[1];
+  int flags = regs_data[2];
+  int mode = regs_data[3];
   trap_syscalls_off();
-  r = syscall(5, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  r = syscall(5, filename, flags, mode, 0, 0, 0);
   trap_syscalls_on();
   return r;
 }
