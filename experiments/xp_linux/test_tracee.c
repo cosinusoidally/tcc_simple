@@ -86,9 +86,7 @@ int vm_write() {
   }
   wi8(file_addr+file_offset, ri8(buf));
   file_offset = file_offset + 1;
-  trap_syscalls_off();
-  r = syscall(4, fd, buf, count, 0, 0, 0);
-  trap_syscalls_on();
+//  r = syscall(4, fd, buf, count, 0, 0, 0);
   return r;
 }
 
@@ -103,7 +101,8 @@ int vm_open() {
     printf("open %s for write\n", filename);
     file_addr = file_addr+file_length;
     file_offset = 0;
-    r = syscall(5, filename, flags, mode, 0, 0, 0);
+    r = 4;
+//    r = syscall(5, filename, flags, mode, 0, 0, 0);
   } else {
     printf("open %s for read\n", filename);
     r = 4;
