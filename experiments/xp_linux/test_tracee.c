@@ -9,6 +9,10 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
+int file_addr = 0x54000000;
+int file_offset = 0;
+int file_length = 0;
+
 int wi8(int o,int v) {
         char *h = 0;
         h[o]=v;
@@ -113,6 +117,19 @@ int wrap_syscall() {
   return r;
 }
 
+load_file() {
+  int f = fopen("artifacts/hello.c", "r");
+  int c;
+  while((c = fgetc(f)) != -1) {
+    wi8(file_addr+file_offset, c);
+    file_offset=file_offset+1;
+  }
+  file_length = file_offset;
+  file_offset = 0;
+  printf("file_length: %d\n", file_length);
+  fclose(f);
+}
+
 main(){
 /* big mapping for our heap */
   int res = 0;
@@ -141,6 +158,8 @@ main(){
 
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
+
+  load_file();
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
