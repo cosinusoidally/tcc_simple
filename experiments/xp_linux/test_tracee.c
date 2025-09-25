@@ -57,6 +57,7 @@ int vm_open() {
   int flags = regs_data[2];
   int mode = regs_data[3];
   trap_syscalls_off();
+  printf("open: %s %d %d\n", filename, flags, mode);
   r = syscall(5, filename, flags, mode, 0, 0, 0);
   trap_syscalls_on();
   return r;
