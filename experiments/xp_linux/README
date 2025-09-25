@@ -57,3 +57,12 @@ This is another custom syscall implemented by the tracer.
 
 Having this ability to toggle allows the tracee to freely use the system libc
 to implement any required support functionality for the emulated syscalls.
+
+Currently the following syscalls are implemented:
+
+brk
+read (partial)
+write (partial)
+open (partial)
+close (partial)
+exit (complete, but also does some custom clean/extracts result files).
