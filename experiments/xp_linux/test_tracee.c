@@ -89,8 +89,7 @@ int vm_open() {
     r = syscall(5, filename, flags, mode, 0, 0, 0);
   } else {
     printf("open %s for read\n", filename);
-    trap_syscalls_on();
-    return 4;
+    r = 4;
 //    r = syscall(5, filename, flags, mode, 0, 0, 0);
   }
   printf("open: fd %d\n", r);
