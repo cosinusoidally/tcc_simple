@@ -71,8 +71,10 @@ int vm_open() {
 
 int vm_close() {
   int r;
+  int fd = regs_data[1];
   trap_syscalls_off();
-  r = syscall(6, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  printf("close: %d\n", fd);
+  r = syscall(6, fd, 0, 0, 0, 0, 0);
   trap_syscalls_on();
   return r;
 }
