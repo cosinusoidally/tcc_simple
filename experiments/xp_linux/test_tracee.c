@@ -143,7 +143,7 @@ int wrap_syscall() {
 }
 
 load_file() {
-  int f = fopen("artifacts/hello.c", "r");
+  int f = fopen("../cjsawk/hello.c", "r");
   int c;
   while((c = fgetc(f)) != -1) {
     wi8(file_addr+file_offset, c);
