@@ -56,8 +56,6 @@ int vm_read() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-/* disabled direct syscall */
-//  r = syscall(3, fd, buf, count, 0, 0, 0);
   if(file_offset == file_length) {
     r = 0;
   } else {
@@ -86,7 +84,6 @@ int vm_write() {
   }
   wi8(file_addr+file_offset, ri8(buf));
   file_offset = file_offset + 1;
-//  r = syscall(4, fd, buf, count, 0, 0, 0);
   return r;
 }
 
@@ -102,11 +99,9 @@ int vm_open() {
     file_addr = file_addr+file_length;
     file_offset = 0;
     r = 4;
-//    r = syscall(5, filename, flags, mode, 0, 0, 0);
   } else {
     printf("open %s for read\n", filename);
     r = 4;
-//    r = syscall(5, filename, flags, mode, 0, 0, 0);
   }
   printf("open: fd %d\n", r);
   trap_syscalls_on();
@@ -118,22 +113,19 @@ int vm_close() {
   int fd = regs_data[1];
   trap_syscalls_off();
   printf("close: %d\n", fd);
-  r = syscall(6, fd, 0, 0, 0, 0, 0);
   trap_syscalls_on();
   return r;
 }
 
 int vm_exit() {
-  int r;
+  int error_code = regs_data[1];
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
   printf("file_offset: %d\n", file_offset);
   int ofile=fopen("artifacts/out.M1", "w");
   fwrite(file_addr, 1, file_offset, ofile);
   fclose(ofile);
-  r = syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
-  trap_syscalls_on();
-  return r;
+  exit(error_code);
 }
 
 int wrap_syscall() {
