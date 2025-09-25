@@ -129,6 +129,9 @@ int vm_exit() {
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
   printf("file_offset: %d\n", file_offset);
+  int ofile=fopen("artifacts/out2.M1", "w");
+  fwrite(file_addr, 1, file_offset, ofile);
+  fclose(ofile);
   r = syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   trap_syscalls_on();
   return r;
