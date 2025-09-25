@@ -16,8 +16,7 @@ int file_length = 0;
 char *heap = 0;
 
 int wi8(int o,int v) {
-        char *h = 0;
-        h[o]=v;
+        heap[o]=v;
         return 0;
 }
 
