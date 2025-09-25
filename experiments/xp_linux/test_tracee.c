@@ -178,7 +178,8 @@ main(){
   args = 0x8047F80;
   args[0] = 3;
   args[1] = "cjsawk.exe";
-  args[2] = "artifacts/hello.c";
+/* dummy for now to make sure we are really reading via virtual syscalls */
+  args[2] = "artifacts/hello_dummy.c";
   args[3] = "artifacts/out.M1";
 
   brk_ptr = 4096+4096*(o/4096);
