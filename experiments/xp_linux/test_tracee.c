@@ -13,10 +13,16 @@ int file_addr = 0x54000000;
 int file_offset = 0;
 int file_length = 0;
 
+char *heap = 0;
+
 int wi8(int o,int v) {
         char *h = 0;
         h[o]=v;
         return 0;
+}
+
+int ri8(o) {
+  return heap[o] & 255;
 }
 
 int wrap_syscall();
@@ -41,7 +47,15 @@ int vm_brk() {
 
 int vm_read() {
   int r;
+  int c;
   trap_syscalls_off();
+  if(file_offset == file_length) {
+    printf("EOF\n");
+    c = -1;
+  } else {
+    c = ri8(file_addr+file_offset);
+    file_offset = file_offset + 1;
+  }
   r = syscall(3, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   trap_syscalls_on();
   return r;
