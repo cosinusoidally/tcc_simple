@@ -71,8 +71,21 @@ int vm_read() {
 
 int vm_write() {
   int r;
+  int fd = regs_data[1];
+  int buf = regs_data[2];
+  int count = regs_data[3];
+  if(fd == 0) {
+    trap_syscalls_off();
+    printf("vm_write doesn't support stdout yet\n");
+    exit(1);
+  }
+  if(count != 1) {
+    trap_syscalls_off();
+    printf("vm_read only supports count 1\n");
+    exit(1);
+  }
   trap_syscalls_off();
-  r = syscall(4, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  r = syscall(4, fd, buf, count, 0, 0, 0);
   trap_syscalls_on();
   return r;
 }
