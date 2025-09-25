@@ -52,6 +52,11 @@ int vm_read() {
   int buf = regs_data[2];
   int count = regs_data[3];
   trap_syscalls_off();
+  if(count != 1) {
+    trap_syscalls_off();
+    printf("vm_read only supports count 1\n");
+    exit(1);
+  }
   r = syscall(3, fd, buf, count, 0, 0, 0);
   if(file_offset == file_length) {
     printf("EOF\n");
