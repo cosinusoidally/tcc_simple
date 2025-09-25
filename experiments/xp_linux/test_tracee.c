@@ -59,6 +59,7 @@ int vm_open() {
   trap_syscalls_off();
   printf("open: %s %d %d\n", filename, flags, mode);
   r = syscall(5, filename, flags, mode, 0, 0, 0);
+  printf("open: fd %d\n", r);
   trap_syscalls_on();
   return r;
 }
@@ -128,7 +129,7 @@ main(){
   args = 0x8047F80;
   args[0] = 3;
   args[1] = "cjsawk.exe";
-  args[2] = "../cjsawk/hello.c";
+  args[2] = "artifacts/hello.c";
   args[3] = "artifacts/out.M1";
 
   brk_ptr = 4096+4096*(o/4096);

@@ -4,6 +4,8 @@ set -xe
 gcc -no-pie -g3 -O0 -m32 test_tracer.c -o artifacts/test_tracer.exe
 gcc -Wl,-Ttext-segment,0x10000 -no-pie -g3 -O0 -m32 test_tracee.c -o artifacts/test_tracee.exe -ldl
 
+cp ../cjsawk/hello.c artifacts/hello.c
+
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe
 
 sha1sum -c sum_hello
