@@ -129,7 +129,7 @@ int vm_exit() {
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
   printf("file_offset: %d\n", file_offset);
-  int ofile=fopen("artifacts/out2.M1", "w");
+  int ofile=fopen("artifacts/out.M1", "w");
   fwrite(file_addr, 1, file_offset, ofile);
   fclose(ofile);
   r = syscall(1, regs_data[1],regs_data[2],regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
@@ -200,7 +200,7 @@ main(){
   args[1] = "cjsawk.exe";
 /* dummy for now to make sure we are really reading via virtual syscalls */
   args[2] = "artifacts/hello_dummy.c";
-  args[3] = "artifacts/out.M1";
+  args[3] = "artifacts/out_dummy.M1";
 
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
