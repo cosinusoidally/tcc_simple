@@ -51,7 +51,6 @@ int vm_read() {
   int fd = regs_data[1];
   int buf = regs_data[2];
   int count = regs_data[3];
-  trap_syscalls_off();
   if(count != 1) {
     trap_syscalls_off();
     printf("vm_read only supports count 1\n");
@@ -67,7 +66,6 @@ int vm_read() {
     wi8(buf, c);
     r = 1;
   }
-  trap_syscalls_on();
   return r;
 }
 
