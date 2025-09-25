@@ -86,10 +86,13 @@ int vm_open() {
   printf("open: %s %d %d\n", filename, flags, mode);
   if((flags==577) && (mode == 384)) {
     printf("open %s for write\n", filename);
+    r = syscall(5, filename, flags, mode, 0, 0, 0);
   } else {
     printf("open %s for read\n", filename);
+    trap_syscalls_on();
+    return 4;
+//    r = syscall(5, filename, flags, mode, 0, 0, 0);
   }
-  r = syscall(5, filename, flags, mode, 0, 0, 0);
   printf("open: fd %d\n", r);
   trap_syscalls_on();
   return r;
