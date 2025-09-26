@@ -99,6 +99,7 @@ int vm_open() {
     r = 4;
   } else {
     printf("open %s for read\n", filename);
+    find_file(filename);
     r = 4;
   }
   printf("open: fd %d\n", r);
@@ -149,6 +150,11 @@ int wrap_syscall() {
     exit(1);
   }
   return r;
+}
+
+int find_file(filename) {
+  printf("find_file: %s\n", filename);
+  return 0;
 }
 
 int new_file(int filename) {
