@@ -95,8 +95,7 @@ int vm_open() {
   printf("open: %s %d %d\n", filename, flags, mode);
   if((flags==577) && (mode == 384)) {
     printf("open %s for write\n", filename);
-    file_addr = file_addr+file_length;
-    file_offset = 0;
+    new_file(filename);
     r = 4;
   } else {
     printf("open %s for read\n", filename);
