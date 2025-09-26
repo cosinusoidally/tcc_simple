@@ -94,6 +94,7 @@ int vm_read() {
 
 int vm_write() {
   int r;
+  int t;
   int fd = regs_data[1];
   int buf = regs_data[2];
   int count = regs_data[3];
@@ -107,8 +108,8 @@ int vm_write() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-  wi8(gfd_get_file_addr(fd_get_filenum(fd))+file_offset, ri8(buf));
-  file_offset = file_offset + 1;
+  wi8(gfd_get_file_addr(fd_get_filenum(fd))+fd_get_file_offset(fd), ri8(buf));
+  fd_set_file_offset(fd, fd_get_file_offset(fd) + 1);
   return r;
 }
 
@@ -161,7 +162,7 @@ int vm_exit() {
   printf("brk_ptr: %x\n", brk_ptr);
   printf("file_offset: %d\n", file_offset);
   int ofile=fopen("artifacts/out.M1", "w");
-  fwrite(file_addr, 1, file_offset, ofile);
+  fwrite(file_addr, 1, fd_get_file_offset(5), ofile);
   fclose(ofile);
   exit(error_code);
 }
