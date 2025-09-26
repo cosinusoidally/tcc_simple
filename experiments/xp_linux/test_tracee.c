@@ -10,7 +10,6 @@ int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
 int file_addr = 0x54000000;
-int file_length = 0;
 
 int next_filenum = 4;
 int next_fd = 4;
@@ -80,7 +79,7 @@ int vm_read() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-  if(fd_get_file_offset(fd) == file_length) {
+  if(fd_get_file_offset(fd) == gfd_get_file_length(fd_get_filenum(fd))) {
     r = 0;
   } else {
     c = ri8(gfd_get_file_addr(fd_get_filenum(fd))+fd_get_file_offset(fd));
@@ -259,7 +258,6 @@ int new_file(int filename) {
   file_addr = file_addr + gfd_get_file_length(next_filenum - 1);
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
-  file_length = 0;
   strcpy(gfn_get_filename(next_filenum), filename);
   next_filenum = next_filenum + 1;
   return next_filenum - 1;
@@ -275,7 +273,6 @@ load_file(realname, virtualname) {
     wi8(file_addr+gfd_get_file_length(t), c);
     gfd_set_file_length(t, gfd_get_file_length(t)+1);
   }
-  file_length = gfd_get_file_length(t);
   printf("file_length: %d\n", gfd_get_file_length(t));
   fclose(f);
 }
