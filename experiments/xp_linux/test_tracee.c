@@ -19,6 +19,10 @@ int next_fd = 4;
 int filename_array = 0x0200000;
 int filename_size = 1024;
 
+int gfds = 0x01000010;
+int sizeof_gfd = 8;
+
+
 int file_descriptors = 0x20000+0x200;
 int sizeof_file_descriptor = 8;
 
@@ -228,8 +232,18 @@ int new_fd(filenum) {
   return next_fd - 1;
 }
 
+int gfd_set_file_addr(filenum, addr) {
+  wi32(gfds+(filenum*sizeof_gfd), addr);
+}
+
+int gfd_set_file_length(filenum, len) {
+  wi32(gfds+(filenum*sizeof_gfd)+4, len);
+}
+
 int new_file(int filename) {
   file_addr = file_addr + file_length;
+  gfd_set_file_addr(next_filenum, file_addr);
+  gfd_set_file_length(next_filenum, 0);
   file_offset = 0;
   file_length = 0;
   strcpy(gfn_get_filename(next_filenum), filename);
