@@ -158,6 +158,7 @@ int wrap_syscall() {
 }
 
 int find_file(filename) {
+  int i = next_filenum - 1;
   printf("find_file: %s\n", filename);
   return 0;
 }
@@ -166,7 +167,9 @@ int new_file(int filename) {
   file_addr = file_addr + file_length;
   file_offset = 0;
   file_length = 0;
+  strcpy(filename_array+(filename_size*next_filenum), filename);
   next_filenum = next_filenum + 1;
+  return next_filenum - 1;
 }
 
 load_file(realname, virtualname) {
