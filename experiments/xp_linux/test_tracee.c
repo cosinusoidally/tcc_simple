@@ -13,6 +13,8 @@ int file_addr = 0x54000000;
 int file_offset = 0;
 int file_length = 0;
 
+int next_filenum = 4;
+
 char *heap = 0;
 
 int wi8(int o,int v) {
