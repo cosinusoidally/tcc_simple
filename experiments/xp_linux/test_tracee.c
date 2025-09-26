@@ -14,6 +14,7 @@ int file_offset = 0;
 int file_length = 0;
 
 int next_filenum = 4;
+int next_fd = 4;
 
 int filename_array = 0x0200000;
 int filename_size = 1024;
@@ -102,12 +103,12 @@ int vm_open() {
   if((flags==577) && (mode == 384)) {
     printf("open %s for write\n", filename);
     t = new_file(filename);
-    r = t;
+    r = new_fd(t);
   } else {
     printf("open %s for read\n", filename);
     t = find_file(filename);
     if(t) {
-      r = t;
+      r = new_fd(t);
     }
     printf("file not found %s\n", filename);
   }
@@ -176,6 +177,11 @@ int find_file(filename) {
   }
   printf("not found %s\n", filename);
   return 0;
+}
+
+int new_fd(filenum) {
+  next_fd = next_fd+1;
+  return next_fd -1;
 }
 
 int new_file(int filename) {
