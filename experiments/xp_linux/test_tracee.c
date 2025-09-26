@@ -159,7 +159,7 @@ int new_file(int filename) {
 }
 
 load_file2(realname, virtualname) {
-  printf("load_file: %d virtualname: %s\n", realname, virtualname);
+  printf("load_file: %s virtualname: %s\n", realname, virtualname);
   int f = fopen(realname, "r");
   int c;
   new_file(virtualname);
@@ -216,7 +216,7 @@ main(){
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
 
-  load_file();
+  load_file2("../cjsawk/hello.c", "hello.c");
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
