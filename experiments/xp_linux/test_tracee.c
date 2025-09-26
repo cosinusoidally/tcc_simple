@@ -15,6 +15,9 @@ int file_length = 0;
 
 int next_filenum = 4;
 
+int filename_array = 0x0200000;
+int filename_size = 1024;
+
 char *heap = 0;
 
 int wi8(int o,int v) {
@@ -163,6 +166,7 @@ int new_file(int filename) {
   file_addr = file_addr + file_length;
   file_offset = 0;
   file_length = 0;
+  next_filenum = next_filenum + 1;
 }
 
 load_file(realname, virtualname) {
