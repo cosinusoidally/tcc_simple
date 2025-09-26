@@ -93,6 +93,7 @@ int vm_write() {
 
 int vm_open() {
   int r;
+  int t;
   int filename = regs_data[1];
   int flags = regs_data[2];
   int mode = regs_data[3];
@@ -104,8 +105,11 @@ int vm_open() {
     r = 4;
   } else {
     printf("open %s for read\n", filename);
-    find_file(filename);
-    r = 4;
+    t = find_file(filename);
+    if(t) {
+      r = 4;
+    }
+    printf("file not found %s\n", filename);
   }
   printf("open: fd %d\n", r);
   trap_syscalls_on();
@@ -165,7 +169,7 @@ int find_file(filename) {
     t = filename_array+(i*filename_size);
     printf("looking at: %s\n", t);
     if(strcmp(t, filename) == 0) {
-      printf("found: %s %d\n", filename, t);
+      printf("found: %s %d\n", filename, i);
       return i;
     }
     i = i - 1;
@@ -222,7 +226,7 @@ main(){
   args[0] = 3;
   args[1] = "cjsawk.exe";
 /* dummy for now to make sure we are really reading via virtual syscalls */
-  args[2] = "artifacts/hello_dummy.c";
+  args[2] = "hello.c";
   args[3] = "artifacts/out_dummy.M1";
 
   brk_ptr = 4096+4096*(o/4096);
