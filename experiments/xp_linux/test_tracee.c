@@ -40,6 +40,12 @@ int ri8(o) {
   return heap[o] & 255;
 }
 
+int ri32(o) {
+  int *h;
+  h = o;
+  return h[0];
+}
+
 int wrap_syscall();
 
 int trap_syscalls_on() {
@@ -127,11 +133,20 @@ int vm_open() {
   return r;
 }
 
+int gfn_get_filename(fn) {
+  return filename_array + (fn*filename_size);
+}
+
 int vm_close() {
   int r;
+  int t;
+  int tn;
   int fd = regs_data[1];
   trap_syscalls_off();
   printf("close: %d\n", fd);
+  t = fd_get_filenum(fd);
+  tn = gfn_get_filename(t);
+  printf("t: %d tn: %s\n", t, tn);
   trap_syscalls_on();
   return r;
 }
@@ -193,6 +208,10 @@ int fd_set_filenum(fd, filenum) {
   wi32(file_descriptors+(fd*sizeof_file_descriptor), filenum);
 }
 
+int fd_get_filenum(fd) {
+  return ri32(file_descriptors+(fd*sizeof_file_descriptor));
+}
+
 int fd_set_fileoffset(fd, o) {
   wi32(file_descriptors+(fd*sizeof_file_descriptor)+4, 0);
 }
@@ -209,7 +228,7 @@ int new_file(int filename) {
   file_addr = file_addr + file_length;
   file_offset = 0;
   file_length = 0;
-  strcpy(filename_array+(filename_size*next_filenum), filename);
+  strcpy(gfn_get_filename(next_filenum), filename);
   next_filenum = next_filenum + 1;
   return next_filenum - 1;
 }
