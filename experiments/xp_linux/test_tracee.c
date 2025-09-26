@@ -107,7 +107,7 @@ int vm_write() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-  wi8(file_addr+file_offset, ri8(buf));
+  wi8(gfd_get_file_addr(fd_get_filenum(fd))+file_offset, ri8(buf));
   file_offset = file_offset + 1;
   return r;
 }
@@ -234,6 +234,10 @@ int new_fd(filenum) {
 
 int gfd_set_file_addr(filenum, addr) {
   wi32(gfds+(filenum*sizeof_gfd), addr);
+}
+
+int gfd_get_file_addr(filenum) {
+  return ri32(gfds+(filenum*sizeof_gfd));
 }
 
 int gfd_set_file_length(filenum, len) {
