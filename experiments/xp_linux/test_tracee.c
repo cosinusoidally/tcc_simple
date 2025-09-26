@@ -77,11 +77,11 @@ int vm_read() {
     printf("vm_read only supports count 1\n");
     exit(1);
   }
-  if(file_offset == file_length) {
+  if(fd_get_file_offset(fd) == file_length) {
     r = 0;
   } else {
-    c = ri8(file_addr+file_offset);
-    file_offset = file_offset + 1;
+    c = ri8(file_addr+fd_get_file_offset(fd));
+    fd_set_file_offset(fd, fd_get_file_offset(fd) + 1);
     wi8(buf, c);
     r = 1;
   }
@@ -212,14 +212,18 @@ int fd_get_filenum(fd) {
   return ri32(file_descriptors+(fd*sizeof_file_descriptor));
 }
 
-int fd_set_fileoffset(fd, o) {
-  wi32(file_descriptors+(fd*sizeof_file_descriptor)+4, 0);
+int fd_set_file_offset(fd, o) {
+  wi32(file_descriptors+(fd*sizeof_file_descriptor)+4, o);
+}
+
+int fd_get_file_offset(fd) {
+  return ri32(file_descriptors+(fd*sizeof_file_descriptor)+4);
 }
 
 
 int new_fd(filenum) {
   fd_set_filenum(next_fd, filenum);
-  fd_set_fileoffset(next_fd, 0);
+  fd_set_file_offset(next_fd, 0);
   next_fd = next_fd+1;
   return next_fd - 1;
 }
