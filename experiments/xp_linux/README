@@ -5,8 +5,9 @@ is able to run a subset of Linux executables across a range of 32 bit x86
 operating systems (including under win32).
 
 Specifically I want to be able to run the initial stages of live-bootstrap all
-the way up to fiwix in order to be able to emit a copy of the Tiny C compiler
-and the fiwix kernel/bootdisk.
+the way up to fiwix and to be able to emit a copy of the Tiny C compiler
+and the fiwix kernel/bootdisk. Note tcc will be emitted first, so in theory
+could build fiwix outside after tcc has been built.
 
 The initial stages of live-bootstrap run under an operating system written in
 assembly language that is called builder-hex0. My first goal is to create a
@@ -70,3 +71,7 @@ exit (complete, but also does some custom clean/extracts result files).
 As much as is practically possible the memory layout of xp_linux will match
 that of builder-hex0 (though this may have to be changed to support win32).
 Data structures should also match when possible.
+
+Implementations of fork/exec will initially follow the builder-hex0
+implementation (ie by being single process and swapping out processes in memory
+to simulate context switches).
