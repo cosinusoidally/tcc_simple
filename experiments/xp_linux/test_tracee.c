@@ -152,6 +152,27 @@ int wrap_syscall() {
   return r;
 }
 
+int new_file(int filename) {
+  file_addr = file_addr + file_length;
+  file_offset = 0;
+  file_length = 0;
+}
+
+load_file2(realname, virtualname) {
+  printf("load_file: %d virtualname: %s\n", realname, virtualname);
+  int f = fopen(realname, "r");
+  int c;
+  new_file(virtualname);
+  while((c = fgetc(f)) != -1) {
+    wi8(file_addr+file_offset, c);
+    file_offset=file_offset+1;
+  }
+  file_length = file_offset;
+  file_offset = 0;
+  printf("file_length: %d\n", file_length);
+  fclose(f);
+}
+
 load_file() {
   int f = fopen("../cjsawk/hello.c", "r");
   int c;
