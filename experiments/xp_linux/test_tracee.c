@@ -84,7 +84,7 @@ int vm_read() {
   if(fd_get_file_offset(fd) == file_length) {
     r = 0;
   } else {
-    c = ri8(file_addr+fd_get_file_offset(fd));
+    c = ri8(gfd_get_file_addr(fd_get_filenum(fd))+fd_get_file_offset(fd));
     fd_set_file_offset(fd, fd_get_file_offset(fd) + 1);
     wi8(buf, c);
     r = 1;
