@@ -10,7 +10,6 @@ int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
 int file_addr = 0x54000000;
-int file_offset = 0;
 int file_length = 0;
 
 int next_filenum = 4;
@@ -260,7 +259,6 @@ int new_file(int filename) {
   file_addr = file_addr + gfd_get_file_length(next_filenum - 1);
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
-  file_offset = 0;
   file_length = 0;
   strcpy(gfn_get_filename(next_filenum), filename);
   next_filenum = next_filenum + 1;
@@ -274,12 +272,11 @@ load_file(realname, virtualname) {
   int t;
   t = new_file(virtualname);
   while((c = fgetc(f)) != -1) {
-    wi8(file_addr+file_offset, c);
-    file_offset=file_offset+1;
+    wi8(file_addr+gfd_get_file_length(t), c);
+    gfd_set_file_length(t, gfd_get_file_length(t)+1);
   }
-  file_length = file_offset;
-  file_offset = 0;
-  printf("file_length: %d\n", file_length);
+  file_length = gfd_get_file_length(t);
+  printf("file_length: %d\n", gfd_get_file_length(t));
   fclose(f);
 }
 
