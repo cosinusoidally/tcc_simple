@@ -253,8 +253,12 @@ int gfd_set_file_length(filenum, len) {
   wi32(gfds+(filenum*sizeof_gfd)+4, len);
 }
 
+int gfd_get_file_length(filenum) {
+  return ri32(gfds+(filenum*sizeof_gfd)+4);
+}
+
 int new_file(int filename) {
-  file_addr = file_addr + file_length;
+  file_addr = file_addr + gfd_get_file_length(next_filenum - 1);
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
   file_offset = 0;
