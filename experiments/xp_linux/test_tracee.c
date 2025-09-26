@@ -158,24 +158,11 @@ int new_file(int filename) {
   file_length = 0;
 }
 
-load_file2(realname, virtualname) {
+load_file(realname, virtualname) {
   printf("load_file: %s virtualname: %s\n", realname, virtualname);
   int f = fopen(realname, "r");
   int c;
   new_file(virtualname);
-  while((c = fgetc(f)) != -1) {
-    wi8(file_addr+file_offset, c);
-    file_offset=file_offset+1;
-  }
-  file_length = file_offset;
-  file_offset = 0;
-  printf("file_length: %d\n", file_length);
-  fclose(f);
-}
-
-load_file() {
-  int f = fopen("../cjsawk/hello.c", "r");
-  int c;
   while((c = fgetc(f)) != -1) {
     wi8(file_addr+file_offset, c);
     file_offset=file_offset+1;
@@ -216,7 +203,7 @@ main(){
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
 
-  load_file2("../cjsawk/hello.c", "hello.c");
+  load_file("../cjsawk/hello.c", "hello.c");
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
