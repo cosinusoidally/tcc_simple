@@ -158,8 +158,14 @@ int wrap_syscall() {
 }
 
 int find_file(filename) {
+  int t;
   int i = next_filenum - 1;
   printf("find_file: %s\n", filename);
+  while(i>3) {
+    t = filename_array+(i*filename_size);
+    printf("looking at: %s\n", t);
+    i = i - 1;
+  }
   return 0;
 }
 
@@ -217,6 +223,7 @@ main(){
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
 
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
   load_file("../cjsawk/hello.c", "hello.c");
 
   trap_syscalls_on();
