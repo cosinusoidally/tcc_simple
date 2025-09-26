@@ -164,8 +164,13 @@ int find_file(filename) {
   while(i>3) {
     t = filename_array+(i*filename_size);
     printf("looking at: %s\n", t);
+    if(strcmp(t, filename) == 0) {
+      printf("found: %s %d\n", filename, t);
+      return i;
+    }
     i = i - 1;
   }
+  printf("not found %s\n", filename);
   return 0;
 }
 
