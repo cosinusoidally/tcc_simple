@@ -19,10 +19,20 @@ int next_fd = 4;
 int filename_array = 0x0200000;
 int filename_size = 1024;
 
+int file_descriptors = 0x20000+0x200;
+int sizeof_file_descriptor = 8;
+
 char *heap = 0;
 
 int wi8(int o,int v) {
         heap[o]=v;
+        return 0;
+}
+
+int wi32(int o,int v) {
+	int *h;
+        h = o;
+        h[0]=v;
         return 0;
 }
 
@@ -179,9 +189,20 @@ int find_file(filename) {
   return 0;
 }
 
+int fd_set_filenum(fd, filenum) {
+  wi32(file_descriptors+(fd*sizeof_file_descriptor), filenum);
+}
+
+int fd_set_fileoffset(fd, o) {
+  wi32(file_descriptors+(fd*sizeof_file_descriptor)+4, 0);
+}
+
+
 int new_fd(filenum) {
+  fd_set_filenum(next_fd, filenum);
+  fd_set_fileoffset(next_fd, 0);
   next_fd = next_fd+1;
-  return next_fd -1;
+  return next_fd - 1;
 }
 
 int new_file(int filename) {
