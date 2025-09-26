@@ -101,13 +101,13 @@ int vm_open() {
   printf("open: %s %d %d\n", filename, flags, mode);
   if((flags==577) && (mode == 384)) {
     printf("open %s for write\n", filename);
-    new_file(filename);
-    r = 4;
+    t = new_file(filename);
+    r = t;
   } else {
     printf("open %s for read\n", filename);
     t = find_file(filename);
     if(t) {
-      r = 4;
+      r = t;
     }
     printf("file not found %s\n", filename);
   }
