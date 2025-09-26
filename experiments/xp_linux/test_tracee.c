@@ -133,8 +133,11 @@ int vm_open() {
     t = find_file(filename);
     if(t) {
       r = new_fd(t);
+    } else {
+      trap_syscalls_off();
+      printf("file not found %s\n", filename);
+      exit(1);
     }
-    printf("file not found %s\n", filename);
   }
   printf("open: fd %d\n", r);
   trap_syscalls_on();
@@ -165,7 +168,9 @@ int vm_exit() {
   printf("brk_ptr: %x\n", brk_ptr);
   printf("file_offset: %d\n", file_offset);
   int ofile=fopen("artifacts/out.M1", "w");
-  fwrite(file_addr, 1, fd_get_file_offset(5), ofile);
+  int t;
+  t = find_file("artifacts/out_dummy.M1");
+  fwrite(gfd_get_file_addr(t), 1, fd_get_file_offset(5), ofile);
   fclose(ofile);
   exit(error_code);
 }
