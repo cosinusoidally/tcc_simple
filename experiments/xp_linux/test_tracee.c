@@ -166,7 +166,6 @@ int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
-  printf("file_offset: %d\n", file_offset);
   int ofile=fopen("artifacts/out.M1", "w");
   int t;
   t = find_file("artifacts/out_dummy.M1");
@@ -272,7 +271,8 @@ load_file(realname, virtualname) {
   printf("load_file: %s virtualname: %s\n", realname, virtualname);
   int f = fopen(realname, "r");
   int c;
-  new_file(virtualname);
+  int t;
+  t = new_file(virtualname);
   while((c = fgetc(f)) != -1) {
     wi8(file_addr+file_offset, c);
     file_offset=file_offset+1;
