@@ -27,6 +27,7 @@ int sizeof_file_descriptor = 8;
 char *heap = 0;
 
 int elf_base = 0x8048000;
+int args_base = 0x8047F80;
 
 int wi8(int o,int v) {
         heap[o]=v;
@@ -279,11 +280,20 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
+reset_memory() {
+  int base_addr;
+  base_addr =args_base;
+  printf("reset_memory: 0x%x 0x%x\n", base_addr, brk_ptr);
+}
+
 run_process(cmd, arg1, arg2) {
   int foo;
   int c;
   int o;
   printf("run_process: %s %s %s\n", cmd, arg1, arg2);
+
+  reset_memory();
+
   foo=fopen(cmd, "r");
   o = elf_base;
   while((c=fgetc(foo))!=-1) {
@@ -296,7 +306,7 @@ run_process(cmd, arg1, arg2) {
   printf("brk_ptr: %x\n", brk_ptr);
 
   int *args;
-  args = 0x8047F80;
+  args = args_base;
   args[0] = 3;
   args[1] = "dummy.exe";
   args[2] = arg1;
@@ -320,6 +330,8 @@ main(){
     printf("mmap error\n");
     exit(1);
   }
+
+  brk_ptr = elf_base;
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
