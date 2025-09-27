@@ -26,6 +26,8 @@ int sizeof_file_descriptor = 8;
 
 char *heap = 0;
 
+int elf_base = 0x8048000;
+
 int wi8(int o,int v) {
         heap[o]=v;
         return 0;
@@ -277,6 +279,11 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
+run_process(cmd, arg1, arg2) {
+  printf("run_process: %s %s %s\n", cmd, arg1, arg2);
+  return 0;
+}
+
 main(){
 /* big mapping for our heap */
   int res = 0;
@@ -289,7 +296,7 @@ main(){
 //  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
   int foo=fopen("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "r");
   int c;
-  int o = 0x8048000;
+  int o = elf_base;
   while((c=fgetc(foo))!=-1) {
     wi8(o,c);
     o = o + 1;
@@ -309,6 +316,8 @@ main(){
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
+
+  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1");
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
