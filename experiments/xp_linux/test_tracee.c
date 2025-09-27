@@ -307,8 +307,8 @@ main(){
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
 
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
   load_file("../cjsawk/hello.c", "hello.c");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
