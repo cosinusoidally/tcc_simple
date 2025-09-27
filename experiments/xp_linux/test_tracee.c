@@ -180,7 +180,7 @@ int vm_exit() {
   if(run_again) {
     printf("run_again\n");
     run_again = 0;
-    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy2.M1", "artifacts/out2.M1");
+    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk_full.c", "artifacts/out_dummy2.M1", "artifacts/out2.M1");
   } else {
     exit(error_code);
   }
@@ -357,6 +357,7 @@ main(){
   brk_ptr = elf_base;
 
   load_file("../cjsawk/hello.c", "hello.c");
+  load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
