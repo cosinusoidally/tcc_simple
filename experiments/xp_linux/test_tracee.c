@@ -166,16 +166,24 @@ int vm_close() {
   return r;
 }
 
+int run_again = 1;
+
 int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
-  printf("brk_ptr: %x\n", brk_ptr);
+  printf("brk_ptr: 0x%x\n", brk_ptr);
   int ofile=fopen(ofilename, "w");
   int t;
   t = find_file(ofilename_dummy);
   fwrite(gfd_get_file_addr(t), 1, fd_get_file_offset(5), ofile);
   fclose(ofile);
-  exit(error_code);
+  if(run_again) {
+    printf("run_again\n");
+    run_again = 0;
+    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy2.M1", "artifacts/out2.M1");
+  } else {
+    exit(error_code);
+  }
 }
 
 int wrap_syscall() {
