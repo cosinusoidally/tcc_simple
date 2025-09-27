@@ -166,7 +166,7 @@ int vm_close() {
   return r;
 }
 
-int run_again = 2;
+int run_again = 3;
 
 int vm_exit() {
   int error_code = regs_data[1];
@@ -185,7 +185,10 @@ int vm_exit() {
     printf("run_again 2\n");
     run_again = 1;
     run_process("../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe", "cjsawk-0.M1", "artifacts/out_dummy2.hex2", "artifacts/cjsawk.exe.hex2");
-//    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
+  } else if(run_again == 3) {
+    printf("run_again 3\n");
+    run_again = 2;
+    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
   } else {
     exit(error_code);
   }
