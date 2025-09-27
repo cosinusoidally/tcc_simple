@@ -166,7 +166,7 @@ int vm_close() {
   return r;
 }
 
-int run_again = 1;
+int run_again = 2;
 
 int vm_exit() {
   int error_code = regs_data[1];
@@ -175,12 +175,17 @@ int vm_exit() {
   int ofile=fopen(ofilename, "w");
   int t;
   t = find_file(ofilename_dummy);
-  fwrite(gfd_get_file_addr(t), 1, fd_get_file_offset(5), ofile);
+  fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
   fclose(ofile);
-  if(run_again) {
-    printf("run_again\n");
+  if(run_again == 1) {
+    printf("run_again 1\n");
     run_again = 0;
-    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk_full.c", "artifacts/out_dummy2.M1", "artifacts/out2.M1");
+    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk_full.c", "artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
+  } else if(run_again == 2) {
+    printf("run_again 2\n");
+    run_again = 1;
+    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe", "cjsawk-0.M1", "artifacts/out_dummy2.hex2", "artifacts/cjsawk.exe.hex2");
+//    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
   } else {
     exit(error_code);
   }
@@ -358,7 +363,8 @@ main(){
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.M1", "cjsawk.exe-0.M1");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.M1", "cjsawk-0.M1");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.hex2", "cjsawk-0.hex2");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
