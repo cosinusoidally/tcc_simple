@@ -12,7 +12,7 @@ int MAP_FIXED=0x10;
 int file_addr = 0x54000000;
 
 int next_filenum = 4;
-int next_fd = 4;
+int next_fd;
 
 int filename_array = 0x0200000;
 int filename_size = 1024;
@@ -280,10 +280,18 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
-reset_memory() {
+reset_process() {
   int base_addr;
+  int i;
   base_addr =args_base;
   printf("reset_memory: 0x%x 0x%x\n", base_addr, brk_ptr);
+  i = base_addr;
+  while(i <=brk_ptr) {
+    wi8(i,0);
+    i = i + 1;
+  }
+  printf("reset file descriptors\n");
+  next_fd = 4;
 }
 
 run_process(cmd, arg1, arg2) {
@@ -292,7 +300,7 @@ run_process(cmd, arg1, arg2) {
   int o;
   printf("run_process: %s %s %s\n", cmd, arg1, arg2);
 
-  reset_memory();
+  reset_process();
 
   foo=fopen(cmd, "r");
   o = elf_base;
