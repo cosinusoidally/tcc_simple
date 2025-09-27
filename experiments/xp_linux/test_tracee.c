@@ -29,6 +29,9 @@ char *heap = 0;
 int elf_base = 0x8048000;
 int args_base = 0x8047F80;
 
+int ofilename;
+int ofilename_dummy;
+
 int wi8(int o,int v) {
         heap[o]=v;
         return 0;
@@ -167,9 +170,9 @@ int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
   printf("brk_ptr: %x\n", brk_ptr);
-  int ofile=fopen("artifacts/out.M1", "w");
+  int ofile=fopen(ofilename, "w");
   int t;
-  t = find_file("artifacts/out_dummy.M1");
+  t = find_file(ofilename_dummy);
   fwrite(gfd_get_file_addr(t), 1, fd_get_file_offset(5), ofile);
   fclose(ofile);
   exit(error_code);
@@ -294,7 +297,7 @@ reset_process() {
   next_fd = 4;
 }
 
-run_process(cmd, arg1, arg2) {
+run_process(cmd, arg1, arg2, ofn) {
   int foo;
   int c;
   int o;
@@ -308,6 +311,7 @@ run_process(cmd, arg1, arg2) {
     wi8(o,c);
     o = o + 1;
   }
+  fclose(foo);
   printf("o: %x\n", o);
 
   brk_ptr = 4096+4096*(o/4096);
@@ -319,6 +323,9 @@ run_process(cmd, arg1, arg2) {
   args[1] = "dummy.exe";
   args[2] = arg1;
   args[3] = arg2;
+
+  ofilename_dummy = arg2;
+  ofilename = ofn;
 
   trap_syscalls_on();
   asm("mov $0x8047F80,%esp");
@@ -344,7 +351,7 @@ main(){
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
-  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1");
+  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
 
   return 0;
 }
