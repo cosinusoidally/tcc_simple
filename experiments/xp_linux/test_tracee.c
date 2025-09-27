@@ -280,7 +280,34 @@ load_file(realname, virtualname) {
 }
 
 run_process(cmd, arg1, arg2) {
+  int foo;
+  int c;
+  int o;
   printf("run_process: %s %s %s\n", cmd, arg1, arg2);
+  foo=fopen(cmd, "r");
+  o = elf_base;
+  while((c=fgetc(foo))!=-1) {
+    wi8(o,c);
+    o = o + 1;
+  }
+  printf("o: %x\n", o);
+
+  brk_ptr = 4096+4096*(o/4096);
+  printf("brk_ptr: %x\n", brk_ptr);
+
+  int *args;
+  args = 0x8047F80;
+  args[0] = 3;
+  args[1] = "dummy.exe";
+  args[2] = arg1;
+  args[3] = arg2;
+
+  trap_syscalls_on();
+  asm("mov $0x8047F80,%esp");
+  asm("mov $0x8048054,%eax");
+  asm("jmp %eax");
+  trap_syscalls_off();
+
   return 0;
 }
 
@@ -293,36 +320,11 @@ main(){
     printf("mmap error\n");
     exit(1);
   }
-//  int foo=fopen("../cjsawk/artifacts/builds/hello/hello.exe", "r");
-  int foo=fopen("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "r");
-  int c;
-  int o = elf_base;
-  while((c=fgetc(foo))!=-1) {
-    wi8(o,c);
-    o = o + 1;
-  }
-  printf("o: %x\n", o);
-
-  int *args;
-  args = 0x8047F80;
-  args[0] = 3;
-  args[1] = "cjsawk.exe";
-/* dummy for now to make sure we are really reading via virtual syscalls */
-  args[2] = "hello.c";
-  args[3] = "artifacts/out_dummy.M1";
-
-  brk_ptr = 4096+4096*(o/4096);
-  printf("brk_ptr: %x\n", brk_ptr);
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1");
 
-  trap_syscalls_on();
-  asm("mov $0x8047F80,%esp");
-  asm("mov $0x8048054,%eax");
-  asm("jmp %eax");
-  trap_syscalls_off();
   return 0;
 }
