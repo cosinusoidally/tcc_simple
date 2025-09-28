@@ -13,12 +13,66 @@ executables should be loaded from the virtual filesystem
 
 ===============================================================================
 STATUS: TODO
-Reduce size of memory mapping. Currently I do a 3.5 GiB linear memory map. This
-is problematic for several reasons:
+Reduce size of memory mapping.
+
+Currently I do a 3.5 GiB linear memory map. This is problematic for several
+reasons:
 
 * 32 bit Linux can reseve that much contigiuous memory.
-* win32 can't either, plus win32 also has the issue 
+* win32 can't either, plus win32 also has the issue of not allowing overcommit
+  (which means that doing a large allocation may fail if there is not enough
+  physical/page file space to accomodate it in full).
 
-Quick fix would be to just cut it down to 512MiB (still fixed from 
+Quick fix would be to just cut it down to 512MiB (still mmap fixed from a low
+base address. Benefit of this is that the memory map could be identical across
+all platforms.
+
+Next best fix would be to do several fixed position reservations (still all
+below 512MB upper address limit).
+
+Or alternatively I could do a fixed allocation for the elf process memory/stack
+and then do plain malloc allocations for other memory regions (eg files).
+
+===============================================================================
+STATUS: TODO
+win32 port
+
+Will have to use ideas similar to http://cowlark.com/lbw/ (but should be simpler
+since I don't need to support stuff like thread local storage).
+
+Has also previously been done under:
+
+https://github.com/hackpascal/line-is-not-emulator (like WINE in reverse).
+
+There's also another one but I can't think of its name atm, but iirc it was
+relatively complete. I'll maybe manage to find it with Google, but Google isn't
+being very helpful atm.
+
+There's also stuff like usermode linux for win32. But my plan it to do it from
+scratch.
+
+There is some win32 library function you can call to trap int 0x80. In theory
+I'll just need to use that.
+
+===============================================================================
+STATUS: TODO
+fork/exec/waitpid.
+
+This will allow me to run multiple processes. This will be needed to allow me
+to run stage0-posix (or anything else that needs a command interpreter).
+
+Implementation will be similar to builder-hex0 which does not use the MMU and
+only supports cooperative multitasking (and a bunch of other restrictions). It
+emulated fork by simply copying the process memory into a temporary location.
+When the fork/execed process is done then the previously saved process memory is
+restored from the temp location, and execution is resumed in the previous parent
+process.
+
+===============================================================================
+STATUS: TODO
+build pnut_js (and run it).
+
+May need some form of mmap support, since I think pnut will mmap its heap. Can
+probably patch use of mmap out if necessary.
 
 ===============================================================================
