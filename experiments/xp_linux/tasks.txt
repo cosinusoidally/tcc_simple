@@ -1,0 +1,24 @@
+This is essentially my issue tracker. I might put together something more formal
+but for now this will do.
+
+===============================================================================
+STATUS: WIP
+command interpreter, ability to run a list of command in sequence. Currently
+it's a bit clunky but it is possible. Need to improve. Ultimate aim would be to
+instead just run kaem (from stage0-posix) but kaem relies on fork/exec/waitpid.
+
+===============================================================================
+STATUS: TODO
+executables should be loaded from the virtual filesystem
+
+===============================================================================
+STATUS: TODO
+Reduce size of memory mapping. Currently I do a 3.5 GiB linear memory map. This
+is problematic for several reasons:
+
+* 32 bit Linux can reseve that much contigiuous memory.
+* win32 can't either, plus win32 also has the issue 
+
+Quick fix would be to just cut it down to 512MiB (still fixed from 
+
+===============================================================================
