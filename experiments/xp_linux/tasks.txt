@@ -59,6 +59,17 @@ I'll just need to use that.
 
 ===============================================================================
 STATUS: TODO
+NetBSD port.
+
+This is just to verify that I can make the usermode emulation work correctly on
+a BSD system. I will not be using the built in Linux emulation (as I want to
+make sure I can do this entirely via ptrace in usermode). I picked NetBSD as it
+is easy to build from Linux, and I am interested in using it for other projects
+so this should be a good first project to get myself familar with it. I'll
+likely try FreeBSD after.
+
+===============================================================================
+STATUS: TODO
 fork/exec/waitpid.
 
 This will allow me to run multiple processes. This will be needed to allow me
