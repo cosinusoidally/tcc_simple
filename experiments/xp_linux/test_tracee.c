@@ -166,7 +166,7 @@ int vm_close() {
   return r;
 }
 
-int run_again = 3;
+int run_again = 1;
 
 int vm_exit() {
   int error_code = regs_data[1];
@@ -174,15 +174,10 @@ int vm_exit() {
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
 /*
-  int ofile=fopen(ofilename, "w");
-  int t;
-  t = find_file(ofilename_dummy);
-  fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
-  fclose(ofile);
   if(run_again == 1) {
     printf("run_again 1\n");
     run_again = 0;
-    run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk_full.c", "artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
+    run_process2("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c artifacts/out_dummy2.M1");
   } else if(run_again == 2) {
     printf("run_again 2\n");
     run_again = 1;
