@@ -413,42 +413,6 @@ run_process2(cmdline) {
   return 0;
 }
 
-run_process(cmd, arg1, arg2, ofn) {
-  int foo;
-  int c;
-  int o;
-  printf("run_process: %s %s %s\n", cmd, arg1, arg2);
-
-  reset_process();
-
-  foo=fopen(cmd, "r");
-  o = elf_base;
-  while((c=fgetc(foo))!=-1) {
-    wi8(o,c);
-    o = o + 1;
-  }
-  fclose(foo);
-  printf("o: %x\n", o);
-
-  brk_ptr = 4096+4096*(o/4096);
-  printf("brk_ptr: %x\n", brk_ptr);
-
-  int *args;
-  args = args_base;
-  args[0] = 3;
-  args[1] = "dummy.exe";
-  args[2] = arg1;
-  args[3] = arg2;
-
-  trap_syscalls_on();
-  asm("mov $0x8047B80,%esp");
-  asm("mov $0x8048054,%eax");
-  asm("jmp %eax");
-  trap_syscalls_off();
-
-  return 0;
-}
-
 main(){
 /* big mapping for our heap */
   int res = 0;
