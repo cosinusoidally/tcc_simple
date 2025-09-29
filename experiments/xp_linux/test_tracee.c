@@ -38,6 +38,7 @@ char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "../m2min_v2/artifacts/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 cjsawk.hex2",
+  "../m2min_v2/artifacts/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
   "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
   0
 };
@@ -471,11 +472,11 @@ main(){
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.hex2", "cjsawk-0.hex2");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
+  load_file("../m2min_v3/ELF-i386.hex2", "ELF-i386.hex2");
 
   run_process2(commands[0]);
 
