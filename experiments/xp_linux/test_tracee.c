@@ -32,6 +32,7 @@ int args_base = 0x8047B80;
 int command_num = 0;
 
 char *commands[] = {
+//  "../artifacts/pnut-exe hello.c",
   "/cjsawk.exe hello.c out_dummy.M1",
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
@@ -123,10 +124,11 @@ int vm_write() {
   int buf = regs_data[2];
   int count = regs_data[3];
   int c2 = count;
-  if(fd == 0) {
+  if(fd < 3) {
     trap_syscalls_off();
-    printf("vm_write doesn't support stdout yet\n");
-    exit(1);
+    syscall(4, fd, buf, count);
+    trap_syscalls_on();
+    return count;
   }
   t = fd_get_file_offset(fd);
   while(c2>0) {
@@ -193,6 +195,10 @@ int run_again = 1;
 int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
+  if(error_code != 0) {
+    printf("vm_exit\n");
+    exit(error_code);
+  }
   command_num = command_num + 1;
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
