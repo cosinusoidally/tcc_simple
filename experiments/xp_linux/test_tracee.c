@@ -36,8 +36,9 @@ char *commands[] = {
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
+  "/hex2-0 catm_x86.hex2 /catm",
+  "/hex2-0 M0_x86.hex2 /M0",
   "/cjsawk.exe hello.c out_dummy.M1",
-  0,
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "/m0.exe cjsawk-0.M1 cjsawk.hex2",
@@ -458,7 +459,6 @@ main(){
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe", "/m0.exe");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "/hex2.exe");
-  load_file("../m2min_v2/artifacts/catm", "/catm");
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
