@@ -172,12 +172,14 @@ int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
   printf("brk_ptr: 0x%x\n", brk_ptr);
+  extract_file(ofilename_dummy, ofilename);
+
+/*
   int ofile=fopen(ofilename, "w");
   int t;
   t = find_file(ofilename_dummy);
   fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
   fclose(ofile);
-/*
   if(run_again == 1) {
     printf("run_again 1\n");
     run_again = 0;
@@ -194,6 +196,16 @@ int vm_exit() {
 */
     exit(error_code);
 //  }
+}
+
+extract_file(vfs_name, real_name) {
+  int t;
+  t = find_file(ofilename_dummy);
+  if(t != 0) {
+    int ofile=fopen(real_name, "w");
+    fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
+    fclose(ofile);
+  }
 }
 
 int wrap_syscall() {
