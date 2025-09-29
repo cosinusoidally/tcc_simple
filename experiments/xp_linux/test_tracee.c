@@ -177,6 +177,7 @@ int vm_exit() {
   t = find_file(ofilename_dummy);
   fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
   fclose(ofile);
+/*
   if(run_again == 1) {
     printf("run_again 1\n");
     run_again = 0;
@@ -190,8 +191,9 @@ int vm_exit() {
     run_again = 2;
     run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
   } else {
+*/
     exit(error_code);
-  }
+//  }
 }
 
 int wrap_syscall() {
