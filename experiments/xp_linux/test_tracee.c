@@ -377,14 +377,28 @@ run_process(cmdline) {
     i = i + 1;
   }
 
-
-  foo=fopen(args[1], "r");
   o = elf_base;
-  while((c=fgetc(foo))!=-1) {
-    wi8(o,c);
-    o = o + 1;
+
+  if(foo = find_file(args[1])) {
+    printf("run_process: found %s in vfs\n", args[1]);
+    t = 0;
+    int p;
+    int l;
+    p = gfd_get_file_addr(foo);
+    l = gfd_get_file_length(foo);
+    while(t<l) {
+      wi8(o, ri8(p+t));
+      t = t + 1;
+      o = o + 1;
+    }
+  } else {
+    foo=fopen(args[1], "r");
+    while((c=fgetc(foo))!=-1) {
+      wi8(o,c);
+      o = o + 1;
+    }
+    fclose(foo);
   }
-  fclose(foo);
 
   printf("o: %x\n", o);
 
