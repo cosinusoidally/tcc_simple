@@ -27,7 +27,7 @@ int sizeof_file_descriptor = 8;
 char *heap = 0;
 
 int elf_base = 0x8048000;
-int args_base = 0x8047F80;
+int args_base = 0x8047B80;
 
 int ofilename;
 int ofilename_dummy;
@@ -315,6 +315,10 @@ reset_process() {
   next_fd = 4;
 }
 
+run_process2(cmdline) {
+
+}
+
 run_process(cmd, arg1, arg2, ofn) {
   int foo;
   int c;
@@ -346,7 +350,7 @@ run_process(cmd, arg1, arg2, ofn) {
   ofilename = ofn;
 
   trap_syscalls_on();
-  asm("mov $0x8047F80,%esp");
+  asm("mov $0x8047B80,%esp");
   asm("mov $0x8048054,%eax");
   asm("jmp %eax");
   trap_syscalls_off();
