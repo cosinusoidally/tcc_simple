@@ -316,7 +316,38 @@ reset_process() {
 }
 
 run_process2(cmdline) {
-
+  int o;
+  int c;
+  int t;
+  int args_offset;
+  int last_offset;
+  int argc;
+  o = 0;
+  args_offset = 128;
+  int *args;
+  args = args_base;
+  last_offset = args_base+args_offset;
+  while(1) {
+    c = ri8(cmdline+o);
+    t = c;
+    if(t == ' ' || t == 0) {
+      t = 0;
+      argc= args[0] + 1;
+      args[0] = argc;
+      args[argc]= last_offset;
+      last_offset = args_base + args_offset +o +1;
+    }
+    wi8(args_base+args_offset+o,t);
+    if(c == 0) {
+      break;
+    }
+    o = o + 1;
+  }
+  int i = 0;
+  while(i < argc){
+    printf("run_process2 arg[%d]: %s\n", i + 1, args[i+1]);
+    i = i + 1;
+  }
 }
 
 run_process(cmd, arg1, arg2, ofn) {
@@ -376,6 +407,7 @@ main(){
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.hex2", "cjsawk-0.hex2");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
+  run_process2("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c artifacts/out_dummy.M1");
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
 
   return 0;
