@@ -34,10 +34,10 @@ int ofilename_dummy;
 
 int command_num = 0;
 char *commands[] = {
-  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c artifacts/out_dummy.M1",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c artifacts/out_dummy2.M1",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 artifacts/out_dummy2.hex2",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 artifacts/out_dummy2.exe",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c out_dummy.M1",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c cjsawk.M1",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 cjsawk.hex2",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk.exe",
   0
 };
 
@@ -202,10 +202,10 @@ int vm_exit() {
     printf("shouldn't get here\n");
     exit(1);
   } else {
-    extract_file("artifacts/out_dummy.M1", "artifacts/out.M1");
-    extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
-    extract_file("artifacts/out_dummy2.hex2", "artifacts/cjsawk.exe.hex2");
-    extract_file("artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
+    extract_file("out_dummy.M1", "artifacts/out.M1");
+    extract_file("cjsawk.M1", "artifacts/cjsawk.exe.M1");
+    extract_file("cjsawk.hex2", "artifacts/cjsawk.exe.hex2");
+    extract_file("cjsawk.exe", "artifacts/cjsawk.exe");
     exit(error_code);
   }
 }
