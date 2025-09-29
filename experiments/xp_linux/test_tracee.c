@@ -44,11 +44,14 @@ char *commands[] = {
   "/hex2-0 cc_x86_min-1.hex2 /cc_x86_min.exe",
 
   "/catm js_to_c_simple_all.c js_to_c_m2_support.c js_to_c_simple.c",
+
   "/cc_x86_min.exe js_to_c_simple_all.c js_to_c.exe.M1",
   "/catm js_to_c.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 js_to_c.exe.M1",
   "/M0 js_to_c.exe-0.M1 js_to_c.exe.hex2",
   "/catm js_to_c.exe-0.hex2 ELF-i386.hex2 js_to_c.exe.hex2",
   "/hex2-0 js_to_c.exe-0.hex2 /js_to_c.exe",
+
+  "/catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c",
   "/js_to_c.exe cjsawk_full.c cjsawk_full_js_to_c.c",
 
   "/cc_x86_min.exe cjsawk_full_js_to_c.c cjsawk_boot.exe.M1",
@@ -488,7 +491,7 @@ main(){
   load_file("../cjsawk/support_libc.js", "support_libc.js");
   load_file("../cjsawk/simple_support_js_m2_prims.c", "simple_support_js_m2_prims.c");
   load_file("../cjsawk/support_m2.c", "support_m2.c");
-  load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
+
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
