@@ -445,6 +445,13 @@ main(){
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
   load_file("../m2min_v3/ELF-i386.hex2", "ELF-i386.hex2");
 
+  load_file("../m2min_v2/hex0_x86.hex0", "hex0_x86.hex0");
+  load_file("../m2min_v2/hex1_x86.hex0", "hex1_x86.hex0");
+  load_file("../m2min_v2/hex2_x86.hex1", "hex2_x86.hex1");
+  load_file("../m2min_v2/catm_x86.hex2", "catm_x86.hex2");
+  load_file("../m2min_v2/M0_x86.hex2", "M0_x86.hex2");
+  load_file("../m2min_v2/cc_x86_min.M1", "cc_x86_min.M1");
+
   run_process(commands[0]);
 
   return 0;
