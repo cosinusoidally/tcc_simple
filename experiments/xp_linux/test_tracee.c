@@ -443,7 +443,7 @@ main(){
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.M1", "cjsawk-0.M1");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.hex2", "cjsawk-0.hex2");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
 
   run_process2("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c artifacts/out_dummy.M1");
 //  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
