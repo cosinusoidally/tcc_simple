@@ -470,9 +470,13 @@ main(){
 
   brk_ptr = elf_base;
 
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe", "/m0.exe");
+  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "/hex2.exe");
+  load_file("../m2min_v2/artifacts/catm", "/catm");
+
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
