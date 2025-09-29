@@ -35,7 +35,7 @@ char *commands[] = {
 //  "../artifacts/pnut-exe hello.c",
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
-//  "/hex1 hex2_x86.hex1 /hex2-0",
+  "/hex1 hex2_x86.hex1 /hex2-0",
   "/cjsawk.exe hello.c out_dummy.M1",
   0,
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
@@ -43,6 +43,7 @@ char *commands[] = {
   "/m0.exe cjsawk-0.M1 cjsawk.hex2",
   "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
   "/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
+  0,
 };
 
 int wi8(int o,int v) {
@@ -194,14 +195,15 @@ int vm_close() {
 }
 
 int vm_lseek() {
-  int t;
   int fd = regs_data[1];
   int offset = regs_data[2];
   int whence = regs_data[3];
   trap_syscalls_off();
   printf("vm_lseek: %d %d %d\n", fd, offset, whence);
-  t = fd_get_filenum(fd);
-  exit(1);
+  if(whence !=0) {
+    printf("vm_lseek only whence = 0 supported\n");
+  }
+  fd_set_file_offset(fd, offset);
   trap_syscalls_on();
   return offset;
 }
@@ -228,6 +230,7 @@ int vm_exit() {
     extract_file("cjsawk.hex2", "artifacts/cjsawk.exe.hex2");
     extract_file("cjsawk2.exe", "artifacts/cjsawk.exe");
     extract_file("/hex0", "artifacts/hex0");
+    extract_file("/hex2-0", "artifacts/hex2-0");
     exit(error_code);
   }
 }
