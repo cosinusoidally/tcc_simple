@@ -44,9 +44,12 @@ Has also previously been done under:
 
 https://github.com/hackpascal/line-is-not-emulator (like WINE in reverse).
 
-There's also another one but I can't think of its name atm, but iirc it was
-relatively complete. I'll maybe manage to find it with Google, but Google isn't
-being very helpful atm.
+There's also Kernel Emulation on Windows:
+
+https://sourceforge.net/projects/keow/
+
+No updates on that project for a long while, but it seems to have some good
+ideas and useful documentation.
 
 There's also stuff like usermode linux for win32. But my plan it to do it from
 scratch.
