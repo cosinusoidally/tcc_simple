@@ -36,7 +36,7 @@ int command_num = 0;
 char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c out_dummy.M1",
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c cjsawk.M1",
-  "../m2min_v2/artifacts/catm test.M1 cjsawk.M1",
+//  "../m2min_v2/artifacts/catm test.M1 cjsawk.M1",
   "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 cjsawk.hex2",
   "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk.exe",
   0
@@ -91,18 +91,19 @@ int vm_read() {
   int fd = regs_data[1];
   int buf = regs_data[2];
   int count = regs_data[3];
-  if(count != 1) {
-    trap_syscalls_off();
-    printf("vm_read only supports count 1\n");
-    exit(1);
-  }
+  int t = count;
+
   if(fd_get_file_offset(fd) == gfd_get_file_length(fd_get_filenum(fd))) {
     r = 0;
   } else {
-    c = ri8(gfd_get_file_addr(fd_get_filenum(fd))+fd_get_file_offset(fd));
-    fd_set_file_offset(fd, fd_get_file_offset(fd) + 1);
-    wi8(buf, c);
-    r = 1;
+    while(t > 0) {
+      c = ri8(gfd_get_file_addr(fd_get_filenum(fd))+fd_get_file_offset(fd));
+      fd_set_file_offset(fd, fd_get_file_offset(fd) + 1);
+      wi8(buf, c);
+      buf = buf + 1;
+      t = t - 1;
+    }
+    r = count;
   }
   return r;
 }
@@ -120,7 +121,7 @@ int vm_write() {
   }
   if(count != 1) {
     trap_syscalls_off();
-    printf("vm_read only supports count 1\n");
+    printf("vm_write only supports count 1\n");
     exit(1);
   }
   t = fd_get_file_offset(fd);
