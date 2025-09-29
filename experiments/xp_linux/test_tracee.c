@@ -58,6 +58,7 @@ char *commands[] = {
   "/hex2-0 cjsawk_boot.exe-0.hex2 /cjsawk_boot.exe",
 
   "/cjsawk_boot.exe hello.c out_dummy.M1",
+
   "/cjsawk_boot.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "/M0 cjsawk-0.M1 cjsawk.hex2",
@@ -483,6 +484,10 @@ main(){
   brk_ptr = elf_base;
 
   load_file("../cjsawk/hello.c", "hello.c");
+  load_file("../cjsawk/cjsawk.js", "cjsawk.js");
+  load_file("../cjsawk/support_libc.js", "support_libc.js");
+  load_file("../cjsawk/simple_support_js_m2_prims.c", "simple_support_js_m2_prims.c");
+  load_file("../cjsawk/support_m2.c", "support_m2.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
