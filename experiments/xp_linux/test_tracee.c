@@ -9,7 +9,7 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int file_addr = 0x54000000;
+int file_addr = 256*1024*1024;
 
 int next_filenum = 4;
 int next_fd;
@@ -424,7 +424,7 @@ run_process(cmdline) {
 main(){
 /* big mapping for our heap */
   int res = 0;
-  res = mmap(0x20000, 7*512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
+  res = mmap(0x20000, 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
   printf("res: %d\n", res);
   if(res == -1 ) {
     printf("mmap error\n");
