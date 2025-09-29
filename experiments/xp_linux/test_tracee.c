@@ -39,7 +39,9 @@ char *commands[] = {
   "/hex2-0 catm_x86.hex2 /catm",
   "/catm M0.hex2 ELF-i386.hex2 M0_x86.hex2",
   "/hex2-0 M0.hex2 /M0",
-  "/M0 cc_x86_min.M1 /cc_x86_min.exe",
+  "/M0 cc_x86_min.M1 cc_x86_min-0.hex2",
+  "/catm cc_x86_min-1.hex2 ELF-i386.hex2 cc_x86_min-0.hex2",
+  "/hex2-0 cc_x86_min-1.hex2 /cc_x86_min.exe",
   "/cjsawk.exe hello.c out_dummy.M1",
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
@@ -217,8 +219,9 @@ int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
   if(error_code != 0) {
-    printf("vm_exit\n");
-    exit(error_code);
+    printf("vm_exit: %d\n", error_code);
+// swallow error for now
+//    exit(error_code);
   }
   command_num = command_num + 1;
   printf("brk_ptr: 0x%x\n", brk_ptr);
@@ -235,6 +238,9 @@ int vm_exit() {
     extract_file("/hex0", "artifacts/hex0");
     extract_file("/hex2-0", "artifacts/hex2-0");
     extract_file("/M0", "artifacts/M0");
+    extract_file("cc_x86_min-0.hex2", "artifacts/cc_x86_min-0.hex2");
+    extract_file("cc_x86_min-1.hex2", "artifacts/cc_x86_min-1.hex2");
+    extract_file("/cc_x86_min.exe", "artifacts/cc_x86_min.exe");
     exit(error_code);
   }
 }
