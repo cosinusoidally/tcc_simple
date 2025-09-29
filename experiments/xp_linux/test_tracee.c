@@ -195,21 +195,8 @@ int vm_exit() {
   command_num = command_num + 1;
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
-/*
-  if(run_again == 1) {
-    printf("run_again 1\n");
-    run_again = 0;
-    run_process2("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c artifacts/out_dummy2.M1");
-  } else if(run_again == 2) {
-    printf("run_again 2\n");
-    run_again = 1;
-  } else if(run_again == 3) {
-    printf("run_again 3\n");
-    run_again = 2;
-  } else {
-*/
   if(commands[command_num]) {
-    run_process2(commands[command_num]);
+    run_process(commands[command_num]);
     printf("shouldn't get here\n");
     exit(1);
   } else {
@@ -350,7 +337,7 @@ reset_process() {
   next_fd = 4;
 }
 
-run_process2(cmdline) {
+run_process(cmdline) {
   int o;
   int c;
   int t;
@@ -386,7 +373,7 @@ run_process2(cmdline) {
   args[argc+1] = 0;
   int i = 0;
   while(i < argc){
-    printf("run_process2 arg[%d]: %s\n", i + 1, args[i+1]);
+    printf("run_process arg[%d]: %s\n", i + 1, args[i+1]);
     i = i + 1;
   }
 
@@ -437,7 +424,7 @@ main(){
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
   load_file("../m2min_v3/ELF-i386.hex2", "ELF-i386.hex2");
 
-  run_process2(commands[0]);
+  run_process(commands[0]);
 
   return 0;
 }
