@@ -202,8 +202,10 @@ int vm_exit() {
     printf("shouldn't get here\n");
     exit(1);
   } else {
-    extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
     extract_file("artifacts/out_dummy.M1", "artifacts/out.M1");
+    extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
+    extract_file("artifacts/out_dummy2.hex2", "artifacts/cjsawk.exe.hex2");
+    extract_file("artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
     exit(error_code);
   }
 }
