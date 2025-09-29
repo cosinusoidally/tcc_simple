@@ -36,9 +36,9 @@ int command_num = 0;
 char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c out_dummy.M1",
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c cjsawk.M1",
-  "../m2min_v2/artifacts/catm test.M1 cjsawk.M1",
+  "../m2min_v2/artifacts/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 cjsawk.hex2",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk.exe",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
   0
 };
 
@@ -219,7 +219,7 @@ int vm_exit() {
     extract_file("out_dummy.M1", "artifacts/out.M1");
     extract_file("cjsawk.M1", "artifacts/cjsawk.exe.M1");
     extract_file("cjsawk.hex2", "artifacts/cjsawk.exe.hex2");
-    extract_file("cjsawk.exe", "artifacts/cjsawk.exe");
+    extract_file("cjsawk2.exe", "artifacts/cjsawk.exe");
     exit(error_code);
   }
 }
@@ -471,11 +471,11 @@ main(){
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.M1", "cjsawk-0.M1");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe-0.hex2", "cjsawk-0.hex2");
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
+  load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
 
   run_process2(commands[0]);
 
