@@ -62,7 +62,7 @@ char *commands[] = {
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "/M0 cjsawk-0.M1 cjsawk.hex2",
   "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
-  "/hex2-0 cjsawk-0.hex2 cjsawk2.exe",
+  "/hex2-0 cjsawk-0.hex2 /cjsawk.exe",
   0,
 };
 
@@ -249,7 +249,7 @@ int vm_exit() {
     extract_file("out_dummy.M1", "artifacts/out.M1");
     extract_file("cjsawk.M1", "artifacts/cjsawk.exe.M1");
     extract_file("cjsawk.hex2", "artifacts/cjsawk.exe.hex2");
-    extract_file("cjsawk2.exe", "artifacts/cjsawk.exe");
+    extract_file("/cjsawk.exe", "artifacts/cjsawk.exe");
     extract_file("/cjsawk_boot.exe", "artifacts/cjsawk_boot.exe");
     extract_file("/hex0", "artifacts/hex0");
     extract_file("/hex2-0", "artifacts/hex2-0");
