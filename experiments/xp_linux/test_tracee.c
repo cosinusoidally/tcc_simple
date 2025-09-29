@@ -37,13 +37,15 @@ char *commands[] = {
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
   "/hex2-0 catm_x86.hex2 /catm",
-  "/hex2-0 M0_x86.hex2 /M0",
+  "/catm M0.hex2 ELF-i386.hex2 M0_x86.hex2",
+  "/hex2-0 M0.hex2 /M0",
+  "/M0 cc_x86_min.M1 /cc_x86_min.exe",
   "/cjsawk.exe hello.c out_dummy.M1",
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
-  "/m0.exe cjsawk-0.M1 cjsawk.hex2",
+  "/M0 cjsawk-0.M1 cjsawk.hex2",
   "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
-  "/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
+  "/hex2-0 cjsawk-0.hex2 cjsawk2.exe",
   0,
 };
 
@@ -232,6 +234,7 @@ int vm_exit() {
     extract_file("cjsawk2.exe", "artifacts/cjsawk.exe");
     extract_file("/hex0", "artifacts/hex0");
     extract_file("/hex2-0", "artifacts/hex2-0");
+    extract_file("/M0", "artifacts/M0");
     exit(error_code);
   }
 }
@@ -457,8 +460,6 @@ main(){
   brk_ptr = elf_base;
 
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "/cjsawk.exe");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe", "/m0.exe");
-  load_file("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "/hex2.exe");
 
   load_file("../cjsawk/hello.c", "hello.c");
   load_file("../cjsawk/artifacts/deps/cjsawk_full.c", "cjsawk_full.c");
