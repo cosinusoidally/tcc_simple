@@ -35,6 +35,7 @@ int ofilename_dummy;
 int command_num = 0;
 char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c artifacts/out_dummy.M1",
+  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c artifacts/out_dummy2.M1",
   0
 };
 
@@ -197,7 +198,8 @@ int vm_exit() {
   } else {
 */
   if(commands[command_num]) {
-    printf("blah\n");
+    run_process2(commands[command_num]);
+    printf("shouldn't get here\n");
     exit(1);
   } else {
     extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
