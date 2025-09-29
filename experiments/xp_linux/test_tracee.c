@@ -172,7 +172,6 @@ int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
   printf("brk_ptr: 0x%x\n", brk_ptr);
-  extract_file(ofilename_dummy, ofilename);
 
 /*
   int ofile=fopen(ofilename, "w");
@@ -194,13 +193,15 @@ int vm_exit() {
     run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
   } else {
 */
+    extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
+    extract_file("artifacts/out_dummy.M1", "artifacts/out.M1");
     exit(error_code);
 //  }
 }
 
 extract_file(vfs_name, real_name) {
   int t;
-  t = find_file(ofilename_dummy);
+  t = find_file(vfs_name);
   if(t != 0) {
     int ofile=fopen(real_name, "w");
     fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
