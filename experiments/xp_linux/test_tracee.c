@@ -178,6 +178,7 @@ int run_again = 1;
 int vm_exit() {
   int error_code = regs_data[1];
   trap_syscalls_off();
+  command_num = command_num + 1;
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
 /*
@@ -195,10 +196,14 @@ int vm_exit() {
     run_process("../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe", "cjsawk-0.hex2", "artifacts/out_dummy2.exe", "artifacts/cjsawk.exe");
   } else {
 */
+  if(commands[command_num]) {
+    printf("blah\n");
+    exit(1);
+  } else {
     extract_file("artifacts/out_dummy2.M1", "artifacts/cjsawk.exe.M1");
     extract_file("artifacts/out_dummy.M1", "artifacts/out.M1");
     exit(error_code);
-//  }
+  }
 }
 
 extract_file(vfs_name, real_name) {
