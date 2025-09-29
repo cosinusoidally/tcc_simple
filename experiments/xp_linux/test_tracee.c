@@ -29,9 +29,6 @@ char *heap = 0;
 int elf_base = 0x8048000;
 int args_base = 0x8047B80;
 
-int ofilename;
-int ofilename_dummy;
-
 int command_num = 0;
 char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c out_dummy.M1",
@@ -42,7 +39,6 @@ char *commands[] = {
   "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
   0
 };
-
 
 int wi8(int o,int v) {
         heap[o]=v;
@@ -394,8 +390,6 @@ run_process2(cmdline) {
     i = i + 1;
   }
 
-  ofilename_dummy = "artifacts/out_dummy.M1";
-  ofilename = "artifacts/out.M1";
 
   foo=fopen(args[1], "r");
   o = elf_base;
@@ -445,9 +439,6 @@ run_process(cmd, arg1, arg2, ofn) {
   args[1] = "dummy.exe";
   args[2] = arg1;
   args[3] = arg2;
-
-  ofilename_dummy = arg2;
-  ofilename = ofn;
 
   trap_syscalls_on();
   asm("mov $0x8047B80,%esp");
