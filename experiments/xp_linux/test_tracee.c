@@ -30,13 +30,14 @@ int elf_base = 0x8048000;
 int args_base = 0x8047B80;
 
 int command_num = 0;
+
 char *commands[] = {
-  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c out_dummy.M1",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe cjsawk_full.c cjsawk.M1",
-  "../m2min_v2/artifacts/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe cjsawk-0.M1 cjsawk.hex2",
-  "../m2min_v2/artifacts/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
-  "../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
+  "/cjsawk.exe hello.c out_dummy.M1",
+  "/cjsawk.exe cjsawk_full.c cjsawk.M1",
+  "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
+  "/m0.exe cjsawk-0.M1 cjsawk.hex2",
+  "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
+  "/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
   0
 };
 
