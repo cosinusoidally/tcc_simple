@@ -33,13 +33,16 @@ int command_num = 0;
 
 char *commands[] = {
 //  "../artifacts/pnut-exe hello.c",
+  "/hex0-orig hex0_x86.hex0 /hex0",
+  "/hex0 hex1_x86.hex0 /hex1",
+//  "/hex1 hex2_x86.hex1 /hex2-0",
   "/cjsawk.exe hello.c out_dummy.M1",
+  0,
   "/cjsawk.exe cjsawk_full.c cjsawk.M1",
   "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
   "/m0.exe cjsawk-0.M1 cjsawk.hex2",
   "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
   "/hex2.exe cjsawk-0.hex2 cjsawk2.exe",
-  0
 };
 
 int wi8(int o,int v) {
@@ -152,7 +155,7 @@ int vm_open() {
   flags = flags & 0xFFFF;
   mode = mode & 0xFFFF;
   printf("open: %s %d %d\n", filename, flags, mode);
-  if((flags==577) && (mode == 384)) {
+  if((flags==577) && ((mode == 384) || (mode == 448))) {
     printf("open %s for write\n", filename);
     t = new_file(filename);
     r = new_fd(t);
@@ -190,6 +193,19 @@ int vm_close() {
   return r;
 }
 
+int vm_lseek() {
+  int t;
+  int fd = regs_data[1];
+  int offset = regs_data[2];
+  int whence = regs_data[3];
+  trap_syscalls_off();
+  printf("vm_lseek: %d %d %d\n", fd, offset, whence);
+  t = fd_get_filenum(fd);
+  exit(1);
+  trap_syscalls_on();
+  return offset;
+}
+
 int run_again = 1;
 
 int vm_exit() {
@@ -211,6 +227,7 @@ int vm_exit() {
     extract_file("cjsawk.M1", "artifacts/cjsawk.exe.M1");
     extract_file("cjsawk.hex2", "artifacts/cjsawk.exe.hex2");
     extract_file("cjsawk2.exe", "artifacts/cjsawk.exe");
+    extract_file("/hex0", "artifacts/hex0");
     exit(error_code);
   }
 }
@@ -242,6 +259,8 @@ int wrap_syscall() {
     r = vm_close();
   } else if(n == 1) {
     r = vm_exit();
+  } else if(n == 19) {
+    r = vm_lseek();
   } else {
     trap_syscalls_off();
     printf("unsupported syscall: %d\n",n);
@@ -444,6 +463,8 @@ main(){
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
   load_file("../m2min_v3/ELF-i386.hex2", "ELF-i386.hex2");
+
+  load_file("../m2min_v2/artifacts/hex0", "/hex0-orig");
 
   load_file("../m2min_v2/hex0_x86.hex0", "hex0_x86.hex0");
   load_file("../m2min_v2/hex1_x86.hex0", "hex1_x86.hex0");
