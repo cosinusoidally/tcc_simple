@@ -322,11 +322,16 @@ run_process2(cmdline) {
   int args_offset;
   int last_offset;
   int argc;
+  int foo;
+
   o = 0;
   args_offset = 128;
   int *args;
   args = args_base;
   last_offset = args_base+args_offset;
+
+  reset_process();
+
   while(1) {
     c = ri8(cmdline+o);
     t = c;
@@ -343,11 +348,36 @@ run_process2(cmdline) {
     }
     o = o + 1;
   }
+  args[argc+1] = 0;
   int i = 0;
   while(i < argc){
     printf("run_process2 arg[%d]: %s\n", i + 1, args[i+1]);
     i = i + 1;
   }
+
+  ofilename_dummy = "artifacts/out_dummy.M1";
+  ofilename = "artifacts/out.M1";
+
+  foo=fopen(args[1], "r");
+  o = elf_base;
+  while((c=fgetc(foo))!=-1) {
+    wi8(o,c);
+    o = o + 1;
+  }
+  fclose(foo);
+
+  printf("o: %x\n", o);
+
+  brk_ptr = 4096+4096*(o/4096);
+  printf("brk_ptr: %x\n", brk_ptr);
+
+  trap_syscalls_on();
+  asm("mov $0x8047B80,%esp");
+  asm("mov $0x8048054,%eax");
+  asm("jmp %eax");
+  trap_syscalls_off();
+
+  return 0;
 }
 
 run_process(cmd, arg1, arg2, ofn) {
@@ -408,7 +438,7 @@ main(){
   load_file("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "cjsawk.exe");
 
   run_process2("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe hello.c artifacts/out_dummy.M1");
-  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
+//  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe", "hello.c", "artifacts/out_dummy.M1", "artifacts/out.M1");
 
   return 0;
 }
