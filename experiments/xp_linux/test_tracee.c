@@ -114,22 +114,22 @@ int vm_write() {
   int fd = regs_data[1];
   int buf = regs_data[2];
   int count = regs_data[3];
+  int c2 = count;
   if(fd == 0) {
     trap_syscalls_off();
     printf("vm_write doesn't support stdout yet\n");
     exit(1);
   }
-  if(count != 1) {
-    trap_syscalls_off();
-    printf("vm_write only supports count 1\n");
-    exit(1);
+  while(c2>0) {
+    t = fd_get_file_offset(fd);
+    wi8(gfd_get_file_addr(fd_get_filenum(fd))+t, ri8(buf));
+    t = t + 1;
+    fd_set_file_offset(fd, t);
+    gfd_set_file_length(fd_get_filenum(fd), t);
+    c2 = c2 - 1;
+    buf = buf + 1;
   }
-  t = fd_get_file_offset(fd);
-  wi8(gfd_get_file_addr(fd_get_filenum(fd))+t, ri8(buf));
-  t = t + 1;
-  fd_set_file_offset(fd, t);
-  gfd_set_file_length(fd_get_filenum(fd), t);
-  return r;
+  return count;
 }
 
 int vm_open() {
