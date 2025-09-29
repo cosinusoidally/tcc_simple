@@ -483,6 +483,9 @@ main(){
   load_file("../m2min_v2/M0_x86.hex2", "M0_x86.hex2");
   load_file("../m2min_v2/cc_x86_min.M1", "cc_x86_min.M1");
 
+  load_file("../m2min_v3/js_to_c/js_to_c_m2_support.c", "js_to_c_m2_support.c");
+  load_file("../m2min_v3/js_to_c/js_to_c_simple.c", "js_to_c_simple.c");
+
   run_process(commands[0]);
 
   return 0;
