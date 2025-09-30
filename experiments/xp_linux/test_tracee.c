@@ -189,7 +189,7 @@ int vm_open() {
   flags = flags & 0xFFFF;
   mode = mode & 0xFFFF;
   printf("open: %s %d %d\n", filename, flags, mode);
-  if((flags==577) && ((mode == 384) || (mode == 448))) {
+  if((flags==577) && ((mode == 384) || (mode == 448) || (mode == 438))) {
     printf("open %s for write\n", filename);
     t = new_file(filename);
     r = new_fd(t);
