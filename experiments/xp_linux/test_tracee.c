@@ -34,7 +34,7 @@ int args_base = 0x8047B80;
 int command_num = 0;
 
 char *commands[] = {
-//  "../artifacts/tcc-pnut -c foo.c", 0,
+//  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
@@ -545,6 +545,9 @@ main(){
 
   load_file("../m2min_v3/js_to_c/js_to_c_m2_support.c", "js_to_c_m2_support.c");
   load_file("../m2min_v3/js_to_c/js_to_c_simple.c", "js_to_c_simple.c");
+
+// to test out tcc-pnut
+  load_file("../cjsawk/cjsawk.js", "foo.c");
 
   run_process(commands[0]);
 
