@@ -273,6 +273,7 @@ int vm_exit() {
     extract_file("cjsawk_full_js_to_c.c", "artifacts/cjsawk_full_js_to_c.c");
     extract_file("pnut_js_m2.c", "artifacts/pnut_js_m2.c");
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
+    extract_file("foo.o", "artifacts/foo.o");
     exit(error_code);
   }
 }
