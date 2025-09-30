@@ -280,7 +280,7 @@ int vm_exit() {
 int vm_mmap() {
   int r;
   trap_syscalls_off();
-  printf("mmap not impl\n");
+  printf("mmap not impl eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   exit(1);
   trap_syscalls_on();
   return r;
