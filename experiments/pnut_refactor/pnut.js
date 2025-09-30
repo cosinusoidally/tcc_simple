@@ -7515,7 +7515,7 @@ function init_globals() {
   string_pool = malloc(STRING_POOL_SIZE);
 
 // 1MB heap
-  RT_HEAP_SIZE = 104857600;
+  RT_HEAP_SIZE = 1048576;
 /*
   MAX_CODE_SIZE = 5000000;
   code = malloc(mul(4, MAX_CODE_SIZE));

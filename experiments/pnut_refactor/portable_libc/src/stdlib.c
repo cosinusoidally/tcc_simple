@@ -1,7 +1,7 @@
 #include "../include/stdlib.h"
 #include "../include/stdio.h"
 
-#define HEAP_SIZE 1000000000
+#define HEAP_SIZE 32000000
 
 char _heap[HEAP_SIZE];
 int _heap_alloc = 0;
