@@ -68,6 +68,12 @@ char *commands[] = {
   "/M0 cjsawk-0.M1 cjsawk.hex2",
   "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
   "/hex2-0 cjsawk-0.hex2 /cjsawk.exe",
+
+  "/cjsawk.exe pnut_js_m2.c pnut_js.exe.M1",
+  "/catm pnut_js.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 pnut_js.exe.M1",
+  "/M0 pnut_js.exe-0.M1 pnut_js.exe.hex2",
+  "/catm pnut_js.exe-0.hex2 ELF-i386.hex2 pnut_js.exe.hex2",
+  "/hex2-0 pnut_js.exe-0.hex2 /pnut_js.exe",
   0,
 };
 
@@ -264,6 +270,7 @@ int vm_exit() {
     extract_file("/cc_x86_min.exe", "artifacts/cc_x86_min.exe");
     extract_file("cjsawk_full_js_to_c.c", "artifacts/cjsawk_full_js_to_c.c");
     extract_file("pnut_js_m2.c", "artifacts/pnut_js_m2.c");
+    extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     exit(error_code);
   }
 }
