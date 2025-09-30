@@ -263,6 +263,7 @@ int vm_exit() {
     extract_file("cc_x86_min-1.hex2", "artifacts/cc_x86_min-1.hex2");
     extract_file("/cc_x86_min.exe", "artifacts/cc_x86_min.exe");
     extract_file("cjsawk_full_js_to_c.c", "artifacts/cjsawk_full_js_to_c.c");
+    extract_file("pnut_js_m2.c", "artifacts/pnut_js_m2.c");
     exit(error_code);
   }
 }
