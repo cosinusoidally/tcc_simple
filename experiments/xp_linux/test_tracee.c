@@ -34,7 +34,7 @@ int args_base = 0x8047B80;
 int command_num = 0;
 
 char *commands[] = {
-  "../artifacts/pnut-exe hello.c", 0,
+//  "../artifacts/tcc-pnut -c foo.c", 0,
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
