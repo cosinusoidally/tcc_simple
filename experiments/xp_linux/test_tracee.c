@@ -1,5 +1,7 @@
 extern int stdout;
 
+int dbg = 0;
+
 int regs_data[8];
 
 int PROT_READ=1;
@@ -32,7 +34,7 @@ int args_base = 0x8047B80;
 int command_num = 0;
 
 char *commands[] = {
-//  "../artifacts/pnut-exe hello.c",
+  "../artifacts/pnut-exe hello.c", 0,
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
@@ -315,17 +317,17 @@ int wrap_syscall() {
 int find_file(filename) {
   int t;
   int i = next_filenum - 1;
-  printf("find_file: %s\n", filename);
+  if(dbg) {printf("find_file: %s\n", filename);}
   while(i>3) {
     t = filename_array+(i*filename_size);
-    printf("looking at: %s\n", t);
+    if(dbg) {printf("looking at: %s\n", t);}
     if(strcmp(t, filename) == 0) {
-      printf("found: %s %d\n", filename, i);
+      if(dbg) {printf("found: %s %d\n", filename, i);}
       return i;
     }
     i = i - 1;
   }
-  printf("not found %s\n", filename);
+  if(dbg) {printf("not found %s\n", filename);}
   return 0;
 }
 
