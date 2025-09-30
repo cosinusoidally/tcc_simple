@@ -44,6 +44,7 @@ char *commands[] = {
   "/hex2-0 cc_x86_min-1.hex2 /cc_x86_min.exe",
 
   "/catm js_to_c_simple_all.c js_to_c_m2_support.c js_to_c_simple.c",
+  "/catm pnut_js_m2.c pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js",
 
   "/cc_x86_min.exe js_to_c_simple_all.c js_to_c.exe.M1",
   "/catm js_to_c.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 js_to_c.exe.M1",
