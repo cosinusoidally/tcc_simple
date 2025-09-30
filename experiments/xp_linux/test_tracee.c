@@ -492,6 +492,11 @@ main(){
   load_file("../cjsawk/simple_support_js_m2_prims.c", "simple_support_js_m2_prims.c");
   load_file("../cjsawk/support_m2.c", "support_m2.c");
 
+  load_file("../pnut_refactor/simple_support_js_m2_prims.c", "pnut_refactor/simple_support_js_m2_prims.c");
+  load_file("../pnut_refactor/support_common.c", "pnut_refactor/support_common.c");
+  load_file("../pnut_refactor/simple_support_js_m2.js", "pnut_refactor/simple_support_js_m2.js");
+  load_file("../pnut_refactor/pnut.js", "pnut_refactor/pnut.js");
+
   load_file("../m2min_v3/simple_asm_defs.M1", "simple_asm_defs.M1");
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
