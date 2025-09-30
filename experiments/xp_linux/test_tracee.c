@@ -297,6 +297,16 @@ int vm_mmap() {
   return r;
 }
 
+int vm_unlink() {
+  int pathname = regs_data[1];
+  trap_syscalls_off();
+  printf("unlink %s\n", pathname);
+  exit(1);
+  trap_syscalls_on();
+  // dummy impl since opening a file for write always creates a new file
+  return 0;
+}
+
 extract_file(vfs_name, real_name) {
   int t;
   t = find_file(vfs_name);
@@ -328,6 +338,8 @@ int wrap_syscall() {
     r = vm_lseek();
   } else if(n == 192) {
     r = vm_mmap();
+  } else if(n == 10) {
+    r = vm_unlink();
   } else {
     trap_syscalls_off();
     printf("unsupported syscall: %d\n",n);
