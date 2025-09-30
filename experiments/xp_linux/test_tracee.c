@@ -277,6 +277,15 @@ int vm_exit() {
   }
 }
 
+int vm_mmap() {
+  int r;
+  trap_syscalls_off();
+  printf("mmap not impl\n");
+  exit(1);
+  trap_syscalls_on();
+  return r;
+}
+
 extract_file(vfs_name, real_name) {
   int t;
   t = find_file(vfs_name);
@@ -306,6 +315,8 @@ int wrap_syscall() {
     r = vm_exit();
   } else if(n == 19) {
     r = vm_lseek();
+  } else if(n == 192) {
+    r = vm_mmap();
   } else {
     trap_syscalls_off();
     printf("unsupported syscall: %d\n",n);
