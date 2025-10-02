@@ -11,19 +11,21 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int file_addr = 256*1024*1024;
+int file_addr;
 
 int next_filenum = 4;
 int next_fd;
 
-int filename_array = 0x0200000;
+int base_address;
+
+int filename_array;
 int filename_size = 1024;
 
-int gfds = 0x01000010;
+int gfds;
 int sizeof_gfd = 8;
 
 
-int file_descriptors = 0x20000+0x200;
+int file_descriptors;
 int sizeof_file_descriptor = 8;
 
 char *heap = 0;
@@ -519,10 +521,19 @@ run_process(cmdline) {
   return 0;
 }
 
+init_globals() {
+  base_address = 64 * 1024 * 1024;
+  file_descriptors = base_address+0x20000+0x200;
+  filename_array = base_address+0x0200000;
+  file_addr = 256*1024*1024;
+  gfds = base_address+0x01000010;
+}
+
 main(){
 /* big mapping for our heap */
   int res = 0;
-  res = mmap(0x20000, 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
+  init_globals();
+  res = mmap(base_address, 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
   printf("res: %d\n", res);
   if(res == -1 ) {
     printf("mmap error\n");
