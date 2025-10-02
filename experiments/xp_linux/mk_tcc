@@ -2,8 +2,8 @@
 set -xe
 
 gcc -no-pie -g3 -O0 -m32 test_tracer.c -o artifacts/test_tracer.exe
-tcc -g -O0 -m32 test_tracee.c -o artifacts/test_tracee.o
-gcc -Wl,-Ttext-segment,0x10000 -g -O0 -m32 artifacts/test_tracee.c -o artifacts/test_tracee.exe -ldl
+tcc -c -g -O0 -m32 test_tracee.c -o artifacts/test_tracee.o
+gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/test_tracee.o -o artifacts/test_tracee.exe -ldl
 
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe
