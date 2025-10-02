@@ -128,7 +128,7 @@ main(){
   int out=0;
   out=ri32(elf_base);
   printf("r: 0x%x out: %x\n",r, out);
-  load_file((int)"linux_exe",(int)"blah");
+  load_file((int)"artifacts/hello.exe",(int)"blah");
 /*
   wi8(elf_base,0xB8);
   wi32(elf_base+1,0xDEADBEEF);
