@@ -37,6 +37,7 @@ int command_num = 0;
 
 char *commands[] = {
 //  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
+
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
@@ -313,7 +314,7 @@ extract_file(vfs_name, real_name) {
   int t;
   t = find_file(vfs_name);
   if(t != 0) {
-    int ofile=fopen(real_name, "w");
+    int ofile=fopen(real_name, "wb");
     fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
     fclose(ofile);
   }
@@ -418,7 +419,7 @@ int new_file(int filename) {
 
 load_file(realname, virtualname) {
   printf("load_file: %s virtualname: %s\n", realname, virtualname);
-  int f = fopen(realname, "r");
+  int f = fopen(realname, "rb");
   int c;
   int t;
   t = new_file(virtualname);
@@ -499,7 +500,7 @@ run_process(cmdline) {
       o = o + 1;
     }
   } else {
-    foo=fopen(args[1], "r");
+    foo=fopen(args[1], "rb");
     while((c=fgetc(foo))!=-1) {
       wi8(o,c);
       o = o + 1;
