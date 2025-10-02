@@ -516,7 +516,10 @@ run_process(cmdline) {
   trap_syscalls_on();
   asm("mov $0x8047B80,%esp");
   asm("mov $0x8048054,%eax");
-  asm("jmp %eax");
+/* tcc 0.9.27 doesn't support this jmp to address in register */
+//  asm("jmp %eax");
+  asm(".byte 255");
+  asm(".byte 224");
   trap_syscalls_off();
 
   return 0;
