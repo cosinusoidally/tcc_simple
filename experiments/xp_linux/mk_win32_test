@@ -5,3 +5,7 @@ set -xe
 i386-win32-tcc test_tcc_win32.c -o artifacts/test.exe
 
 cp ../cjsawk/artifacts/builds/hello/hello.exe artifacts
+
+chmod -x artifacts/*exe
+
+echo "DONE"
