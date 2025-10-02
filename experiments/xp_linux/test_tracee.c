@@ -445,7 +445,9 @@ reset_process() {
   next_fd = 4;
 }
 
-run_process(cmdline) {
+run_process(cmdline_) {
+/* hack reseve some stack space since reset_process scribbles over the stack */
+  int arr[128];
   int o;
   int c;
   int t;
@@ -453,6 +455,7 @@ run_process(cmdline) {
   int last_offset;
   int argc;
   int foo;
+  int cmdline = cmdline_;
 
   o = 0;
   args_offset = 128;
@@ -460,7 +463,9 @@ run_process(cmdline) {
   args = args_base;
   last_offset = args_base+args_offset;
 
+  printf("cmdline: %s 0x%x\n", cmdline, &cmdline);
   reset_process();
+  printf("cmdline: %s 0x%x\n", cmdline, &cmdline);
 
   while(1) {
     c = ri8(cmdline+o);
