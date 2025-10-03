@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <windows.h>
+#include <stdio.h>
 
 int regs_data[8];
 
