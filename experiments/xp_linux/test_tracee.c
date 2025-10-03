@@ -1,5 +1,3 @@
-extern int stdout;
-
 int dbg = 0;
 
 int regs_data[8];
