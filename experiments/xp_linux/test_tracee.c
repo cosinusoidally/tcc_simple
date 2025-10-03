@@ -440,6 +440,7 @@ hex0_compile(src, dst) {
     int ooff;
     int i;
     int c;
+    int in_comment;
     trap_syscalls_off();
     printf("hex0 compile: %s %s\n", src, dst);
     ifile = find_file(src);
@@ -447,9 +448,15 @@ hex0_compile(src, dst) {
     ilen =  gfd_get_file_length(ifile);
     i = 0;
     ofile = new_file(dst);
+    in_comment = 0;
     while(i < ilen) {
       c = ri8(ioff+i);
-      fputc(c, stdout);
+      if((c == '#') || (c == ';')) { in_comment = 1;}
+      if(in_comment) {
+        if(c == '\n') { in_comment = 0;}
+      } else {
+        fputc(c, stdout);
+      }
       i = i + 1;
     }
 
