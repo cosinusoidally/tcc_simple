@@ -431,6 +431,18 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
+hex_digit_to_int(c) {
+  if((c>='0') && (c <= '9')) {
+    c = c - '0';
+  } else if((c>='A') && (c <= 'F')) {
+    c = 10 + c - 'A';
+  } else {
+    printf("invalid digit %d\n", c);
+    exit(1);
+  }
+  return c;
+}
+
 hex0_compile(src, dst) {
     int ifile;
     int ofile;
@@ -440,7 +452,9 @@ hex0_compile(src, dst) {
     int ooff;
     int i;
     int c;
+    int t;
     int in_comment;
+    int hi = 1;
     trap_syscalls_off();
     printf("hex0 compile: %s %s\n", src, dst);
     ifile = find_file(src);
@@ -457,6 +471,15 @@ hex0_compile(src, dst) {
       } else {
         if(!((c == ' ') || (c == '\t') || (c == '\n'))) {
           fputc(c, stdout);
+          if(hi == 1) {
+           hi = 0;
+           t = hex_digit_to_int(c);
+          } else {
+           hi = 1;
+           t = t << 4;
+           t = t | hex_digit_to_int(c);
+//           printf(" t: 0x%x\n", t);
+          }
         }
       }
       i = i + 1;
