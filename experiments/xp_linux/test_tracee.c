@@ -462,6 +462,8 @@ hex0_compile(src, dst) {
     ilen =  gfd_get_file_length(ifile);
     i = 0;
     ofile = new_file(dst);
+    ooff = gfd_get_file_addr(ofile);
+    olen = 0;
     in_comment = 0;
     while(i < ilen) {
       c = ri8(ioff+i);
@@ -478,13 +480,16 @@ hex0_compile(src, dst) {
            hi = 1;
            t = t << 4;
            t = t | hex_digit_to_int(c);
+           wi8(ooff, t);
+           ooff = ooff + 1;
+           olen = olen + 1;
 //           printf(" t: 0x%x\n", t);
           }
         }
       }
       i = i + 1;
     }
-
+    gfd_set_file_length(ofile, olen);
     /* this is a hacky way of 'terminating' the built in command */
     regs_data[1] = 0;
     vm_exit();
