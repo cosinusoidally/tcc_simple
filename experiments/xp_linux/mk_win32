@@ -1,0 +1,7 @@
+./mk_clean
+
+set -xe
+
+i386-win32-tcc wrap_win32.c -o artifacts/xp_linux.exe
+
+echo "DONE"
