@@ -35,9 +35,7 @@ int command_num = 0;
 
 char *commands[] = {
 //  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
-
-  "hex0 hex0_x86.hex0 /hex0-orig2",
-  "/hex0-orig hex0_x86.hex0 /hex0",
+  "hex0 hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
   "/hex2-0 catm_x86.hex2 /catm",
@@ -636,8 +634,6 @@ main(){
   load_file("../m2min_v3/x86_defs.M1", "x86_defs.M1");
   load_file("../m2min_v3/libc-core.M1", "libc-core.M1");
   load_file("../m2min_v3/ELF-i386.hex2", "ELF-i386.hex2");
-
-  load_file("../m2min_v2/artifacts/hex0", "/hex0-orig");
 
   load_file("../m2min_v2/hex0_x86.hex0", "hex0_x86.hex0");
   load_file("../m2min_v2/hex1_x86.hex0", "hex1_x86.hex0");
