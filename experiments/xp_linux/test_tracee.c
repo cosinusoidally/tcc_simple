@@ -36,6 +36,7 @@ int command_num = 0;
 char *commands[] = {
 //  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
 
+  "hex0 hex0_x86.hex0 /hex0-orig2",
   "/hex0-orig hex0_x86.hex0 /hex0",
   "/hex0 hex1_x86.hex0 /hex1",
   "/hex1 hex2_x86.hex1 /hex2-0",
@@ -275,6 +276,7 @@ int vm_exit() {
     extract_file("pnut_js_m2.c", "artifacts/pnut_js_m2.c");
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     extract_file("foo.o", "artifacts/foo.o");
+    extract_file("/hex0-orig2", "artifacts/hex0-orig2");
     exit(error_code);
   }
 }
@@ -429,6 +431,15 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
+hex0_compile(src, dst) {
+    trap_syscalls_off();
+    printf("hex0 compile: %s %s\n", src, dst);
+
+    /* this is a hacky way of 'terminating' the built in command */
+    regs_data[1] = 0;
+    vm_exit();
+}
+
 reset_process() {
   int base_addr;
   int i;
@@ -486,6 +497,12 @@ run_process(cmdline_) {
   while(i < argc){
     printf("run_process arg[%d]: %s\n", i + 1, args[i+1]);
     i = i + 1;
+  }
+
+  /* dispatch built in commands */
+  /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary */
+  if(ri8(args[1]) == 'h') {
+    hex0_compile(args[2], args[3]);
   }
 
   o = elf_base;
