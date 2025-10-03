@@ -455,7 +455,9 @@ hex0_compile(src, dst) {
       if(in_comment) {
         if(c == '\n') { in_comment = 0;}
       } else {
-        fputc(c, stdout);
+        if(!((c == ' ') || (c == '\t') || (c == '\n'))) {
+          fputc(c, stdout);
+        }
       }
       i = i + 1;
     }
