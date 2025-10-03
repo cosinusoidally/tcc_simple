@@ -2,7 +2,7 @@ This is essentially my issue tracker. I might put together something more formal
 but for now this will do.
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 built in hex0 compiler. builder-hex0 has this. Commands of the form:
 
 hex0 foo.hex0 blah
@@ -10,7 +10,7 @@ hex0 foo.hex0 blah
 will compile foo.hex0 to the binary blah
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 win32 port
 
 Will have to use ideas similar to http://cowlark.com/lbw/ (but should be simpler
@@ -59,7 +59,7 @@ restored from the temp location, and execution is resumed in the previous parent
 process.
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 build pnut_js (and run it).
 
 May need some form of mmap support, since I think pnut will mmap its heap. Can
