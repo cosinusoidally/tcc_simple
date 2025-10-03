@@ -37,15 +37,18 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
 }
 
 int syscall(x) {
-  printf("sycall function not impl %d\n", x);
   if(x == 65534) {
     if(trap_ready) {
       return;
     } else {
       printf("installing trap\n");
+      SetUnhandledExceptionFilter(TopLevelHandler);
       trap_ready = 1;
       return;
     }
+  } else if(x == 65533) {
+    // ignore
+    return;
   } else if(x == 4) {
       printf("sycall write missing impl %d\n", x);
   } else {
