@@ -432,8 +432,26 @@ load_file(realname, virtualname) {
 }
 
 hex0_compile(src, dst) {
+    int ifile;
+    int ofile;
+    int ilen;
+    int olen;
+    int ioff;
+    int ooff;
+    int i;
+    int c;
     trap_syscalls_off();
     printf("hex0 compile: %s %s\n", src, dst);
+    ifile = find_file(src);
+    ioff =  gfd_get_file_addr(ifile);
+    ilen =  gfd_get_file_length(ifile);
+    i = 0;
+    ofile = new_file(dst);
+    while(i < ilen) {
+      c = ri8(ioff+i);
+      fputc(c, stdout);
+      i = i + 1;
+    }
 
     /* this is a hacky way of 'terminating' the built in command */
     regs_data[1] = 0;
