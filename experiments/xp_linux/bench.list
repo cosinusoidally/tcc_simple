@@ -1,0 +1,2 @@
+load_file ../cjsawk/artifacts/builds/hello2/hello2.exe /hello2.exe
+/hello2.exe

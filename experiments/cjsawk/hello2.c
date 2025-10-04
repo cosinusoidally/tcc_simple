@@ -594,6 +594,7 @@ int memcpy(int a, int b, int c) {
 
 function main(argc, argv) {
   int i;
+  i = 0;
   init_c();
   fputs("syscall overhead test\n", 1);
   while(lt(i, 1000000)) {
