@@ -1,0 +1,5 @@
+hex0 hex0_x86.hex0 /hex0
+/hex0 hex1_x86.hex0 /hex1
+/hex1 hex2_x86.hex1 /hex2-0
+/hex2-0 catm_x86.hex2 /catm
+/catm M0.hex2 ELF-i386.hex2 M0_x86.hex2

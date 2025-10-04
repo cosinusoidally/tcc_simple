@@ -115,9 +115,16 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
+char command_buffer[1024];
+
 int next_command() {
-  command_num = command_num + 1;
-  return commands[command_num - 1];
+  if(command_file) {
+    printf("command_file not yet supported\n");
+    exit(1);
+  } else {
+    command_num = command_num + 1;
+    return commands[command_num - 1];
+  }
 }
 
 int brk_ptr=0;
@@ -658,7 +665,6 @@ int main(int argc, int **argv){
   if(argc > 1) {
     printf("openning command file %s\n", argv[1]);
     command_file = fopen(argv[1], "rb");
-    exit(1);
   } else {
     command_file = 0;
   }
