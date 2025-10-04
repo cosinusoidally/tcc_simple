@@ -1,4 +1,6 @@
 load_file ../m2min_v2/artifacts/catm /catm
 load_file ../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe /cjsawk_boot.exe
+load_file ../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe /m0.exe
+load_file ../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe /hex2.exe
 /catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c
 /cjsawk_boot.exe cjsawk_full.c cjsawk.M1

@@ -1,0 +1,25 @@
+rm -r artifacts/builds/hello
+
+set -xe
+
+BLD_DIR=artifacts/builds/hello
+SRC_DIR=artifacts/deps
+
+mkdir $BLD_DIR
+
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+function compile_self {
+  compile_native $BLD_DIR/../full_cc_x86_min/cjsawk.exe $BLD_DIR/../full_cc_x86_min/m0.exe $BLD_DIR/../full_cc_x86_min/hex2.exe $1 $2
+}
+
+compile_self hello.c $BLD_DIR/hello.exe
+
+echo "DONE hello"
