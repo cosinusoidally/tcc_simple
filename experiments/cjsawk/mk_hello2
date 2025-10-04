@@ -1,8 +1,8 @@
-rm -r artifacts/builds/hello
+rm -r artifacts/builds/hello2
 
 set -xe
 
-BLD_DIR=artifacts/builds/hello
+BLD_DIR=artifacts/builds/hello2
 SRC_DIR=artifacts/deps
 
 mkdir $BLD_DIR
@@ -20,6 +20,6 @@ function compile_self {
   compile_native $BLD_DIR/../full_cc_x86_min/cjsawk.exe $BLD_DIR/../full_cc_x86_min/m0.exe $BLD_DIR/../full_cc_x86_min/hex2.exe $1 $2
 }
 
-compile_self hello.c $BLD_DIR/hello.exe
+compile_self hello2.c $BLD_DIR/hello2.exe
 
-echo "DONE hello"
+echo "DONE hello2"
