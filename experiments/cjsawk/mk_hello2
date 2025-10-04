@@ -9,7 +9,8 @@ mkdir $BLD_DIR
 
 function compile_native {
   $1 $4 $5.M1
-  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+# add some NOPs before int so we can use the xp_linux tracer to patch the int
+  echo "DEFINE int 909090CD" | cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 - ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
   $2 $5-0.M1 $5.hex2
   cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
   $3 $5-0.hex2 $5
