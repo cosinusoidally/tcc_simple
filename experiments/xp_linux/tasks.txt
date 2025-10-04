@@ -18,7 +18,7 @@ At the moment I jump to a specific hardcoded offset. Should actually read the
 correct address from the header and then jump to that.
 
 ===============================================================================
-STATUS: TODO
+STATUS: WIP (mostly works, needs some refinement)
 Have the ability to run external scripts.
 
 At the moment I have all the commands in a "commands" array. Instead I should
