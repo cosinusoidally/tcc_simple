@@ -118,9 +118,20 @@ int trap_syscalls_off() {
 char command_buffer[1024];
 
 int next_command() {
+  int o = 0;
+  int c;
   if(command_file) {
     printf("command_file not yet supported\n");
-    exit(1);
+    while((c = fgetc(command_file)) != -1) {
+      if(c == '\n') {break;}
+//      fputc(c,stdout);
+      wi8(command_buffer+o, c);
+      o = o + 1;
+    }
+    wi8(command_buffer+o, 0);
+    printf("command_buffer %s\n", command_buffer);
+    if(o == 0) { return o;}
+    return command_buffer;
   } else {
     command_num = command_num + 1;
     return commands[command_num - 1];
