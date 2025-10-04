@@ -121,7 +121,6 @@ int next_command() {
   int o = 0;
   int c;
   if(command_file) {
-    printf("command_file not yet supported\n");
     while((c = fgetc(command_file)) != -1) {
       if(c == '\n') {break;}
 //      fputc(c,stdout);
