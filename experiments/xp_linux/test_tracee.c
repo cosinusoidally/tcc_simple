@@ -81,6 +81,8 @@ char *commands[] = {
   0,
 };
 
+int command_next;
+
 int wi8(int o,int v) {
         heap[o]=v;
         return 0;
@@ -111,6 +113,11 @@ int trap_syscalls_on() {
 
 int trap_syscalls_off() {
   syscall(65533);
+}
+
+int next_command() {
+  command_num = command_num + 1;
+  return commands[command_num - 1];
 }
 
 int brk_ptr=0;
@@ -244,6 +251,7 @@ int vm_lseek() {
 }
 
 int vm_exit() {
+  int t;
   int error_code = regs_data[1];
   trap_syscalls_off();
   if(error_code != 0) {
@@ -251,11 +259,10 @@ int vm_exit() {
 // swallow error for now
 //    exit(error_code);
   }
-  command_num = command_num + 1;
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
-  if(commands[command_num]) {
-    run_process(commands[command_num]);
+  if(t = next_command()) {
+    run_process(t);
     printf("shouldn't get here\n");
     exit(1);
   } else {
@@ -656,7 +663,7 @@ int main(int argc, int **argv){
     command_file = 0;
   }
 
-  run_process(commands[0]);
+  run_process(next_command());
 
   return 0;
 }
