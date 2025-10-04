@@ -453,6 +453,13 @@ load_file(realname, virtualname) {
   fclose(f);
 }
 
+exit_builtin() {
+    /* this is a hacky way of 'terminating' the built in command */
+    regs_data[1] = 0;
+    vm_exit();
+}
+
+
 hex_digit_to_int(c) {
   if((c>='0') && (c <= '9')) {
     c = c - '0';
@@ -580,6 +587,10 @@ run_process(cmdline_) {
   if(ri8(args[1]) == 'h') {
     /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary) */
     hex0_compile(args[2], args[3]);
+  } else if(ri8(args[1]) == 'l') {
+    /* load_file command */
+    load_file(args[2], args[3]);
+    exit_builtin();
   }
 
   o = elf_base;
