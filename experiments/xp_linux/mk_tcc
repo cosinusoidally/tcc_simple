@@ -6,7 +6,7 @@ tcc -c -g -O0 -m32 wrap_linux.c -o artifacts/test_tracee.o
 gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/test_tracee.o -o artifacts/test_tracee.exe -ldl
 
 
-./artifacts/test_tracer.exe ./artifacts/test_tracee.exe
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe $1
 
 sha1sum -c sum_hello
 
