@@ -578,8 +578,8 @@ run_process(cmdline_) {
   }
 
   /* dispatch built in commands */
-  /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary */
   if(ri8(args[1]) == 'h') {
+    /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary) */
     hex0_compile(args[2], args[3]);
   }
 
