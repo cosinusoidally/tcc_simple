@@ -2,6 +2,58 @@ This is essentially my issue tracker. I might put together something more formal
 but for now this will do.
 
 ===============================================================================
+STATUS: TODO
+build tcc-pnut under xp_linux.
+
+Should be easy enough, just need to get the command line right and make sure I
+use '-o' so pnut spit out a file rather than writing the executable to stdout.
+
+Example of how to call with the '-o' flag is in my live-bootstrap fork.
+
+===============================================================================
+STATUS: TODO
+Correctly handle the entrypoint from the elf header.
+
+At the moment I jump to a specific hardcoded offset. Should actually read the
+correct address from the header and then jump to that.
+
+===============================================================================
+STATUS: TODO
+Have the ability to run external scripts.
+
+At the moment I have all the commands in a "commands" array. Instead I should
+be able to give the script as a file eg:
+
+./test_tracer.exe ./test_tracee.exe commands.list
+
+This will also make adhoc testing easier.
+
+===============================================================================
+STATUS: TODO
+Improve performance.
+
+Syscall interception overhead is high on both Linux and win32. Probably the
+easiest way to fix this would be to replace the "int" interrupt instruction with
+"int" followed by a sequence of nops. That way when the tracer intercepts the
+instruction for the first time it would then have enough space to replace the
+"int" instruction with a call to the syscall wrapper function.
+
+Will likely also need to do this for hex2 and M0. Will need the M1 versions of
+those (which are in the stage0-posix-x86 repo).
+
+May be easiest to start with prebuilt cjsawk.exe and then test if its
+performance is significantly improved by patching int 0x80 to a direct call.
+
+pnut might be tricker to implement this, but I'll see.
+
+Maybe not peeking all the reigisters and poking them into regs_data would save
+some time on Linux at least. In theory I should only need to save eax via
+ptrace and then I could have a wrapper function (in the tracee) that extracts
+the other registers using asm and then writes them into regs_data. Probably
+not a major time saver on win32 though as all the register copying is done
+there inside the tracee (since there is no tracer process needed on win32).
+
+===============================================================================
 STATUS: DONE
 built in hex0 compiler. builder-hex0 has this. Commands of the form:
 
