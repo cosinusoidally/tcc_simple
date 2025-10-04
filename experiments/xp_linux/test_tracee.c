@@ -33,6 +33,8 @@ int args_base = 0x8047B80;
 
 int command_num = 0;
 
+int command_file;
+
 char *commands[] = {
 //  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
   "hex0 hex0_x86.hex0 /hex0",
@@ -240,8 +242,6 @@ int vm_lseek() {
   trap_syscalls_on();
   return offset;
 }
-
-int run_again = 1;
 
 int vm_exit() {
   int error_code = regs_data[1];
@@ -606,7 +606,7 @@ init_globals() {
   gfds = base_address+0x01000010;
 }
 
-main(){
+int main(int argc, int **argv){
 /* big mapping for our heap */
   int res = 0;
   init_globals();
@@ -647,6 +647,14 @@ main(){
 
 // to test out tcc-pnut
   load_file("../cjsawk/cjsawk.js", "foo.c");
+
+  if(argc > 1) {
+    printf("openning command file %s\n", argv[1]);
+    command_file = fopen(argv[1], "rb");
+    exit(1);
+  } else {
+    command_file = 0;
+  }
 
   run_process(commands[0]);
 
