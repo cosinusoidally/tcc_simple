@@ -13,9 +13,11 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
   esp = info->ContextRecord->Esp;
 
   int eip_wrap = eip - 10;
+  int patch_int = 0;
   if(ri32(eip_wrap) == 0x90909090 &&
      ri32(eip_wrap + 4) == 0x90909090 &&
      ri32(eip_wrap + 8) == 0x80CD9090) {
+    patch_int = 1;
     printf("installing wrapper stub 0x%x\n", eip_wrap);
     int syscall_wrap_alt_addr = &regs_data[8];
     printf("syscall_wrap_alt 0x%x\n", ri32(syscall_wrap_alt_addr));
@@ -25,8 +27,8 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
     }
     printf("\n");
     wi32(eip_wrap, 0x58505850);
-    wi32(eip_wrap + 4, 0x58505850);
-    wi32(eip_wrap + 8, 0x80CD5850);
+    wi32(eip_wrap + 8, 0x58505850);
+    wi32(eip_wrap + 4, 0x80CD5850);
 //    wi32(eip_wrap, 0x15FF6090);
 //    wi32(eip_wrap + 4, syscall_wrap_alt_addr);
 //    wi32(eip_wrap + 8, 0x9020C483);
@@ -39,7 +41,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
 
 //  printf("eip: 0x%x esp: 0x%x\n",eip, esp);
 //  printf("instruction: %x\n",ri8(eip));
-  if(ri8(eip)==0xCD) {
+  if((ri8(eip)==0xCD) || patch_int) {
     int int_num = ri8(eip+1);
 //    printf("in interrupt 0x%x\n", int_num);
     eip = eip + 2;
