@@ -1,8 +1,5 @@
 load_file alt_defs.M1 alt_defs.M1
 load_file ../m2min_v2/artifacts/catm /catm
-load_file ../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe /hex2-0
-load_file ../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe /M0
-load_file ../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe /cjsawk_boot.exe
 load_file ../cjsawk/artifacts/builds/hello2/hex2_alt.exe /hex2-0
 load_file ../cjsawk/artifacts/builds/hello2/m0_alt.exe /M0
 load_file ../cjsawk/artifacts/builds/hello2/cjsawk_alt.exe /cjsawk_boot.exe
