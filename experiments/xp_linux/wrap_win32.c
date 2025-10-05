@@ -50,7 +50,13 @@ int syscall(x) {
     // ignore
     return;
   } else if(x == 4) {
-      printf("sycall write missing impl %d\n", x);
+//      printf("sycall write missing impl %d\n", x);
+/* temp hacky code */
+    int fd = regs_data[1];
+    int buf = regs_data[2];
+    int count = regs_data[3];
+    write(fd, buf, count);
+    return 0;
   } else {
       printf("sycall function missing impl %d\n", x);
   }
