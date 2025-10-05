@@ -22,5 +22,8 @@ function compile_self {
 }
 
 compile_self hello2.c $BLD_DIR/hello2.exe
+compile_self $SRC_DIR/cjsawk_full.c $BLD_DIR/cjsawk_alt.exe
+compile_self $SRC_DIR/m0_full.c $BLD_DIR/m0_alt.exe
+compile_self $SRC_DIR/hex2_full.c $BLD_DIR/hex2_alt.exe
 
 echo "DONE hello2"
