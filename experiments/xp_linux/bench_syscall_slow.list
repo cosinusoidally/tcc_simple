@@ -1,0 +1,17 @@
+load_file alt_defs.M1 alt_defs.M1
+load_file ../m2min_v2/artifacts/catm /catm
+load_file ../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe /hex2-0
+load_file ../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe /M0
+load_file ../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe /cjsawk_boot.exe
+/catm pnut_js_m2.c pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js
+/catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c
+/cjsawk_boot.exe cjsawk_full.c cjsawk.M1
+/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1
+/M0 cjsawk-0.M1 cjsawk.hex2
+/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2
+/hex2-0 cjsawk-0.hex2 /cjsawk.exe
+/cjsawk_boot.exe pnut_js_m2.c pnut_js.exe.M1
+/catm pnut_js.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 pnut_js.exe.M1
+/M0 pnut_js.exe-0.M1 pnut_js.exe.hex2
+/catm pnut_js.exe-0.hex2 ELF-i386.hex2 pnut_js.exe.hex2
+/hex2-0 pnut_js.exe-0.hex2 /pnut_js.exe
