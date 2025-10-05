@@ -1,6 +1,6 @@
 int dbg = 0;
 
-int regs_data[8];
+int regs_data[9];
 
 int PROT_READ=1;
 int PROT_WRITE=2;
@@ -82,6 +82,8 @@ char *commands[] = {
 };
 
 int command_next;
+
+int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax);
 
 int wi8(int o,int v) {
         heap[o]=v;
@@ -299,6 +301,7 @@ int vm_exit() {
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     extract_file("foo.o", "artifacts/foo.o");
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
+    printf("wrap_syscall_alt address: 0x%x vs regs_data[8] %x0x\n", wrap_syscall_alt, regs_data[8]);
     exit(error_code);
   }
 }
@@ -340,6 +343,20 @@ extract_file(vfs_name, real_name) {
     fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
     fclose(ofile);
   }
+}
+
+int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
+  printf("in wrap_syscall_alt\n");
+  printf("eax\t\t0x%x\n", eax);
+  printf("ecx\t\t0x%x\n", ecx);
+  printf("edx\t\t0x%x\n", edx);
+  printf("ebx\t\t0x%x\n", ebx);
+  printf("esp\t\t0x%x\n", esp);
+  printf("ebp\t\t0x%x\n", ebp);
+  printf("esi\t\t0x%x\n", esi);
+  printf("edi\t\t0x%x\n", edi);
+
+  exit(1);
 }
 
 int wrap_syscall() {
@@ -639,6 +656,10 @@ init_globals() {
   filename_array = base_address+0x0200000;
   file_addr = 256*1024*1024;
   gfds = base_address+0x01000010;
+
+
+  /* hacky way of communicating wrap_syscall_alt address with tracer */
+  regs_data[8] = wrap_syscall_alt;
 }
 
 int main(int argc, int **argv){
