@@ -379,7 +379,10 @@ int main(int argc, char *argv[])
      printf("installing wrapper stub 0x%x\n", eip_wrap);
      int syscall_wrap_alt_addr = ptrace(PTRACE_PEEKDATA, pid,regs_data+32);
      printf("syscall_wrap_alt 0x%x\n", syscall_wrap_alt_addr);
-     exit(1);
+     ptrace(PTRACE_POKEDATA, pid, eip_wrap, 0x90909090);
+     ptrace(PTRACE_POKEDATA, pid, eip_wrap + 4, 0x80CD9090);
+     ptrace(PTRACE_POKEDATA, pid, eip_wrap + 8, 0x90909090);
+//     exit(1);
   }
 							if(dbg) {printf("blocked syscall %d\n", regs.orig_eax);}
 							ptrace(PTRACE_POKEDATA, pid, regs_data, regs.orig_eax);
