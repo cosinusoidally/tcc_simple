@@ -11,6 +11,22 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
 //  printf("Executed toplevelhandler, Exception: %X\n", info->ExceptionRecord->ExceptionCode); //print any other exceptions we encounter
   eip = info->ContextRecord->Eip;
   esp = info->ContextRecord->Esp;
+
+  int eip_wrap = eip - 10;
+  if(ri32(eip_wrap) == 0x90909090 &&
+     ri32(eip_wrap + 4) == 0x90909090 &&
+     ri32(eip_wrap + 8) == 0x80CD9090) {
+    printf("installing wrapper stub 0x%x\n", eip_wrap);
+    int syscall_wrap_alt_addr = regs_data[8];
+    printf("syscall_wrap_alt 0x%x\n", syscall_wrap_alt_addr);
+    wi32(eip_wrap, 0x90909090);
+    wi32(eip_wrap + 4, 0x90909090);
+    wi32(eip_wrap + 8, 0x80CD9090);
+//    wi32(eip_wrap, 0x15FF6090);
+//    wi32(eip_wrap + 4, syscall_wrap_alt_addr);
+//    wi32(eip_wrap + 8, 0x9020C483);
+  }
+
 //  printf("eip: 0x%x esp: 0x%x\n",eip, esp);
 //  printf("instruction: %x\n",ri8(eip));
   if(ri8(eip)==0xCD) {
