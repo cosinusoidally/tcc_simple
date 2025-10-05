@@ -345,6 +345,7 @@ extract_file(vfs_name, real_name) {
 }
 
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
+/*
   printf("in wrap_syscall_alt\n");
   printf("eax\t\t0x%x\n", eax);
   printf("ecx\t\t0x%x\n", ecx);
@@ -354,8 +355,15 @@ int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
   printf("ebp\t\t0x%x\n", ebp);
   printf("esi\t\t0x%x\n", esi);
   printf("edi\t\t0x%x\n", edi);
-
-  exit(1);
+*/
+  regs_data[0] = eax;
+  regs_data[1] = ebx;
+  regs_data[2] = ecx;
+  regs_data[3] = edx;
+  regs_data[4] = esi;
+  regs_data[5] = edi;
+  regs_data[6] = ebp;
+  return wrap_syscall();
 }
 
 int wrap_syscall() {

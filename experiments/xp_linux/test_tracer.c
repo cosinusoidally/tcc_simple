@@ -376,9 +376,9 @@ int main(int argc, char *argv[])
   if(ptrace(PTRACE_PEEKDATA, pid, eip_wrap) == 0x90909090 &&
      ptrace(PTRACE_PEEKDATA, pid, eip_wrap + 4) == 0x90909090 &&
      ptrace(PTRACE_PEEKDATA, pid, eip_wrap + 8) == 0x80CD9090) {
-     printf("installing wrapper stub 0x%x\n", eip_wrap);
+     if(dbg) {printf("installing wrapper stub 0x%x\n", eip_wrap);}
      int syscall_wrap_alt_addr = ptrace(PTRACE_PEEKDATA, pid,regs_data+32);
-     printf("syscall_wrap_alt 0x%x\n", syscall_wrap_alt_addr);
+     if(dbg) {printf("syscall_wrap_alt 0x%x\n", syscall_wrap_alt_addr);}
 /* dummy handler
      ptrace(PTRACE_POKEDATA, pid, eip_wrap, 0x90909090);
      ptrace(PTRACE_POKEDATA, pid, eip_wrap + 4, 0x80CD9090);
