@@ -301,7 +301,7 @@ int vm_exit() {
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     extract_file("foo.o", "artifacts/foo.o");
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
-    printf("wrap_syscall_alt address: 0x%x vs regs_data[8] %x0x\n", wrap_syscall_alt, regs_data[8]);
+    printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
     exit(error_code);
   }
 }
