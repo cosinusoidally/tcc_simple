@@ -301,7 +301,6 @@ int vm_exit() {
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     extract_file("foo.o", "artifacts/foo.o");
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
-    printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
     exit(error_code);
   }
 }
@@ -638,6 +637,10 @@ run_process(cmdline_) {
   brk_ptr = 4096+4096*(o/4096);
   printf("brk_ptr: %x\n", brk_ptr);
 
+  /* hacky way of communicating wrap_syscall_alt address with tracer */
+  regs_data[8] = wrap_syscall_alt;
+  printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
+
   trap_syscalls_on();
   asm("mov $0x8047B80,%esp");
   asm("mov $0x8048054,%eax");
@@ -658,8 +661,6 @@ init_globals() {
   gfds = base_address+0x01000010;
 
 
-  /* hacky way of communicating wrap_syscall_alt address with tracer */
-  regs_data[8] = wrap_syscall_alt;
 }
 
 int main(int argc, int **argv){
