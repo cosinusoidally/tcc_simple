@@ -17,14 +17,24 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
      ri32(eip_wrap + 4) == 0x90909090 &&
      ri32(eip_wrap + 8) == 0x80CD9090) {
     printf("installing wrapper stub 0x%x\n", eip_wrap);
-    int syscall_wrap_alt_addr = regs_data[8];
-    printf("syscall_wrap_alt 0x%x\n", syscall_wrap_alt_addr);
-    wi32(eip_wrap, 0x90909090);
+    int syscall_wrap_alt_addr = &regs_data[8];
+    printf("syscall_wrap_alt 0x%x\n", ri32(syscall_wrap_alt_addr));
+    printf("before: ");
+    for(int i = 0; i< 12;i++) {
+      printf("0x%x ",ri8(eip_wrap+i));
+    }
+    printf("\n");
+    wi32(eip_wrap, 0x90905850);
     wi32(eip_wrap + 4, 0x90909090);
     wi32(eip_wrap + 8, 0x80CD9090);
 //    wi32(eip_wrap, 0x15FF6090);
 //    wi32(eip_wrap + 4, syscall_wrap_alt_addr);
 //    wi32(eip_wrap + 8, 0x9020C483);
+    printf("after:  ");
+    for(int i = 0; i< 12;i++) {
+      printf("0x%x ",ri8(eip_wrap+i));
+    }
+    printf("\n");
   }
 
 //  printf("eip: 0x%x esp: 0x%x\n",eip, esp);
