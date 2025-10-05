@@ -24,9 +24,9 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
       printf("0x%x ",ri8(eip_wrap+i));
     }
     printf("\n");
-    wi32(eip_wrap, 0x90905850);
-    wi32(eip_wrap + 4, 0x90909090);
-    wi32(eip_wrap + 8, 0x80CD9090);
+    wi32(eip_wrap, 0x58505850);
+    wi32(eip_wrap + 4, 0x58505850);
+    wi32(eip_wrap + 8, 0x80CD5850);
 //    wi32(eip_wrap, 0x15FF6090);
 //    wi32(eip_wrap + 4, syscall_wrap_alt_addr);
 //    wi32(eip_wrap + 8, 0x9020C483);
