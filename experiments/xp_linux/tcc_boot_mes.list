@@ -2,3 +2,4 @@
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/crt1.o ../mes-0.27/lib/linux/x86-mes-gcc/crt1.c
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I 5459MES_DIR/include/linux/x86 -o ../artifacts/boot0-lib/crtn.o ../mes-0.27/lib/linux/x86-mes-gcc/crtn.c
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/crti.o ../mes-0.27/lib/linux/x86-mes-gcc/crti.c
+../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/unified-libc.o ../artifacts/boot0/unified-libc.c
