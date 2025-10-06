@@ -1,0 +1,4 @@
+./mk_tcc pnut.list
+set -xe
+cp artifacts/pnut_js.exe ../artifacts/pnut-exe
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe tcc_boot_mes.list
