@@ -29,7 +29,8 @@ int sizeof_file_descriptor = 8;
 char *heap = 0;
 
 int elf_base = 0x8048000;
-int args_base = 0x8047B80;
+/* elf_base - (8192 + 2048) 8192 bytes for command line and 2048 for argv */
+int args_base = 0x8045800;
 
 int command_num = 0;
 
@@ -117,7 +118,7 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
-char command_buffer[1024];
+char command_buffer[8192];
 
 int next_command() {
   int o = 0;
@@ -632,7 +633,7 @@ run_process(cmdline_) {
   int cmdline = cmdline_;
 
   o = 0;
-  args_offset = 128;
+  args_offset = 2048;
   int *args;
   args = args_base;
   last_offset = args_base+args_offset;
@@ -707,7 +708,7 @@ run_process(cmdline_) {
   printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
 
   trap_syscalls_on();
-  asm("mov $0x8047B80,%esp");
+  asm("mov $0x8045800,%esp");
   asm("mov $0x8048054,%eax");
 /* tcc 0.9.27 doesn't support this jmp to address in register */
 //  asm("jmp %eax");
