@@ -358,6 +358,7 @@ int vm_exit() {
     extract_file("/pnut_js.exe", "artifacts/pnut_js.exe");
     extract_file("foo.o", "artifacts/foo.o");
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
+    extract_file("/artifacts/tcc-pnut", "artifacts/tcc-pnut");
     exit(error_code);
   }
 }
