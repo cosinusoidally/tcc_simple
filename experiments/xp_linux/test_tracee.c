@@ -139,6 +139,61 @@ int next_command() {
   }
 }
 
+/* buffer for absolute filenames */
+char afb[1024];
+
+int absolute_path(filename) {
+  int i = 0;
+  int j = 0;
+  int t;
+  while(j<1024) {
+    wi8(afb+j,0);
+    j = j +1;
+  }
+  j = 0;
+  wi8(afb,'/');
+  j = j + 1;
+  if(ri8(filename) == '/') {
+    i = i + 1;
+  }
+  while((t=ri8(filename+i)) !=0) {
+    if(t == '.') {
+      i = i + 1;
+      t = ri8(filename+i);
+      if(t == '.') {
+        i = i + 1;
+        t = ri8(filename+i);
+        if(t == '/') {
+          i = i + 1;
+          t = ri8(filename+i);
+          while((ri8(afb+j) != '/')&& (j>=0)){
+            j = j - 1;
+          }
+          j = j - 1;
+          if(j < 0) { j = 0;}
+          while((ri8(afb+j) != '/')&& (j>=0)){
+            j = j - 1;
+          }
+          j = j + 1;
+        } else {
+          printf("absolute_path error\n");
+          exit(1);
+        }
+      } else if(t == '/') {
+        i = i + 1;
+      } else {
+        i = i - 1;
+        t = ri8(filename+i);
+      }
+    }
+    wi8(afb+j, t);
+    i = i + 1;
+    j = j + 1;
+  }
+  wi8(afb+j, 0);
+  return afb;
+}
+
 int brk_ptr=0;
 
 int vm_brk() {
@@ -401,6 +456,7 @@ int find_file(filename) {
   int t;
   int i = next_filenum - 1;
   if(dbg) {printf("find_file: %s\n", filename);}
+  filename = absolute_path(filename);
   while(i>3) {
     t = filename_array+(i*filename_size);
     if(dbg) {printf("looking at: %s\n", t);}
@@ -455,6 +511,7 @@ int gfd_get_file_length(filenum) {
 }
 
 int new_file(int filename) {
+  filename = absolute_path(filename);
   file_addr = file_addr + gfd_get_file_length(next_filenum - 1);
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
