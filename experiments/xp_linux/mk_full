@@ -18,3 +18,5 @@ popd
 cat tcc_boot_mes.list >> artifacts/full.list
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+echo "DONE full"
