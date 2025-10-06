@@ -323,7 +323,7 @@ int vm_lseek() {
     /* nothing needed */
   } else if(whence == 2){
     /* SEEK_END */
-    offset = offset + gfd_get_file_length(fd_get_filenum(fd));
+    offset = offset + gfd_get_file_length(fd_get_filenum(fd)) - 1;
   } else if(whence == 1){
     /* SEEK_CUR */
     offset = offset + fd_get_file_offset(fd);
