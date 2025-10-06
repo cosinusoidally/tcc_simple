@@ -274,7 +274,8 @@ int vm_open() {
   mode = mode & 0xFFFF;
   printf("open: %s %d %d\n", filename, flags, mode);
   /* fixme parse mode properly rather than special case all write modes */
-  if((flags==577) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438))) {
+  /* 578 might need special handing as I think it may be append */
+  if(((flags == 578) ||(flags==577)) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438))) {
     printf("open %s for write\n", filename);
     t = new_file(filename);
     r = new_fd(t);
@@ -320,6 +321,7 @@ int vm_lseek() {
   printf("vm_lseek: %d %d %d\n", fd, offset, whence);
   if(whence !=0) {
     printf("vm_lseek only whence = 0 supported\n");
+    exit(1);
   }
   fd_set_file_offset(fd, offset);
   trap_syscalls_on();

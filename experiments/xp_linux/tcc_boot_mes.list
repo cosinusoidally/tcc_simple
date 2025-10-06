@@ -3,3 +3,7 @@
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I 5459MES_DIR/include/linux/x86 -o ../artifacts/boot0-lib/crtn.o ../mes-0.27/lib/linux/x86-mes-gcc/crtn.c
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/crti.o ../mes-0.27/lib/linux/x86-mes-gcc/crti.c
 ../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/unified-libc.o ../artifacts/boot0/unified-libc.c
+../artifacts/tcc-pnut -ar cr ../artifacts/boot0-lib/libc.a ../artifacts/boot0-lib/unified-libc.o
+../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -D HAVE_LONG_LONG=1 -D HAVE_FLOAT=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 -o ../artifacts/boot0-lib/libtcc1.o ../mes-0.27/lib/libtcc1.c
+../artifacts/tcc-pnut -c -D HAVE_CONFIG_H=1 -I ../mes-0.27/include -I ../mes-0.27/include/linux/x86 ../mes-0.27/lib/posix/getopt.c -o ../artifacts/boot0-lib/getopt.o
+../artifacts/tcc-pnut -ar cr ../artifacts/boot0-lib/libgetopt.a ../artifacts/boot0-lib/getopt.o
