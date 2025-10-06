@@ -319,8 +319,16 @@ int vm_lseek() {
   int whence = regs_data[3];
   trap_syscalls_off();
   printf("vm_lseek: %d %d %d\n", fd, offset, whence);
-  if(whence !=0) {
-    printf("vm_lseek only whence = 0 supported\n");
+  if(whence == 0) {
+    /* nothing needed */
+  } else if(whence == 2){
+    /* SEEK_END */
+    offset = offset + gfd_get_file_length(fd_get_filenum(fd));
+  } else if(whence == 1){
+    /* SEEK_CUR */
+    offset = offset + fd_get_file_offset(fd);
+  } else {
+    printf("vm_lseek invalid whence\n");
     exit(1);
   }
   fd_set_file_offset(fd, offset);
