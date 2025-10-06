@@ -318,7 +318,6 @@ int vm_lseek() {
   int offset = regs_data[2];
   int whence = regs_data[3];
   trap_syscalls_off();
-  printf("vm_lseek: %d %d %d\n", fd, offset, whence);
   if(whence == 0) {
     /* nothing needed */
   } else if(whence == 2){
@@ -331,6 +330,7 @@ int vm_lseek() {
     printf("vm_lseek invalid whence\n");
     exit(1);
   }
+  printf("vm_lseek: %d %d %d\n", fd, offset, whence);
   fd_set_file_offset(fd, offset);
   trap_syscalls_on();
   return offset;
