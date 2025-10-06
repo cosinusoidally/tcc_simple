@@ -386,7 +386,6 @@ int vm_unlink() {
   int pathname = regs_data[1];
   trap_syscalls_off();
   printf("unlink %s\n", pathname);
-  exit(1);
   trap_syscalls_on();
   // dummy impl since opening a file for write always creates a new file
   return 0;
