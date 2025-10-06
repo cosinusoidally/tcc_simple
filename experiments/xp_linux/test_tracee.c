@@ -360,6 +360,7 @@ int vm_exit() {
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
     extract_file("/artifacts/tcc-pnut", "artifacts/tcc-pnut");
     extract_file("../artifacts/boot0-lib/crt1.o", "artifacts/crt1.o");
+    extract_file("../artifacts/boot0-lib/unified-libc.o", "artifacts/unified-libc.o");
     exit(error_code);
   }
 }
