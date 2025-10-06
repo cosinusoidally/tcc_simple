@@ -6,6 +6,15 @@ for i in $(find ../tcc-0.9.26-lb/ -type f); do
 echo load_file $i $i
 done > artifacts/full.list
 
+pushd .
+cd ../pnut_refactor/
+
+for i in $(find portable_libc -type f); do
+echo load_file ../pnut_refactor/$i $i
+done >> ../xp_linux/artifacts/full.list
+
+popd
+
 cat tcc_boot_mes.list >> artifacts/full.list
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
