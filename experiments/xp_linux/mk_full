@@ -19,4 +19,6 @@ cat tcc_boot_mes.list >> artifacts/full.list
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
 
+diff -u -s artifacts/tcc-pnut ../artifacts/tcc-pnut
+
 echo "DONE full"
