@@ -370,8 +370,13 @@ int vm_exit() {
     extract_file("/hex0-orig2", "artifacts/hex0-orig2");
     extract_file("/artifacts/tcc-pnut", "artifacts/tcc-pnut");
     extract_file("../artifacts/boot0-lib/crt1.o", "artifacts/crt1.o");
+    extract_file("../artifacts/boot0-lib/crti.o", "artifacts/crti.o");
+    extract_file("../artifacts/boot0-lib/crtn.o", "artifacts/crtn.o");
+    extract_file("../artifacts/boot0-lib/libtcc1.o", "artifacts/libtcc1.o");
     extract_file("../artifacts/boot0-lib/unified-libc.o", "artifacts/unified-libc.o");
+    extract_file("../artifacts/boot0-lib/getopt.o", "artifacts/getopt.o");
     extract_file("../artifacts/boot0-lib/libc.a", "artifacts/libc.a");
+    extract_file("../artifacts/boot0-lib/libgetopt.a", "artifacts/libgetopt.a");
     exit(error_code);
   }
 }
