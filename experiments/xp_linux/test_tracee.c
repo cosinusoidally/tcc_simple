@@ -531,8 +531,14 @@ int gfd_get_file_length(filenum) {
 }
 
 int new_file(int filename) {
+  int l_prev;
   filename = absolute_path(filename);
-  file_addr = file_addr + gfd_get_file_length(next_filenum - 1);
+  l_prev = gfd_get_file_length(next_filenum - 1);
+  if(l_prev == 0) {
+    printf("new_file: applying hacky work around to open multiple files for write\n");
+    file_addr = file_addr + (1024*1024);
+  }
+  file_addr = file_addr + l_prev;
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
   strcpy(gfn_get_filename(next_filenum), filename);
