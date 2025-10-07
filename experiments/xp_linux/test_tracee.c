@@ -275,7 +275,7 @@ int vm_open() {
   printf("open: %s %d %d\n", filename, flags, mode);
   /* fixme parse mode properly rather than special case all write modes */
   /* 578 might need special handing as I think it may be append */
-  if(((flags == 578) ||(flags==577)) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438))) {
+  if(((flags == 578) ||(flags==577)) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438) || (mode == 511))) {
     printf("open %s for write\n", filename);
     t = new_file(filename);
     r = new_fd(t);
@@ -377,6 +377,7 @@ int vm_exit() {
     extract_file("../artifacts/boot0-lib/getopt.o", "artifacts/getopt.o");
     extract_file("../artifacts/boot0-lib/libc.a", "artifacts/libc.a");
     extract_file("../artifacts/boot0-lib/libgetopt.a", "artifacts/libgetopt.a");
+    extract_file("../artifacts/tcc-boot0", "artifacts/tcc-boot0");
     exit(error_code);
   }
 }
