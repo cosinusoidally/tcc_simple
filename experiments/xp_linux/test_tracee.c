@@ -717,27 +717,16 @@ run_process(cmdline_) {
   p = gfd_get_file_addr(foo);
   l = gfd_get_file_length(foo);
 
-  while(t<l) {
-    wi8(o, ri8(p+t));
-    t = t + 1;
-    o = o + 1;
-  }
-
-  printf("o: %x\n", o);
-
-  brk_ptr = 4096+4096*(o/4096);
-  printf("brk_ptr: %x\n", brk_ptr);
-
   /* hacky way of communicating wrap_syscall_alt address with tracer */
   regs_data[8] = wrap_syscall_alt;
   printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
 
   printf("e_entry: 0x%x\n", ri32(elf_base + 0x18));
-  int e_phoff = ri32(elf_base + 0x1C);
+  int e_phoff = ri32(p + 0x1C);
   printf("e_phoff: 0x%x\n", e_phoff);
-  int e_phnum = ri32(elf_base + 0x2C) & 0xFF;
+  int e_phnum = ri32(p + 0x2C) & 0xFF;
   printf("e_phnum: 0x%x\n", e_phnum);
-  int e_phentsize = ri32(elf_base + 0x2A) & 0xFF;
+  int e_phentsize = ri32(p + 0x2A) & 0xFF;
   printf("e_phentsize: 0x%x\n", e_phentsize);
   if(e_phentsize != 0x20){
     printf("invalid e_phentsize\n");
@@ -751,23 +740,33 @@ run_process(cmdline_) {
   int p_filesz;
   int j;
   while(i < e_phnum) {
-    pheader = elf_base + e_phoff + (i * e_phentsize);
+    pheader = p + e_phoff + (i * e_phentsize);
     p_offset = ri32(pheader+0x4);
     p_vaddr = ri32(pheader+0x8);
     p_filesz = ri32(pheader+0x10);
     printf("pheader: %d p_offset: 0x%x p_vaddr: 0x%x p_filesz 0x%x\n", i, p_offset, p_vaddr, p_filesz);
     j = 0;
     while(j < p_filesz) {
-      wi8(p_vaddr+j, ri8(elf_base+p_offset+j));
+      wi8(p_vaddr+j, ri8(p+p_offset+j));
       j = j + 1;
     }
     i = i + 1;
     brk_ptr = 4096+4096*((p_vaddr+p_filesz)/4096);
   }
-  while(j < o) {
+
+
+  /* shouldn't happen but cc_x86_min.exe has an incorrect p_filesz which I
+     think will then cause garbage to be appended at the end of the in memory
+     image (which then causes cc_x86 to crash) */
+  j = l;
+  while(j < p_filesz) {
     wi8(p_vaddr+j, 0);
     j = j + 1;
   }
+
+  /* bodge to add more space after load */
+  brk_ptr = brk_ptr + 0x20000;
+
   printf("brk_ptr: 0x%x\n", brk_ptr);
 
   trap_syscalls_on();
