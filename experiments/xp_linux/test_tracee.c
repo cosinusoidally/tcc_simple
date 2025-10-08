@@ -734,6 +734,10 @@ run_process(cmdline_) {
   printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
 
   printf("e_entry: 0x%x\n", ri32(elf_base + 0x18));
+  int e_phoff = ri32(elf_base + 0x1C);
+  printf("e_phoff: 0x%x\n", e_phoff);
+  int e_phnum = ri32(elf_base + 0x2C);
+  printf("e_phnum: 0x%x\n", e_phnum);
 
   trap_syscalls_on();
   asm("mov $0x8045800,%esp");
