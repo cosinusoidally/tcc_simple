@@ -738,6 +738,12 @@ run_process(cmdline_) {
   printf("e_phoff: 0x%x\n", e_phoff);
   int e_phnum = ri32(elf_base + 0x2C) & 0xFF;
   printf("e_phnum: 0x%x\n", e_phnum);
+  int e_phentsize = ri32(elf_base + 0x2A) & 0xFF;
+  printf("e_phentsize: 0x%x\n", e_phentsize);
+  if(e_phentsize != 0x20){
+    printf("invalid e_phentsize\n");
+    exit(1);
+  }
 
   trap_syscalls_on();
   asm("mov $0x8045800,%esp");
