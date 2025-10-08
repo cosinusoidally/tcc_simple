@@ -135,6 +135,8 @@ int next_command() {
     if(o == 0) { return o;}
     return command_buffer;
   } else {
+    printf("error could not load command file\n");
+    exit(1);
     command_num = command_num + 1;
     return commands[command_num - 1];
   }
