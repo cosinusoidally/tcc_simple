@@ -838,7 +838,7 @@ int main(int argc, int **argv){
     printf("openning command file %s\n", argv[1]);
     command_file = fopen(argv[1], "rb");
   } else {
-    command_file = 0;
+    command_file = fopen("commands.list", "rb");
   }
 
   run_process(next_command());

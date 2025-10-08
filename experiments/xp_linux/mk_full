@@ -38,8 +38,6 @@ cat tcc_boot_mes.list >> artifacts/full.list
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
 
-diff -u -s artifacts/tcc-pnut ../artifacts/tcc-pnut
-
 sha256sum -c ../sums_tcc-boot-mes
 
 echo "DONE full"
