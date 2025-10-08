@@ -32,57 +32,7 @@ int elf_base = 0x8048000;
 /* elf_base - (8192 + 2048) 8192 bytes for command line and 2048 for argv */
 int args_base = 0x8045800;
 
-int command_num = 0;
-
 int command_file;
-
-char *commands[] = {
-//  "../artifacts/tcc-pnut -Dfunction=int -Dvar=int -c foo.c", 0,
-  "hex0 hex0_x86.hex0 /hex0",
-  "/hex0 hex1_x86.hex0 /hex1",
-  "/hex1 hex2_x86.hex1 /hex2-0",
-  "/hex2-0 catm_x86.hex2 /catm",
-  "/catm M0.hex2 ELF-i386.hex2 M0_x86.hex2",
-  "/hex2-0 M0.hex2 /M0",
-  "/M0 cc_x86_min.M1 cc_x86_min-0.hex2",
-  "/catm cc_x86_min-1.hex2 ELF-i386.hex2 cc_x86_min-0.hex2",
-  "/hex2-0 cc_x86_min-1.hex2 /cc_x86_min.exe",
-
-  "/catm js_to_c_simple_all.c js_to_c_m2_support.c js_to_c_simple.c",
-  "/catm pnut_js_m2.c pnut_refactor/simple_support_js_m2_prims.c pnut_refactor/support_common.c pnut_refactor/simple_support_js_m2.js pnut_refactor/pnut.js",
-
-  "/cc_x86_min.exe js_to_c_simple_all.c js_to_c.exe.M1",
-  "/catm js_to_c.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 js_to_c.exe.M1",
-  "/M0 js_to_c.exe-0.M1 js_to_c.exe.hex2",
-  "/catm js_to_c.exe-0.hex2 ELF-i386.hex2 js_to_c.exe.hex2",
-  "/hex2-0 js_to_c.exe-0.hex2 /js_to_c.exe",
-
-  "/catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c",
-  "/js_to_c.exe cjsawk_full.c cjsawk_full_js_to_c.c",
-
-  "/cc_x86_min.exe cjsawk_full_js_to_c.c cjsawk_boot.exe.M1",
-  "/catm cjsawk_boot.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk_boot.exe.M1",
-  "/M0 cjsawk_boot.exe-0.M1 cjsawk_boot.exe.hex2",
-  "/catm cjsawk_boot.exe-0.hex2 ELF-i386.hex2 cjsawk_boot.exe.hex2",
-  "/hex2-0 cjsawk_boot.exe-0.hex2 /cjsawk_boot.exe",
-
-  "/cjsawk_boot.exe hello.c out_dummy.M1",
-
-  "/cjsawk_boot.exe cjsawk_full.c cjsawk.M1",
-  "/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1",
-  "/M0 cjsawk-0.M1 cjsawk.hex2",
-  "/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2",
-  "/hex2-0 cjsawk-0.hex2 /cjsawk.exe",
-
-  "/cjsawk.exe pnut_js_m2.c pnut_js.exe.M1",
-  "/catm pnut_js.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 pnut_js.exe.M1",
-  "/M0 pnut_js.exe-0.M1 pnut_js.exe.hex2",
-  "/catm pnut_js.exe-0.hex2 ELF-i386.hex2 pnut_js.exe.hex2",
-  "/hex2-0 pnut_js.exe-0.hex2 /pnut_js.exe",
-  0,
-};
-
-int command_next;
 
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax);
 
@@ -137,8 +87,6 @@ int next_command() {
   } else {
     printf("error could not load command file\n");
     exit(1);
-    command_num = command_num + 1;
-    return commands[command_num - 1];
   }
 }
 
