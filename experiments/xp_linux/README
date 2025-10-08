@@ -6,7 +6,7 @@ operating systems (including under win32).
 
 Specifically I want to be able to run the initial stages of live-bootstrap all
 the way up to fiwix and to be able to emit a copy of the Tiny C compiler
-and the fiwix kernel/bootdisk. Note tcc will be emitted first, so in theory
+(and the fiwix kernel/bootdisk). Note tcc will be emitted first, so in theory
 could build fiwix outside after tcc has been built.
 
 The initial stages of live-bootstrap run under an operating system written in
@@ -16,15 +16,15 @@ to run under qemu, or on bare metal).
 
 https://github.com/ironmeld/builder-hex0/
 
-xp_linux is still very WIP. At the moment what it can do is:
+xp_linux is still WIP. At the moment what it can do is:
 
 intercept int 0x80 syscalls.
 load ../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe
 run cjsawk.exe and compile ../cjsawk/hello.c into artifacts/out.M1
 
-test_tracee.c is the prototype version of xp_linux. It loads cjsawk.exe, runs
-it and intercepts all syscalls. It uses its own "vm_ " version of each syscall
-to emulate linux syscalls.
+test_tracee.c is the prototype version of xp_linux. It loads linux binaries
+runs them and intercepts all syscalls. It uses its own "vm_ " version of each
+syscall to emulate linux syscalls.
 
 test_tracee.c is run by test_tracer.c with some ptrace syscall hooks in place.
 
@@ -62,16 +62,20 @@ to implement any required support functionality for the emulated syscalls.
 Currently the following syscalls are implemented:
 
 brk
-read (partial)
-write (partial)
-open (partial)
-close (partial)
+read
+write
+open
+close
+lseek (partial, probably slightly buggy)
+mmap (incomplete implemented in terms of brk, just enough to run pnut generated
+      executables)
 exit (complete, but also does some custom clean/extracts result files).
 
 As much as is practically possible the memory layout of xp_linux will match
-that of builder-hex0 (though this may have to be changed to support win32).
+that of builder-hex0 (this layout had to be changed to support win32).
 Data structures should also match when possible.
 
 Implementations of fork/exec will initially follow the builder-hex0
 implementation (ie by being single process and swapping out processes in memory
-to simulate context switches).
+to simulate context switches). For now fork/exec is not supported, but since we
+have a built in command interpreter this is not a major issue for now.
