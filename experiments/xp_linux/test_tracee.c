@@ -656,6 +656,7 @@ run_process(cmdline_) {
   int last_offset;
   int argc;
   int foo;
+  int i;
   int cmdline = cmdline_;
 
   o = 0;
@@ -685,7 +686,7 @@ run_process(cmdline_) {
     o = o + 1;
   }
   args[argc+1] = 0;
-  int i = 0;
+  i = 0;
   while(i < argc){
     printf("run_process arg[%d]: %s\n", i + 1, args[i+1]);
     i = i + 1;
@@ -743,6 +744,20 @@ run_process(cmdline_) {
   if(e_phentsize != 0x20){
     printf("invalid e_phentsize\n");
     exit(1);
+  }
+
+  i = 0;
+  int pheader;
+  int p_offset;
+  int p_vaddr;
+  int p_filesz;
+  while(i < e_phnum) {
+    pheader = elf_base + e_phoff + (i * e_phentsize);
+    p_offset = ri32(pheader+0x4);
+    p_vaddr = ri32(pheader+0x8);
+    p_filesz = ri32(pheader+0x10);
+    printf("pheader: %d p_offset: 0x%x p_vaddr: 0x%x p_filez 0x%x\n", i, p_offset, p_vaddr, p_filesz);
+    i = i + 1;
   }
 
   trap_syscalls_on();
