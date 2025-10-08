@@ -82,7 +82,6 @@ $TEMP_DIR/tcc-pnut -ar cr $TEMP_DIR/boot0-lib/libgetopt.a $TEMP_DIR/boot0-lib/ge
 
 # We can now compile tcc-boot0
 $TEMP_DIR/tcc-pnut \
-    -g \
     -v \
     -static \
     -o $TEMP_DIR/tcc-boot0 \
@@ -120,7 +119,6 @@ $TEMP_DIR/tcc-boot0 -c -D HAVE_CONFIG_H=1 -I $MES_DIR/include -I $MES_DIR/includ
 $TEMP_DIR/tcc-boot0 -ar cr $TEMP_DIR/boot0-lib/libc.a $TEMP_DIR/boot0-lib/unified-libc.o
 
 $TEMP_DIR/tcc-boot0 \
-    -g \
     -v \
     -static \
     -o $TEMP_DIR/tcc-boot1 \
@@ -158,7 +156,6 @@ $TEMP_DIR/tcc-boot1 -c -D HAVE_CONFIG_H=1 -I $MES_DIR/include -I $MES_DIR/includ
 $TEMP_DIR/tcc-boot1 -ar cr $TEMP_DIR/boot0-lib/libc.a $TEMP_DIR/boot0-lib/unified-libc.o
 
 $TEMP_DIR/tcc-boot1 \
-    -g \
     -v \
     -static \
     -o $TEMP_DIR/tcc-boot2 \
@@ -200,7 +197,6 @@ $TEMP_DIR/tcc-boot2 -c -D HAVE_CONFIG_H=1 -I $MES_DIR/include -I $MES_DIR/includ
 $TEMP_DIR/tcc-boot2 -ar cr $TEMP_DIR/boot0-lib/libc.a $TEMP_DIR/boot0-lib/unified-libc.o
 
 $TEMP_DIR/tcc-boot2 \
-    -g \
     -v \
     -static \
     -o $TEMP_DIR/tcc-boot3 \
