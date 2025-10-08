@@ -733,13 +733,12 @@ run_process(cmdline_) {
   regs_data[8] = wrap_syscall_alt;
   printf("wrap_syscall_alt address: 0x%x vs regs_data[8] 0x%x\n", wrap_syscall_alt, regs_data[8]);
 
+  printf("e_entry: 0x%x\n", ri32(elf_base + 0x18));
+
   trap_syscalls_on();
   asm("mov $0x8045800,%esp");
-  asm("mov $0x8048054,%eax");
-/* tcc 0.9.27 doesn't support this jmp to address in register */
-//  asm("jmp %eax");
-  asm(".byte 255");
-  asm(".byte 224");
+  /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
+  asm("jmp *0x8048018");
   trap_syscalls_off();
 
   return 0;
