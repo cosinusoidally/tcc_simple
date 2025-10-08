@@ -547,7 +547,7 @@ int new_file(int filename) {
   return next_filenum - 1;
 }
 
-load_file(realname, virtualname) {
+int load_file(realname, virtualname) {
   printf("load_file: %s virtualname: %s\n", realname, virtualname);
   int f = fopen(realname, "rb");
   int c;
@@ -559,6 +559,7 @@ load_file(realname, virtualname) {
   }
   printf("file_length: %d\n", gfd_get_file_length(t));
   fclose(f);
+  return t;
 }
 
 exit_builtin() {
@@ -704,25 +705,22 @@ run_process(cmdline_) {
 
   o = elf_base;
 
+  t = 0;
+  int p;
+  int l;
   if(foo = find_file(args[1])) {
     printf("run_process: found %s in vfs\n", args[1]);
-    t = 0;
-    int p;
-    int l;
-    p = gfd_get_file_addr(foo);
-    l = gfd_get_file_length(foo);
-    while(t<l) {
-      wi8(o, ri8(p+t));
-      t = t + 1;
-      o = o + 1;
-    }
   } else {
-    foo=fopen(args[1], "rb");
-    while((c=fgetc(foo))!=-1) {
-      wi8(o,c);
-      o = o + 1;
-    }
-    fclose(foo);
+    foo=load_file(args[1], args[1]);
+  }
+
+  p = gfd_get_file_addr(foo);
+  l = gfd_get_file_length(foo);
+
+  while(t<l) {
+    wi8(o, ri8(p+t));
+    t = t + 1;
+    o = o + 1;
   }
 
   printf("o: %x\n", o);
