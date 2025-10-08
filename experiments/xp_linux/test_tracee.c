@@ -751,14 +751,26 @@ run_process(cmdline_) {
   int p_offset;
   int p_vaddr;
   int p_filesz;
+  int j;
   while(i < e_phnum) {
     pheader = elf_base + e_phoff + (i * e_phentsize);
     p_offset = ri32(pheader+0x4);
     p_vaddr = ri32(pheader+0x8);
     p_filesz = ri32(pheader+0x10);
-    printf("pheader: %d p_offset: 0x%x p_vaddr: 0x%x p_filez 0x%x\n", i, p_offset, p_vaddr, p_filesz);
+    printf("pheader: %d p_offset: 0x%x p_vaddr: 0x%x p_filesz 0x%x\n", i, p_offset, p_vaddr, p_filesz);
+    j = 0;
+    while(j < p_filesz) {
+      wi8(p_vaddr+j, ri8(elf_base+p_offset+j));
+      j = j + 1;
+    }
     i = i + 1;
+    brk_ptr = 4096+4096*((p_vaddr+p_filesz)/4096);
   }
+  while(j < o) {
+    wi8(p_vaddr+j, 0);
+    j = j + 1;
+  }
+  printf("brk_ptr: 0x%x\n", brk_ptr);
 
   trap_syscalls_on();
   asm("mov $0x8045800,%esp");
