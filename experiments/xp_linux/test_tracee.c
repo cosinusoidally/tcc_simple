@@ -379,6 +379,9 @@ int vm_exit() {
     extract_file("../artifacts/boot0-lib/libgetopt.a", "artifacts/libgetopt.a");
     extract_file("../artifacts/tcc-boot0", "artifacts/tcc-boot0");
     extract_file("../artifacts/tcc-boot1", "artifacts/tcc-boot1");
+    extract_file("../artifacts/tcc-boot2", "artifacts/tcc-boot2");
+    extract_file("../artifacts/tcc-boot3", "artifacts/tcc-boot3");
+    extract_file("../artifacts/tcc-boot-mes", "artifacts/tcc-boot-mes");
     exit(error_code);
   }
 }
