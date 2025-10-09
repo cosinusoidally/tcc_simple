@@ -1,0 +1,33 @@
+set -xe
+
+./mk_tcc cjsawk.list
+
+cp artifacts/cjsawk.exe ../artifacts/cjsawk.exe
+cp artifacts/m0.exe ../artifacts/m0.exe
+cp artifacts/hex2.exe ../artifacts/hex2.exe
+cp artifacts/catm ../artifacts/catm
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe pnut_alt.list
+
+./mk_load_deps
+
+cp artifacts/pnut_js.exe ../artifacts/pnut-exe
+cp artifacts/catm ../artifacts/catm
+
+cat mes_libc.list >> artifacts/full.list
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+cp artifacts/unified-libc.c ../artifacts/unified-libc.c
+
+./mk_load_deps
+
+echo "load_file ../artifacts/unified-libc.c ../artifacts/boot0/unified-libc.c" >> artifacts/full.list
+
+cat tcc_boot_mes.list >> artifacts/full.list
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+sha256sum -c ../sums_tcc-boot-mes
+
+echo "DONE full"
