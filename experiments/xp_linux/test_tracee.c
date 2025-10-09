@@ -332,6 +332,7 @@ int vm_exit() {
     extract_file("../artifacts/tcc-boot2", "artifacts/tcc-boot2");
     extract_file("../artifacts/tcc-boot3", "artifacts/tcc-boot3");
     extract_file("../artifacts/tcc-boot-mes", "artifacts/tcc-boot-mes");
+    extract_file("../artifacts/boot0/unified-libc.c", "artifacts/unified-libc.c");
     exit(error_code);
   }
 }
