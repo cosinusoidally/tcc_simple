@@ -1,6 +1,6 @@
 set -xe
 
-for i in $(find ../tcc-0.9.26-lb/ -type f); do
+for i in $(find ../tcc-0.9.26-lb/ -type f | grep -v tests); do
 echo load_file $i $i
 done > artifacts/full.list
 
