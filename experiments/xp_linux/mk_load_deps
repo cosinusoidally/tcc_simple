@@ -28,6 +28,3 @@ echo load_file ../mes-0.27/include/$i ../artifacts/boot0/$i
 done >> ../../xp_linux/artifacts/full.list
 
 popd
-
-# hack as we don't yet have a catm that can handle a directory prefix
-echo "load_file ../artifacts/boot0/unified-libc.c ../artifacts/boot0/unified-libc.c" >> artifacts/full.list

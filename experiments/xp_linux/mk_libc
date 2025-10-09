@@ -1,0 +1,6 @@
+set -xe
+./mk_load_deps
+
+cat mes_libc.list >> artifacts/full.list
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list

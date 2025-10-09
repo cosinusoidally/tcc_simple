@@ -309,6 +309,7 @@ int vm_exit() {
     extract_file("/cjsawk_boot.exe", "artifacts/cjsawk_boot.exe");
     extract_file("/hex0", "artifacts/hex0");
     extract_file("/hex2-0", "artifacts/hex2-0");
+    extract_file("/catm", "artifacts/catm");
     extract_file("/M0", "artifacts/M0");
     extract_file("cc_x86_min-0.hex2", "artifacts/cc_x86_min-0.hex2");
     extract_file("cc_x86_min-1.hex2", "artifacts/cc_x86_min-1.hex2");
