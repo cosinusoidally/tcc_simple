@@ -38,3 +38,8 @@ hex0 hex0_x86.hex0 /hex0
 /M0 m0-0.M1 m0.hex2
 /catm m0-0.hex2 ELF-i386.hex2 m0.hex2
 /hex2-0 m0-0.hex2 /m0.exe
+/cjsawk.exe hex2_full.c hex2.M1
+/catm hex2-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 hex2.M1
+/m0.exe hex2-0.M1 hex2.hex2
+/catm hex2-0.hex2 ELF-i386.hex2 hex2.hex2
+/hex2-0 hex2-0.hex2 /hex2.exe
