@@ -287,6 +287,12 @@ int vm_lseek() {
 }
 
 int vm_exit() {
+  /* reset esp back to a known good value (since catm leaves esp in a bad
+     state */
+  asm("mov $0x8045700,%esp");
+  return vm_exit_();
+}
+int vm_exit_() {
   int t;
   int error_code = regs_data[1];
   trap_syscalls_off();
