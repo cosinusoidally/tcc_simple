@@ -1,21 +1,15 @@
 set -xe
 
-./mk_tcc pnut.list
+./mk_tcc dummy.list
 
 ./mk_load_deps
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe pnut.list
 
 cp artifacts/pnut_js.exe ../artifacts/pnut-exe
 cp artifacts/catm ../artifacts/catm
 
 cat mes_libc.list >> artifacts/full.list
-
-./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
-
-cp artifacts/unified-libc.c ../artifacts/unified-libc.c
-
-./mk_load_deps
-
-echo "load_file ../artifacts/unified-libc.c ../artifacts/boot0/unified-libc.c" >> artifacts/full.list
 
 cat tcc_boot_mes.list >> artifacts/full.list
 
