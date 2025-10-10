@@ -7259,7 +7259,15 @@ function int_i8(n) {
 
   // INT imm8 ;; Software interrupt with vector specified by immediate byte
   // See: https://web.archive.org/web/20240407051903/https://www.felixcloutier.com/x86/intn:into:int3:int1
-
+/* xp_linux performance hack, xp_linux will detect 10 nops in a row and
+   then replace the int 0x80 instruction with a call to the syscall wrapper.
+   Not yet enabled by default as it will change the file hash of pnut-exe */
+/*
+  emit_i32_le(0x90909090);
+  emit_i32_le(0x90909090);
+  emit_i8(0x90);
+  emit_i8(0x90);
+*/
   emit_2_i8(0xCD, n);
 }
 
