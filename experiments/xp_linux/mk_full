@@ -4,13 +4,8 @@ set -xe
 
 ./mk_load_deps
 
-./artifacts/test_tracer.exe ./artifacts/test_tracee.exe pnut.list
-
-cp artifacts/pnut_js.exe ../artifacts/pnut-exe
-cp artifacts/catm ../artifacts/catm
-
+cat pnut.list >> artifacts/full.list
 cat mes_libc.list >> artifacts/full.list
-
 cat tcc_boot_mes.list >> artifacts/full.list
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
