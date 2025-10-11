@@ -75,7 +75,7 @@
 ; Our main function
 
 #:_start
-	BB 00000000                 ; LOADI32_EBX %0              ; Get current pointer
+	31DB                        ; XOR_EBX_EBX                 ; Get current pointer
 	E8 %x                       ; CALL32 %malloc              ; Get current HEAP
 	89C3                        ; COPY_EAX_to_EBX             ; Using current
 	89C5                        ; COPY_EAX_to_EBP             ; Setup MALLOC
@@ -107,7 +107,7 @@
 	E8 %I                       ; CALL32 %ClearScratch        ; Zero scratch
 	B8 FFFFFFFF                 ; LOADI32_EAX %-1             ; Our flag for byte processing
 	A3 6A850408                 ; STORE32_Absolute32_eax &Flag ; Set
-	B8 00000000                 ; LOADI32_EAX %0              ; temp storage for the sum
+	31C0                        ; XOR_EAX_EAX                 ; temp storage for the sum
 	A3 66850408                 ; STORE32_Absolute32_eax &High ; Set
 	BF 00800408                 ; LOADI32_EDI %0x8048000      ; Our starting IP
 	BE 00000000                 ; LOADI32_ESI %0              ; HEAD = NULL
@@ -124,7 +124,7 @@
 
 	B8 FFFFFFFF                 ; LOADI32_EAX %-1             ; Our flag for byte processing
 	A3 6A850408                 ; STORE32_Absolute32_eax &Flag ; Set
-	B8 00000000                 ; LOADI32_EAX %0              ; temp storage for the sum
+	31C0                        ; XOR_EAX_EAX                 ; temp storage for the sum
 	A3 66850408                 ; STORE32_Absolute32_eax &High ; Set
 	BF 00800408                 ; LOADI32_EDI %0x8048000      ; Our starting IP
 	E8 %l                       ; CALL32 %Second_pass         ; Process it
@@ -327,7 +327,7 @@
 	; process first byte of pair
 	C1E0 04                     ; SHLI8_EAX !4
 	A3 66850408                 ; STORE32_Absolute32_eax &High
-	B8 00000000                 ; LOADI32_EAX %0
+	31C0                        ; XOR_EAX_EAX
 	A3 6A850408                 ; STORE32_Absolute32_eax &Flag
 	E9 %l                       ; JMP32 %Second_pass
 
@@ -526,7 +526,7 @@
 	53                          ; PUSH_EBX                    ; And overwrites
 	51                          ; PUSH_ECX                    ; While we work
 	BB 7A850408                 ; LOADI32_EBX &table          ; Where our table is
-	B8 00000000                 ; LOADI32_EAX %0              ; Using null
+	31C0                        ; XOR_EAX_EAX                 ; Using null
 
 :J #:ClearScratch_loop
 	8B0B                        ; LOAD32_ECX_from_EBX         ; Get current value
