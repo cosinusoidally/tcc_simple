@@ -405,7 +405,7 @@
 	8B1D 6E850408               ; LOAD32_Absolute32_ebx &Input ; Where are we reading from
 	B8 03000000                 ; LOADI32_EAX %3              ; the syscall number for read
 	BA 01000000                 ; LOADI32_EDX %1              ; set the size of chars we want
-	CD80                        ; INT_80                      ; call the Kernel
+	90909090909090909090CD80    ; INT_80 (xp_linux nop prefix) ; call the Kernel
 	85C0                        ; TEST                        ; check what we got
 	58                          ; POP_EAX                     ; Get either char or EOF
 	0F84 %z                     ; JE32 %Read_byte_1           ; Got EOF call it done
@@ -431,7 +431,7 @@
 	8B1D 72850408               ; LOAD32_Absolute32_ebx &Output ; Write to target file
 	B8 04000000                 ; LOADI32_EAX %4              ; the syscall number for write
 	;; EDX contains the number of bytes to write
-	CD80                        ; INT_80                      ; call the Kernel
+	90909090909090909090CD80    ; INT_80 (xp_linux nop prefix) ; call the Kernel
 	58                          ; POP_EAX                     ; Restore stack
 	5B                          ; POP_EBX                     ; Restore EBX
 	59                          ; POP_ECX                     ; Restore ECX
@@ -610,7 +610,8 @@
 	B8 01000000                 ; LOADI32_EAX %1              ; put the exit syscall number in eax
 	CD80                        ; INT_80                      ; Call it a good day
 
-
+;; padding (since xp_linux refactor saved an extra 4 bytes)
+	00000000
 #:High (0x8048566)
 	00000000                    ; NULL
 #:Flag (0x804856A)
