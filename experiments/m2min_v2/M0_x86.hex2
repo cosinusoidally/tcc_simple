@@ -146,7 +146,7 @@
 	8B1D &Input                 ; LOAD32_Absolute32_ebx &Input ; Where are we reading from
 	B8 03000000                 ; LOADI32_EAX %3              ; the syscall number for read
 	BA 01000000                 ; LOADI32_EDX %1              ; set the size of chars we want
-	CD80                        ; INT_80                      ; call the Kernel
+	90909090909090909090CD80    ; INT_80 (xp_linux nop prefix) ; call the Kernel
 	58                          ; POP_EAX                     ; Get either char or EOF
 	5B                          ; POP_EBX                     ; Restore EBX
 	59                          ; POP_ECX                     ; Restore ECX
@@ -165,7 +165,7 @@
 	89FB                        ; COPY_EDI_to_EBX             ; Using the current pointer
 	01C3                        ; ADD_EAX_to_EBX              ; Request the number of desired bytes
 	B8 2D000000                 ; LOADI32_EAX %45             ; the Syscall # for SYS_BRK
-	CD80                        ; INT_80                      ; call the Kernel
+	90909090909090909090CD80    ; INT_80 (xp_linux nop prefix) ; call the Kernel
 	89F8                        ; COPY_EDI_to_EAX             ; Return pointer
 	89DF                        ; COPY_EBX_to_EDI             ; Update pointer
 
@@ -860,7 +860,7 @@
 	8B1D &Output                ; LOAD32_Absolute32_ebx &Output ; Write to target file
 	B8 04000000                 ; LOADI32_EAX %4              ; the syscall number for write
 	BA 01000000                 ; LOADI32_EDX %1              ; set the size of chars we want
-	CD80                        ; INT_80                      ; call the Kernel
+	90909090909090909090CD80    ; INT_80 (xp_linux nop prefix) ; call the Kernel
 	58                          ; POP_EAX                     ; Restore stack
 	5B                          ; POP_EBX                     ; Restore EBX
 	59                          ; POP_ECX                     ; Restore ECX
