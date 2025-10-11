@@ -7,7 +7,7 @@ int trap_ready = 0;
 
 LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
 {
-  int eip, esp;
+  int eip, esp, i;
 //  printf("Executed toplevelhandler, Exception: %X\n", info->ExceptionRecord->ExceptionCode); //print any other exceptions we encounter
   eip = info->ContextRecord->Eip;
   esp = info->ContextRecord->Esp;
@@ -25,7 +25,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
       int syscall_wrap_alt_addr = &regs_data[8];
       printf("syscall_wrap_alt 0x%x\n", ri32(syscall_wrap_alt_addr));
       printf("before: ");
-      for(int i = 0; i< 12;i++) {
+      for(i = 0; i< 12;i++) {
         printf("0x%x ",ri8(eip_wrap+i));
       }
       printf("\n");
@@ -36,7 +36,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
       wi32(eip_wrap + 4, syscall_wrap_alt_addr);
       wi32(eip_wrap + 8, 0x9020C483);
       printf("after:  ");
-      for(int i = 0; i< 12;i++) {
+      for(i = 0; i< 12;i++) {
         printf("0x%x ",ri8(eip_wrap+i));
       }
       printf("\n");
