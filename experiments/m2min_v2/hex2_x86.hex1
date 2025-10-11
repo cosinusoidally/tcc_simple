@@ -85,7 +85,7 @@
 	58                          ; POP_EAX                     ; Get the number of arguments
 	5B                          ; POP_EBX                     ; Get the program name
 	5B                          ; POP_EBX                     ; Get the actual input name
-	B9 00000000                 ; LOADI32_ECX %0              ; prepare read_only
+	31C9                        ; XOR_ECX_ECX                 ; prepare read_only
 	BA 00000000                 ; LOADI32_EDX %0              ; Really sure
 	B8 05000000                 ; LOADI32_EAX %5              ; the syscall number for open()
 	CD80                        ; INT_80                      ; Now open that damn file
@@ -115,7 +115,7 @@
 
 	; rewind input file
 	8B1D 6E850408               ; LOAD32_Absolute32_ebx &Input ; Using our input file
-	B9 00000000                 ; LOADI32_ECX %0              ; Offset Zero
+	31C9                        ; XOR_ECX_ECX                 ; Offset Zero
 	BA 00000000                 ; LOADI32_EDX %0              ; Whence Zero
 	B8 13000000                 ; LOADI32_EAX %19             ; lseek
 	56                          ; PUSH_ESI                    ; Protect HEAD
@@ -465,7 +465,7 @@
 	E9 %B                       ; JMP32 %consume_token        ; loop until done
 
 :C #:consume_token_done
-	B9 00000000                 ; LOADI32_ECX %0              ; Pad with nulls
+	31C9                        ; XOR_ECX_ECX                 ; Pad with nulls
 	890B                        ; STORE32_ECX_into_Address_EBX
 	83C3 04                     ; ADDI8_EBX !4
 	C3                          ; RET
