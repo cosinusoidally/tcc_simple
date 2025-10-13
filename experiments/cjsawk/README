@@ -4,6 +4,10 @@ live web version:
 
 https://cosinusoidally.github.io/tcc_simple/experiments/cjsawk/
 
+Youtube talk:
+
+https://www.youtube.com/watch?v=GvIdgExPF7M
+
 Note the web version only compiles as far as assembly language. The native
 bootstrap scripts build down to executables.
 
