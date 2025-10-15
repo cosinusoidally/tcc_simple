@@ -2,6 +2,49 @@ This is essentially my issue tracker. I might put together something more formal
 but for now this will do.
 
 ===============================================================================
+STATUS: TODO
+Fix the RT_HEAP_SIZE in pnut.js since after I lowered it I have accidentally
+broke the ability for pnut to rebuil itself (which becomes apparent when I
+tried to run mk_pnut_cc_x86_min from tcc_bootstrap_alt. Doesn't break all paths
+(which is why I didn't notice). Right size is somewhere between 20 and 30 MB.
+
+===============================================================================
+STATUS: TODO
+NetBSD port.
+
+This is just to verify that I can make the usermode emulation work correctly on
+a BSD system. I will not be using the built in Linux emulation (as I want to
+make sure I can do this entirely via ptrace in usermode). I picked NetBSD as it
+is easy to build from Linux, and I am interested in using it for other projects
+so this should be a good first project to get myself familar with it. I'll
+likely try FreeBSD after.
+
+===============================================================================
+STATUS: TODO
+fork/exec/waitpid.
+
+This will allow me to run multiple processes. This will be needed to allow me
+to run stage0-posix (or anything else that needs a command interpreter).
+
+Implementation will be similar to builder-hex0 which does not use the MMU and
+only supports cooperative multitasking (and a bunch of other restrictions). It
+emulated fork by simply copying the process memory into a temporary location.
+When the fork/execed process is done then the previously saved process memory is
+restored from the temp location, and execution is resumed in the previous parent
+process.
+
+===============================================================================
+STATUS: WIP (mostly works, needs some refinement)
+Have the ability to run external scripts.
+
+At the moment I have all the commands in a "commands" array. Instead I should
+be able to give the script as a file eg:
+
+./test_tracer.exe ./test_tracee.exe commands.list
+
+This will also make adhoc testing easier.
+
+===============================================================================
 STATUS: DONE
 build tcc-pnut under xp_linux.
 
@@ -16,17 +59,6 @@ Correctly handle the entrypoint from the elf header.
 
 At the moment I jump to a specific hardcoded offset. Should actually read the
 correct address from the header and then jump to that.
-
-===============================================================================
-STATUS: WIP (mostly works, needs some refinement)
-Have the ability to run external scripts.
-
-At the moment I have all the commands in a "commands" array. Instead I should
-be able to give the script as a file eg:
-
-./test_tracer.exe ./test_tracee.exe commands.list
-
-This will also make adhoc testing easier.
 
 ===============================================================================
 STATUS: DONE
@@ -84,31 +116,6 @@ scratch.
 
 There is some win32 library function you can call to trap int 0x80. In theory
 I'll just need to use that.
-
-===============================================================================
-STATUS: TODO
-NetBSD port.
-
-This is just to verify that I can make the usermode emulation work correctly on
-a BSD system. I will not be using the built in Linux emulation (as I want to
-make sure I can do this entirely via ptrace in usermode). I picked NetBSD as it
-is easy to build from Linux, and I am interested in using it for other projects
-so this should be a good first project to get myself familar with it. I'll
-likely try FreeBSD after.
-
-===============================================================================
-STATUS: TODO
-fork/exec/waitpid.
-
-This will allow me to run multiple processes. This will be needed to allow me
-to run stage0-posix (or anything else that needs a command interpreter).
-
-Implementation will be similar to builder-hex0 which does not use the MMU and
-only supports cooperative multitasking (and a bunch of other restrictions). It
-emulated fork by simply copying the process memory into a temporary location.
-When the fork/execed process is done then the previously saved process memory is
-restored from the temp location, and execution is resumed in the previous parent
-process.
 
 ===============================================================================
 STATUS: DONE
