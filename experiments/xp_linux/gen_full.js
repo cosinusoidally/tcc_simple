@@ -70,7 +70,9 @@ function print_file(x) {
   if(t[t.length-1] === "") {
     t.pop();
   }
-  console.log(t.join("\n"));
+  t = t.join("\n");
+  console.log(t);
+  return t;
 }
 
 gen_load_list(tcc_list);
