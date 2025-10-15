@@ -86,4 +86,4 @@ var out = [
   print_file("tcc_boot_mes.list")
 ].join("\n") +"\n";
 
-fs.writeFileSync("artifacts/full2.list", out);
+fs.writeFileSync("artifacts/full.list", out);
