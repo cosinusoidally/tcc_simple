@@ -4,6 +4,7 @@ function find_files(x, prefix) {
   var t= fs.readdirSync(x);
   var n;
   var s;
+  var st;
   var out = [];
   var tout;
   if(prefix === undefined) {
@@ -11,14 +12,17 @@ function find_files(x, prefix) {
   }
   for(var i = 0 ; i < t.length ; i++){
     n = t[i];
-    s = fs.statSync(x+"/"+n).isDirectory();
+    st = fs.lstatSync(x+"/"+n);
+    s = st.isDirectory();
     if(s) {
       tout = find_files(x+"/"+n, x+"/"+n+"/");
       for(var j = 0; j< tout.length; j++) {
         out.push(tout[j]);
       } 
     } else {
-      out.push(prefix+t[i]);
+      if(!st.isSymbolicLink()) {
+        out.push(prefix+t[i]);
+      }
     }
   }
   return out;
