@@ -58,3 +58,14 @@ gen_load_list(tcc_list);
 gen_load_list(mes_list);
 gen_load_list_remap(portable_libc_list, "../pnut_refactor/", "");
 gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0");
+
+function print_file(x) {
+  var t;
+  t = fs.readFileSync(x,"utf8").split("\n");
+  if(t[t.length-1] === "") {
+    t.pop();
+  }
+  console.log(t.join("\n"));
+}
+
+// print_file("cjsawk.list");
