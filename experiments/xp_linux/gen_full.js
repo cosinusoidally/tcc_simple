@@ -35,16 +35,26 @@ function print_list(x) {
 }
 
 function gen_load_list(x) {
+  var o = [];
+  var t;
   for(var i = 0;i< x.length;i++) {
-    console.log("load_file "+x[i]+" "+x[i]);
+    t = "load_file "+x[i]+" "+x[i];
+    console.log(t);
+    o.push(t);
   }
+  return o.join("\n");
 }
 
 function gen_load_list_remap(x, s1, s2) {
+  var o = [];
+  var t;
   for(var i = 0;i< x.length;i++) {
 //    console.log("load_file "+x[i]+" "+x[i]);
-    console.log("load_file "+x[i]+" " +s2+x[i].slice(s1.length));
+    t = "load_file "+x[i]+" " +s2+x[i].slice(s1.length);
+    console.log(t);
+    o.push(t);
   }
+  return o.join("\n");
 }
 
 tcc_list = find_files("../tcc-0.9.26-lb");
