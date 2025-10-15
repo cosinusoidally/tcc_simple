@@ -4,7 +4,7 @@ but for now this will do.
 ===============================================================================
 STATUS: TODO
 Fix the RT_HEAP_SIZE in pnut.js since after I lowered it I have accidentally
-broke the ability for pnut to rebuil itself (which becomes apparent when I
+broke the ability for pnut to rebuild itself (which becomes apparent when I
 tried to run mk_pnut_cc_x86_min from tcc_bootstrap_alt. Doesn't break all paths
 (which is why I didn't notice). Right size is somewhere between 20 and 30 MB.
 
