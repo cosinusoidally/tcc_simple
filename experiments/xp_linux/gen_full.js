@@ -31,7 +31,13 @@ function print_list(x) {
 }
 
 tcc_list = find_files("../tcc-0.9.26-lb");
+mes_list = find_files("../mes-0.27");
+portable_libc_list = find_files("../pnut_refactor/portable_libc");
+extra_list = find_files("../mes-0.27/include/mes");
 
 tcc_list = tcc_list.filter(function(x) {if(x.match("tests")==null) {return true;}});
 
 print_list(tcc_list);
+print_list(mes_list);
+print_list(portable_libc_list);
+print_list(extra_list);
