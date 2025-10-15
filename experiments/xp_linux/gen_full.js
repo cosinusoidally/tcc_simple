@@ -64,11 +64,6 @@ extra_list = find_files("../mes-0.27/include/mes");
 
 tcc_list = tcc_list.filter(function(x) {if(x.match("tests")==null) {return true;}});
 
-gen_load_list(tcc_list);
-gen_load_list(mes_list);
-gen_load_list_remap(portable_libc_list, "../pnut_refactor/", "");
-gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0");
-
 function print_file(x) {
   var t;
   t = fs.readFileSync(x,"utf8").split("\n");
@@ -77,6 +72,11 @@ function print_file(x) {
   }
   console.log(t.join("\n"));
 }
+
+gen_load_list(tcc_list);
+gen_load_list(mes_list);
+gen_load_list_remap(portable_libc_list, "../pnut_refactor/", "");
+gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0");
 
 print_file("cjsawk.list");
 print_file("pnut.list");
