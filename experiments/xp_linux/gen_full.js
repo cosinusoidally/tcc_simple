@@ -34,6 +34,19 @@ function print_list(x) {
   }
 }
 
+function gen_load_list(x) {
+  for(var i = 0;i< x.length;i++) {
+    console.log("load_file "+x[i]+" "+x[i]);
+  }
+}
+
+function gen_load_list_remap(x, s1, s2) {
+  for(var i = 0;i< x.length;i++) {
+//    console.log("load_file "+x[i]+" "+x[i]);
+    console.log("load_file "+x[i]+" " +s2+x[i].slice(s1.length));
+  }
+}
+
 tcc_list = find_files("../tcc-0.9.26-lb");
 mes_list = find_files("../mes-0.27");
 portable_libc_list = find_files("../pnut_refactor/portable_libc");
@@ -41,7 +54,7 @@ extra_list = find_files("../mes-0.27/include/mes");
 
 tcc_list = tcc_list.filter(function(x) {if(x.match("tests")==null) {return true;}});
 
-print_list(tcc_list);
-print_list(mes_list);
-print_list(portable_libc_list);
-print_list(extra_list);
+gen_load_list(tcc_list);
+gen_load_list(mes_list);
+gen_load_list_remap(portable_libc_list, "../pnut_refactor/", "");
+gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0");
