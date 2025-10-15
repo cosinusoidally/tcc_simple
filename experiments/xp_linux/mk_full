@@ -4,6 +4,7 @@ set -xe
 
 ./mk_load_deps
 
+cat cjsawk.list >> artifacts/full.list
 cat pnut.list >> artifacts/full.list
 cat mes_libc.list >> artifacts/full.list
 cat tcc_boot_mes.list >> artifacts/full.list
