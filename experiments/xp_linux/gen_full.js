@@ -39,7 +39,6 @@ function gen_load_list(x) {
   var t;
   for(var i = 0;i< x.length;i++) {
     t = "load_file "+x[i]+" "+x[i];
-    console.log(t);
     o.push(t);
   }
   return o.join("\n");
@@ -49,9 +48,7 @@ function gen_load_list_remap(x, s1, s2) {
   var o = [];
   var t;
   for(var i = 0;i< x.length;i++) {
-//    console.log("load_file "+x[i]+" "+x[i]);
     t = "load_file "+x[i]+" " +s2+x[i].slice(s1.length);
-    console.log(t);
     o.push(t);
   }
   return o.join("\n");
@@ -71,7 +68,6 @@ function print_file(x) {
     t.pop();
   }
   t = t.join("\n");
-  console.log(t);
   return t;
 }
 
