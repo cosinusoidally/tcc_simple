@@ -68,4 +68,7 @@ function print_file(x) {
   console.log(t.join("\n"));
 }
 
-// print_file("cjsawk.list");
+print_file("cjsawk.list");
+print_file("pnut.list");
+print_file("mes_libc.list");
+print_file("tcc_boot_mes.list");

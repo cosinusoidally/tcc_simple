@@ -4,11 +4,6 @@ set -xe
 
 nodejs gen_full.js > artifacts/full.list
 
-cat cjsawk.list >> artifacts/full.list
-cat pnut.list >> artifacts/full.list
-cat mes_libc.list >> artifacts/full.list
-cat tcc_boot_mes.list >> artifacts/full.list
-
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
 
 sha256sum -c ../sums_tcc-boot-mes
