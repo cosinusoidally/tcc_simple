@@ -2,7 +2,7 @@ This is essentially my issue tracker. I might put together something more formal
 but for now this will do.
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 build tcc-pnut under xp_linux.
 
 Should be easy enough, just need to get the command line right and make sure I
@@ -11,7 +11,7 @@ use '-o' so pnut spit out a file rather than writing the executable to stdout.
 Example of how to call with the '-o' flag is in my live-bootstrap fork.
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 Correctly handle the entrypoint from the elf header.
 
 At the moment I jump to a specific hardcoded offset. Should actually read the
@@ -29,7 +29,7 @@ be able to give the script as a file eg:
 This will also make adhoc testing easier.
 
 ===============================================================================
-STATUS: TODO
+STATUS: DONE
 Improve performance.
 
 Syscall interception overhead is high on both Linux and win32. Probably the
