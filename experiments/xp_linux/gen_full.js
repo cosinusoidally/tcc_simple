@@ -75,12 +75,15 @@ function print_file(x) {
   return t;
 }
 
-gen_load_list(tcc_list);
-gen_load_list(mes_list);
-gen_load_list_remap(portable_libc_list, "../pnut_refactor/", "");
-gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0");
+var out = [
+  gen_load_list(tcc_list),
+  gen_load_list(mes_list),
+  gen_load_list_remap(portable_libc_list, "../pnut_refactor/", ""),
+  gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0"),
+  print_file("cjsawk.list"),
+  print_file("pnut.list"),
+  print_file("mes_libc.list"),
+  print_file("tcc_boot_mes.list")
+].join("\n") +"\n";
 
-print_file("cjsawk.list");
-print_file("pnut.list");
-print_file("mes_libc.list");
-print_file("tcc_boot_mes.list");
+fs.writeFileSync("artifacts/full2.list", out);
