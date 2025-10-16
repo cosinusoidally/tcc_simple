@@ -6,4 +6,6 @@ nodejs gen_alt.js
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
 
+sha1sum artifacts/*26*o |sort
+
 echo "DONE tcc_26 nodejs"

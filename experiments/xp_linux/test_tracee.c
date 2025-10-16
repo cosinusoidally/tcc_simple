@@ -342,6 +342,10 @@ int vm_exit_() {
     extract_file("../artifacts/boot0/unified-libc.c", "artifacts/unified-libc.c");
     extract_file("/m0.exe", "artifacts/m0.exe");
     extract_file("/hex2.exe", "artifacts/hex2.exe");
+    extract_file("artifacts/libtcc1_26.o", "artifacts/libtcc1_26.o");
+    extract_file("artifacts/tcc_26.o", "artifacts/tcc_26.o");
+    extract_file("artifacts/libc_boot3_26.o", "artifacts/libc_boot3_26.o");
+    extract_file("artifacts/libc_static_26.o", "artifacts/libc_static_26.o");
     exit(error_code);
   }
 }
