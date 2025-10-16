@@ -58,6 +58,7 @@ tcc_list = find_files("../../../tcc_bootstrap_alt");
 
 
 tcc_list = tcc_list.filter(function(x) {if(x.match(".git")==null) {return true;}});
+tcc_list = tcc_list.filter(function(x) {if(x.match("artifacts/")==null) {return true;}});
 
 function print_file(x) {
   var t;
@@ -70,7 +71,6 @@ function print_file(x) {
 }
 
 var out = [
-  gen_load_list(tcc_list),
   gen_load_list_remap(tcc_list, "../../../tcc_bootstrap_alt", ""),
   print_file("tcc_26.list"),
 ].join("\n") +"\n";
