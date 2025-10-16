@@ -1,0 +1,9 @@
+set -xe
+
+./mk_test dummy.list
+
+nodejs gen_alt.js
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+echo "DONE full nodejs"
