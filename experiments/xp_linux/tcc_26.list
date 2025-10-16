@@ -1,0 +1,1 @@
+../artifacts/tcc-boot-mes -c tcc_26/lib/libtcc1.c -o artifacts/libtcc1_26.o
