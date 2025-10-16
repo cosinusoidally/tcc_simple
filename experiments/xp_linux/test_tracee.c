@@ -235,9 +235,8 @@ int vm_open() {
     if(t) {
       r = new_fd(t);
     } else {
-      trap_syscalls_off();
-      printf("file not found %s\n", filename);
-      exit(1);
+      r = -1;
+      printf("vm_open: file not found %s returning -1\n", filename);
     }
   }
   printf("open: fd %d\n", r);
