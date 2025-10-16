@@ -54,12 +54,10 @@ function gen_load_list_remap(x, s1, s2) {
   return o.join("\n");
 }
 
-tcc_list = find_files("../tcc-0.9.26-lb");
-mes_list = find_files("../mes-0.27");
-portable_libc_list = find_files("../pnut_refactor/portable_libc");
-extra_list = find_files("../mes-0.27/include/mes");
+tcc_list = find_files("../../../tcc_bootstrap_alt");
 
-tcc_list = tcc_list.filter(function(x) {if(x.match("tests")==null) {return true;}});
+
+tcc_list = tcc_list.filter(function(x) {if(x.match(".git")==null) {return true;}});
 
 function print_file(x) {
   var t;
@@ -73,9 +71,7 @@ function print_file(x) {
 
 var out = [
   gen_load_list(tcc_list),
-  gen_load_list(mes_list),
-  gen_load_list_remap(portable_libc_list, "../pnut_refactor/", ""),
-  gen_load_list_remap(extra_list, "../mes-0.27/include", "../artifacts/boot0"),
+  gen_load_list_remap(tcc_list, "../../../tcc_bootstrap_alt", ""),
   print_file("tcc_26.list"),
 ].join("\n") +"\n";
 
