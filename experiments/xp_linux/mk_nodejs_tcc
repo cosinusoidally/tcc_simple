@@ -6,4 +6,4 @@ nodejs gen_alt.js
 
 ./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
 
-echo "DONE full nodejs"
+echo "DONE tcc_26 nodejs"
