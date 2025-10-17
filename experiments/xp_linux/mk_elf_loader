@@ -1,0 +1,6 @@
+set -xe
+./mk_test dummy.list
+cat cjsawk.list elf_loader.list > artifacts/full.list
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+echo "DONE elf_loader"

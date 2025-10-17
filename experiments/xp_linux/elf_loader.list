@@ -1,0 +1,6 @@
+load_file ../m2min_v2/simple_support_m2_head.c simple_support_m2_head.c
+load_file ../m2min_v2/simple_support_m2.c simple_support_m2.c
+load_file ../m2min_v2/simple_support_common.c simple_support_common.c
+load_file ../m2min_v2/M2_tcc_js_simple.c M2_tcc_js_simple.c
+/catm artifacts/M2_tcc_js_simple_full_m2.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c M2_tcc_js_simple.c
+/cjsawk.exe artifacts/M2_tcc_js_simple_full_m2.c artifacts/M2_tcc_js_simple.M1
