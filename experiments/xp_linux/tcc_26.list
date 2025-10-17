@@ -1,3 +1,4 @@
+load_file libc_boot4_alt.c libc_boot4.c
 ../artifacts/tcc-boot-mes -c tcc_26/lib/libtcc1.c -o artifacts/libtcc1_26.o
 ../artifacts/tcc-boot-mes -c tcc_27/libc_static.c -o artifacts/libc_static_26.o
 ../artifacts/tcc-boot-mes -c tcc_27/libc_boot4.c -o artifacts/libc_boot4_mes.o
