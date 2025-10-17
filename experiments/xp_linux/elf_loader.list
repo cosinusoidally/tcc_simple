@@ -6,7 +6,8 @@ load_file ../m2min_v2/m2min_v2.c m2min_v2.c
 /catm m2min_v2_full.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c m2min_v2.c
 /cc_x86_min.exe m2min_v2_full.c m2min_v2.exe.M1
 /catm m2min_v2.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 m2min_v2.exe.M1
-/M0 m2min_v2.exe-0.M1 m2min_v2.exe.hex2
+/m0.exe m2min_v2.exe-0.M1 m2min_v2.exe.hex2
 /catm m2min_v2.exe-0.hex2 ELF-i386.hex2 m2min_v2.exe.hex2
 /hex2.exe m2min_v2.exe-0.hex2 /m2min_v2.exe
-/m2min_v2.exe m2min_v2_full.c m2min_v2.exe.M1
+/catm M2_tcc_js_simple_full.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c M2_tcc_js_simple.c
+/m2min_v2.exe M2_tcc_js_simple_full.c M2_tcc_js_simple.exe.M1
