@@ -345,8 +345,9 @@ int vm_exit_() {
     extract_file("artifacts/tcc_26.o", "artifacts/tcc_26.o");
     extract_file("artifacts/libc_boot3_26.o", "artifacts/libc_boot3_26.o");
     extract_file("artifacts/libc_static_26.o", "artifacts/libc_static_26.o");
+    extract_file("m2min_v2_full.c", "artifacts/m2min_v2_full.c");
     extract_file("m2min_v2.exe-0.hex2", "artifacts/m2min_v2.exe-0.hex2");
-    extract_file("m2min.exe", "artifacts/m2min_v2.exe");
+    extract_file("m2min_v2.exe.M1", "artifacts/m2min_v2.exe.M1");
     exit(error_code);
   }
 }
