@@ -11,3 +11,7 @@ load_file ../m2min_v2/m2min_v2.c m2min_v2.c
 /hex2.exe m2min_v2.exe-0.hex2 /m2min_v2.exe
 /catm M2_tcc_js_simple_full.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c M2_tcc_js_simple.c
 /m2min_v2.exe M2_tcc_js_simple_full.c M2_tcc_js_simple.exe.M1
+/catm M2_tcc_js_simple.exe-0.M1 exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 M2_tcc_js_simple.exe.M1
+/m0.exe M2_tcc_js_simple.exe-0.M1 M2_tcc_js_simple.exe.hex2
+/catm M2_tcc_js_simple.exe-0.hex2 ELF-i386.hex2 M2_tcc_js_simple.exe.hex2
+/hex2.exe M2_tcc_js_simple.exe-0.hex2 /M2_tcc_js_simple.exe
