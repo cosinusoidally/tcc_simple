@@ -6,3 +6,7 @@
 ../artifacts/elf_loader_cc_x86.exe -l artifacts/libc_boot4_mes.o -l artifacts/libtcc1_26.o -l artifacts/tcc_27.o -c tcc_27/lib/libtcc1.c -o artifacts/libtcc1_27.o
 ../artifacts/elf_loader_cc_x86.exe -l artifacts/libc_boot4_mes.o -l artifacts/libtcc1_27.o -l artifacts/tcc_27.o -c tcc_27/libc_static.c -o artifacts/libc_static_27.o
 ../artifacts/elf_loader_cc_x86.exe -l artifacts/libc_boot4_mes.o -l artifacts/libtcc1_27.o -l artifacts/tcc_27.o -nostdlib -static artifacts/libc_static_27.o artifacts/libc_boot4_mes.o artifacts/libtcc1_27.o artifacts/tcc_27.o -o artifacts/tcc_27_boot_static2.exe
+artifacts/tcc_27_boot_static2.exe -c tcc_27/libc_boot4.c -o artifacts/libc_boot4_27_2.o
+artifacts/tcc_27_boot_static2.exe -c tcc_27/libc_static.c -o artifacts/libc_static_27_2.o
+artifacts/tcc_27_boot_static2.exe -c tcc_27/lib/libtcc1.c -o artifacts/libtcc1_27_2.o
+artifacts/tcc_27_boot_static2.exe -I woody/usr/include -I tcc_27/include -c tcc_27/tcc.c -DONE_SOURCE -o artifacts/tcc_27_2.o
