@@ -353,6 +353,7 @@ int vm_exit_() {
     extract_file("M2_tcc_js_simple.exe", "artifacts/M2_tcc_js_simple.exe");
     extract_file("elf_loader.M1", "artifacts/elf_loader.M1");
     extract_file("elf_loader_cc_x86.exe", "artifacts/elf_loader_cc_x86.exe");
+    extract_file("artifacts/tcc_27.o", "artifacts/tcc_27.o");
     exit(error_code);
   }
 }
