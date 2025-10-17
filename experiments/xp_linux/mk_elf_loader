@@ -6,4 +6,7 @@ cat cjsawk.list elf_loader.list > artifacts/full.list
 cp artifacts/elf_loader_cc_x86.exe ../artifacts
 cp artifacts/catm ../artifacts
 
+chmod +x ../artifacts/elf_loader_cc_x86.exe
+chmod +x ../artifacts/catm
+
 echo "DONE elf_loader"

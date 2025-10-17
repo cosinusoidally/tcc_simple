@@ -15,7 +15,12 @@ load_file ../m2min_v2/m2min_v2.c m2min_v2.c
 /m0.exe M2_tcc_js_simple.exe-0.M1 M2_tcc_js_simple.exe.hex2
 /catm M2_tcc_js_simple.exe-0.hex2 ELF-i386.hex2 M2_tcc_js_simple.exe.hex2
 /hex2.exe M2_tcc_js_simple.exe-0.hex2 /M2_tcc_js_simple.exe
-load_file ../../../tcc_bootstrap_alt/x86/artifact/elf_loader_all.c elf_loader_all.c
+load_file ../../../tcc_bootstrap_alt/tcc_js/bootstrap_load.c bootstrap_load.c
+load_file ../../../tcc_bootstrap_alt/tcc_js/bootstrappable_load.c bootstrappable_load.c
+load_file ../../../tcc_bootstrap_alt/tcc_js/elf_loader_support.c elf_loader_support.c
+load_file ../../../tcc_bootstrap_alt/tcc_js/elf_loader_support_cc_x86.c elf_loader_support_cc_x86.c
+load_file ../../../tcc_bootstrap_alt/tcc_js/elf_loader.c elf_loader.c
+/catm elf_loader_all.c bootstrap_load.c bootstrappable_load.c elf_loader_support.c elf_loader_support_cc_x86.c elf_loader.c
 /M2_tcc_js_simple.exe elf_loader_all.c elf_loader.M1
 /catm elf_loader-0.M1 x86_defs.M1 libc-core.M1 elf_loader.M1
 /m0.exe elf_loader-0.M1 elf_loader-0.hex2
