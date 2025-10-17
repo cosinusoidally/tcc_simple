@@ -348,6 +348,7 @@ int vm_exit_() {
     extract_file("m2min_v2_full.c", "artifacts/m2min_v2_full.c");
     extract_file("m2min_v2.exe-0.hex2", "artifacts/m2min_v2.exe-0.hex2");
     extract_file("m2min_v2.exe.M1", "artifacts/m2min_v2.exe.M1");
+    extract_file("m2min_v2.exe", "artifacts/m2min_v2.exe");
     exit(error_code);
   }
 }
