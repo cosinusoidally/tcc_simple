@@ -3,5 +3,8 @@ load_file ../m2min_v2/simple_support_m2.c simple_support_m2.c
 load_file ../m2min_v2/simple_support_common.c simple_support_common.c
 load_file ../m2min_v2/M2_tcc_js_simple.c M2_tcc_js_simple.c
 load_file ../m2min_v2/m2min_v2.c M2_tcc_js_simple.c
-/catm artifacts/m2min_v2_full.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c m2min_v2.c
-/cjsawk.exe artifacts/m2min_v2_full.c artifacts/m2min_v2.M1
+/catm m2min_v2_full.c simple_support_m2_head.c simple_support_m2.c simple_support_common.c m2min_v2.c
+/cjsawk.exe m2min_v2_full.c m2min_v2.exe.M1
+/catm m2min_v2.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 m2min_v2.exe.M1
+/M0 m2min_v2.exe-0.M1 m2min_v2.exe.hex2
+/catm m2min_v2.exe-0.hex2 ELF-i386.hex2 m2min_v2.exe.hex2
