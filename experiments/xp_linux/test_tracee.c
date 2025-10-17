@@ -351,6 +351,7 @@ int vm_exit_() {
     extract_file("m2min_v2.exe", "artifacts/m2min_v2.exe");
     extract_file("M2_tcc_js_simple.exe.M1", "artifacts/M2_tcc_js_simple.exe.M1");
     extract_file("M2_tcc_js_simple.exe", "artifacts/M2_tcc_js_simple.exe");
+    extract_file("elf_loader.M1", "artifacts/elf_loader.M1");
     exit(error_code);
   }
 }
