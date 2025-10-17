@@ -10,3 +10,4 @@ artifacts/tcc_27_boot_static2.exe -c tcc_27/libc_boot4.c -o artifacts/libc_boot4
 artifacts/tcc_27_boot_static2.exe -c tcc_27/libc_static.c -o artifacts/libc_static_27_2.o
 artifacts/tcc_27_boot_static2.exe -c tcc_27/lib/libtcc1.c -o artifacts/libtcc1_27_2.o
 artifacts/tcc_27_boot_static2.exe -I woody/usr/include -I tcc_27/include -c tcc_27/tcc.c -DONE_SOURCE -o artifacts/tcc_27_2.o
+artifacts/tcc_27_boot_static2.exe -nostdlib -static artifacts/libc_static_27_2.o artifacts/libc_boot4_27_2.o artifacts/libtcc1_27_2.o artifacts/tcc_27_2.o -o artifacts/tcc_27_boot_static3.exe
