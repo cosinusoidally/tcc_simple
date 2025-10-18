@@ -358,6 +358,10 @@ int vm_exit_() {
     extract_file("artifacts/tcc_27_boot_static3.exe", "artifacts/tcc_27_boot_static3.exe");
     extract_file("artifacts/tcc_27_boot_static4.exe", "artifacts/tcc_27_boot_static4.exe");
     extract_file("artifacts/tcc_27_boot_static5.exe", "artifacts/tcc_27_boot_static5.exe");
+    extract_file("artifacts/libc_boot4_27_4.o", "artifacts/libc_boot4_27_4.o");
+    extract_file("artifacts/libc_static_27_4.o", "artifacts/libc_static_27_4.o");
+    extract_file("artifacts/libtcc1_27_4.o", "artifacts/libtcc1_27_4.o");
+    extract_file("artifacts/tcc_27_4.o", "artifacts/tcc_27_4.o");
     exit(error_code);
   }
 }
