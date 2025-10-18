@@ -143,6 +143,7 @@ var out = [
   print_file("mes_libc.list"),
   print_file("tcc_boot_mes.list"),
   print_file("elf_loader.list"),
+  "/catm ../artifacts/elf_loader_cc_x86.exe /elf_loader_cc_x86.exe",
   print_file("tcc_26.list"),
 ].join("\n") +"\n";
 
