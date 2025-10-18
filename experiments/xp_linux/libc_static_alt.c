@@ -91,11 +91,22 @@ int
 _write (int filedes, void const *buffer, int size)
 {
   long r;
+/* LJW nop chain is for xp_linux perf boost */
   asm (
        "mov    $"SYS_write",%%eax\n\t"
        "mov    %1,%%ebx\n\t"
        "mov    %2,%%ecx\n\t"
        "mov    %3,%%edx\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
+       "nop\n\t"
        "int    $0x80\n\t"
        "mov    %%eax,%0\n\t"
        : "=r" (r)
