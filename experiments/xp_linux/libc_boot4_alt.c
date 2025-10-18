@@ -18,6 +18,13 @@ extern int stdout;
 int strcpy(int d, int s);
 int strcat(int de,int s);
 
+// perf hack to make it less verbose
+#define fputs v_fputs
+
+int v_fputs(int a, int b) {
+  return 0;
+}
+
 int puts(int x) {
   fputs(x, stdout);
   fputs("\n", stdout);
