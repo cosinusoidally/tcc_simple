@@ -362,6 +362,8 @@ int vm_exit_() {
     extract_file("artifacts/libc_static_27_4.o", "artifacts/libc_static_27_4.o");
     extract_file("artifacts/libtcc1_27_4.o", "artifacts/libtcc1_27_4.o");
     extract_file("artifacts/tcc_27_4.o", "artifacts/tcc_27_4.o");
+    extract_file("artifacts/otccelf_cc_x86_min.exe", "artifacts/otccelf_cc_x86_min.exe");
+    extract_file("artifacts/elf_loader.exe", "artifacts/elf_loader.exe");
     exit(error_code);
   }
 }
