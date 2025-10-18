@@ -4,8 +4,8 @@ chmod +x ../artifacts/tcc-boot-mes
 ./mk_elf_loader
 ./mk_nodejs_tcc
 cd artifacts
-chmod +x tcc_27_boot_static3.exe
-ln -s tcc_27_boot_static3.exe tcc_27_boot_static.exe
+chmod +x tcc_27_boot_static5.exe
+ln -s tcc_27_boot_static5.exe tcc_27_boot_static.exe
 export PATH=$PWD:$PATH
 cd ../../../../mishmashvm/libc_portable_proto
 ./bootstrap_clean.sh
