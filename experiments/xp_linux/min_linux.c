@@ -121,6 +121,18 @@ int test_callback() {
     trap_syscalls_off();
     r = fwrite(get_param(1), get_param(2), get_param(3), get_param(4));
     trap_syscalls_on();
+  } else if(n == 5) {
+    trap_syscalls_off();
+    printf("fopen not impl\n");
+    exit(1);
+  } else if(n == 6) {
+    trap_syscalls_off();
+    printf("fclose not impl\n");
+    exit(1);
+  } else if(n == 7) {
+    trap_syscalls_off();
+    printf("fread not impl\n");
+    exit(1);
   }
   return r;
 }
