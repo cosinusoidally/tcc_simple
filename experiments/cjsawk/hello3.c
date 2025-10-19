@@ -611,5 +611,11 @@ function main(argc, argv) {
   init_c();
   fputs("xp_linux test\n", 1);
   host_call();
+  set_param(0, 1);
+  host_call();
+  fputs("xp_linux test2\n", 1);
+  set_param(0, 2);
+  host_call();
+  fputs("test3\n", 1);
   return 0;
 }

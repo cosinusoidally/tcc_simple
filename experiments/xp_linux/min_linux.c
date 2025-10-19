@@ -110,6 +110,15 @@ int get_param(x) {
 
 int test_callback() {
   int i;
+  int n;
+  n = get_param(0);
+  if(n == 1) {
+    trap_syscalls_off();
+    puts("trap_syscalls_off");
+  } else if(n == 2) {
+    puts("trap_syscalls_on");
+    trap_syscalls_on();
+  }
   puts("test_callback called");
   i = 0;
   while(i < 8) {
