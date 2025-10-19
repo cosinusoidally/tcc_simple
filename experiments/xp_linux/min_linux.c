@@ -104,8 +104,19 @@ init_globals() {
   host_params = data_area + (4*10);
 }
 
+int get_param(x) {
+  return ri32(host_params+(4*x));
+}
+
 int test_callback() {
+  int i;
   puts("test_callback called");
+  i = 0;
+  while(i < 8) {
+    printf("param(%d): 0x%x ", i , get_param(i));
+    i = i + 1;
+  }
+  printf("\n");
 }
 
 init_runtime() {
