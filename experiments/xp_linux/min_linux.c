@@ -81,7 +81,7 @@ int load_boot(filename) {
   int size;
   f = fopen(filename, "rb");
   o = elf_base;
-  while(size = fread(o, 1, 1024*1024, f)) {
+  while(size = fread(o, 1, 4096, f)) {
     o = o + size;
   }
   fclose(f);
