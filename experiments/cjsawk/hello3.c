@@ -663,5 +663,6 @@ function main(argc, argv) {
   fi = host_fopen("./artifacts/read_test.txt", "rb");
   host_fread(0x10000000, 1, 1024, fi);
   fo = host_fopen("./artifacts/write_test.txt", "wb");
+  host_fwrite(0x10000000, 1, 1024, fo);
   return 0;
 }
