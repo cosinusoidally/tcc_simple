@@ -13,6 +13,7 @@ int base_address;
 int data_area;
 int host_call_fn;
 int host_params;
+int host_stdout;
 
 int elf_base = 0x8048000;
 
@@ -93,7 +94,8 @@ init_globals() {
   data_area = base_address+0x20000;
   regs_data = data_area;
   host_call_fn = data_area + (4*9);
-  host_params = data_area + (4*10);
+  host_params = host_call_fn + 4;
+  host_stdout = host_params + (4*8);
 }
 
 int get_param(x) {
@@ -116,13 +118,14 @@ int test_callback() {
     trap_syscalls_on();
   } else if(n == 3) {
     trap_syscalls_off();
-    fputc(get_param(2), stdout);
+    fwrite(get_param(2), get_param(3), get_param(4), get_param(5));
     trap_syscalls_on();
   }
 }
 
 init_runtime() {
   wi32(host_call_fn, test_callback);
+  wi32(host_stdout, stdout);
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello3/xp_linux_test.exe"));
 }
