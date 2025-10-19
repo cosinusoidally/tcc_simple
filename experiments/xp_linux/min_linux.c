@@ -105,6 +105,7 @@ int get_param(x) {
 int test_callback() {
   int i;
   int n;
+  int r;
   n = get_param(0);
   if(n == 1) {
     trap_syscalls_off();
@@ -118,9 +119,10 @@ int test_callback() {
     trap_syscalls_on();
   } else if(n == 3) {
     trap_syscalls_off();
-    fwrite(get_param(2), get_param(3), get_param(4), get_param(5));
+    r = fwrite(get_param(2), get_param(3), get_param(4), get_param(5));
     trap_syscalls_on();
   }
+  return r;
 }
 
 init_runtime() {
@@ -151,6 +153,7 @@ int main(int argc, char **argv) {
 
   printf("host_call_fn: 0x%x\n", host_call_fn);
   printf("host_params: 0x%x\n", host_params);
+  printf("host_stdout: 0x%x\n", host_stdout);
   asm("call *0x4020024");
 
   run_process();

@@ -600,6 +600,10 @@ function host_params() {
   return 0x4020028;
 }
 
+function host_stdout() {
+  return ri32(0x4020048);
+}
+
 function set_param(i, v) {
   wi32(add(host_params(), mul(i, 4)), v);
 }
@@ -612,6 +616,15 @@ function host_call() {
 function host_puts(s) {
   set_param(0, 3);
   set_param(1, s);
+  return host_call();
+}
+
+function host_fwrite(ptr, size, nitems, stream) {
+  set_param(0, 4);
+  set_param(1, ptr);
+  set_param(2, size);
+  set_param(3, nitems);
+  set_param(4, stream);
   return host_call();
 }
 
