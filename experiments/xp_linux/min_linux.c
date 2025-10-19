@@ -22,6 +22,56 @@ int wi32(int o,int v) {
         return 0;
 }
 
+int ri32(o) {
+  int *h;
+  h = o;
+  return h[0];
+}
+
+int wrap_syscall();
+
+int trap_syscalls_on() {
+  syscall(65534, wrap_syscall, regs_data);
+}
+
+int trap_syscalls_off() {
+  syscall(65533);
+}
+
+int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
+  printf("in wrap_syscall_alt\n");
+  printf("eax\t\t0x%x\n", eax);
+  printf("ecx\t\t0x%x\n", ecx);
+  printf("edx\t\t0x%x\n", edx);
+  printf("ebx\t\t0x%x\n", ebx);
+  printf("esp\t\t0x%x\n", esp);
+  printf("ebp\t\t0x%x\n", ebp);
+  printf("esi\t\t0x%x\n", esi);
+  printf("edi\t\t0x%x\n", edi);
+  exit(1);
+/*
+  regs_data[0] = eax;
+  regs_data[1] = ebx;
+  regs_data[2] = ecx;
+  regs_data[3] = edx;
+  regs_data[4] = esi;
+  regs_data[5] = edi;
+  regs_data[6] = ebp;
+*/
+  return wrap_syscall();
+}
+
+int wrap_syscall() {
+  int r;
+  int n;
+//  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  printf("wrap_syscall eax: %d\n", ri32(regs_data));
+  n = ri32(regs_data);
+  trap_syscalls_off();
+  printf("unsupported syscall: %d\n",n);
+  exit(1);
+}
+
 int load_boot(filename) {
   int f;
   int o;
