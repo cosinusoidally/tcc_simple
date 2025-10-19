@@ -133,6 +133,7 @@ int main(int argc, char **argv) {
   init_runtime();
 
   printf("host_call_fn: 0x%x\n", host_call_fn);
+  printf("host_params: 0x%x\n", host_params);
   asm("call *0x4020024");
 
   run_process();
