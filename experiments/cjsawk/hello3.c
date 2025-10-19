@@ -597,7 +597,8 @@ function host_params() {
 }
 
 function host_call() {
-  asm("FF15 %0x4020024");
+  asm("DEFINE call_indirect FF15");
+  asm("call_indirect %0x4020024");
 }
 
 function main(argc, argv) {
@@ -605,5 +606,6 @@ function main(argc, argv) {
   i = 0;
   init_c();
   fputs("xp_linux test\n", 1);
+  host_call();
   return 0;
 }
