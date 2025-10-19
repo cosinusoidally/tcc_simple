@@ -118,14 +118,11 @@ int test_callback() {
   } else if(n == 2) {
     puts("trap_syscalls_on");
     trap_syscalls_on();
+  } else if(n == 3) {
+    trap_syscalls_off();
+    puts(get_param(1));
+    trap_syscalls_on();
   }
-  puts("test_callback called");
-  i = 0;
-  while(i < 8) {
-    printf("param(%d): 0x%x ", i , get_param(i));
-    i = i + 1;
-  }
-  printf("\n");
 }
 
 init_runtime() {
