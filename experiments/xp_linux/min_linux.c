@@ -72,8 +72,10 @@ int wrap_syscall() {
   trap_syscalls_off();
   n = get_reg(0);
   printf("wrap_syscall eax: %d\n", n);
-  printf("unsupported syscall: %d\n",n);
-  exit(1);
+  r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
+//  printf("unsupported syscall: %d\n",n);
+  trap_syscalls_on();
+  return r;
 }
 
 int load_boot(filename) {
