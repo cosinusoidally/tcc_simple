@@ -47,6 +47,13 @@ init_runtime() {
   printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello/hello.exe"));
 }
 
+run_process() {
+  /* set up stack pointer */
+  asm("mov $0x8045800,%esp");
+  /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
+  asm("jmp *0x8048018");
+}
+
 int main(int argc, char **argv) {
   int res = 0;
   init_globals();
@@ -56,5 +63,6 @@ int main(int argc, char **argv) {
     exit(1);
   }
   init_runtime();
+  run_process();
   return 0;
 }
