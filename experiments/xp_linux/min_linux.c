@@ -124,6 +124,7 @@ int host_callback() {
   } else if(n == 5) {
     trap_syscalls_off();
     printf("fopen not impl\n");
+    printf("fopen path: %s mode: %s", get_param(1), get_param(2));
     exit(1);
   } else if(n == 6) {
     trap_syscalls_off();
