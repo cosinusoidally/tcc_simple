@@ -110,7 +110,7 @@ int test_callback() {
 
 init_runtime() {
   wi32(host_call_fn, test_callback);
-  printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello/hello.exe"));
+  printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello3/xp_linux_test.exe"));
 }
 
 run_process() {
