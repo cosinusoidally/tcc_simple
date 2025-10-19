@@ -48,9 +48,11 @@ int set_reg(x, v) {
   wi32(regs_data+ (x*4), v);
 }
 
+/*
 dump_regs() {
   printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", get_reg(0), get_reg(0),get_reg(1),get_reg(2),get_reg(3),get_reg(4),get_reg(5),get_reg(6));
 }
+*/
 
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
   set_reg(0, eax);
@@ -149,11 +151,12 @@ int main(int argc, char **argv) {
 
   init_runtime();
 
+/*
   printf("host_call_fn: 0x%x\n", host_call_fn);
   printf("host_params: 0x%x\n", host_params);
   printf("host_stdout: 0x%x\n", host_stdout);
   asm("call *0x4020024");
-
+*/
   run_process();
   return 0;
 }
