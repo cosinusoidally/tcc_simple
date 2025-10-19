@@ -641,5 +641,6 @@ function main(argc, argv) {
   host_call();
   fputs("test3\n", 1);
   host_puts("This is a test");
+  host_fwrite("Hello\n", 1, 6, host_stdout());
   return 0;
 }

@@ -117,9 +117,9 @@ int test_callback() {
     trap_syscalls_off();
     puts(get_param(1));
     trap_syscalls_on();
-  } else if(n == 3) {
+  } else if(n == 4) {
     trap_syscalls_off();
-    r = fwrite(get_param(2), get_param(3), get_param(4), get_param(5));
+    r = fwrite(get_param(1), get_param(2), get_param(3), get_param(4));
     trap_syscalls_on();
   }
   return r;
