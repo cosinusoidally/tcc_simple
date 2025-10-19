@@ -22,14 +22,6 @@ int wi32(int o,int v) {
         return 0;
 }
 
-init_globals() {
-  base_address = 64 * 1024 * 1024;
-  data_area = base_address+0x20000;
-  regs_data = data_area;
-  host_puts = data_area +(4*9);
-//  wi32(host_puts, puts);
-}
-
 int load_boot(filename) {
   int f;
   int o;
@@ -40,6 +32,19 @@ int load_boot(filename) {
     o = o + size;
   }
   fclose(f);
+  return o - elf_base;
+}
+
+init_globals() {
+  base_address = 64 * 1024 * 1024;
+  data_area = base_address+0x20000;
+  regs_data = data_area;
+  host_puts = data_area +(4*9);
+}
+
+init_runtime() {
+  wi32(host_puts, puts);
+  printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello/hello.exe"));
 }
 
 int main(int argc, char **argv) {
@@ -50,5 +55,6 @@ int main(int argc, char **argv) {
     puts("mmap error\n");
     exit(1);
   }
+  init_runtime();
   return 0;
 }
