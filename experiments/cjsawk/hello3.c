@@ -628,6 +628,13 @@ function host_fwrite(ptr, size, nitems, stream) {
   return host_call();
 }
 
+function host_fopen(path, mode) {
+  set_param(0, 5);
+  set_param(1, path);
+  set_param(2, mode);
+  return host_call();
+}
+
 function main(argc, argv) {
   int i;
   i = 0;
