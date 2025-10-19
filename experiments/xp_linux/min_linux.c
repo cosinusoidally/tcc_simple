@@ -133,6 +133,10 @@ int test_callback() {
     trap_syscalls_off();
     printf("fread not impl\n");
     exit(1);
+  } else if(n == 8) {
+    trap_syscalls_off();
+    printf("exit not impl\n");
+    exit(1);
   }
   return r;
 }
