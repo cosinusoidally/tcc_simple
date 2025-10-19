@@ -33,7 +33,12 @@ init_globals() {
 int load_boot(filename) {
   int f;
   int o;
+  int size;
   f = fopen(filename, "rb");
+  o = elf_base;
+  while(size = fread(o, 1, 1024*1024, f)) {
+    o = o + size;
+  }
   fclose(f);
 }
 
