@@ -114,6 +114,10 @@ int test_callback() {
     trap_syscalls_off();
     puts(get_param(1));
     trap_syscalls_on();
+  } else if(n == 3) {
+    trap_syscalls_off();
+    fputc(get_param(2), stdout);
+    trap_syscalls_on();
   }
 }
 
