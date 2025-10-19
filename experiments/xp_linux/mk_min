@@ -13,6 +13,8 @@ cd ../cjsawk/
 ./mk_hello3
 popd
 
+echo "this is a test file" > artifacts/read_test.txt
+
 ./artifacts/test_tracer.exe ./artifacts/min_linux.exe $1
 
 ls -lS artifacts/*.exe

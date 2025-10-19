@@ -635,6 +635,15 @@ function host_fopen(path, mode) {
   return host_call();
 }
 
+function host_fread(ptr, size, nmemb, stream) {
+  set_param(0, 7);
+  set_param(1, ptr);
+  set_param(2, size);
+  set_param(3, nmemb);
+  set_param(4, stream);
+  return host_call();
+}
+
 function main(argc, argv) {
   int i;
   int fi;
@@ -652,6 +661,7 @@ function main(argc, argv) {
   host_puts("This is a test");
   host_fwrite("Hello\n", 1, 6, host_stdout());
   fi = host_fopen("./artifacts/read_test.txt", "rb");
+  host_fread(0x10000000, 1, 1024, fi);
   fo = host_fopen("./artifacts/write_test.txt", "wb");
   return 0;
 }

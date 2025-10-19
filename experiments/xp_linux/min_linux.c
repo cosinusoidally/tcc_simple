@@ -131,8 +131,7 @@ int host_callback() {
     exit(1);
   } else if(n == 7) {
     trap_syscalls_off();
-    printf("fread not impl\n");
-    exit(1);
+    r = fread(get_param(1), get_param(2), get_param(3),get_param(4));
   } else if(n == 8) {
     trap_syscalls_off();
     printf("exit not impl\n");
