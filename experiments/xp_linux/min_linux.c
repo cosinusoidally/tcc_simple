@@ -73,9 +73,9 @@ int wrap_syscall() {
   int r;
   int n;
   trap_syscalls_off();
-  dump_regs();
   n = get_reg(0);
-  printf("wrap_syscall eax: %d\n", n);
+  dump_regs();
+//  printf("wrap_syscall eax: %d\n", n);
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
 //  printf("unsupported syscall: %d\n",n);
   trap_syscalls_on();
