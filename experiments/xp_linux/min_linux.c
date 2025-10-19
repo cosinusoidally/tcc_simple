@@ -11,7 +11,8 @@ int MAP_FIXED=0x10;
 
 int base_address;
 int data_area;
-int host_puts;
+int host_call_fn;
+int host_params;
 
 int elf_base = 0x8048000;
 
@@ -99,7 +100,8 @@ init_globals() {
   base_address = 64 * 1024 * 1024;
   data_area = base_address+0x20000;
   regs_data = data_area;
-  host_puts = data_area + (4*9);
+  host_call_fn = data_area + (4*9);
+  host_params = data_area + (4*10);
 }
 
 int test_callback() {
@@ -107,7 +109,7 @@ int test_callback() {
 }
 
 init_runtime() {
-  wi32(host_puts, test_callback);
+  wi32(host_call_fn, test_callback);
   printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello/hello.exe"));
 }
 
@@ -127,7 +129,12 @@ int main(int argc, char **argv) {
     puts("mmap error\n");
     exit(1);
   }
+
   init_runtime();
+
+  printf("host_call_fn: 0x%x\n", host_call_fn);
+  asm("call *0x4020024");
+
   run_process();
   return 0;
 }
