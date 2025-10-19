@@ -637,7 +637,8 @@ function host_fopen(path, mode) {
 
 function main(argc, argv) {
   int i;
-  int f;
+  int fi;
+  int fo;
   i = 0;
   init_c();
   fputs("xp_linux test\n", 1);
@@ -650,6 +651,7 @@ function main(argc, argv) {
   fputs("test3\n", 1);
   host_puts("This is a test");
   host_fwrite("Hello\n", 1, 6, host_stdout());
-  f = host_fopen("./artifacts/read_test.txt", "rb");
+  fi = host_fopen("./artifacts/read_test.txt", "rb");
+  fo = host_fopen("./artifacts/write_test.txt", "wb");
   return 0;
 }
