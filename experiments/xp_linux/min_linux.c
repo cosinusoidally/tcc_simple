@@ -65,6 +65,7 @@ int wrap_syscall() {
   int r;
   int n;
 //  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
+  trap_syscalls_off();
   printf("wrap_syscall eax: %d\n", ri32(regs_data));
   n = ri32(regs_data);
   trap_syscalls_off();
