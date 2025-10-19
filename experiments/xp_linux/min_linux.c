@@ -68,7 +68,6 @@ int wrap_syscall() {
   trap_syscalls_off();
   printf("wrap_syscall eax: %d\n", ri32(regs_data));
   n = ri32(regs_data);
-  trap_syscalls_off();
   printf("unsupported syscall: %d\n",n);
   exit(1);
 }
@@ -90,7 +89,7 @@ init_globals() {
   base_address = 64 * 1024 * 1024;
   data_area = base_address+0x20000;
   regs_data = data_area;
-  host_puts = data_area +(4*9);
+  host_puts = data_area + (4*9);
 }
 
 init_runtime() {
@@ -99,6 +98,7 @@ init_runtime() {
 }
 
 run_process() {
+  trap_syscalls_on();
   /* set up stack pointer */
   asm("mov $0x8045800,%esp");
   /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
