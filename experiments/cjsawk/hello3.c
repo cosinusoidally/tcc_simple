@@ -596,6 +596,10 @@ function host_params() {
   return 0x4020028;
 }
 
+function set_param(i, v) {
+  wi32(add(host_params(), mul(i, 4)), v);
+}
+
 function host_call() {
   asm("DEFINE call_indirect FF15");
   asm("call_indirect %0x4020024");
