@@ -68,8 +68,8 @@ int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
 int wrap_syscall() {
   int r;
   int n;
-//  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   trap_syscalls_off();
+  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", get_reg(0), get_reg(0),get_reg(1),get_reg(2),get_reg(3),get_reg(4),get_reg(5),get_reg(6));
   n = get_reg(0);
   printf("wrap_syscall eax: %d\n", n);
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
