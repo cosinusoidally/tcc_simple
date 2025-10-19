@@ -644,6 +644,12 @@ function host_fread(ptr, size, nmemb, stream) {
   return host_call();
 }
 
+function host_fclose(fp) {
+  set_param(0, 6);
+  set_param(1, fp);
+  return host_call();
+}
+
 function main(argc, argv) {
   int i;
   int fi;
@@ -664,5 +670,6 @@ function main(argc, argv) {
   host_fread(0x10000000, 1, 1024, fi);
   fo = host_fopen("./artifacts/write_test.txt", "wb");
   host_fwrite(0x10000000, 1, 1024, fo);
+  host_fclose(fo);
   return 0;
 }

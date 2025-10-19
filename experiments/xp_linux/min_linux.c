@@ -127,8 +127,8 @@ int host_callback() {
     r = fopen(get_param(1), get_param(2));
   } else if(n == 6) {
     trap_syscalls_off();
-    printf("fclose not impl\n");
-    exit(1);
+    printf("fclose: %d\n", get_param(1));
+    r = fclose(get_param(1));
   } else if(n == 7) {
     trap_syscalls_off();
     r = fread(get_param(1), get_param(2), get_param(3),get_param(4));
