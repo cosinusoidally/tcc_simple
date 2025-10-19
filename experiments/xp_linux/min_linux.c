@@ -52,26 +52,13 @@ dump_regs() {
 }
 
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
-  printf("in wrap_syscall_alt\n");
-  printf("eax\t\t0x%x\n", eax);
-  printf("ecx\t\t0x%x\n", ecx);
-  printf("edx\t\t0x%x\n", edx);
-  printf("ebx\t\t0x%x\n", ebx);
-  printf("esp\t\t0x%x\n", esp);
-  printf("ebp\t\t0x%x\n", ebp);
-  printf("esi\t\t0x%x\n", esi);
-  printf("edi\t\t0x%x\n", edi);
   set_reg(0, eax);
-  exit(1);
-/*
-  regs_data[0] = eax;
-  regs_data[1] = ebx;
-  regs_data[2] = ecx;
-  regs_data[3] = edx;
-  regs_data[4] = esi;
-  regs_data[5] = edi;
-  regs_data[6] = ebp;
-*/
+  set_reg(1, ebx);
+  set_reg(2, ecx);
+  set_reg(3, edx);
+  set_reg(4, esi);
+  set_reg(5, edi);
+  set_reg(6, ebp);
   return wrap_syscall();
 }
 
@@ -132,6 +119,7 @@ int test_callback() {
 
 init_runtime() {
   wi32(host_call_fn, test_callback);
+  set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello3/xp_linux_test.exe"));
 }
 

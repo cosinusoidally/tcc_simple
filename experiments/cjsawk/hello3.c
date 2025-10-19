@@ -15,6 +15,10 @@
  * along with M2-Planet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+int foobar() {
+  asm("DEFINE int 9090909090909090909090CD");
+}
+
 int eq(int a, int b){
 /*      return a == b; */
         asm(
