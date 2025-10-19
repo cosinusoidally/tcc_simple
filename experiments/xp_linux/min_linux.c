@@ -102,8 +102,12 @@ init_globals() {
   host_puts = data_area + (4*9);
 }
 
+int test_callback() {
+  puts("test_callback called");
+}
+
 init_runtime() {
-  wi32(host_puts, puts);
+  wi32(host_puts, test_callback);
   printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello/hello.exe"));
 }
 
