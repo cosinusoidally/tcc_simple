@@ -29,6 +29,12 @@ init_globals() {
 }
 
 int main(int argc, char **argv) {
+  int res = 0;
   init_globals();
+  res = mmap(base_address, 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
+  if(res != base_address) {
+    puts("mmap error\n");
+    exit(1);
+  }
   return 0;
 }
