@@ -38,6 +38,10 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
+int get_reg(x) {
+  return ri32(regs_data+ (x*4));
+}
+
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
   printf("in wrap_syscall_alt\n");
   printf("eax\t\t0x%x\n", eax);
@@ -66,8 +70,8 @@ int wrap_syscall() {
   int n;
 //  printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", regs_data[0], regs_data[1], regs_data[2], regs_data[3], regs_data[4], regs_data[5], regs_data[6]);
   trap_syscalls_off();
-  printf("wrap_syscall eax: %d\n", ri32(regs_data));
-  n = ri32(regs_data);
+  n = get_reg(0);
+  printf("wrap_syscall eax: %d\n", n);
   printf("unsupported syscall: %d\n",n);
   exit(1);
 }
