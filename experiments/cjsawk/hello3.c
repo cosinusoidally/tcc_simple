@@ -605,6 +605,12 @@ function host_call() {
   asm("call_indirect %0x4020024");
 }
 
+function host_puts(s) {
+  set_param(0, 3);
+  set_param(1, s);
+  return host_call();
+}
+
 function main(argc, argv) {
   int i;
   i = 0;
@@ -617,5 +623,6 @@ function main(argc, argv) {
   set_param(0, 2);
   host_call();
   fputs("test3\n", 1);
+  host_puts("This is a test");
   return 0;
 }
