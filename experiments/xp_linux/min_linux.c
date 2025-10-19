@@ -13,6 +13,8 @@ int base_address;
 int data_area;
 int host_puts;
 
+int elf_base = 0x8048000;
+
 int wi32(int o,int v) {
         int *h;
         h = o;
@@ -26,6 +28,13 @@ init_globals() {
   regs_data = data_area;
   host_puts = data_area +(4*9);
 //  wi32(host_puts, puts);
+}
+
+int load_boot(filename) {
+  int f;
+  int o;
+  f = fopen(filename, "rb");
+  fclose(f);
 }
 
 int main(int argc, char **argv) {
