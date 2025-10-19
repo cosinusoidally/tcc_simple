@@ -592,6 +592,14 @@ int memcpy(int a, int b, int c) {
   }
 }
 
+function host_params() {
+  return 0x4020028;
+}
+
+function host_call() {
+  asm("FF15 %0x4020024");
+}
+
 function main(argc, argv) {
   int i;
   i = 0;
