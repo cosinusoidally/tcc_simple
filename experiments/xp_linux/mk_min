@@ -8,6 +8,11 @@ gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_linux.o -o artifacts/m
 cp artifacts/min_linux.exe artifacts/min_linux_strip.exe
 strip artifacts/min_linux_strip.exe
 
+pushd .
+cd ../cjsawk/
+./mk_hello3
+popd
+
 ./artifacts/test_tracer.exe ./artifacts/min_linux.exe $1
 
 ls -lS artifacts/*.exe
