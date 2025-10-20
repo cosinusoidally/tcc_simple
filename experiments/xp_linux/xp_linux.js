@@ -675,6 +675,10 @@ function elf_base() {
 
 function test_reloc() {
   memcpy(base_address(), elf_base(), 0x10000);
+  wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
+  trap_syscalls_on();
+  fputs("reloc\n", 1);
+  trap_syscalls_off();
 }
 
 function main(argc, argv) {
@@ -697,5 +701,6 @@ function main(argc, argv) {
   fo = host_fopen("./artifacts/write_test.txt", "wb");
   host_fwrite(0x10000000, 1, l, fo);
   host_fclose(fo);
+  test_reloc();
   return 0;
 }
