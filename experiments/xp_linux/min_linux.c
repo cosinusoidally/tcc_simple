@@ -151,7 +151,7 @@ init_runtime() {
   wi32(host_call_fn, host_callback);
   wi32(host_stdout, stdout);
   set_reg(8, wrap_syscall_alt);
-  printf("load_size: %d\n", load_boot("../cjsawk/artifacts/builds/hello3/xp_linux_test.exe"));
+  printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
 }
 
 run_process() {

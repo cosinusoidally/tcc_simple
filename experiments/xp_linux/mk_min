@@ -8,9 +8,26 @@ gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_linux.o -o artifacts/m
 cp artifacts/min_linux.exe artifacts/min_linux_strip.exe
 strip artifacts/min_linux_strip.exe
 
+function compile_native {
+  $1 $4 $5.M1
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
+  $2 $5-0.M1 $5.hex2
+  cat ../m2min_v3/ELF-i386.hex2 $5.hex2 > $5-0.hex2
+  $3 $5-0.hex2 $5
+  chmod +x $5
+}
+
+BLD_DIR=artifacts/builds/full_cc_x86_min
+
+function compile_self {
+  compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe $1 $2
+}
+
+cp xp_linux.js artifacts/xp_linux.js
+
 pushd .
 cd ../cjsawk/
-./mk_hello3
+compile_self ../xp_linux/artifacts/xp_linux.js ../xp_linux/artifacts/xp_linux.exe
 popd
 
 echo "this is a test file" > artifacts/read_test.txt
