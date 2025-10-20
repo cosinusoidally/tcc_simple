@@ -513,7 +513,7 @@ int int2str(int x, int base, int signed_p) {
 	int sign_p;
 	int table;
 	/* Be overly conservative and save space for 32binary digits and padding null */
-	p = calloc(34, 1);
+	p = mul(256,mul(1024,1024));
 	/* if calloc fails return null to let calling code deal with it */
 	if(eq(NULL, p)) {
 		return p;
