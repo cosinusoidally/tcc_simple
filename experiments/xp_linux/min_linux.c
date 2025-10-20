@@ -16,6 +16,7 @@ int host_params;
 int host_stdout;
 
 int syscall_hook;
+int reloc_entrypoint_addr;
 
 int elf_base = 0x8048000;
 
@@ -73,13 +74,13 @@ int wrap_syscall() {
   int hook;
   trap_syscalls_off();
   if(hook = ri32(syscall_hook)) {
-    printf("calling syscall_hook 0x%x\n", hook);
+//    printf("calling syscall_hook 0x%x\n", hook);
     r = ((FUNC)hook)();
     trap_syscalls_off();
-    printf("syscall_hook result: 0x%x\n", r);
+//    printf("syscall_hook result: 0x%x\n", r);
   }
   n = get_reg(0);
-  dump_regs();
+//  dump_regs();
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
   trap_syscalls_on();
   return r;
@@ -106,6 +107,7 @@ init_globals() {
   host_params = host_call_fn + 4;
   host_stdout = host_params + (4*8);
   syscall_hook = host_stdout + 4;
+  reloc_entrypoint_addr = syscall_hook + 4;
 }
 
 int get_param(x) {
@@ -182,6 +184,7 @@ int main(int argc, char **argv) {
 
   init_runtime();
 
+  printf("reloc_entrypoint_addr: 0x%x\n", reloc_entrypoint_addr);
 /*
   printf("host_call_fn: 0x%x\n", host_call_fn);
   printf("host_params: 0x%x\n", host_params);

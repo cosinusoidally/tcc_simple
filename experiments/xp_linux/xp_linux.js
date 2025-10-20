@@ -608,6 +608,11 @@ function host_call() {
   asm("call_indirect %0x4020024");
 }
 
+function enter_reloc() {
+  asm("DEFINE call_indirect FF15");
+  asm("call_indirect %0x4020050");
+}
+
 function trap_syscalls_off() {
   set_param(0, 1);
   return host_call();
@@ -660,7 +665,7 @@ function wrap_syscall() {
   return wrap_syscall_();
 }
 function wrap_syscall_() {
-  host_puts("This is a test");
+/*  host_puts("This is a test"); */
   return 7;
 }
 
@@ -673,12 +678,23 @@ function elf_base() {
   return 0x8048000;
 }
 
-function test_reloc() {
-  memcpy(base_address(), elf_base(), 0x10000);
-  wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
+function reloc_entrypoint() {
   trap_syscalls_on();
   fputs("reloc\n", 1);
   trap_syscalls_off();
+  exit(0);
+}
+
+function reloc_entrypoint_addr() {
+  asm("mov_eax, &FUNCTION_reloc_entrypoint");
+  asm("ret");
+}
+
+function test_reloc() {
+  memcpy(base_address(), elf_base(), 0x10000);
+  wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
+  wi32(0x4020050, reloc_entrypoint_addr());
+  enter_reloc();
 }
 
 function main(argc, argv) {
