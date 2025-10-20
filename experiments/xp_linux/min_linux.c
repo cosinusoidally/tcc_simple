@@ -65,12 +65,18 @@ int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
   return wrap_syscall();
 }
 
+typedef int (* FUNC)(void);
+
 int wrap_syscall() {
   int r;
   int n;
+  int hook;
   trap_syscalls_off();
-  if(ri32(syscall_hook)) {
-    printf("calling syscall_hook\n");
+  if(hook = ri32(syscall_hook)) {
+    printf("calling syscall_hook 0x%x\n", hook);
+    r = ((FUNC)hook)();
+    trap_syscalls_off();
+    printf("syscall_hook result: 0x%x\n", r);
   }
   n = get_reg(0);
   dump_regs();
