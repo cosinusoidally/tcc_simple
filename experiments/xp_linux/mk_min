@@ -8,7 +8,7 @@ gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_linux.o -o artifacts/m
 cp artifacts/min_linux.exe artifacts/min_linux_strip.exe
 strip artifacts/min_linux_strip.exe
 
-function compile_native {
+compile_native (){
   $1 $4 $5.M1
   cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $5.M1 > $5-0.M1
   $2 $5-0.M1 $5.hex2
@@ -21,6 +21,29 @@ BLD_DIR=artifacts/builds/full_cc_x86_min
 
 function compile_self {
   compile_native $BLD_DIR/cjsawk.exe $BLD_DIR/m0.exe $BLD_DIR/hex2.exe $1 $2
+}
+
+compile_js (){
+  echo "build $2.M1"
+  echo "fname=\"$1\";load(\"cjsawk_test.js\");" > $BLD_DIR/mk_cjsawk.js
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_cjsawk.js > $2.M1
+
+  echo "append definitions to make $2-0.M1"
+
+  cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $2.M1 > $2-0.M1
+
+  echo "build $2.hex2"
+  echo "fname=\"$2-0.M1\";load(\"m0_test.js\");" > $BLD_DIR/mk_m0.js
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_m0.js > $2.hex2
+
+  echo "generate $2-0.hex2"
+  cat ../m2min_v3/ELF-i386.hex2 $2.hex2 > $2-0.hex2
+
+  echo "build $2"
+  echo "fname=\"$2-0.hex2\";load(\"hex2_test.js\");" > $BLD_DIR/mk_hex2.js
+  nodejs ../m2min_v3/node_compat_min.js $BLD_DIR/mk_hex2.js | base64 -d > $2
+
+  chmod +x $2
 }
 
 cp xp_linux.js artifacts/xp_linux.js
