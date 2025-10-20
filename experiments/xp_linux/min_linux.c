@@ -90,7 +90,7 @@ int load_boot(filename) {
 }
 
 init_globals() {
-  base_address = 64 * 1024 * 1024;
+  base_address = 0x4000000; /* 64MB */
   data_area = base_address+0x20000;
   regs_data = data_area;
   host_call_fn = data_area + (4*9);
