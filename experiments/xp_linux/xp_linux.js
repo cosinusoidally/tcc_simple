@@ -660,6 +660,7 @@ function main(argc, argv) {
   init_c();
   fputs("xp_linux test\n", 1);
   fputs("xp_linux test2\n", 1);
+  wi32(syscall_hook(), 123);
   trap_syscalls_on();
   fputs("test3\n", 1);
   trap_syscalls_off();
