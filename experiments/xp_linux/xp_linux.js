@@ -656,7 +656,9 @@ function main(argc, argv) {
   init_c();
   fputs("xp_linux test\n", 1);
   fputs("xp_linux test2\n", 1);
+  trap_syscalls_on();
   fputs("test3\n", 1);
+  trap_syscalls_off();
   host_puts("This is a test");
   host_fwrite("Hello\n", 1, 6, host_stdout());
   fi = host_fopen("./artifacts/read_test.txt", "rb");
