@@ -645,11 +645,7 @@ function main(argc, argv) {
   i = 0;
   init_c();
   fputs("xp_linux test\n", 1);
-  set_param(0, 1);
-  host_call();
   fputs("xp_linux test2\n", 1);
-  set_param(0, 2);
-  host_call();
   fputs("test3\n", 1);
   host_puts("This is a test");
   host_fwrite("Hello\n", 1, 6, host_stdout());

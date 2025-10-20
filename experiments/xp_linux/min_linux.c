@@ -48,11 +48,9 @@ int set_reg(x, v) {
   wi32(regs_data+ (x*4), v);
 }
 
-/*
 dump_regs() {
   printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", get_reg(0), get_reg(0),get_reg(1),get_reg(2),get_reg(3),get_reg(4),get_reg(5),get_reg(6));
 }
-*/
 
 int wrap_syscall_alt(edi, esi, ebp, esp, ebx, edx, ecx, eax) {
   set_reg(0, eax);
@@ -70,7 +68,7 @@ int wrap_syscall() {
   int n;
   trap_syscalls_off();
   n = get_reg(0);
-//  dump_regs();
+  dump_regs();
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
   trap_syscalls_on();
   return r;
@@ -114,29 +112,18 @@ int host_callback() {
     puts("trap_syscalls_on");
     trap_syscalls_on();
   } else if(n == 3) {
-    trap_syscalls_off();
     puts(get_param(1));
-    trap_syscalls_on();
   } else if(n == 4) {
-    trap_syscalls_off();
     r = fwrite(get_param(1), get_param(2), get_param(3), get_param(4));
-    trap_syscalls_on();
   } else if(n == 5) {
-    trap_syscalls_off();
     printf("fopen path: %s mode: %s\n", get_param(1), get_param(2));
     r = fopen(get_param(1), get_param(2));
-    trap_syscalls_on();
   } else if(n == 6) {
-    trap_syscalls_off();
     printf("fclose: %d\n", get_param(1));
     r = fclose(get_param(1));
-    trap_syscalls_on();
   } else if(n == 7) {
-    trap_syscalls_off();
     r = fread(get_param(1), get_param(2), get_param(3),get_param(4));
-    trap_syscalls_on();
   } else if(n == 8) {
-    trap_syscalls_off();
     printf("exit not impl\n");
     exit(1);
   } else {
@@ -155,7 +142,6 @@ init_runtime() {
 }
 
 run_process() {
-  trap_syscalls_on();
   /* set up stack pointer */
   asm("mov $0x8045800,%esp");
   /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
