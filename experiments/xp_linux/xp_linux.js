@@ -380,6 +380,10 @@ int fclose(int stream)
 	return error;
 }
 
+function mks(s) {
+  return s;
+}
+
 int brk(int addr)
 {
 	asm("mov_eax,[esp+DWORD] %4"
@@ -515,12 +519,12 @@ int int2str(int x, int base, int signed_p) {
 	/* Be overly conservative and save space for 32binary digits and padding null */
 	p = mul(256,mul(1024,1024));
 	/* if calloc fails return null to let calling code deal with it */
-	if(eq(NULL, p)) {
+	if(eq(0, p)) {
 		return p;
 	}
 
 	p = add(p, 32);
-	sign_p = FALSE;
+	sign_p = 0;
 	table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	if(and(and(signed_p, eq(10, base)), neq(0, (and(x, 0x80000000))))) {
@@ -680,7 +684,7 @@ function elf_base() {
 
 function reloc_entrypoint() {
   trap_syscalls_on();
-  fputs("reloc\n", 1);
+  fputs(mks("reloc\n"), 1);
   trap_syscalls_off();
   exit(0);
 }
