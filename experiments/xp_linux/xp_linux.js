@@ -591,6 +591,10 @@ function host_stdout() {
   return ri32(0x4020048);
 }
 
+function syscall_hook() {
+  return 0x402004C;
+}
+
 function set_param(i, v) {
   wi32(add(host_params(), mul(i, 4)), v);
 }

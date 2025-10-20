@@ -15,6 +15,8 @@ int host_call_fn;
 int host_params;
 int host_stdout;
 
+int syscall_hook;
+
 int elf_base = 0x8048000;
 
 int wi32(int o,int v) {
@@ -94,6 +96,7 @@ init_globals() {
   host_call_fn = data_area + (4*9);
   host_params = host_call_fn + 4;
   host_stdout = host_params + (4*8);
+  syscall_hook = host_stdout + 4;
 }
 
 int get_param(x) {
