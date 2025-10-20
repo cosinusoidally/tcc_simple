@@ -683,7 +683,7 @@ function wrap_syscall() {
   return wrap_syscall_();
 }
 function wrap_syscall_() {
-/*  host_puts("This is a test"); */
+  host_puts(mks("wrap_syscall called"));
   return 7;
 }
 
