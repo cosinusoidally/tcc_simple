@@ -583,6 +583,10 @@ int memcpy(int a, int b, int c) {
   }
 }
 
+function base_address() {
+  return 0x4000000;
+}
+
 function host_params() {
   return 0x4020028;
 }
@@ -663,6 +667,14 @@ function wrap_syscall_() {
 function wrap_syscall_addr() {
   asm("mov_eax, &FUNCTION_wrap_syscall");
   asm("ret");
+}
+
+function elf_base() {
+  return 0x8048000;
+}
+
+function test_reloc() {
+  memcpy(base_address(), elf_base(), 0x10000);
 }
 
 function main(argc, argv) {
