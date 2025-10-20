@@ -684,8 +684,13 @@ function elf_base() {
 }
 
 function reloc_entrypoint() {
+  int a;
+/*  memset(elf_base(), 0, 0x10000); */
   trap_syscalls_on();
-  fputs(mks("reloc\n"), 1);
+  a = mks("reloc blah\n");
+  fputs(a, 1);
+  fputs(int2str(a,16,0), 1);
+  fputs(mks("\n"), 1);
   trap_syscalls_off();
   exit(0);
 }
@@ -698,7 +703,7 @@ function reloc_entrypoint_addr() {
 function test_reloc() {
   memcpy(base_address(), elf_base(), 0x10000);
   wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
-  wi32(0x4020050, reloc_entrypoint_addr());
+  wi32(0x4020050, add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));
   enter_reloc();
 }
 
