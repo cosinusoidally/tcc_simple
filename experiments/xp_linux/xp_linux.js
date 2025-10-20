@@ -1,5 +1,6 @@
-/* note this is not yet xp_linux, see ./mk for the actual current version of
- * xp_linux. This file is a prototype for the "v2" version */
+/* note this is not yet xp_linux, see ./mk_test/tcc for the actual current
+ *  version of xp_linux. This file is a prototype for the "v2" version
+ */
 
 int foobar() {
   asm("DEFINE int 9090909090909090909090CD");
