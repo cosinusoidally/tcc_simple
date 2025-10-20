@@ -651,6 +651,20 @@ function host_fclose(fp) {
   return host_call();
 }
 
+function wrap_syscall() {
+/* needed to set up stack frame correctly when called from tcc generated code */
+  return wrap_syscall_();
+}
+function wrap_syscall_() {
+  host_puts("This is a test");
+  return 7;
+}
+
+function wrap_syscall_addr() {
+  asm("mov_eax, &FUNCTION_wrap_syscall");
+  asm("ret");
+}
+
 function main(argc, argv) {
   int i;
   int fi;
