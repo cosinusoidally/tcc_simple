@@ -600,6 +600,16 @@ function host_call() {
   asm("call_indirect %0x4020024");
 }
 
+function trap_syscalls_off() {
+  set_param(0, 1);
+  return host_call();
+}
+
+function trap_syscalls_on() {
+  set_param(0, 2);
+  return host_call();
+}
+
 function host_puts(s) {
   set_param(0, 3);
   set_param(1, s);
