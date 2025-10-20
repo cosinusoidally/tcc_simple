@@ -380,7 +380,14 @@ int fclose(int stream)
 	return error;
 }
 
+function get_eip() {
+  asm("pop_eax");
+  asm("push_eax");
+  asm("ret");
+}
+
 function mks(s) {
+  fputs(int2str(get_eip(), 16, 0), 1);
   return s;
 }
 
@@ -701,6 +708,7 @@ function reloc_entrypoint_addr() {
 }
 
 function test_reloc() {
+  fputs(mks("test_reloc\n"), 1);
   memcpy(base_address(), elf_base(), 0x10000);
   wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
   wi32(0x4020050, add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));
