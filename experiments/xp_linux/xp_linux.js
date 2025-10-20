@@ -387,8 +387,14 @@ function get_eip() {
 }
 
 function mks(s) {
-  fputs(int2str(get_eip(), 16, 0), 1);
-  return s;
+  int r;
+  if(gte(get_eip(),elf_base())) {
+    r = s;
+  } else {
+    r = add(base_address(), sub(s, elf_base()));
+  }
+/*  fputs(int2str(r, 16, 0), 1); */
+  return r;
 }
 
 int brk(int addr)
@@ -696,8 +702,10 @@ function reloc_entrypoint() {
   trap_syscalls_on();
   a = mks("reloc blah\n");
   fputs(a, 1);
+/*
   fputs(int2str(a,16,0), 1);
   fputs(mks("\n"), 1);
+*/
   trap_syscalls_off();
   exit(0);
 }
