@@ -112,18 +112,29 @@ int host_callback() {
     puts("trap_syscalls_on");
     trap_syscalls_on();
   } else if(n == 3) {
+    trap_syscalls_off();
     puts(get_param(1));
+    trap_syscalls_on();
   } else if(n == 4) {
+    trap_syscalls_off();
     r = fwrite(get_param(1), get_param(2), get_param(3), get_param(4));
+    trap_syscalls_on();
   } else if(n == 5) {
+    trap_syscalls_off();
     printf("fopen path: %s mode: %s\n", get_param(1), get_param(2));
     r = fopen(get_param(1), get_param(2));
+    trap_syscalls_on();
   } else if(n == 6) {
+    trap_syscalls_off();
     printf("fclose: %d\n", get_param(1));
     r = fclose(get_param(1));
+    trap_syscalls_on();
   } else if(n == 7) {
+    trap_syscalls_off();
     r = fread(get_param(1), get_param(2), get_param(3),get_param(4));
+    trap_syscalls_on();
   } else if(n == 8) {
+    trap_syscalls_off();
     printf("exit not impl\n");
     exit(1);
   } else {
