@@ -654,10 +654,10 @@ function main(argc, argv) {
   int i;
   int fi;
   int fo;
+  int l;
   i = 0;
   init_c();
   fputs("xp_linux test\n", 1);
-  host_call();
   set_param(0, 1);
   host_call();
   fputs("xp_linux test2\n", 1);
@@ -667,9 +667,9 @@ function main(argc, argv) {
   host_puts("This is a test");
   host_fwrite("Hello\n", 1, 6, host_stdout());
   fi = host_fopen("./artifacts/read_test.txt", "rb");
-  host_fread(0x10000000, 1, 1024, fi);
+  l = host_fread(0x10000000, 1, 1024, fi);
   fo = host_fopen("./artifacts/write_test.txt", "wb");
-  host_fwrite(0x10000000, 1, 1024, fo);
+  host_fwrite(0x10000000, 1, l, fo);
   host_fclose(fo);
   return 0;
 }
