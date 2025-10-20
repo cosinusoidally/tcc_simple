@@ -698,7 +698,7 @@ function elf_base() {
 
 function reloc_entrypoint() {
   int a;
-/*  memset(elf_base(), 0, 0x10000); */
+  memset(elf_base(), 0, 0x10000);
   trap_syscalls_on();
   a = mks("reloc blah\n");
   fputs(a, 1);
