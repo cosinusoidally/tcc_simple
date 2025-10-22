@@ -539,7 +539,7 @@ int int2str(int x, int base, int signed_p) {
 
 	p = add(p, 32);
 	sign_p = 0;
-	table = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	table = mks("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 	if(and(and(signed_p, eq(10, base)), neq(0, (and(x, 0x80000000))))) {
 		/* Truncate to 31bits */
