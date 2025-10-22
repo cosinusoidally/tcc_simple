@@ -738,7 +738,6 @@ function wrap_syscall_() {
   if(eq(n, 4)) {
     r = vm_write();
   } else {
-    host_exit(1);
     trap_syscalls_off();
     host_fputs("unsupported syscall: ", host_stdout());
     host_fputs(int2str(n, 10, 0), host_stdout());
