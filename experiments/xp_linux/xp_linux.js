@@ -307,15 +307,6 @@ function mks(s) {
   return r;
 }
 
-int brk(int addr)
-{
-	asm("mov_eax,[esp+DWORD] %4"
-	    "push_eax"
-	    "mov_eax, %45"
-	    "pop_ebx"
-	    "int !0x80");
-}
-
 int strlen(int str)
 {
 	int i;
@@ -383,9 +374,6 @@ int int2str(int x, int base, int signed_p) {
 
 	return add(p, 1);
 }
-
-int p_size;
-int verbose;
 
 int memcpy(int a, int b, int c) {
   int dest;
