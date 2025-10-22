@@ -687,6 +687,12 @@ function host_fclose(fp) {
   return host_call();
 }
 
+function host_fputs(s, fd) {
+  var l;
+  l=strlen(s);
+  host_fwrite(s, 1, l, fd);
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
