@@ -147,7 +147,7 @@ int host_callback() {
   } else if(n == 8) {
     trap_syscalls_off();
     printf("exit called\n");
-    exit(1);
+    exit(get_param(1));
   } else {
     trap_syscalls_off();
     printf("Invalid host call: %d\n", n);
