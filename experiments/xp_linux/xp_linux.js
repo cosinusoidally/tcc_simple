@@ -769,6 +769,15 @@ function load_boot(filename) {
   return sub(o, elf_base());
 }
 
+function run_process() {
+  asm("DEFINE mov_esp, BC");
+  asm("DEFINE jmp_indirect FF25");
+  asm("mov_esp, %0x8045800");
+  /* set up stack pointer */
+  asm("mov_esp, %0x8045800");
+  /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
+  asm("jmp_indirect %0x8048018");
+}
 
 function reloc_entrypoint() {
   int a;
@@ -783,6 +792,8 @@ function reloc_entrypoint() {
   host_fputs(mks("file length: "), host_stdout());
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
+  trap_syscalls_on();
+  run_process();
   trap_syscalls_off();
   exit(0);
 }
