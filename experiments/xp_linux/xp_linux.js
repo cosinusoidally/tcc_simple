@@ -702,7 +702,9 @@ function wrap_syscall_() {
   var n;
 /*  host_puts(mks("wrap_syscall called")); */
   n = get_reg(0);
-  host_puts(int2str(n, 10, 0));
+  host_fputs("n: ", host_stdout());
+  host_fputs(int2str(n, 10, 0), host_stdout());
+  host_fputs("\n", host_stdout());
   return 7;
 }
 
