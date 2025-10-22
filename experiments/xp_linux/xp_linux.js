@@ -693,6 +693,17 @@ function host_fputs(s, fd) {
   host_fwrite(s, 1, l, fd);
 }
 
+function host_exit(s) {
+  set_param(0, 8);
+  set_param(1, s);
+  host_call();
+}
+
+function vm_write() {
+  host_puts("vm_write not impl");
+  host_exit(1);
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
@@ -705,6 +716,15 @@ function wrap_syscall_() {
   host_fputs("n: ", host_stdout());
   host_fputs(int2str(n, 10, 0), host_stdout());
   host_fputs("\n", host_stdout());
+  if(eq(n, 4)) {
+    r = vm_write();
+  } else {
+    trap_syscalls_off();
+    host_fputs("unsupported syscall: ", host_stdout());
+    host_fputs(int2str(n, 10, 0), host_stdout());
+    host_fputs("\n", host_stdout());
+    host_exit(1);
+  }
   return 7;
 }
 
