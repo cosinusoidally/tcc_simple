@@ -739,9 +739,9 @@ function wrap_syscall_() {
     r = vm_write();
   } else {
     trap_syscalls_off();
-    host_fputs("unsupported syscall: ", host_stdout());
+    host_fputs(mks("unsupported syscall: "), host_stdout());
     host_fputs(int2str(n, 10, 0), host_stdout());
-    host_fputs("\n", host_stdout());
+    host_fputs(mks("\n"), host_stdout());
     host_exit(1);
   }
   return r;
@@ -765,19 +765,24 @@ function load_boot(filename) {
   while(size = host_fread(o, 1, 4096, f)) {
     o = add(o, size);
   }
-  fclose(f);
+  host_fclose(f);
   return sub(o, elf_base());
 }
 
 
 function reloc_entrypoint() {
   int a;
+  int l;
   memset(elf_base(), 0, 0x10000);
   trap_syscalls_on();
   a = mks("reloc blah\n");
   fputs(a, 1);
   fputs(int2str(a,16,0), 1);
   fputs(mks("\n"), 1);
+  l = load_boot(mks("../cjsawk/artifacts/builds/hello/hello.exe"));
+  host_fputs(mks("file length: "), host_stdout());
+  host_fputs(int2str(l, 10, 0), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
   trap_syscalls_off();
   exit(0);
 }
