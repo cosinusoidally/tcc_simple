@@ -700,7 +700,24 @@ function host_exit(s) {
 }
 
 function vm_write() {
-  host_puts("vm_write not impl");
+  var r;
+  var t;
+  var fd;
+  var buf;
+  var count;
+  var c2;
+  fd = get_reg(1);
+  buf = get_reg(2);
+  count = get_reg(3);
+  c2 = count;
+  if(lt(fd, 3)) {
+    trap_syscalls_off();
+    host_fwrite(buf, 1, count, host_stdout());
+    trap_syscalls_on();
+    return count;
+  }
+  trap_syscalls_off();
+  host_puts("vm_write to file not impl");
   host_exit(1);
 }
 
@@ -713,19 +730,22 @@ function wrap_syscall_() {
   var n;
 /*  host_puts(mks("wrap_syscall called")); */
   n = get_reg(0);
+/*
   host_fputs("n: ", host_stdout());
   host_fputs(int2str(n, 10, 0), host_stdout());
   host_fputs("\n", host_stdout());
+*/
   if(eq(n, 4)) {
     r = vm_write();
   } else {
+    host_exit(1);
     trap_syscalls_off();
     host_fputs("unsupported syscall: ", host_stdout());
     host_fputs(int2str(n, 10, 0), host_stdout());
     host_fputs("\n", host_stdout());
     host_exit(1);
   }
-  return 7;
+  return r;
 }
 
 function wrap_syscall_addr() {
@@ -743,10 +763,8 @@ function reloc_entrypoint() {
   trap_syscalls_on();
   a = mks("reloc blah\n");
   fputs(a, 1);
-/*
   fputs(int2str(a,16,0), 1);
   fputs(mks("\n"), 1);
-*/
   trap_syscalls_off();
   exit(0);
 }

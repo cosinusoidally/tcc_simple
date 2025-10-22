@@ -72,13 +72,12 @@ int wrap_syscall() {
   int r;
   int n;
   int hook;
-  trap_syscalls_off();
   if(hook = ri32(syscall_hook)) {
 //    printf("calling syscall_hook 0x%x\n", hook);
-    r = ((FUNC)hook)();
-    trap_syscalls_off();
+    return ((FUNC)hook)();
 //    printf("syscall_hook result: 0x%x\n", r);
   }
+  trap_syscalls_off();
   n = get_reg(0);
 //  dump_regs();
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
@@ -121,9 +120,7 @@ int host_callback() {
   n = get_param(0);
   if(n == 1) {
     trap_syscalls_off();
-    puts("trap_syscalls_off");
   } else if(n == 2) {
-    puts("trap_syscalls_on");
     trap_syscalls_on();
   } else if(n == 3) {
     trap_syscalls_off();
