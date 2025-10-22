@@ -810,8 +810,8 @@ function reloc_entrypoint_addr() {
   asm("ret");
 }
 
-function test_reloc() {
-  fputs(mks("test_reloc\n"), 1);
+function reloc_self() {
+  fputs(mks("reloc_self\n"), 1);
   memcpy(base_address(), elf_base(), 0x10000);
   wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
   wi32(0x4020050, add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));
@@ -821,6 +821,6 @@ function test_reloc() {
 function main(argc, argv) {
   init_c();
   wi32(syscall_hook(), wrap_syscall_addr());
-  test_reloc();
+  reloc_self();
   return 0;
 }
