@@ -1,11 +1,3 @@
-/* note this is not yet xp_linux, see ./mk_test/tcc for the actual current
- *  version of xp_linux. This file is a prototype for the "v2" version
- */
-
-int foobar() {
-  asm("DEFINE int 9090909090909090909090CD");
-}
-
 int eq(int a, int b){
 /*      return a == b; */
         asm(
@@ -584,6 +576,7 @@ function reloc_entrypoint() {
   host_fputs(int2str(a,16,0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   l = load_boot(mks("../cjsawk/artifacts/builds/hello/hello.exe"));
+/*  l = load_boot(mks("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe")); */
   host_fputs(mks("file length: "), host_stdout());
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
