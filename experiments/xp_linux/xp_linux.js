@@ -756,6 +756,20 @@ function elf_base() {
   return 0x8048000;
 }
 
+function load_boot(filename) {
+  var f;
+  var o;
+  var size;
+  f = host_fopen(filename, mks("rb"));
+  o = elf_base();
+  while(size = host_fread(o, 1, 4096, f)) {
+    o = add(o, size);
+  }
+  fclose(f);
+  return sub(o, elf_base());
+}
+
+
 function reloc_entrypoint() {
   int a;
   memset(elf_base(), 0, 0x10000);
