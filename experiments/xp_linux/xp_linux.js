@@ -290,13 +290,6 @@ int wi32(int o, int v) {
   wi8(add(o, 3), and(v, 0xFF));
 }
 
-int stdin;
-int stdout;
-int stderr;
-int NULL;
-int TRUE;
-int FALSE;
-
 function get_eip() {
   asm("pop_eax");
   asm("push_eax");
@@ -393,16 +386,6 @@ int int2str(int x, int base, int signed_p) {
 
 int p_size;
 int verbose;
-
-int init_c() {
-  p_size = 4;
-  stdin = 0;
-  stdout = 1;
-  stderr = 3;
-  NULL = 0;
-  TRUE = 1;
-  FALSE = 0;
-}
 
 int memcpy(int a, int b, int c) {
   int dest;
@@ -636,7 +619,6 @@ function reloc_self() {
 }
 
 function main(argc, argv) {
-  init_c();
   wi32(syscall_hook(), wrap_syscall_addr());
   reloc_self();
   return 0;
