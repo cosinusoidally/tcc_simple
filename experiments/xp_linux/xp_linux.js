@@ -345,31 +345,6 @@ int memset(int ptr, int value, int num)
 	}
 }
 
-int match(int a, int b) {
-	int i;
-	if(and(eq(NULL, a), eq(NULL, b))) {
-		return TRUE;
-	}
-	if(eq(NULL, a)) {
-		return FALSE;
-	}
-	if(eq(NULL, b)) {
-		return FALSE;
-	}
-
-	i = sub(0, 1);
-	while(1) {
-		i = add(i, 1);
-		if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
-			return FALSE;
-		}
-		if(eq(0,and(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
-			break;
-		}
-	}
-	return TRUE;
-}
-
 int int2str(int x, int base, int signed_p) {
 	int p;
 	int i;
@@ -391,9 +366,9 @@ int int2str(int x, int base, int signed_p) {
 		/* Truncate to 31bits */
 		i = and(sub(0, x), 0x7FFFFFFF);
 		if(eq(0, i)) {
-			return "-2147483648";
+			return mks("-2147483648");
 		}
-		sign_p = TRUE;
+		sign_p = 1;
 	} else {
 		/* Truncate to 32bits */
 		i = and(x, or(0x7FFFFFFF, shl(1, 31)));
