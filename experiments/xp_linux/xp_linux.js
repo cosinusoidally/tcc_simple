@@ -819,25 +819,8 @@ function test_reloc() {
 }
 
 function main(argc, argv) {
-  int i;
-  int fi;
-  int fo;
-  int l;
-  i = 0;
   init_c();
-  fputs("xp_linux test\n", 1);
-  fputs("xp_linux test2\n", 1);
   wi32(syscall_hook(), wrap_syscall_addr());
-  trap_syscalls_on();
-  fputs("test3\n", 1);
-  trap_syscalls_off();
-  host_puts("This is a test");
-  host_fwrite("Hello\n", 1, 6, host_stdout());
-  fi = host_fopen("./artifacts/read_test.txt", "rb");
-  l = host_fread(0x10000000, 1, 1024, fi);
-  fo = host_fopen("./artifacts/write_test.txt", "wb");
-  host_fwrite(0x10000000, 1, l, fo);
-  host_fclose(fo);
   test_reloc();
   return 0;
 }
