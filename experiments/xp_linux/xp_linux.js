@@ -721,6 +721,11 @@ function vm_write() {
   host_exit(1);
 }
 
+function vm_exit() {
+  trap_syscalls_off();
+  host_exit(get_reg(1));
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
@@ -737,6 +742,8 @@ function wrap_syscall_() {
 */
   if(eq(n, 4)) {
     r = vm_write();
+  } else if(eq(n, 1)) {
+    r = vm_exit();
   } else {
     trap_syscalls_off();
     host_fputs(mks("unsupported syscall: "), host_stdout());

@@ -146,7 +146,7 @@ int host_callback() {
     trap_syscalls_on();
   } else if(n == 8) {
     trap_syscalls_off();
-    printf("exit not impl\n");
+    printf("exit called\n");
     exit(1);
   } else {
     trap_syscalls_off();
