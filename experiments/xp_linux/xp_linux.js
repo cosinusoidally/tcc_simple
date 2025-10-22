@@ -735,11 +735,13 @@ function wrap_syscall_() {
   var n;
 /*  host_puts(mks("wrap_syscall called")); */
   n = get_reg(0);
-/*
-  host_fputs("n: ", host_stdout());
+
+  trap_syscalls_off();
+  host_fputs(mks("n: "), host_stdout());
   host_fputs(int2str(n, 10, 0), host_stdout());
-  host_fputs("\n", host_stdout());
-*/
+  host_fputs(mks("\n"), host_stdout());
+  trap_syscalls_on();
+
   if(eq(n, 4)) {
     r = vm_write();
   } else if(eq(n, 1)) {
@@ -790,11 +792,10 @@ function reloc_entrypoint() {
   int a;
   int l;
   memset(elf_base(), 0, 0x10000);
-  trap_syscalls_on();
   a = mks("reloc blah\n");
-  fputs(a, 1);
-  fputs(int2str(a,16,0), 1);
-  fputs(mks("\n"), 1);
+  host_fputs(a, host_stdout());
+  host_fputs(int2str(a,16,0), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
   l = load_boot(mks("../cjsawk/artifacts/builds/hello/hello.exe"));
   host_fputs(mks("file length: "), host_stdout());
   host_fputs(int2str(l, 10, 0), host_stdout());
@@ -811,7 +812,7 @@ function reloc_entrypoint_addr() {
 }
 
 function reloc_self() {
-  fputs(mks("reloc_self\n"), 1);
+  host_fputs(mks("reloc_self\n"), host_stdout());
   memcpy(base_address(), elf_base(), 0x10000);
   wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
   wi32(0x4020050, add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));

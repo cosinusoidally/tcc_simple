@@ -78,6 +78,8 @@ int wrap_syscall() {
 //    printf("syscall_hook result: 0x%x\n", r);
   }
   trap_syscalls_off();
+  printf("Shouldn't get here\n");
+  exit(1);
   n = get_reg(0);
 //  dump_regs();
   r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
@@ -123,29 +125,18 @@ int host_callback() {
   } else if(n == 2) {
     trap_syscalls_on();
   } else if(n == 3) {
-    trap_syscalls_off();
     puts(get_param(1));
-    trap_syscalls_on();
   } else if(n == 4) {
-    trap_syscalls_off();
     r = fwrite(get_param(1), get_param(2), get_param(3), get_param(4));
-    trap_syscalls_on();
   } else if(n == 5) {
-    trap_syscalls_off();
     printf("fopen path: %s mode: %s\n", get_param(1), get_param(2));
     r = fopen(get_param(1), get_param(2));
-    trap_syscalls_on();
   } else if(n == 6) {
-    trap_syscalls_off();
     printf("fclose: %d\n", get_param(1));
     r = fclose(get_param(1));
-    trap_syscalls_on();
   } else if(n == 7) {
-    trap_syscalls_off();
     r = fread(get_param(1), get_param(2), get_param(3),get_param(4));
-    trap_syscalls_on();
   } else if(n == 8) {
-    trap_syscalls_off();
     printf("exit called\n");
     exit(get_param(1));
   } else {
