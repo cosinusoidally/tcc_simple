@@ -297,43 +297,6 @@ int NULL;
 int TRUE;
 int FALSE;
 
-int puts(int a);
-int exit(int value);
-
-int fgetc(int f)
-{
-	asm("mov_eax, %3"
-	    "lea_ebx,[esp+DWORD] %4"
-	    "mov_ebx,[ebx]"
-	    "push_ebx"
-	    "mov_ecx,esp"
-	    "mov_edx, %1"
-	    "int !0x80"
-	    "test_eax,eax"
-	    "pop_eax"
-	    "jne %FUNCTION_fgetc_Done"
-	    "mov_eax, %-1"
-	    ":FUNCTION_fgetc_Done");
-}
-
-int fputc(int s, int f)
-{
-	asm("mov_eax, %4"
-	    "lea_ebx,[esp+DWORD] %4"
-	    "mov_ebx,[ebx]"
-	    "lea_ecx,[esp+DWORD] %8"
-	    "mov_edx, %1"
-	    "int !0x80");
-}
-
-int fputs(int si, int f) {
-	while(neq(0, ri8(si))) {
-		fputc(ri8(si), f);
-		si = add(si, 1);
-	}
-}
-
-
 int open(int name, int flag, int mode)
 {
 	asm("lea_ebx,[esp+DWORD] %12"
@@ -461,29 +424,6 @@ int calloc(int count, int size)
 	return ret;
 }
 
-
-int free(int l)
-{
-	return;
-}
-
-int exit(int value)
-{
-	asm("pop_ebx"
-	    "pop_ebx"
-	    "mov_eax, %1"
-	    "int !0x80");
-}
-
-int require(int bool, int error)
-{
-	if(eq(0,bool))
-	{
-		fputs(error, stderr);
-		exit(1);
-	}
-}
-
 int match(int a, int b) {
 	int i;
 	if(and(eq(NULL, a), eq(NULL, b))) {
@@ -507,21 +447,6 @@ int match(int a, int b) {
 		}
 	}
 	return TRUE;
-}
-
-int in_set(int c, int s) {
-	/* NULL set is always false */
-	if(eq(NULL, s)) {
-		return FALSE;
-	}
-
-	while(neq(0, ri8(s))) {
-		if(eq(c, ri8(s))) {
-			return TRUE;
-		}
-		s = add(s, 1);
-	}
-	return FALSE;
 }
 
 int int2str(int x, int base, int signed_p) {
@@ -572,11 +497,6 @@ int int2str(int x, int base, int signed_p) {
 
 int p_size;
 int verbose;
-
-int puts(int a) {
-  fputs(a,stdout);
-  fputs("\n",stdout);
-}
 
 int init_c() {
   p_size = 4;
@@ -803,7 +723,7 @@ function reloc_entrypoint() {
   trap_syscalls_on();
   run_process();
   trap_syscalls_off();
-  exit(0);
+  host_exit(0);
 }
 
 function reloc_entrypoint_addr() {
