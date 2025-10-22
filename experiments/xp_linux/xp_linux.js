@@ -617,6 +617,15 @@ function syscall_hook() {
   return 0x402004C;
 }
 
+function regs_data() {
+  return 0x4020000;
+}
+
+function get_reg(x) {
+  return ri32(add(regs_data(), mul(x,4)));
+}
+
+
 function set_param(i, v) {
   wi32(add(host_params(), mul(i, 4)), v);
 }
@@ -683,7 +692,11 @@ function wrap_syscall() {
   return wrap_syscall_();
 }
 function wrap_syscall_() {
-  host_puts(mks("wrap_syscall called"));
+  var r;
+  var n;
+/*  host_puts(mks("wrap_syscall called")); */
+  n = get_reg(0);
+  host_puts(int2str(n, 10, 0));
   return 7;
 }
 
