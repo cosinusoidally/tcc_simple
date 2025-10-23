@@ -539,6 +539,32 @@ function load_boot(filename) {
   return sub(o, elf_base());
 }
 
+function absolute_path(filename) {
+/* FIXME correct impl */
+  return filename;
+}
+
+function new_file(filename) {
+  var l_prev;
+  filename = absolute_path(filename);
+/*
+  l_prev = gfd_get_file_length(next_filenum - 1);
+  if(l_prev == 0) {
+*/
+/*    printf("new_file: applying hacky work around to open multiple files for write\n"); */
+/*
+    file_addr = file_addr + (1024*1024);
+  }
+  file_addr = file_addr + l_prev;
+  gfd_set_file_addr(next_filenum, file_addr);
+  gfd_set_file_length(next_filenum, 0);
+  strcpy(gfn_get_filename(next_filenum), filename);
+  next_filenum = next_filenum + 1;
+  return next_filenum - 1;
+*/
+}
+
+
 function load_file(realname, virtualname) {
   int f;
   int c;
@@ -549,8 +575,8 @@ function load_file(realname, virtualname) {
   host_fputs(virtualname, host_stdout());
   host_fputs(mks("\n"), host_stdout());
   f = host_fopen(realname, mks("rb"));
-/*
   t = new_file(virtualname);
+/*
   while((c = fgetc(f)) != -1) {
     wi8(file_addr+gfd_get_file_length(t), c);
     gfd_set_file_length(t, gfd_get_file_length(t)+1);
