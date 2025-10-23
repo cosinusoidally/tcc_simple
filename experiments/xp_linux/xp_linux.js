@@ -680,6 +680,11 @@ function run_process(cmdline) {
   int e_phoff;
   int e_phnum;
   int e_phentsize;
+  int pheader;
+  int p_offset;
+  int p_vaddr;
+  int p_filesz;
+  int j;
 
   args_offset = 2048;
   args = args_base();
@@ -751,6 +756,27 @@ function run_process(cmdline) {
   if(neq(e_phentsize, 0x20)){
     host_fputs(mks("invalid e_phentsize\n"), host_stdout());
     host_exit(1);
+  }
+
+  i = 0;
+  while(lt(i, e_phnum)) {
+    pheader = add(p, add(e_phoff, mul(i, e_phentsize)));
+    p_offset = ri32(add(pheader, 0x4));
+    p_vaddr = ri32(add(pheader, 0x8));
+    p_filesz = ri32(add(pheader, 0x10));
+    print_labled_hex(mks("pheader"), i);
+    print_labled_hex(mks("p_offset"), p_offset);
+    print_labled_hex(mks("p_vaddr"), p_vaddr);
+    print_labled_hex(mks("p_filesz"), p_filesz);
+    j = 0;
+    while(lt(j, p_filesz)) {
+      wi8(add(p_vaddr, j), ri8(add(p, add(p_offset, j))));
+      j = add(j, 1);
+    }
+    i = add(i, 1);
+/*
+    brk_ptr = 4096+4096*((p_vaddr+p_filesz)/4096);
+*/
   }
 
   trap_syscalls_on();
