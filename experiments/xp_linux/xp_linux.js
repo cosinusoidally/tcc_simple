@@ -381,7 +381,7 @@ int memcpy(int a, int b, int c) {
 }
 
 function host_stdout() {
-  return ri32(0x4020048);
+  return ri32(host_stdout_addr());
 }
 
 function get_reg(x) {
@@ -522,10 +522,6 @@ function wrap_syscall_() {
 function wrap_syscall_addr() {
   asm("mov_eax, &FUNCTION_wrap_syscall");
   asm("ret");
-}
-
-function elf_base() {
-  return 0x8048000;
 }
 
 function load_boot(filename) {

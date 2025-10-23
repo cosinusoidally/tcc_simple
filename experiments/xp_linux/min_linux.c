@@ -80,11 +80,6 @@ int wrap_syscall() {
   trap_syscalls_off();
   printf("Shouldn't get here\n");
   exit(1);
-  n = get_reg(0);
-//  dump_regs();
-  r = syscall(get_reg(0), get_reg(1), get_reg(2),get_reg(3),get_reg(4),get_reg(5), get_reg(6));
-  trap_syscalls_on();
-  return r;
 }
 
 int load_boot(filename) {
