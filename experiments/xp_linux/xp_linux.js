@@ -552,10 +552,12 @@ function new_file(filename) {
     host_puts(mks("new_file: applying hacky work around to open multiple files for write\n"));
     wi32(file_addr(), add(ri32(file_addr()), mul(1024, 1024)));
   }
+  wi32(file_addr(),add(file_addr(), l_prev));
+  gfd_set_file_addr(ri32(next_filenum()), ri32(file_addr()));
+  host_puts(mks("gfd_set_file_length: "), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
 /*
-  file_addr = file_addr + l_prev;
-  gfd_set_file_addr(next_filenum, file_addr);
-  gfd_set_file_length(next_filenum, 0);
+  gfd_set_file_length(ri32(next_filenum()), 0);
   strcpy(gfn_get_filename(next_filenum), filename);
   next_filenum = next_filenum + 1;
   return next_filenum - 1;
