@@ -544,6 +544,27 @@ function absolute_path(filename) {
   return filename;
 }
 
+function find_file(filename) {
+  return 0;
+/*
+  int t;
+  int i = next_filenum - 1;
+  if(dbg) {printf("find_file: %s\n", filename);}
+  filename = absolute_path(filename);
+  while(i>3) {
+    t = filename_array+(i*filename_size);
+    if(dbg) {printf("looking at: %s\n", t);}
+    if(strcmp(t, filename) == 0) {
+      if(dbg) {printf("found: %s %d\n", filename, i);}
+      return i;
+    }
+    i = i - 1;
+  }
+  if(dbg) {printf("not found %s\n", filename);}
+  return 0;
+*/
+}
+
 function print_file_addr() {
     host_fputs(mks("file_addr: 0x"), host_stdout());
     host_fputs(int2str(ri32(file_addr()), 16, 0), host_stdout());
@@ -675,6 +696,14 @@ function run_process(cmdline) {
 
   /* dispatch built in commands */
   /* FIXME impl builtins */
+
+  if(foo = find_file(ri32(add(args, 4)))) {
+    host_fputs(mks("run_process: in vfs found "), host_stdout());
+    host_fputs(ri32(add(args, 4)), host_stdout());
+    host_fputs(mks("\n"), host_stdout());
+  } else {
+    foo = load_file(ri32(add(args, 4)), ri32(add(args, 4)));
+  }
 
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
