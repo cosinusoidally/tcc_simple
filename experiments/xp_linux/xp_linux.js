@@ -397,6 +397,13 @@ int int2str(int x, int base, int signed_p) {
 	return add(p, 1);
 }
 
+function print_labled_hex(s, v) {
+  host_fputs(s, host_stdout());
+  host_fputs(mks(": "), host_stdout());
+  host_fputs(int2str(v, 16, 0), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+}
+
 int memcpy(int a, int b, int c) {
   int dest;
   int src;
