@@ -550,7 +550,7 @@ function new_file(filename) {
   l_prev = gfd_get_file_length(sub(ri32(next_filenum()), 1));
   if(eq(l_prev, 0)) {
     host_puts(mks("new_file: applying hacky work around to open multiple files for write\n"));
-/*    file_addr = file_addr + (1024*1024); */
+    wi32(file_addr(), add(ri32(file_addr()), mul(1024, 1024)));
   }
 /*
   file_addr = file_addr + l_prev;
@@ -660,6 +660,7 @@ function reloc_self() {
 function main(argc, argv) {
   wi32(syscall_hook(), wrap_syscall_addr());
   wi32(next_filenum(), 4);
+  wi32(file_addr(), mul(256, mul(1024,1024)));
   reloc_self();
   return 0;
 }
