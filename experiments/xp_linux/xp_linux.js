@@ -555,11 +555,9 @@ function new_file(filename) {
   wi32(file_addr(),add(file_addr(), l_prev));
   gfd_set_file_addr(ri32(next_filenum()), ri32(file_addr()));
   gfd_set_file_length(ri32(next_filenum()), 0);
-/*
   memcpy(gfn_get_filename(ri32(next_filenum())), filename, add(strlen(filename), 1));
-  next_filenum = next_filenum + 1;
-  return next_filenum - 1;
-*/
+  wi32(next_filenum(), add(ri32(next_filenum()), 1));
+  return sub(ri32(next_filenum()), 1);
 }
 
 
