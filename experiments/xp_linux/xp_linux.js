@@ -523,7 +523,31 @@ function load_boot(filename) {
   return sub(o, elf_base());
 }
 
+function reset_process() {
+  int base_addr;
+  int i;
+  int upper_addr;
+  base_addr = args_base();
+  upper_addr = ri32(brk_ptr());
+  host_fputs(mks("reset_memory: 0x"), host_stdout());
+  host_fputs(int2str(base_addr, 16,0), host_stdout());
+  host_fputs(mks(" to 0x"), host_stdout());
+  host_fputs(int2str(upper_addr, 16,0), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+/*
+  i = base_addr;
+  while(lte(i,ri32(brk_ptr()))) {
+    wi8(i,0);
+    i = i + 1;
+  }
+  printf("reset file descriptors\n");
+  next_fd = 4;
+*/
+}
+
 function run_process() {
+  reset_process();
+  trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
   asm("DEFINE jmp_indirect FF25");
   asm("mov_esp, %0x8045800");
@@ -531,6 +555,9 @@ function run_process() {
   asm("mov_esp, %0x8045800");
   /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
   asm("jmp_indirect %0x8048018");
+  trap_syscalls_off();
+  host_puts("run_process_shouln't get here\n");
+  host_exit(123);
 }
 
 function reloc_entrypoint() {
@@ -547,9 +574,7 @@ function reloc_entrypoint() {
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   wi32(brk_ptr(), elf_base());
-  trap_syscalls_on();
   run_process();
-  trap_syscalls_off();
   host_exit(0);
 }
 
