@@ -46,6 +46,22 @@ int lt(int a, int b){
         );
 }
 
+int lte(int a, int b){
+/*      return a <= b; */
+        asm(
+                "lea_eax,[ebp+DWORD] %-4"
+                "mov_eax,[eax]"
+                "push_eax"
+                "lea_eax,[ebp+DWORD] %-8"
+                "mov_eax,[eax]"
+                "pop_ebx"
+                "cmp"
+                "setle_al"
+                "movzx_eax,al"
+                "ret"
+        );
+}
+
 int gt(int a, int b){
 /*      return a > b; */
         asm(
@@ -534,12 +550,12 @@ function reset_process() {
   host_fputs(mks(" to 0x"), host_stdout());
   host_fputs(int2str(upper_addr, 16,0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
-/*
   i = base_addr;
-  while(lte(i,ri32(brk_ptr()))) {
+  while(lte(i, upper_addr)) {
     wi8(i,0);
-    i = i + 1;
+    i = add(i, 1);
   }
+/*
   printf("reset file descriptors\n");
   next_fd = 4;
 */
