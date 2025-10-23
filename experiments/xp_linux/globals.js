@@ -13,3 +13,7 @@ function global_data() {
 function globals(x) {
   return add(global_data(), mul(4,x));
 }
+
+function regs_data() {
+  return globals(0);
+}

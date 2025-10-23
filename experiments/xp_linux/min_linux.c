@@ -5,8 +5,6 @@
 
 #include <stdio.h>
 
-int regs_data;
-
 int PROT_READ=1;
 int PROT_WRITE=2;
 int PROT_EXEC=4;
@@ -14,7 +12,6 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int data_area;
 int host_call_fn;
 int host_params;
 int host_stdout;
@@ -46,7 +43,7 @@ int ri32(o) {
 int wrap_syscall();
 
 int trap_syscalls_on() {
-  syscall(65534, wrap_syscall, regs_data);
+  syscall(65534, wrap_syscall, regs_data());
 }
 
 int trap_syscalls_off() {
@@ -54,11 +51,11 @@ int trap_syscalls_off() {
 }
 
 int get_reg(x) {
-  return ri32(regs_data+ (x*4));
+  return ri32(regs_data()+ (x*4));
 }
 
 int set_reg(x, v) {
-  wi32(regs_data+ (x*4), v);
+  wi32(regs_data() + (x*4), v);
 }
 
 dump_regs() {
@@ -111,8 +108,6 @@ int load_boot(filename) {
 }
 
 init_globals() {
-  data_area = base_address() +0x20000;
-  regs_data = globals(0);
   host_call_fn = globals(9);
   host_params = globals(10);
   host_stdout = globals(18);
