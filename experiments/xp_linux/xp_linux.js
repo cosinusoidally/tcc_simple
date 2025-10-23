@@ -380,24 +380,8 @@ int memcpy(int a, int b, int c) {
   }
 }
 
-function base_address() {
-  return 0x4000000;
-}
-
-function host_params() {
-  return 0x4020028;
-}
-
 function host_stdout() {
   return ri32(0x4020048);
-}
-
-function syscall_hook() {
-  return 0x402004C;
-}
-
-function regs_data() {
-  return 0x4020000;
 }
 
 function get_reg(x) {
