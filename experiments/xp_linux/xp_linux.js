@@ -572,12 +572,12 @@ function find_file(filename) {
     host_fputs(mks("looking at: "), host_stdout());
     host_fputs(t, host_stdout());
     host_fputs(mks("\n"), host_stdout());
-/*
-    if(strcmp(t, filename) == 0) {
-      if(dbg) {printf("found: %s %d\n", filename, i);}
+    if(match(t, filename)) {
+      host_fputs(mks("found: "), host_stdout());
+      host_fputs(t, host_stdout());
+      host_fputs(mks("\n"), host_stdout());
       return i;
     }
-*/
     i = sub(i, 1);
   }
   host_fputs(mks("not found: "), host_stdout());
