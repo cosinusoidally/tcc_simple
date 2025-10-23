@@ -29,3 +29,11 @@ function host_params() {
 function host_stdout() {
   return globals(18);
 }
+
+function syscall_hook() {
+  return globals(19);
+}
+
+function reloc_entrypoint_addr() {
+  return globals(20);
+}

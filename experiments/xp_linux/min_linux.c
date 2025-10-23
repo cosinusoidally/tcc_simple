@@ -12,9 +12,6 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int syscall_hook;
-int reloc_entrypoint_addr;
-
 function mul(a, b) {
   return a*b;
 }
@@ -75,7 +72,7 @@ int wrap_syscall() {
   int r;
   int n;
   int hook;
-  if(hook = ri32(syscall_hook)) {
+  if(hook = ri32(syscall_hook())) {
 //    printf("calling syscall_hook 0x%x\n", hook);
     return ((FUNC)hook)();
 //    printf("syscall_hook result: 0x%x\n", r);
@@ -101,11 +98,6 @@ int load_boot(filename) {
   }
   fclose(f);
   return o - elf_base();
-}
-
-init_globals() {
-  syscall_hook = globals(19);
-  reloc_entrypoint_addr = globals(20);
 }
 
 int get_param(x) {
@@ -160,7 +152,6 @@ run_process() {
 
 int main(int argc, char **argv) {
   int res = 0;
-  init_globals();
   res = mmap(base_address(), 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
   if(res != base_address()) {
     puts("mmap error\n");
