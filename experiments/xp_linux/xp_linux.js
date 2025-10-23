@@ -546,6 +546,7 @@ function reloc_entrypoint() {
   host_fputs(mks("file length: "), host_stdout());
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
+  wi32(brk_ptr(), elf_base());
   trap_syscalls_on();
   run_process();
   trap_syscalls_off();
