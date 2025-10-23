@@ -573,7 +573,11 @@ function load_file(realname, virtualname) {
   host_fputs(mks("\n"), host_stdout());
   f = host_fopen(realname, mks("rb"));
   t = new_file(virtualname);
-  while(size = host_fread(add(ri32(file_addr()), gfd_get_file_length(t)), 1, 4096, f)) {
+  while(1) {
+    size = host_fread(add(ri32(file_addr()), gfd_get_file_length(t)), 1, 1, f);
+    if(eq(size, 0)) {
+      break;
+    }
     host_fputs(mks("size: "), host_stdout());
     host_fputs(int2str(size, 10, 0), host_stdout());
     host_fputs(mks("\n"), host_stdout());
