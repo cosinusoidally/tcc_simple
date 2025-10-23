@@ -1,3 +1,8 @@
+#define var int
+#define function int
+
+#include "globals.js"
+
 #include <stdio.h>
 
 int regs_data;
@@ -17,8 +22,6 @@ int host_stdout;
 
 int syscall_hook;
 int reloc_entrypoint_addr;
-
-int elf_base = 0x8048000;
 
 int wi32(int o,int v) {
         int *h;
@@ -92,12 +95,12 @@ int load_boot(filename) {
   int o;
   int size;
   f = fopen(filename, "rb");
-  o = elf_base;
+  o = elf_base();
   while(size = fread(o, 1, 4096, f)) {
     o = o + size;
   }
   fclose(f);
-  return o - elf_base;
+  return o - elf_base();
 }
 
 init_globals() {
