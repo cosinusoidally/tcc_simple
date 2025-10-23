@@ -552,17 +552,20 @@ function find_file(filename) {
   host_fputs(filename, host_stdout());
   host_fputs(mks("\n"), host_stdout());
   filename = absolute_path(filename);
+  while(gt(i, 3)) {
+    t = add(filename_array(),mul(i, filename_size()));
+    host_fputs(mks("find_file: "), host_stdout());
+    host_fputs(filename, host_stdout());
+    host_fputs(mks("\n"), host_stdout());
 /*
-  while(i>3) {
-    t = filename_array+(i*filename_size);
     if(dbg) {printf("looking at: %s\n", t);}
     if(strcmp(t, filename) == 0) {
       if(dbg) {printf("found: %s %d\n", filename, i);}
       return i;
     }
-    i = i - 1;
-  }
 */
+    i = sub(i, 1);
+  }
   host_fputs(mks("not found: "), host_stdout());
   host_fputs(filename, host_stdout());
   host_fputs(mks("\n"), host_stdout());
