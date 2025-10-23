@@ -38,8 +38,9 @@ function syscall_hook() {
   return globals(19);
 }
 
-function reloc_entrypoint_addr() {
-  return globals(20);
+function reloc_entrypoint_ptr() {
+/*  return globals(20); */
+  return 0x4020050; /* hard coded for now, see enter_reloc asm */
 }
 
 function get_reg(x) {

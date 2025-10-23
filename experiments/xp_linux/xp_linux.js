@@ -380,15 +380,6 @@ int memcpy(int a, int b, int c) {
   }
 }
 
-function get_reg(x) {
-  return ri32(add(regs_data(), mul(x,4)));
-}
-
-
-function set_param(i, v) {
-  wi32(add(host_params(), mul(i, 4)), v);
-}
-
 function host_call() {
   asm("DEFINE call_indirect FF15");
   asm("call_indirect %0x4020024");
@@ -571,7 +562,7 @@ function reloc_self() {
   host_fputs(mks("reloc_self\n"), host_stdout());
   memcpy(base_address(), elf_base(), 0x10000);
   wi32(syscall_hook(), add(base_address(), sub(wrap_syscall_addr(),elf_base())));
-  wi32(0x4020050, add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));
+  wi32(reloc_entrypoint_ptr(), add(base_address(), sub(reloc_entrypoint_addr(),elf_base())));
   enter_reloc();
 }
 
