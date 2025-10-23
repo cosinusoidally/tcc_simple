@@ -555,10 +555,8 @@ function reset_process() {
     wi8(i,0);
     i = add(i, 1);
   }
-/*
-  printf("reset file descriptors\n");
-  next_fd = 4;
-*/
+/* reset file descriptors */
+  wi32(next_fd(), 4);
 }
 
 function run_process() {
