@@ -48,6 +48,10 @@ function int2str_tmp() {
   return globals(21);
 }
 
+function brk_ptr() {
+  return globals(40);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }
