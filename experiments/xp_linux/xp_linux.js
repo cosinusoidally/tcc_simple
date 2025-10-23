@@ -539,6 +539,29 @@ function load_boot(filename) {
   return sub(o, elf_base());
 }
 
+function load_file(realname, virtualname) {
+  int f;
+  int c;
+  int t;
+  host_fputs(mks("load_file: realname: "), host_stdout());
+  host_fputs(realname, host_stdout());
+  host_fputs(mks(" virtualname: "), host_stdout());
+  host_fputs(virtualname, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+  f = host_fopen(realname, mks("rb"));
+/*
+  t = new_file(virtualname);
+  while((c = fgetc(f)) != -1) {
+    wi8(file_addr+gfd_get_file_length(t), c);
+    gfd_set_file_length(t, gfd_get_file_length(t)+1);
+  }
+  printf("file_length: %d\n", gfd_get_file_length(t));
+  fclose(f);
+  return t;
+*/
+}
+
+
 function reset_process() {
   int base_addr;
   int i;
