@@ -44,6 +44,10 @@ function reloc_entrypoint_ptr() {
   return 0x4020050; /* hard coded for now, see enter_reloc asm */
 }
 
+function int2str_tmp() {
+  return globals(21);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }

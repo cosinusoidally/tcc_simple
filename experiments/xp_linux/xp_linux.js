@@ -327,8 +327,7 @@ int int2str(int x, int base, int signed_p) {
 	int sign_p;
 	int table;
 	/* Be overly conservative and save space for 32binary digits and padding null */
-/* FIXME should pick a safer address */
-	p = mul(256,mul(1024,1024));
+	p = int2str_tmp();
 	/* if calloc fails return null to let calling code deal with it */
 	if(eq(0, p)) {
 		return p;
