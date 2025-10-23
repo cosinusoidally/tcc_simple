@@ -520,10 +520,27 @@ function vm_brk() {
   if(neq(p, 0)) {
     wi32(brk_ptr(), p);
   }
+/*
   trap_syscalls_off();
-/*  print_labled_hex(mks("vm_brk: "), ri32(brk_ptr())); */
+  print_labled_hex(mks("vm_brk: "), ri32(brk_ptr()));
   trap_syscalls_on();
+*/
   return ri32(brk_ptr());
+}
+
+function vm_open() {
+  var filename;
+  var flags;
+  var mode;
+
+  filename = get_reg(1);
+  trap_syscalls_off();
+  host_fputs(mks("open: "), host_stdout());
+  host_fputs(filename, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+  host_exit(1);
+  trap_syscalls_on();
+
 }
 
 function wrap_syscall() {
@@ -546,6 +563,8 @@ function wrap_syscall_() {
     r = vm_brk();
   } else if(eq(n, 4)) {
     r = vm_write();
+  } else if(eq(n, 5)) {
+    r = vm_open();
   } else if(eq(n, 1)) {
     r = vm_exit();
   } else {
