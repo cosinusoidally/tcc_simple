@@ -513,6 +513,13 @@ function vm_exit() {
   host_exit(get_reg(1));
 }
 
+function vm_brk() {
+  trap_syscalls_off();
+  host_puts(mks("brk not impl"));
+  host_exit(1);
+}
+
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
@@ -529,7 +536,9 @@ function wrap_syscall_() {
   host_fputs(mks("\n"), host_stdout());
   trap_syscalls_on();
 
-  if(eq(n, 4)) {
+  if(eq(n, 45)) {
+    vm_brk();
+  } else if(eq(n, 4)) {
     r = vm_write();
   } else if(eq(n, 1)) {
     r = vm_exit();
