@@ -19,7 +19,8 @@ function regs_data() {
 }
 
 function host_call_fn() {
-  return globals(9);
+/*  return globals(9); */
+  return 0x4020024; /* must hard code for now, see host_call asm */
 }
 
 function host_params() {
