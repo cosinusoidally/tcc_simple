@@ -635,6 +635,38 @@ function run_process(cmdline) {
   host_fputs(cmdline, host_stdout());
   host_fputs(mks("\n"), host_stdout());
   reset_process();
+  host_fputs(mks("cmdline: "), host_stdout());
+  host_fputs(cmdline, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+
+  while(1) {
+    c = ri8(add(cmdline, o));
+    t = c;
+    if(or(eq(t, ' '), eq(t, 0))) {
+      t = 0;
+      argc = add(ri32(args,1));
+      wi32(args, argc);
+      wi32(add(args, mul(argc, 4)), last_offset);
+      last_offset = add(add(args_base(), args_offset), add(o,1));
+    }
+    wi8(add(args_base(), o), t);
+    if(eq(c, 0)) {
+      break;
+    }
+    o = add(o, 1);
+  }
+  wi32(add(args, mul(add(argc, 1), 4)), 0);
+  i = 0;
+
+  while(lt(i, argc)) {
+/*
+    host_fputs(ri32(add(args, mul(add(i, 1), 4))), host_stdout());
+*/
+    i = add(i, 1);
+  }
+
+  /* dispatch built in commands */
+  /* FIXME impl builtins */
 
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
