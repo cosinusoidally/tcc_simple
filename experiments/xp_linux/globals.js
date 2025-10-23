@@ -18,6 +18,14 @@ function sizeof_gfd() {
   return 8;
 }
 
+function filename_array() {
+  return add(base_address(), 0x0200000);
+}
+
+function filename_size() {
+  return 1024;
+}
+
 function global_data() {
   return add(base_address(), 0x20000);
 }
