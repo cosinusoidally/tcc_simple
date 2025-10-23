@@ -548,7 +548,7 @@ function new_file(filename) {
   var l_prev;
   filename = absolute_path(filename);
 /*
-  l_prev = gfd_get_file_length(next_filenum - 1);
+  l_prev = gfd_get_file_length(sub(ri32(next_filenum()), 1));
   if(l_prev == 0) {
 */
 /*    printf("new_file: applying hacky work around to open multiple files for write\n"); */
