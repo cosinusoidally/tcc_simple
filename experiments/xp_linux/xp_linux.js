@@ -528,10 +528,17 @@ function vm_brk() {
   return ri32(brk_ptr());
 }
 
+function new_fd(filenum) {
+/* FIXME add impl */
+  return 0;
+}
+
 function vm_open() {
   var filename;
   var flags;
   var mode;
+  var t;
+  var r;
   filename = get_reg(1);
   flags = get_reg(2);
   mode = get_reg(3);
@@ -545,6 +552,33 @@ function vm_open() {
   host_fputs(mks(" "), host_stdout());
   host_fputs(int2str(mode, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
+  /* fixme parse mode properly rather than special case all write modes */
+  /* 578 might need special handing as I think it may be append */
+/*
+  if(((flags == 578) ||(flags==577)) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438) || (mode == 511))) {
+*/
+  if(0) {
+    host_fputs(mks("open "), host_stdout());
+    host_fputs(filename, host_stdout());
+    host_fputs(mks(" for write"), host_stdout());
+    host_fputs(mks("\n"), host_stdout());
+    t = new_file(filename);
+    r = new_fd(t);
+  } else {
+    host_fputs(mks("open "), host_stdout());
+    host_fputs(filename, host_stdout());
+    host_fputs(mks(" for read"), host_stdout());
+    host_fputs(mks("\n"), host_stdout());
+    t = find_file(filename);
+    if(t) {
+      r = new_fd(t);
+    } else {
+      r = sub(0, 1);
+      host_fputs(mks("vm_open: file not found "), host_stdout());
+      host_fputs(filename, host_stdout());
+      host_fputs(mks(" returning -1\n"), host_stdout());
+    }
+  }
   host_exit(1);
   trap_syscalls_on();
 
@@ -860,6 +894,7 @@ function reloc_entrypoint() {
   /* load in some test files */
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
   load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
+  load_file(mks("artifacts/xp_linux_full.js"), mks("artifacts/xp_linux_full.js"));
 
   run_process(mks("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
   host_exit(0);
