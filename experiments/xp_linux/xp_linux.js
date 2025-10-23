@@ -544,6 +544,12 @@ function absolute_path(filename) {
   return filename;
 }
 
+function print_file_addr() {
+    host_fputs(mks("file_addr: 0x"), host_stdout());
+    host_fputs(int2str(ri32(file_addr()), 16, 0), host_stdout());
+    host_fputs(mks("\n"), host_stdout());
+}
+
 function new_file(filename) {
   var l_prev;
   filename = absolute_path(filename);
@@ -552,7 +558,7 @@ function new_file(filename) {
     host_puts(mks("new_file: applying hacky work around to open multiple files for write\n"));
     wi32(file_addr(), add(ri32(file_addr()), mul(1024, 1024)));
   }
-  wi32(file_addr(),add(file_addr(), l_prev));
+  wi32(file_addr(),add(ri32(file_addr()), l_prev));
   gfd_set_file_addr(ri32(next_filenum()), ri32(file_addr()));
   gfd_set_file_length(ri32(next_filenum()), 0);
   memcpy(gfn_get_filename(ri32(next_filenum())), filename, add(strlen(filename), 1));
@@ -566,6 +572,7 @@ function load_file(realname, virtualname) {
   int c;
   int t;
   int size;
+  int ptr;
   host_fputs(mks("load_file: realname: "), host_stdout());
   host_fputs(realname, host_stdout());
   host_fputs(mks(" virtualname: "), host_stdout());
@@ -574,13 +581,11 @@ function load_file(realname, virtualname) {
   f = host_fopen(realname, mks("rb"));
   t = new_file(virtualname);
   while(1) {
-    size = host_fread(add(ri32(file_addr()), gfd_get_file_length(t)), 1, 1, f);
+    ptr = add(ri32(file_addr()), gfd_get_file_length(t));
+    size = host_fread(ptr, 1, 4096, f);
     if(eq(size, 0)) {
       break;
     }
-    host_fputs(mks("size: "), host_stdout());
-    host_fputs(int2str(size, 10, 0), host_stdout());
-    host_fputs(mks("\n"), host_stdout());
     gfd_set_file_length(t, add(gfd_get_file_length(t), size));
   }
   host_fclose(f);
@@ -642,9 +647,8 @@ function reloc_entrypoint() {
   wi32(brk_ptr(), elf_base());
 
   /* load in some test files */
-  load_file(mks("artifacts/read_test.txt"), mks("foo.txt"));
-  load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
+  load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
 
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1");
   host_exit(0);
