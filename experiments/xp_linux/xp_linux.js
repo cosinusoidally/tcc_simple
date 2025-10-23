@@ -337,6 +337,21 @@ int memset(int ptr, int value, int num)
 	}
 }
 
+function match(a, b) {
+  var i;
+  i = sub(0, 1);
+  while(1) {
+    i = add(i, 1);
+    if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
+      return 0;
+    }
+    if(eq(0,and(neq(0, ri8(add(a,i))), neq(0, ri8(add(b, i)))))){
+      break;
+    }
+  }
+  return 1;
+}
+
 int int2str(int x, int base, int signed_p) {
 	int p;
 	int i;
@@ -558,7 +573,6 @@ function find_file(filename) {
     host_fputs(t, host_stdout());
     host_fputs(mks("\n"), host_stdout());
 /*
-    if(dbg) {printf("looking at: %s\n", t);}
     if(strcmp(t, filename) == 0) {
       if(dbg) {printf("found: %s %d\n", filename, i);}
       return i;
