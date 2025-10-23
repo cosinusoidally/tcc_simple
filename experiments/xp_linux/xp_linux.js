@@ -668,6 +668,8 @@ function run_process(cmdline) {
   int foo;
   int i;
   int args;
+  int p;
+  int l;
 
   args_offset = 2048;
   args = args_base();
@@ -725,6 +727,9 @@ function run_process(cmdline) {
   } else {
     foo = load_file(ri32(add(args, 4)), ri32(add(args, 4)));
   }
+
+  p = gfd_get_file_addr(foo);
+  l = gfd_get_file_length(foo);
 
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");

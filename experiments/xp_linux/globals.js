@@ -100,6 +100,10 @@ function gfd_set_file_length(filenum, len) {
   wi32(add(gfds(), add(mul(filenum, sizeof_gfd()), 4)), len);
 }
 
+function gfd_get_file_addr(filenum) {
+  return ri32(add(gfds(), mul(filenum, sizeof_gfd())));
+}
+
 function gfd_set_file_addr(filenum, addr) {
   wi32(add(gfds(), mul(filenum, sizeof_gfd())), addr);
 }
@@ -107,14 +111,3 @@ function gfd_set_file_addr(filenum, addr) {
 function gfn_get_filename(fn) {
   return add(filename_array(), mul(fn, filename_size()));
 }
-
-/*
-int gfd_get_file_addr(filenum) {
-  return ri32(gfds+(filenum*sizeof_gfd));
-}
-
-
-int gfd_get_file_length(filenum) {
-  return ri32(gfds+(filenum*sizeof_gfd)+4);
-}
-*/
