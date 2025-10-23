@@ -638,6 +638,7 @@ function reloc_entrypoint() {
 
   /* load in some test files */
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
+  load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
 
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1");
   host_exit(0);
