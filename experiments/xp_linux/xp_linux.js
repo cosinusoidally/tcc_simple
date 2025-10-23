@@ -548,13 +548,11 @@ function new_file(filename) {
   var l_prev;
   filename = absolute_path(filename);
   l_prev = gfd_get_file_length(sub(ri32(next_filenum()), 1));
-/*
-  if(l_prev == 0) {
-*/
-/*    printf("new_file: applying hacky work around to open multiple files for write\n"); */
-/*
-    file_addr = file_addr + (1024*1024);
+  if(eq(l_prev, 0)) {
+    host_puts("new_file: applying hacky work around to open multiple files for write\n");
+/*    file_addr = file_addr + (1024*1024); */
   }
+/*
   file_addr = file_addr + l_prev;
   gfd_set_file_addr(next_filenum, file_addr);
   gfd_set_file_length(next_filenum, 0);
@@ -637,6 +635,10 @@ function reloc_entrypoint() {
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   wi32(brk_ptr(), elf_base());
+
+  /* load in some test files */
+  load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
+
   run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1");
   host_exit(0);
 }
