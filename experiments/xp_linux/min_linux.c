@@ -112,12 +112,12 @@ int load_boot(filename) {
 
 init_globals() {
   data_area = base_address() +0x20000;
-  regs_data = data_area;
-  host_call_fn = data_area + (4*9);
-  host_params = host_call_fn + 4;
-  host_stdout = host_params + (4*8);
-  syscall_hook = host_stdout + 4;
-  reloc_entrypoint_addr = syscall_hook + 4;
+  regs_data = globals(0);
+  host_call_fn = globals(9);
+  host_params = globals(10);
+  host_stdout = globals(18);
+  syscall_hook = globals(19);
+  reloc_entrypoint_addr = globals(20);
 }
 
 int get_param(x) {
