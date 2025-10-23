@@ -547,8 +547,8 @@ function absolute_path(filename) {
 function new_file(filename) {
   var l_prev;
   filename = absolute_path(filename);
-/*
   l_prev = gfd_get_file_length(sub(ri32(next_filenum()), 1));
+/*
   if(l_prev == 0) {
 */
 /*    printf("new_file: applying hacky work around to open multiple files for write\n"); */
@@ -656,6 +656,7 @@ function reloc_self() {
 
 function main(argc, argv) {
   wi32(syscall_hook(), wrap_syscall_addr());
+  wi32(next_filenum(), 4);
   reloc_self();
   return 0;
 }

@@ -68,6 +68,10 @@ function next_fd() {
   return globals(41);
 }
 
+function next_filenum() {
+  return globals(42);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }
