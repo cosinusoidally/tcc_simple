@@ -26,7 +26,7 @@ function host_params() {
   return globals(10);
 }
 
-function host_stdout() {
+function host_stdout_addr() {
   return globals(18);
 }
 

@@ -138,7 +138,7 @@ int host_callback() {
 
 init_runtime() {
   wi32(host_call_fn(), host_callback);
-  wi32(host_stdout(), stdout);
+  wi32(host_stdout_addr(), stdout);
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
 }
