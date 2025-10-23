@@ -559,7 +559,7 @@ function reset_process() {
   wi32(next_fd(), 4);
 }
 
-function run_process() {
+function run_process(cmdline) {
   reset_process();
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
@@ -588,7 +588,7 @@ function reloc_entrypoint() {
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   wi32(brk_ptr(), elf_base());
-  run_process();
+  run_process("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1");
   host_exit(0);
 }
 
