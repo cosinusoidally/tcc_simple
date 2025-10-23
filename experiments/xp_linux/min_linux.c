@@ -22,6 +22,14 @@ int host_stdout;
 int syscall_hook;
 int reloc_entrypoint_addr;
 
+function mul(a, b) {
+  return a*b;
+}
+
+function add(a, b) {
+  return a+b;
+}
+
 int wi32(int o,int v) {
         int *h;
         h = o;
