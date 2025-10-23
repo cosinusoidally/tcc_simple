@@ -514,11 +514,17 @@ function vm_exit() {
 }
 
 function vm_brk() {
+  var p;
+  p = get_reg(1);
+/*  print_labled_hex(mks("vm_brk: p"), p); */
+  if(neq(p, 0)) {
+    wi32(brk_ptr(), p);
+  }
   trap_syscalls_off();
-  host_puts(mks("brk not impl"));
-  host_exit(1);
+/*  print_labled_hex(mks("vm_brk: "), ri32(brk_ptr())); */
+  trap_syscalls_on();
+  return ri32(brk_ptr());
 }
-
 
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
@@ -537,7 +543,7 @@ function wrap_syscall_() {
   trap_syscalls_on();
 
   if(eq(n, 45)) {
-    vm_brk();
+    r = vm_brk();
   } else if(eq(n, 4)) {
     r = vm_write();
   } else if(eq(n, 1)) {
