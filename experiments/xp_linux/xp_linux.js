@@ -549,7 +549,7 @@ function new_file(filename) {
   filename = absolute_path(filename);
   l_prev = gfd_get_file_length(sub(ri32(next_filenum()), 1));
   if(eq(l_prev, 0)) {
-    host_puts("new_file: applying hacky work around to open multiple files for write\n");
+    host_puts(mks("new_file: applying hacky work around to open multiple files for write\n"));
 /*    file_addr = file_addr + (1024*1024); */
   }
 /*
