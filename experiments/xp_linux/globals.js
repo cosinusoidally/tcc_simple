@@ -89,7 +89,7 @@ function gfd_get_file_length(filenum) {
 }
 
 function gfd_set_file_length(filenum, len) {
-  wi32(ri32(add(gfds(), add(mul(filenum, sizeof_gfd()), 4))), len);
+  wi32(add(gfds(), add(mul(filenum, sizeof_gfd()), 4)), len);
 }
 
 function gfd_set_file_addr(filenum, addr) {
