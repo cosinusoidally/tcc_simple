@@ -17,3 +17,11 @@ function globals(x) {
 function regs_data() {
   return globals(0);
 }
+
+function host_call_fn() {
+  return globals(9);
+}
+
+function host_params() {
+  return globals(10);
+}

@@ -12,8 +12,6 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int host_call_fn;
-int host_params;
 int host_stdout;
 
 int syscall_hook;
@@ -108,15 +106,13 @@ int load_boot(filename) {
 }
 
 init_globals() {
-  host_call_fn = globals(9);
-  host_params = globals(10);
   host_stdout = globals(18);
   syscall_hook = globals(19);
   reloc_entrypoint_addr = globals(20);
 }
 
 int get_param(x) {
-  return ri32(host_params+(4*x));
+  return ri32(host_params()+(4*x));
 }
 
 int host_callback() {
@@ -152,7 +148,7 @@ int host_callback() {
 }
 
 init_runtime() {
-  wi32(host_call_fn, host_callback);
+  wi32(host_call_fn(), host_callback);
   wi32(host_stdout, stdout);
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
