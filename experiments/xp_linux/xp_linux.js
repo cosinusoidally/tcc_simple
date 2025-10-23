@@ -554,8 +554,8 @@ function find_file(filename) {
   filename = absolute_path(filename);
   while(gt(i, 3)) {
     t = add(filename_array(),mul(i, filename_size()));
-    host_fputs(mks("find_file: "), host_stdout());
-    host_fputs(filename, host_stdout());
+    host_fputs(mks("looking at: "), host_stdout());
+    host_fputs(t, host_stdout());
     host_fputs(mks("\n"), host_stdout());
 /*
     if(dbg) {printf("looking at: %s\n", t);}
