@@ -742,18 +742,17 @@ function run_process(cmdline) {
   l = gfd_get_file_length(foo);
 
   print_labled_hex(mks("e_entry"), ri32(add(elf_base(), 0x18)));
-/*
-  int e_phoff = ri32(p + 0x1C);
-  printf("e_phoff: 0x%x\n", e_phoff);
-  int e_phnum = ri32(p + 0x2C) & 0xFF;
-  printf("e_phnum: 0x%x\n", e_phnum);
-  int e_phentsize = ri32(p + 0x2A) & 0xFF;
-  printf("e_phentsize: 0x%x\n", e_phentsize);
-  if(e_phentsize != 0x20){
-    printf("invalid e_phentsize\n");
-    exit(1);
+  e_phoff = ri32(add(p, 0x1C));
+  print_labled_hex(mks("e_phoff"), e_phoff);
+  e_phnum = and(ri32(add(p, 0x2C)), 0xFF);
+  print_labled_hex(mks("e_phnum"), e_phnum);
+  e_phentsize = and(ri32(add(p, 0x2A)), 0xFF);
+  print_labled_hex(mks("e_phentsize"), e_phentsize);
+  if(neq(e_phentsize, 0x20)){
+    host_fputs(mks("invalid e_phentsize\n"), host_stdout());
+    host_exit(1);
   }
-*/
+
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
   asm("DEFINE jmp_indirect FF25");
