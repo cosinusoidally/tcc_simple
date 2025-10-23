@@ -774,10 +774,10 @@ function run_process(cmdline) {
       j = add(j, 1);
     }
     i = add(i, 1);
-/*
-    brk_ptr = 4096+4096*((p_vaddr+p_filesz)/4096);
-*/
+    wi32(brk_ptr(), add(4096, mul(4096, div(add(p_vaddr, p_filesz),4096))));
   }
+
+  print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
 
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
