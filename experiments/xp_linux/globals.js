@@ -1,3 +1,7 @@
+function args_base() {
+  return 0x8045800;
+}
+
 function elf_base() {
   return 0x8048000;
 }
