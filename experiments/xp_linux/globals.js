@@ -30,10 +30,22 @@ function host_stdout_addr() {
   return globals(18);
 }
 
+function host_stdout() {
+  return ri32(host_stdout_addr());
+}
+
 function syscall_hook() {
   return globals(19);
 }
 
 function reloc_entrypoint_addr() {
   return globals(20);
+}
+
+function get_reg(x) {
+  return ri32(add(regs_data(), mul(x,4)));
+}
+
+function set_param(i, v) {
+  wi32(add(host_params(), mul(i, 4)), v);
 }

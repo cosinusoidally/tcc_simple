@@ -380,10 +380,6 @@ int memcpy(int a, int b, int c) {
   }
 }
 
-function host_stdout() {
-  return ri32(host_stdout_addr());
-}
-
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }

@@ -43,10 +43,6 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
-int get_reg(x) {
-  return ri32(regs_data()+ (x*4));
-}
-
 int set_reg(x, v) {
   wi32(regs_data() + (x*4), v);
 }
