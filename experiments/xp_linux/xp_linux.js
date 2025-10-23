@@ -777,6 +777,15 @@ function run_process(cmdline) {
     wi32(brk_ptr(), add(4096, mul(4096, div(add(p_vaddr, p_filesz),4096))));
   }
 
+  /* shouldn't happen but cc_x86_min.exe has an incorrect p_filesz which I
+     think will then cause garbage to be appended at the end of the in memory
+     image (which then causes cc_x86 to crash) */
+  j = l;
+  while(lt(j, p_filesz)) {
+    wi8(add(p_vaddr, j), 0);
+    j = add(j, 1);
+  }
+
   print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
 
   trap_syscalls_on();
