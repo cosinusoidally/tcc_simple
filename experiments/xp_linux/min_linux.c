@@ -12,8 +12,6 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-int host_stdout;
-
 int syscall_hook;
 int reloc_entrypoint_addr;
 
@@ -106,7 +104,6 @@ int load_boot(filename) {
 }
 
 init_globals() {
-  host_stdout = globals(18);
   syscall_hook = globals(19);
   reloc_entrypoint_addr = globals(20);
 }
@@ -149,7 +146,7 @@ int host_callback() {
 
 init_runtime() {
   wi32(host_call_fn(), host_callback);
-  wi32(host_stdout, stdout);
+  wi32(host_stdout(), stdout);
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
 }
@@ -172,8 +169,8 @@ int main(int argc, char **argv) {
 
   init_runtime();
 
-  printf("reloc_entrypoint_addr: 0x%x\n", reloc_entrypoint_addr);
 /*
+  printf("reloc_entrypoint_addr: 0x%x\n", reloc_entrypoint_addr);
   printf("host_call_fn: 0x%x\n", host_call_fn);
   printf("host_params: 0x%x\n", host_params);
   printf("host_stdout: 0x%x\n", host_stdout);

@@ -25,3 +25,7 @@ function host_call_fn() {
 function host_params() {
   return globals(10);
 }
+
+function host_stdout() {
+  return globals(18);
+}
