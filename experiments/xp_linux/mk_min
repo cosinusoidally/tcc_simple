@@ -46,12 +46,12 @@ compile_js (){
   chmod +x $2
 }
 
-cp xp_linux.js artifacts/xp_linux.js
+cat globals.js xp_linux.js > artifacts/xp_linux_full.js
 
 pushd .
 cd ../cjsawk/
-compile_self ../xp_linux/artifacts/xp_linux.js ../xp_linux/artifacts/xp_linux.exe
-compile_js ../xp_linux/artifacts/xp_linux.js ../xp_linux/artifacts/xp_linux_js.exe
+compile_self ../xp_linux/artifacts/xp_linux_full.js ../xp_linux/artifacts/xp_linux.exe
+compile_js ../xp_linux/artifacts/xp_linux_full.js ../xp_linux/artifacts/xp_linux_js.exe
 popd
 
 diff -u -s artifacts/xp_linux.exe artifacts/xp_linux_js.exe
