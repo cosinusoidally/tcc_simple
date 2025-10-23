@@ -554,10 +554,7 @@ function vm_open() {
   host_fputs(mks("\n"), host_stdout());
   /* fixme parse mode properly rather than special case all write modes */
   /* 578 might need special handing as I think it may be append */
-/*
-  if(((flags == 578) ||(flags==577)) && ((mode == 420) || (mode == 384) || (mode == 448) || (mode == 438) || (mode == 511))) {
-*/
-  if(0) {
+  if(and(or(eq(flags, 578), eq(flags, 577)), or(eq(mode, 420), or(eq(mode, 384), or(eq(mode, 448), or(eq(mode, 438), eq(mode, 511))))))) {
     host_fputs(mks("open "), host_stdout());
     host_fputs(filename, host_stdout());
     host_fputs(mks(" for write"), host_stdout());
