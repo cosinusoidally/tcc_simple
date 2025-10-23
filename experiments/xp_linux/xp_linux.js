@@ -565,6 +565,7 @@ function load_file(realname, virtualname) {
   int f;
   int c;
   int t;
+  int size;
   host_fputs(mks("load_file: realname: "), host_stdout());
   host_fputs(realname, host_stdout());
   host_fputs(mks(" virtualname: "), host_stdout());
@@ -572,15 +573,14 @@ function load_file(realname, virtualname) {
   host_fputs(mks("\n"), host_stdout());
   f = host_fopen(realname, mks("rb"));
   t = new_file(virtualname);
-/*
-  while((c = fgetc(f)) != -1) {
-    wi8(file_addr+gfd_get_file_length(t), c);
-    gfd_set_file_length(t, gfd_get_file_length(t)+1);
+  while(size = host_fread(add(ri32(file_addr()), gfd_get_file_length(t)), 1, 4096, f)) {
+    gfd_set_file_length(t, add(gfd_get_file_length(t), size));
   }
-  printf("file_length: %d\n", gfd_get_file_length(t));
-  fclose(f);
+  host_fclose(f);
+  host_fputs(mks("file_length: "), host_stdout());
+  host_fputs(int2str(gfd_get_file_length(t), 10, 0), host_stdout());
+  host_fputs(mks("\n"), host_stdout());
   return t;
-*/
 }
 
 
