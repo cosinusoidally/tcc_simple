@@ -399,7 +399,7 @@ int int2str(int x, int base, int signed_p) {
 
 function print_labled_hex(s, v) {
   host_fputs(s, host_stdout());
-  host_fputs(mks(": "), host_stdout());
+  host_fputs(mks(": 0x"), host_stdout());
   host_fputs(int2str(v, 16, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
 }
@@ -677,6 +677,9 @@ function run_process(cmdline) {
   int args;
   int p;
   int l;
+  int e_phoff;
+  int e_phnum;
+  int e_phentsize;
 
   args_offset = 2048;
   args = args_base();
@@ -738,6 +741,19 @@ function run_process(cmdline) {
   p = gfd_get_file_addr(foo);
   l = gfd_get_file_length(foo);
 
+  print_labled_hex(mks("e_entry"), ri32(add(elf_base(), 0x18)));
+/*
+  int e_phoff = ri32(p + 0x1C);
+  printf("e_phoff: 0x%x\n", e_phoff);
+  int e_phnum = ri32(p + 0x2C) & 0xFF;
+  printf("e_phnum: 0x%x\n", e_phnum);
+  int e_phentsize = ri32(p + 0x2A) & 0xFF;
+  printf("e_phentsize: 0x%x\n", e_phentsize);
+  if(e_phentsize != 0x20){
+    printf("invalid e_phentsize\n");
+    exit(1);
+  }
+*/
   trap_syscalls_on();
   asm("DEFINE mov_esp, BC");
   asm("DEFINE jmp_indirect FF25");
