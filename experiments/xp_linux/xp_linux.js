@@ -554,7 +554,10 @@ function new_file(filename) {
   }
   wi32(file_addr(),add(file_addr(), l_prev));
   gfd_set_file_addr(ri32(next_filenum()), ri32(file_addr()));
-  host_puts(mks("gfd_set_file_length: "), host_stdout());
+  host_fputs(mks("gfd_set_file_length: "), host_stdout());
+  host_fputs(int2str(ri32(next_filenum()),10,0), host_stdout());
+  host_fputs(mks(" "), host_stdout());
+  host_fputs(int2str(gfds(),10,0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
 /*
   gfd_set_file_length(ri32(next_filenum()), 0);
