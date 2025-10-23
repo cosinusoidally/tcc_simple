@@ -545,12 +545,14 @@ function absolute_path(filename) {
 }
 
 function find_file(filename) {
-  return 0;
-/*
   int t;
-  int i = next_filenum - 1;
-  if(dbg) {printf("find_file: %s\n", filename);}
+  int i;
+  i = sub(ri32(next_filenum()),  1);
+  host_fputs(mks("find_file: "), host_stdout());
+  host_fputs(filename, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
   filename = absolute_path(filename);
+/*
   while(i>3) {
     t = filename_array+(i*filename_size);
     if(dbg) {printf("looking at: %s\n", t);}
@@ -560,9 +562,11 @@ function find_file(filename) {
     }
     i = i - 1;
   }
-  if(dbg) {printf("not found %s\n", filename);}
-  return 0;
 */
+  host_fputs(mks("not found: "), host_stdout());
+  host_fputs(filename, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+  return 0;
 }
 
 function print_file_addr() {
