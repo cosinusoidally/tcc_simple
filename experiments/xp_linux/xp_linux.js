@@ -532,11 +532,18 @@ function vm_open() {
   var filename;
   var flags;
   var mode;
-
   filename = get_reg(1);
+  flags = get_reg(2);
+  mode = get_reg(3);
+  flags = and(flags, 0xFFFF);
+  mode = and(mode, 0xFFFF);
   trap_syscalls_off();
   host_fputs(mks("open: "), host_stdout());
   host_fputs(filename, host_stdout());
+  host_fputs(mks(" "), host_stdout());
+  host_fputs(int2str(flags, 10, 0), host_stdout());
+  host_fputs(mks(" "), host_stdout());
+  host_fputs(int2str(mode, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   host_exit(1);
   trap_syscalls_on();
