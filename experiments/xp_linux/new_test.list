@@ -59,4 +59,4 @@ load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 /m0.exe hex2-0.M1 hex2.hex2
 /catm hex2-0.hex2 ELF-i386.hex2 hex2.hex2
 /hex2-0 hex2-0.hex2 /hex2.exe
-../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
+/cjsawk.exe artifacts/xp_linux_full.js artifacts/xp_linux_self.exe.M1
