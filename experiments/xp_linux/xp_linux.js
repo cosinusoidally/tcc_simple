@@ -511,7 +511,7 @@ function vm_write() {
     return count;
   }
   trap_syscalls_off();
-  host_puts("vm_write to file not impl");
+  host_puts(mks("vm_write to file not impl"));
   host_exit(1);
 }
 
