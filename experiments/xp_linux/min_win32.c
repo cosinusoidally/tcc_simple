@@ -22,9 +22,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
        ri32(eip_wrap + 4) == 0x90909090 &&
        ri32(eip_wrap + 8) == 0x80CD9090) {
       printf("installing wrapper stub 0x%x\n", eip_wrap);
-// FIXME
-//      int syscall_wrap_alt_addr = &regs_data[8];
-      int syscall_wrap_alt_addr = 0;
+      int syscall_wrap_alt_addr = regs_data()+(4*8);
       printf("syscall_wrap_alt 0x%x\n", ri32(syscall_wrap_alt_addr));
       printf("before: ");
       for(i = 0; i< 12;i++) {
