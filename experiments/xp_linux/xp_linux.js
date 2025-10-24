@@ -926,14 +926,15 @@ function run_process(cmdline) {
   }
 
   /* dispatch built in commands */
-  if(eq(ri8(ri32(add(args, 4))), 'h')) {
+  c0 = ri8(ri32(add(args, 4)));
+  if(eq(c0, 'h')) {
     /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary) */
 /*
     hex0_compile(args[2], args[3]);
 */
     print_labled_string(mks("hex0 not impl"), ri32(add(args, 4)));
     host_exit(1);
-  } else if(eq(ri8(ri32(add(args, 4)), 'l'))) {
+  } else if(eq(c0, 'l')) {
     /* load_file command */
     load_file(ri32(add(args, 8)), ri32(add(args, 12)));
     exit_builtin();
