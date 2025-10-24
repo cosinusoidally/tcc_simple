@@ -722,19 +722,6 @@ function wrap_syscall_addr() {
   asm("ret");
 }
 
-function load_boot(filename) {
-  var f;
-  var o;
-  var size;
-  f = host_fopen(filename, mks("rb"));
-  o = elf_base();
-  while(size = host_fread(o, 1, 4096, f)) {
-    o = add(o, size);
-  }
-  host_fclose(f);
-  return sub(o, elf_base());
-}
-
 function absolute_path(filename) {
 /* FIXME correct impl */
   return filename;
