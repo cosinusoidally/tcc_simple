@@ -655,13 +655,13 @@ function wrap_syscall_() {
   var n;
 /*  host_puts(mks("wrap_syscall called")); */
   n = get_reg(0);
-
+/*
   trap_syscalls_off();
   host_fputs(mks("n: "), host_stdout());
   host_fputs(int2str(n, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
   trap_syscalls_on();
-
+*/
   if(eq(n, 45)) {
     r = vm_brk();
   } else if(eq(n, 3)) {
@@ -960,8 +960,6 @@ function reloc_entrypoint() {
   host_fputs(a, host_stdout());
   host_fputs(int2str(a,16,0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
-  l = load_boot(mks("../cjsawk/artifacts/builds/hello/hello.exe"));
-/*  l = load_boot(mks("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe")); */
   host_fputs(mks("file length: "), host_stdout());
   host_fputs(int2str(l, 10, 0), host_stdout());
   host_fputs(mks("\n"), host_stdout());
