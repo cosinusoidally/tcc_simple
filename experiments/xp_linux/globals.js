@@ -96,6 +96,10 @@ function command_file() {
   return globals(44);
 }
 
+function char_buf() {
+  return globals(45);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }

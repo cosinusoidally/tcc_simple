@@ -475,6 +475,16 @@ function host_fread(ptr, size, nmemb, stream) {
   return host_call();
 }
 
+function host_fgetc(stream) {
+  int t;
+  t = host_fread(char_buf(), 1, 1, stream);
+  if(neq(t, 1)) {
+    return sub(0,1);
+  } else {
+    return ri8(char_buf());
+  }
+}
+
 function host_fclose(fp) {
   set_param(0, 6);
   set_param(1, fp);
