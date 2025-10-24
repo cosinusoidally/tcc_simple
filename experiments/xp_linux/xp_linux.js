@@ -784,6 +784,16 @@ function load_file(realname, virtualname) {
   return t;
 }
 
+function extract_file(vfs_name, real_name) {
+  var t;
+  var ofile;
+  t = find_file(vfs_name);
+  if(neq(t, 0)) {
+    ofile = host_fopen(real_name, mks("wb"));
+    host_fwrite(gfd_get_file_addr(t), 1, gfd_get_file_length(t), ofile);
+    host_fclose(ofile);
+  }
+}
 
 function reset_process() {
   int base_addr;
