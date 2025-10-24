@@ -1023,7 +1023,6 @@ function reloc_entrypoint() {
   /* load in some test files */
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
   load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
-  load_file(mks("artifacts/xp_linux_full.js"), mks("artifacts/xp_linux_full.js"));
 
   run_process(next_command());
   host_exit(0);
