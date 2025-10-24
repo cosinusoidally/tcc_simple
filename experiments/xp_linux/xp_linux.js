@@ -485,6 +485,11 @@ function host_fgetc(stream) {
   }
 }
 
+function host_fputc(c, stream) {
+  wi8(char_buf(), c);
+  host_fwrite(char_buf(), 1, 1, stream);
+}
+
 function host_fclose(fp) {
   set_param(0, 6);
   set_param(1, fp);
@@ -965,6 +970,7 @@ function run_process(cmdline) {
 function reloc_entrypoint() {
   int a;
   int l;
+  int c;
   memset(elf_base(), 0, 0x10000);
   a = mks("reloc blah\n");
   host_fputs(a, host_stdout());
@@ -979,6 +985,12 @@ function reloc_entrypoint() {
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
   load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
   load_file(mks("artifacts/xp_linux_full.js"), mks("artifacts/xp_linux_full.js"));
+
+/*
+  while(neq(c = host_fgetc(ri32(command_file())), sub(0, 1))) {
+    host_fputc(c, host_stdout());
+  }
+*/
 
   run_process(mks("../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
   host_exit(0);
