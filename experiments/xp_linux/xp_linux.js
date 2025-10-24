@@ -534,7 +534,6 @@ function new_fd(filenum) {
   fd_set_file_offset(ri32(next_fd()), 0);
   wi32(next_fd(), add(ri32(next_fd()), 1));
   t = sub(ri32(next_fd()), 1);
-  print_labled_hex(mks("fd"),t);
   return t;
 }
 
@@ -581,9 +580,9 @@ function vm_open() {
       host_fputs(mks(" returning -1\n"), host_stdout());
     }
   }
-  host_exit(1);
+  print_labled_hex(mks("open: fd"),r);
   trap_syscalls_on();
-
+  return r;
 }
 
 function wrap_syscall() {
