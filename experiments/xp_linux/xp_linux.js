@@ -564,6 +564,8 @@ function vm_exit_() {
     extract_file(mks("/M0"), mks("artifacts/M0"));
     extract_file(mks("/cc_x86_min.exe"), mks("artifacts/cc_x86_min.exe"));
     extract_file(mks("/js_to_c.exe"), mks("artifacts/js_to_c.exe"));
+    extract_file(mks("cjsawk_boot.exe.M1"), mks("artifacts/cjsawk_boot.exe.M1"));
+    extract_file(mks("/cjsawk.exe"), mks("artifacts/cjsawk.exe"));
     host_exit(error_code);
   }
 }

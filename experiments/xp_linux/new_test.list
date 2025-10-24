@@ -38,5 +38,25 @@ load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 /catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c
 /catm m0_full.c m0.js support_libc.js simple_support_js_m2_prims.c support_m2.c
 /catm hex2_full.c hex2.js support_libc.js simple_support_js_m2_prims.c support_m2.c
+/js_to_c.exe cjsawk_full.c cjsawk_full_js_to_c.c
 /cc_x86_min.exe cjsawk_full_js_to_c.c cjsawk_boot.exe.M1
+/catm cjsawk_boot.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk_boot.exe.M1
+/M0 cjsawk_boot.exe-0.M1 cjsawk_boot.exe.hex2
+/catm cjsawk_boot.exe-0.hex2 ELF-i386.hex2 cjsawk_boot.exe.hex2
+/hex2-0 cjsawk_boot.exe-0.hex2 /cjsawk_boot.exe
+/cjsawk_boot.exe cjsawk_full.c cjsawk.M1
+/catm cjsawk-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 cjsawk.M1
+/M0 cjsawk-0.M1 cjsawk.hex2
+/catm cjsawk-0.hex2 ELF-i386.hex2 cjsawk.hex2
+/hex2-0 cjsawk-0.hex2 /cjsawk.exe
+/cjsawk.exe m0_full.c m0.M1
+/catm m0-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 m0.M1
+/M0 m0-0.M1 m0.hex2
+/catm m0-0.hex2 ELF-i386.hex2 m0.hex2
+/hex2-0 m0-0.hex2 /m0.exe
+/cjsawk.exe hex2_full.c hex2.M1
+/catm hex2-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 hex2.M1
+/m0.exe hex2-0.M1 hex2.hex2
+/catm hex2-0.hex2 ELF-i386.hex2 hex2.hex2
+/hex2-0 hex2-0.hex2 /hex2.exe
 ../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
