@@ -100,6 +100,14 @@ function char_buf() {
   return globals(45);
 }
 
+function command_buffer() {
+  return globals(45);
+}
+
+function dummy_global() {
+  return globals(2093);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }
