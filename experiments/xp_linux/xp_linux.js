@@ -529,8 +529,13 @@ function vm_brk() {
 }
 
 function new_fd(filenum) {
-/* FIXME add impl */
-  return 0;
+  var t;
+  fd_set_filenum(ri32(next_fd()), filenum);
+  fd_set_file_offset(ri32(next_fd()), 0);
+  wi32(next_fd(), add(ri32(next_fd()), 1));
+  t = sub(ri32(next_fd()), 1);
+  print_labled_hex(mks("fd"),t);
+  return t;
 }
 
 function vm_open() {

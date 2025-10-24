@@ -119,3 +119,20 @@ function gfd_set_file_addr(filenum, addr) {
 function gfn_get_filename(fn) {
   return add(filename_array(), mul(fn, filename_size()));
 }
+
+
+function fd_set_filenum(fd, filenum) {
+  wi32(add(file_descriptors(), mul(fd, sizeof_file_descriptor())), filenum);
+}
+
+function fd_get_filenum(fd) {
+  return ri32(add(file_descriptors(), mul(fd, sizeof_file_descriptor())));
+}
+
+function fd_set_file_offset(fd, o) {
+  wi32(add(file_descriptors(), add(mul(fd, sizeof_file_descriptor()), 4)), o);
+}
+
+function fd_get_file_offset(fd) {
+  return ri32(add(file_descriptors(), add(mul(fd, sizeof_file_descriptor()),4)));
+}
