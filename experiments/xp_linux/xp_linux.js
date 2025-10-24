@@ -1001,14 +1001,7 @@ function reloc_entrypoint() {
   load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
   load_file(mks("artifacts/xp_linux_full.js"), mks("artifacts/xp_linux_full.js"));
 
-/*
-  while(neq(c = host_fgetc(ri32(command_file())), sub(0, 1))) {
-    host_fputc(c, host_stdout());
-  }
-*/
-  next_command();
-  next_command();
-  run_process(mks("../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
+  run_process(next_command());
   host_exit(0);
 }
 
