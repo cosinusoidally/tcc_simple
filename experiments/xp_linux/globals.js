@@ -92,6 +92,10 @@ function file_addr() {
   return globals(43);
 }
 
+function command_file() {
+  return globals(44);
+}
+
 function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }

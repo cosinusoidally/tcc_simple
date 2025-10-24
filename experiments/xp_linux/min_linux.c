@@ -154,6 +154,18 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
+  if(argc > 1) {
+    printf("opening command file %s\n", argv[1]);
+    wi32(command_file(), fopen(argv[1], "rb"));
+  } else {
+    printf("opening default command file command.list\n");
+    wi32(command_file(), fopen("commands.list", "rb"));
+  }
+  if(!ri32(command_file())) {
+    printf("error could not open command file\n");
+    exit(1);
+  }
+
   init_runtime();
 
 /*
