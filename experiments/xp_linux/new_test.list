@@ -19,4 +19,7 @@ load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 /hex2-0 catm_x86.hex2 /catm
 /catm M0.hex2 ELF-i386.hex2 M0_x86.hex2
 /hex2-0 M0.hex2 /M0
+/M0 cc_x86_min.M1 cc_x86_min-0.hex2
+/catm cc_x86_min-1.hex2 ELF-i386.hex2 cc_x86_min-0.hex2
+/hex2-0 cc_x86_min-1.hex2 /cc_x86_min.exe
 ../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
