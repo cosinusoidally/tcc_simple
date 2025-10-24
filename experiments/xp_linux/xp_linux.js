@@ -404,6 +404,13 @@ function print_labled_hex(s, v) {
   host_fputs(mks("\n"), host_stdout());
 }
 
+function print_labled_string(s, v) {
+  host_fputs(s, host_stdout());
+  host_fputs(mks(": "), host_stdout());
+  host_fputs(v, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+}
+
 int memcpy(int a, int b, int c) {
   int dest;
   int src;
@@ -615,6 +622,22 @@ function vm_read() {
   return r;
 }
 
+function vm_close() {
+  int r;
+  int t;
+  int tn;
+  int fd;
+  fd = get_reg(1);
+  trap_syscalls_off();
+  print_labled_hex(mks("close"), fd);
+  t = fd_get_filenum(fd);
+  tn = gfn_get_filename(t);
+  print_labled_hex(mks("close t"), t);
+  print_labled_string(mks("close tn"), tn);
+  trap_syscalls_on();
+  return r;
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
@@ -639,6 +662,8 @@ function wrap_syscall_() {
     r = vm_write();
   } else if(eq(n, 5)) {
     r = vm_open();
+  } else if(eq(n, 6)) {
+    r = vm_close();
   } else if(eq(n, 1)) {
     r = vm_exit();
   } else {
