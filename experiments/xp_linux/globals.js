@@ -35,7 +35,7 @@ function filename_size() {
 }
 
 function global_data() {
-  return add(base_address(), 0x20000);
+  return add(base_address(), 0x010000);
 }
 
 function globals(x) {
