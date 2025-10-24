@@ -510,9 +510,16 @@ function vm_write() {
     trap_syscalls_on();
     return count;
   }
-  trap_syscalls_off();
-  host_puts(mks("vm_write to file not impl"));
-  host_exit(1);
+  t = fd_get_file_offset(fd);
+  while(gt(c2, 0)) {
+    wi8(add(gfd_get_file_addr(fd_get_filenum(fd)), t), ri8(buf));
+    t = add(t, 1);
+    fd_set_file_offset(fd, t);
+    gfd_set_file_length(fd_get_filenum(fd), t);
+    c2 = sub(c2, 1);
+    buf = add(buf, 1);
+  }
+  return count;
 }
 
 function vm_exit() {
