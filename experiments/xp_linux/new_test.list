@@ -17,7 +17,7 @@ load_file ../m2min_v2/hex2_x86.hex1 hex2_x86.hex1
 load_file ../m2min_v2/catm_x86.hex2 catm_x86.hex2
 load_file ../m2min_v2/M0_x86.hex2 M0_x86.hex2
 load_file ../m2min_v2/cc_x86_min.M1 cc_x86_min.M1
-load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
+load_file ./artifacts/xp_linux_full.js xp_linux_full.js
 ../m2min_v2/artifacts/hex0 hex0_x86.hex0 /hex0
 /hex0 hex1_x86.hex0 /hex1
 /hex1 hex2_x86.hex1 /hex2-0
@@ -59,4 +59,5 @@ load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 /m0.exe hex2-0.M1 hex2.hex2
 /catm hex2-0.hex2 ELF-i386.hex2 hex2.hex2
 /hex2-0 hex2-0.hex2 /hex2.exe
-/cjsawk.exe artifacts/xp_linux_full.js artifacts/xp_linux_self.exe.M1
+/cjsawk.exe xp_linux_full.js xp_linux_self.exe.M1
+/catm xp_linux_self.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 xp_linux_self.exe.M1

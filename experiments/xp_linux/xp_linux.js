@@ -555,7 +555,8 @@ function vm_exit_() {
     host_puts(mks("shouldn't get here"));
     host_exit(1);
   } else {
-    extract_file(mks("artifacts/xp_linux_self.exe.M1"), mks("artifacts/xp_linux_self.exe.M1"));
+    extract_file(mks("xp_linux_self.exe.M1"), mks("artifacts/xp_linux_self.exe.M1"));
+    extract_file(mks("xp_linux_self.exe-0.M1"), mks("artifacts/xp_linux_self.exe-0.M1"));
     extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
     extract_file(mks("/hex0"), mks("artifacts/hex0"));
     extract_file(mks("/hex1"), mks("artifacts/hex1"));
