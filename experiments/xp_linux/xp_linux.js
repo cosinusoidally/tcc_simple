@@ -741,6 +741,8 @@ function wrap_syscall_() {
     r = vm_read();
   } else if(eq(n, 4)) {
     r = vm_write();
+  } else if(eq(n, 19)) {
+    r = vm_lseek();
   } else if(eq(n, 5)) {
     r = vm_open();
   } else if(eq(n, 6)) {
