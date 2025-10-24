@@ -815,8 +815,8 @@ function next_command() {
   var o;
   var c;
   o = 0;
-  while(neq((c = host_fgetc(command_file())), sub(0,1))) {
-    if(eq(c, '\n')) {break;}
+  while(neq((c = host_fgetc(ri32(command_file()))), sub(0,1))) {
+    if(eq(c, 10)) {break;}
     wi8(add(command_buffer(), o), c);
     o = add(o, 1);
   }
@@ -1006,7 +1006,8 @@ function reloc_entrypoint() {
     host_fputc(c, host_stdout());
   }
 */
-
+  next_command();
+  next_command();
   run_process(mks("../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
   host_exit(0);
 }

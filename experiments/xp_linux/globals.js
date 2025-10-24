@@ -101,11 +101,11 @@ function char_buf() {
 }
 
 function command_buffer() {
-  return globals(45);
+  return globals(46);
 }
 
 function dummy_global() {
-  return globals(2093);
+  return globals(2094);
 }
 
 function get_reg(x) {
