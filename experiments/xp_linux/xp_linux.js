@@ -558,6 +558,7 @@ function vm_exit_() {
     extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
     extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
     extract_file(mks("/hex0"), mks("artifacts/hex0"));
+    extract_file(mks("hex0_x86.hex0"), mks("artifacts/hex0_x86.hex0"));
     host_exit(error_code);
   }
 }
@@ -682,7 +683,10 @@ function vm_close() {
 
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
-  return wrap_syscall_();
+/* also need to preserve edi since hex0 uses it */
+  asm("push_edi");
+  wrap_syscall_();
+  asm("pop_edi");
 }
 function wrap_syscall_() {
   var r;
