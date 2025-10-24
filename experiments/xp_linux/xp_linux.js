@@ -560,6 +560,9 @@ function vm_exit_() {
     extract_file(mks("/hex0"), mks("artifacts/hex0"));
     extract_file(mks("/hex1"), mks("artifacts/hex1"));
     extract_file(mks("/hex2-0"), mks("artifacts/hex2-0"));
+    extract_file(mks("/catm"), mks("artifacts/catm"));
+    extract_file(mks("/M0"), mks("artifacts/M0"));
+    extract_file(mks("/cc_x86_min.exe"), mks("artifacts/cc_x86_min.exe"));
     host_exit(error_code);
   }
 }

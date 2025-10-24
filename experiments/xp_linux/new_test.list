@@ -2,11 +2,21 @@ load_file alt_defs.M1 alt_defs.M1
 load_file ../cjsawk/m0.js m0.js
 load_file ../cjsawk/hex2.js hex2.js
 load_file ../cjsawk/cjsawk.js cjsawk.js
+load_file ../m2min_v3/simple_asm_defs.M1 simple_asm_defs.M1
+load_file ../m2min_v3/x86_defs.M1 x86_defs.M1
+load_file ../m2min_v3/libc-core.M1 libc-core.M1
+load_file ../m2min_v3/ELF-i386.hex2 ELF-i386.hex2
 load_file ../m2min_v2/hex0_x86.hex0 hex0_x86.hex0
 load_file ../m2min_v2/hex1_x86.hex0 hex1_x86.hex0
 load_file ../m2min_v2/hex2_x86.hex1 hex2_x86.hex1
 load_file ../m2min_v2/catm_x86.hex2 catm_x86.hex2
+load_file ../m2min_v2/M0_x86.hex2 M0_x86.hex2
+load_file ../m2min_v2/cc_x86_min.M1 cc_x86_min.M1
 load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 ../m2min_v2/artifacts/hex0 hex0_x86.hex0 /hex0
 /hex0 hex1_x86.hex0 /hex1
+/hex1 hex2_x86.hex1 /hex2-0
+/hex2-0 catm_x86.hex2 /catm
+/catm M0.hex2 ELF-i386.hex2 M0_x86.hex2
+/hex2-0 M0.hex2 /M0
 ../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
