@@ -10,6 +10,14 @@ function base_address() {
   return 0x4000000;
 }
 
+function file_descriptors() {
+  return add(base_address(), add(0x20000, 0x200));
+}
+
+function sizeof_file_descriptor() {
+  return 8;
+}
+
 function gfds() {
   return add(base_address(),0x01000010);
 }
