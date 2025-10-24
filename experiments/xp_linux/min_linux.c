@@ -48,10 +48,6 @@ int trap_syscalls_off() {
   syscall(65533);
 }
 
-int set_reg(x, v) {
-  wi32(regs_data() + (x*4), v);
-}
-
 dump_regs() {
   printf("wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d\n", get_reg(0), get_reg(0),get_reg(1),get_reg(2),get_reg(3),get_reg(4),get_reg(5),get_reg(6));
 }

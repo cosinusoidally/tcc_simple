@@ -112,6 +112,10 @@ function get_reg(x) {
   return ri32(add(regs_data(), mul(x,4)));
 }
 
+function set_reg(x, v) {
+  wi32(add(regs_data(), mul(x, 4)), v);
+}
+
 function set_param(i, v) {
   wi32(add(host_params(), mul(i, 4)), v);
 }

@@ -805,6 +805,12 @@ function load_file(realname, virtualname) {
   return t;
 }
 
+function exit_builtin() {
+  /* this is a hacky way of 'terminating' the built in command */
+  set_reg(1, 0);
+  vm_exit();
+}
+
 function extract_file(vfs_name, real_name) {
   var t;
   var ofile;
@@ -871,6 +877,7 @@ function run_process(cmdline) {
   int p_vaddr;
   int p_filesz;
   int j;
+  int c0;
 
   args_offset = 2048;
   args = args_base();
@@ -919,7 +926,18 @@ function run_process(cmdline) {
   }
 
   /* dispatch built in commands */
-  /* FIXME impl builtins */
+  if(eq(ri8(ri32(add(args, 4))), 'h')) {
+    /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary) */
+/*
+    hex0_compile(args[2], args[3]);
+*/
+    print_labled_string(mks("hex0 not impl"), ri32(add(args, 4)));
+    host_exit(1);
+  } else if(eq(ri8(ri32(add(args, 4)), 'l'))) {
+    /* load_file command */
+    load_file(ri32(add(args, 8)), ri32(add(args, 12)));
+    exit_builtin();
+  }
 
   if(foo = find_file(ri32(add(args, 4)))) {
     host_fputs(mks("run_process: in vfs found "), host_stdout());
