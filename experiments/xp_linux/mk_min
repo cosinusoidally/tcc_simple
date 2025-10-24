@@ -60,6 +60,8 @@ echo "this is a test file" > artifacts/read_test.txt
 
 ./artifacts/test_tracer.exe ./artifacts/min_linux.exe $1
 
+diff -u -s artifacts/xp_linux_js.exe.M1 artifacts/out.M1
+
 ls -lS artifacts/*.exe
 
 echo DONE

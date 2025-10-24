@@ -524,6 +524,7 @@ function vm_write() {
 
 function vm_exit() {
   trap_syscalls_off();
+  extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
   host_exit(get_reg(1));
 }
 
