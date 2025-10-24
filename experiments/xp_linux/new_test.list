@@ -61,3 +61,6 @@ load_file ./artifacts/xp_linux_full.js xp_linux_full.js
 /hex2-0 hex2-0.hex2 /hex2.exe
 /cjsawk.exe xp_linux_full.js xp_linux_self.exe.M1
 /catm xp_linux_self.exe-0.M1 simple_asm_defs.M1 x86_defs.M1 libc-core.M1 xp_linux_self.exe.M1
+/m0.exe xp_linux_self.exe-0.M1 xp_linux_self.exe.hex2
+/catm xp_linux_self.exe-0.hex2 ELF-i386.hex2 xp_linux_self.exe.hex2
+/hex2.exe xp_linux_self.exe.hex2 /xp_linux_self.exe
