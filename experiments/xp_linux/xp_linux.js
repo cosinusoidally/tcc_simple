@@ -544,7 +544,12 @@ function vm_exit() {
   return vm_exit_();
 }
 function vm_exit_() {
+  var t;
+  var error_code;
+  error_code = get_reg(1);
   trap_syscalls_off();
+  print_labled_hex(mks("vm_exit"), error_code);
+  print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
   extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
   extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
   host_exit(get_reg(1));
