@@ -586,9 +586,33 @@ function vm_open() {
 }
 
 function vm_read() {
-  trap_syscalls_off();
-  host_puts(mks("vm_read not impl"));
-  host_exit(1);
+  var r;
+  var c;
+  var fd;
+  var buf;
+  var count;
+  var t;
+
+  fd = get_reg(1);
+  buf = get_reg(2);
+  count = get_reg(3);
+  t = 0;
+  if(eq(fd_get_file_offset(fd), gfd_get_file_length(fd_get_filenum(fd)))) {
+    r = 0;
+  } else {
+    while(lt(t, count)) {
+      if(eq(fd_get_file_offset(fd), gfd_get_file_length(fd_get_filenum(fd)))) {
+        break;
+      }
+      c = ri8(add(gfd_get_file_addr(fd_get_filenum(fd)),fd_get_file_offset(fd)));
+      fd_set_file_offset(fd, add(fd_get_file_offset(fd), 1));
+      wi8(buf, c);
+      buf = add(buf, 1);
+      t = add(t, 1);
+    }
+    r = t;
+  }
+  return r;
 }
 
 function wrap_syscall() {
