@@ -682,6 +682,34 @@ function vm_close() {
   return r;
 }
 
+function vm_lseek() {
+  var fd;
+  var offset;
+  var whence;
+  fd = get_reg(1);
+  offset = get_reg(2);
+  whence = get_reg(3);
+  trap_syscalls_off();
+  if(eq(whence, 0)) {
+    /* nothing needed */
+  } else if(eq(whence, 2)){
+    /* SEEK_END */
+    offset = add(offset, gfd_get_file_length(fd_get_filenum(fd)));
+  } else if(eq(whence, 1)){
+    /* SEEK_CUR */
+    offset = add(offset, fd_get_file_offset(fd));
+  } else {
+    host_puts(mks("vm_lseek invalid whence"));
+    host_exit(1);
+  }
+  print_labled_hex(mks("vm_lseek fd:"), fd);
+  print_labled_hex(mks("vm_lseek offset:"), offset);
+  print_labled_hex(mks("vm_lseek whence:"), whence);
+  fd_set_file_offset(fd, offset);
+  trap_syscalls_on();
+  return offset;
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
 /* also need to preserve more registers since some of the early tool use them */
