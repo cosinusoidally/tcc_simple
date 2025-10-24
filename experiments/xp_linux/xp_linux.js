@@ -550,9 +550,15 @@ function vm_exit_() {
   trap_syscalls_off();
   print_labled_hex(mks("vm_exit"), error_code);
   print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
-  extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
-  extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
-  host_exit(get_reg(1));
+  if(t = next_command()) {
+    run_process(t);
+    host_puts(mks("shouldn't get here"));
+    host_exit(1);
+  } else {
+    extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
+    extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
+    host_exit(error_code);
+  }
 }
 
 function vm_brk() {
