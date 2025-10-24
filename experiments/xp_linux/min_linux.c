@@ -27,6 +27,11 @@ int wi32(int o,int v) {
         return 0;
 }
 
+int ri8(o) {
+  char *heap = 0;
+  return heap[o] & 255;
+}
+
 int ri32(o) {
   int *h;
   h = o;
