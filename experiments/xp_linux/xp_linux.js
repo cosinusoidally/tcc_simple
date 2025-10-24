@@ -585,6 +585,12 @@ function vm_open() {
   return r;
 }
 
+function vm_read() {
+  trap_syscalls_off();
+  host_puts(mks("vm_read not impl"));
+  host_exit(1);
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
   return wrap_syscall_();
@@ -603,6 +609,8 @@ function wrap_syscall_() {
 
   if(eq(n, 45)) {
     r = vm_brk();
+  } else if(eq(n, 3)) {
+    r = vm_read();
   } else if(eq(n, 4)) {
     r = vm_write();
   } else if(eq(n, 5)) {
