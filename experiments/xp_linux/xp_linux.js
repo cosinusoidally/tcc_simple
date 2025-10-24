@@ -558,7 +558,7 @@ function vm_exit_() {
     extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
     extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
     extract_file(mks("/hex0"), mks("artifacts/hex0"));
-    extract_file(mks("hex0_x86.hex0"), mks("artifacts/hex0_x86.hex0"));
+    extract_file(mks("/hex1"), mks("artifacts/hex1"));
     host_exit(error_code);
   }
 }
