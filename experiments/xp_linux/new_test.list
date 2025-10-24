@@ -35,4 +35,8 @@ load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
 /M0 js_to_c.exe-0.M1 js_to_c.exe.hex2
 /catm js_to_c.exe-0.hex2 ELF-i386.hex2 js_to_c.exe.hex2
 /hex2-0 js_to_c.exe-0.hex2 /js_to_c.exe
+/catm cjsawk_full.c cjsawk.js support_libc.js simple_support_js_m2_prims.c support_m2.c
+/catm m0_full.c m0.js support_libc.js simple_support_js_m2_prims.c support_m2.c
+/catm hex2_full.c hex2.js support_libc.js simple_support_js_m2_prims.c support_m2.c
+/cc_x86_min.exe cjsawk_full_js_to_c.c cjsawk_boot.exe.M1
 ../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
