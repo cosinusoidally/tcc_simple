@@ -683,9 +683,15 @@ function vm_close() {
 
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
-/* also need to preserve edi since hex0 uses it */
+/* also need to preserve more registers since some of the early tool use them */
   asm("push_edi");
+  asm("push_ebx");
+  asm("push_ecx");
+  asm("push_edx");
   wrap_syscall_();
+  asm("pop_edx");
+  asm("pop_ecx");
+  asm("pop_ebx");
   asm("pop_edi");
 }
 function wrap_syscall_() {
