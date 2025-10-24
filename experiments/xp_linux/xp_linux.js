@@ -538,8 +538,15 @@ function vm_write() {
 }
 
 function vm_exit() {
+  /* reset esp back to a known good value (since catm leaves esp in a bad
+     state */
+  asm("mov_esp, %0x8045700");
+  return vm_exit_();
+}
+function vm_exit_() {
   trap_syscalls_off();
   extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
+  extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
   host_exit(get_reg(1));
 }
 
@@ -822,7 +829,7 @@ function next_command() {
   }
   wi8(add(command_buffer(), o), 0);
   print_labled_string(mks("command_buffer"), command_buffer());
-  if(eq(o, 0)) { return o;}
+  if(eq(o, 0)) { return 0;}
   return command_buffer();
 }
 
