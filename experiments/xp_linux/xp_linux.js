@@ -557,6 +557,7 @@ function vm_exit_() {
   } else {
     extract_file(mks("artifacts/out.M1"), mks("artifacts/out.M1"));
     extract_file(mks("artifacts/out2.M1"), mks("artifacts/out2.M1"));
+    extract_file(mks("/hex0"), mks("artifacts/hex0"));
     host_exit(error_code);
   }
 }
@@ -1022,7 +1023,6 @@ function reloc_entrypoint() {
 
   /* load in some test files */
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
-  load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
 
   run_process(next_command());
   host_exit(0);

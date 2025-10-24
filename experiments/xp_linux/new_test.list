@@ -1,2 +1,8 @@
+load_file alt_defs.M1 alt_defs.M1
+load_file ../cjsawk/m0.js m0.js
+load_file ../cjsawk/hex2.js hex2.js
+load_file ../cjsawk/cjsawk.js cjsawk.js
+load_file ../m2min_v2/hex0_x86.hex0 hex0_x86.hex0
 load_file ./artifacts/xp_linux_full.js artifacts/xp_linux_full.js
+../m2min_v2/artifacts/hex0 hex0_x86.hex0 /hex0
 ../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1
