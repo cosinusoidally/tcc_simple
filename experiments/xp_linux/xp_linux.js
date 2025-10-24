@@ -811,6 +811,21 @@ function extract_file(vfs_name, real_name) {
   }
 }
 
+function next_command() {
+  var o;
+  var c;
+  o = 0;
+  while(neq((c = host_fgetc(command_file())), sub(0,1))) {
+    if(eq(c, '\n')) {break;}
+    wi8(add(command_buffer(), o), c);
+    o = add(o, 1);
+  }
+  wi8(add(command_buffer(), o), 0);
+  print_labled_string(mks("command_buffer"), command_buffer());
+  if(eq(o, 0)) { return o;}
+  return command_buffer();
+}
+
 function reset_process() {
   int base_addr;
   int i;
