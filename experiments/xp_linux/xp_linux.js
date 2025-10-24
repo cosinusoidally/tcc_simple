@@ -970,7 +970,7 @@ function reloc_entrypoint() {
   load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
   load_file(mks("artifacts/xp_linux_full.js"), mks("artifacts/xp_linux_full.js"));
 
-  run_process(mks("../cjsawk/artifacts/builds/full_cc_x86_min/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
+  run_process(mks("../artifacts/cjsawk.exe artifacts/xp_linux_full.js artifacts/out.M1"));
   host_exit(0);
 }
 
