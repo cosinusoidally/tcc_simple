@@ -855,6 +855,64 @@ function load_file(realname, virtualname) {
   return t;
 }
 
+function hex0_compile(src, dst) {
+  int ifile;
+  int ofile;
+  int ilen;
+  int olen;
+  int ioff;
+  int ooff;
+  int i;
+  int c;
+  int t;
+  int in_comment;
+  int hi;
+  hi = 1;
+
+  host_fputs(mks("hex0 compile: "), host_stdout());
+  host_fputs(src, host_stdout());
+  host_fputs(mks(" "), host_stdout());
+  host_fputs(dst, host_stdout());
+  host_fputs(mks("\n"), host_stdout());
+/*
+  printf("hex0 compile: %s %s\n", src, dst);
+  ifile = find_file(src);
+  ioff =  gfd_get_file_addr(ifile);
+  ilen =  gfd_get_file_length(ifile);
+  i = 0;
+  ofile = new_file(dst);
+  ooff = gfd_get_file_addr(ofile);
+  olen = 0;
+  in_comment = 0;
+  while(i < ilen) {
+    c = ri8(ioff+i);
+    if((c == '#') || (c == ';')) { in_comment = 1;}
+    if(in_comment) {
+      if(c == '\n') { in_comment = 0;}
+    } else {
+      if(!((c == ' ') || (c == '\t') || (c == '\n'))) {
+        fputc(c, stdout);
+        if(hi == 1) {
+          hi = 0;
+          t = hex_digit_to_int(c);
+        } else {
+          hi = 1;
+          t = t << 4;
+          t = t | hex_digit_to_int(c);
+          wi8(ooff, t);
+          ooff = ooff + 1;
+          olen = olen + 1;
+//         printf(" t: 0x%x\n", t);
+        }
+      }
+    }
+    i = i + 1;
+  }
+  gfd_set_file_length(ofile, olen);
+*/
+  host_exit(1);
+}
+
 function exit_builtin() {
   /* this is a hacky way of 'terminating' the built in command */
   set_reg(1, 0);
@@ -979,11 +1037,8 @@ function run_process(cmdline) {
   c0 = ri8(ri32(add(args, 4)));
   if(eq(c0, 'h')) {
     /* hex0 foo.hex0 bar.exe (compile foo.hex0 to a binary) */
-/*
-    hex0_compile(args[2], args[3]);
-*/
-    print_labled_string(mks("hex0 not impl"), ri32(add(args, 4)));
-    host_exit(1);
+    hex0_compile(ri32(add(args, 8)), ri32(add(args, 12)));
+    exit_builtin();
   } else if(eq(c0, 'l')) {
     /* load_file command */
     load_file(ri32(add(args, 8)), ri32(add(args, 12)));
