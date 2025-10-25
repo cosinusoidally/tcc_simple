@@ -874,8 +874,6 @@ function hex0_compile(src, dst) {
   host_fputs(mks(" "), host_stdout());
   host_fputs(dst, host_stdout());
   host_fputs(mks("\n"), host_stdout());
-/*
-  printf("hex0 compile: %s %s\n", src, dst);
   ifile = find_file(src);
   ioff =  gfd_get_file_addr(ifile);
   ilen =  gfd_get_file_length(ifile);
@@ -884,11 +882,12 @@ function hex0_compile(src, dst) {
   ooff = gfd_get_file_addr(ofile);
   olen = 0;
   in_comment = 0;
-  while(i < ilen) {
+/*
+  while(lt(i, ilen)) {
     c = ri8(ioff+i);
-    if((c == '#') || (c == ';')) { in_comment = 1;}
+    if(or(eq(c, '#'), eq(c, ';'))) { in_comment = 1;}
     if(in_comment) {
-      if(c == '\n') { in_comment = 0;}
+      if(eq(c, '\n')) { in_comment = 0;}
     } else {
       if(!((c == ' ') || (c == '\t') || (c == '\n'))) {
         fputc(c, stdout);
