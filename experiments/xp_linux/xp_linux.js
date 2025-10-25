@@ -884,28 +884,28 @@ function hex0_compile(src, dst) {
   in_comment = 0;
 /*
   while(lt(i, ilen)) {
-    c = ri8(ioff+i);
+    c = ri8(add(ioff, i));
     if(or(eq(c, '#'), eq(c, ';'))) { in_comment = 1;}
     if(in_comment) {
       if(eq(c, '\n')) { in_comment = 0;}
     } else {
-      if(!((c == ' ') || (c == '\t') || (c == '\n'))) {
-        fputc(c, stdout);
-        if(hi == 1) {
+      if(eq(or(eq(c, ' '), or(eq(c, '\t'), eq(c, '\n'))),0)) {
+        host_fputc(c, host_stdout());
+        if(eq(hi, 1)) {
           hi = 0;
           t = hex_digit_to_int(c);
         } else {
           hi = 1;
-          t = t << 4;
-          t = t | hex_digit_to_int(c);
+          t = shl(t, 4);
+          t = or(t, hex_digit_to_int(c));
           wi8(ooff, t);
-          ooff = ooff + 1;
-          olen = olen + 1;
+          ooff = add(ooff, 1);
+          olen = add(olen, 1);
 //         printf(" t: 0x%x\n", t);
         }
       }
     }
-    i = i + 1;
+    i = add(i, 1);
   }
   gfd_set_file_length(ofile, olen);
 */
