@@ -11,7 +11,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
   eip = info->ContextRecord->Eip;
   esp = info->ContextRecord->Esp;
 
-  if((ri8(eip)==0xCD)) {
+  if((ri8(eip)==0xCD) && (ri8(eip+1)==0x80)) {
     /* first try and patch in int wrapper */
     int eip_wrap = eip - 10;
     if(ri32(eip_wrap) == 0x90909090 &&
@@ -48,7 +48,7 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
     set_reg(6, info->ContextRecord->Ebp);
     return EXCEPTION_CONTINUE_EXECUTION;
   } else {
-    printf("not interrupt\n");
+    printf("not int 0x80\n");
     return EXCEPTION_CONTINUE_SEARCH;
   }
 }
