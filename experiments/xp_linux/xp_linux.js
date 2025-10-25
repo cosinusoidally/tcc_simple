@@ -856,17 +856,15 @@ function load_file(realname, virtualname) {
 }
 
 function hex_digit_to_int(c) {
-/*
   if(and(gte(c, '0'), lte(c, '9'))) {
     c = sub(c, '0');
   } else if(and(gte(c,'A'), lte(c, 'F'))) {
     c = add(10, sub(c, 'A'));
   } else {
-    print_lanbled_hex(mks("invalid digit"), c);
+    print_labled_hex(mks("invalid digit"), c);
     host_exit(1);
   }
   return c;
-*/
 }
 
 function hex0_compile(src, dst) {
