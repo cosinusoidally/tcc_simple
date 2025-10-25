@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#include "min_linux.c"
+#include "min_common.c"
 
 int trap_ready = 0;
 

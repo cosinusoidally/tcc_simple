@@ -2,8 +2,8 @@
 set -xe
 
 gcc -no-pie -g3 -O0 -m32 test_tracer.c -o artifacts/test_tracer.exe
-tcc -c -g -O0 -m32 min_linux.c -o artifacts/min_linux.o
-gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_linux.o -o artifacts/min_linux.exe -ldl
+tcc -c -g -O0 -m32 min_common.c -o artifacts/min_common.o
+gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_common.o -o artifacts/min_linux.exe -ldl
 
 i386-win32-tcc -m32 min_win32.c -o artifacts/min_win32.exe
 
