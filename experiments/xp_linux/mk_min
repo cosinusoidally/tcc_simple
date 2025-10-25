@@ -6,8 +6,8 @@ tcc -c -g -O0 -m32 min_common.c -o artifacts/min_common.o
 tcc -c -O0 -m32 min_linux.c -o artifacts/min_linux.o
 gcc -Wl,-Ttext-segment,0x10000 -g3 -O0 -m32 artifacts/min_linux.o artifacts/min_common.o -o artifacts/min_linux.exe -ldl
 
-i386-win32-tcc -m32 -c min_win32.c -o artifacts/min_win32.o
-i386-win32-tcc -m32 artifacts/min_common.o artifacts/min_win32.o -o artifacts/min_win32.exe
+i386-win32-tcc -g -m32 -c min_win32.c -o artifacts/min_win32.o
+i386-win32-tcc -g -m32 artifacts/min_common.o artifacts/min_win32.o -o artifacts/min_win32.exe
 
 cp artifacts/min_linux.exe artifacts/min_linux_strip.exe
 strip artifacts/min_linux_strip.exe
