@@ -855,6 +855,20 @@ function load_file(realname, virtualname) {
   return t;
 }
 
+function hex_digit_to_int(c) {
+/*
+  if(and(gte(c, '0'), lte(c, '9'))) {
+    c = sub(c, '0');
+  } else if(and(gte(c,'A'), lte(c, 'F'))) {
+    c = add(10, sub(c, 'A'));
+  } else {
+    print_lanbled_hex(mks("invalid digit"), c);
+    host_exit(1);
+  }
+  return c;
+*/
+}
+
 function hex0_compile(src, dst) {
   int ifile;
   int ofile;
@@ -882,7 +896,6 @@ function hex0_compile(src, dst) {
   ooff = gfd_get_file_addr(ofile);
   olen = 0;
   in_comment = 0;
-/*
   while(lt(i, ilen)) {
     c = ri8(add(ioff, i));
     if(or(eq(c, '#'), eq(c, ';'))) { in_comment = 1;}
@@ -908,8 +921,6 @@ function hex0_compile(src, dst) {
     i = add(i, 1);
   }
   gfd_set_file_length(ofile, olen);
-*/
-  host_exit(1);
 }
 
 function exit_builtin() {
