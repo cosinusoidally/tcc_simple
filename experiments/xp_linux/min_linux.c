@@ -7,7 +7,7 @@ int MAP_ANONYMOUS=32;
 int MAP_PRIVATE=2;
 int MAP_FIXED=0x10;
 
-function get_stdout() {
+int get_stdout() {
   return stdout;
 }
 
