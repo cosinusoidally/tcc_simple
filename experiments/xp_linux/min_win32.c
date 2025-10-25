@@ -8,13 +8,9 @@ int wrap_syscall();
 LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
 {
   int eip, esp, i;
-//  printf("Executed toplevelhandler, Exception: %X\n", info->ExceptionRecord->ExceptionCode); //print any other exceptions we encounter
   eip = info->ContextRecord->Eip;
   esp = info->ContextRecord->Esp;
 
-
-//  printf("eip: 0x%x esp: 0x%x\n",eip, esp);
-//  printf("instruction: %x\n",ri8(eip));
   if((ri8(eip)==0xCD)) {
     /* first try and patch in int wrapper */
     int eip_wrap = eip - 10;
@@ -29,9 +25,6 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
         printf("0x%x ",ri8(eip_wrap+i));
       }
       printf("\n");
-//    wi32(eip_wrap, 0x58505850);
-//    wi32(eip_wrap + 8, 0x58505850);
-//    wi32(eip_wrap + 4, 0x80CD5850);
       wi32(eip_wrap, 0x15FF6090);
       wi32(eip_wrap + 4, syscall_wrap_alt_addr);
       wi32(eip_wrap + 8, 0x9020C483);
@@ -41,13 +34,10 @@ LONG CALLBACK TopLevelHandler(EXCEPTION_POINTERS* info)
       }
       printf("\n");
     }
-    int int_num = ri8(eip+1);
-//    printf("in interrupt 0x%x\n", int_num);
     eip = eip + 2;
     info->ContextRecord->Eip = (int)wrap_syscall;
     esp = esp - 4;
     info->ContextRecord->Esp = esp;
-//    printf("eip new: 0x%x\n", eip);
     wi32(esp, eip);
     set_reg(0, info->ContextRecord->Eax);
     set_reg(1, info->ContextRecord->Ebx);
@@ -76,14 +66,6 @@ int syscall(x) {
   } else if(x == 65533) {
     // ignore
     return;
-  } else if(x == 4) {
-//      printf("sycall write missing impl %d\n", x);
-/* temp hacky code */
-    int fd = regs_data[1];
-    int buf = regs_data[2];
-    int count = regs_data[3];
-    write(fd, buf, count);
-    return 0;
   } else {
       printf("sycall function missing impl %d\n", x);
   }
