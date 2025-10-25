@@ -3,15 +3,6 @@
 
 #include "globals.js"
 
-#include <stdio.h>
-
-int PROT_READ=1;
-int PROT_WRITE=2;
-int PROT_EXEC=4;
-int MAP_ANONYMOUS=32;
-int MAP_PRIVATE=2;
-int MAP_FIXED=0x10;
-
 function mul(a, b) {
   return a*b;
 }
@@ -130,7 +121,7 @@ int host_callback() {
 
 init_runtime(filename) {
   wi32(host_call_fn(), host_callback);
-  wi32(host_stdout_addr(), stdout);
+  wi32(host_stdout_addr(), get_stdout());
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
   wi32(command_file(), fopen(filename, "rb"));
@@ -145,6 +136,19 @@ run_process() {
   asm("mov $0x8045800,%esp");
   /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
   asm("jmp *0x8048018");
+}
+
+#include <stdio.h>
+
+int PROT_READ=1;
+int PROT_WRITE=2;
+int PROT_EXEC=4;
+int MAP_ANONYMOUS=32;
+int MAP_PRIVATE=2;
+int MAP_FIXED=0x10;
+
+function get_stdout() {
+  return stdout;
 }
 
 int main(int argc, char **argv) {
