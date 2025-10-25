@@ -19,7 +19,8 @@ load_file ../m2min_v2/M0_x86.hex2 M0_x86.hex2
 load_file ../m2min_v2/cc_x86_min.M1 cc_x86_min.M1
 load_file globals.js globals.js
 load_file xp_linux.js xp_linux.js
-../m2min_v2/artifacts/hex0 hex0_x86.hex0 /hex0
+hex0 hex0_x86.hex0 /hex0-seed
+/hex0-seed hex0_x86.hex0 /hex0
 /hex0 hex1_x86.hex0 /hex1
 /hex1 hex2_x86.hex1 /hex2-0
 /hex2-0 catm_x86.hex2 /catm
