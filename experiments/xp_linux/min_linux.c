@@ -144,33 +144,25 @@ run_process() {
 
 int main(int argc, char **argv) {
   int res = 0;
+  int filename;
   res = mmap(base_address(), 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
   if(res != base_address()) {
     puts("mmap error\n");
     exit(1);
   }
-
   if(argc > 1) {
     printf("opening command file %s\n", argv[1]);
-    wi32(command_file(), fopen(argv[1], "rb"));
+    filename = argv[1];
   } else {
     printf("opening default command file new_test.list\n");
-    wi32(command_file(), fopen("new_test.list", "rb"));
+    filename = "new_test.list";
   }
+  wi32(command_file(), fopen(filename, "rb"));
   if(!ri32(command_file())) {
     printf("error could not open command file\n");
     exit(1);
   }
-
   init_runtime();
-
-/*
-  printf("reloc_entrypoint_addr: 0x%x\n", reloc_entrypoint_addr);
-  printf("host_call_fn: 0x%x\n", host_call_fn);
-  printf("host_params: 0x%x\n", host_params);
-  printf("host_stdout: 0x%x\n", host_stdout);
-  asm("call *0x4020024");
-*/
   run_process();
   return 0;
 }
