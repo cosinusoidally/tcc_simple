@@ -137,3 +137,30 @@ run_process() {
   /* this is a jmp to the entrypoint, stored in elf_base + 0x18 */
   asm("jmp *0x8048018");
 }
+
+int PROT_READ=1;
+int PROT_WRITE=2;
+int PROT_EXEC=4;
+int MAP_ANONYMOUS=32;
+int MAP_PRIVATE=2;
+int MAP_FIXED=0x10;
+
+int v_main(int argc, int argv) {
+  int res = 0;
+  int filename;
+  res = mmap(base_address(), 512*1024*1024, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, 0, 0);
+  if(res != base_address()) {
+    puts("mmap error\n");
+    exit(1);
+  }
+  if(argc > 1) {
+    filename = ri32(argv+4);
+    printf("opening command file %s\n", filename);
+  } else {
+    printf("opening default command file new_test.list\n");
+    filename = "new_test.list";
+  }
+  init_runtime(filename);
+  run_process();
+  return 0;
+}
