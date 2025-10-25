@@ -128,11 +128,16 @@ int host_callback() {
   return r;
 }
 
-init_runtime() {
+init_runtime(filename) {
   wi32(host_call_fn(), host_callback);
   wi32(host_stdout_addr(), stdout);
   set_reg(8, wrap_syscall_alt);
   printf("load_size: %d\n", load_boot("artifacts/xp_linux.exe"));
+  wi32(command_file(), fopen(filename, "rb"));
+  if(!ri32(command_file())) {
+    printf("error could not open command file\n");
+    exit(1);
+  }
 }
 
 run_process() {
@@ -157,12 +162,7 @@ int main(int argc, char **argv) {
     printf("opening default command file new_test.list\n");
     filename = "new_test.list";
   }
-  wi32(command_file(), fopen(filename, "rb"));
-  if(!ri32(command_file())) {
-    printf("error could not open command file\n");
-    exit(1);
-  }
-  init_runtime();
+  init_runtime(filename);
   run_process();
   return 0;
 }
