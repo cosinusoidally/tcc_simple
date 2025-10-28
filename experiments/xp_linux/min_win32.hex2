@@ -76,7 +76,7 @@ E000      # SizeOfOptionalHeader
 
 # Section Table (Section Headers)
 
-# text section:
+# .text section header:
 2E74 6578 7400 0000  # Name .text
 7812 0000            # VirtualSize
 0010 0000            # VirtualAddress
@@ -88,7 +88,7 @@ E000      # SizeOfOptionalHeader
 0000                 # NumberOfLinenumbers
 2000 0060            # Characteristics
 
-# data section:
+# .data section header:
 2e64 6174 6100 0000  #  name .data
 E403 0000            # VirtualSize
 0030 0000            # VirtualAddress
@@ -105,3 +105,5 @@ E403 0000            # VirtualSize
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
 0000 0000 0000 0000 0000 0000 0000 0000
+
+# .text section
