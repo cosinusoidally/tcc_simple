@@ -89,10 +89,17 @@ E000      # SizeOfOptionalHeader
 2000 0060            # Characteristics
 
 # data section:
-
-# 000001a0: 2e64 6174 6100 0000 e403 0000 0030 0000  .data........0..
-# 000001b0: 0004 0000 0016 0000 0000 0000 0000 0000  ................
-# 000001c0: 0000 0000 4000 00c0 0000 0000 0000 0000  ....@...........
+2e64 6174 6100 0000  #  name .data
+e403 0000            # VirtualSize
+0030 0000            # VirtualAddress
+0004 0000            # SizeOfRawData
+0016 0000            # PointerToRawData (where .data is in the exe file)
+0000 0000            # PointerToRelocations
+0000 0000            # PointerToLinenumbers
+0000                 # NumberOfRelocations
+0000                 # NumberOfLinenumbers
+4000 00c0            # Characteristics
+# 0000 0000 0000 0000  ....@...........
 # 000001d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
 # 000001e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
 # 000001f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
