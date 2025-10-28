@@ -73,10 +73,23 @@ E000      # SizeOfOptionalHeader
 0000 0000 0000 0000 # Delay Import Descriptor
 0000 0000 0000 0000 # CLR Runtime Header
 0000 0000 0000 0000 # Reserved, must be zero
+
 # Section Table (Section Headers)
-# 2e74 6578 7400 0000  # .text
-# 00000180: 7812 0000 0010 0000 0014 0000 0002 0000  x...............
-# 00000190: 0000 0000 0000 0000 0000 0000 2000 0060  ............ ..`
+
+# text section:
+2e74 6578 7400 0000  # Name .text
+7812 0000            # VirtualSize
+0010 0000            # VirtualAddress
+0014 0000            # SizeOfRawData
+0002 0000            # PointerToRawData (where .text is in the exe file)
+0000 0000            # PointerToRelocations
+0000 0000            # PointerToLinenumbers
+0000                 # NumberOfRelocations
+0000                 # NumberOfLinenumbers
+2000 0060            # Characteristics
+
+# data section:
+
 # 000001a0: 2e64 6174 6100 0000 e403 0000 0030 0000  .data........0..
 # 000001b0: 0004 0000 0016 0000 0000 0000 0000 0000  ................
 # 000001c0: 0000 0000 4000 00c0 0000 0000 0000 0000  ....@...........
