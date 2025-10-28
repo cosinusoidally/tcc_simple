@@ -51,6 +51,12 @@ E000      # SizeOfOptionalHeader
 0010 0000 # SizeOfHeapCommit
 0000 0000 # LoaderFlags (must be 0)
 1000 0000 # NumberOfRvaAndSizes
+# Optional Header Data Directories
+#  typedef struct _IMAGE_DATA_DIRECTORY {
+#    DWORD   VirtualAddress;
+#    DWORD   Size;
+# } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+#
 # 0000 0000 0000 0000  ................
 # 00000100: 0032 0000 3c00 0000 0000 0000 0000 0000  .2..<...........
 # 00000110: 0000 0000 0000 0000 0000 0000 0000 0000  ................
