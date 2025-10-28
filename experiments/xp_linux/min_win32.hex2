@@ -33,7 +33,13 @@ E000      # SizeOfOptionalHeader
 0000 4000 # ImageBase
 0010 0000 # SectionAlignment
 0002 0000 # FileAlignment
-# 000000c0: 0400 0000 0000 0000 0400 0000 0000 0000  ................
+0400      # MajorOperatingSystemVersion
+0000      # MinorOperatingSystemVersion
+0000      # MajorImageVersion
+0000      # MinorImageVersion
+0400      # MajorSubsystemVersion
+0000      # MinorSubsystemVersion
+0000 0000 # Win32VersionValue
 # 000000d0: 0040 0000 0002 0000 8e51 0000 0300 0000  .@.......Q......
 # 000000e0: 0000 1000 0010 0000 0000 1000 0010 0000  ................
 # 000000f0: 0000 0000 1000 0000 0000 0000 0000 0000  ................
