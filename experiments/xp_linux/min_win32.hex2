@@ -598,7 +598,7 @@ C3
 81EC 04000000
 E8 %file_descriptors
 8945 FC
-E8 71fbffff
+E8 %sizeof_file_descriptor
 50
 8B45 08
 50
