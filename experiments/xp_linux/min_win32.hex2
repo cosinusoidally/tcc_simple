@@ -503,8 +503,8 @@ E8 EA010000
 83C4 08
 C9
 C3
-
+:gfd_get_file_addr
 55
 89E5
 81EC 04000000
-E8 74fc ffff
+E8 %gfds
