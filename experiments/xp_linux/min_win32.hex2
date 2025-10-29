@@ -595,5 +595,12 @@ C3
 :fd_get_filenum
 55
 89E5
-# 000006e0: 81ec 0400 0000 e845 fbff ff89 45fc e871  .......E....E..q
-# 000006f0: fbff ff50 8b45 0850 e8b3 0000 0083 c408  ...P.E.P........
+81EC 04000000
+E8 %file_descriptors
+8945 FC
+E8 71fbffff
+50
+8B45 08
+50
+E8 B3000000
+83C4 08
