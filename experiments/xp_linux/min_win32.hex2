@@ -572,10 +572,14 @@ C3
 55
 89E5
 81EC 04000000
-E8 84fbffff
+E8 %file_descriptors
 8945 FC
-E8
-# 000006b0: b0fb ffff 508b 4508 50e8 f200 0000 83c4  ....P.E.P.......
+E8 %sizeof_file_descriptor
+50
+8B45 08
+50
+E8 F2000000
+83C4
 # 000006c0: 0850 8b45 fc50 e8f9 0000 0083 c408 8b4d  .P.E.P.........M
 # 000006d0: 0c51 50e8 ff00 0000 83c4 08c9 c355 89e5  .QP..........U..
 # 000006e0: 81ec 0400 0000 e845 fbff ff89 45fc e871  .......E....E..q
