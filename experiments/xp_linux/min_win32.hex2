@@ -617,8 +617,12 @@ C3
 :fd_set_file_offset
 55
 89E5
-81EC 040000
-# 00000720: 00e8 0afb ffff 8945 fce8 36fb ffff 508b  .......E..6...P.
+81EC 04000000
+E8 %file_descriptors
+8945 FC
+E8 %sizeof_file_descriptor
+50
+8B
 # 00000730: 4508 50e8 7800 0000 83c4 08b9 0400 0000  E.P.x...........
 # 00000740: 5150 e87d 0000 0083 c408 508b 45fc 50e8  QP.}......P.E.P.
 # 00000750: 7000 0000 83c4 088b 4d0c 5150 e876 0000  p.......M.QP.v..
