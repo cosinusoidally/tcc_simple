@@ -1549,6 +1549,7 @@ E8 %v_main
 C9
 C3
 # I think this might be the entrypoint
+# Seems to be either from ./lib/i386-win32-crt1w.o or ./lib/i386-win32-crt1.o
 :_start
 55
 89E5
