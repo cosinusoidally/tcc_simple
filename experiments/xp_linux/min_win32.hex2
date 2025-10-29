@@ -880,7 +880,8 @@ E9 21000000
 E8 %trap_syscalls_off
 B8 46304000
 50
-E8 070A0000
+# E8 070A0000
+E8 %THUNK_printf
 83C4 04
 B8 01000000
 50
@@ -1665,7 +1666,7 @@ c089 4514 8d45 0864 a300 0000 005d c300
 # reads the memory location given by the immediate, fetches the value held in
 # that location and then jumps there.
 # 00001400:
-:THUNK_0
+:THUNK_printf
 ff25 3c32 4000 0000
 :THUNK_1
 ff25 4032 4000 0000
