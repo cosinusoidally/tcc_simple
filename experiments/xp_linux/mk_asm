@@ -5,6 +5,6 @@ chmod +x artifacts/hex2.exe
 ./artifacts/hex2.exe ./min_win32.hex2 artifacts/min_win32_asm.exe
 
 xxd artifacts/min_win32_asm.exe artifacts/min_win32_asm.exe.hexdump
-xxd -l 0xa00 artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
+xxd -l 0xb00 artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
 
 diff -u -s artifacts/min_win32_asm.exe.hexdump artifacts/min_win32.exe.hexdump
