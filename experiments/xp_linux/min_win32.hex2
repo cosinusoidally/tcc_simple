@@ -1632,7 +1632,7 @@ E8 2D010000
 8B45 FC
 8B00
 50
-E8 e8fe ffff
+E8 %main
 83C4 0C
 C9
 C3
