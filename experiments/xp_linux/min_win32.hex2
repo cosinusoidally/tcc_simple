@@ -1603,8 +1603,8 @@ E8 1B010000
 83C4 04
 C9
 C3
-# not sure what this is currently
-:unknown
+# seems to be _runmain from lib/i386-win32-crt1.o
+:_runmain
 55
 89E5
 81EC 04000000
