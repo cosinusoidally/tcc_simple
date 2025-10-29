@@ -7,4 +7,5 @@ chmod +x artifacts/hex2.exe
 xxd artifacts/min_win32_asm.exe artifacts/min_win32_asm.exe.hexdump
 xxd -l 0xf00 artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
 
+ls -l artifacts/min_win32*exe
 diff -u -s artifacts/min_win32_asm.exe.hexdump artifacts/min_win32.exe.hexdump
