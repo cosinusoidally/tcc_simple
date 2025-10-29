@@ -509,7 +509,7 @@ C3
 81EC 04000000
 E8 %gfds
 8945 FC
-E8 8bfcffff
+E8 %sizeof_gfd
 50
 8B45 08
 50
