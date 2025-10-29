@@ -729,7 +729,7 @@ C3
 55
 89E5
 81EC 00000000
-E8 E0faffff
+E8 %regs_data
 50
 B8 BC174000
 50
