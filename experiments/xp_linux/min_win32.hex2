@@ -1660,6 +1660,10 @@ e9ab 0000 0055 8b6c 2408 8d44 240c 8945
 c021 4000 8945 0cb8 b421 4000 8945 1031
 # 000013f0:
 c089 4514 8d45 0864 a300 0000 005d c300
+
+# I suspect the following are "thunks" since FF25 is an indirect jump ie it
+# reads the memory location given by the immediate, fetches the value held in
+# that location and then jumps there.
 # 00001400:
 ff25 3c32 4000 0000 ff25 4032 4000 0000
 # 00001410:
