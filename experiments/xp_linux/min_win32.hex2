@@ -107,6 +107,7 @@ E403 0000            # VirtualSize
 0000 0000 0000 0000 0000 0000 0000 0000
 
 # .text section
+:.text
 :args_base
 55
 89E5
