@@ -1659,8 +1659,11 @@ C3
 89CC
 8B08
 FF60 04
-# 00001380:
-8b45 ecc3 e8f7 ffff ff8b 008b 00c3 e8ed
+:_exception_info
+8B45 EC
+C3
+:_exception_code
+e8f7 ffff ff8b 008b 00c3 e8ed
 # 00001390:
 ffff ff50 e8eb ffff ff50 e8c1 0000 0083
 # 000013a0:
