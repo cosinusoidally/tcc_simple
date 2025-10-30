@@ -1668,9 +1668,9 @@ E8 %_exception_info
 8B00
 C3
 :seh_filter
-E8 ed ffff ff
+E8 %_exception_info
 50
-E8 eb ffff ff
+E8 %_exception_code
 50
 E8 C1000000
 83C4 08
