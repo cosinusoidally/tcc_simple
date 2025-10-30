@@ -1639,7 +1639,7 @@ E8 %main
 C9
 C3
 # end of _runmain
-# 00001350:
+# 00001350: padding?
 00 0000
 :__chkstk
 872C24
@@ -1677,7 +1677,7 @@ E8 C1000000
 C3
 :seh_except
 8B65 E8
-E8 d9 ffff ff
+E8 %_exception_code
 50
 E8 b7000000
 00 0000
