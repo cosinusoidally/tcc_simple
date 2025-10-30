@@ -1679,7 +1679,7 @@ C3
 8B65 E8
 E8 %_exception_code
 50
-E8 b7000000
+E8 %THUNK_14
 00 0000
 :seh_scopetable
 ffff ffff 8e21 4000 a321 4000
