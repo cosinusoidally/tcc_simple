@@ -1680,6 +1680,7 @@ C3
 E8 %_exception_code
 50
 E8 %THUNK_14
+# padding ?
 00 0000
 :seh_scopetable
 ffff ffff 8e21 4000 a321 4000
