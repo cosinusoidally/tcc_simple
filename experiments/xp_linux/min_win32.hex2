@@ -1664,11 +1664,19 @@ FF60 04
 C3
 :_exception_code
 E8 %_exception_info
-8b 008b 00c3 e8ed
-# 00001390:
-ffff ff50 e8eb ffff ff50 e8c1 0000 0083
-# 000013a0:
-c408 c38b 65e8 e8d9 ffff ff50 e8b7 0000
+8B00
+8B00
+C3
+:seh_filter
+E8 ed ffff ff
+50
+E8 eb ffff ff
+50
+E8 C1000000
+83C4 08
+C3
+:seh_except
+8b 65e8 e8d9 ffff ff50 e8b7 0000
 # 000013b0:
 0000 0000 ffff ffff 8e21 4000 a321 4000
 # 000013c0:
