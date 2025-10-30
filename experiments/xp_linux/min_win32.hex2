@@ -1663,7 +1663,8 @@ FF60 04
 8B45 EC
 C3
 :_exception_code
-e8f7 ffff ff8b 008b 00c3 e8ed
+E8 %_exception_info
+8b 008b 00c3 e8ed
 # 00001390:
 ffff ff50 e8eb ffff ff50 e8c1 0000 0083
 # 000013a0:
