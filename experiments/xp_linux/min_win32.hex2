@@ -1672,7 +1672,7 @@ E8 %_exception_info
 50
 E8 %_exception_code
 50
-E8 C1000000
+E8 %THUNK_13
 83C4 08
 C3
 :seh_except
