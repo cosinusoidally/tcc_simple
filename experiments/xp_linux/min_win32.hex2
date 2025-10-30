@@ -1641,6 +1641,7 @@ C3
 # end of _runmain
 # 00001350: padding?
 00 0000
+# see win32/lib/chkstk.S in the tcc source code
 :__chkstk
 872C24
 55
