@@ -77,19 +77,19 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 08000000'
-'C9'
-'C3'
+  mov_eax, %8
+  leave
+  ret
 :filename_array
-'55'
-'89E5'
-'81EC 00000000'
-'E8' %base_address
-'B9 00002000'
-'51'
-'50'
-'E8' %add
-'83C4 08'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %base_address
+  mov_ecx, %0x200000
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
   leave
   ret
 :filename_size
