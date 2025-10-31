@@ -883,8 +883,8 @@ DEFINE ret C3
   cmpi8_eax, !1
   jne '0A000000'
   call %trap_syscalls_off
-  jmp '27020000'
-   movi8_eax,[ebp+BYTE] !-8
+  jmp %END_IF_host_callback_0
+  movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !2
   jne '0A000000'
   call %trap_syscalls_on
@@ -1048,6 +1048,7 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
+:END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-12
   leave
   ret
