@@ -8,9 +8,9 @@ DEFINE ret C3
 # .text section
 :.text
 :args_base
-push_ebp
-mov_ebp,esp
-sub_esp, %0
-mov_eax, %0x8045800
-leave
-ret
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x8045800
+  leave
+  ret
