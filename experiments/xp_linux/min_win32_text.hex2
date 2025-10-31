@@ -1,39 +1,3 @@
-# seems to be _runmain from lib/i386-win32-crt1.o
-:_runmain
-55
-89E5
-81EC 04000000
-90
-8B05 64324000
-8B4D 08
-8908
-8B05 68324000
-8b4D 0C
-8908
-B8 00000300
-50
-b8 00000100
-50
-E8 %THUNK_10
-83C4 08
-8B05 64324000
-8B0D 68324000
-8B15 6c324000
-8945 FC
-8B02
-50
-8B01
-50
-8B45 FC
-8B00
-50
-E8 %main
-83C4 0C
-C9
-C3
-# end of _runmain
-# 00001350: padding?
-00 0000
 # see win32/lib/chkstk.S in the tcc source code
 :__chkstk
 872C24
