@@ -1260,10 +1260,11 @@ DEFINE reti16 C2
   call %ri8
   addi8_esp, !4
   cmp_eax, %0x80
-  jne 'E0010000'
+  jne %ELSE_TopLevelHandler_0
   movi8_eax,[ebp+BYTE] !-4
   subi8_eax, !0xA
   movi8_[ebp+BYTE],eax !-16
+# IF_TopLevelHandler_1
   movi8_eax,[ebp+BYTE] !-16
   push_eax
   call %ri32
