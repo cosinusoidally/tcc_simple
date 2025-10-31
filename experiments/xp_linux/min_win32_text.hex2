@@ -1,12 +1,3 @@
-# .text section
-:.text
-:args_base
-55
-89E5
-81EC 00000000
-B8 00580408
-C9
-C3
 :elf_base
 55
 89E5
