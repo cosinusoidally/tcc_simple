@@ -823,6 +823,7 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-4
   call %elf_base
   movi8_[ebp+BYTE],eax !-8
+:WHILE_load_boot_0
   movi8_eax,[ebp+BYTE] !-4
   push_eax
   mov_eax, %0x1000
@@ -840,7 +841,7 @@ DEFINE ret C3
   movi8_ecx,[ebp+BYTE] !-12
   add_eax,ecx
   movi8_[ebp+BYTE],eax !-8
-  jmpi8 'CB'
+  jmpi8 !WHILE_load_boot_0
 :END_WHILE_load_boot_0
   movi8_eax,[ebp+BYTE] !-4
   push_eax
