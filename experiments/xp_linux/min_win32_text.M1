@@ -1148,9 +1148,9 @@ DEFINE ret C3
   mov_ecx,[DWORD] %0x4030F4
   mov_edx,[DWORD] %0x4030F8
 '09D1'
-'8B15 FC304000'
+  mov_edx,[DWORD] %0x4030FC
 '09D1'
-'8B15 00314000'
+  mov_edx,[DWORD] %0x403100
   movi8_[ebp+BYTE],eax !-12
 '8B05 04314000'
 '09C2'
