@@ -7,6 +7,7 @@ DEFINE call_eax FFD0
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
+DEFINE jmp E9
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
@@ -794,7 +795,7 @@ DEFINE ret C3
   je %_END_IF_wrap_syscall_0
   movi8_eax,[ebp+BYTE] !-12
   call_eax
-'E9' %0x21
+  jmp %0x21
 :_END_IF_wrap_syscall_0
   call %trap_syscalls_off
   mov_eax, %0x403046
