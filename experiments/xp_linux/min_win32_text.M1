@@ -881,17 +881,19 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-8
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !1
-  jne '0A000000'
+  jne %ELSE_host_callback_0
   call %trap_syscalls_off
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !2
-  jne '0A000000'
+  jne %ELSE_host_callback_1
   call %trap_syscalls_on
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_1
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !3
-  jne '1C000000'
+  jne %ELSE_host_callback_2
   mov_eax, %1
   push_eax
   call %get_param
@@ -900,9 +902,10 @@ DEFINE ret C3
   call %THUNK_puts
   addi8_esp, !4
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_2
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !4
-  jne '5E000000'
+  jne %ELSE_host_callback_3
   mov_eax, %1
   push_eax
   call %get_param
@@ -933,9 +936,10 @@ DEFINE ret C3
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_3
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !5
-  jne '66000000'
+  jne %ELSE_host_callback_4
   mov_eax, %1
   push_eax
   call %get_param
@@ -968,9 +972,10 @@ DEFINE ret C3
   addi8_esp, !8
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_4
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !6
-  jne '3C000000'
+  jne %ELSE_host_callback_5
   mov_eax, %1
   push_eax
   call %get_param
@@ -989,9 +994,10 @@ DEFINE ret C3
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_5
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !7
-  jne '5E000000'
+  jne %ELSE_host_callback_6
   mov_eax, %1
   push_eax
   call %get_param
@@ -1022,9 +1028,10 @@ DEFINE ret C3
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_6
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !8
-  jne '2A000000'
+  jne %ELSE_host_callback_7
   mov_eax, %0x403082
   push_eax
   call %THUNK_printf
@@ -1037,6 +1044,7 @@ DEFINE ret C3
   call %THUNK_exit
   addi8_esp, !4
   jmp %END_IF_host_callback_0
+:ELSE_host_callback_7
   call %trap_syscalls_off
   movi8_eax,[ebp+BYTE] !-8
   push_eax
