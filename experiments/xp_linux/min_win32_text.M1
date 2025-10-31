@@ -1,5 +1,6 @@
 DEFINE add_eax,ecx 01C8
 DEFINE add_ecx,eax 01C1
+DEFINE addi8_eax, 83C0
 DEFINE addi8_esp, 83C4
 DEFINE and_eax, 81E0
 DEFINE call E8
@@ -1190,7 +1191,7 @@ DEFINE ret C3
   cmpi8_eax, !1
   jle '29000000'
   movi8_eax,[ebp+BYTE] !12
-'83C0 04'
+  addi8_eax, !4
   push_eax
   call %ri32
   addi8_esp, !4
