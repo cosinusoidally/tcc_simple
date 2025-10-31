@@ -158,3 +158,50 @@ DEFINE ret C3
   addi8_esp, !4
   leave
   ret
+:host_stdout_addr
+'55'
+'89E5'
+'81EC 00000000'
+'B8 12000000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
+:host_stdout
+'55'
+'89E5'
+'81EC 00000000'
+'E8' %host_stdout_addr
+'50'
+'E8' %ri32
+'83C4 04'
+'C9'
+'C3'
+:syscall_hook
+'55'
+'89E5'
+'81EC 00000000'
+'B8 13000000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
+:reloc_entrypoint_ptr
+'55'
+'89E5'
+'81EC 00000000'
+'B8 50000204'
+'C9'
+'C3'
+:int2str_tmp
+'55'
+'89E5'
+'81EC 00000000'
+'B8 15000000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
