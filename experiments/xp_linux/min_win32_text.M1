@@ -607,14 +607,14 @@ DEFINE ret C3
 '8B45 FC'
 '8B4D 0C'
 '8908'
-'B8 00000000'
+  mov_eax, %0
   leave
   ret
 :ri8
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'B8 00000000'
+  mov_eax, %0
 '8945 FC'
 '8B45 08'
 '8B4D FC'
@@ -639,13 +639,13 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'E8' %regs_data
-'50'
-'B8 BC174000'
-'50'
-'B8 FEFF0000'
-'50'
-'E8' %syscall
-'83C4 0C'
+  call %regs_data
+  push_eax
+  mov_eax, %0x4017BC
+  push_eax
+  mov_eax, %0xFFFE
+  push_eax
+  call %syscall
+  addi8_esp, !12
   leave
   ret
