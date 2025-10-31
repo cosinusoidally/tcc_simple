@@ -783,16 +783,18 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0xC
+# IF_wrap_syscall_0
   call %syscall_hook
   push_eax
   call %ri32
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
   cmpi8_eax, !0
-  je '0A000000'
+  je %_END_IF_wrap_syscall_0
   movi8_eax,[ebp+BYTE] !-12
 'FFD0'
 'E9' %0x21
+:_END_IF_wrap_syscall_0
   call %trap_syscalls_off
   mov_eax, %0x403046
   push_eax
