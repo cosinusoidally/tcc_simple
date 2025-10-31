@@ -159,49 +159,49 @@ DEFINE ret C3
   leave
   ret
 :host_stdout_addr
-'55'
-'89E5'
-'81EC 00000000'
-'B8 12000000'
-'50'
-'E8' %globals
-'83C4 04'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x12
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
 :host_stdout
-'55'
-'89E5'
-'81EC 00000000'
-'E8' %host_stdout_addr
-'50'
-'E8' %ri32
-'83C4 04'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %host_stdout_addr
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
 :syscall_hook
-'55'
-'89E5'
-'81EC 00000000'
-'B8 13000000'
-'50'
-'E8' %globals
-'83C4 04'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x13
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
 :reloc_entrypoint_ptr
-'55'
-'89E5'
-'81EC 00000000'
-'B8 50000204'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x4020050
+  leave
+  ret
 :int2str_tmp
-'55'
-'89E5'
-'81EC 00000000'
-'B8 15000000'
-'50'
-'E8' %globals
-'83C4 04'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x15
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
