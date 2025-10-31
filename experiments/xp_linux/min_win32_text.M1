@@ -19,6 +19,7 @@ DEFINE mov_eax,ecx 89C8
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[eax],ecx 8908
 DEFINE mov_eax,[eax] 8B00
+DEFINE mov_eax,[DWORD] 8B05
 DEFINE mov_ecx,[DWORD] 8B0D
 DEFINE mov_edx,[DWORD] 8B15
 DEFINE movi8_[ebp+BYTE],eax 8945
@@ -1152,7 +1153,7 @@ DEFINE ret C3
 '09D1'
   mov_edx,[DWORD] %0x403100
   movi8_[ebp+BYTE],eax !-12
-'8B05 04314000'
+  mov_eax,[DWORD] %0x403104
 '09C2'
 '8B05 08314000'
 '09C2'
