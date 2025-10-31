@@ -1,29 +1,3 @@
-01C8
-8945 F8
-EB CB
-8B45 FC
-50
-E8 %THUNK_fclose
-83C4 04
-E8 %elf_base
-8B4D F8
-29C1
-89C8
-C9
-C3
-:get_param
-55
-89E5
-81EC 00000000
-E8 %host_params
-8B4D 08
-C1E1 02
-01C8
-50
-E8 %ri32
-83C4 04
-C9
-C3
 :host_callback
 55
 89E5
