@@ -1432,11 +1432,13 @@ DEFINE reti16 C2
   movi8_eax,[ebp+BYTE] !8
   cmp_eax, %0xFFFE
   jne %ELSE_IF_syscall_0
+# IF_syscall_1
   mov_eax,[DWORD] %0x40316C
   cmpi8_eax, !0
-  je '0A000000'
+  je %ELSE_syscall_1
   jmp '6C000000'
   jmp '29000000'
+:ELSE_syscall_1
   mov_eax, %0x40319C
   push_eax
   call %THUNK_printf
