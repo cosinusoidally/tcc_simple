@@ -461,18 +461,18 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'E8' %filename_array
+  call %filename_array
 '8945 FC'
-'E8' %filename_size
-'50'
+  call %filename_size
+  push_eax
 '8B45 08'
-'50'
-'E8' %mul
-'83C4 08'
-'50'
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
 '8B45 FC'
-'50'
-'E8' %add
-'83C4 08'
+  push_eax
+  call %add
+  addi8_esp, !8
   leave
   ret
