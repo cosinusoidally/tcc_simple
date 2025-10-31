@@ -526,56 +526,56 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'E8' %file_descriptors
+  call %file_descriptors
 '8945 FC'
-'E8' %sizeof_file_descriptor
-'50'
+  call %sizeof_file_descriptor
+  push_eax
 '8B45 08'
-'50'
+  push_eax
 'E8' %mul
-'83C4 08'
-'B9 04000000'
-'51'
-'50'
-'E8' %add
-'83C4 08'
-'50'
+  addi8_esp, !8
+  mov_ecx, %4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
 '8B45 FC'
-'50'
-'E8' %add
-'83C4 08'
+  push_eax
+  call %add
+  addi8_esp, !8
 '8B4D 0C'
-'51'
-'50'
-'E8' %wi32
-'83C4 08'
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
   leave
   ret
 :fd_get_file_offset
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'E8' %file_descriptors
+  call %file_descriptors
 '8945 FC'
-'E8' %sizeof_file_descriptor
-'50'
+  call %sizeof_file_descriptor
+  push_eax
 '8B45 08'
-'50'
-'E8' %mul
-'83C4 08'
-'B9 04000000'
-'51'
-'50'
-'E8' %add
-'83C4 08'
-'50'
+  push_eax
+  call %mul
+  addi8_esp, !8
+  mov_ecx, %0x4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
 '8B45 FC'
-'50'
-'E8' %add
-'83C4 08'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
   leave
   ret
 :mul
