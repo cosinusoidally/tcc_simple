@@ -1126,10 +1126,10 @@ DEFINE ret C3
   leave
   ret
 :run_process
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'BC 00580408'
 'FF25 18800408'
-'C9'
-'C3'
+  leave
+  ret
