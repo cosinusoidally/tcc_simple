@@ -870,183 +870,183 @@ DEFINE ret C3
   leave
   ret
 :host_callback
-'55'
-'89E5'
-'81EC 2C000000'
-'B8 00000000'
-'50'
-'E8' %get_param
-'83C4 04'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x2C
+  mov_eax, %0
+  push_eax
+  call %get_param
+  addi8_esp, !4
 '8945 F8'
 '8B45 F8'
 '83F8 01'
 '0F85 0A000000'
-'E8' %trap_syscalls_off
-'E9 27020000'
+  call %trap_syscalls_off
+  jmp '27020000'
 '8B45 F8'
 '83F8 02'
 '0F85 0A000000'
-'E8' %trap_syscalls_on
-'E9 11020000'
+  call %trap_syscalls_on
+  jmp '11020000'
 '8B45 F8'
 '83F8 03'
 '0F85 1C000000'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'50'
-'E8' %THUNK_puts
-'83C4 04'
-'E9 E9010000'
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_puts
+  addi8_esp, !4
+  jmp 'E9010000'
 '8B45 F8'
 '83F8 04'
 '0F85 5E000000'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'B9 02000000'
-'51'
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
 '8945 F0'
-'E8' %get_param
-'83C4 04'
-'B9 03000000'
-'51'
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %3
+  push_ecx
 '8945 EC'
-'E8' %get_param
-'83C4 04'
-'B9 04000000'
-'51'
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %4
+  push_ecx
 '8945 E8'
-'E8' %get_param
-'83C4 04'
-'50'
+  call %get_param
+  addi8_esp, !4
+  push_eax
 '8B45 E8'
-'50'
+  push_eax
 '8B45 EC'
-'50'
+  push_eax
 '8B45 F0'
-'50'
-'E8' %THUNK_fwrite
-'83C4 10'
+  push_eax
+  call %THUNK_fwrite
+  addi8_esp, !16
 '8945 F4'
-'E9 7F010000'
+  jmp '7F010000'
 '8B45 F8'
 '83F8 05'
 '0F85 66000000'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'B9 02000000'
-'51'
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
 '8945 E4'
-'E8' %get_param
-'83C4 04'
-'50'
+  call %get_param
+  addi8_esp, !4
+  push_eax
 '8B45 E4'
-'50'
-'B8 5D304000'
-'50'
-'E8' %THUNK_printf
-'83C4 0C'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'B9 02000000'
-'51'
+  push_eax
+  mov_eax, %0x40305D
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !12
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
 '8945 E0'
-'E8' %get_param
-'83C4 04'
-'50'
+  call %get_param
+  addi8_esp, !4
+  push_eax
 '8B45 E0'
-'50'
-'E8' %THUNK_fopen
-'83C4 08'
+  push_eax
+  call %THUNK_fopen
+  addi8_esp, !8
 '8945 F4'
-'E9 0D010000'
+  jmp '0D010000'
 '8B45 F8'
 '83F8 06'
 '0F85 3C000000'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'50'
-'B8 76304000'
-'50'
-'E8' %THUNK_printf
-'83C4 08'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'50'
-'E8' %THUNK_fclose
-'83C4 04'
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %0x403076
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_fclose
+  addi8_esp, !4
 '8945 F4'
-'E9 C5000000'
+  jmp 'C5000000'
 '8B45 F8'
 '83F8 07'
 '0F85 5E000000'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'B9 02000000'
-'51'
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
 '8945 DC'
-'E8' %get_param
-'83C4 04'
-'B9 03000000'
-'51'
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %3
+  push_ecx
 '8945 D8'
-'E8' %get_param
-'83C4 04'
-'B9 04000000'
-'51'
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %4
+  push_ecx
 '8945 D4'
-'E8' %get_param
-'83C4 04'
-'50'
+  call %get_param
+  addi8_esp, !4
+  push_eax
 '8B45 D4'
-'50'
+  push_eax
 '8B45 D8'
-'50'
+  push_eax
 '8B45 DC'
-'50'
-'E8' %THUNK_fread
-'83C4 10'
+  push_eax
+  call %THUNK_fread
+  addi8_esp, !16
 '8945 F4'
-'E9 5B000000'
+ jmp '5B000000'
 '8B45 F8'
 '83F8 08'
 '0F85 2A000000'
-'B8 82304000'
-'50'
-'E8' %THUNK_printf
-'83C4 04'
-'B8 01000000'
-'50'
-'E8' %get_param
-'83C4 04'
-'50'
-'E8' %THUNK_exit
-'83C4 04'
-'E9 25000000'
-'E8' %trap_syscalls_off
+  mov_eax, %0x403082
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+  jmp '25000000'
+  call %trap_syscalls_off
 '8B45 F8'
-'50'
-'B8 8F304000'
-'50'
-'E8' %THUNK_printf
-'83C4 08'
-'B8 01000000'
-'50'
-'E8' %THUNK_exit
-'83C4 04'
+  push_eax
+  mov_eax, %0x40308F
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
 '8B45 F4'
-'C9'
-'C3'
+  leave
+  ret
