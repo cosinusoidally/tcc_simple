@@ -13,6 +13,7 @@ DEFINE jmpi8 EB
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
+DEFINE mov_esp, BC
 DEFINE mov_eax,ecx 89C8
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[eax],ecx 8908
@@ -1129,7 +1130,7 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'BC 00580408'
+  mov_esp, %0x8045800
 'FF25 18800408'
   leave
   ret
