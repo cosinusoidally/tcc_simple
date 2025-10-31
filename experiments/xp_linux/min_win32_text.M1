@@ -209,49 +209,49 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 28000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0x28
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
 :next_fd
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 29000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0x29
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
 :next_filenum
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 2a000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0x2A
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
 :file_addr
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 2B000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0x2B
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
 :command_file
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 2C000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0x2C
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
