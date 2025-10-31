@@ -795,7 +795,7 @@ DEFINE ret C3
   je %_END_IF_wrap_syscall_0
   movi8_eax,[ebp+BYTE] !-12
   call_eax
-  jmp %0x21
+  jmp %_END_wrap_syscall
 :_END_IF_wrap_syscall_0
   call %trap_syscalls_off
   mov_eax, %0x403046
@@ -806,6 +806,7 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
+:_END_wrap_syscall
   leave
   ret
 :load_boot
