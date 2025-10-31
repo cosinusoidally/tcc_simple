@@ -1,15 +1,3 @@
-:gfds
-55
-89E5
-81EC 00000000
-E8 %base_address
-B9 10000001
-51
-50
-E8 %add
-83C4 08
-C9
-C3
 :sizeof_gfd
 55
 89E5

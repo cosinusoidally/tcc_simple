@@ -61,3 +61,15 @@ DEFINE ret C3
   mov_eax, %8
   leave
   ret
+:gfds
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %base_address
+  mov_ecx, %0x01000010
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
