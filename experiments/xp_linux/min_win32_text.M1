@@ -338,17 +338,17 @@ DEFINE ret C3
   call %host_params
   mov_ecx, %0x4
   push_ecx
-'8B4D 08'
+  movi8_ecx,[ebp+BYTE] !8
   push_ecx
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %mul
   addi8_esp, !8
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
-'8B4D 0C'
+  movi8_ecx,[ebp+BYTE] !12
   push_ecx
   push_eax
   call %wi32
