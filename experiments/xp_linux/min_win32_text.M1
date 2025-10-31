@@ -6,6 +6,7 @@ DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
 DEFINE mov_ebp,esp 89E5
+DEFINE mov_[eax],ecx 8908
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
@@ -606,7 +607,7 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-4
   movi8_eax,[ebp+BYTE] !-4
   movi8_ecx,[ebp+BYTE] !12
-'8908'
+  mov_[eax],ecx
   mov_eax, %0
   leave
   ret
