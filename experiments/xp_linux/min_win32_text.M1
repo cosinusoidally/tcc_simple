@@ -3,6 +3,7 @@ DEFINE call E8
 DEFINE leave C9
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
+DEFINE movi8_ecx,[ebp+BYTE] 8B4D
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
 DEFINE mov_ebp,esp 89E5
@@ -116,7 +117,7 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   call %global_data
-'8B4D 08'
+  movi8_ecx,[ebp+BYTE] !8
   push_ecx
   mov_ecx, %4
   push_ecx
