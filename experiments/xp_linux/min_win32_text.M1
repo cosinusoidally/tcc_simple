@@ -8,6 +8,7 @@ DEFINE cmp_ecx,eax 39C1
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
+DEFINE jle 0F8E
 DEFINE jne 0F85
 DEFINE jmp_indirect FF25
 DEFINE jmp E9
@@ -1187,7 +1188,7 @@ DEFINE ret C3
   addi8_esp, !4
   movi8_eax,[ebp+BYTE] !8
   cmpi8_eax, !1
-'0F8E 29000000'
+  jle '29000000'
   movi8_eax,[ebp+BYTE] !12
 '83C0 04'
   push_eax
