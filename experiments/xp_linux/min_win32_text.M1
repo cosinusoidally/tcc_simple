@@ -877,19 +877,19 @@ DEFINE ret C3
   push_eax
   call %get_param
   addi8_esp, !4
-'8945 F8'
-'8B45 F8'
-'83F8 01'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !1
 '0F85 0A000000'
   call %trap_syscalls_off
   jmp '27020000'
-'8B45 F8'
-'83F8 02'
+   movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !2
 '0F85 0A000000'
   call %trap_syscalls_on
   jmp '11020000'
-'8B45 F8'
-'83F8 03'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !3
 '0F85 1C000000'
   mov_eax, %1
   push_eax
@@ -899,8 +899,8 @@ DEFINE ret C3
   call %THUNK_puts
   addi8_esp, !4
   jmp 'E9010000'
-'8B45 F8'
-'83F8 04'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !4
 '0F85 5E000000'
   mov_eax, %1
   push_eax
@@ -908,32 +908,32 @@ DEFINE ret C3
   addi8_esp, !4
   mov_ecx, %2
   push_ecx
-'8945 F0'
+  movi8_[ebp+BYTE],eax !-16
   call %get_param
   addi8_esp, !4
   mov_ecx, %3
   push_ecx
-'8945 EC'
+  movi8_[ebp+BYTE],eax !-20
   call %get_param
   addi8_esp, !4
   mov_ecx, %4
   push_ecx
-'8945 E8'
+  movi8_[ebp+BYTE],eax !-24
   call %get_param
   addi8_esp, !4
   push_eax
-'8B45 E8'
+  movi8_eax,[ebp+BYTE] !-24
   push_eax
-'8B45 EC'
+  movi8_eax,[ebp+BYTE] !-20
   push_eax
-'8B45 F0'
+  movi8_eax,[ebp+BYTE] !-16
   push_eax
   call %THUNK_fwrite
   addi8_esp, !16
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
   jmp '7F010000'
-'8B45 F8'
-'83F8 05'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !5
 '0F85 66000000'
   mov_eax, %1
   push_eax
@@ -941,11 +941,11 @@ DEFINE ret C3
   addi8_esp, !4
   mov_ecx, %2
   push_ecx
-'8945 E4'
+  movi8_[ebp+BYTE],eax !-28
   call %get_param
   addi8_esp, !4
   push_eax
-'8B45 E4'
+  movi8_eax,[ebp+BYTE] !-28
   push_eax
   mov_eax, %0x40305D
   push_eax
@@ -957,18 +957,18 @@ DEFINE ret C3
   addi8_esp, !4
   mov_ecx, %2
   push_ecx
-'8945 E0'
+  movi8_[ebp+BYTE],eax !-32
   call %get_param
   addi8_esp, !4
   push_eax
-'8B45 E0'
+  movi8_eax,[ebp+BYTE] !-32
   push_eax
   call %THUNK_fopen
   addi8_esp, !8
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
   jmp '0D010000'
-'8B45 F8'
-'83F8 06'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !6
 '0F85 3C000000'
   mov_eax, %1
   push_eax
@@ -986,10 +986,10 @@ DEFINE ret C3
   push_eax
   call %THUNK_fclose
   addi8_esp, !4
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
   jmp 'C5000000'
-'8B45 F8'
-'83F8 07'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !7
 '0F85 5E000000'
   mov_eax, %1
   push_eax
@@ -997,32 +997,32 @@ DEFINE ret C3
   addi8_esp, !4
   mov_ecx, %2
   push_ecx
-'8945 DC'
+  movi8_[ebp+BYTE],eax !-36
   call %get_param
   addi8_esp, !4
   mov_ecx, %3
   push_ecx
-'8945 D8'
+  movi8_[ebp+BYTE],eax !-40
   call %get_param
   addi8_esp, !4
   mov_ecx, %4
   push_ecx
-'8945 D4'
+  movi8_[ebp+BYTE],eax !-44
   call %get_param
   addi8_esp, !4
   push_eax
-'8B45 D4'
+  movi8_eax,[ebp+BYTE] !-44
   push_eax
-'8B45 D8'
+  movi8_eax,[ebp+BYTE] !-40
   push_eax
-'8B45 DC'
+  movi8_eax,[ebp+BYTE] !-36
   push_eax
   call %THUNK_fread
   addi8_esp, !16
-'8945 F4'
- jmp '5B000000'
-'8B45 F8'
-'83F8 08'
+  movi8_[ebp+BYTE],eax !-12
+  jmp '5B000000'
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !8
 '0F85 2A000000'
   mov_eax, %0x403082
   push_eax
@@ -1037,7 +1037,7 @@ DEFINE ret C3
   addi8_esp, !4
   jmp '25000000'
   call %trap_syscalls_off
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
   mov_eax, %0x40308F
   push_eax
@@ -1047,6 +1047,6 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
-'8B45 F4'
+  movi8_eax,[ebp+BYTE] !-12
   leave
   ret
