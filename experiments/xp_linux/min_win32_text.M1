@@ -1136,15 +1136,15 @@ DEFINE ret C3
   leave
   ret
 :v_main
-'55'
-'89E5'
-'81EC 0C000000'
-'B8 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
+  mov_eax, %0
 '8945 FC'
-'E8' %base_address
+  call %base_address
 '8B0D F4304000'
 '8B15 f8304000'
-'09d1'
+'09D1'
 '8B15 FC304000'
 '09D1'
 '8B15 00314000'
@@ -1153,57 +1153,57 @@ DEFINE ret C3
 '09C2'
 '8B05 08314000'
 '09C2'
-'B8 00000000'
-'50'
-'B8 00000000'
-'50'
+  mov_eax, %0
+  push_eax
+  mov_eax, %0
+  push_eax
 '52'
-'51'
-'B8 00000020'
-'50'
+  push_ecx
+  mov_eax, %0x20000000
+  push_eax
 '8B45 F4'
-'50'
-'E8' %mmap
-'83C4 18'
+  push_eax
+  call %mmap
+  addi8_esp, !0x18
 '8945 FC'
-'E8' %base_address
+  call %base_address
 '8B4D FC'
 '39C1'
 '0F84 1C000000'
-'B8 0C314000'
-'50'
-'E8' %THUNK_puts
-'83C4 04'
-'B8 01000000'
-'50'
-'E8' %THUNK_exit
-'83C4 04'
+  mov_eax, %0x40310C
+  push_eax
+  call %THUNK_puts
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
 '8B45 08'
 '83F8 01'
 '0F8E 29000000'
 '8B45 0C'
 '83C0 04'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %ri32
+  addi8_esp, !4
 '8945 F8'
 '8B45 F8'
-'50'
-'B8 18314000'
-'50'
-'E8' %THUNK_printf
-'83C4 08'
-'E9 16000000'
-'B8 31314000'
-'50'
-'E8' %THUNK_printf
-'83C4 04'
-'B8 5D314000'
+  push_eax
+  mov_eax, %0x403118
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  jmp '16000000'
+  mov_eax, %0x403131
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %0x40315D
 '8945 F8'
 '8B45 F8'
-'50'
-'E8' %init_runtime
-'83C4 04'
+  push_eax
+  call %init_runtime
+  addi8_esp, !4
 'E8' %run_process
 'B8 00000000'
 'C9'
