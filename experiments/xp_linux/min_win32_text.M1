@@ -54,3 +54,10 @@ DEFINE ret C3
   addi8_esp, !8
   leave
   ret
+:sizeof_file_descriptor
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %8
+  leave
+  ret
