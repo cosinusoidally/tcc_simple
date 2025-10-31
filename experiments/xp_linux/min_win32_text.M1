@@ -834,13 +834,13 @@ DEFINE ret C3
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
   cmpi8_eax, !0
-  je '0D000000'
+  je %END_WHILE_load_boot_0
   movi8_eax,[ebp+BYTE] !-8
   movi8_ecx,[ebp+BYTE] !-12
   add_eax,ecx
   movi8_[ebp+BYTE],eax !-8
 'EB CB'
-:_END_WHILE_load_boot_0
+:END_WHILE_load_boot_0
   movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %THUNK_fclose
