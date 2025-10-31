@@ -1155,7 +1155,7 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-12
   mov_eax,[DWORD] %0x403104
 '09C2'
-'8B05 08314000'
+  mov_eax,[DWORD] %0x403108
 '09C2'
   mov_eax, %0
   push_eax
