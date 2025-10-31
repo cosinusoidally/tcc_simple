@@ -19,6 +19,7 @@ DEFINE mov_eax,ecx 89C8
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[eax],ecx 8908
 DEFINE mov_eax,[eax] 8B00
+DEFINE mov_ecx,[DWORD] 8B0D
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
@@ -1143,7 +1144,7 @@ DEFINE ret C3
   mov_eax, %0
   movi8_[ebp+BYTE],eax !-4
   call %base_address
-'8B0D' %0x4030F4
+  mov_ecx,[DWORD] %0x4030F4
 '8B15' %0x4030F8
 '09D1'
 '8B15 FC304000'
