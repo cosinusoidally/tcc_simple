@@ -602,10 +602,10 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'8B45 08'
-'8945 FC'
-'8B45 FC'
-'8B4D 0C'
+  movi8_eax,[ebp+BYTE] !8
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !-4
+  movi8_ecx,[ebp+BYTE] !12
 '8908'
   mov_eax, %0
   leave
@@ -615,9 +615,9 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   mov_eax, %0
-'8945 FC'
-'8B45 08'
-'8B4D FC'
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !-4
 '01C1'
 '0FBE01'
 '81E0 FF000000'
@@ -627,11 +627,11 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %8
-'8B45 08'
-'8945 FC'
-'8B45 FC'
-'8945 F8'
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !8
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !-4
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
 '8B00'
   leave
   ret
