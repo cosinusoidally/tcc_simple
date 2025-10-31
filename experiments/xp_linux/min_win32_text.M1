@@ -655,12 +655,12 @@ DEFINE ret C3
   leave
   ret
 :trap_syscalls_off
-'55'
-'89E5'
-'81EC 00000000'
-'B8 FDFF0000'
-'50'
-'E8' %syscall
-'83C4 04'
-'C9'
-'C3'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0xFFFD
+  push_eax
+  call %syscall
+  addi8_esp, !4
+  leave
+  ret
