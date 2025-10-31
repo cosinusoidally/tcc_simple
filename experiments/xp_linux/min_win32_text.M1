@@ -115,13 +115,13 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'E8' %global_data
+  call %global_data
 '8B4D 08'
-'51'
-'B9 04000000'
-'51'
+  push_ecx
+  mov_ecx, %4
+  push_ecx
 '8945 FC'
-'E8' %mul
+  call %mul
 '83C4 08'
 '50'
 '8B45 FC'
@@ -144,16 +144,17 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 24000204'
+# 'B8 24000204'
+  mov_eax, %0x4020024
   leave
   ret
 :host_params
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 0A000000'
-'50'
-'E8' %globals
-'83C4 04'
+  mov_eax, %0xA
+  push_eax
+  call %globals
+  addi8_esp, !4
   leave
   ret
