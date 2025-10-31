@@ -29,6 +29,7 @@ DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
 DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
+DEFINE nop 90
 DEFINE or_ecx,edx 09D1
 DEFINE or_edx,eax 09C2
 DEFINE push_eax 50
@@ -1222,10 +1223,10 @@ DEFINE ret C3
   leave
   ret
 :TopLevelHandler
-'55'
-'89E5'
-'81EC 14000000'
-'90'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x14
+  nop
 '8B45 08'
 '83C0 04'
 '8B08'
