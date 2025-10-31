@@ -8,6 +8,7 @@ DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
 DEFINE jne 0F85
+DEFINE jmp_indirect FF25
 DEFINE jmp E9
 DEFINE jmpi8 EB
 DEFINE leave C9
@@ -1131,6 +1132,6 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %0
   mov_esp, %0x8045800
-'FF25 18800408'
+  jmp_indirect %0x8048018
   leave
   ret
