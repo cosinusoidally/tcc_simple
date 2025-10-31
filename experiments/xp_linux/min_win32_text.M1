@@ -22,6 +22,7 @@ DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
 DEFINE push_eax 50
 DEFINE push_ecx 51
 DEFINE push_ebp 55
+DEFINE sub_ecx,eax 29C1
 DEFINE sub_esp, 81EC
 DEFINE ret C3
 
@@ -849,7 +850,7 @@ DEFINE ret C3
   addi8_esp, !4
   call %elf_base
   movi8_ecx,[ebp+BYTE] !-8
-'29C1'
+  sub_ecx,eax
 '89C8'
   leave
   ret
