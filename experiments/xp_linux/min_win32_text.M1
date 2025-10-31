@@ -438,19 +438,19 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   call %gfds
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %sizeof_gfd
   push_eax
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
   call %mul
   addi8_esp, !8
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
-'8B4D 0C'
+  movi8_ecx,[ebp+BYTE] !12
   push_ecx
   push_eax
   call %wi32
@@ -462,15 +462,15 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   call %filename_array
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %filename_size
   push_eax
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
   call %mul
   addi8_esp, !8
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
