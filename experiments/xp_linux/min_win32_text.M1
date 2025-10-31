@@ -1,3 +1,4 @@
+DEFINE call E8
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ebp,esp 89E5
@@ -32,18 +33,18 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-  'E8' %base_address
+  call %base_address
   'B9' %0x200
   '51'
   'B9' %0x20000
   '51'
   '8945' !-4
-  'E8' %add
+  call %add
   '83C4' !8
   '50'
   '8B45' !-4
   '50'
-  'E8' %add
+  call %add
   '83C4' !8
   leave
   ret
