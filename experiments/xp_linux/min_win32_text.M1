@@ -26,6 +26,8 @@ DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
 DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
+DEFINE or_ecx,edx 09D1
+DEFINE or_edx,eax 09C2
 DEFINE push_eax 50
 DEFINE push_ecx 51
 DEFINE push_edx 52
@@ -1148,15 +1150,15 @@ DEFINE ret C3
   call %base_address
   mov_ecx,[DWORD] %0x4030F4
   mov_edx,[DWORD] %0x4030F8
-'09D1'
+  or_ecx,edx
   mov_edx,[DWORD] %0x4030FC
-'09D1'
+  or_ecx,edx
   mov_edx,[DWORD] %0x403100
   movi8_[ebp+BYTE],eax !-12
   mov_eax,[DWORD] %0x403104
-'09C2'
+  or_edx,eax
   mov_eax,[DWORD] %0x403108
-'09C2'
+  or_edx,eax
   mov_eax, %0
   push_eax
   mov_eax, %0
