@@ -25,6 +25,7 @@ DEFINE movi8_ecx,[ebp+BYTE] 8B4D
 DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
 DEFINE push_eax 50
 DEFINE push_ecx 51
+DEFINE push_edx 52
 DEFINE push_ebp 55
 DEFINE shli8_ecx, C1E1
 DEFINE sub_ecx,eax 29C1
@@ -1140,7 +1141,7 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %0xC
   mov_eax, %0
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %base_address
 '8B0D F4304000'
 '8B15 f8304000'
@@ -1148,7 +1149,7 @@ DEFINE ret C3
 '8B15 FC304000'
 '09D1'
 '8B15 00314000'
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
 '8B05 04314000'
 '09C2'
 '8B05 08314000'
@@ -1157,19 +1158,19 @@ DEFINE ret C3
   push_eax
   mov_eax, %0
   push_eax
-'52'
+  push_edx
   push_ecx
   mov_eax, %0x20000000
   push_eax
-'8B45 F4'
+  movi8_eax,[ebp+BYTE] !-12
   push_eax
   call %mmap
   addi8_esp, !0x18
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %base_address
-'8B4D FC'
+  movi8_ecx,[ebp+BYTE] !-4
 '39C1'
-'0F84 1C000000'
+  je '1C000000'
   mov_eax, %0x40310C
   push_eax
   call %THUNK_puts
@@ -1178,16 +1179,16 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
-'8B45 08'
-'83F8 01'
+  movi8_eax,[ebp+BYTE] !8
+  cmpi8_eax, !1
 '0F8E 29000000'
-'8B45 0C'
+  movi8_eax,[ebp+BYTE] !12
 '83C0 04'
   push_eax
   call %ri32
   addi8_esp, !4
-'8945 F8'
-'8B45 F8'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
   mov_eax, %0x403118
   push_eax
@@ -1199,8 +1200,8 @@ DEFINE ret C3
   call %THUNK_printf
   addi8_esp, !4
   mov_eax, %0x40315D
-'8945 F8'
-'8B45 F8'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
   call %init_runtime
   addi8_esp, !4
