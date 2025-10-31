@@ -527,12 +527,12 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %sizeof_file_descriptor
   push_eax
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
-'E8' %mul
+  call %mul
   addi8_esp, !8
   mov_ecx, %4
   push_ecx
@@ -540,11 +540,11 @@ DEFINE ret C3
   call %add
   addi8_esp, !8
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
-'8B4D 0C'
+  movi8_ecx,[ebp+BYTE] !12
   push_ecx
   push_eax
   call %wi32
@@ -556,10 +556,10 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %sizeof_file_descriptor
   push_eax
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
   call %mul
   addi8_esp, !8
@@ -569,7 +569,7 @@ DEFINE ret C3
   call %add
   addi8_esp, !8
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
@@ -582,8 +582,8 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'8B45 08'
-'8B4D 0C'
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !12
 '0FAFC1'
   leave
   ret
@@ -591,8 +591,8 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'8B45 08'
-'8B4D 0C'
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !12
 '01C8'
   leave
   ret
