@@ -523,9 +523,9 @@ DEFINE ret C3
   leave
   ret
 :fd_set_file_offset
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'E8' %file_descriptors
 '8945 FC'
 'E8' %sizeof_file_descriptor
@@ -549,12 +549,12 @@ DEFINE ret C3
 '50'
 'E8' %wi32
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
 :fd_get_file_offset
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'E8' %file_descriptors
 '8945 FC'
 'E8' %sizeof_file_descriptor
@@ -576,23 +576,23 @@ DEFINE ret C3
 '50'
 'E8' %ri32
 '83C4 04'
-'C9'
-'C3'
+  leave
+  ret
 :mul
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 '8B45 08'
 '8B4D 0C'
 '0FAFC1'
-'C9'
-'C3'
+  leave
+  ret
 :add
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 '8B45 08'
 '8B4D 0C'
 '01C8'
-'C9'
-'C3'
+  leave
+  ret
