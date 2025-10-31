@@ -1,7 +1,7 @@
 DEFINE add_eax,ecx 01C8
 DEFINE addi8_esp, 83C4
 DEFINE call E8
-DEFINE imul_eax_ecx 0FAFC1
+DEFINE imul_eax,ecx 0FAFC1
 DEFINE leave C9
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
@@ -586,7 +586,7 @@ DEFINE ret C3
   sub_esp, %0
   movi8_eax,[ebp+BYTE] !8
   movi8_ecx,[ebp+BYTE] !12
-  imul_eax_ecx
+  imul_eax,ecx
   leave
   ret
 :add
