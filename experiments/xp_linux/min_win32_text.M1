@@ -7,6 +7,7 @@ DEFINE call_eax FFD0
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
+DEFINE jne 0F85
 DEFINE jmp E9
 DEFINE jmpi8 EB
 DEFINE leave C9
@@ -880,17 +881,17 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-8
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !1
-'0F85 0A000000'
+  jne '0A000000'
   call %trap_syscalls_off
   jmp '27020000'
    movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !2
-'0F85 0A000000'
+  jne '0A000000'
   call %trap_syscalls_on
   jmp '11020000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !3
-'0F85 1C000000'
+  jne '1C000000'
   mov_eax, %1
   push_eax
   call %get_param
@@ -901,7 +902,7 @@ DEFINE ret C3
   jmp 'E9010000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !4
-'0F85 5E000000'
+  jne '5E000000'
   mov_eax, %1
   push_eax
   call %get_param
@@ -934,7 +935,7 @@ DEFINE ret C3
   jmp '7F010000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !5
-'0F85 66000000'
+  jne '66000000'
   mov_eax, %1
   push_eax
   call %get_param
@@ -969,7 +970,7 @@ DEFINE ret C3
   jmp '0D010000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !6
-'0F85 3C000000'
+  jne '3C000000'
   mov_eax, %1
   push_eax
   call %get_param
@@ -990,7 +991,7 @@ DEFINE ret C3
   jmp 'C5000000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !7
-'0F85 5E000000'
+  jne '5E000000'
   mov_eax, %1
   push_eax
   call %get_param
@@ -1023,7 +1024,7 @@ DEFINE ret C3
   jmp '5B000000'
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !8
-'0F85 2A000000'
+  jne '2A000000'
   mov_eax, %0x403082
   push_eax
   call %THUNK_printf
