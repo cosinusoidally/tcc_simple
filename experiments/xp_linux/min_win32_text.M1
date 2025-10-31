@@ -1178,7 +1178,7 @@ DEFINE ret C3
   call %base_address
   movi8_ecx,[ebp+BYTE] !-4
   cmp_ecx,eax
-  je '1C000000'
+  je %END_IF_v_main_0
   mov_eax, %0x40310C
   push_eax
   call %THUNK_puts
@@ -1187,9 +1187,11 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
+:END_IF_v_main_0
+# IF_v_main_1
   movi8_eax,[ebp+BYTE] !8
   cmpi8_eax, !1
-  jle '29000000'
+  jle %ELSE_v_main_1
   movi8_eax,[ebp+BYTE] !12
   addi8_eax, !4
   push_eax
@@ -1202,13 +1204,15 @@ DEFINE ret C3
   push_eax
   call %THUNK_printf
   addi8_esp, !8
-  jmp '16000000'
+  jmp %END_if_v_main_1
+:ELSE_v_main_1
   mov_eax, %0x403131
   push_eax
   call %THUNK_printf
   addi8_esp, !4
   mov_eax, %0x40315D
   movi8_[ebp+BYTE],eax !-8
+:END_if_v_main_1
   movi8_eax,[ebp+BYTE] !-8
   push_eax
   call %init_runtime
