@@ -12,6 +12,7 @@ DEFINE jmpi8 EB
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
+DEFINE mov_eax,ecx 89C8
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[eax],ecx 8908
 DEFINE mov_eax,[eax] 8B00
@@ -851,7 +852,7 @@ DEFINE ret C3
   call %elf_base
   movi8_ecx,[ebp+BYTE] !-8
   sub_ecx,eax
-'89C8'
+  mov_eax,ecx
   leave
   ret
 :get_param
