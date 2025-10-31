@@ -255,3 +255,33 @@ DEFINE ret C3
   addi8_esp, !4
   leave
   ret
+:char_buf
+'55'
+'89E5'
+'81EC 00000000'
+'B8 2D000000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
+:command_buffer
+'55'
+'89E5'
+'81EC 00000000'
+'B8 2E000000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
+:dummy_global
+'55'
+'89E5'
+'81EC 00000000'
+'B8 2E080000'
+'50'
+'E8' %globals
+'83C4 04'
+'C9'
+'C3'
