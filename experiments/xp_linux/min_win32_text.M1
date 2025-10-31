@@ -4,6 +4,7 @@ DEFINE addi8_esp, 83C4
 DEFINE and_eax, 81E0
 DEFINE call E8
 DEFINE call_eax FFD0
+DEFINE cmp_ecx,eax 39C1
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
@@ -1174,7 +1175,7 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-4
   call %base_address
   movi8_ecx,[ebp+BYTE] !-4
-'39C1'
+  cmp_ecx,eax
   je '1C000000'
   mov_eax, %0x40310C
   push_eax
