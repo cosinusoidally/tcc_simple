@@ -1,4 +1,4 @@
-DEFINE addb_esp, 83C4
+DEFINE addi8_esp, 83C4
 DEFINE call E8
 DEFINE leave C9
 DEFINE mov_eax, B8
@@ -44,11 +44,11 @@ DEFINE ret C3
   push_ecx
   '8945' !-4
   call %add
-  addb_esp, !8
+  addi8_esp, !8
   push_eax
   '8B45' !-4
   push_eax
   call %add
-  addb_esp, !8
+  addi8_esp, !8
   leave
   ret
