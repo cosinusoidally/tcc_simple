@@ -112,9 +112,9 @@ DEFINE ret C3
   leave
   ret
 :globals
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'E8' %global_data
 '8B4D 08'
 '51'
@@ -128,32 +128,32 @@ DEFINE ret C3
 '50'
 'E8' %add
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
 :regs_data
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'B8 00000000'
 '50'
 'E8' %globals
 '83C4 04'
-'C9'
-'C3'
+  leave
+  ret
 :host_call_fn
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'B8 24000204'
-'C9'
-'C3'
+  leave
+  ret
 :host_params
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'B8 0A000000'
 '50'
 'E8' %globals
 '83C4 04'
-'C9'
-'C3'
+  leave
+  ret
