@@ -1,13 +1,16 @@
 DEFINE leave C9
+DEFINE mov_eax, B8
+DEFINE mov_ebp,esp 89E5
 DEFINE push_ebp 55
+DEFINE sub_esp, 81EC
 DEFINE ret C3
 
 # .text section
 :.text
 :args_base
 push_ebp
-'89E5'
-'81EC' %0
-'B8' %0x8045800
+mov_ebp,esp
+sub_esp, %0
+mov_eax, %0x8045800
 leave
 ret
