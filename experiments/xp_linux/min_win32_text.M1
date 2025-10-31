@@ -781,50 +781,50 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0xC
-'E8' %syscall_hook
-'50'
-'E8' %ri32
-'83C4 04'
+  call %syscall_hook
+  push_eax
+  call %ri32
+  addi8_esp, !4
 '8945 F4'
 '83F8 00'
 '0F84 0A000000'
 '8B45 F4'
 'FFD0'
 'E9 21000000'
-'E8' %trap_syscalls_off
-'B8 46304000'
-'50'
-'E8' %THUNK_printf
+  call %trap_syscalls_off
+  mov_eax, %0x403046
+  push_eax
+  call %THUNK_printf
 '83C4 04'
-'B8 01000000'
-'50'
-'E8' %THUNK_exit
-'83C4 04'
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
   leave
   ret
 :load_boot
   push_ebp
   mov_ebp,esp
   sub_esp, %0xC
-'B8 5A304000'
-'50'
+  mov_eax, %0x40305A
+  push_eax
 '8B45 08'
-'50'
-'E8' %THUNK_fopen
-'83C4 08'
+  push_eax
+  call %THUNK_fopen
+  addi8_esp, !8
 '8945 FC'
-'E8' %elf_base
+  call %elf_base
 '8945 F8'
 '8B45 FC'
-'50'
-'B8 00100000'
-'50'
-'B8 01000000'
-'50'
+  push_eax
+  mov_eax, %0x1000
+  push_eax
+  mov_eax, %1
+  push_eax
 '8B45 F8'
-'50'
-'E8' %THUNK_fread
-'83C4 10'
+  push_eax
+  call %THUNK_fread
+  addi8_esp, !16
 '8945 F4'
 '83F8 00'
 '0F84 0D000000'
@@ -834,10 +834,10 @@ DEFINE ret C3
 '8945 F8'
 'EB CB'
 '8B45 FC'
-'50'
-'E8' %THUNK_fclose
-'83C4 04'
-'E8' %elf_base
+  push_eax
+  call %THUNK_fclose
+  addi8_esp, !4
+  call %elf_base
 '8B4D F8'
 '29C1'
 '89C8'
@@ -847,12 +847,12 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'E8' %host_params
+  call %host_params
 '8B4D 08'
 'C1E1 02'
 '01C8'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %ri32
+  addi8_esp, !4
   leave
   ret
