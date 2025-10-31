@@ -732,43 +732,43 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'8B45 24'
+  movi8_eax,[ebp+BYTE] !36
   push_eax
   mov_eax, %0
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 18'
+  movi8_eax,[ebp+BYTE] !24
   push_eax
   mov_eax, %1
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 20'
+  movi8_eax,[ebp+BYTE] !32
   push_eax
   mov_eax, %2
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 1C'
+  movi8_eax,[ebp+BYTE] !28
   push_eax
   mov_eax, %3
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 0C'
+  movi8_eax,[ebp+BYTE] !12
   push_eax
   mov_eax, %4
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
   mov_eax, %5
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 10'
+  movi8_eax,[ebp+BYTE] !16
   push_eax
   mov_eax, %6
   push_eax
