@@ -1069,15 +1069,15 @@ DEFINE ret C3
   push_ecx
   push_eax
   call %wi32
-'83C4 08'
+  addi8_esp, !8
   call %host_stdout_addr
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %get_stdout
   push_eax
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %wi32
-'83C4 08'
+  addi8_esp, !8
   mov_eax, %0x40172E
   push_eax
   mov_eax, %8
@@ -1096,13 +1096,13 @@ DEFINE ret C3
   call %command_file
   mov_ecx, %0x4030CC
   push_ecx
-'8B4D 08'
+  movi8_ecx,[ebp+BYTE] !8
   push_ecx
-'8945 F8'
+  movi8_[ebp+BYTE],eax !-8
   call %THUNK_fopen
   addi8_esp, !8
   push_eax
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
   call %wi32
   addi8_esp, !8
@@ -1110,13 +1110,13 @@ DEFINE ret C3
   push_eax
   call %ri32
   addi8_esp, !4
-'83F8 00'
+  cmpi8_eax, !0
   je '05000000'
   jmp '1C000000'
   mov_eax, %0x4030CF
   push_eax
   call %THUNK_printf
-'83C4 04'
+  addi8_esp, !4
   mov_eax, %1
   push_eax
   call %THUNK_exit
