@@ -1,4 +1,5 @@
 DEFINE add_eax,ecx 01C8
+DEFINE add_ecx,eax 01C1
 DEFINE addi8_esp, 83C4
 DEFINE call E8
 DEFINE imul_eax,ecx 0FAFC1
@@ -619,7 +620,7 @@ DEFINE ret C3
   movi8_[ebp+BYTE],eax !-4
   movi8_eax,[ebp+BYTE] !8
   movi8_ecx,[ebp+BYTE] !-4
-'01C1'
+  add_ecx,eax
 '0FBE01'
 '81E0 FF000000'
   leave
