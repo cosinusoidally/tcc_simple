@@ -3,6 +3,7 @@ DEFINE add_ecx,eax 01C1
 DEFINE addi8_esp, 83C4
 DEFINE and_eax, 81E0
 DEFINE call E8
+DEFINE call_eax FFD0
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE je 0F84
@@ -792,7 +793,7 @@ DEFINE ret C3
   cmpi8_eax, !0
   je %_END_IF_wrap_syscall_0
   movi8_eax,[ebp+BYTE] !-12
-'FFD0'
+  call_eax
 'E9' %0x21
 :_END_IF_wrap_syscall_0
   call %trap_syscalls_off
