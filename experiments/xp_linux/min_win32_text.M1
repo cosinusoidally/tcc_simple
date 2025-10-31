@@ -311,23 +311,23 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-'E8' %regs_data
-'B9 04000000'
-'51'
+  call %regs_data
+  mov_ecx, %0x4
+  push_ecx
 '8B4D 08'
-'51'
+  push_ecx
 '8945 FC'
-'E8' %mul
-'83C4 08'
-'50'
+  call %mul
+  addi8_esp, !8
+  push_eax
 '8B45 FC'
-'50'
-'E8' %add
-'83C4 08'
+  push_eax
+  call %add
+  addi8_esp, !8
 '8B4D 0c'
-'51'
-'50'
-'E8' %wi32
-'83C4 08'
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
   leave
   ret
