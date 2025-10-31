@@ -96,18 +96,18 @@ DEFINE ret C3
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'B8 00040000'
+  mov_eax, %0x400
   leave
   ret
 :global_data
   push_ebp
   mov_ebp,esp
   sub_esp, %0
-'E8' %base_address
-'B9 00000100'
-'51'
-'50'
-'E8' %add
-'83C4 08'
+  call %base_address
+  mov_ecx, %0x10000
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
   leave
   ret
