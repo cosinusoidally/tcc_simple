@@ -74,9 +74,9 @@ DEFINE ret C3
   leave
   ret
 :sizeof_gfd
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'B8 08000000'
 'C9'
 'C3'
@@ -90,24 +90,24 @@ DEFINE ret C3
 '50'
 'E8' %add
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
 :filename_size
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'B8 00040000'
-'C9'
-'C3'
+  leave
+  ret
 :global_data
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'E8' %base_address
 'B9 00000100'
 '51'
 '50'
 'E8' %add
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
