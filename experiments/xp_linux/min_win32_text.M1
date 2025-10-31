@@ -1111,8 +1111,9 @@ DEFINE ret C3
   call %ri32
   addi8_esp, !4
   cmpi8_eax, !0
-  je '05000000'
-  jmp '1C000000'
+  je %IF_init_runtime_0
+  jmp %END_IF_init_runtime_0
+:IF_init_runtime_0
   mov_eax, %0x4030CF
   push_eax
   call %THUNK_printf
@@ -1121,5 +1122,6 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
+:END_IF_init_runtime_0
   leave
   ret
