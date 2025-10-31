@@ -1125,3 +1125,11 @@ DEFINE ret C3
 :END_IF_init_runtime_0
   leave
   ret
+:run_process
+'55'
+'89E5'
+'81EC 00000000'
+'BC 00580408'
+'FF25 18800408'
+'C9'
+'C3'
