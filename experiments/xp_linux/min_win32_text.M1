@@ -1028,3 +1028,25 @@ DEFINE ret C3
 '50'
 'E8' %THUNK_printf
 '83C4 04'
+'B8 01000000'
+'50'
+'E8' %get_param
+'83C4 04'
+'50'
+'E8' %THUNK_exit
+'83C4 04'
+'E9 25000000'
+'E8' %trap_syscalls_off
+'8B45 F8'
+'50'
+'B8 8F304000'
+'50'
+'E8' %THUNK_printf
+'83C4 08'
+'B8 01000000'
+'50'
+'E8' %THUNK_exit
+'83C4 04'
+'8B45 F4'
+'C9'
+'C3'
