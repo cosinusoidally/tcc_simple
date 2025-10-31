@@ -665,9 +665,9 @@ DEFINE ret C3
   leave
   ret
 :dump_regs
-'55'
-'89e5'
-'81EC 1C000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x1C
 'B8 00000000'
 '50'
 'E8' %get_reg
@@ -726,5 +726,5 @@ DEFINE ret C3
 '50'
 'E8' %THUNK_printf
 '83C4 24'
-'C9'
-'C3'
+  leave
+  ret
