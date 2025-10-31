@@ -2,6 +2,7 @@ DEFINE addi8_esp, 83C4
 DEFINE call E8
 DEFINE leave C9
 DEFINE movi8_[ebp+BYTE],eax 8945
+DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
 DEFINE mov_ebp,esp 89E5
@@ -47,7 +48,7 @@ DEFINE ret C3
   call %add
   addi8_esp, !8
   push_eax
-  '8B45' !-4
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %add
   addi8_esp, !8
