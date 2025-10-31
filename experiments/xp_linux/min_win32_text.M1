@@ -8,6 +8,7 @@ DEFINE call_eax FFD0
 DEFINE cmp_ecx,eax 39C1
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
+DEFINE inc_eax 40
 DEFINE je 0F84
 DEFINE jle 0F8E
 DEFINE jne 0F85
@@ -1228,119 +1229,119 @@ DEFINE reti16 C2
   mov_ebp,esp
   sub_esp, %0x14
   nop
-'8B45 08'
-'83C0 04'
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 B8000000'
 '8B01'
-'8945 FC'
-'8B45 08'
-'83C0 04'
-'8B 08'
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+'8B08'
 '81C1 C4000000'
 '8B01'
-'8945 F8'
-'8B45 FC'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %ri8
-'83C4 04'
+  addi8_esp, !4
 '81F8 CD000000'
-'0F85 F9010000'
-'8B45 FC'
-'40'
+  jne 'F9010000'
+  movi8_eax,[ebp+BYTE] !-4
+  inc_eax
   push_eax
   call %ri8
   addi8_esp, !4
 '81F8 80000000'
-'0F85 E0010000'
-'8B45 FC'
+  jne 'E0010000'
+  movi8_eax,[ebp+BYTE] !-4
 '83E8 0A'
-'8945 F0'
-'8b45 F0'
+  movi8_[ebp+BYTE],eax !-16
+  movi8_eax,[ebp+BYTE] !-16
   push_eax
   call %ri32
   addi8_esp, !4
 '81F8 90909090'
-'0F85 8D000000'
-'8B45 F0'
-'83C0 04'
+  jne '8D000000'
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !4
   push_eax
   call %ri32
   addi8_esp, !4
 '81F8 90909090'
-'0f85 72000000'
-'8B45 F0'
-'83C0 08'
+  jne '72000000'
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !8
   push_eax
   call %ri32
   addi8_esp, !4
 '81F8 9090CD80'
-'0f85 57000000'
-'8B45 F0'
+  jne '57000000'
+  movi8_eax,[ebp+BYTE] !-16
   push_eax
   mov_eax, %0x403170
   push_eax
   call %THUNK_printf
   addi8_esp, !8
   call %regs_data
-'83C0 20'
-'8945 EC'
+  addi8_eax, !0x20
+  movi8_[ebp+BYTE],eax !-20
   mov_eax, %0x15FF6090
   push_eax
-'8B45 F0'
+  movi8_eax,[ebp+BYTE] !-16
   push_eax
   call %wi32
   addi8_esp, !8
-'8B45 F0'
-'83C0 04'
-'8B4D EC'
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !4
+  movi8_ecx,[ebp+BYTE] !-20
   push_ecx
   push_eax
   call %wi32
   addi8_esp, !8
-'8B45 F0'
-'83C0 08'
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !8
   mov_ecx, %0x9020C483
   push_ecx
   push_eax
   call %wi32
   addi8_esp, !8
-'8B45 FC'
-'83C0 02'
-'8945 FC'
-'8B45 08'
-'83C0 04'
+  movi8_eax,[ebp+BYTE] !-4
+  addi8_eax, !2
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 B8000000'
   mov_eax, %0x4017BC
 '8901'
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
 '83E8 04'
-'8945 F8'
-'8B45 08'
-'83C0 04'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 C4000000'
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
 '8901'
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
-'E8' %wi32
-'83C4 08'
-'8B45 08'
-'83C0 04'
+  call %wi32
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 B0000000'
 '8B01'
   push_eax
-'B8 00000000'
+  mov_eax, %0
   push_eax
   call %set_reg
-'83C4 08'
-'8B45 08'
-'83C0 04'
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 A4000000'
 '8B01'
@@ -1348,9 +1349,9 @@ DEFINE reti16 C2
   mov_eax, %1
   push_eax
   call %set_reg
-'83C4 08'
-'8B45 08'
-'83C0 04'
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 AC000000'
 '8B01'
@@ -1359,8 +1360,8 @@ DEFINE reti16 C2
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 08'
-'83C0 04'
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 A8000000'
 '8B01'
@@ -1369,8 +1370,8 @@ DEFINE reti16 C2
   push_eax
   call %set_reg
   addi8_esp, !8
-'8B45 08'
-'83C0 04'
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 A0000000'
 '8B01'
@@ -1378,9 +1379,9 @@ DEFINE reti16 C2
   mov_eax, %4
   push_eax
   call %set_reg
-'83C4 08'
-'8B45 08'
-'83C0 04'
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
 '8B08'
 '81C1 9C000000'
 '8B01'
@@ -1388,21 +1389,21 @@ DEFINE reti16 C2
   mov_eax, %5
   push_eax
   call %set_reg
-'83C4 08'
-'8B45 08'
-'83C0 04'
-'8b08'
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+'8B08'
 '81C1 B4000000'
 '8B01'
   push_eax
   mov_eax, %6
   push_eax
   call %set_reg
-'83C4 08'
-'B8 FFFFFFFF'
-'E9 1D000000'
-'E9 18000000'
-'B8 8E314000'
+  addi8_esp, !8
+  mov_eax, %0xFFFFFFFF
+  jmp '1D000000'
+  jmp '18000000'
+  mov_eax, %0x40318E
   push_eax
   call %THUNK_printf
   addi8_esp, !4
