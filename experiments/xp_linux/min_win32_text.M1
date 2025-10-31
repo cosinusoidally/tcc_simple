@@ -11,6 +11,7 @@ DEFINE mov_[eax],ecx 8908
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
+DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
 DEFINE push_eax 50
 DEFINE push_ecx 51
 DEFINE push_ebp 55
@@ -621,7 +622,7 @@ DEFINE ret C3
   movi8_eax,[ebp+BYTE] !8
   movi8_ecx,[ebp+BYTE] !-4
   add_ecx,eax
-'0FBE01'
+  movsx_eax,BYTE_PTR_[ecx]
 '81E0 FF000000'
   leave
   ret
