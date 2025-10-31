@@ -888,7 +888,7 @@ DEFINE ret C3
   cmpi8_eax, !2
   jne '0A000000'
   call %trap_syscalls_on
-  jmp '11020000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !3
   jne '1C000000'
@@ -899,7 +899,7 @@ DEFINE ret C3
   push_eax
   call %THUNK_puts
   addi8_esp, !4
-  jmp 'E9010000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !4
   jne '5E000000'
@@ -932,7 +932,7 @@ DEFINE ret C3
   call %THUNK_fwrite
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
-  jmp '7F010000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !5
   jne '66000000'
@@ -967,7 +967,7 @@ DEFINE ret C3
   call %THUNK_fopen
   addi8_esp, !8
   movi8_[ebp+BYTE],eax !-12
-  jmp '0D010000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !6
   jne '3C000000'
@@ -988,7 +988,7 @@ DEFINE ret C3
   call %THUNK_fclose
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
-  jmp 'C5000000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !7
   jne '5E000000'
@@ -1021,7 +1021,7 @@ DEFINE ret C3
   call %THUNK_fread
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
-  jmp '5B000000'
+  jmp %END_IF_host_callback_0
   movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !8
   jne '2A000000'
@@ -1036,7 +1036,7 @@ DEFINE ret C3
   push_eax
   call %THUNK_exit
   addi8_esp, !4
-  jmp '25000000'
+  jmp %END_IF_host_callback_0
   call %trap_syscalls_off
   movi8_eax,[ebp+BYTE] !-8
   push_eax
