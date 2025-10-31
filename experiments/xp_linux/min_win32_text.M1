@@ -693,38 +693,38 @@ DEFINE ret C3
   call %get_reg
   addi8_esp, !4
   mov_ecx, %4
-'51'
+  push_ecx
 '8945 EC'
-'E8' %get_reg
-'83C4 04'
-'B9 05000000'
-'51'
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %5
+  push_ecx
 '8945 E8'
-'E8' %get_reg
-'83C4 04'
-'B9 06000000'
-'51'
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %6
+  push_ecx
 '8945 E4'
-'E8' %get_reg
-'83c4 04'
-'50'
+  call %get_reg
+  addi8_esp, !4
+  push_eax
 '8B45 E4'
-'50'
+  push_eax
 '8B45 E8'
-'50'
+  push_eax
 '8B45 EC'
-'50'
+  push_eax
 '8B45 F0'
-'50'
+  push_eax
 '8B45 F4'
-'50'
+  push_eax
 '8B45 F8'
-'50'
+  push_eax
 '8B45 FC'
-'50'
-'B8 00304000'
-'50'
-'E8' %THUNK_printf
-'83C4 24'
+  push_eax
+  mov_eax, %0x403000
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !0x24
   leave
   ret
