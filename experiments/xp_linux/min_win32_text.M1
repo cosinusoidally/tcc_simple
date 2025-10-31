@@ -1240,70 +1240,70 @@ DEFINE ret C3
 '8B01'
 '8945 F8'
 '8B45 FC'
-'50'
-'E8' %ri8
+  push_eax
+  call %ri8
 '83C4 04'
 '81F8 CD000000'
 '0F85 F9010000'
 '8B45 FC'
 '40'
-'50'
-'E8' %ri8
-'83C4 04'
+  push_eax
+  call %ri8
+  addi8_esp, !4
 '81F8 80000000'
 '0F85 E0010000'
 '8B45 FC'
 '83E8 0A'
 '8945 F0'
 '8b45 F0'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %ri32
+  addi8_esp, !4
 '81F8 90909090'
 '0F85 8D000000'
 '8B45 F0'
 '83C0 04'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %ri32
+  addi8_esp, !4
 '81F8 90909090'
 '0f85 72000000'
 '8B45 F0'
 '83C0 08'
-'50'
-'E8' %ri32
-'83C4 04'
+  push_eax
+  call %ri32
+  addi8_esp, !4
 '81F8 9090CD80'
 '0f85 57000000'
 '8B45 F0'
-'50'
-'B8 70314000'
-'50'
-'E8' %THUNK_printf
-'83C4 08'
-'E8' %regs_data
+  push_eax
+  mov_eax, %0x403170
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  call %regs_data
 '83C0 20'
 '8945 EC'
-'B8 9060ff15'
-'50'
+  mov_eax, %0x15FF6090
+  push_eax
 '8B45 F0'
-'50'
-'E8' %wi32
-'83C4 08'
+  push_eax
+  call %wi32
+  addi8_esp, !8
 '8B45 F0'
 '83C0 04'
 '8B4D EC'
-'51'
-'50'
-'E8' %wi32
-'83C4 08'
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
 '8B45 F0'
 '83C0 08'
-'B9 83c42090'
-'51'
-'50'
-'E8' %wi32
-'83C4 08'
+  mov_ecx, %0x9020C483
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
 '8B45 FC'
 '83C0 02'
 '8945 FC'
@@ -1311,7 +1311,7 @@ DEFINE ret C3
 '83C0 04'
 '8B08'
 '81C1 B8000000'
-'B8 BC174000'
+  mov_eax, %0x4017BC
 '8901'
 '8B45 F8'
 '83E8 04'
@@ -1323,9 +1323,9 @@ DEFINE ret C3
 '8B45 F8'
 '8901'
 '8B45 FC'
-'50'
+  push_eax
 '8B45 F8'
-'50'
+  push_eax
 'E8' %wi32
 '83C4 08'
 '8B45 08'
@@ -1333,79 +1333,79 @@ DEFINE ret C3
 '8B08'
 '81C1 B0000000'
 '8B01'
-'50'
+  push_eax
 'B8 00000000'
-'50'
-'E8' %set_reg
+  push_eax
+  call %set_reg
 '83C4 08'
 '8B45 08'
 '83C0 04'
 '8B08'
 '81C1 A4000000'
 '8B01'
-'50'
-'B8 01000000'
-'50'
-'E8' %set_reg
+  push_eax
+  mov_eax, %1
+  push_eax
+  call %set_reg
 '83C4 08'
 '8B45 08'
 '83C0 04'
 '8B08'
 '81C1 AC000000'
 '8B01'
-'50'
-'b8 02000000'
-'50'
-'E8' %set_reg
-'83C4 08'
+  push_eax
+  mov_eax, %2
+  push_eax
+  call %set_reg
+  addi8_esp, !8
 '8B45 08'
 '83C0 04'
 '8B08'
 '81C1 A8000000'
 '8B01'
-'50'
-'B8 03000000'
-'50'
-'E8' %set_reg
-'83C4 08'
+  push_eax
+  mov_eax, %3
+  push_eax
+  call %set_reg
+  addi8_esp, !8
 '8B45 08'
 '83C0 04'
 '8B08'
 '81C1 A0000000'
 '8B01'
-'50'
-'B8 04000000'
-'50'
-'E8' %set_reg
+  push_eax
+  mov_eax, %4
+  push_eax
+  call %set_reg
 '83C4 08'
 '8B45 08'
 '83C0 04'
 '8B08'
 '81C1 9C000000'
 '8B01'
-'50'
-'B8 05000000'
-'50'
-'E8' %set_reg
+  push_eax
+  mov_eax, %5
+  push_eax
+  call %set_reg
 '83C4 08'
 '8B45 08'
 '83C0 04'
 '8b08'
 '81C1 B4000000'
 '8B01'
-'50'
-'B8 06000000'
-'50'
-'E8' %set_reg
+  push_eax
+  mov_eax, %6
+  push_eax
+  call %set_reg
 '83C4 08'
 'B8 FFFFFFFF'
 'E9 1D000000'
 'E9 18000000'
 'B8 8E314000'
-'50'
-'E8' %THUNK_printf
-'83C4 04'
-'B8 00000000'
-'E9 00000000'
-'C9'
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %0
+  jmp %0
+  leave
 'C2 0400'
