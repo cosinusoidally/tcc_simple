@@ -785,17 +785,17 @@ DEFINE ret C3
   push_eax
   call %ri32
   addi8_esp, !4
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
 '83F8 00'
 '0F84 0A000000'
-'8B45 F4'
+  movi8_eax,[ebp+BYTE] !-12
 'FFD0'
-'E9 21000000'
+'E9' %0x21
   call %trap_syscalls_off
   mov_eax, %0x403046
   push_eax
   call %THUNK_printf
-'83C4 04'
+  addi8_esp, !4
   mov_eax, %1
   push_eax
   call %THUNK_exit
@@ -808,37 +808,37 @@ DEFINE ret C3
   sub_esp, %0xC
   mov_eax, %0x40305A
   push_eax
-'8B45 08'
+  movi8_eax,[ebp+BYTE] !8
   push_eax
   call %THUNK_fopen
   addi8_esp, !8
-'8945 FC'
+  movi8_[ebp+BYTE],eax !-4
   call %elf_base
-'8945 F8'
-'8B45 FC'
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   mov_eax, %0x1000
   push_eax
   mov_eax, %1
   push_eax
-'8B45 F8'
+  movi8_eax,[ebp+BYTE] !-8
   push_eax
   call %THUNK_fread
   addi8_esp, !16
-'8945 F4'
+  movi8_[ebp+BYTE],eax !-12
 '83F8 00'
 '0F84 0D000000'
-'8B45 F8'
-'8B4D F4'
-'01C8'
-'8945 F8'
+   movi8_eax,[ebp+BYTE] !-8
+   movi8_ecx,[ebp+BYTE] !-12
+  add_eax,ecx
+  movi8_[ebp+BYTE],eax !-8
 'EB CB'
-'8B45 FC'
+  movi8_eax,[ebp+BYTE] !-4
   push_eax
   call %THUNK_fclose
   addi8_esp, !4
   call %elf_base
-'8B4D F8'
+  movi8_ecx,[ebp+BYTE] !-8
 '29C1'
 '89C8'
   leave
@@ -848,9 +848,9 @@ DEFINE ret C3
   mov_ebp,esp
   sub_esp, %0
   call %host_params
-'8B4D 08'
+  movi8_ecx,[ebp+BYTE] !8
 'C1E1 02'
-'01C8'
+  add_eax,ecx
   push_eax
   call %ri32
   addi8_esp, !4
