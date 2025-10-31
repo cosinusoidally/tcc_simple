@@ -5,6 +5,7 @@ DEFINE and_eax, 81E0
 DEFINE call E8
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
+DEFINE je 0F84
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
@@ -788,7 +789,7 @@ DEFINE ret C3
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
   cmpi8_eax, !0
-'0F84 0A000000'
+  je '0A000000'
   movi8_eax,[ebp+BYTE] !-12
 'FFD0'
 'E9' %0x21
@@ -828,7 +829,7 @@ DEFINE ret C3
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
   cmpi8_eax, !0
-'0F84 0D000000'
+  je '0D000000'
    movi8_eax,[ebp+BYTE] !-8
    movi8_ecx,[ebp+BYTE] !-12
   add_eax,ecx
