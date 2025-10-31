@@ -1204,7 +1204,7 @@ DEFINE ret C3
   push_eax
   call %init_runtime
   addi8_esp, !4
-'E8' %run_process
-'B8 00000000'
-'C9'
-'C3'
+  call %run_process
+  mov_eax, %0
+  leave
+  ret
