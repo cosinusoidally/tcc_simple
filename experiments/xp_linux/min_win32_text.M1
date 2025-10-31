@@ -778,9 +778,9 @@ DEFINE ret C3
   leave
   ret
 :wrap_syscall
-'55'
-'89E5'
-'81EC 0c000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
 'E8' %syscall_hook
 '50'
 'E8' %ri32
@@ -800,12 +800,12 @@ DEFINE ret C3
 '50'
 'E8' %THUNK_exit
 '83C4 04'
-'C9'
-'C3'
+  leave
+  ret
 :load_boot
-'55'
-'89E5'
-'81EC 0C000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
 'B8 5A304000'
 '50'
 '8B45 08'
@@ -841,12 +841,12 @@ DEFINE ret C3
 '8B4D F8'
 '29C1'
 '89C8'
-'C9'
-'C3'
+  leave
+  ret
 :get_param
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'E8' %host_params
 '8B4D 08'
 'C1E1 02'
@@ -854,5 +854,5 @@ DEFINE ret C3
 '50'
 'E8' %ri32
 '83C4 04'
-'C9'
-'C3'
+  leave
+  ret
