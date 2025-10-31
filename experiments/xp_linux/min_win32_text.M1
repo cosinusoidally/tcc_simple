@@ -599,21 +599,21 @@ DEFINE ret C3
   leave
   ret
 :wi32
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 '8B45 08'
 '8945 FC'
 '8B45 FC'
 '8B4D 0C'
 '8908'
 'B8 00000000'
-'C9'
-'C3'
+  leave
+  ret
 :ri8
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'B8 00000000'
 '8945 FC'
 '8B45 08'
@@ -621,24 +621,24 @@ DEFINE ret C3
 '01C1'
 '0FBE01'
 '81E0 FF000000'
-'C9'
-'C3'
+  leave
+  ret
 :ri32
-'55'
-'89E5'
-'81EC 08000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %8
 '8B45 08'
 '8945 FC'
 '8B45 FC'
 '8945 F8'
 '8B45 F8'
 '8B00'
-'C9'
-'C3'
+  leave
+  ret
 :trap_syscalls_on
-'55'
-'89E5'
-'81EC 00000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
 'E8' %regs_data
 '50'
 'B8 BC174000'
@@ -647,5 +647,5 @@ DEFINE ret C3
 '50'
 'E8' %syscall
 '83C4 0C'
-'C9'
-'C3'
+  leave
+  ret
