@@ -17,6 +17,7 @@ DEFINE jne 0F85
 DEFINE jmp_indirect FF25
 DEFINE jmp E9
 DEFINE jmpi8 EB
+DEFINE lea_eax,[ebp+BYTE] 8D45
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
@@ -1533,7 +1534,7 @@ DEFINE reti16 C2
   mov_ebp,esp
   sub_esp, %0x24
   nop
-'8D45 E8'
+  lea_eax,[ebp+BYTE] !-24
   push_eax
   call %__try__
   addi8_esp, !4
