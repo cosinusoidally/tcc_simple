@@ -23,6 +23,7 @@ DEFINE mov_eax,ecx 89C8
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[eax],ecx 8908
 DEFINE mov_eax,[eax] 8B00
+DEFINE mov_ecx,[eax] 8B08
 DEFINE mov_eax,[DWORD] 8B05
 DEFINE mov_ecx,[DWORD] 8B0D
 DEFINE mov_edx,[DWORD] 8B15
@@ -1231,13 +1232,13 @@ DEFINE reti16 C2
   nop
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 B8000000'
 '8B01'
   movi8_[ebp+BYTE],eax !-4
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 C4000000'
 '8B01'
   movi8_[ebp+BYTE],eax !-8
@@ -1311,7 +1312,7 @@ DEFINE reti16 C2
   movi8_[ebp+BYTE],eax !-4
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 B8000000'
   mov_eax, %0x4017BC
 '8901'
@@ -1320,7 +1321,7 @@ DEFINE reti16 C2
   movi8_[ebp+BYTE],eax !-8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 C4000000'
   movi8_eax,[ebp+BYTE] !-8
 '8901'
@@ -1332,7 +1333,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 B0000000'
 '8B01'
   push_eax
@@ -1342,7 +1343,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 A4000000'
 '8B01'
   push_eax
@@ -1352,7 +1353,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 AC000000'
 '8B01'
   push_eax
@@ -1362,7 +1363,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 A8000000'
 '8B01'
   push_eax
@@ -1372,7 +1373,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 A0000000'
 '8B01'
   push_eax
@@ -1382,7 +1383,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 9C000000'
 '8B01'
   push_eax
@@ -1392,7 +1393,7 @@ DEFINE reti16 C2
   addi8_esp, !8
   movi8_eax,[ebp+BYTE] !8
   addi8_eax, !4
-'8B08'
+  mov_ecx,[eax]
 '81C1 B4000000'
 '8B01'
   push_eax
