@@ -434,9 +434,9 @@ DEFINE ret C3
   leave
   ret
 :gfd_set_file_addr
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'E8' %gfds
 '8945 FC'
 'E8' %sizeof_gfd
@@ -455,12 +455,12 @@ DEFINE ret C3
 '50'
 'E8' %wi32
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
 :gfn_get_filename
-'55'
-'89E5'
-'81EC 04000000'
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
 'E8' %filename_array
 '8945 FC'
 'E8' %filename_size
@@ -474,5 +474,5 @@ DEFINE ret C3
 '50'
 'E8' %add
 '83C4 08'
-'C9'
-'C3'
+  leave
+  ret
