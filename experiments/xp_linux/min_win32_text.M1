@@ -3,6 +3,7 @@ DEFINE add_ecx,eax 01C1
 DEFINE addi8_esp, 83C4
 DEFINE and_eax, 81E0
 DEFINE call E8
+DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE leave C9
 DEFINE mov_eax, B8
@@ -786,7 +787,7 @@ DEFINE ret C3
   call %ri32
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
-'83F8 00'
+  cmpi8_eax, !0
 '0F84 0A000000'
   movi8_eax,[ebp+BYTE] !-12
 'FFD0'
@@ -826,7 +827,7 @@ DEFINE ret C3
   call %THUNK_fread
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
-'83F8 00'
+  cmpi8_eax, !0
 '0F84 0D000000'
    movi8_eax,[ebp+BYTE] !-8
    movi8_ecx,[ebp+BYTE] !-12
