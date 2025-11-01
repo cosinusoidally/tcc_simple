@@ -25,8 +25,10 @@ DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
 DEFINE mov_esp, BC
 DEFINE mov_eax,ecx 89C8
+DEFINE mov_eax,esp 89E0
 DEFINE mov_ecx,ebp 89E9
 DEFINE mov_ebp,esp 89E5
+DEFINE mov_esp,ecx 89CC
 DEFINE mov_[DWORD],eax 8905
 DEFINE mov_[eax],ecx 8908
 DEFINE mov_[ecx],eax 8901
@@ -1641,8 +1643,8 @@ DEFINE xchg_[esp],ebp 872C24
   jgei8 !0xEC
   sub_ecx,eax
   test_[ecx],eax
-'89E0'
-'89CC'
+  mov_eax,esp
+  mov_esp,ecx
   mov_ecx,[eax]
 'FF60 04'
 :_exception_info
