@@ -79,6 +79,7 @@
 "
 '0000 0000'
 # import table
+:.idata
 # 00001800:
 # first dll import
 &ILT_RVA_0
