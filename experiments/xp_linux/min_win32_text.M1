@@ -18,11 +18,13 @@ DEFINE jmp_indirect FF25
 DEFINE jmp E9
 DEFINE jmpi8 EB
 DEFINE lea_eax,[ebp+BYTE] 8D45
+DEFINE lea_ebp,[esp+BYTE] 8D6C24
 DEFINE leave C9
 DEFINE mov_eax, B8
 DEFINE mov_ecx, B9
 DEFINE mov_esp, BC
 DEFINE mov_eax,ecx 89C8
+DEFINE mov_ecx,ebp 89E9
 DEFINE mov_ebp,esp 89E5
 DEFINE mov_[DWORD],eax 8905
 DEFINE mov_[eax],ecx 8908
@@ -49,8 +51,10 @@ DEFINE shli8_ecx, C1E1
 DEFINE sub_ecx,eax 29C1
 DEFINE sub_esp, 81EC
 DEFINE subi8_eax, 83E8
+DEFINE test_[ecx],eax 8501
 DEFINE ret C3
 DEFINE reti16 C2
+DEFINE xchg_[esp],ebp 872C24
 
 # .text section
 :.text
@@ -1621,19 +1625,19 @@ DEFINE reti16 C2
 '00 0000'
 # see win32/lib/chkstk.S in the tcc source code
 :__chkstk
-'872C24'
+  xchg_[esp],ebp
   push_ebp
-'8D6C24 04'
+  lea_ebp,[esp+BYTE] !4
   push_ecx
-'89E9'
+  mov_ecx,ebp
 :P0
 '81E9 00100000'
-'8501'
+  test_[ecx],eax
 '2D 00100000'
 '3D 00100000'
 '7D EC'
   sub_ecx,eax
-'8501'
+  test_[ecx],eax
 '89E0'
 '89CC'
   mov_ecx,[eax]
