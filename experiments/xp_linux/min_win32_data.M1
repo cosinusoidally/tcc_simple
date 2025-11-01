@@ -109,7 +109,9 @@
 '0000 0000'
 
 :IAT_RVA_1
+:IAT_SetUnhandledExceptionFilter
 &SYM_SetUnhandledExceptionFilter
+:IAT_VirtualAlloc
 &SYM_VirtualAlloc
 '0000 0000'
 

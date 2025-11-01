@@ -1722,10 +1722,10 @@ jmp_indirect &IAT_puts '0000'
 :THUNK_fwrite
 jmp_indirect &IAT_fwrite '0000'
 :THUNK_SetUnhandledExceptionFilter
-jmp_indirect %0x403284 '0000'
+jmp_indirect &IAT_SetUnhandledExceptionFilter '0000'
 # 00001440:
 :THUNK_VirtualAlloc
-jmp_indirect %0x403288 '0000'
+jmp_indirect &IAT_VirtualAlloc '0000'
 :THUNK_9
 jmp_indirect %0x40325C '0000'
 # 00001450:
