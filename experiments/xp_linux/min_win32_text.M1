@@ -24,6 +24,8 @@ DEFINE lea_eax,[esp+BYTE] 8D4424
 DEFINE lea_ebp,[esp+BYTE] 8D6C24
 DEFINE leave C9
 DEFINE mov_eax, B8
+DEFINE mov_eax,fs:DWORD 64A1
+DEFINE mov_fs:DWORD,eax 64A3
 DEFINE mov_ecx, B9
 DEFINE mov_esp, BC
 DEFINE mov_eax,ecx 89C8
@@ -1685,7 +1687,7 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !0
   xor_eax,eax
   movi8_[ebp+BYTE],eax !4
-'64A1 00000000'
+  mov_eax,fs:DWORD %0
   movi8_[ebp+BYTE],eax !8
   mov_eax, %0x4021C0
   movi8_[ebp+BYTE],eax !0xC
@@ -1694,7 +1696,7 @@ DEFINE xor_eax,eax 31C0
   xor_eax,eax
   movi8_[ebp+BYTE],eax !0x14
   lea_eax,[ebp+BYTE] !8
-'64A3 00000000'
+  mov_fs:DWORD,eax %0
 '5D'
   ret
 
