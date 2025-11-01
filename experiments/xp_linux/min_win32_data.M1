@@ -1,3 +1,4 @@
+:.data
 :STRING_dump_regs_0
 "wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d
 "
