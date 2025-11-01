@@ -102,8 +102,10 @@
 '0000 0000'
 '0000 0000'
 
-# Import Address Table (IAT)
+:.idata_end
 
+# Import Address Table (IAT)
+:.IAT
 :IAT_RVA_0
 :IAT_printf
 &SYM_printf
@@ -147,6 +149,8 @@
 :IAT_VirtualAlloc
 &SYM_VirtualAlloc
 '0000 0000'
+
+:.IAT_end
 
 :ILT_RVA_0
 &SYM_printf
