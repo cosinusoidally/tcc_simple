@@ -1732,12 +1732,12 @@ jmp_indirect %0x40325C '0000'
 :THUNK_10
 jmp_indirect %0x403260 '0000'
 :THUNK_11
-jmp_indirect '7032 4000 0000'
+jmp_indirect %0x403270 '0000'
 # 00001460:
 :THUNK_12
-jmp_indirect '7432 4000 0000'
+jmp_indirect %0x403274 '0000'
 :THUNK_13
-jmp_indirect '7832 4000 0000'
+jmp_indirect %0x403278 '0000'
 # 00001470:
 :THUNK_14
 jmp_indirect %0x40327C '0000'
