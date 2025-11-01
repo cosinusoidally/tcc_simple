@@ -1735,7 +1735,7 @@ jmp_indirect &IAT__controlfp '0000'
 jmp_indirect &IAT___getmainargs '0000'
 # 00001460:
 :THUNK_12
-jmp_indirect %0x403274 '0000'
+jmp_indirect &IAT__XcptFilter '0000'
 :THUNK_13
 jmp_indirect %0x403278 '0000'
 # 00001470:
