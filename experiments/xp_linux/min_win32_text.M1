@@ -1453,7 +1453,7 @@ DEFINE xor_eax,eax 31C0
   cmp_eax, %0xFFFE
   jne %ELSE_IF_syscall_0
 # IF_syscall_1
-  mov_eax,[DWORD] %0x40316C
+  mov_eax,[DWORD] &trap_ready
   cmpi8_eax, !0
   je %ELSE_syscall_1
   jmp %END_IF_syscall_0
@@ -1705,7 +1705,7 @@ DEFINE xor_eax,eax 31C0
 '00'
 # 00001400:
 :THUNK_printf
-jmp_indirect %0x40323C '0000'
+jmp_indirect &IAT_printf '0000'
 :THUNK_exit
 jmp_indirect %0x403240 '0000'
 # 00001410:

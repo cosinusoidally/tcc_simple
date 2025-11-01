@@ -385,6 +385,10 @@ function main(argc, argv) {
 		mks("hack for xp_linux win32 support see xp_linux readme");
 		Base_Address = SUB(12288, 5632);
 	}
+	if(eq(argc, 5)) {
+		mks("2nd hack for xp_linux win32 support see xp_linux readme");
+		Base_Address = add(4194304, SUB(12288, 5632));
+	}
 
 	scratch = v_calloc(add(max_string, 1), 1);
 

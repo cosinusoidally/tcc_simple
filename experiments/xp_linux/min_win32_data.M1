@@ -82,6 +82,7 @@
 # function definitions?
 
 :IAT_RVA_0
+:IAT_printf
 &SYM_printf
 &SYM_exit
 &SYM_fopen
