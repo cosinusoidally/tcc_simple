@@ -27,8 +27,8 @@ E000      # SizeOfOptionalHeader
 0B01      # Magic (0x10B : PE32)
 06        # MajorLinkerVersion (hard coded in tcc)
 00        # MinorLinkerVersion (hard coded in tcc)
-0014 0000 # SizeOfCode
-0004 0000 # SizeOfInitializedData
+%.text_end>.text # SizeOfCode
+%.data_end>.data # SizeOfInitializedData
 0000 0000 # SizeOfUninitializedData
 5020 0000 # AddressOfEntryPoint
 0010 0000 # BaseOfCode
