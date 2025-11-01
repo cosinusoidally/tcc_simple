@@ -1575,7 +1575,7 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !-32
   lea_eax,[ebp+BYTE] !-28
   push_eax
-  mov_eax,[DWORD] %0x4033E0
+  mov_eax,[DWORD] &_dowildcard
   push_eax
   push_edx
   push_ecx
