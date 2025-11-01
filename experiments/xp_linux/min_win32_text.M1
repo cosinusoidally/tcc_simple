@@ -52,6 +52,7 @@ DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
 DEFINE nop 90
 DEFINE or_ecx,edx 09D1
 DEFINE or_edx,eax 09C2
+DEFINE pop_ebp 5D
 DEFINE push_eax 50
 DEFINE push_ecx 51
 DEFINE push_edx 52
@@ -1697,7 +1698,7 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !0x14
   lea_eax,[ebp+BYTE] !8
   mov_fs:DWORD,eax %0
-'5D'
+  pop_ebp
   ret
 
 '00'
