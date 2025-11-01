@@ -119,8 +119,8 @@
 '9033 0000 0000 0000'
 
 :ILT_RVA_1
-'B033 0000'
-'CE33 0000'
+&SYM_SetUnhandledExceptionFilter
+&SYM_VirtualAlloc
 '0000 0000'
 
 :DLLNAME_msvcrt.dll
