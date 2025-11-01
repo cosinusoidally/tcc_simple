@@ -1707,35 +1707,26 @@ DEFINE xor_eax,eax 31C0
 # reads the memory location given by the immediate, fetches the value held in
 # that location and then jumps there.
 # 00001400:
-:THUNK_0
 :THUNK_printf
 'ff25 3c32 4000 0000'
-:THUNK_1
 :THUNK_exit
 'ff25 4032 4000 0000'
 # 00001410:
-:THUNK_2
 :THUNK_fopen
 'ff25 4432 4000 0000'
-:THUNK_3
 :THUNK_fread
 'ff25 4832 4000 0000'
 # 00001420:
-:THUNK_4
 :THUNK_fclose
 'ff25 4c32 4000 0000'
-:THUNK_5
 :THUNK_puts
 'ff25 5032 4000 0000'
 # 00001430:
-:THUNK_6
 :THUNK_fwrite
 'ff25 5432 4000 0000'
-:THUNK_7
 :THUNK_SetUnhandledExceptionFilter
 'ff25 8432 4000 0000'
 # 00001440:
-:THUNK_8
 :THUNK_VirtualAlloc
 'ff25 8832 4000 0000'
 :THUNK_9
