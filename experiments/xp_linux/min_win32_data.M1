@@ -44,12 +44,16 @@
 %2
 :MAP_FIXED
 %0x10
+:STRING_v_main_0
 "mmap error
 "
+:STRING_v_main_1
 "opening command file %s
 "
+:STRING_v_main_2
 "opening default command file new_test.list
 "
+:STRING_v_main_3
 "new_test.list"
 '00'
 :trap_ready
