@@ -380,6 +380,12 @@ function main(argc, argv) {
 
 	jump_tables = v_calloc(65537, 4);
 	Base_Address = 134512640;
+
+	if(eq(argc, 4)) {
+		mks("hack for xp_linux win32 support see xp_linux readme");
+		Base_Address = SUB(12288, 5632);
+	}
+
 	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = ri32(add(argv, 4));

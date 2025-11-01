@@ -8,7 +8,8 @@ chmod +x artifacts/m0.exe
 
 cat min_win32_head.hex2 artifacts/min_win32_text.hex2 artifacts/min_win32_data.hex2 > artifacts/min_win32.hex2
 
-./artifacts/hex2.exe artifacts/min_win32.hex2 artifacts/min_win32_asm.exe
+# dummy argument is a hack to tell hex2.exe to change its base address
+./artifacts/hex2.exe artifacts/min_win32.hex2 artifacts/min_win32_asm.exe artifacts/dummy
 
 xxd artifacts/min_win32_asm.exe artifacts/min_win32_asm.exe.hexdump
 xxd artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
