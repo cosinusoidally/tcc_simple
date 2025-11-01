@@ -79,16 +79,22 @@
 '0000 0000'
 '0000 0000'
 
-# function definitions?
+# Import Address Table (IAT)
 
 :IAT_RVA_0
 :IAT_printf
 &SYM_printf
+:IAT_exit
 &SYM_exit
+:IAT_fopen
 &SYM_fopen
+:IAT_fread
 &SYM_fread
+:IAT_fclose
 &SYM_fclose
+:IAT_puts
 &SYM_puts
+:IAT_fwrite
 &SYM_fwrite
 &SYM__iob
 &SYM___set_app_type
