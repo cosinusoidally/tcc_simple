@@ -1569,9 +1569,9 @@ DEFINE xor_eax,eax 31C0
   push_eax
   call %THUNK___controlfp
   addi8_esp, !8
-  mov_eax,[DWORD] %0x403264
-  mov_ecx,[DWORD] %0x403268
-  mov_edx,[DWORD] %0x40326C
+  mov_eax,[DWORD] &IAT___argc
+  mov_ecx,[DWORD] &IAT___argv
+  mov_edx,[DWORD] &IAT__environ
   movi8_[ebp+BYTE],eax !-32
   lea_eax,[ebp+BYTE] !-28
   push_eax
@@ -1583,9 +1583,9 @@ DEFINE xor_eax,eax 31C0
   push_eax
   call %THUNK___getmainargs
   addi8_esp, !0x14
-  mov_eax,[DWORD] %0x403264
-  mov_ecx,[DWORD] %0x403268
-  mov_edx,[DWORD] %0x40326C
+  mov_eax,[DWORD] &IAT___argc
+  mov_ecx,[DWORD] &IAT___argv
+  mov_edx,[DWORD] &IAT__environ
   movi8_[ebp+BYTE],eax !-36
   mov_eax,[edx]
   push_eax

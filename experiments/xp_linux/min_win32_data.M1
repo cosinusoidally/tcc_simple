@@ -123,8 +123,11 @@
 &SYM___set_app_type
 :IAT__controlfp
 &SYM__controlfp
+:IAT___argc
 &SYM___argc
+:IAT___argv
 &SYM___argv
+:IAT__environ
 &SYM__environ
 :IAT___getmainargs
 &SYM___getmainargs
