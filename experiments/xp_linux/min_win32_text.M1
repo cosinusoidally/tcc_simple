@@ -49,6 +49,7 @@ DEFINE push_edx 52
 DEFINE push_ebp 55
 DEFINE shli8_ecx, C1E1
 DEFINE sub_ecx,eax 29C1
+DEFINE sub_ecx, 81E9
 DEFINE sub_esp, 81EC
 DEFINE subi8_eax, 83E8
 DEFINE test_[ecx],eax 8501
@@ -1631,7 +1632,7 @@ DEFINE xchg_[esp],ebp 872C24
   push_ecx
   mov_ecx,ebp
 :P0
-'81E9 00100000'
+  sub_ecx, %0x1000
   test_[ecx],eax
 '2D 00100000'
 '3D 00100000'
