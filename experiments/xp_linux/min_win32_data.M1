@@ -58,16 +58,22 @@
 '00'
 :trap_ready
 %0
+:STRING_TopLevelHandler_0
 "installing wrapper stub 0x%x
 "
+:STRING_TopLevelHandler_1
 "not int 0x80
 "
+:STRING_syscall_0
 "installing trap
 "
+:STRING_syscall_1
 "sycall function missing impl %d
 "
+:STRING_mmap_0
 "mmap not impl base: 0x%x size: 0x%x
 "
+:STRING_mmap_1
 "r: 0x%x
 "
 '0000 0000'
