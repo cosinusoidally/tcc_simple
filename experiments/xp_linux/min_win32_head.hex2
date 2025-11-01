@@ -61,7 +61,7 @@ E000      # SizeOfOptionalHeader
 # } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
 #
 0000 0000 0000 0000 # Export Table
-0032 0000 3C00 0000 # Import Table
+&.idata   3C00 0000 # Import Table
 0000 0000 0000 0000 # Resource Table
 0000 0000 0000 0000 # Exception Table
 0000 0000 0000 0000 # Certificate Table
