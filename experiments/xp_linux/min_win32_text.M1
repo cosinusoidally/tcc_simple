@@ -62,6 +62,7 @@ DEFINE test_[ecx],eax 8501
 DEFINE ret C3
 DEFINE reti16 C2
 DEFINE xchg_[esp],ebp 872C24
+DEFINE xor_eax,eax 31C0
 
 # .text section
 :.text
@@ -1680,7 +1681,7 @@ DEFINE xchg_[esp],ebp 872C24
 '8B6C24 08'
 '8D4424 0C'
   movi8_[ebp+BYTE],eax !0
-'31C0'
+  xor_eax,eax
   movi8_[ebp+BYTE],eax !4
 '64A1 00000000'
   movi8_[ebp+BYTE],eax !8
@@ -1688,7 +1689,7 @@ DEFINE xchg_[esp],ebp 872C24
   movi8_[ebp+BYTE],eax !0xC
   mov_eax, %0x4021B4
   movi8_[ebp+BYTE],eax !0x10
-'31C0'
+  xor_eax,eax
   movi8_[ebp+BYTE],eax !0x14
   lea_eax,[ebp+BYTE] !8
 '64A3 00000000'
