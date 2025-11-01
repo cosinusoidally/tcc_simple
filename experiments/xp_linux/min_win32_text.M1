@@ -43,6 +43,7 @@ DEFINE mov_edx,[DWORD] 8B15
 DEFINE movi8_[ebp+BYTE],eax 8945
 DEFINE movi8_eax,[ebp+BYTE] 8B45
 DEFINE movi8_ecx,[ebp+BYTE] 8B4D
+DEFINE movi8_esp,[ebp+BYTE] 8B65
 DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
 DEFINE nop 90
 DEFINE or_ecx,edx 09D1
@@ -1665,7 +1666,7 @@ DEFINE xchg_[esp],ebp 872C24
   addi8_esp, !8
   ret
 :seh_except
-'8B65 E8'
+  movi8_esp,[ebp+BYTE] !-24
   call %_exception_code
   push_eax
   call %THUNK_13
