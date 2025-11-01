@@ -772,7 +772,7 @@ DEFINE xor_eax,eax 31C0
   push_eax
   movi8_eax,[ebp+BYTE] !-4
   push_eax
-  mov_eax, %0x403000
+  mov_eax, &STRING_dump_regs_0
   push_eax
   call %THUNK_printf
   addi8_esp, !0x24
