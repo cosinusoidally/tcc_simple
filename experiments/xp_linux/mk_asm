@@ -11,7 +11,7 @@ cat min_win32_head.hex2 artifacts/min_win32_text.hex2 artifacts/min_win32_data.h
 ./artifacts/hex2.exe artifacts/min_win32.hex2 artifacts/min_win32_asm.exe
 
 xxd artifacts/min_win32_asm.exe artifacts/min_win32_asm.exe.hexdump
-xxd -l 0x1800 artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
+xxd artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
 
 ls -l artifacts/min_win32*exe
 wc min_win32_text.*
