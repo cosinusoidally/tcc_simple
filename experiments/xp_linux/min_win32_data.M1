@@ -6,14 +6,16 @@
 "rb"
 "fopen path: %s mode: %s
 "
-# 00001650: 6765 7420 6865 7265 0a00 7262 0066 6f70  get here..rb.fop
-# 00001660: 656e 2070 6174 683a 2025 7320 6d6f 6465  en path: %s mode
-# 00001670: 3a20 2573 0a00 6663 6c6f 7365 3a20 2564  : %s..fclose: %d
-# 00001680: 0a00 6578 6974 2063 616c 6c65 640a 0049  ..exit called..I
-# 00001690: 6e76 616c 6964 2068 6f73 7420 6361 6c6c  nvalid host call
-# 000016a0: 3a20 2564 0a00 6c6f 6164 5f73 697a 653a  : %d..load_size:
-# 000016b0: 2025 640a 0061 7274 6966 6163 7473 2f78   %d..artifacts/x
-# 000016c0: 705f 6c69 6e75 782e 6578 6500 7262 0065  p_linux.exe.rb.e
-# 000016d0: 7272 6f72 2063 6f75 6c64 206e 6f74 206f  rror could not o
-# 000016e0: 7065 6e20 636f 6d6d 616e 6420 6669 6c65  pen command file
+"fclose: %d
+"
+"exit called
+"
+"Invalid host call: %d
+"
+"load_size: %d
+"
+"artifacts/xp_linux.exe"
+"rb"
+"error could not open command file
+"
 # 000016f0: 0a00 0000 0100 0000 0200 0000 0400 0000  ................
