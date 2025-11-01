@@ -1181,16 +1181,16 @@ DEFINE xor_eax,eax 31C0
   mov_eax, %0
   movi8_[ebp+BYTE],eax !-4
   call %base_address
-  mov_ecx,[DWORD] %0x4030F4
-  mov_edx,[DWORD] %0x4030F8
+  mov_ecx,[DWORD] &PROT_READ
+  mov_edx,[DWORD] &PROT_WRITE
   or_ecx,edx
-  mov_edx,[DWORD] %0x4030FC
+  mov_edx,[DWORD] &PROT_EXEC
   or_ecx,edx
-  mov_edx,[DWORD] %0x403100
+  mov_edx,[DWORD] &MAP_ANONYMOUS
   movi8_[ebp+BYTE],eax !-12
-  mov_eax,[DWORD] %0x403104
+  mov_eax,[DWORD] &MAP_PRIVATE
   or_edx,eax
-  mov_eax,[DWORD] %0x403108
+  mov_eax,[DWORD] &MAP_FIXED
   or_edx,eax
   mov_eax, %0
   push_eax
