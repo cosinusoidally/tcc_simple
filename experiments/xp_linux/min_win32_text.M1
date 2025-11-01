@@ -1308,7 +1308,7 @@ DEFINE xor_eax,eax 31C0
   jne %END_IF_TopLevelHandler_1
   movi8_eax,[ebp+BYTE] !-16
   push_eax
-  mov_eax, %0x403170
+  mov_eax, &STRING_TopLevelHandler_0
   push_eax
   call %THUNK_printf
   addi8_esp, !8
@@ -1434,7 +1434,7 @@ DEFINE xor_eax,eax 31C0
   jmp %END_IF_TopLevelHandler_0
   jmp %END_IF_TopLevelHandler_0
 :ELSE_TopLevelHandler_0
-  mov_eax, %0x40318E
+  mov_eax, &STRING_TopLevelHandler_1
   push_eax
   call %THUNK_printf
   addi8_esp, !4
@@ -1459,7 +1459,7 @@ DEFINE xor_eax,eax 31C0
   jmp %END_IF_syscall_0
   jmp %END_IF_syscall_1
 :ELSE_syscall_1
-  mov_eax, %0x40319C
+  mov_eax, &STRING_syscall_0
   push_eax
   call %THUNK_printf
   addi8_esp, !4
@@ -1467,7 +1467,7 @@ DEFINE xor_eax,eax 31C0
   push_eax
   call %THUNK_SetUnhandledExceptionFilter
   mov_eax, %1
-  mov_[DWORD],eax %0x40316C
+  mov_[DWORD],eax &trap_ready
   jmp %END_IF_syscall_0
 :END_IF_syscall_1
   jmp %TMP_syscall_0
@@ -1480,7 +1480,7 @@ DEFINE xor_eax,eax 31C0
 :ELSE_syscall_0
   movi8_eax,[ebp+BYTE] !8
   push_eax
-  mov_eax, %0x4031AD
+  mov_eax, &STRING_syscall_1
   push_eax
   call %THUNK_printf
   addi8_esp, !8
@@ -1501,7 +1501,7 @@ DEFINE xor_eax,eax 31C0
   push_eax
   movi8_eax,[ebp+BYTE] !8
   push_eax
-  mov_eax, %0x4031CE
+  mov_eax, &STRING_mmap_0
   push_eax
   call %THUNK_printf
   addi8_esp, !12
@@ -1517,7 +1517,7 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !-4
   movi8_eax,[ebp+BYTE] !-4
   push_eax
-  mov_eax, %0x4031F3
+  mov_eax, &STRING_mmap_1
   push_eax
   call %THUNK_printf
   addi8_esp, !8
