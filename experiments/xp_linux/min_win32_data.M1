@@ -86,9 +86,11 @@
 # function definitions?
 
 :IAT_RVA_0
-'EF32 0000'
+&SYM_printf
+#'EF32 0000'
 # 00001840:
-'F832 0000 FF32 0000 0733 0000 0F33 0000'
+&SYM_exit
+'FF32 0000 0733 0000 0F33 0000'
 # 00001850:
 '1833 0000 1F33 0000 2833 0000 2F33 0000'
 # 00001860:
@@ -113,9 +115,15 @@
 # 000018e0:
 '0000 0000'
 :DLLNAME_msvcrt.dll
-"msvcrt.dll" '00'
+"msvcrt.dll"
+:SYM_printf
+'00'
 # 000018f0:
-'00' "printf" '0000' "exit" '00'
+'00'
+"printf"
+:SYM_exit
+'0000' "exit"
+'00'
 # 00001900:
 '00' "fopen" '00 00' "fread" '00'
 # 00001910:
