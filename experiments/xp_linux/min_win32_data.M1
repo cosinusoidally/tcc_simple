@@ -97,11 +97,14 @@
 :IAT_fwrite
 &SYM_fwrite
 &SYM__iob
+:IAT___set_app_type
 &SYM___set_app_type
+:IAT__controlfp
 &SYM__controlfp
 &SYM___argc
 &SYM___argv
 &SYM__environ
+:IAT___getmainargs
 &SYM___getmainargs
 &SYM__XcptFilter
 &SYM__exit
