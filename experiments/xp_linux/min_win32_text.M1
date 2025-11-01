@@ -12,6 +12,7 @@ DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE inc_eax 40
 DEFINE je 0F84
+DEFINE jgei8 7D
 DEFINE jle 0F8E
 DEFINE jne 0F85
 DEFINE jmp_indirect FF25
@@ -48,6 +49,7 @@ DEFINE push_ecx 51
 DEFINE push_edx 52
 DEFINE push_ebp 55
 DEFINE shli8_ecx, C1E1
+DEFINE sub_eax, 2D
 DEFINE sub_ecx,eax 29C1
 DEFINE sub_ecx, 81E9
 DEFINE sub_esp, 81EC
@@ -1634,9 +1636,9 @@ DEFINE xchg_[esp],ebp 872C24
 :P0
   sub_ecx, %0x1000
   test_[ecx],eax
-'2D 00100000'
+  sub_eax, %0x1000
 '3D 00100000'
-'7D EC'
+  jgei8 !0xEC
   sub_ecx,eax
   test_[ecx],eax
 '89E0'
