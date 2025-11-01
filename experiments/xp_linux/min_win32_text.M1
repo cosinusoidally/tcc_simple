@@ -1561,13 +1561,13 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !-28
   mov_eax, %1
   push_eax
-  call %THUNK_9
+  call %THUNK___set_app_type
   addi8_esp, !4
   mov_eax, %0x30000
   push_eax
   mov_eax, %0x10000
   push_eax
-  call %THUNK_10
+  call %THUNK___controlfp
   addi8_esp, !8
   mov_eax,[DWORD] %0x403264
   mov_ecx,[DWORD] %0x403268
@@ -1617,7 +1617,7 @@ DEFINE xor_eax,eax 31C0
   push_eax
   mov_eax, %0x10000
   push_eax
-  call %THUNK_10
+  call %THUNK___controlfp
   addi8_esp, !8
   mov_eax,[DWORD] %0x403264
   mov_ecx,[DWORD] %0x403268
@@ -1726,10 +1726,10 @@ jmp_indirect &IAT_SetUnhandledExceptionFilter '0000'
 # 00001440:
 :THUNK_VirtualAlloc
 jmp_indirect &IAT_VirtualAlloc '0000'
-:THUNK_9
+:THUNK___set_app_type
 jmp_indirect &IAT___set_app_type '0000'
 # 00001450:
-:THUNK_10
+:THUNK___controlfp
 jmp_indirect &IAT__controlfp '0000'
 :THUNK_11
 jmp_indirect &IAT___getmainargs '0000'
