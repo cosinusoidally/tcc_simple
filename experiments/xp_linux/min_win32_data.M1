@@ -40,6 +40,9 @@
 "opening default command file new_test.list
 "
 "new_test.list"
+'00'
+:trap_ready
+%0
 # 00001760: 5f74 6573 742e 6c69 7374 0000 0000 0000  _test.list......
 # 00001770: 696e 7374 616c 6c69 6e67 2077 7261 7070  installing wrapp
 # 00001780: 6572 2073 7475 6220 3078 2578 0a00 6e6f  er stub 0x%x..no
