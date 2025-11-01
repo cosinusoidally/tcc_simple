@@ -1581,7 +1581,7 @@ DEFINE xor_eax,eax 31C0
   push_ecx
   movi8_eax,[ebp+BYTE] !-32
   push_eax
-  call %THUNK_11
+  call %THUNK___getmainargs
   addi8_esp, !0x14
   mov_eax,[DWORD] %0x403264
   mov_ecx,[DWORD] %0x403268
@@ -1669,14 +1669,14 @@ DEFINE xor_eax,eax 31C0
   push_eax
   call %_exception_code
   push_eax
-  call %THUNK_12
+  call %THUNK__XcptFilter
   addi8_esp, !8
   ret
 :seh_except
   movi8_esp,[ebp+BYTE] !-24
   call %_exception_code
   push_eax
-  call %THUNK_13
+  call %THUNK__exit
 # padding ?
 '00 0000'
 :seh_scopetable
@@ -1731,15 +1731,15 @@ jmp_indirect &IAT___set_app_type '0000'
 # 00001450:
 :THUNK___controlfp
 jmp_indirect &IAT__controlfp '0000'
-:THUNK_11
+:THUNK___getmainargs
 jmp_indirect &IAT___getmainargs '0000'
 # 00001460:
-:THUNK_12
+:THUNK__XcptFilter
 jmp_indirect &IAT__XcptFilter '0000'
-:THUNK_13
+:THUNK__exit
 jmp_indirect &IAT__exit '0000'
 # 00001470:
-:THUNK_14
+:THUNK__except_handler3
 jmp_indirect &IAT__except_handler3 '0000'
 # padding? Seems to be zero all the way to the next section
 '0000 0000 0000 0000'
