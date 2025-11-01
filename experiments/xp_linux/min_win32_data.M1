@@ -87,10 +87,11 @@
 
 :IAT_RVA_0
 &SYM_printf
-#'EF32 0000'
 # 00001840:
 &SYM_exit
-'FF32 0000 0733 0000 0F33 0000'
+&SYM_fopen
+&SYM_fread
+'0F33 0000'
 # 00001850:
 '1833 0000 1F33 0000 2833 0000 2F33 0000'
 # 00001860:
@@ -116,16 +117,16 @@
 '0000 0000'
 :DLLNAME_msvcrt.dll
 "msvcrt.dll"
+
 :SYM_printf
-'00'
-# 000018f0:
-'00'
-"printf"
+'0000' "printf"
 :SYM_exit
 '0000' "exit"
+:SYM_fopen
+'0000' "fopen"
+:SYM_fread
+'0000' "fread"
 '00'
-# 00001900:
-'00' "fopen" '00 00' "fread" '00'
 # 00001910:
 '00' "fclose" '0000' "puts" '00'
 # 00001920:
