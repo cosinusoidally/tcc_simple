@@ -65,13 +65,15 @@
 &DLLNAME_msvcrt.dll
 # 00001810:
 '3C32 0000'
+
 # 2nd dll import
 'D832 0000'
 '0000 0000'
 '0000 0000'
 # 00001820:
-'A333 0000'
+&DLLNAME_kernel32.dll
 '8432 0000'
+
 # null import to indicate end of table
 '0000 0000'
 '0000 0000'
@@ -121,7 +123,9 @@
 # 00001960:
 '00' "_environ" '0000' "__getmainargs" '0000' "_XcptFilter" '0000' "_exit"
 # 00001990:
-'0000' "_except_handler3" "kernel32.dll"
+'0000' "_except_handler3"
+:DLLNAME_kernel32.dll
+"kernel32.dll"
 # 000019b0:
 '0000' "SetUnhandledExceptionFilter" '0000'
 # 000019d0:
