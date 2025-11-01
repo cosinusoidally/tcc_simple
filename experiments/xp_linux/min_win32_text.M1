@@ -8,6 +8,7 @@ DEFINE call E8
 DEFINE call_eax FFD0
 DEFINE cmp_ecx,eax 39C1
 DEFINE cmp_eax, 81F8
+DEFINE cmp_eax_short_version, 3D
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE inc_eax 40
@@ -1647,7 +1648,7 @@ DEFINE xor_eax,eax 31C0
   sub_ecx, %0x1000
   test_[ecx],eax
   sub_eax, %0x1000
-'3D 00100000'
+  cmp_eax_short_version, %0x1000
   jgei8 !0xEC
   sub_ecx,eax
   test_[ecx],eax
