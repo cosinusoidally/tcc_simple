@@ -7,12 +7,16 @@
 "
 :STRING_load_boot_0
 "rb"
+:STRING_host_callback_0
 "fopen path: %s mode: %s
 "
+:STRING_host_callback_1
 "fclose: %d
 "
+:STRING_host_callback_2
 "exit called
 "
+:STRING_host_callback_3
 "Invalid host call: %d
 "
 "load_size: %d
