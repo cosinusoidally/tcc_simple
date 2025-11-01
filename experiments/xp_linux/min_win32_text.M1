@@ -844,7 +844,7 @@ DEFINE xor_eax,eax 31C0
   jmp %END_wrap_syscall
 :END_IF_wrap_syscall_0
   call %trap_syscalls_off
-  mov_eax, %0x403046
+  mov_eax, &STRING_wrap_syscall_0
   push_eax
   call %THUNK_printf
   addi8_esp, !4
@@ -859,7 +859,7 @@ DEFINE xor_eax,eax 31C0
   push_ebp
   mov_ebp,esp
   sub_esp, %0xC
-  mov_eax, %0x40305A
+  mov_eax, &STRING_load_boot_0
   push_eax
   movi8_eax,[ebp+BYTE] !8
   push_eax
