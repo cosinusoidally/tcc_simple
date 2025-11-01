@@ -132,13 +132,25 @@
 :SYM_puts
 '0000' "puts"
 :SYM_fwrite
-'0000' "fwrite" '0000' "_iob" '00'
-# 00001930:
-'00' "__set_app_type"
-# 00001940:
-'0000' "_controlfp" '0000' "__argc" '0000' "__argv" '00'
-# 00001960:
-'00' "_environ" '0000' "__getmainargs" '0000' "_XcptFilter" '0000' "_exit"
+'0000' "fwrite"
+:SYM__iob
+'0000' "_iob"
+:SYM___set_app_type
+'0000' "__set_app_type"
+:SYM__controlfp
+'0000' "_controlfp"
+:SYM___argc
+'0000' "__argc"
+:SYM___argv
+'0000' "__argv"
+:SYM__environ
+'0000' "_environ"
+:SYM___getmainargs
+'0000' "__getmainargs"
+:SYM__XcptFilter
+'0000' "_XcptFilter"
+:SYM__exit
+'0000' "_exit"
 # 00001990:
 '0000' "_except_handler3"
 :DLLNAME_kernel32.dll
