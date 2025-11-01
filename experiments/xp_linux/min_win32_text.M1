@@ -1209,7 +1209,7 @@ DEFINE xor_eax,eax 31C0
   movi8_ecx,[ebp+BYTE] !-4
   cmp_ecx,eax
   je %END_IF_v_main_0
-  mov_eax, %0x40310C
+  mov_eax, &STRING_v_main_0
   push_eax
   call %THUNK_puts
   addi8_esp, !4
@@ -1230,17 +1230,17 @@ DEFINE xor_eax,eax 31C0
   movi8_[ebp+BYTE],eax !-8
   movi8_eax,[ebp+BYTE] !-8
   push_eax
-  mov_eax, %0x403118
+  mov_eax, &STRING_v_main_1
   push_eax
   call %THUNK_printf
   addi8_esp, !8
   jmp %END_if_v_main_1
 :ELSE_v_main_1
-  mov_eax, %0x403131
+  mov_eax, &STRING_v_main_2
   push_eax
   call %THUNK_printf
   addi8_esp, !4
-  mov_eax, %0x40315D
+  mov_eax, &STRING_v_main_3
   movi8_[ebp+BYTE],eax !-8
 :END_if_v_main_1
   movi8_eax,[ebp+BYTE] !-8
