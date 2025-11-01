@@ -1529,7 +1529,7 @@ DEFINE xor_eax,eax 31C0
   mov_ebp,esp
   sub_esp, %0x0
   nop
-  mov_eax,[DWORD] %0x403258
+  mov_eax,[DWORD] &IAT__iob
   addi8_eax, !0x20
   leave
   ret

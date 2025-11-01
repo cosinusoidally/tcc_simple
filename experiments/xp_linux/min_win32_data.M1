@@ -96,6 +96,7 @@
 &SYM_puts
 :IAT_fwrite
 &SYM_fwrite
+:IAT__iob
 &SYM__iob
 :IAT___set_app_type
 &SYM___set_app_type
