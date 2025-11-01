@@ -75,7 +75,6 @@
 # null import to indicate end of table
 '0000 0000'
 '0000 0000'
-# 00001830:
 '0000 0000'
 '0000 0000'
 '0000 0000'
@@ -84,7 +83,6 @@
 
 :IAT_RVA_0
 &SYM_printf
-# 00001840:
 &SYM_exit
 &SYM_fopen
 &SYM_fread
@@ -104,7 +102,10 @@
 '0000 0000'
 
 :IAT_RVA_1
-'B033 0000 CE33 0000 0000 0000'
+&SYM_SetUnhandledExceptionFilter
+&SYM_VirtualAlloc
+'0000 0000'
+
 # 00001890:
 'EF32 0000 F832 0000 FF32 0000 0733 0000'
 # 000018a0:
