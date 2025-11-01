@@ -1703,37 +1703,34 @@ DEFINE xor_eax,eax 31C0
   ret
 
 '00'
-# I suspect the following are "thunks" since FF25 is an indirect jump ie it
-# reads the memory location given by the immediate, fetches the value held in
-# that location and then jumps there.
 # 00001400:
 :THUNK_printf
 jmp_indirect %0x40323C '0000'
 :THUNK_exit
-jmp_indirect '4032 4000 0000'
+jmp_indirect %0x403240 '0000'
 # 00001410:
 :THUNK_fopen
-jmp_indirect '4432 4000 0000'
+jmp_indirect %0x403244 '0000'
 :THUNK_fread
-jmp_indirect '4832 4000 0000'
+jmp_indirect %0x403248 '0000'
 # 00001420:
 :THUNK_fclose
-jmp_indirect '4c32 4000 0000'
+jmp_indirect %0x40324C '0000'
 :THUNK_puts
-jmp_indirect '5032 4000 0000'
+jmp_indirect %0x403250 '0000'
 # 00001430:
 :THUNK_fwrite
-jmp_indirect '5432 4000 0000'
+jmp_indirect %0x403254 '0000'
 :THUNK_SetUnhandledExceptionFilter
-jmp_indirect '8432 4000 0000'
+jmp_indirect %0x403284 '0000'
 # 00001440:
 :THUNK_VirtualAlloc
-jmp_indirect '8832 4000 0000'
+jmp_indirect %0x403288 '0000'
 :THUNK_9
-jmp_indirect '5c32 4000 0000'
+jmp_indirect %0x40325C '0000'
 # 00001450:
 :THUNK_10
-jmp_indirect '6032 4000 0000'
+jmp_indirect %0x403260 '0000'
 :THUNK_11
 jmp_indirect '7032 4000 0000'
 # 00001460:
@@ -1743,4 +1740,4 @@ jmp_indirect '7432 4000 0000'
 jmp_indirect '7832 4000 0000'
 # 00001470:
 :THUNK_14
-jmp_indirect '7c32 4000 0000'
+jmp_indirect %0x40327C '0000'
