@@ -116,6 +116,7 @@
 '9033 0000 0000 0000 B033 0000 CE33 0000'
 # 000018e0:
 '0000 0000'
+
 :DLLNAME_msvcrt.dll
 "msvcrt.dll"
 
@@ -151,14 +152,18 @@
 '0000' "_XcptFilter"
 :SYM__exit
 '0000' "_exit"
-# 00001990:
+:SYM__except_handler3
 '0000' "_except_handler3"
+
 :DLLNAME_kernel32.dll
 "kernel32.dll"
-# 000019b0:
-'0000' "SetUnhandledExceptionFilter" '0000'
-# 000019d0:
-"VirtualAlloc" '00 0000'
+
+:SYM_SetUnhandledExceptionFilter
+'0000' "SetUnhandledExceptionFilter"
+:SYM_VirtualAlloc
+'0000' "VirtualAlloc"
+
+'00 0000'
 # 000019e0:
 '0000 0000 0000 0000 0000 0000 0000 0000'
 # 000019f0:
