@@ -91,9 +91,10 @@
 &SYM_exit
 &SYM_fopen
 &SYM_fread
-'0F33 0000'
-# 00001850:
-'1833 0000 1F33 0000 2833 0000 2F33 0000'
+&SYM_fclose
+&SYM_puts
+&SYM_fwrite
+'2833 0000 2F33 0000'
 # 00001860:
 '4033 0000 4D33 0000 5633 0000 5F33 0000'
 # 00001870:
@@ -126,11 +127,12 @@
 '0000' "fopen"
 :SYM_fread
 '0000' "fread"
-'00'
-# 00001910:
-'00' "fclose" '0000' "puts" '00'
-# 00001920:
-'00' "fwrite" '0000' "_iob" '00'
+:SYM_fclose
+'0000' "fclose"
+:SYM_puts
+'0000' "puts"
+:SYM_fwrite
+'0000' "fwrite" '0000' "_iob" '00'
 # 00001930:
 '00' "__set_app_type"
 # 00001940:
