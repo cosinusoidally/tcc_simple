@@ -108,6 +108,7 @@
 &SYM___getmainargs
 :IAT__XcptFilter
 &SYM__XcptFilter
+:IAT__exit
 &SYM__exit
 &SYM__except_handler3
 '0000 0000'
