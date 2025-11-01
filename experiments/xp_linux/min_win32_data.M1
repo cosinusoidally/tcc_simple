@@ -1,8 +1,11 @@
-# 00001600: 7772 6170 5f73 7973 6361 6c6c 2065 6178  wrap_syscall eax
-# 00001610: 3a20 2564 2065 6278 3a20 2564 2065 6378  : %d ebx: %d ecx
-# 00001620: 3a20 2564 2065 6478 3a20 2564 2065 7369  : %d edx: %d esi
-# 00001630: 3a20 2564 2065 6469 3a20 2564 2065 6270  : %d edi: %d ebp
-# 00001640: 3a20 2564 0a00 5368 6f75 6c64 6e27 7420  : %d..Shouldn't 
+"wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d
+"
+# "Shouldn't get here\n" (can't handle ' so have to use hex)
+'5368 6F75 6C64 6E27 7420' "get here
+"
+"rb"
+"fopen path: %s mode: %s
+"
 # 00001650: 6765 7420 6865 7265 0a00 7262 0066 6f70  get here..rb.fop
 # 00001660: 656e 2070 6174 683a 2025 7320 6d6f 6465  en path: %s mode
 # 00001670: 3a20 2573 0a00 6663 6c6f 7365 3a20 2564  : %s..fclose: %d
