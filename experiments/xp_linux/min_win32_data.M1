@@ -19,10 +19,14 @@
 :STRING_host_callback_3
 "Invalid host call: %d
 "
+:STRING_init_runtime_0
 "load_size: %d
 "
+:STRING_init_runtime_1
 "artifacts/xp_linux.exe"
+:STRING_init_runtime_2
 "rb"
+:STRING_init_runtime_3
 "error could not open command file
 "
 # 000016f0:
