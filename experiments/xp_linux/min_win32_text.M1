@@ -1740,7 +1740,7 @@ jmp_indirect &IAT__XcptFilter '0000'
 jmp_indirect &IAT__exit '0000'
 # 00001470:
 :THUNK_14
-jmp_indirect %0x40327C '0000'
+jmp_indirect &IAT__except_handler3 '0000'
 # padding? Seems to be zero all the way to the next section
 '0000 0000 0000 0000'
 # 00001480:
