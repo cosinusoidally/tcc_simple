@@ -1,8 +1,11 @@
+:STRING_dump_regs_0
 "wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d
 "
 # "Shouldn't get here\n" (can't handle ' so have to use hex)
+:STRING_wrap_syscall_0
 '5368 6F75 6C64 6E27 7420' "get here
 "
+:STRING_load_boot_0
 "rb"
 "fopen path: %s mode: %s
 "
