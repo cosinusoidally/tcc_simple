@@ -43,13 +43,16 @@
 '00'
 :trap_ready
 %0
-# 00001760: 5f74 6573 742e 6c69 7374 0000 0000 0000  _test.list......
-# 00001770: 696e 7374 616c 6c69 6e67 2077 7261 7070  installing wrapp
-# 00001780: 6572 2073 7475 6220 3078 2578 0a00 6e6f  er stub 0x%x..no
-# 00001790: 7420 696e 7420 3078 3830 0a00 696e 7374  t int 0x80..inst
-# 000017a0: 616c 6c69 6e67 2074 7261 700a 0073 7963  alling trap..syc
-# 000017b0: 616c 6c20 6675 6e63 7469 6f6e 206d 6973  all function mis
-# 000017c0: 7369 6e67 2069 6d70 6c20 2564 0a00 6d6d  sing impl %d..mm
-# 000017d0: 6170 206e 6f74 2069 6d70 6c20 6261 7365  ap not impl base
-# 000017e0: 3a20 3078 2578 2073 697a 653a 2030 7825  : 0x%x size: 0x%
+"installing wrapper stub 0x%x
+"
+"not int 0x80
+"
+"installing trap
+"
+"sycall function missing impl %d
+"
+"mmap not impl base: 0x%x size: 0x%x
+"
+"r: 0x%x
+"
 # 000017f0: 780a 0072 3a20 3078 2578 0a00 0000 0000  x..r: 0x%x......
