@@ -1125,17 +1125,17 @@ DEFINE xor_eax,eax 31C0
   push_eax
   call %set_reg
   addi8_esp, !8
-  mov_eax, %0x4030B5
+  mov_eax, &STRING_init_runtime_1
   push_eax
   call %load_boot
   addi8_esp, !4
   push_eax
-  mov_eax, %0x4030A6
+  mov_eax, &STRING_init_runtime_0
   push_eax
   call %THUNK_printf
   addi8_esp, !8
   call %command_file
-  mov_ecx, %0x4030CC
+  mov_ecx, &STRING_init_runtime_2
   push_ecx
   movi8_ecx,[ebp+BYTE] !8
   push_ecx
@@ -1155,7 +1155,7 @@ DEFINE xor_eax,eax 31C0
   je %IF_init_runtime_0
   jmp %END_IF_init_runtime_0
 :IF_init_runtime_0
-  mov_eax, %0x4030CF
+  mov_eax, &STRING_init_runtime_3
   push_eax
   call %THUNK_printf
   addi8_esp, !4
