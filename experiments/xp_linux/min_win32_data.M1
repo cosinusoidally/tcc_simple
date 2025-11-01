@@ -109,8 +109,8 @@
 '0000' "_controlfp" '0000' "__argc" '0000' "__argv" '00'
 # 00001960:
 '00' "_environ" '0000' "__getmainargs" '0000' "_XcptFilter" '0000' "_exit"
-# 00001990: 0000 5f65 7863 6570 745f 6861 6e64 6c65  .._except_handle
-# 000019a0: 7233 006b 6572 6e65 6c33 322e 646c 6c00  r3.kernel32.dll.
+# 00001990:
+'0000' "_except_handler3" "kernel32.dll"
 # 000019b0: 0000 5365 7455 6e68 616e 646c 6564 4578  ..SetUnhandledEx
 # 000019c0: 6365 7074 696f 6e46 696c 7465 7200 0000  ceptionFilter...
 # 000019d0: 5669 7274 7561 6c41 6c6c 6f63 0000 0000  VirtualAlloc....
