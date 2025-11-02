@@ -15,12 +15,12 @@
 '6D6F 6465 2E0D 0D0A 2400 0000 0000 0000'  # mode....$.......
 # PE header
 :.PE_header
-'5045 0000' # PE\0\0
+"PE" !0     # PE\0\0
 '4C01'      # Machine (0x14C IMAGE_FILE_MACHINE_I386)
 '0200'      # NumberOfSections (2)
-'0000 0000' # TimeDateStamp (null)
-'0000 0000' # PointerToSymbolTable (null)
-'0000 0000' # NumberOfSymbols (0)
+%0          # TimeDateStamp (null)
+%0          # PointerToSymbolTable (null)
+%0          # NumberOfSymbols (0)
 'E000'      # SizeOfOptionalHeader
 '0F03'      # Characteristics (0x030F is hard coded in tcc)
 # Optional Header
@@ -29,20 +29,20 @@
 '00'        # MinorLinkerVersion (hard coded in tcc)
 %.text_end>.text # SizeOfCode
 %.data_end>.data # SizeOfInitializedData
-'0000 0000' # SizeOfUninitializedData
-'5020 0000' # AddressOfEntryPoint
-'0010 0000' # BaseOfCode
-'0030 0000' # BaseOfData
-'0000 4000' # ImageBase
-'0010 0000' # SectionAlignment
-'0002 0000' # FileAlignment
+%0          # SizeOfUninitializedData
+%0x2050     # AddressOfEntryPoint
+%0x1000     # BaseOfCode
+%0x3000     # BaseOfData
+%0x400000   # ImageBase
+%0x1000     # SectionAlignment
+%0x200      # FileAlignment
 '0400'      # MajorOperatingSystemVersion
 '0000'      # MinorOperatingSystemVersion
 '0000'      # MajorImageVersion
 '0000'      # MinorImageVersion
 '0400'      # MajorSubsystemVersion
 '0000'      # MinorSubsystemVersion
-'0000 0000' # Win32VersionValue
+%0          # Win32VersionValue
 '0040 0000' # SizeOfImage
 '0002 0000' # SizeOfHeaders
 '8E51 0000' # CheckSum (can probably avoid having to calculate)
