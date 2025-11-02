@@ -23,12 +23,21 @@ process.chdir("../cjsawk");
 my_cmd = 'fname="../xp_linux/min_win32_asm.M1"; \
 load("m0_test.js");'
 fs.writeFileSync("artifacts/test.js", my_cmd); 
-out=run("artifacts/test.js");
-fs.writeFileSync("../xp_linux/artifacts/test.hex2", out);
+out0=run("artifacts/test.js");
+fs.writeFileSync("../xp_linux/artifacts/test.hex2", out0);
 
 my_cmd = 'fname="../xp_linux/artifacts/test.hex2"; \
-load("hex2_test.js");'
+load("hex2_test.js"); \
+extra_args = " artifacts/dummy1";'
 fs.writeFileSync("artifacts/test.js", my_cmd); 
-out=run("artifacts/test.js").toString();
-out=Buffer.from(out, "base64");
-fs.writeFileSync("../xp_linux/artifacts/test.exe", out);
+out1=run("artifacts/test.js").toString();
+out1=Buffer.from(out1, "base64");
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node1.exe", out1);
+
+my_cmd = 'fname="../xp_linux/artifacts/test.hex2"; \
+load("hex2_test.js"); \
+extra_args = " artifacts/dummy1 artifacts/dummy2";'
+fs.writeFileSync("artifacts/test.js", my_cmd);
+out2=run("artifacts/test.js").toString();
+out2=Buffer.from(out2, "base64");
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node2.exe", out2);
