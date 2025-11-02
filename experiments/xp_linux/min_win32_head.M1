@@ -43,13 +43,13 @@
 '0400'      # MajorSubsystemVersion
 '0000'      # MinorSubsystemVersion
 %0          # Win32VersionValue
-'0040 0000' # SizeOfImage
-'0002 0000' # SizeOfHeaders
-'8E51 0000' # CheckSum (can probably avoid having to calculate)
+%0x4000     # SizeOfImage
+%.text>.PE_base  # SizeOfHeaders
+%0x0000518E # CheckSum (can probably avoid having to calculate)
 '0300'      # Subsystem (IMAGE_SUBSYSTEM_WINDOWS_CUI is 3)
 '0000'      # DllCharacteristics
-'0000 1000' # SizeOfStackReserve
-'0010 0000' # SizeOfStackCommit
+%0x100000   # SizeOfStackReserve
+%0x1000     # SizeOfStackCommit
 '0000 1000' # SizeOfHeapReserve
 '0010 0000' # SizeOfHeapCommit
 '0000 0000' # LoaderFlags (must be 0)
