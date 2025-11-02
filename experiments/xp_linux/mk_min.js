@@ -92,5 +92,20 @@ tmp = concat(["../xp_linux/globals.js", "../xp_linux/xp_linux.js"]).toString();
 fs.writeFileSync("../xp_linux/artifacts/xp_linux_full_node.js", tmp);
 
 out3 = cjsawk("../xp_linux/artifacts/xp_linux_full_node.js");
-
 fs.writeFileSync("../xp_linux/artifacts/xp_linux_node.exe.M1", out3);
+
+tmp = concat(["../m2min_v3/simple_asm_defs.M1",
+              "../m2min_v3/x86_defs.M1",
+              "../m2min_v3/libc-core.M1",
+              "../xp_linux/artifacts/xp_linux_node.exe.M1"]);
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_full_node.exe-0.M1", tmp);
+
+out4 = m0("../xp_linux/artifacts/xp_linux_full_node.exe-0.M1");
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_node.exe.hex2", out4);
+
+tmp = concat(["../m2min_v3/ELF-i386.hex2",
+              "../xp_linux/artifacts/xp_linux_node.exe.hex2"]);
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_full_node.exe-0.hex2", tmp);
+
+out5 = hex2("../xp_linux/artifacts/xp_linux_full_node.exe-0.hex2");
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_node.exe", out5);
