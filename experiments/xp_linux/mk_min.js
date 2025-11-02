@@ -29,13 +29,21 @@ load("hex2_test.js");'
   return Buffer.from(res, "base64");
 }
 
-my_cmd = 'fname="../xp_linux/min_win32_asm.M1"; \
+function m0(src) {
+  var res;
+  var my_cmd = 'fname="' + src+ '"; \
 load("m0_test.js");'
-fs.writeFileSync("artifacts/test.js", my_cmd); 
-out0=run("artifacts/test.js");
+  fs.writeFileSync("artifacts/test.js", my_cmd);
+  res = run("artifacts/test.js").toString();
+  return res;
+}
+
+out0 = m0("../xp_linux/min_win32_asm.M1");
 fs.writeFileSync("../xp_linux/artifacts/test.hex2", out0);
 
 out1 = hex2("../xp_linux/artifacts/test.hex2", " artifacts/dummy1");
 out2 = hex2("../xp_linux/artifacts/test.hex2", " artifacts/dummy1 artifacts/dummy2");
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node1.exe", out1);
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node2.exe", out2);
+
+i = 0;
