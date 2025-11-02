@@ -31,8 +31,15 @@ load("hex2_test.js");'
 
 function m0(src) {
   var res;
-  var my_cmd = 'fname="' + src+ '"; \
-load("m0_test.js");'
+  var my_cmd = 'fname="' + src+ '"; load("m0_test.js");'
+  fs.writeFileSync("artifacts/test.js", my_cmd);
+  res = run("artifacts/test.js").toString();
+  return res;
+}
+
+function cjsawk(src) {
+  var res;
+  var my_cmd = 'fname="' + src+ '"; load("cjsawk_test.js");'
   fs.writeFileSync("artifacts/test.js", my_cmd);
   res = run("artifacts/test.js").toString();
   return res;
@@ -65,3 +72,7 @@ while(i<(6.5*1024)){
 }
 
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node.exe", out);
+
+out3 = cjsawk("../xp_linux/artifacts/xp_linux_full.js");
+
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_node.exe.M1", out3);
