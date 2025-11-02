@@ -1,5 +1,5 @@
 :.PE_base
-'4D5A'  # MZ DOS magic number
+'4D5A'  # "MZ" DOS magic number
 
 # DOS header (unused data)
 '9000 0300 0000 0400 0000 FFFF 0000'
@@ -12,7 +12,7 @@
 '0E1F BA0E 00B4 09CD 21B8 014C CD21'
 "This program cannot be run in DOS mode.
 $"
-'0000 0000 0000'  # mode....$.......
+'0000 0000 0000'
 # PE header
 :.PE_header
 "PE" !0     # PE\0\0
