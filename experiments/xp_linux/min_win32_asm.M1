@@ -1,3 +1,114 @@
+:.PE_base
+'4D5A'  # "MZ" DOS magic number
+
+# DOS header (unused data)
+'9000 0300 0000 0400 0000 FFFF 0000'
+'B800 0000 0000 0000 4000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000'
+# pointer to PE header
+%.PE_header>.PE_base
+# more of the DOS header
+'0E1F BA0E 00B4 09CD 21B8 014C CD21'
+"This program cannot be run in DOS mode.
+$"
+'0000 0000 0000'
+# PE header
+:.PE_header
+"PE" !0     # PE\0\0
+'4C01'      # Machine (0x14C IMAGE_FILE_MACHINE_I386)
+'0200'      # NumberOfSections (2)
+%0          # TimeDateStamp (null)
+%0          # PointerToSymbolTable (null)
+%0          # NumberOfSymbols (0)
+'E000'      # SizeOfOptionalHeader
+'0F03'      # Characteristics (0x030F is hard coded in tcc)
+# Optional Header
+'0B01'      # Magic (0x10B : PE32)
+'06'        # MajorLinkerVersion (hard coded in tcc)
+'00'        # MinorLinkerVersion (hard coded in tcc)
+%.text_end>.text # SizeOfCode
+%.data_end>.data # SizeOfInitializedData
+%0          # SizeOfUninitializedData
+%0x2050     # AddressOfEntryPoint
+%0x1000     # BaseOfCode
+%0x3000     # BaseOfData
+%0x400000   # ImageBase
+%0x1000     # SectionAlignment
+%0x200      # FileAlignment
+'0400'      # MajorOperatingSystemVersion
+'0000'      # MinorOperatingSystemVersion
+'0000'      # MajorImageVersion
+'0000'      # MinorImageVersion
+'0400'      # MajorSubsystemVersion
+'0000'      # MinorSubsystemVersion
+%0          # Win32VersionValue
+%0x4000     # SizeOfImage
+%.text>.PE_base  # SizeOfHeaders
+%0x0000518E # CheckSum (can probably avoid having to calculate)
+'0300'      # Subsystem (IMAGE_SUBSYSTEM_WINDOWS_CUI is 3)
+'0000'      # DllCharacteristics
+%0x100000   # SizeOfStackReserve
+%0x1000     # SizeOfStackCommit
+%0x100000   # SizeOfHeapReserve
+%0x1000     # SizeOfHeapCommit
+%0          # LoaderFlags (must be 0)
+%0x10       # NumberOfRvaAndSizes
+
+# Optional Header Data Directories
+#  typedef struct _IMAGE_DATA_DIRECTORY {
+#    DWORD   VirtualAddress;
+#    DWORD   Size;
+# } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+#
+'0000 0000     0000 0000'         # Export Table
+&.idata        %.idata_end>.idata # Import Table
+'0000 0000     0000 0000'         # Resource Table
+'0000 0000     0000 0000'         # Exception Table
+'0000 0000     0000 0000'         # Certificate Table
+'0000 0000     0000 0000'         # Base Relocation Table
+'0000 0000     0000 0000'         # Debug
+'0000 0000     0000 0000'         # Architecture
+'0000 0000     0000 0000'         # Global Ptr
+'0000 0000     0000 0000'         # TLS Table
+'0000 0000     0000 0000'         # Load Config Table
+'0000 0000     0000 0000'         # Bound Import
+&.IAT          %.IAT_end>.IAT     # Import Address Table (IAT)
+'0000 0000     0000 0000'         # Delay Import Descriptor
+'0000 0000     0000 0000'         # CLR Runtime Header
+'0000 0000     0000 0000'         # Reserved, must be zero
+
+# Section Table (Section Headers)
+
+# .text section header:
+".text" '0000'    # Name
+%0x1278           # VirtualSize
+%0x1000           # VirtualAddress
+%.text_end>.text  # SizeOfRawData
+%.text>.PE_base   # PointerToRawData (where .text is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0x60000020       # Characteristics
+
+# .data section header:
+".data" '0000'    #  name .data
+%0x3E4            # VirtualSize
+%0x3000           # VirtualAddress
+%.data_end>.data  # SizeOfRawData
+%.data>.PE_base   # PointerToRawData (where .data is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0xC0000040       # Characteristics
+
+# padding
+'0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
 DEFINE add_eax,ecx 01C8
 DEFINE add_ecx,eax 01C1
 DEFINE add_ecx, 81C1
@@ -1769,3 +1880,235 @@ jmp_indirect &IAT__except_handler3 '0000'
 '0000 0000 0000 0000 0000 0000 0000 0000'
 '0000 0000 0000 0000 0000 0000 0000 0000'
 :.text_end
+:.data
+:STRING_dump_regs_0
+"wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d
+"
+# "Shouldn't get here\n" (can't handle ' so have to use hex)
+:STRING_wrap_syscall_0
+'5368 6F75 6C64 6E27 7420' "get here
+"
+:STRING_load_boot_0
+"rb"
+:STRING_host_callback_0
+"fopen path: %s mode: %s
+"
+:STRING_host_callback_1
+"fclose: %d
+"
+:STRING_host_callback_2
+"exit called
+"
+:STRING_host_callback_3
+"Invalid host call: %d
+"
+:STRING_init_runtime_0
+"load_size: %d
+"
+:STRING_init_runtime_1
+"artifacts/xp_linux.exe"
+:STRING_init_runtime_2
+"rb"
+:STRING_init_runtime_3
+"error could not open command file
+"
+# 000016f0:
+# 0a00
+'0000'
+:PROT_READ
+%1
+:PROT_WRITE
+%2
+:PROT_EXEC
+%4
+:MAP_ANONYMOUS
+%32
+:MAP_PRIVATE
+%2
+:MAP_FIXED
+%0x10
+:STRING_v_main_0
+"mmap error
+"
+:STRING_v_main_1
+"opening command file %s
+"
+:STRING_v_main_2
+"opening default command file new_test.list
+"
+:STRING_v_main_3
+"new_test.list"
+'00'
+:trap_ready
+%0
+:STRING_TopLevelHandler_0
+"installing wrapper stub 0x%x
+"
+:STRING_TopLevelHandler_1
+"not int 0x80
+"
+:STRING_syscall_0
+"installing trap
+"
+:STRING_syscall_1
+"sycall function missing impl %d
+"
+:STRING_mmap_0
+"mmap not impl base: 0x%x size: 0x%x
+"
+:STRING_mmap_1
+"r: 0x%x
+"
+'0000 0000'
+# import table
+:.idata
+# 00001800:
+# first dll import
+&ILT_RVA_0
+'0000 0000'
+'0000 0000'
+&DLLNAME_msvcrt.dll
+&IAT_RVA_0
+
+# 2nd dll import
+&ILT_RVA_1
+'0000 0000'
+'0000 0000'
+&DLLNAME_kernel32.dll
+&IAT_RVA_1
+
+# null import to indicate end of table
+'0000 0000'
+'0000 0000'
+'0000 0000'
+'0000 0000'
+'0000 0000'
+
+:.idata_end
+
+# Import Address Table (IAT)
+:.IAT
+:IAT_RVA_0
+:IAT_printf
+&SYM_printf
+:IAT_exit
+&SYM_exit
+:IAT_fopen
+&SYM_fopen
+:IAT_fread
+&SYM_fread
+:IAT_fclose
+&SYM_fclose
+:IAT_puts
+&SYM_puts
+:IAT_fwrite
+&SYM_fwrite
+:IAT__iob
+&SYM__iob
+:IAT___set_app_type
+&SYM___set_app_type
+:IAT__controlfp
+&SYM__controlfp
+:IAT___argc
+&SYM___argc
+:IAT___argv
+&SYM___argv
+:IAT__environ
+&SYM__environ
+:IAT___getmainargs
+&SYM___getmainargs
+:IAT__XcptFilter
+&SYM__XcptFilter
+:IAT__exit
+&SYM__exit
+:IAT__except_handler3
+&SYM__except_handler3
+'0000 0000'
+
+:IAT_RVA_1
+:IAT_SetUnhandledExceptionFilter
+&SYM_SetUnhandledExceptionFilter
+:IAT_VirtualAlloc
+&SYM_VirtualAlloc
+'0000 0000'
+
+:.IAT_end
+
+:ILT_RVA_0
+&SYM_printf
+&SYM_exit
+&SYM_fopen
+&SYM_fread
+&SYM_fclose
+&SYM_puts
+&SYM_fwrite
+&SYM__iob
+&SYM___set_app_type
+&SYM__controlfp
+&SYM___argc
+&SYM___argv
+&SYM__environ
+&SYM___getmainargs
+&SYM__XcptFilter
+&SYM__exit
+&SYM__except_handler3
+'0000 0000'
+
+:ILT_RVA_1
+&SYM_SetUnhandledExceptionFilter
+&SYM_VirtualAlloc
+'0000 0000'
+
+:DLLNAME_msvcrt.dll
+"msvcrt.dll"
+
+:SYM_printf
+'0000' "printf"
+:SYM_exit
+'0000' "exit"
+:SYM_fopen
+'0000' "fopen"
+:SYM_fread
+'0000' "fread"
+:SYM_fclose
+'0000' "fclose"
+:SYM_puts
+'0000' "puts"
+:SYM_fwrite
+'0000' "fwrite"
+:SYM__iob
+'0000' "_iob"
+:SYM___set_app_type
+'0000' "__set_app_type"
+:SYM__controlfp
+'0000' "_controlfp"
+:SYM___argc
+'0000' "__argc"
+:SYM___argv
+'0000' "__argv"
+:SYM__environ
+'0000' "_environ"
+:SYM___getmainargs
+'0000' "__getmainargs"
+:SYM__XcptFilter
+'0000' "_XcptFilter"
+:SYM__exit
+'0000' "_exit"
+:SYM__except_handler3
+'0000' "_except_handler3"
+
+:DLLNAME_kernel32.dll
+"kernel32.dll"
+
+:SYM_SetUnhandledExceptionFilter
+'0000' "SetUnhandledExceptionFilter"
+:SYM_VirtualAlloc
+'0000' "VirtualAlloc"
+
+'00 0000'
+:_dowildcard
+# 000019e0:
+'0000 0000 0000 0000 0000 0000 0000 0000'
+# 000019f0:
+'0000 0000 0000 0000 0000 0000 0000 0000'
+:.data_end

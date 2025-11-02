@@ -3,17 +3,13 @@ set -xe
 chmod +x artifacts/hex2.exe
 chmod +x artifacts/m0.exe
 
-./artifacts/m0.exe min_win32_head.M1 artifacts/min_win32_head.hex2
-./artifacts/m0.exe min_win32_text.M1 artifacts/min_win32_text.hex2
-./artifacts/m0.exe min_win32_data.M1 artifacts/min_win32_data.hex2
-
-cat artifacts/min_win32_head.hex2 artifacts/min_win32_text.hex2 artifacts/min_win32_data.hex2 > artifacts/min_win32.hex2
+./artifacts/m0.exe min_win32_asm.M1 artifacts/min_win32_asm.hex2
 
 # dummy argument is a hack to tell hex2.exe to change its base address
-./artifacts/hex2.exe artifacts/min_win32.hex2 artifacts/min_win32_asm1.exe artifacts/dummy
+./artifacts/hex2.exe artifacts/min_win32_asm.hex2 artifacts/min_win32_asm1.exe artifacts/dummy
 
 # 2nd dummy argument is a hack to tell hex2.exe to change its base address
-./artifacts/hex2.exe artifacts/min_win32.hex2 artifacts/min_win32_asm2.exe artifacts/dummy artifacts/dummy2
+./artifacts/hex2.exe artifacts/min_win32_asm.hex2 artifacts/min_win32_asm2.exe artifacts/dummy artifacts/dummy2
 
 head -c 5632 artifacts/min_win32_asm2.exe > artifacts/min_win32_asm_head.exe
 tail -c 5120 artifacts/min_win32_asm_head.exe > artifacts/min_win32_asm_text.exe
@@ -26,5 +22,4 @@ xxd artifacts/min_win32_asm.exe artifacts/min_win32_asm.exe.hexdump
 xxd artifacts/min_win32.exe artifacts/min_win32.exe.hexdump
 
 ls -l artifacts/min_win32*exe
-wc min_win32_text.*
 diff -u -s artifacts/min_win32_asm.exe.hexdump artifacts/min_win32.exe.hexdump
