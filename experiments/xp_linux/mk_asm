@@ -1,3 +1,5 @@
+rm artifacts/min_win32_asm*
+
 set -xe
 
 chmod +x artifacts/hex2.exe
