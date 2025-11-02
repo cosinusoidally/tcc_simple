@@ -61,12 +61,12 @@ function concat(arr) {
 }
 
 out0 = m0("../xp_linux/min_win32_asm.M1");
-fs.writeFileSync("../xp_linux/artifacts/test.hex2", out0);
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node.hex2", out0);
 
-out1 = hex2("../xp_linux/artifacts/test.hex2", " artifacts/dummy1");
-out2 = hex2("../xp_linux/artifacts/test.hex2", " artifacts/dummy1 artifacts/dummy2");
-fs.writeFileSync("../xp_linux/artifacts/min_win32_node1.exe", out1);
-fs.writeFileSync("../xp_linux/artifacts/min_win32_node2.exe", out2);
+out1 = hex2("../xp_linux/artifacts/min_win32_node.hex2", " artifacts/dummy1");
+out2 = hex2("../xp_linux/artifacts/min_win32_node.hex2", " artifacts/dummy1 artifacts/dummy2");
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node1.exe.tmp", out1);
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node2.exe.tmp", out2);
 
 out = new Buffer(1024*6.5);
 i = 0;
