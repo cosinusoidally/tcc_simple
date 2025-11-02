@@ -46,4 +46,22 @@ out2 = hex2("../xp_linux/artifacts/test.hex2", " artifacts/dummy1 artifacts/dumm
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node1.exe", out1);
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node2.exe", out2);
 
+out = new Buffer(1024*6.5);
 i = 0;
+
+while(i<512){
+  out[i] = out1[i];
+  i = i + 1;
+}
+
+while(i<(5.5*1024)){
+  out[i] = out2[i];
+  i = i + 1;
+}
+
+while(i<(6.5*1024)){
+  out[i] = out1[i];
+  i = i + 1;
+}
+
+fs.writeFileSync("../xp_linux/artifacts/min_win32_node.exe", out);
