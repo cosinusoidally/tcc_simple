@@ -45,6 +45,21 @@ function cjsawk(src) {
   return res;
 }
 
+function concat(arr) {
+  var t = [];
+  var c;
+  arr = arr.map(function(x) {
+    return fs.readFileSync(x);
+  });
+  for(var i=0; i < arr.length;i++) {
+    c = arr[i];
+    for(var j = 0; j < c.length;j++) {
+      t.push(c[j]);
+    }
+  }
+  return new Buffer(t);
+}
+
 out0 = m0("../xp_linux/min_win32_asm.M1");
 fs.writeFileSync("../xp_linux/artifacts/test.hex2", out0);
 
@@ -73,6 +88,9 @@ while(i<(6.5*1024)){
 
 fs.writeFileSync("../xp_linux/artifacts/min_win32_node.exe", out);
 
-out3 = cjsawk("../xp_linux/artifacts/xp_linux_full.js");
+tmp = concat(["../xp_linux/globals.js", "../xp_linux/xp_linux.js"]).toString();
+fs.writeFileSync("../xp_linux/artifacts/xp_linux_full_node.js", tmp);
+
+out3 = cjsawk("../xp_linux/artifacts/xp_linux_full_node.js");
 
 fs.writeFileSync("../xp_linux/artifacts/xp_linux_node.exe.M1", out3);
