@@ -81,30 +81,30 @@
 # Section Table (Section Headers)
 
 # .text section header:
-'2E74 6578 7400 0000'  # Name .text
-'7812 0000'            # VirtualSize
-'0010 0000'            # VirtualAddress
-%.text_end>.text     # SizeOfRawData
-%.text>.PE_base      # PointerToRawData (where .text is in the exe file)
-'0000 0000'            # PointerToRelocations
-'0000 0000'            # PointerToLinenumbers
-'0000'                 # NumberOfRelocations
-'0000'                 # NumberOfLinenumbers
-'2000 0060'            # Characteristics
+".text" '0000'    # Name
+%0x1278           # VirtualSize
+%0x1000           # VirtualAddress
+%.text_end>.text  # SizeOfRawData
+%.text>.PE_base   # PointerToRawData (where .text is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0x60000020       # Characteristics
 
 # .data section header:
-'2e64 6174 6100 0000'  #  name .data
-'E403 0000'            # VirtualSize
-'0030 0000'            # VirtualAddress
-%.data_end>.data     # SizeOfRawData
-%.data>.PE_base      # PointerToRawData (where .data is in the exe file)
-'0000 0000'            # PointerToRelocations
-'0000 0000'            # PointerToLinenumbers
-'0000'                 # NumberOfRelocations
-'0000'                 # NumberOfLinenumbers
-'4000 00C0'            # Characteristics
+".data" '0000'    #  name .data
+%0x3E4            # VirtualSize
+%0x3000           # VirtualAddress
+%.data_end>.data  # SizeOfRawData
+%.data>.PE_base   # PointerToRawData (where .data is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0xC0000040       # Characteristics
 
-# padding ?
+# padding
 '0000 0000 0000 0000'
 '0000 0000 0000 0000 0000 0000 0000 0000'
 '0000 0000 0000 0000 0000 0000 0000 0000'
