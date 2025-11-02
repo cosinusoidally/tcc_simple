@@ -9,10 +9,10 @@
 # pointer to PE header
 %.PE_header>.PE_base
 # more of the DOS header
-'0E1F BA0E 00B4 09CD 21B8 014C CD21 5468'  # ........!..L.!Th
-'6973 2070 726F 6772 616D 2063 616E 6E6F'  # is program canno
-'7420 6265 2072 756E 2069 6E20 444F 5320'  #  t be run in DOS
-'6D6F 6465 2E0D 0D0A 2400 0000 0000 0000'  # mode....$.......
+'0E1F BA0E 00B4 09CD 21B8 014C CD21'
+"This program cannot be run in DOS mode.
+$"
+'0000 0000 0000'  # mode....$.......
 # PE header
 :.PE_header
 "PE" !0     # PE\0\0
