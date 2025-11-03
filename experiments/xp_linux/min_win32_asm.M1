@@ -429,31 +429,15 @@ int3 int3 int3 int3  int3 int3
 :wrap_syscall
   push_ebp
   mov_ebp,esp
-  sub_esp, %0xC
-# IF_wrap_syscall_0
   call %syscall_hook
   push_eax
   call %ri32
-  addi8_esp, !4
-  movi8_[ebp+BYTE],eax !-12
-  cmpi8_eax, !0
-  je %END_IF_wrap_syscall_0
-  movi8_eax,[ebp+BYTE] !-12
   call_eax
-  jmp %END_wrap_syscall
-:END_IF_wrap_syscall_0
-  call %trap_syscalls_off
-  mov_eax, &STRING_wrap_syscall_0
-  push_eax
-  call %THUNK_printf
-  addi8_esp, !4
-  mov_eax, %1
-  push_eax
-  call %THUNK_exit
-  addi8_esp, !4
-:END_wrap_syscall
   leave
   ret
+dead16 dead16 dead16
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3
 :load_boot
   push_ebp
   mov_ebp,esp
