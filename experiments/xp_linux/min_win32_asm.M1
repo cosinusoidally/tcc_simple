@@ -361,44 +361,20 @@ int3 int3 int3 int3  int3 int3 int3 int3
   mov_eax, %0x4020050
   leave
   ret
-:int2str_tmp
+# padding
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
-int3
-:brk_ptr
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x28
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
-:next_fd
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x29
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
-:next_filenum
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x2A
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3
 :file_addr
   push_ebp
   mov_ebp,esp
