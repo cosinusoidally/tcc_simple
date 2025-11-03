@@ -435,9 +435,6 @@ int3 int3 int3 int3  int3 int3
   call_eax
   leave
   ret
-dead16 dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3
 :load_boot
   push_ebp
   mov_ebp,esp
@@ -484,16 +481,17 @@ int3 int3 int3 int3  int3 int3
 :get_param
   push_ebp
   mov_ebp,esp
-  sub_esp, %0
   call %host_params
   movi8_ecx,[ebp+BYTE] !8
   shli8_ecx, !2
   add_eax,ecx
   push_eax
   call %ri32
-  addi8_esp, !4
   leave
   ret
+
+dead16 dead16 dead16 dead16
+int3 int3 int3 int3  int3 int3 int3
 
 # DONT MOVE
 :host_callback
