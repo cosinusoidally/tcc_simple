@@ -187,12 +187,10 @@ $"
 # .text section
 :.text
 :elf_base
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x8048000
-  leave
   ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3
 :base_address
   push_ebp
   mov_ebp,esp
