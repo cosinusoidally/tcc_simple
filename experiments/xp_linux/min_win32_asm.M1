@@ -384,10 +384,6 @@ $"
   and_eax, %0xFF
   leave
   ret
-dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16 dead16 dead16  dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3
 :ri32
   push_ebp
   mov_ebp,esp
@@ -398,7 +394,6 @@ int3 int3 int3 int3  int3
 :trap_syscalls_on
   push_ebp
   mov_ebp,esp
-  sub_esp, %0
   call %regs_data
   push_eax
   mov_eax, %0x4017BC
@@ -412,7 +407,6 @@ int3 int3 int3 int3  int3
 :trap_syscalls_off
   push_ebp
   mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0xFFFD
   push_eax
   call %syscall
@@ -428,8 +422,10 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16
+int3
 
 # DONT MOVE
 :wrap_syscall_alt
