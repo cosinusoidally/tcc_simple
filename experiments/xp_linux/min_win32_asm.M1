@@ -12,6 +12,7 @@ DEFINE cmp_eax_short_version, 3D
 DEFINE cmpi8_eax, 83F8
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE inc_eax 40
+DEFINE int3 CC
 DEFINE je 0F84
 DEFINE jgei8 7D
 DEFINE jle 0F8E

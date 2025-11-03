@@ -2,5 +2,3 @@
 set -xe
 
 nodejs mk_min.js
-
-
