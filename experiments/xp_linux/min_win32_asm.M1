@@ -388,39 +388,17 @@ int3 int3 int3 int3  int3
   addi8_esp, !4
   leave
   ret
-:char_buf
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x2D
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
-:command_buffer
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x2E
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
-:dummy_global
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x82E
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
+# padding
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3
 :get_reg
   push_ebp
   mov_ebp,esp
