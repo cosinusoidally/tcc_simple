@@ -186,10 +186,8 @@ $"
 # .text section
 :.text
 :args_base
-int3 int3 int3 int3
-int3 int3 int3 int3
-int3 int3 int3 int3
-int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
 :elf_base
   push_ebp
   mov_ebp,esp
@@ -364,16 +362,10 @@ int3 int3 int3 int3
   leave
   ret
 :int2str_tmp
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
 int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x15
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
 :brk_ptr
 int3
 #  push_ebp
