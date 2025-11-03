@@ -323,32 +323,30 @@ $"
   addi8_esp, !4
   leave
   ret
-int3 int3 int3 int3  int3 int3 int3
-int3 int3 int3 int3  int3 int3
 :set_reg
   push_ebp
   mov_ebp,esp
-  sub_esp, %4
-  call %regs_data
-  mov_ecx, %0x4
-  push_ecx
-  movi8_ecx,[ebp+BYTE] !8
-  push_ecx
-  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !12
+  push_eax
+  mov_eax, %0x4
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
   call %mul
   addi8_esp, !8
   push_eax
-  movi8_eax,[ebp+BYTE] !-4
+  call %regs_data
   push_eax
   call %add
   addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
   push_eax
   call %wi32
   addi8_esp, !8
   leave
   ret
+dead16
+int3 int3 int3 int3  int3 int3 int3 int3
+int3
 :mul
   push_ebp
   mov_ebp,esp
