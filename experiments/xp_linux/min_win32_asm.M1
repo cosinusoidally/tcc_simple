@@ -1403,6 +1403,9 @@ int3 int3 int3 int3  int3 int3 int3 int3
   addi8_esp, !8
   leave
   ret
+
+# DONT MOVE ANYTHING BEYOND HERE
+
 # I think this might be the entrypoint
 # Seems to be either from ./lib/i386-win32-crt1w.o or ./lib/i386-win32-crt1.o
 :_start
