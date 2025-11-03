@@ -1,0 +1,6 @@
+./mk_clean
+set -xe
+
+nodejs mk_min.js
+
+
