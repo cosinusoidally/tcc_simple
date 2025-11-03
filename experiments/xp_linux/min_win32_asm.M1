@@ -379,28 +379,19 @@ $"
 :ri8
   push_ebp
   mov_ebp,esp
-  sub_esp, %4
-  mov_eax, %0
-  movi8_[ebp+BYTE],eax !-4
-  movi8_eax,[ebp+BYTE] !8
-  movi8_ecx,[ebp+BYTE] !-4
-  add_ecx,eax
+  movi8_ecx,[ebp+BYTE] !8
   movsx_eax,BYTE_PTR_[ecx]
   and_eax, %0xFF
   leave
   ret
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16 dead16
+dead16 dead16 dead16 dead16  dead16
 int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3
 :ri32
   push_ebp
   mov_ebp,esp
-  sub_esp, %8
   movi8_eax,[ebp+BYTE] !8
-  movi8_[ebp+BYTE],eax !-4
-  movi8_eax,[ebp+BYTE] !-4
-  movi8_[ebp+BYTE],eax !-8
-  movi8_eax,[ebp+BYTE] !-8
   mov_eax,[eax]
   leave
   ret
