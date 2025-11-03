@@ -10,6 +10,7 @@ DEFINE cmp_ecx,eax 39C1
 DEFINE cmp_eax, 81F8
 DEFINE cmp_eax_short_version, 3D
 DEFINE cmpi8_eax, 83F8
+DEFINE dead16 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 DEFINE imul_eax,ecx 0FAFC1
 DEFINE inc_eax 40
 DEFINE int3 CC
@@ -494,8 +495,7 @@ $"
   leave
   ret
 # padding
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
+dead16
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
