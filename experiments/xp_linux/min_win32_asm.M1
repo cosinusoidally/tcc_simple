@@ -445,112 +445,42 @@ int3 int3 int3
   addi8_esp, !8
   leave
   ret
-:set_param
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %host_params
-  mov_ecx, %0x4
-  push_ecx
-  movi8_ecx,[ebp+BYTE] !8
-  push_ecx
-  movi8_[ebp+BYTE],eax !-4
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
-  push_eax
-  call %wi32
-  addi8_esp, !8
-  leave
-  ret
-:gfd_get_file_length
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %gfds
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_gfd
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  mov_ecx, %0x4
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  call %ri32
-  addi8_esp, !4
-  leave
-  ret
-:gfd_set_file_length
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %gfds
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_gfd
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  mov_ecx, %0x4
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
-  push_eax
-  call %wi32
-  addi8_esp, !8
-  leave
-  ret
-:gfd_get_file_addr
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %gfds
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_gfd
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  call %ri32
-  addi8_esp, !4
-  leave
-  ret
+# padding
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3
 :gfd_set_file_addr
 int3
 #  push_ebp
