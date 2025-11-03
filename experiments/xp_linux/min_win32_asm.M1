@@ -344,9 +344,6 @@ $"
   addi8_esp, !8
   leave
   ret
-dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3
 :mul
   push_ebp
   mov_ebp,esp
@@ -420,8 +417,9 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16
-int3
+dead16 dead16
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3
 
 # DONT MOVE
 :wrap_syscall_alt
