@@ -185,9 +185,6 @@ $"
 
 # .text section
 :.text
-:args_base
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
 :elf_base
   push_ebp
   mov_ebp,esp
@@ -361,23 +358,6 @@ int3 int3 int3 int3  int3 int3 int3 int3
   mov_eax, %0x4020050
   leave
   ret
-# padding
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3
 :command_file
   push_ebp
   mov_ebp,esp
@@ -388,17 +368,6 @@ int3 int3 int3 int3  int3
   addi8_esp, !4
   leave
   ret
-# padding
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3
 :get_reg
   push_ebp
   mov_ebp,esp
@@ -445,90 +414,6 @@ int3 int3 int3
   addi8_esp, !8
   leave
   ret
-# padding
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3
 :mul
   push_ebp
   mov_ebp,esp
@@ -608,7 +493,7 @@ int3 int3 int3 int3  int3
   addi8_esp, !4
   leave
   ret
-:dump_regs
+# padding
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
@@ -632,7 +517,116 @@ int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
 
 # DONT MOVE
 :wrap_syscall_alt
