@@ -480,158 +480,55 @@ int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3
-:gfd_set_file_addr
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %gfds
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_gfd
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
-  push_eax
-  call %wi32
-  addi8_esp, !8
-  leave
-  ret
-:gfn_get_filename
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %filename_array
-  movi8_[ebp+BYTE],eax !-4
-  call %filename_size
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  leave
-  ret
-:fd_set_filenum
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %file_descriptors
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_file_descriptor
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
-  push_eax
-  call %wi32
-  addi8_esp, !8
-  leave
-  ret
-:fd_get_filenum
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %file_descriptors
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_file_descriptor
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  call %ri32
-  addi8_esp, !4
-  leave
-  ret
-:fd_set_file_offset
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %file_descriptors
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_file_descriptor
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  mov_ecx, %4
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  movi8_ecx,[ebp+BYTE] !12
-  push_ecx
-  push_eax
-  call %wi32
-  addi8_esp, !8
-  leave
-  ret
-:fd_get_file_offset
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %file_descriptors
-  movi8_[ebp+BYTE],eax !-4
-  call %sizeof_file_descriptor
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  call %mul
-  addi8_esp, !8
-  mov_ecx, %0x4
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  push_eax
-  call %ri32
-  addi8_esp, !4
-  leave
-  ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3
 :mul
   push_ebp
   mov_ebp,esp
