@@ -351,10 +351,6 @@ $"
   addi8_esp, !8
   leave
   ret
-dead16 dead16 dead16  dead16 dead16 dead16
-dead16 dead16 dead16  dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3
 :mul
   push_ebp
   mov_ebp,esp
@@ -374,10 +370,7 @@ int3 int3 int3 int3
 :wi32
   push_ebp
   mov_ebp,esp
-  sub_esp, %4
   movi8_eax,[ebp+BYTE] !8
-  movi8_[ebp+BYTE],eax !-4
-  movi8_eax,[ebp+BYTE] !-4
   movi8_ecx,[ebp+BYTE] !12
   mov_[eax],ecx
   mov_eax, %0
@@ -396,6 +389,9 @@ int3 int3 int3 int3
   and_eax, %0xFF
   leave
   ret
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16 dead16 dead16
+int3 int3 int3 int3  int3 int3 int3 int3
 :ri32
   push_ebp
   mov_ebp,esp
