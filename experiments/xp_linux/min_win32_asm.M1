@@ -192,25 +192,6 @@ $"
 :base_address
   mov_eax, %0x4000000
   ret
-:file_descriptors
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %4
-  call %base_address
-  mov_ecx, %0x200
-  push_ecx
-  mov_ecx, %0x20000
-  push_ecx
-  movi8_[ebp+BYTE],eax !-4
-  call %add
-  addi8_esp, !8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  call %add
-  addi8_esp, !8
-  leave
-  ret
 :sizeof_file_descriptor
   mov_eax, %8
   ret
@@ -417,9 +398,9 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16
+dead16 dead16 dead16 dead16  dead16
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3
+int3 int3 int3 int3  int3 int3
 
 # DONT MOVE
 :wrap_syscall_alt
