@@ -186,13 +186,10 @@ $"
 # .text section
 :.text
 :args_base
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x8045800
-  leave
-  ret
+int3 int3 int3 int3
+int3 int3 int3 int3
+int3 int3 int3 int3
+int3 int3 int3 int3
 :elf_base
   push_ebp
   mov_ebp,esp
