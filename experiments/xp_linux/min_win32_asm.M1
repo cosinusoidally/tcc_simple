@@ -374,18 +374,10 @@ int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3
-:file_addr
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
-  mov_eax, %0x2B
-  push_eax
-  call %globals
-  addi8_esp, !4
-  leave
-  ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3
 :command_file
   push_ebp
   mov_ebp,esp
