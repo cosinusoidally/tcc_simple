@@ -203,17 +203,14 @@ $"
 :globals
   push_ebp
   mov_ebp,esp
-  sub_esp, %4
-  call %global_data
-  movi8_ecx,[ebp+BYTE] !8
-  push_ecx
-  mov_ecx, %4
-  push_ecx
-  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  mov_eax, %4
+  push_eax
   call %mul
   addi8_esp, !8
   push_eax
-  movi8_eax,[ebp+BYTE] !-4
+  call %global_data
   push_eax
   call %add
   addi8_esp, !8
@@ -374,9 +371,8 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3
+dead16 dead16
+int3 int3 int3 int3  int3 int3
 
 # DONT MOVE
 :wrap_syscall_alt
