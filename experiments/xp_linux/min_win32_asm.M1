@@ -684,6 +684,8 @@ int3 int3 int3
   call %wrap_syscall
   leave
   ret
+
+# DONT MOVE
 :wrap_syscall
   push_ebp
   mov_ebp,esp
@@ -768,6 +770,8 @@ int3 int3 int3
   addi8_esp, !4
   leave
   ret
+
+# DONT MOVE
 :host_callback
   push_ebp
   mov_ebp,esp
@@ -1108,6 +1112,8 @@ int3 int3 int3
   mov_eax, %0
   leave
   ret
+
+# DONT MOVE
 :TopLevelHandler
   push_ebp
   mov_ebp,esp
