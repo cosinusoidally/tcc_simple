@@ -110,6 +110,6 @@ fs.writeFileSync("../xp_linux/artifacts/xp_linux.exe-0.hex2", tmp);
 out5 = hex2("../xp_linux/artifacts/xp_linux.exe-0.hex2");
 fs.writeFileSync("../xp_linux/artifacts/xp_linux.exe", out5);
 
-console.log("file_length :" + out.length);
-console.log("short_by: " + ((6.5*1024) -out.length));
+console.log("file_length :" + out1.length);
+console.log("short_by: " + ((6.5*1024) -out1.length));
 console.log(os.platform());

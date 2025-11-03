@@ -186,7 +186,8 @@ $"
 # .text section
 :.text
 :args_base
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x8045800
@@ -366,7 +367,8 @@ $"
   leave
   ret
 :int2str_tmp
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x15
@@ -376,7 +378,8 @@ $"
   leave
   ret
 :brk_ptr
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x28
@@ -386,7 +389,8 @@ $"
   leave
   ret
 :next_fd
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x29
@@ -396,7 +400,8 @@ $"
   leave
   ret
 :next_filenum
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x2A
