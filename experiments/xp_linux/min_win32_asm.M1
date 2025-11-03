@@ -609,70 +609,32 @@ int3 int3 int3 int3  int3
   leave
   ret
 :dump_regs
-int3
-#  push_ebp
-  mov_ebp,esp
-  sub_esp, %0x1C
-  mov_eax, %0
-  push_eax
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %0
-  push_ecx
-  movi8_[ebp+BYTE],eax !-4
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %1
-  push_ecx
-  movi8_[ebp+BYTE],eax !-8
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %2
-  push_ecx
-  movi8_[ebp+BYTE],eax !-12
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %3
-  push_ecx
-  movi8_[ebp+BYTE],eax !-16
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %4
-  push_ecx
-  movi8_[ebp+BYTE],eax !-20
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %5
-  push_ecx
-  movi8_[ebp+BYTE],eax !-24
-  call %get_reg
-  addi8_esp, !4
-  mov_ecx, %6
-  push_ecx
-  movi8_[ebp+BYTE],eax !-28
-  call %get_reg
-  addi8_esp, !4
-  push_eax
-  movi8_eax,[ebp+BYTE] !-28
-  push_eax
-  movi8_eax,[ebp+BYTE] !-24
-  push_eax
-  movi8_eax,[ebp+BYTE] !-20
-  push_eax
-  movi8_eax,[ebp+BYTE] !-16
-  push_eax
-  movi8_eax,[ebp+BYTE] !-12
-  push_eax
-  movi8_eax,[ebp+BYTE] !-8
-  push_eax
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  mov_eax, &STRING_dump_regs_0
-  push_eax
-  call %THUNK_printf
-  addi8_esp, !0x24
-  leave
-  ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3
+
+# DONT MOVE
 :wrap_syscall_alt
   push_ebp
   mov_ebp,esp
