@@ -2,3 +2,13 @@
 set -xe
 
 nodejs mk_min.js
+
+../cjsawk/artifacts/builds/full_cc_x86_min/m0.exe min_win32_asm.M1 artifacts/min_win32_alt.hex2
+../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe artifacts/min_win32_alt.hex2 artifacts/min_win32_alt1.exe.tmp artifacts/dummy1
+../cjsawk/artifacts/builds/full_cc_x86_min/hex2.exe artifacts/min_win32_alt.hex2 artifacts/min_win32_alt2.exe.tmp artifacts/dummy2/ artifacts/dummy2
+
+diff -u -s artifacts/min_win32_node.hex2 artifacts/min_win32_alt.hex2
+diff -u -s artifacts/min_win32_node1.exe.tmp artifacts/min_win32_alt1.exe.tmp
+diff -u -s artifacts/min_win32_node2.exe.tmp artifacts/min_win32_alt2.exe.tmp
+
+echo "DONE"
