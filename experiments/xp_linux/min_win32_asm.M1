@@ -353,10 +353,11 @@ $"
   ret
 dead16 dead16 dead16  dead16 dead16 dead16
 dead16 dead16 dead16  dead16
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3
 :mul
   push_ebp
   mov_ebp,esp
-  sub_esp, %0
   movi8_eax,[ebp+BYTE] !8
   movi8_ecx,[ebp+BYTE] !12
   imul_eax,ecx
@@ -365,7 +366,6 @@ dead16 dead16 dead16  dead16
 :add
   push_ebp
   mov_ebp,esp
-  sub_esp, %0
   movi8_eax,[ebp+BYTE] !8
   movi8_ecx,[ebp+BYTE] !12
   add_eax,ecx
