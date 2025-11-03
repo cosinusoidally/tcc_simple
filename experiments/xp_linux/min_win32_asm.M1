@@ -192,31 +192,6 @@ $"
 :base_address
   mov_eax, %0x4000000
   ret
-:sizeof_file_descriptor
-  mov_eax, %8
-  ret
-:gfds
-  call %base_address
-  mov_ecx, %0x01000010
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  ret
-:sizeof_gfd
-  mov_eax, %8
-  ret
-:filename_array
-  call %base_address
-  mov_ecx, %0x200000
-  push_ecx
-  push_eax
-  call %add
-  addi8_esp, !8
-  ret
-:filename_size
-  mov_eax, %0x400
-  ret
 :global_data
   call %base_address
   mov_ecx, %0x10000
@@ -398,9 +373,10 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16 dead16 dead16  dead16
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3
+int3 int3
 
 # DONT MOVE
 :wrap_syscall_alt
