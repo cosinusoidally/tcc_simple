@@ -225,9 +225,6 @@ $"
 :sizeof_gfd
   mov_eax, %8
   ret
-dead16 dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3
 :filename_array
   call %base_address
   mov_ecx, %0x200000
@@ -237,23 +234,15 @@ int3 int3 int3 int3
   addi8_esp, !8
   ret
 :filename_size
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x400
-  leave
   ret
 :global_data
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   call %base_address
   mov_ecx, %0x10000
   push_ecx
   push_eax
   call %add
   addi8_esp, !8
-  leave
   ret
 :globals
   push_ebp
@@ -275,78 +264,46 @@ int3 int3 int3 int3
   leave
   ret
 :regs_data
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0
   push_eax
   call %globals
   addi8_esp, !4
-  leave
   ret
 :host_call_fn
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x4020024
-  leave
   ret
 :host_params
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0xA
   push_eax
   call %globals
   addi8_esp, !4
-  leave
   ret
 :host_stdout_addr
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x12
   push_eax
   call %globals
   addi8_esp, !4
-  leave
   ret
 :host_stdout
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   call %host_stdout_addr
   push_eax
   call %ri32
   addi8_esp, !4
-  leave
   ret
 :syscall_hook
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x13
   push_eax
   call %globals
   addi8_esp, !4
-  leave
   ret
 :reloc_entrypoint_ptr
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x4020050
-  leave
   ret
 :command_file
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x2C
   push_eax
   call %globals
   addi8_esp, !4
-  leave
   ret
 :get_reg
   push_ebp
@@ -394,6 +351,8 @@ int3 int3 int3 int3
   addi8_esp, !8
   leave
   ret
+dead16 dead16 dead16  dead16 dead16 dead16
+dead16 dead16 dead16  dead16
 :mul
   push_ebp
   mov_ebp,esp
