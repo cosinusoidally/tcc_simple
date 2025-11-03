@@ -376,7 +376,8 @@ int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3
 :file_addr
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x2B
@@ -396,7 +397,8 @@ int3 int3 int3 int3
   leave
   ret
 :char_buf
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x2D
@@ -406,7 +408,8 @@ int3 int3 int3 int3
   leave
   ret
 :command_buffer
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x2E
@@ -416,7 +419,8 @@ int3 int3 int3 int3
   leave
   ret
 :dummy_global
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0
   mov_eax, %0x82E
@@ -472,7 +476,8 @@ int3 int3 int3 int3
   leave
   ret
 :set_param
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %host_params
@@ -496,7 +501,8 @@ int3 int3 int3 int3
   leave
   ret
 :gfd_get_file_length
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %gfds
@@ -523,7 +529,8 @@ int3 int3 int3 int3
   leave
   ret
 :gfd_set_file_length
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %gfds
@@ -552,7 +559,8 @@ int3 int3 int3 int3
   leave
   ret
 :gfd_get_file_addr
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %gfds
@@ -574,7 +582,8 @@ int3 int3 int3 int3
   leave
   ret
 :gfd_set_file_addr
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %gfds
@@ -598,7 +607,8 @@ int3 int3 int3 int3
   leave
   ret
 :gfn_get_filename
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %filename_array
@@ -617,7 +627,8 @@ int3 int3 int3 int3
   leave
   ret
 :fd_set_filenum
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
@@ -641,7 +652,8 @@ int3 int3 int3 int3
   leave
   ret
 :fd_get_filenum
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
@@ -663,7 +675,8 @@ int3 int3 int3 int3
   leave
   ret
 :fd_set_file_offset
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
@@ -692,7 +705,8 @@ int3 int3 int3 int3
   leave
   ret
 :fd_get_file_offset
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %4
   call %file_descriptors
@@ -798,7 +812,8 @@ int3 int3 int3 int3
   leave
   ret
 :dump_regs
-  push_ebp
+int3
+#  push_ebp
   mov_ebp,esp
   sub_esp, %0x1C
   mov_eax, %0
