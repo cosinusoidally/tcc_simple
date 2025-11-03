@@ -193,9 +193,9 @@ $"
   mov_eax, %0x4000000
   ret
 :global_data
+  mov_eax, %0x10000
+  push_eax
   call %base_address
-  mov_ecx, %0x10000
-  push_ecx
   push_eax
   call %add
   addi8_esp, !8
