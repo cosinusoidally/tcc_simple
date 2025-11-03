@@ -189,14 +189,8 @@ $"
 :elf_base
   mov_eax, %0x8048000
   ret
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3
 :base_address
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %0x4000000
-  leave
   ret
 :file_descriptors
   push_ebp
@@ -218,24 +212,21 @@ int3 int3
   leave
   ret
 :sizeof_file_descriptor
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %8
-  leave
   ret
 :gfds
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   call %base_address
   mov_ecx, %0x01000010
   push_ecx
   push_eax
   call %add
   addi8_esp, !8
-  leave
   ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
 :sizeof_gfd
   push_ebp
   mov_ebp,esp
