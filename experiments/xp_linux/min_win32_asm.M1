@@ -222,18 +222,16 @@ $"
   call %add
   addi8_esp, !8
   ret
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
 :sizeof_gfd
-  push_ebp
-  mov_ebp,esp
-  sub_esp, %0
   mov_eax, %8
-  leave
   ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3
 :filename_array
   push_ebp
   mov_ebp,esp
