@@ -589,22 +589,21 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16
 int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3
 :init_runtime
   push_ebp
   mov_ebp,esp
   sub_esp, %8
+  mov_eax, %0x4018A2
+  push_eax
   call %host_call_fn
-  mov_ecx, %0x4018A2
-  push_ecx
   push_eax
   call %wi32
   addi8_esp, !8
-  call %host_stdout_addr
-  movi8_[ebp+BYTE],eax !-4
   call %get_stdout
   push_eax
-  movi8_eax,[ebp+BYTE] !-4
+  call %host_stdout_addr
   push_eax
   call %wi32
   addi8_esp, !8
