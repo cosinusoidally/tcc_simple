@@ -973,14 +973,6 @@ int3 int3 int3 int3  int3 int3 int3
   movi8_eax,[ebp+BYTE] !8
   push_eax
   call %THUNK_VirtualAlloc
-  movi8_[ebp+BYTE],eax !-4
-  movi8_eax,[ebp+BYTE] !-4
-  push_eax
-  mov_eax, &STRING_mmap_1
-  push_eax
-  call %THUNK_printf
-  addi8_esp, !8
-  movi8_eax,[ebp+BYTE] !-4
   leave
   ret
 :get_stdout
@@ -1006,7 +998,8 @@ int3 int3 int3 int3  int3 int3 int3
   leave
   ret
 
-dead16
+dead16 dead16
+int3 int3 int3 int3  int3 int3 int3 int3
 int3 int3 int3 int3  int3 int3 int3
 
 # DONT MOVE ANYTHING BEYOND HERE
