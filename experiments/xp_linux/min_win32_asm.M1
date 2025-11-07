@@ -659,28 +659,12 @@ int3 int3 int3 int3  int3 int3 int3
   mov_ebp,esp
   sub_esp, %0xC
   mov_eax, %0
-  movi8_[ebp+BYTE],eax !-4
-  call %base_address
-  mov_ecx,[DWORD] &PROT_READ
-  mov_edx,[DWORD] &PROT_WRITE
-  or_ecx,edx
-  mov_edx,[DWORD] &PROT_EXEC
-  or_ecx,edx
-  mov_edx,[DWORD] &MAP_ANONYMOUS
-  movi8_[ebp+BYTE],eax !-12
-  mov_eax,[DWORD] &MAP_PRIVATE
-  or_edx,eax
-  mov_eax,[DWORD] &MAP_FIXED
-  or_edx,eax
-  mov_eax, %0
   push_eax
-  mov_eax, %0
   push_eax
-  push_edx
-  push_ecx
+  push_eax
   mov_eax, %0x20000000
   push_eax
-  movi8_eax,[ebp+BYTE] !-12
+  call %base_address
   push_eax
   call %mmap
   addi8_esp, !0x18
@@ -735,7 +719,10 @@ int3 int3 int3 int3  int3 int3 int3
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16
-int3 int3 int3 int3  int3 int3 int3
+dead16 dead16 dead16
+dead16
+int3 int3 int3 int3
+int3 int3 int3
 
 # DONT MOVE
 :TopLevelHandler
