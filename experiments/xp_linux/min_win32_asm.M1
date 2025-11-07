@@ -964,15 +964,6 @@ int3 int3 int3 int3  int3 int3 int3
   push_ebp
   mov_ebp,esp
   sub_esp, %4
-  nop
-  movi8_eax,[ebp+BYTE] !12
-  push_eax
-  movi8_eax,[ebp+BYTE] !8
-  push_eax
-  mov_eax, &STRING_mmap_0
-  push_eax
-  call %THUNK_printf
-  addi8_esp, !12
   mov_eax, %0x40
   push_eax
   mov_eax, %0x3000
@@ -1014,6 +1005,9 @@ int3 int3 int3 int3  int3 int3 int3
   addi8_esp, !8
   leave
   ret
+
+dead16
+int3 int3 int3 int3  int3 int3 int3
 
 # DONT MOVE ANYTHING BEYOND HERE
 
