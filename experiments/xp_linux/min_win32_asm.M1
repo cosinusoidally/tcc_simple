@@ -547,51 +547,17 @@ int3 int3 int3 int3  int3 int3 int3
   call %trap_syscalls_on
   jmp %END_IF_host_callback_0
 :CASE_puts
-  mov_eax, %1
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  push_eax
   call %THUNK_puts
-  addi8_esp, !4
   jmp %END_IF_host_callback_0
 :CASE_fwrite
   call %THUNK_fwrite
   jmp %END_IF_host_callback_0
-dead16
-int3 int3 int3 int3  int3 int3 int3 int3
 :CASE_fopen
-  mov_eax, %1
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  mov_ecx, %2
-  push_ecx
-  movi8_[ebp+BYTE],eax !-28
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  movi8_eax,[ebp+BYTE] !-28
-  push_eax
   mov_eax, &STRING_host_callback_0
   push_eax
   call %THUNK_printf
-  addi8_esp, !12
-  mov_eax, %1
-  push_eax
-  call %get_param
   addi8_esp, !4
-  mov_ecx, %2
-  push_ecx
-  movi8_[ebp+BYTE],eax !-32
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  movi8_eax,[ebp+BYTE] !-32
-  push_eax
   call %THUNK_fopen
-  addi8_esp, !8
-  movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
 :CASE_fclose
   mov_eax, %1
@@ -633,7 +599,7 @@ int3 int3 int3 int3  int3 int3 int3 int3
   leave
   ret
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 int3 int3 int3 int3
 :init_runtime
   push_ebp
