@@ -925,7 +925,6 @@ int3 int3 int3 int3  int3 int3 int3
   cmpi8_eax, !0
   je %ELSE_syscall_1
   jmp %END_IF_syscall_0
-  jmp %END_IF_syscall_1
 :ELSE_syscall_1
   mov_eax, &STRING_syscall_0
   push_eax
@@ -937,14 +936,11 @@ int3 int3 int3 int3  int3 int3 int3
   mov_eax, %1
   mov_[DWORD],eax &trap_ready
   jmp %END_IF_syscall_0
-:END_IF_syscall_1
-  jmp %TMP_syscall_0
 :ELSE_IF_syscall_0
   movi8_eax,[ebp+BYTE] !8
   cmp_eax, %0xFFFD
   jne %ELSE_syscall_0
   jmp %END_IF_syscall_0
-  jmp %TMP_syscall_0
 :ELSE_syscall_0
   movi8_eax,[ebp+BYTE] !8
   push_eax
@@ -952,7 +948,6 @@ int3 int3 int3 int3  int3 int3 int3
   push_eax
   call %THUNK_printf
   addi8_esp, !8
-:TMP_syscall_0
   mov_eax, %1
   push_eax
   call %THUNK_exit
@@ -960,6 +955,8 @@ int3 int3 int3 int3  int3 int3 int3
 :END_IF_syscall_0
   leave
   ret
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3  int3
 :map_mem
   push_ebp
   mov_ebp,esp
