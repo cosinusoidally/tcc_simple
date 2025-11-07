@@ -953,9 +953,6 @@ int3 int3 int3 int3  int3 int3 int3
 :END_IF_syscall_0
   leave
   ret
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3  int3
-int3 int3 int3 int3  int3 int3  int3
 :map_mem
   push_ebp
   mov_ebp,esp
@@ -994,9 +991,8 @@ int3 int3 int3 int3  int3 int3  int3
   leave
   ret
 
-dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3
+dead16 dead16 dead16 dead16
+int3 int3 int3 int3  int3
 
 # DONT MOVE ANYTHING BEYOND HERE
 
