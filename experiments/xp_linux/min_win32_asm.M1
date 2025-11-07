@@ -517,7 +517,9 @@ int3 int3 int3 int3  int3 int3 int3
   je %CASE_fclose
   cmpi8_eax, !7
   je %CASE_fread
-  jne %ELSE_host_callback_6
+  cmpi8_eax, !8
+  je %CASE_exit
+  jne %CASE_default
 :CASE_trap_syscalls_off
   call %trap_syscalls_off
   jmp %END_IF_host_callback_0
@@ -616,11 +618,6 @@ int3 int3 int3 int3  int3 int3 int3
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
-int3 int3 int3
-int3 int3 int3
-int3 int3 int3
-int3 int3 int3
-int3 int3 int3
 :CASE_fread
   mov_eax, %1
   push_eax
@@ -652,10 +649,7 @@ int3 int3 int3
   addi8_esp, !16
   movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
-:ELSE_host_callback_6
-  movi8_eax,[ebp+BYTE] !-8
-  cmpi8_eax, !8
-  jne %ELSE_host_callback_7
+:CASE_exit
   mov_eax, &STRING_host_callback_2
   push_eax
   call %THUNK_printf
@@ -668,7 +662,7 @@ int3 int3 int3
   call %THUNK_exit
   addi8_esp, !4
   jmp %END_IF_host_callback_0
-:ELSE_host_callback_7
+:CASE_default
   call %trap_syscalls_off
   movi8_eax,[ebp+BYTE] !-8
   push_eax
@@ -681,9 +675,10 @@ int3 int3 int3
   call %THUNK_exit
   addi8_esp, !4
 :END_IF_host_callback_0
-  movi8_eax,[ebp+BYTE] !-12
   leave
   ret
+dead16
+int3 int3 int3 int3  int3
 :init_runtime
   push_ebp
   mov_ebp,esp
