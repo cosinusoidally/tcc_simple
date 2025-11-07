@@ -536,36 +536,30 @@ int3 int3 int3 int3  int3 int3 int3
   addi8_esp, !4
   jmp %END_IF_host_callback_0
 :CASE_fwrite
+  mov_eax, %4
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %3
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %2
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
   mov_eax, %1
   push_eax
   call %get_param
   addi8_esp, !4
-  mov_ecx, %2
-  push_ecx
-  movi8_[ebp+BYTE],eax !-16
-  call %get_param
-  addi8_esp, !4
-  mov_ecx, %3
-  push_ecx
-  movi8_[ebp+BYTE],eax !-20
-  call %get_param
-  addi8_esp, !4
-  mov_ecx, %4
-  push_ecx
-  movi8_[ebp+BYTE],eax !-24
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  movi8_eax,[ebp+BYTE] !-24
-  push_eax
-  movi8_eax,[ebp+BYTE] !-20
-  push_eax
-  movi8_eax,[ebp+BYTE] !-16
   push_eax
   call %THUNK_fwrite
-  addi8_esp, !16
-  movi8_[ebp+BYTE],eax !-12
   jmp %END_IF_host_callback_0
+dead16
+int3 int3 int3 int3  int3 int3 int3 int3
 :CASE_fopen
   mov_eax, %1
   push_eax
