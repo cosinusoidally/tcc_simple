@@ -498,6 +498,26 @@ int3 int3 int3 int3  int3 int3 int3
   push_ebp
   mov_ebp,esp
   sub_esp, %0x2C
+  mov_eax, %4
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %3
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %2
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
   mov_eax, %0
   push_eax
   call %get_param
@@ -536,26 +556,6 @@ int3 int3 int3 int3  int3 int3 int3
   addi8_esp, !4
   jmp %END_IF_host_callback_0
 :CASE_fwrite
-  mov_eax, %4
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  mov_eax, %3
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  mov_eax, %2
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  push_eax
-  mov_eax, %1
-  push_eax
-  call %get_param
-  addi8_esp, !4
-  push_eax
   call %THUNK_fwrite
   jmp %END_IF_host_callback_0
 dead16
