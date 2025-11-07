@@ -658,16 +658,12 @@ int3 int3 int3 int3  int3 int3 int3
   push_ebp
   mov_ebp,esp
   sub_esp, %0xC
-  mov_eax, %0
-  push_eax
-  push_eax
-  push_eax
   mov_eax, %0x20000000
   push_eax
   call %base_address
   push_eax
-  call %mmap
-  addi8_esp, !0x18
+  call %map_mem
+  addi8_esp, !0x8
   movi8_[ebp+BYTE],eax !-4
   call %base_address
   movi8_ecx,[ebp+BYTE] !-4
@@ -721,8 +717,8 @@ dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16
 dead16 dead16 dead16
 dead16
-int3 int3 int3 int3
-int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3 int3
 
 # DONT MOVE
 :TopLevelHandler
@@ -966,7 +962,7 @@ int3 int3 int3
 :END_IF_syscall_0
   leave
   ret
-:mmap
+:map_mem
   push_ebp
   mov_ebp,esp
   sub_esp, %4
