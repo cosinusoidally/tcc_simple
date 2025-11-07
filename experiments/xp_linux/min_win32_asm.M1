@@ -503,15 +503,15 @@ int3 int3 int3 int3  int3 int3 int3
   call %get_param
   addi8_esp, !4
   movi8_[ebp+BYTE],eax !-8
-  movi8_eax,[ebp+BYTE] !-8
   cmpi8_eax, !1
-  jne %ELSE_host_callback_0
+  je %CASE_trap_syscalls_off
+  cmpi8_eax, !2
+  je %CASE_trap_syscalls_on
+  jne %ELSE_host_callback_1
+:CASE_trap_syscalls_off
   call %trap_syscalls_off
   jmp %END_IF_host_callback_0
-:ELSE_host_callback_0
-  movi8_eax,[ebp+BYTE] !-8
-  cmpi8_eax, !2
-  jne %ELSE_host_callback_1
+:CASE_trap_syscalls_on
   call %trap_syscalls_on
   jmp %END_IF_host_callback_0
 :ELSE_host_callback_1
