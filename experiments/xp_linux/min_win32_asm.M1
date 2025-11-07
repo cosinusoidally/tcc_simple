@@ -579,7 +579,6 @@ int3 int3 int3 int3  int3 int3 int3
   mov_eax, &STRING_host_callback_3
   push_eax
   call %THUNK_printf
-  addi8_esp, !8
   mov_eax, %1
   push_eax
   call %THUNK_exit
@@ -588,10 +587,9 @@ int3 int3 int3 int3  int3 int3 int3
   ret
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
 dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16
-dead16
-int3 int3 int3 int3
-int3 int3 int3 int3
+dead16 dead16
+int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3
 :init_runtime
   push_ebp
   mov_ebp,esp
