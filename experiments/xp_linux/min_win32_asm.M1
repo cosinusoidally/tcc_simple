@@ -914,8 +914,6 @@ int3 int3 int3 int3  int3 int3 int3
 :syscall
   push_ebp
   mov_ebp,esp
-  sub_esp, %0x0
-  nop
 # IF_syscall_0
   movi8_eax,[ebp+BYTE] !8
   cmp_eax, %0xFFFE
@@ -956,6 +954,7 @@ int3 int3 int3 int3  int3 int3 int3
   leave
   ret
 int3 int3 int3 int3  int3 int3 int3 int3
+int3 int3 int3 int3  int3 int3  int3
 int3 int3 int3 int3  int3 int3  int3
 :map_mem
   push_ebp
