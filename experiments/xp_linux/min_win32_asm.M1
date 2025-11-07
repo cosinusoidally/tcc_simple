@@ -622,16 +622,14 @@ int3
   push_eax
   call %THUNK_printf
   addi8_esp, !8
-  call %command_file
-  mov_ecx, &STRING_init_runtime_2
-  push_ecx
-  movi8_ecx,[ebp+BYTE] !8
-  push_ecx
-  movi8_[ebp+BYTE],eax !-8
+  mov_eax, &STRING_init_runtime_2
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
   call %THUNK_fopen
   addi8_esp, !8
   push_eax
-  movi8_eax,[ebp+BYTE] !-8
+  call %command_file
   push_eax
   call %wi32
   addi8_esp, !8
@@ -654,6 +652,8 @@ int3
 :END_IF_init_runtime_0
   leave
   ret
+int3 int3 int3
+int3 int3 int3
 :run_process
   push_ebp
   mov_ebp,esp
