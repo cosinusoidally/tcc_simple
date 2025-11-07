@@ -585,12 +585,6 @@ int3 int3 int3 int3  int3 int3 int3
 :END_CASE
   leave
   ret
-dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
-dead16 dead16
-int3 int3 int3 int3  int3 int3 int3 int3
-int3 int3 int3 int3  int3 int3 int3 int3
-int3
 :init_runtime
   push_ebp
   mov_ebp,esp
@@ -652,8 +646,6 @@ int3
 :END_IF_init_runtime_0
   leave
   ret
-int3 int3 int3
-int3 int3 int3
 :run_process
   push_ebp
   mov_ebp,esp
@@ -739,6 +731,11 @@ int3 int3 int3
   mov_eax, %0
   leave
   ret
+
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16 dead16 dead16 dead16  dead16 dead16 dead16 dead16
+dead16 dead16 dead16
+int3 int3 int3 int3  int3 int3 int3
 
 # DONT MOVE
 :TopLevelHandler
