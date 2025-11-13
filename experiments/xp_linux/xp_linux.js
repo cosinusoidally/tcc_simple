@@ -955,6 +955,13 @@ function next_command() {
   return command_buffer();
 }
 
+function afb() {
+  /* ideally I would declare this in globals.js but mk_asm relies on
+   * globals.js being unchanged from this point (I should fix this)
+   */
+  return dummy_global();
+}
+
 int absolute_path(filename) {
   return filename;
 }
