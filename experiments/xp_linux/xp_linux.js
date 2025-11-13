@@ -816,12 +816,10 @@ function absolute_path(filename) {
           if(lt(j, 0)) {
             j = 0;
           }
-/*
-          while((ri8(afb+j) != '/')&& (j>=0)){
-            j = j - 1;
+          while(and(neq(ri8(add(afb,j)), '/'), gte(j, 0))) {
+            j = sub(j, 1);
           }
-          j = j + 1;
-*/
+          j = add(j, 1);
         } else {
           host_puts(mks("absolute_path error"));
           exit(1);
