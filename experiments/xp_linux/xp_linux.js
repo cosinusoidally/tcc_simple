@@ -744,6 +744,12 @@ function vm_mmap() {
   return r;
 }
 
+function vm_unlink() {
+  trap_syscalls_off();
+  host_puts(mks("unlink unimpl"));
+  host_exit(1);
+}
+
 function wrap_syscall() {
 /* needed to set up stack frame correctly when called from tcc generated code */
 /* also need to preserve more registers since some of the early tool use them */
@@ -785,6 +791,8 @@ function wrap_syscall_() {
     r = vm_exit();
   } else if(eq(n, 192)) {
     r = vm_mmap();
+  } else if(eq(n, 10)) {
+    r = vm_unlink();
   } else {
     trap_syscalls_off();
     host_fputs(mks("unsupported syscall: "), host_stdout());
