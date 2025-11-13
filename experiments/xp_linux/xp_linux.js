@@ -789,19 +789,18 @@ function absolute_path(filename) {
   i = 0;
   j = 0;
   afb = get_afb();
-  return filename;
-/*
   while(lt(j, 1024)) {
     wi8(add(afb, j),0);
     j = add(j, 1);
   }
   j = 0;
   wi8(afb,'/');
-  j = j + 1;
-  if(ri8(filename) == '/') {
-    i = i + 1;
+  j = add(j, 1);
+  if(eq(ri8(filename), '/')) {
+    i = add(i, 1);
   }
-  while((t=ri8(filename+i)) !=0) {
+  while(neq((t=ri8(add(filename, i))), 0)) {
+/*
     if(t == '.') {
       i = i + 1;
       t = ri8(filename+i);
@@ -831,13 +830,17 @@ function absolute_path(filename) {
         t = ri8(filename+i);
       }
     }
-    wi8(afb+j, t);
-    i = i + 1;
-    j = j + 1;
-  }
-  wi8(afb+j, 0);
-  return afb;
 */
+    wi8(add(afb, j), t);
+    i = add(i, 1);
+    j = add(j, 1);
+  }
+  wi8(add(afb, j), 0);
+
+/* FIXME remove this once port is done */
+  afb = filename;
+
+  return afb;
 }
 
 function find_file(filename) {
