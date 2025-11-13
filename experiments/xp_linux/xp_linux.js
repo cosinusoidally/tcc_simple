@@ -733,7 +733,9 @@ function vm_mmap() {
   if(eq(loc, 0)) {
     r = vm_brk();
     print_labled_hex(mks("brk"), r);
-    vm_brk(add(r, size));
+    /* hacky way of calling vm_brk */
+    set_reg(2, add(r, size));
+    vm_brk();
   } else {
     host_puts(mks("mmap addr must be null"));
     host_exit(1);
@@ -1193,6 +1195,11 @@ function run_process(cmdline) {
     wi8(add(p_vaddr, j), 0);
     j = add(j, 1);
   }
+
+  /* bodge to add more space after load
+   * FIXME figure out why this is needed
+   */
+  wi32(brk_ptr(), add(ri32(brk_ptr()),0x20000));
 
   print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
 

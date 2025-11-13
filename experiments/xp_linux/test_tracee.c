@@ -378,6 +378,7 @@ int vm_mmap() {
   if(loc == 0) {
     r = vm_brk();
     printf("brk: %x\n",r);
+/* FIXME I think this is buggy */
     vm_brk(r+size);
   } else {
     printf("mmap addr must be null\n");
