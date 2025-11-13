@@ -781,9 +781,59 @@ function afb() {
   return dummy_global();
 }
 
-int absolute_path(filename) {
-/* FIXME correct impl */
+function absolute_path(filename) {
+  var i;
+  var j;
+  var t;
   return filename;
+/*
+  while(j<1024) {
+    wi8(afb+j,0);
+    j = j +1;
+  }
+  j = 0;
+  wi8(afb,'/');
+  j = j + 1;
+  if(ri8(filename) == '/') {
+    i = i + 1;
+  }
+  while((t=ri8(filename+i)) !=0) {
+    if(t == '.') {
+      i = i + 1;
+      t = ri8(filename+i);
+      if(t == '.') {
+        i = i + 1;
+        t = ri8(filename+i);
+        if(t == '/') {
+          i = i + 1;
+          t = ri8(filename+i);
+          while((ri8(afb+j) != '/')&& (j>=0)){
+            j = j - 1;
+          }
+          j = j - 1;
+          if(j < 0) { j = 0;}
+          while((ri8(afb+j) != '/')&& (j>=0)){
+            j = j - 1;
+          }
+          j = j + 1;
+        } else {
+          printf("absolute_path error\n");
+          exit(1);
+        }
+      } else if(t == '/') {
+        i = i + 1;
+      } else {
+        i = i - 1;
+        t = ri8(filename+i);
+      }
+    }
+    wi8(afb+j, t);
+    i = i + 1;
+    j = j + 1;
+  }
+  wi8(afb+j, 0);
+  return afb;
+*/
 }
 
 function find_file(filename) {
