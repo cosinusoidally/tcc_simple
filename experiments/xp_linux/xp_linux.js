@@ -723,15 +723,15 @@ function vm_lseek() {
 }
 
 function vm_mmap() {
+  var r;
+  var size;
+  var loc;
+  size = get_reg(2);
+  loc = get_reg(1);
   trap_syscalls_off();
-  host_puts(mks("mmap not impl"));
+  print_labled_hex(mks("mmap size"), size);
   host_exit(1);
 /*
-  int r;
-  int size = regs_data[2];
-  int loc = regs_data[1];
-  trap_syscalls_off();
-  printf("mmap size: %d\n", size);
   if(loc == 0) {
     r = vm_brk();
     printf("brk: %x\n",r);
@@ -740,9 +740,9 @@ function vm_mmap() {
     printf("mmap addr must be null\n");
     exit(1);
   }
+*/
   trap_syscalls_on();
   return r;
-*/
 }
 
 function wrap_syscall() {
