@@ -955,6 +955,10 @@ function next_command() {
   return command_buffer();
 }
 
+int absolute_path(filename) {
+  return filename;
+}
+
 function reset_process() {
   int base_addr;
   int i;
