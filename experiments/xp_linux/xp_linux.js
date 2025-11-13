@@ -801,12 +801,12 @@ function absolute_path(filename) {
   }
   while(neq((t=ri8(add(filename, i))), 0)) {
     if(eq(t, '.')) {
+      i = add(i, 1);
+      t = ri8(add(filename, i));
+      if(eq(t, '.')) {
+        i = add(i, 1);
+        t = ri8(add(filename, i));
 /*
-      i = i + 1;
-      t = ri8(filename+i);
-      if(t == '.') {
-        i = i + 1;
-        t = ri8(filename+i);
         if(t == '/') {
           i = i + 1;
           t = ri8(filename+i);
@@ -823,13 +823,13 @@ function absolute_path(filename) {
           printf("absolute_path error\n");
           exit(1);
         }
+*/
       } else if(eq(t, '/')) {
         i = add(i, 1);
       } else {
         i = sub(i, 1);
         t = ri8(add(filename, i));
       }
-*/
     }
     wi8(add(afb, j), t);
     i = add(i, 1);
@@ -837,6 +837,8 @@ function absolute_path(filename) {
   }
   wi8(add(afb, j), 0);
 
+
+  print_labled_string(mks("afb"), afb);
 /* FIXME remove this once port is done */
   afb = filename;
 
