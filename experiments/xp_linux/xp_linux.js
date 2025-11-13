@@ -837,11 +837,7 @@ function absolute_path(filename) {
   }
   wi8(add(afb, j), 0);
 
-
   print_labled_string(mks("afb"), afb);
-/* FIXME remove this once port is done */
-  afb = filename;
-
   return afb;
 }
 
