@@ -813,8 +813,10 @@ function absolute_path(filename) {
             j = sub(j, 1);
           }
           j = sub(j, 1);
+          if(lt(j, 0)) {
+            j = 0;
+          }
 /*
-          if(j < 0) { j = 0;}
           while((ri8(afb+j) != '/')&& (j>=0)){
             j = j - 1;
           }
