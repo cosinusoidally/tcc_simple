@@ -571,6 +571,7 @@ function vm_exit_() {
     extract_file(mks("/m0.exe"), mks("artifacts/m0.exe"));
     extract_file(mks("/hex2.exe"), mks("artifacts/hex2.exe"));
     extract_file(mks("/pnut_js.exe"), mks("artifacts/pnut_js.exe"));
+    extract_file(mks("/artifacts/boot0/unified-libc.c"), mks("artifacts/unified-libc.c"));
     host_exit(error_code);
   }
 }
