@@ -1136,7 +1136,37 @@ function reloc_entrypoint() {
   wi32(brk_ptr(), elf_base());
 
   /* load in some test files */
+  /* FIXME this is copied from test_tracee.c but we should not rely on these
+   * files being preloaded
+   */
+
   load_file(mks("../cjsawk/hello.c"), mks("hello.c"));
+  load_file(mks("../cjsawk/cjsawk.js"), mks("cjsawk.js"));
+  load_file(mks("../cjsawk/support_libc.js"), mks("support_libc.js"));
+  load_file(mks("../cjsawk/simple_support_js_m2_prims.c"), mks("simple_support_js_m2_prims.c"));
+  load_file(mks("../cjsawk/support_m2.c"), mks("support_m2.c"));
+
+  load_file(mks("../pnut_refactor/simple_support_js_m2_prims.c"), mks("pnut_refactor/simple_support_js_m2_prims.c"));
+  load_file(mks("../pnut_refactor/support_common.c"), mks("pnut_refactor/support_common.c"));
+  load_file(mks("../pnut_refactor/simple_support_js_m2.js"), mks("pnut_refactor/simple_support_js_m2.js"));
+  load_file(mks("../pnut_refactor/pnut.js"), mks("pnut_refactor/pnut.js"));
+
+  load_file(mks("../m2min_v3/simple_asm_defs.M1"), mks("simple_asm_defs.M1"));
+  load_file(mks("../m2min_v3/x86_defs.M1"), mks("x86_defs.M1"));
+  load_file(mks("../m2min_v3/libc-core.M1"), mks("libc-core.M1"));
+  load_file(mks("../m2min_v3/ELF-i386.hex2"), mks("ELF-i386.hex2"));
+
+  load_file(mks("../m2min_v2/hex0_x86.hex0"), mks("hex0_x86.hex0"));
+  load_file(mks("../m2min_v2/hex1_x86.hex0"), mks("hex1_x86.hex0"));
+  load_file(mks("../m2min_v2/hex2_x86.hex1"), mks("hex2_x86.hex1"));
+  load_file(mks("../m2min_v2/catm_x86.hex2"), mks("catm_x86.hex2"));
+  load_file(mks("../m2min_v2/M0_x86.hex2"), mks("M0_x86.hex2"));
+  load_file(mks("../m2min_v2/cc_x86_min.M1"), mks("cc_x86_min.M1"));
+
+  load_file(mks("../m2min_v3/js_to_c/js_to_c_m2_support.c"), mks("js_to_c_m2_support.c"));
+  load_file(mks("../m2min_v3/js_to_c/js_to_c_simple.c"), mks("js_to_c_simple.c"));
+
+  load_file(mks("../cjsawk/cjsawk.js"), mks("foo.c"));
 
   run_process(next_command());
   host_exit(0);
