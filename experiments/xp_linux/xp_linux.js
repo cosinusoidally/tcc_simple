@@ -800,8 +800,8 @@ function absolute_path(filename) {
     i = add(i, 1);
   }
   while(neq((t=ri8(add(filename, i))), 0)) {
+    if(eq(t, '.')) {
 /*
-    if(t == '.') {
       i = i + 1;
       t = ri8(filename+i);
       if(t == '.') {
@@ -823,14 +823,14 @@ function absolute_path(filename) {
           printf("absolute_path error\n");
           exit(1);
         }
-      } else if(t == '/') {
-        i = i + 1;
+      } else if(eq(t, '/')) {
+        i = add(i, 1);
       } else {
-        i = i - 1;
-        t = ri8(filename+i);
+        i = sub(i, 1);
+        t = ri8(add(filename, i));
       }
-    }
 */
+    }
     wi8(add(afb, j), t);
     i = add(i, 1);
     j = add(j, 1);
