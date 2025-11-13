@@ -774,7 +774,7 @@ function wrap_syscall_addr() {
   asm("ret");
 }
 
-function afb() {
+function get_afb() {
   /* ideally I would declare this in globals.js but mk_asm relies on
    * globals.js being unchanged from this point (I should fix this)
    */
@@ -785,11 +785,15 @@ function absolute_path(filename) {
   var i;
   var j;
   var t;
+  var afb;
+  i = 0;
+  j = 0;
+  afb = get_afb();
   return filename;
 /*
-  while(j<1024) {
-    wi8(afb+j,0);
-    j = j +1;
+  while(lt(j, 1024)) {
+    wi8(add(afb, j),0);
+    j = add(j, 1);
   }
   j = 0;
   wi8(afb,'/');
