@@ -730,17 +730,14 @@ function vm_mmap() {
   loc = get_reg(1);
   trap_syscalls_off();
   print_labled_hex(mks("mmap size"), size);
-  host_exit(1);
-/*
-  if(loc == 0) {
+  if(eq(loc, 0)) {
     r = vm_brk();
-    printf("brk: %x\n",r);
-    vm_brk(r+size);
+    print_labled_hex(mks("brk"), r);
+    vm_brk(add(r, size));
   } else {
-    printf("mmap addr must be null\n");
-    exit(1);
+    host_puts(mks("mmap addr must be null"));
+    host_exit(1);
   }
-*/
   trap_syscalls_on();
   return r;
 }
