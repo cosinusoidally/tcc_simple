@@ -774,7 +774,14 @@ function wrap_syscall_addr() {
   asm("ret");
 }
 
-function absolute_path(filename) {
+function afb() {
+  /* ideally I would declare this in globals.js but mk_asm relies on
+   * globals.js being unchanged from this point (I should fix this)
+   */
+  return dummy_global();
+}
+
+int absolute_path(filename) {
 /* FIXME correct impl */
   return filename;
 }
@@ -953,17 +960,6 @@ function next_command() {
   print_labled_string(mks("command_buffer"), command_buffer());
   if(eq(o, 0)) { return 0;}
   return command_buffer();
-}
-
-function afb() {
-  /* ideally I would declare this in globals.js but mk_asm relies on
-   * globals.js being unchanged from this point (I should fix this)
-   */
-  return dummy_global();
-}
-
-int absolute_path(filename) {
-  return filename;
 }
 
 function reset_process() {
