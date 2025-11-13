@@ -1,3 +1,9 @@
+function dummy_asm() {
+  asm("DEFINE mov_esp, BC");
+  asm("DEFINE jmp_indirect FF25");
+  asm("DEFINE call_indirect FF15");
+}
+
 int eq(int a, int b){
 /*      return a == b; */
         asm(
@@ -425,12 +431,10 @@ int memcpy(int a, int b, int c) {
 }
 
 function host_call() {
-  asm("DEFINE call_indirect FF15");
   asm("call_indirect %0x4020024");
 }
 
 function enter_reloc() {
-  asm("DEFINE call_indirect FF15");
   asm("call_indirect %0x4020050");
 }
 
@@ -1217,8 +1221,6 @@ function run_process(cmdline) {
   print_labled_hex(mks("brk_ptr"), ri32(brk_ptr()));
 
   trap_syscalls_on();
-  asm("DEFINE mov_esp, BC");
-  asm("DEFINE jmp_indirect FF25");
   asm("mov_esp, %0x8045800");
   /* set up stack pointer */
   asm("mov_esp, %0x8045800");
