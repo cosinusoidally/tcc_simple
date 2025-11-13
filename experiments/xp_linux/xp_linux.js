@@ -745,9 +745,13 @@ function vm_mmap() {
 }
 
 function vm_unlink() {
+  var pathname;
+  pathname = get_reg(1);
   trap_syscalls_off();
-  host_puts(mks("unlink unimpl"));
-  host_exit(1);
+  print_labled_string(mks("unlink"), pathname);
+  trap_syscalls_on();
+  /* dummy impl, since opening a file for write always creates a new file */
+  return 0;
 }
 
 function wrap_syscall() {
