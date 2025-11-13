@@ -809,11 +809,11 @@ function absolute_path(filename) {
         if(eq(t, '/')) {
           i = add(i, 1);
           t = ri8(add(filename, i));
-/*
-          while((ri8(afb+j) != '/')&& (j>=0)){
-            j = j - 1;
+          while(and(neq(ri8(add(afb, j)), '/'), gte(j, 0))) {
+            j = sub(j, 1);
           }
-          j = j - 1;
+          j = sub(j, 1);
+/*
           if(j < 0) { j = 0;}
           while((ri8(afb+j) != '/')&& (j>=0)){
             j = j - 1;
