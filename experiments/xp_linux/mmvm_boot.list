@@ -1,0 +1,4 @@
+load_file ../../../mishmashvm/libc_portable_proto/my_libc.c my_libc.c
+load_file ../../../mishmashvm/libc_portable_proto/stubs.c stubs.c
+/artifacts/tcc_27_boot_static5.exe -nostdinc -nostdlib -o my_libc.o -c my_libc.c -I /tcc_27/include:/woody/usr/include
+/artifacts/tcc_27_boot_static5.exe -nostdinc -nostdlib -o stubs.o -c stubs.c -I /tcc_27/include:/woody/usr/include
