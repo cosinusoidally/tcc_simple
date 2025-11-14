@@ -577,6 +577,18 @@ function vm_exit_() {
     extract_file(mks("/pnut_js.exe"), mks("artifacts/pnut_js.exe"));
     extract_file(mks("/artifacts/boot0/unified-libc.c"), mks("artifacts/unified-libc.c"));
     extract_file(mks("../artifacts/tcc-boot-mes"), mks("artifacts/tcc-boot-mes"));
+    extract_file(mks("artifacts/tcc_27.o"), mks("artifacts/tcc_27.o"));
+    extract_file(mks("artifacts/tcc_27_boot_static2.exe"), mks("artifacts/tcc_27_boot_static2.exe"));
+    extract_file(mks("artifacts/tcc_27_boot_static3.exe"), mks("artifacts/tcc_27_boot_static3.exe"));
+    extract_file(mks("artifacts/tcc_27_boot_static4.exe"), mks("artifacts/tcc_27_boot_static4.exe"));
+    extract_file(mks("artifacts/tcc_27_boot_static5.exe"), mks("artifacts/tcc_27_boot_static5.exe"));
+    extract_file(mks("artifacts/libc_boot4_27_4.o"), mks("artifacts/libc_boot4_27_4.o"));
+    extract_file(mks("artifacts/libc_static_27_4.o"), mks("artifacts/libc_static_27_4.o"));
+    extract_file(mks("artifacts/libtcc1_27_4.o"), mks("artifacts/libtcc1_27_4.o"));
+    extract_file(mks("artifacts/tcc_27_4.o"), mks("artifacts/tcc_27_4.o"));
+    extract_file(mks("my_libc.o"), mks("artifacts/my_libc.o"));
+    extract_file(mks("stubs.o"), mks("artifacts/stubs.o"));
+
     host_exit(error_code);
   }
 }
