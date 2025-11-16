@@ -9,6 +9,7 @@ libc = ctypes.open("libc.so.6");
 
 puts = libc.declare("puts", ctypes.default_abi, ctypes.int32_t, ctypes.char.ptr);
 
+(function() {
 // FILE * fopen ( const char * filename, const char * mode );
 var fopen=libc.declare("fopen",
                         ctypes.default_abi, /* call ABI */
@@ -49,8 +50,39 @@ var fread=libc.declare("fread",
                         ctypes.int,
                         ctypes.voidptr_t);
 
+read = function(n,t) {
+  var f=fopen(n,"rb");
+
+  // FIXME this makes no sense, but if I don't do it I get a segfault
+  var ptr = ctypes.cast( f, ctypes.ArrayType( ctypes.int, 1 ).ptr );
+  ptr.contents;
+//  if(ptr===0){throw "no file"};
+
+  fseek(f,0,SEEK_END);
+  var l=ftell(f);
+  rewind(f);
+  l=parseInt(l.toString(),10);
+  var b=new Uint8Array(l);
+  fread(b,1,l,f);
+  fclose(f);
+  if(t==="binary"){
+    return b;
+  };
+
+  var o=[];
+  for(var i=0;i<l;i++){
+    o.push(String.fromCharCode(b[i]));
+  }
+  o=o.join("");
+  return o;
+}
+})();
 
 print(ctypes);
 print(puts);
+// print(fopen("artifacts/deps/cjsawk_full.c", "rb"));
 puts("hello world from ctypes");
-// load("cjsawk_nodejs.js");
+
+
+fname="./artifacts/deps/cjsawk_full.c";
+load("cjsawk_nodejs.js");
