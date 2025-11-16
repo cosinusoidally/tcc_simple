@@ -92,5 +92,6 @@ read = function(n,t) {
 // puts("hello world from ctypes");
 
 
+// fname="./artifacts/builds/xpcshell/cjsawk_full.c";
 fname="./artifacts/deps/cjsawk_full.c";
-load("cjsawk_nodejs.js");
+load("cjsawk_test.js");
