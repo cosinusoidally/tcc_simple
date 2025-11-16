@@ -58,6 +58,14 @@ var fread=libc.declare("fread",
                         ctypes.int,
                         ctypes.voidptr_t);
 
+var fwrite=libc.declare("fwrite",
+                        ctypes.default_abi, /* call ABI */
+                        ctypes.int,
+                        ctypes.voidptr_t,
+                        ctypes.int,
+                        ctypes.int,
+                        ctypes.voidptr_t);
+
 read = function(n,t) {
   var f=fopen(n,"rb");
 
@@ -84,12 +92,31 @@ read = function(n,t) {
   o=o.join("");
   return o;
 }
+
+libc.fopen = fopen;
+libc.fwrite = fwrite;
+libc.fclose = fclose;
 })();
 
 // print(ctypes);
 // print(puts);
 // print(fopen("artifacts/deps/cjsawk_full.c", "rb"));
 // puts("hello world from ctypes");
+
+(function() {
+  var src = [];
+
+  src.push(read("cjsawk.js"));
+  src.push(read("support_libc.js"));
+  src.push(read("simple_support_js_m2_prims.c"));
+  src.push(read("support_m2.c"));
+
+  src = src.join("");
+
+  var f = libc.fopen("./artifacts/builds/xpcshell/cjsawk_full.c", "wb");
+//  libc.fwrite(f,1,src.length,src);
+  libc.fclose(f);
+})();
 
 
 // fname="./artifacts/builds/xpcshell/cjsawk_full.c";
