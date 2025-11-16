@@ -54,9 +54,9 @@ read = function(n,t) {
   var f=fopen(n,"rb");
 
   // FIXME this makes no sense, but if I don't do it I get a segfault
+  // FIXME check if this is still needed
   var ptr = ctypes.cast( f, ctypes.ArrayType( ctypes.int, 1 ).ptr );
   ptr.contents;
-//  if(ptr===0){throw "no file"};
 
   fseek(f,0,SEEK_END);
   var l=ftell(f);
