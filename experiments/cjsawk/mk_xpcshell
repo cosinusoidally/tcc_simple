@@ -1,0 +1,8 @@
+rm -r artifacts/builds/xpcshell
+set -xe
+source common.sh
+
+mkdir artifacts/builds/xpcshell
+firefox -xpcshell cjsawk_xpcshell.js
+
+echo "DONE xpcshell"
