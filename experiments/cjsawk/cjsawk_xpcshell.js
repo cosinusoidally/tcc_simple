@@ -5,6 +5,11 @@ var { ctypes } = ChromeUtils.importESModule(  \
 
 ctypes = init();
 
+libc = ctypes.open("libc.so.6");
+
+puts = libc.declare("puts", ctypes.default_abi, ctypes.int32_t, ctypes.char.ptr);
+
 print(ctypes);
 print(puts);
+puts("hello world from ctypes");
 // load("cjsawk_nodejs.js");
