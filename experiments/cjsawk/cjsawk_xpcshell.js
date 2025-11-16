@@ -138,3 +138,8 @@ print = function(x) {
 load("cjsawk_test.js");
 pbuf = pbuf.join("");
 _print(pbuf);
+pbuf = pbuf+"\n";
+
+f = libc.fopen("./artifacts/builds/xpcshell/cjsawk.exe.M1", "wb");
+libc.fwrite(str_to_buf(pbuf),1,pbuf.length,f);
+libc.fclose(f);
