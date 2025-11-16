@@ -112,9 +112,13 @@ libc.fclose = fclose;
   src.push(read("support_m2.c"));
 
   src = src.join("");
+  src = src.split("");
+  var buf = new Uint8Array(src.length);
+
+  buf = buf.map(function(x,i) { return src[i].charCodeAt(0);});
 
   var f = libc.fopen("./artifacts/builds/xpcshell/cjsawk_full.c", "wb");
-//  libc.fwrite(f,1,src.length,src);
+  libc.fwrite(buf,1,buf.length,f);
   libc.fclose(f);
 })();
 
