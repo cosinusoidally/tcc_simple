@@ -86,10 +86,10 @@ read = function(n,t) {
 }
 })();
 
-print(ctypes);
-print(puts);
+// print(ctypes);
+// print(puts);
 // print(fopen("artifacts/deps/cjsawk_full.c", "rb"));
-puts("hello world from ctypes");
+// puts("hello world from ctypes");
 
 
 fname="./artifacts/deps/cjsawk_full.c";
