@@ -123,6 +123,6 @@ libc.fclose = fclose;
 })();
 
 
-// fname="./artifacts/builds/xpcshell/cjsawk_full.c";
-fname="./artifacts/deps/cjsawk_full.c";
+fname="./artifacts/builds/xpcshell/cjsawk_full.c";
+// fname="./artifacts/deps/cjsawk_full.c";
 load("cjsawk_test.js");
