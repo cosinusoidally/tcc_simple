@@ -5,7 +5,15 @@ var { ctypes } = ChromeUtils.importESModule(  \
 
 ctypes = init();
 
-libc = ctypes.open("libc.so.6");
+try {
+  libc = ctypes.open("libc.so.6");
+} catch(e) {
+  try {
+    libc = ctypes.open("msvcrt.dll");
+  } catch (e2) {
+    throw "unsupported platform";
+  }
+}
 
 puts = libc.declare("puts", ctypes.default_abi, ctypes.int32_t, ctypes.char.ptr);
 
