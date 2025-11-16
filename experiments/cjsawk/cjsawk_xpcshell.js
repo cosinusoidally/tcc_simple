@@ -130,4 +130,11 @@ function str_to_buf(str) {
 
 fname="./artifacts/builds/xpcshell/cjsawk_full.c";
 // fname="./artifacts/deps/cjsawk_full.c";
+_print = print;
+pbuf = [];
+print = function(x) {
+  pbuf.push(x);
+}
 load("cjsawk_test.js");
+pbuf = pbuf.join("");
+_print(pbuf);
