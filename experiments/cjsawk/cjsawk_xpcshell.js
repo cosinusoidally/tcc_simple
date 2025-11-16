@@ -103,6 +103,12 @@ libc.fclose = fclose;
 // print(fopen("artifacts/deps/cjsawk_full.c", "rb"));
 // puts("hello world from ctypes");
 
+function str_to_buf(str) {
+  var buf = new Uint8Array(str.length);
+  buf = buf.map(function(x,i) { return str[i].charCodeAt(0);});
+  return buf;
+}
+
 (function() {
   var src = [];
 
@@ -113,9 +119,8 @@ libc.fclose = fclose;
 
   src = src.join("");
   src = src.split("");
-  var buf = new Uint8Array(src.length);
 
-  buf = buf.map(function(x,i) { return src[i].charCodeAt(0);});
+  var buf = str_to_buf(src);
 
   var f = libc.fopen("./artifacts/builds/xpcshell/cjsawk_full.c", "wb");
   libc.fwrite(buf,1,buf.length,f);
