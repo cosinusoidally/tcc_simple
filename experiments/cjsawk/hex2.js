@@ -209,12 +209,12 @@ function storeLabel_(ip,    c, h, entry) {
 function outputPointer(displacement, number_of_bytes) {
 	return outputPointer_(displacement, number_of_bytes, 0, 0);
 }
-function outputPointer_(displacement, number_of_bytes,    byte, value) {
+function outputPointer_(displacement, number_of_bytes,    b, value) {
 	value = displacement;
 	while(gt(number_of_bytes, 0)) {
-		byte = mod(value, 256);
+		b = mod(value, 256);
 		value = AND(shr(value, 8), 16777215);
-		fputc(byte, output);
+		fputc(b, output);
 		number_of_bytes = SUB(number_of_bytes, 1);
 	}
 }
