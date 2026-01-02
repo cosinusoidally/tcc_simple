@@ -8,8 +8,13 @@ MQJS_DIR=../../../mquickjs/
 
 mkdir $BLD_DIR
 
-gcc -I $MQJS_DIR -Wall -g -MMD -D_GNU_SOURCE -fno-math-errno -fno-trapping-math -Os -c -o $BLD_DIR/mqjs_test.o mqjs_test.c
+pushd .
 
-gcc -g -o $BLD_DIR/mqjs_test.exe $BLD_DIR/mqjs_test.o $MQJS_DIR/mquickjs.o $MQJS_DIR/dtoa.o $MQJS_DIR/libm.o $MQJS_DIR/cutils.o -lm
+cd $MQJS_DIR
+make
 
-$BLD_DIR/mqjs_test.exe cjsawk_mqjs.js
+export PATH=$PWD:$PATH
+
+popd
+
+example cjsawk_mqjs.js
