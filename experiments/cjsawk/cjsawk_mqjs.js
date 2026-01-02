@@ -1,5 +1,3 @@
-print("Hello world from mquickjs");
-
 var dprint;
 
 var NULL;

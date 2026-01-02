@@ -17,4 +17,4 @@ export PATH=$PWD:$PATH
 
 popd
 
-example cjsawk_mqjs.js
+example cjsawk_mqjs.js > $BLD_DIR/cjsawk.exe.M1
