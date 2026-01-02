@@ -11,4 +11,6 @@ var out_file_num;
 
 var mks;
 
+var argv;
+
 load("cjsawk_test.js");
