@@ -1,0 +1,15 @@
+rm -r artifacts/builds/full_mqjs
+
+set -xe
+
+BLD_DIR=artifacts/builds/full_mqjs
+SRC_DIR=artifacts/deps
+MQJS_DIR=../../../mquickjs/
+
+mkdir $BLD_DIR
+
+gcc -I $MQJS_DIR -Wall -g -MMD -D_GNU_SOURCE -fno-math-errno -fno-trapping-math -Os -c -o $BLD_DIR/mqjs_test.o mqjs_test.c
+
+gcc -g -o $BLD_DIR/mqjs_test.exe $BLD_DIR/mqjs_test.o $MQJS_DIR/mquickjs.o $MQJS_DIR/dtoa.o $MQJS_DIR/libm.o $MQJS_DIR/cutils.o -lm
+
+$BLD_DIR/mqjs_test.exe cjsawk_mqjs.js
