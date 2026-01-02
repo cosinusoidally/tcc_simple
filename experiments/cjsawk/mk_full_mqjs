@@ -18,3 +18,7 @@ export PATH=$PWD:$PATH
 popd
 
 example cjsawk_mqjs.js > $BLD_DIR/cjsawk.exe.M1
+
+diff -u -s artifacts/builds/full_cc_x86_min/cjsawk.exe.M1 artifacts/builds/full_mqjs/cjsawk.exe.M1
+
+echo "DONE mqjs"
