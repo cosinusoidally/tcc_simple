@@ -3,6 +3,9 @@ tcc_simple
 UPDATE: see experiments/cjsawk for a working bootstrap path from a minimal
 C/JS compiler all the way up to a bootstrappable version of tcc.
 
+There is also an earlier working experiment in experiments/m2min_v3 which may
+also be of interest.
+
 See also experiments/notes as I will be putting ideas for further experiments
 in there.
 
