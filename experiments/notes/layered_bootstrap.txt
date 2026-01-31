@@ -2,14 +2,14 @@ Thinking a bit about "layered" bootstrapping. Imagine if a C compiler was built
 in layers a bit like this:
 
 # make sure cc0.c can be compiled with gcc (and a range of other C compilers)
-gcc -c cc0.c ; gcc -c cc1_stubs.c ; gcc cc0.o cc0_stubs.o -o cc0_boot ;
+gcc -c cc0.c ; gcc -c cc1_stubs.c ; gcc cc0.o cc1_stubs.o -o cc0_boot ;
 # make sure cc0 is self hosted
-cc0_boot -c cc0.c ; cc0_boot -c cc1_stubs.c ; cc0_boot cc0.o cc0_stubs.o -o cc0 ;
+cc0_boot -c cc0.c ; cc0_boot -c cc1_stubs.c ; cc0_boot cc0.o cc1_stubs.o -o cc0 ;
 # walk up the ccX versions. New features can be used as they are introduced
 cc0 -c cc1.c ; cc0 -c cc2_stubs.c ; cc0 cc1.o cc2_stubs.o -o cc1 ;
-cc1 -c cc2.c ; cc1 -c cc3_stubc.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
-cc2 -c cc3.c ; cc2 -c cc4_stubc.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
-cc3 -c cc4.c ; cc3 -c cc4_stubc.c ; cc3 cc1.o cc2.o cc3.o cc4 cc5_stubs.o -o cc4;
+cc1 -c cc2.c ; cc1 -c cc3_stubs.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
+cc2 -c cc3.c ; cc2 -c cc4_stubs.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
+cc3 -c cc4.c ; cc3 -c cc4_stubs.c ; cc3 cc1.o cc2.o cc3.o cc4 cc5_stubs.o -o cc4;
 
 The ccX.c files are implementations of a subset of C (more specifically they
 implement the difference between the X dialect and the X+1 dialect). Higher
