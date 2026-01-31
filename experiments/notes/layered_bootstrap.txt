@@ -11,9 +11,11 @@ cc1 -c cc2.c ; cc1 -c cc3_stubc.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
 cc2 -c cc3.c ; cc2 -c cc4_stubc.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
 cc3 -c cc4.c ; cc3 -c cc4_stubc.c ; cc3 cc1.o cc2.o cc3.o cc4 cc5_stubs.o -o cc4;
 
-The ccX.c files are implementations of a subset of C. Higher values of X indicate
-a larger subset. The ccX_stubs.c files are stubbed out versions of the X+2
-dialect. For example ccX_stubs.c may contain a stub function like this:
+The ccX.c files are implementations of a subset of C (more specifically they
+implement the difference between the X dialect and the X+1 dialect). Higher
+values of X indicate a larger subset. The ccX_stubs.c files are stubbed out
+versions of the X+2 dialect. For example ccX_stubs.c may contain a stub function
+like this:
 
 int ccX_foo(a, b, c) {
   puts("ccX_foo not implemented.");
