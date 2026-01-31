@@ -12,10 +12,10 @@ cc2 -c cc3.c ; cc2 -c cc4_stubs.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
 cc3 -c cc4.c ; cc3 -c cc4_stubs.c ; cc3 cc1.o cc2.o cc3.o cc4.o cc5_stubs.o -o cc4;
 
 The ccX.c files are implementations of a subset of C (more specifically they
-implement the difference between the X dialect and the X+1 dialect). Higher
-values of X indicate a larger subset. The ccX_stubs.c files are stubbed out
-versions of the X+2 dialect. For example ccX_stubs.c may contain a stub function
-like this:
+implement the difference between the X dialect and the X+1 dialect, in terms of
+the X-1 dialect). Higher values of X indicate a larger subset. The ccX_stubs.c
+files are stubbed out versions of the X+2 dialect. For example ccX_stubs.c may
+contain a stub function like this:
 
 int ccX_foo(a, b, c) {
   puts("ccX_foo not implemented.");
@@ -23,6 +23,8 @@ int ccX_foo(a, b, c) {
 } 
 
 and the ccX.c file would contain the real implementation of ccX_foo.
+
+cc0.c is the "base" dialect of C. It will also be a self hosted compiler.
 
 Also imagine if we had a -stc=.. flag like GCC. That would mean that running:
 
@@ -55,4 +57,6 @@ needed to build that version. For example:
 ccX_unified.exe -std=cc3 cc3_unified.c
 
 In your gcov report you should only see lines being hit in cc0.c,  cc1.c,  and
-cc2.c
+cc2.c . Note in theory this will be the case, but in practice thing might not
+quite work out like that (eg if an optimizer was added in a later cc version
+then lines from the optimizer may be hit even when using earlier dialects).
