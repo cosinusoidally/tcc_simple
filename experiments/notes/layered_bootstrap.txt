@@ -9,7 +9,7 @@ cc0_boot -c cc0.c ; cc0_boot -c cc1_stubs.c ; cc0_boot cc0.o cc1_stubs.o -o cc0 
 cc0 -c cc1.c ; cc0 -c cc2_stubs.c ; cc0 cc1.o cc2_stubs.o -o cc1 ;
 cc1 -c cc2.c ; cc1 -c cc3_stubs.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
 cc2 -c cc3.c ; cc2 -c cc4_stubs.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
-cc3 -c cc4.c ; cc3 -c cc4_stubs.c ; cc3 cc1.o cc2.o cc3.o cc4 cc5_stubs.o -o cc4;
+cc3 -c cc4.c ; cc3 -c cc4_stubs.c ; cc3 cc1.o cc2.o cc3.o cc4.o cc5_stubs.o -o cc4;
 
 The ccX.c files are implementations of a subset of C (more specifically they
 implement the difference between the X dialect and the X+1 dialect). Higher
