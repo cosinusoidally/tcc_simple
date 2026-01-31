@@ -54,4 +54,5 @@ needed to build that version. For example:
 
 ccX_unified.exe -std=cc3 cc3_unified.c
 
-In your gcov report you should only see line being hit in cc0.c cc1.c and cc2.c
+In your gcov report you should only see lines being hit in cc0.c,  cc1.c,  and
+cc2.c
