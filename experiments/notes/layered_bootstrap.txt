@@ -1,0 +1,55 @@
+Thinking a bit about "layered" bootstrapping. Imagine if a C compiler was built
+in layers a bit like this:
+
+# make sure cc0.c can be compiled with gcc (and a range of other C compilers)
+gcc -c cc0.c ; gcc -c cc1_stubs.c ; gcc cc0.o cc0_stubs.o -o cc0_boot ;
+# make sure cc0 is self hosted
+cc0_boot -c cc0.c ; cc0_boot -c cc1_stubs.c ; cc0_boot cc0.o cc0_stubs.o -o cc0 ;
+# walk up the ccX versions. New features can be used as they are introduced
+cc0 -c cc1.c ; cc0 -c cc2_stubs.c ; cc0 cc1.o cc2_stubs.o -o cc1 ;
+cc1 -c cc2.c ; cc1 -c cc3_stubc.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
+cc2 -c cc3.c ; cc2 -c cc4_stubc.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
+cc3 -c cc4.c ; cc3 -c cc4_stubc.c ; cc3 cc1.o cc2.o cc3.o cc4 cc5_stubs.o -o cc4;
+
+The ccX.c files are implementations of a subset of C. Higher values of X indicate
+a larger subset. The ccX_stubs.c files are stubbed out versions of the X+2
+dialect. For example ccX_stubs.c may contain a stub function like this:
+
+int ccX_foo(a, b, c) {
+  puts("ccX_foo not implemented.");
+  exit(1);
+} 
+
+and the ccX.c file would contain the real implementation of ccX_foo.
+
+Also imagine if we had a -stc=.. flag like GCC. That would mean that running:
+
+cc4 -std=cc0 -c foo.c
+
+Would support exactly the same dialect as:
+
+cc0 -c foo.c
+
+It should also be possible to compile ccX itself in a single step with some kind
+of unified build eg:
+
+ccX_unified.c :
+
+#include "cc0.c"
+#include "cc1.c"
+...
+#include "ccX.c"
+#include "ccX+1_stubs.c"
+
+and the running:
+
+ccX ccX_unified.c -o ccX_unified.exe
+
+Further, this also has another interesting property. If you compile
+ccX_unified.c with gcc and gcov, and then build and earlier version you should
+see in your gcov report that the only files with active functions are the ones
+needed to build that version. For example:
+
+ccX_unified.exe -std=cc3 cc3_unified.c
+
+In your gcov report you should only see line being hit in cc0.c cc1.c and cc2.c
