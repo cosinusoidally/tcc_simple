@@ -57,6 +57,6 @@ needed to build that version. For example:
 ccX_unified.exe -std=cc3 cc3_unified.c
 
 In your gcov report you should only see lines being hit in cc0.c,  cc1.c,  and
-cc2.c . Note in theory this will be the case, but in practice thing might not
+cc2.c . Note in theory this will be the case, but in practice things might not
 quite work out like that (eg if an optimizer was added in a later cc version
 then lines from the optimizer may be hit even when using earlier dialects).
