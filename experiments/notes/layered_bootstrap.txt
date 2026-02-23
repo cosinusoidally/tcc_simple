@@ -60,3 +60,16 @@ In your gcov report you should only see lines being hit in cc0.c,  cc1.c,  and
 cc2.c . Note in theory this will be the case, but in practice things might not
 quite work out like that (eg if an optimizer was added in a later cc version
 then lines from the optimizer may be hit even when using earlier dialects).
+
+Benefits
+========
+
+* No "throw away" compilers. This will just be a refactored version of tcc that
+  means only one codebase will need to be studied. Compare this with other
+  bootstrap paths where there are different version of a specific C compiler,
+  or there are multiple independent implementations of compilers. All off the
+  intermediate compilers are then discarded at the end of the bootstrap process.
+  This means more code must be studied to understand if the bootstrap chain can
+  be trusted. With a single refactored codebase only one codebase needs to be
+  studied.
+  
