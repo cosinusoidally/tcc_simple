@@ -72,4 +72,3 @@ Benefits
   This means more code must be studied to understand if the bootstrap chain can
   be trusted. With a single refactored codebase only one codebase needs to be
   studied.
-  
