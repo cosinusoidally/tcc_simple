@@ -1,0 +1,24 @@
+rm -r artifacts/builds/full_mqjs
+
+set -xe
+
+BLD_DIR=artifacts/builds/full_mqjs
+SRC_DIR=artifacts/deps
+MQJS_DIR=../../../mquickjs/
+
+mkdir $BLD_DIR
+
+pushd .
+
+cd $MQJS_DIR
+./mk
+
+export PATH=$PWD:$PATH
+
+popd
+
+example cjsawk_mqjs.js > $BLD_DIR/cjsawk.exe.M1
+
+diff -u -s artifacts/builds/full_cc_x86_min/cjsawk.exe.M1 artifacts/builds/full_mqjs/cjsawk.exe.M1
+
+echo "DONE mqjs"
