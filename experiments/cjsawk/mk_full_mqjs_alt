@@ -13,6 +13,7 @@ pushd .
 cd $MQJS_DIR
 ./mk
 
+cd artifacts
 export PATH=$PWD:$PATH
 
 popd
