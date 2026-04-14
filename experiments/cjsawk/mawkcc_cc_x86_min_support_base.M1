@@ -1,0 +1,443 @@
+:FUNCTION_mks
+  DEFINE ARG_s FCFFFFFF
+  local ARG_s load ret
+:FUNCTION_ri32
+  DEFINE ARG_o FCFFFFFF
+  ( ( ( ( local ARG_o load push_arg
+          do_call %FUNCTION_ri8 cleanup_args_bytes %4
+        )
+        push_arg
+        constant %255 push_arg
+        do_call %FUNCTION_and cleanup_args_bytes %8
+      )
+      push_arg
+      ( ( ( ( local ARG_o load push_arg
+              constant %1 push_arg
+              do_call %FUNCTION_add cleanup_args_bytes %8
+            )
+            push_arg
+            do_call %FUNCTION_ri8 cleanup_args_bytes %4
+          )
+          push_arg
+          constant %255 push_arg
+          do_call %FUNCTION_and cleanup_args_bytes %8
+        )
+        push_arg
+        constant %8 push_arg
+        do_call %FUNCTION_shl cleanup_args_bytes %8
+      )
+      push_arg
+      do_call %FUNCTION_or cleanup_args_bytes %8
+    )
+    push_arg
+    ( ( ( ( ( local ARG_o load push_arg
+              constant %2 push_arg
+              do_call %FUNCTION_add cleanup_args_bytes %8
+            )
+            push_arg
+            do_call %FUNCTION_ri8 cleanup_args_bytes %4
+          )
+          push_arg
+          constant %255 push_arg
+          do_call %FUNCTION_and cleanup_args_bytes %8
+        )
+        push_arg
+        constant %16 push_arg
+        do_call %FUNCTION_shl cleanup_args_bytes %8
+      )
+      push_arg
+      ( ( ( ( local ARG_o load push_arg
+              constant %3 push_arg
+              do_call %FUNCTION_add cleanup_args_bytes %8
+            )
+            push_arg
+            do_call %FUNCTION_ri8 cleanup_args_bytes %4
+          )
+          push_arg
+          constant %255 push_arg
+          do_call %FUNCTION_and cleanup_args_bytes %8
+        )
+        push_arg
+        constant %24 push_arg
+        do_call %FUNCTION_shl cleanup_args_bytes %8
+      )
+      push_arg
+      do_call %FUNCTION_or cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_or cleanup_args_bytes %8
+  )
+  ret
+:FUNCTION_wi32
+  DEFINE ARG_v F8FFFFFF
+  DEFINE ARG_o FCFFFFFF
+  ( local ARG_o load push_arg
+    ( local ARG_v load push_arg
+      constant %255 push_arg
+      do_call %FUNCTION_and cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_wi8 cleanup_args_bytes %8
+  )
+  local ARG_v push_address
+  ( local ARG_v load push_arg
+    constant %8 push_arg
+    do_call %FUNCTION_shr cleanup_args_bytes %8
+  )
+  store
+  ( ( local ARG_o load push_arg
+      constant %1 push_arg
+      do_call %FUNCTION_add cleanup_args_bytes %8
+    )
+    push_arg
+    ( local ARG_v load push_arg
+      constant %255 push_arg
+      do_call %FUNCTION_and cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_wi8 cleanup_args_bytes %8
+  )
+  local ARG_v push_address
+  ( local ARG_v load push_arg
+    constant %8 push_arg
+    do_call %FUNCTION_shr cleanup_args_bytes %8
+  )
+  store
+  ( ( local ARG_o load push_arg
+      constant %2 push_arg
+      do_call %FUNCTION_add cleanup_args_bytes %8
+    )
+    push_arg
+    ( local ARG_v load push_arg
+      constant %255 push_arg
+      do_call %FUNCTION_and cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_wi8 cleanup_args_bytes %8
+  )
+  local ARG_v push_address
+  ( local ARG_v load push_arg
+    constant %8 push_arg
+    do_call %FUNCTION_shr cleanup_args_bytes %8
+  )
+  store
+  ( ( local ARG_o load push_arg
+      constant %3 push_arg
+      do_call %FUNCTION_add cleanup_args_bytes %8
+    )
+    push_arg
+    ( local ARG_v load push_arg
+      constant %255 push_arg
+      do_call %FUNCTION_and cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_wi8 cleanup_args_bytes %8
+  )
+  ret
+:FUNCTION_malloc
+  DEFINE ARG_size FCFFFFFF
+  DEFINE LOCAL_old_malloc F4FFFFFF
+  reserve_stack_slot
+# IF_malloc_0
+  ( global &GLOBAL_NULL load push_arg
+    global &GLOBAL__brk_ptr load push_arg
+    do_call %FUNCTION_eq cleanup_args_bytes %8
+  )
+  jump_false %ELSE_malloc_0
+  global &GLOBAL__brk_ptr push_address
+  ( constant %0 push_arg
+    do_call %FUNCTION_brk cleanup_args_bytes %4
+  )
+  store
+  global &GLOBAL__malloc_ptr push_address
+  global &GLOBAL__brk_ptr load store
+  jump %_END_IF_malloc_0
+:ELSE_malloc_0
+:_END_IF_malloc_0
+# IF_malloc_1
+  ( global &GLOBAL__brk_ptr load push_arg
+    ( global &GLOBAL__malloc_ptr load push_arg
+      local ARG_size load push_arg
+      do_call %FUNCTION_add cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_lt cleanup_args_bytes %8
+  )
+  jump_false %ELSE_malloc_1
+  global &GLOBAL__brk_ptr push_address
+  ( ( global &GLOBAL__malloc_ptr load push_arg
+      local ARG_size load push_arg
+      do_call %FUNCTION_add cleanup_args_bytes %8
+    )
+    push_arg
+    do_call %FUNCTION_brk cleanup_args_bytes %4
+  )
+  store
+# IF_malloc_2
+  ( ( constant %0 push_arg
+      constant %1 push_arg
+      do_call %FUNCTION_sub cleanup_args_bytes %8
+    )
+    push_arg
+    global &GLOBAL__brk_ptr load push_arg
+    do_call %FUNCTION_eq cleanup_args_bytes %8
+  )
+  jump_false %ELSE_malloc_2
+  constant %0 cleanup_locals_bytes %4 ret
+  jump %_END_IF_malloc_2
+:ELSE_malloc_2
+:_END_IF_malloc_2
+  jump %_END_IF_malloc_1
+:ELSE_malloc_1
+:_END_IF_malloc_1
+  local LOCAL_old_malloc push_address
+  global &GLOBAL__malloc_ptr load store
+  global &GLOBAL__malloc_ptr push_address
+  ( global &GLOBAL__malloc_ptr load push_arg
+    local ARG_size load push_arg
+    do_call %FUNCTION_add cleanup_args_bytes %8
+  )
+  store
+  local LOCAL_old_malloc load cleanup_locals_bytes %4 ret
+:FUNCTION_add
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+add_eax,ebx
+ret
+  ret
+:FUNCTION_sub
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+sub_ebx,eax
+mov_eax,ebx
+ret
+  ret
+:FUNCTION_mul
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+imul_ebx
+ret
+  ret
+:FUNCTION_shl
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+mov_ecx,eax
+mov_eax,ebx
+sal_eax,cl
+ret
+  ret
+:FUNCTION_shr
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+mov_ecx,eax
+mov_eax,ebx
+sar_eax,cl
+ret
+  ret
+:FUNCTION_lt
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+setl_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_gt
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+setg_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_lte
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+setle_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_gte
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+setge_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_and
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+and_eax,ebx
+ret
+  ret
+:FUNCTION_or
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+or_eax,ebx
+ret
+  ret
+:FUNCTION_eq
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+sete_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_neq
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+cmp
+setne_al
+movzx_eax,al
+ret
+  ret
+:FUNCTION_xor
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+xor_eax,ebx
+ret
+  ret
+:FUNCTION_div
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+xchg_ebx,eax
+cdq
+idiv_ebx
+ret
+  ret
+:FUNCTION_mod
+  DEFINE ARG_b F8FFFFFF
+  DEFINE ARG_a FCFFFFFF
+lea_eax,[ebp+DWORD] %-4
+mov_eax,[eax]
+push_eax
+lea_eax,[ebp+DWORD] %-8
+mov_eax,[eax]
+pop_ebx
+xchg_ebx,eax
+cdq
+idiv_ebx
+mov_eax,edx
+ret
+  ret
+:FUNCTION_open
+  DEFINE ARG_mode F4FFFFFF
+  DEFINE ARG_flag F8FFFFFF
+  DEFINE ARG_name FCFFFFFF
+lea_ebx,[esp+DWORD] %12
+mov_ebx,[ebx]
+lea_ecx,[esp+DWORD] %8
+mov_ecx,[ecx]
+lea_edx,[esp+DWORD] %4
+mov_edx,[edx]
+mov_eax, %5
+int !0x80
+  ret
+:FUNCTION_close
+  DEFINE ARG_fd FCFFFFFF
+lea_ebx,[esp+DWORD] %4
+mov_ebx,[ebx]
+mov_eax, %6
+int !0x80
+  ret
+:FUNCTION_brk
+  DEFINE ARG_addr FCFFFFFF
+mov_eax,[esp+DWORD] %4
+push_eax
+mov_eax, %45
+pop_ebx
+int !0x80
+  ret
