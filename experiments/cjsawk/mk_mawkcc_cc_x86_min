@@ -231,15 +231,22 @@ cat >> $BLD_DIR/mawkcc_support.M1 <<'M1'
   ret
 :FUNCTION_NEG
   DEFINE ARG_a FCFFFFFF
-  constant %0 push_arg
-  local ARG_a load push_arg
-  do_call %FUNCTION_sub cleanup_args_bytes %8
+  mov_eax, %0
+  push_eax
+  local ARG_a load
+  pop_ebx
+  sub_ebx,eax
+  mov_eax,ebx
   ret
 :FUNCTION_NOT
   DEFINE ARG_a FCFFFFFF
-  local ARG_a load push_arg
-  constant %0 push_arg
-  do_call %FUNCTION_eq cleanup_args_bytes %8
+  local ARG_a load
+  push_eax
+  mov_eax, %0
+  pop_ebx
+  cmp
+  sete_al
+  movzx_eax,al
   ret
 :FUNCTION_read
   DEFINE ARG_count F4FFFFFF
@@ -275,11 +282,18 @@ NULL
 NULL
 M1
 
-../m2min_v2/artifacts/cc_x86_min.exe $BLD_DIR/mawkcc_self_cc_x86_min.c $BLD_DIR/mawkcc.M1
-cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/mawkcc_support.M1 $BLD_DIR/mawkcc.M1 > $BLD_DIR/mawkcc-0.M1
-../m2min_v2/artifacts/M0 $BLD_DIR/mawkcc-0.M1 $BLD_DIR/mawkcc.hex2
-cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/mawkcc.hex2 > $BLD_DIR/mawkcc-0.hex2
-../m2min_v2/artifacts/hex2-0 $BLD_DIR/mawkcc-0.hex2 $BLD_DIR/mawkcc.exe
+../m2min_v2/artifacts/cc_x86_min.exe $BLD_DIR/mawkcc_self_cc_x86_min.c $BLD_DIR/mawkcc_cc_x86_min.M1
+cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/mawkcc_support.M1 $BLD_DIR/mawkcc_cc_x86_min.M1 > $BLD_DIR/mawkcc_cc_x86_min-0.M1
+../m2min_v2/artifacts/M0 $BLD_DIR/mawkcc_cc_x86_min-0.M1 $BLD_DIR/mawkcc_cc_x86_min.hex2
+cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/mawkcc_cc_x86_min.hex2 > $BLD_DIR/mawkcc_cc_x86_min-0.hex2
+../m2min_v2/artifacts/hex2-0 $BLD_DIR/mawkcc_cc_x86_min-0.hex2 $BLD_DIR/mawkcc_cc_x86_min.exe
+chmod +x $BLD_DIR/mawkcc_cc_x86_min.exe
+
+$BLD_DIR/mawkcc_cc_x86_min.exe $MAWKCC_DIR/mawkcc_self.c > $BLD_DIR/mawkcc.exe
 chmod +x $BLD_DIR/mawkcc.exe
+
+if [ -n "${MAWKCC_COMPARE:-}" ]; then
+  cmp -s "$MAWKCC_COMPARE" "$BLD_DIR/mawkcc.exe"
+fi
 
 echo "DONE mawkcc cc_x86_min"
