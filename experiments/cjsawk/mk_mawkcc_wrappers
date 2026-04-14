@@ -1,7 +1,0 @@
-set -xe
-
-cat support_mawkcc.c support_alu_mawkcc.c cjsawk.js > artifacts/deps/cjsawk_mawkcc.c
-cat support_mawkcc.c support_alu_mawkcc.c m0.js > artifacts/deps/m0_mawkcc.c
-cat support_mawkcc.c support_alu_mawkcc.c hex2.js > artifacts/deps/hex2_mawkcc.c
-
-echo "DONE mawkcc wrappers"
