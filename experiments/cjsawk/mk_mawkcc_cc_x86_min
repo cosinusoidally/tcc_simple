@@ -32,7 +32,7 @@ cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/mawkcc_cc_x86_min.hex2 > $BLD_DIR/mawkcc_
 ../m2min_v2/artifacts/hex2-0 $BLD_DIR/mawkcc_cc_x86_min-0.hex2 $BLD_DIR/mawkcc_cc_x86_min.exe
 chmod +x $BLD_DIR/mawkcc_cc_x86_min.exe
 
-$BLD_DIR/mawkcc_cc_x86_min.exe $MAWKCC_DIR/mawkcc_self.c > $BLD_DIR/mawkcc.exe
+$BLD_DIR/mawkcc_cc_x86_min.exe -o $BLD_DIR/mawkcc.exe $MAWKCC_DIR/mawkcc_self.c
 chmod +x $BLD_DIR/mawkcc.exe
 
 if [ -n "${MAWKCC_COMPARE:-}" ]; then
