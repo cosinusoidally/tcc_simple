@@ -444,7 +444,8 @@ int memset(int ptr, int value, int num)
 
 int calloc(int count, int size)
 {
-	int ret = malloc(mul(count, size));
+	int ret;
+	ret = malloc(mul(count, size));
 	if(eq(NULL, ret)) return NULL;
 	memset(ret, 0, mul(count, size));
 	return ret;

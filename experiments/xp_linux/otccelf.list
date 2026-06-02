@@ -1,0 +1,6 @@
+/M2_tcc_js_simple.exe m2min/otccelf_cc_x86_min.c artifacts/otccelf_cc_x86_min.exe.M1
+/catm artifacts/otccelf_cc_x86_min.exe-0.M1 m2min/simple_asm_defs.M1 m2min/x86_defs.M1 M2libc/x86/libc-core.M1 artifacts/otccelf_cc_x86_min.exe.M1
+/m0.exe artifacts/otccelf_cc_x86_min.exe-0.M1 artifacts/otccelf_cc_x86_min.exe.hex2
+/catm artifacts/otccelf_cc_x86_min.exe-0.hex2 x86/ELF-i386.hex2 artifacts/otccelf_cc_x86_min.exe.hex2
+/hex2.exe artifacts/otccelf_cc_x86_min.exe-0.hex2 artifacts/otccelf_cc_x86_min.exe
+artifacts/otccelf_cc_x86_min.exe otccelf/elf_loader.c artifacts/elf_loader.exe

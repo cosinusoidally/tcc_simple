@@ -1,0 +1,42 @@
+rm -r artifacts/builds/mawkcc_cc_x86_min
+
+set -xe
+
+BLD_DIR=artifacts/builds/mawkcc_cc_x86_min
+MAWKCC_DIR=${MAWKCC_DIR:-../../../ai_experiments/mawkcc}
+
+mkdir -p artifacts/builds
+mkdir $BLD_DIR
+
+pushd .
+cd ../m2min_v2/
+./mk_cc_x86_min
+popd
+
+cat ../m2min_v3/js_to_c/js_to_c_m2_support.c mawkcc_to_cc_x86_min.c > $BLD_DIR/mawkcc_to_cc_x86_min_all.c
+../m2min_v2/artifacts/cc_x86_min.exe $BLD_DIR/mawkcc_to_cc_x86_min_all.c $BLD_DIR/mawkcc_to_cc_x86_min.M1
+cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/mawkcc_to_cc_x86_min.M1 > $BLD_DIR/mawkcc_to_cc_x86_min-0.M1
+../m2min_v2/artifacts/M0 $BLD_DIR/mawkcc_to_cc_x86_min-0.M1 $BLD_DIR/mawkcc_to_cc_x86_min.hex2
+cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/mawkcc_to_cc_x86_min.hex2 > $BLD_DIR/mawkcc_to_cc_x86_min-0.hex2
+../m2min_v2/artifacts/hex2-0 $BLD_DIR/mawkcc_to_cc_x86_min-0.hex2 $BLD_DIR/mawkcc_to_cc_x86_min.exe
+chmod +x $BLD_DIR/mawkcc_to_cc_x86_min.exe
+
+$BLD_DIR/mawkcc_to_cc_x86_min.exe "$MAWKCC_DIR/mawkcc_self.c" "$BLD_DIR/mawkcc_self_cc_x86_min.c"
+
+../m2min_v2/artifacts/cc_x86_min.exe mawkcc_cc_x86_min_support.c $BLD_DIR/mawkcc_support.M1
+
+../m2min_v2/artifacts/cc_x86_min.exe $BLD_DIR/mawkcc_self_cc_x86_min.c $BLD_DIR/mawkcc_cc_x86_min.M1
+cat ../m2min_v3/simple_asm_defs.M1 ../m2min_v3/x86_defs.M1 ../m2min_v3/libc-core.M1 $BLD_DIR/mawkcc_support.M1 $BLD_DIR/mawkcc_cc_x86_min.M1 > $BLD_DIR/mawkcc_cc_x86_min-0.M1
+../m2min_v2/artifacts/M0 $BLD_DIR/mawkcc_cc_x86_min-0.M1 $BLD_DIR/mawkcc_cc_x86_min.hex2
+cat ../m2min_v3/ELF-i386.hex2 $BLD_DIR/mawkcc_cc_x86_min.hex2 > $BLD_DIR/mawkcc_cc_x86_min-0.hex2
+../m2min_v2/artifacts/hex2-0 $BLD_DIR/mawkcc_cc_x86_min-0.hex2 $BLD_DIR/mawkcc_cc_x86_min.exe
+chmod +x $BLD_DIR/mawkcc_cc_x86_min.exe
+
+$BLD_DIR/mawkcc_cc_x86_min.exe -o $BLD_DIR/mawkcc.exe $MAWKCC_DIR/mawkcc_self.c
+chmod +x $BLD_DIR/mawkcc.exe
+
+if [ -n "${MAWKCC_COMPARE:-}" ]; then
+  cmp -s "$MAWKCC_COMPARE" "$BLD_DIR/mawkcc.exe"
+fi
+
+echo "DONE mawkcc cc_x86_min"

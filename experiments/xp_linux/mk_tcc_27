@@ -1,0 +1,15 @@
+set -xe
+
+./mk_test dummy.list
+
+nodejs gen_alt2.js
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+sha1sum artifacts/*26*o |sort
+sha1sum artifacts/*27*o |sort
+sha1sum artifacts/*exe |sort
+
+diff -u -s artifacts/tcc_27_boot_static4.exe artifacts/tcc_27_boot_static5.exe
+
+echo "DONE tcc_26 nodejs"

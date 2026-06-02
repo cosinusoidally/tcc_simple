@@ -1,0 +1,11 @@
+set -xe
+
+./mk_test dummy.list
+
+nodejs gen_full.js
+
+./artifacts/test_tracer.exe ./artifacts/test_tracee.exe artifacts/full.list
+
+sha256sum -c ../sums_tcc-boot-mes
+
+echo "DONE full nodejs"

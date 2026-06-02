@@ -209,12 +209,12 @@ function storeLabel_(ip,    c, h, entry) {
 function outputPointer(displacement, number_of_bytes) {
 	return outputPointer_(displacement, number_of_bytes, 0, 0);
 }
-function outputPointer_(displacement, number_of_bytes,    byte, value) {
+function outputPointer_(displacement, number_of_bytes,    b, value) {
 	value = displacement;
 	while(gt(number_of_bytes, 0)) {
-		byte = mod(value, 256);
+		b = mod(value, 256);
 		value = AND(shr(value, 8), 16777215);
-		fputc(byte, output);
+		fputc(b, output);
 		number_of_bytes = SUB(number_of_bytes, 1);
 	}
 }
@@ -380,6 +380,16 @@ function main(argc, argv) {
 
 	jump_tables = v_calloc(65537, 4);
 	Base_Address = 134512640;
+
+	if(eq(argc, 4)) {
+		mks("hack for xp_linux win32 support see xp_linux readme");
+		Base_Address = SUB(12288, 5632);
+	}
+	if(eq(argc, 5)) {
+		mks("2nd hack for xp_linux win32 support see xp_linux readme");
+		Base_Address = add(4194304, SUB(12288, 5632));
+	}
+
 	scratch = v_calloc(add(max_string, 1), 1);
 
 	source_filename = ri32(add(argv, 4));

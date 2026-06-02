@@ -1,0 +1,2115 @@
+DEFINE add_eax,ecx 01C8
+DEFINE add_ecx,eax 01C1
+DEFINE add_ecx, 81C1
+DEFINE addi8_eax, 83C0
+DEFINE addi8_esp, 83C4
+DEFINE and_eax, 81E0
+DEFINE call E8
+DEFINE call_eax FFD0
+DEFINE cmp_ecx,eax 39C1
+DEFINE cmp_eax, 81F8
+DEFINE cmp_eax_short_version, 3D
+DEFINE cmpi8_eax, 83F8
+DEFINE imul_eax,ecx 0FAFC1
+DEFINE inc_eax 40
+DEFINE je 0F84
+DEFINE jgei8 7D
+DEFINE jle 0F8E
+DEFINE jne 0F85
+DEFINE jmp_indirect FF25
+DEFINE jmp E9
+DEFINE jmpi8 EB
+DEFINE jmp_[eax+BYTE], FF60
+DEFINE lea_eax,[ebp+BYTE] 8D45
+DEFINE lea_eax,[esp+BYTE] 8D4424
+DEFINE lea_ebp,[esp+BYTE] 8D6C24
+DEFINE leave C9
+DEFINE mov_eax, B8
+DEFINE mov_eax,fs:DWORD 64A1
+DEFINE mov_fs:DWORD,eax 64A3
+DEFINE mov_ecx, B9
+DEFINE mov_esp, BC
+DEFINE mov_eax,ecx 89C8
+DEFINE mov_eax,esp 89E0
+DEFINE mov_ecx,ebp 89E9
+DEFINE mov_ebp,esp 89E5
+DEFINE mov_esp,ecx 89CC
+DEFINE mov_[DWORD],eax 8905
+DEFINE mov_[eax],ecx 8908
+DEFINE mov_[ecx],eax 8901
+DEFINE mov_eax,[eax] 8B00
+DEFINE mov_eax,[ecx] 8B01
+DEFINE mov_eax,[edx] 8B02
+DEFINE mov_ecx,[eax] 8B08
+DEFINE mov_eax,[DWORD] 8B05
+DEFINE mov_ecx,[DWORD] 8B0D
+DEFINE mov_edx,[DWORD] 8B15
+DEFINE movi8_[ebp+BYTE],eax 8945
+DEFINE movi8_eax,[ebp+BYTE] 8B45
+DEFINE movi8_ecx,[ebp+BYTE] 8B4D
+DEFINE movi8_ebp,[esp+BYTE] 8B6C24
+DEFINE movi8_esp,[ebp+BYTE] 8B65
+DEFINE movsx_eax,BYTE_PTR_[ecx] 0FBE01
+DEFINE nop 90
+DEFINE or_ecx,edx 09D1
+DEFINE or_edx,eax 09C2
+DEFINE pop_ebp 5D
+DEFINE push_eax 50
+DEFINE push_ecx 51
+DEFINE push_edx 52
+DEFINE push_ebp 55
+DEFINE shli8_ecx, C1E1
+DEFINE sub_eax, 2D
+DEFINE sub_ecx,eax 29C1
+DEFINE sub_ecx, 81E9
+DEFINE sub_esp, 81EC
+DEFINE subi8_eax, 83E8
+DEFINE test_[ecx],eax 8501
+DEFINE ret C3
+DEFINE reti16 C2
+DEFINE xchg_[esp],ebp 872C24
+DEFINE xor_eax,eax 31C0
+
+:.PE_base
+'4D5A'  # "MZ" DOS magic number
+
+# DOS header (unused data)
+'9000 0300 0000 0400 0000 FFFF 0000'
+'B800 0000 0000 0000 4000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000'
+# pointer to PE header
+%.PE_header>.PE_base
+# more of the DOS header
+'0E1F BA0E 00B4 09CD 21B8 014C CD21'
+"This program cannot be run in DOS mode.
+$"
+'0000 0000 0000'
+# PE header
+:.PE_header
+"PE" !0     # PE\0\0
+'4C01'      # Machine (0x14C IMAGE_FILE_MACHINE_I386)
+'0200'      # NumberOfSections (2)
+%0          # TimeDateStamp (null)
+%0          # PointerToSymbolTable (null)
+%0          # NumberOfSymbols (0)
+'E000'      # SizeOfOptionalHeader
+'0F03'      # Characteristics (0x030F is hard coded in tcc)
+# Optional Header
+'0B01'      # Magic (0x10B : PE32)
+'06'        # MajorLinkerVersion (hard coded in tcc)
+'00'        # MinorLinkerVersion (hard coded in tcc)
+%.text_end>.text # SizeOfCode
+%.data_end>.data # SizeOfInitializedData
+%0          # SizeOfUninitializedData
+%0x2050     # AddressOfEntryPoint
+%0x1000     # BaseOfCode
+%0x3000     # BaseOfData
+%0x400000   # ImageBase
+%0x1000     # SectionAlignment
+%0x200      # FileAlignment
+'0400'      # MajorOperatingSystemVersion
+'0000'      # MinorOperatingSystemVersion
+'0000'      # MajorImageVersion
+'0000'      # MinorImageVersion
+'0400'      # MajorSubsystemVersion
+'0000'      # MinorSubsystemVersion
+%0          # Win32VersionValue
+%0x4000     # SizeOfImage
+%.text>.PE_base  # SizeOfHeaders
+%0x0000518E # CheckSum (can probably avoid having to calculate)
+'0300'      # Subsystem (IMAGE_SUBSYSTEM_WINDOWS_CUI is 3)
+'0000'      # DllCharacteristics
+%0x100000   # SizeOfStackReserve
+%0x1000     # SizeOfStackCommit
+%0x100000   # SizeOfHeapReserve
+%0x1000     # SizeOfHeapCommit
+%0          # LoaderFlags (must be 0)
+%0x10       # NumberOfRvaAndSizes
+
+# Optional Header Data Directories
+#  typedef struct _IMAGE_DATA_DIRECTORY {
+#    DWORD   VirtualAddress;
+#    DWORD   Size;
+# } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+#
+'0000 0000     0000 0000'         # Export Table
+&.idata        %.idata_end>.idata # Import Table
+'0000 0000     0000 0000'         # Resource Table
+'0000 0000     0000 0000'         # Exception Table
+'0000 0000     0000 0000'         # Certificate Table
+'0000 0000     0000 0000'         # Base Relocation Table
+'0000 0000     0000 0000'         # Debug
+'0000 0000     0000 0000'         # Architecture
+'0000 0000     0000 0000'         # Global Ptr
+'0000 0000     0000 0000'         # TLS Table
+'0000 0000     0000 0000'         # Load Config Table
+'0000 0000     0000 0000'         # Bound Import
+&.IAT          %.IAT_end>.IAT     # Import Address Table (IAT)
+'0000 0000     0000 0000'         # Delay Import Descriptor
+'0000 0000     0000 0000'         # CLR Runtime Header
+'0000 0000     0000 0000'         # Reserved, must be zero
+
+# Section Table (Section Headers)
+
+# .text section header:
+".text" '0000'    # Name
+%0x1278           # VirtualSize
+%0x1000           # VirtualAddress
+%.text_end>.text  # SizeOfRawData
+%.text>.PE_base   # PointerToRawData (where .text is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0x60000020       # Characteristics
+
+# .data section header:
+".data" '0000'    #  name .data
+%0x3E4            # VirtualSize
+%0x3000           # VirtualAddress
+%.data_end>.data  # SizeOfRawData
+%.data>.PE_base   # PointerToRawData (where .data is in the exe file)
+%0                # PointerToRelocations
+%0                # PointerToLinenumbers
+'0000'            # NumberOfRelocations
+'0000'            # NumberOfLinenumbers
+%0xC0000040       # Characteristics
+
+# padding
+'0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+
+# .text section
+:.text
+:args_base
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x8045800
+  leave
+  ret
+:elf_base
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x8048000
+  leave
+  ret
+:base_address
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x4000000
+  leave
+  ret
+:file_descriptors
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %base_address
+  mov_ecx, %0x200
+  push_ecx
+  mov_ecx, %0x20000
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %add
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:sizeof_file_descriptor
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %8
+  leave
+  ret
+:gfds
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %base_address
+  mov_ecx, %0x01000010
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:sizeof_gfd
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %8
+  leave
+  ret
+:filename_array
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %base_address
+  mov_ecx, %0x200000
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:filename_size
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x400
+  leave
+  ret
+:global_data
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %base_address
+  mov_ecx, %0x10000
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:globals
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %global_data
+  movi8_ecx,[ebp+BYTE] !8
+  push_ecx
+  mov_ecx, %4
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:regs_data
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:host_call_fn
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x4020024
+  leave
+  ret
+:host_params
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0xA
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:host_stdout_addr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x12
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:host_stdout
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %host_stdout_addr
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:syscall_hook
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x13
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:reloc_entrypoint_ptr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x4020050
+  leave
+  ret
+:int2str_tmp
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x15
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:brk_ptr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x28
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:next_fd
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x29
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:next_filenum
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x2A
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:file_addr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x2B
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:command_file
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x2C
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:char_buf
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x2D
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:command_buffer
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x2E
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:dummy_global
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0x82E
+  push_eax
+  call %globals
+  addi8_esp, !4
+  leave
+  ret
+:get_reg
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %regs_data
+  mov_ecx, %4
+  push_ecx
+  movi8_ecx,[ebp+BYTE] !8
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:set_reg
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %regs_data
+  mov_ecx, %0x4
+  push_ecx
+  movi8_ecx,[ebp+BYTE] !8
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:set_param
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %host_params
+  mov_ecx, %0x4
+  push_ecx
+  movi8_ecx,[ebp+BYTE] !8
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:gfd_get_file_length
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %gfds
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_gfd
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  mov_ecx, %0x4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:gfd_set_file_length
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %gfds
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_gfd
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  mov_ecx, %0x4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:gfd_get_file_addr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %gfds
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_gfd
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:gfd_set_file_addr
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %gfds
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_gfd
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:gfn_get_filename
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %filename_array
+  movi8_[ebp+BYTE],eax !-4
+  call %filename_size
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  leave
+  ret
+:fd_set_filenum
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %file_descriptors
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_file_descriptor
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:fd_get_filenum
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %file_descriptors
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_file_descriptor
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:fd_set_file_offset
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %file_descriptors
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_file_descriptor
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  mov_ecx, %4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  movi8_ecx,[ebp+BYTE] !12
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  leave
+  ret
+:fd_get_file_offset
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  call %file_descriptors
+  movi8_[ebp+BYTE],eax !-4
+  call %sizeof_file_descriptor
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %mul
+  addi8_esp, !8
+  mov_ecx, %0x4
+  push_ecx
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %add
+  addi8_esp, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:mul
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !12
+  imul_eax,ecx
+  leave
+  ret
+:add
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !12
+  add_eax,ecx
+  leave
+  ret
+:wi32
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  movi8_eax,[ebp+BYTE] !8
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !-4
+  movi8_ecx,[ebp+BYTE] !12
+  mov_[eax],ecx
+  mov_eax, %0
+  leave
+  ret
+:ri8
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  mov_eax, %0
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  movi8_ecx,[ebp+BYTE] !-4
+  add_ecx,eax
+  movsx_eax,BYTE_PTR_[ecx]
+  and_eax, %0xFF
+  leave
+  ret
+:ri32
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %8
+  movi8_eax,[ebp+BYTE] !8
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !-4
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
+  mov_eax,[eax]
+  leave
+  ret
+:trap_syscalls_on
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %regs_data
+  push_eax
+  mov_eax, %0x4017BC
+  push_eax
+  mov_eax, %0xFFFE
+  push_eax
+  call %syscall
+  addi8_esp, !12
+  leave
+  ret
+:trap_syscalls_off
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_eax, %0xFFFD
+  push_eax
+  call %syscall
+  addi8_esp, !4
+  leave
+  ret
+:dump_regs
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x1C
+  mov_eax, %0
+  push_eax
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %0
+  push_ecx
+  movi8_[ebp+BYTE],eax !-4
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %1
+  push_ecx
+  movi8_[ebp+BYTE],eax !-8
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
+  movi8_[ebp+BYTE],eax !-12
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %3
+  push_ecx
+  movi8_[ebp+BYTE],eax !-16
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %4
+  push_ecx
+  movi8_[ebp+BYTE],eax !-20
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %5
+  push_ecx
+  movi8_[ebp+BYTE],eax !-24
+  call %get_reg
+  addi8_esp, !4
+  mov_ecx, %6
+  push_ecx
+  movi8_[ebp+BYTE],eax !-28
+  call %get_reg
+  addi8_esp, !4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-28
+  push_eax
+  movi8_eax,[ebp+BYTE] !-24
+  push_eax
+  movi8_eax,[ebp+BYTE] !-20
+  push_eax
+  movi8_eax,[ebp+BYTE] !-16
+  push_eax
+  movi8_eax,[ebp+BYTE] !-12
+  push_eax
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  mov_eax, &STRING_dump_regs_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !0x24
+  leave
+  ret
+:wrap_syscall_alt
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  movi8_eax,[ebp+BYTE] !36
+  push_eax
+  mov_eax, %0
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !24
+  push_eax
+  mov_eax, %1
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !32
+  push_eax
+  mov_eax, %2
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !28
+  push_eax
+  mov_eax, %3
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !12
+  push_eax
+  mov_eax, %4
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  mov_eax, %5
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !16
+  push_eax
+  mov_eax, %6
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  call %wrap_syscall
+  leave
+  ret
+:wrap_syscall
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
+# IF_wrap_syscall_0
+  call %syscall_hook
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  movi8_[ebp+BYTE],eax !-12
+  cmpi8_eax, !0
+  je %END_IF_wrap_syscall_0
+  movi8_eax,[ebp+BYTE] !-12
+  call_eax
+  jmp %END_wrap_syscall
+:END_IF_wrap_syscall_0
+  call %trap_syscalls_off
+  mov_eax, &STRING_wrap_syscall_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+:END_wrap_syscall
+  leave
+  ret
+:load_boot
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
+  mov_eax, &STRING_load_boot_0
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %THUNK_fopen
+  addi8_esp, !8
+  movi8_[ebp+BYTE],eax !-4
+  call %elf_base
+  movi8_[ebp+BYTE],eax !-8
+:WHILE_load_boot_0
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  mov_eax, %0x1000
+  push_eax
+  mov_eax, %1
+  push_eax
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  call %THUNK_fread
+  addi8_esp, !16
+  movi8_[ebp+BYTE],eax !-12
+  cmpi8_eax, !0
+  je %END_WHILE_load_boot_0
+  movi8_eax,[ebp+BYTE] !-8
+  movi8_ecx,[ebp+BYTE] !-12
+  add_eax,ecx
+  movi8_[ebp+BYTE],eax !-8
+  jmpi8 !WHILE_load_boot_0
+:END_WHILE_load_boot_0
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %THUNK_fclose
+  addi8_esp, !4
+  call %elf_base
+  movi8_ecx,[ebp+BYTE] !-8
+  sub_ecx,eax
+  mov_eax,ecx
+  leave
+  ret
+:get_param
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  call %host_params
+  movi8_ecx,[ebp+BYTE] !8
+  shli8_ecx, !2
+  add_eax,ecx
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  leave
+  ret
+:host_callback
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x2C
+  mov_eax, %0
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !1
+  jne %ELSE_host_callback_0
+  call %trap_syscalls_off
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_0
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !2
+  jne %ELSE_host_callback_1
+  call %trap_syscalls_on
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_1
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !3
+  jne %ELSE_host_callback_2
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_puts
+  addi8_esp, !4
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_2
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !4
+  jne %ELSE_host_callback_3
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
+  movi8_[ebp+BYTE],eax !-16
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %3
+  push_ecx
+  movi8_[ebp+BYTE],eax !-20
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %4
+  push_ecx
+  movi8_[ebp+BYTE],eax !-24
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-24
+  push_eax
+  movi8_eax,[ebp+BYTE] !-20
+  push_eax
+  movi8_eax,[ebp+BYTE] !-16
+  push_eax
+  call %THUNK_fwrite
+  addi8_esp, !16
+  movi8_[ebp+BYTE],eax !-12
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_3
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !5
+  jne %ELSE_host_callback_4
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
+  movi8_[ebp+BYTE],eax !-28
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-28
+  push_eax
+  mov_eax, &STRING_host_callback_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !12
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
+  movi8_[ebp+BYTE],eax !-32
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-32
+  push_eax
+  call %THUNK_fopen
+  addi8_esp, !8
+  movi8_[ebp+BYTE],eax !-12
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_4
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !6
+  jne %ELSE_host_callback_5
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  mov_eax, &STRING_host_callback_1
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_fclose
+  addi8_esp, !4
+  movi8_[ebp+BYTE],eax !-12
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_5
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !7
+  jne %ELSE_host_callback_6
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %2
+  push_ecx
+  movi8_[ebp+BYTE],eax !-36
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %3
+  push_ecx
+  movi8_[ebp+BYTE],eax !-40
+  call %get_param
+  addi8_esp, !4
+  mov_ecx, %4
+  push_ecx
+  movi8_[ebp+BYTE],eax !-44
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-44
+  push_eax
+  movi8_eax,[ebp+BYTE] !-40
+  push_eax
+  movi8_eax,[ebp+BYTE] !-36
+  push_eax
+  call %THUNK_fread
+  addi8_esp, !16
+  movi8_[ebp+BYTE],eax !-12
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_6
+  movi8_eax,[ebp+BYTE] !-8
+  cmpi8_eax, !8
+  jne %ELSE_host_callback_7
+  mov_eax, &STRING_host_callback_2
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %get_param
+  addi8_esp, !4
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+  jmp %END_IF_host_callback_0
+:ELSE_host_callback_7
+  call %trap_syscalls_off
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  mov_eax, &STRING_host_callback_3
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+:END_IF_host_callback_0
+  movi8_eax,[ebp+BYTE] !-12
+  leave
+  ret
+:init_runtime
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %8
+  call %host_call_fn
+  mov_ecx, %0x4018A2
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  call %host_stdout_addr
+  movi8_[ebp+BYTE],eax !-4
+  call %get_stdout
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  mov_eax, %0x40172E
+  push_eax
+  mov_eax, %8
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  mov_eax, &STRING_init_runtime_1
+  push_eax
+  call %load_boot
+  addi8_esp, !4
+  push_eax
+  mov_eax, &STRING_init_runtime_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  call %command_file
+  mov_ecx, &STRING_init_runtime_2
+  push_ecx
+  movi8_ecx,[ebp+BYTE] !8
+  push_ecx
+  movi8_[ebp+BYTE],eax !-8
+  call %THUNK_fopen
+  addi8_esp, !8
+  push_eax
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  call %command_file
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  cmpi8_eax, !0
+  je %IF_init_runtime_0
+  jmp %END_IF_init_runtime_0
+:IF_init_runtime_0
+  mov_eax, &STRING_init_runtime_3
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+:END_IF_init_runtime_0
+  leave
+  ret
+:run_process
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0
+  mov_esp, %0x8045800
+  jmp_indirect %0x8048018
+  leave
+  ret
+:v_main
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0xC
+  mov_eax, %0
+  movi8_[ebp+BYTE],eax !-4
+  call %base_address
+  mov_ecx,[DWORD] &PROT_READ
+  mov_edx,[DWORD] &PROT_WRITE
+  or_ecx,edx
+  mov_edx,[DWORD] &PROT_EXEC
+  or_ecx,edx
+  mov_edx,[DWORD] &MAP_ANONYMOUS
+  movi8_[ebp+BYTE],eax !-12
+  mov_eax,[DWORD] &MAP_PRIVATE
+  or_edx,eax
+  mov_eax,[DWORD] &MAP_FIXED
+  or_edx,eax
+  mov_eax, %0
+  push_eax
+  mov_eax, %0
+  push_eax
+  push_edx
+  push_ecx
+  mov_eax, %0x20000000
+  push_eax
+  movi8_eax,[ebp+BYTE] !-12
+  push_eax
+  call %mmap
+  addi8_esp, !0x18
+  movi8_[ebp+BYTE],eax !-4
+  call %base_address
+  movi8_ecx,[ebp+BYTE] !-4
+  cmp_ecx,eax
+  je %END_IF_v_main_0
+  mov_eax, &STRING_v_main_0
+  push_eax
+  call %THUNK_puts
+  addi8_esp, !4
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+:END_IF_v_main_0
+# IF_v_main_1
+  movi8_eax,[ebp+BYTE] !8
+  cmpi8_eax, !1
+  jle %ELSE_v_main_1
+  movi8_eax,[ebp+BYTE] !12
+  addi8_eax, !4
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  mov_eax, &STRING_v_main_1
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  jmp %END_if_v_main_1
+:ELSE_v_main_1
+  mov_eax, &STRING_v_main_2
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, &STRING_v_main_3
+  movi8_[ebp+BYTE],eax !-8
+:END_if_v_main_1
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  call %init_runtime
+  addi8_esp, !4
+  call %run_process
+  mov_eax, %0
+  leave
+  ret
+:TopLevelHandler
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x14
+  nop
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xB8
+  mov_eax,[ecx]
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xC4
+  mov_eax,[ecx]
+  movi8_[ebp+BYTE],eax !-8
+# IF_TopLevelHandler_0
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  call %ri8
+  addi8_esp, !4
+  cmp_eax, %0xCD
+  jne %ELSE_TopLevelHandler_0
+  movi8_eax,[ebp+BYTE] !-4
+  inc_eax
+  push_eax
+  call %ri8
+  addi8_esp, !4
+  cmp_eax, %0x80
+  jne %ELSE_TopLevelHandler_0
+  movi8_eax,[ebp+BYTE] !-4
+  subi8_eax, !0xA
+  movi8_[ebp+BYTE],eax !-16
+# IF_TopLevelHandler_1
+  movi8_eax,[ebp+BYTE] !-16
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  cmp_eax, %0x90909090
+  jne %END_IF_TopLevelHandler_1
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !4
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  cmp_eax, %0x90909090
+  jne %END_IF_TopLevelHandler_1
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !8
+  push_eax
+  call %ri32
+  addi8_esp, !4
+  cmp_eax, %0x80CD9090
+  jne %END_IF_TopLevelHandler_1
+  movi8_eax,[ebp+BYTE] !-16
+  push_eax
+  mov_eax, &STRING_TopLevelHandler_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  call %regs_data
+  addi8_eax, !0x20
+  movi8_[ebp+BYTE],eax !-20
+  mov_eax, %0x15FF6090
+  push_eax
+  movi8_eax,[ebp+BYTE] !-16
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !4
+  movi8_ecx,[ebp+BYTE] !-20
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !-16
+  addi8_eax, !8
+  mov_ecx, %0x9020C483
+  push_ecx
+  push_eax
+  call %wi32
+  addi8_esp, !8
+:END_IF_TopLevelHandler_1
+  movi8_eax,[ebp+BYTE] !-4
+  addi8_eax, !2
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xB8
+  mov_eax, %0x4017BC
+  mov_[ecx],eax
+  movi8_eax,[ebp+BYTE] !-8
+  subi8_eax, !4
+  movi8_[ebp+BYTE],eax !-8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xC4
+  movi8_eax,[ebp+BYTE] !-8
+  mov_[ecx],eax
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  movi8_eax,[ebp+BYTE] !-8
+  push_eax
+  call %wi32
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xB0
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %0
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xA4
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %1
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xAC
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %2
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xA8
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %3
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xA0
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %4
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0x9C
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %5
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !8
+  addi8_eax, !4
+  mov_ecx,[eax]
+  add_ecx, %0xB4
+  mov_eax,[ecx]
+  push_eax
+  mov_eax, %6
+  push_eax
+  call %set_reg
+  addi8_esp, !8
+  mov_eax, %0xFFFFFFFF
+  jmp %END_IF_TopLevelHandler_0
+  jmp %END_IF_TopLevelHandler_0
+:ELSE_TopLevelHandler_0
+  mov_eax, &STRING_TopLevelHandler_1
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %0
+  jmp %0
+:END_IF_TopLevelHandler_0
+  leave
+  reti16 !4 !0
+:syscall
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x0
+  nop
+# IF_syscall_0
+  movi8_eax,[ebp+BYTE] !8
+  cmp_eax, %0xFFFE
+  jne %ELSE_IF_syscall_0
+# IF_syscall_1
+  mov_eax,[DWORD] &trap_ready
+  cmpi8_eax, !0
+  je %ELSE_syscall_1
+  jmp %END_IF_syscall_0
+  jmp %END_IF_syscall_1
+:ELSE_syscall_1
+  mov_eax, &STRING_syscall_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !4
+  mov_eax, %0x401CD4
+  push_eax
+  call %THUNK_SetUnhandledExceptionFilter
+  mov_eax, %1
+  mov_[DWORD],eax &trap_ready
+  jmp %END_IF_syscall_0
+:END_IF_syscall_1
+  jmp %TMP_syscall_0
+:ELSE_IF_syscall_0
+  movi8_eax,[ebp+BYTE] !8
+  cmp_eax, %0xFFFD
+  jne %ELSE_syscall_0
+  jmp %END_IF_syscall_0
+  jmp %TMP_syscall_0
+:ELSE_syscall_0
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  mov_eax, &STRING_syscall_1
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+:TMP_syscall_0
+  mov_eax, %1
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+:END_IF_syscall_0
+  leave
+  ret
+:mmap
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %4
+  nop
+  movi8_eax,[ebp+BYTE] !12
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  mov_eax, &STRING_mmap_0
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !12
+  mov_eax, %0x40
+  push_eax
+  mov_eax, %0x3000
+  push_eax
+  movi8_eax,[ebp+BYTE] !12
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %THUNK_VirtualAlloc
+  movi8_[ebp+BYTE],eax !-4
+  movi8_eax,[ebp+BYTE] !-4
+  push_eax
+  mov_eax, &STRING_mmap_1
+  push_eax
+  call %THUNK_printf
+  addi8_esp, !8
+  movi8_eax,[ebp+BYTE] !-4
+  leave
+  ret
+:get_stdout
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x0
+  nop
+  mov_eax,[DWORD] &IAT__iob
+  addi8_eax, !0x20
+  leave
+  ret
+:main
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x0
+  nop
+  movi8_eax,[ebp+BYTE] !12
+  push_eax
+  movi8_eax,[ebp+BYTE] !8
+  push_eax
+  call %v_main
+  addi8_esp, !8
+  leave
+  ret
+# I think this might be the entrypoint
+# Seems to be either from ./lib/i386-win32-crt1w.o or ./lib/i386-win32-crt1.o
+:_start
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x24
+  nop
+  lea_eax,[ebp+BYTE] !-24
+  push_eax
+  call %__try__
+  addi8_esp, !4
+  mov_eax, %0
+  movi8_[ebp+BYTE],eax !-28
+  mov_eax, %1
+  push_eax
+  call %THUNK___set_app_type
+  addi8_esp, !4
+  mov_eax, %0x30000
+  push_eax
+  mov_eax, %0x10000
+  push_eax
+  call %THUNK___controlfp
+  addi8_esp, !8
+  mov_eax,[DWORD] &IAT___argc
+  mov_ecx,[DWORD] &IAT___argv
+  mov_edx,[DWORD] &IAT__environ
+  movi8_[ebp+BYTE],eax !-32
+  lea_eax,[ebp+BYTE] !-28
+  push_eax
+  mov_eax,[DWORD] &_dowildcard
+  push_eax
+  push_edx
+  push_ecx
+  movi8_eax,[ebp+BYTE] !-32
+  push_eax
+  call %THUNK___getmainargs
+  addi8_esp, !0x14
+  mov_eax,[DWORD] &IAT___argc
+  mov_ecx,[DWORD] &IAT___argv
+  mov_edx,[DWORD] &IAT__environ
+  movi8_[ebp+BYTE],eax !-36
+  mov_eax,[edx]
+  push_eax
+  mov_eax,[ecx]
+  push_eax
+  movi8_eax,[ebp+BYTE] !-36
+  mov_eax,[eax]
+  push_eax
+  call %main
+  addi8_esp, !12
+  push_eax
+  call %THUNK_exit
+  addi8_esp, !4
+  leave
+  ret
+# seems to be _runmain from lib/i386-win32-crt1.o
+:_runmain
+  push_ebp
+  mov_ebp,esp
+  sub_esp, %0x4
+  nop
+  mov_eax,[DWORD] &IAT___argc
+  movi8_ecx,[ebp+BYTE] !8
+  mov_[eax],ecx
+  mov_eax,[DWORD] &IAT___argv
+  movi8_ecx,[ebp+BYTE] !0xC
+  mov_[eax],ecx
+  mov_eax, %0x30000
+  push_eax
+  mov_eax, %0x10000
+  push_eax
+  call %THUNK___controlfp
+  addi8_esp, !8
+  mov_eax,[DWORD] &IAT___argc
+  mov_ecx,[DWORD] &IAT___argv
+  mov_edx,[DWORD] &IAT__environ
+  movi8_[ebp+BYTE],eax !-4
+  mov_eax,[edx]
+  push_eax
+  mov_eax,[ecx]
+  push_eax
+  movi8_eax,[ebp+BYTE] !-4
+  mov_eax,[eax]
+  push_eax
+  call %main
+  addi8_esp, !12
+  leave
+  ret
+# end of _runmain
+# 00001350: padding?
+'00 0000'
+# see win32/lib/chkstk.S in the tcc source code
+:__chkstk
+  xchg_[esp],ebp
+  push_ebp
+  lea_ebp,[esp+BYTE] !4
+  push_ecx
+  mov_ecx,ebp
+:P0
+  sub_ecx, %0x1000
+  test_[ecx],eax
+  sub_eax, %0x1000
+  cmp_eax_short_version, %0x1000
+  jgei8 !0xEC
+  sub_ecx,eax
+  test_[ecx],eax
+  mov_eax,esp
+  mov_esp,ecx
+  mov_ecx,[eax]
+  jmp_[eax+BYTE], !4
+:_exception_info
+  movi8_eax,[ebp+BYTE] !0xEC
+  ret
+:_exception_code
+  call %_exception_info
+  mov_eax,[eax]
+  mov_eax,[eax]
+  ret
+:seh_filter
+  call %_exception_info
+  push_eax
+  call %_exception_code
+  push_eax
+  call %THUNK__XcptFilter
+  addi8_esp, !8
+  ret
+:seh_except
+  movi8_esp,[ebp+BYTE] !-24
+  call %_exception_code
+  push_eax
+  call %THUNK__exit
+# padding ?
+'00 0000'
+:seh_scopetable
+'ffff ffff 8e21 4000 a321 4000'
+'e9ab 0000 00'
+:__try__
+  push_ebp
+  movi8_ebp,[esp+BYTE] !8
+  lea_eax,[esp+BYTE] !12
+  movi8_[ebp+BYTE],eax !0
+  xor_eax,eax
+  movi8_[ebp+BYTE],eax !4
+  mov_eax,fs:DWORD %0
+  movi8_[ebp+BYTE],eax !8
+  mov_eax, %0x4021C0
+  movi8_[ebp+BYTE],eax !0xC
+  mov_eax, %0x4021B4
+  movi8_[ebp+BYTE],eax !0x10
+  xor_eax,eax
+  movi8_[ebp+BYTE],eax !0x14
+  lea_eax,[ebp+BYTE] !8
+  mov_fs:DWORD,eax %0
+  pop_ebp
+  ret
+
+'00'
+# 00001400:
+:THUNK_printf
+jmp_indirect &IAT_printf '0000'
+:THUNK_exit
+jmp_indirect &IAT_exit '0000'
+# 00001410:
+:THUNK_fopen
+jmp_indirect &IAT_fopen '0000'
+:THUNK_fread
+jmp_indirect &IAT_fread '0000'
+# 00001420:
+:THUNK_fclose
+jmp_indirect &IAT_fclose '0000'
+:THUNK_puts
+jmp_indirect &IAT_puts '0000'
+# 00001430:
+:THUNK_fwrite
+jmp_indirect &IAT_fwrite '0000'
+:THUNK_SetUnhandledExceptionFilter
+jmp_indirect &IAT_SetUnhandledExceptionFilter '0000'
+# 00001440:
+:THUNK_VirtualAlloc
+jmp_indirect &IAT_VirtualAlloc '0000'
+:THUNK___set_app_type
+jmp_indirect &IAT___set_app_type '0000'
+# 00001450:
+:THUNK___controlfp
+jmp_indirect &IAT__controlfp '0000'
+:THUNK___getmainargs
+jmp_indirect &IAT___getmainargs '0000'
+# 00001460:
+:THUNK__XcptFilter
+jmp_indirect &IAT__XcptFilter '0000'
+:THUNK__exit
+jmp_indirect &IAT__exit '0000'
+# 00001470:
+:THUNK__except_handler3
+jmp_indirect &IAT__except_handler3 '0000'
+# padding? Seems to be zero all the way to the next section
+'0000 0000 0000 0000'
+# 00001480:
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+'0000 0000 0000 0000 0000 0000 0000 0000'
+:.text_end
+:.data
+:STRING_dump_regs_0
+"wrap_syscall eax: %d ebx: %d ecx: %d edx: %d esi: %d edi: %d ebp: %d
+"
+# "Shouldn't get here\n" (can't handle ' so have to use hex)
+:STRING_wrap_syscall_0
+'5368 6F75 6C64 6E27 7420' "get here
+"
+:STRING_load_boot_0
+"rb"
+:STRING_host_callback_0
+"fopen path: %s mode: %s
+"
+:STRING_host_callback_1
+"fclose: %d
+"
+:STRING_host_callback_2
+"exit called
+"
+:STRING_host_callback_3
+"Invalid host call: %d
+"
+:STRING_init_runtime_0
+"load_size: %d
+"
+:STRING_init_runtime_1
+"artifacts/xp_linux.exe"
+:STRING_init_runtime_2
+"rb"
+:STRING_init_runtime_3
+"error could not open command file
+"
+# 000016f0:
+# 0a00
+'0000'
+:PROT_READ
+%1
+:PROT_WRITE
+%2
+:PROT_EXEC
+%4
+:MAP_ANONYMOUS
+%32
+:MAP_PRIVATE
+%2
+:MAP_FIXED
+%0x10
+:STRING_v_main_0
+"mmap error
+"
+:STRING_v_main_1
+"opening command file %s
+"
+:STRING_v_main_2
+"opening default command file new_test.list
+"
+:STRING_v_main_3
+"new_test.list"
+'00'
+:trap_ready
+%0
+:STRING_TopLevelHandler_0
+"installing wrapper stub 0x%x
+"
+:STRING_TopLevelHandler_1
+"not int 0x80
+"
+:STRING_syscall_0
+"installing trap
+"
+:STRING_syscall_1
+"sycall function missing impl %d
+"
+:STRING_mmap_0
+"mmap not impl base: 0x%x size: 0x%x
+"
+:STRING_mmap_1
+"r: 0x%x
+"
+'0000 0000'
+# import table
+:.idata
+# 00001800:
+# first dll import
+&ILT_RVA_0
+'0000 0000'
+'0000 0000'
+&DLLNAME_msvcrt.dll
+&IAT_RVA_0
+
+# 2nd dll import
+&ILT_RVA_1
+'0000 0000'
+'0000 0000'
+&DLLNAME_kernel32.dll
+&IAT_RVA_1
+
+# null import to indicate end of table
+'0000 0000'
+'0000 0000'
+'0000 0000'
+'0000 0000'
+'0000 0000'
+
+:.idata_end
+
+# Import Address Table (IAT)
+:.IAT
+:IAT_RVA_0
+:IAT_printf
+&SYM_printf
+:IAT_exit
+&SYM_exit
+:IAT_fopen
+&SYM_fopen
+:IAT_fread
+&SYM_fread
+:IAT_fclose
+&SYM_fclose
+:IAT_puts
+&SYM_puts
+:IAT_fwrite
+&SYM_fwrite
+:IAT__iob
+&SYM__iob
+:IAT___set_app_type
+&SYM___set_app_type
+:IAT__controlfp
+&SYM__controlfp
+:IAT___argc
+&SYM___argc
+:IAT___argv
+&SYM___argv
+:IAT__environ
+&SYM__environ
+:IAT___getmainargs
+&SYM___getmainargs
+:IAT__XcptFilter
+&SYM__XcptFilter
+:IAT__exit
+&SYM__exit
+:IAT__except_handler3
+&SYM__except_handler3
+'0000 0000'
+
+:IAT_RVA_1
+:IAT_SetUnhandledExceptionFilter
+&SYM_SetUnhandledExceptionFilter
+:IAT_VirtualAlloc
+&SYM_VirtualAlloc
+'0000 0000'
+
+:.IAT_end
+
+:ILT_RVA_0
+&SYM_printf
+&SYM_exit
+&SYM_fopen
+&SYM_fread
+&SYM_fclose
+&SYM_puts
+&SYM_fwrite
+&SYM__iob
+&SYM___set_app_type
+&SYM__controlfp
+&SYM___argc
+&SYM___argv
+&SYM__environ
+&SYM___getmainargs
+&SYM__XcptFilter
+&SYM__exit
+&SYM__except_handler3
+'0000 0000'
+
+:ILT_RVA_1
+&SYM_SetUnhandledExceptionFilter
+&SYM_VirtualAlloc
+'0000 0000'
+
+:DLLNAME_msvcrt.dll
+"msvcrt.dll"
+
+:SYM_printf
+'0000' "printf"
+:SYM_exit
+'0000' "exit"
+:SYM_fopen
+'0000' "fopen"
+:SYM_fread
+'0000' "fread"
+:SYM_fclose
+'0000' "fclose"
+:SYM_puts
+'0000' "puts"
+:SYM_fwrite
+'0000' "fwrite"
+:SYM__iob
+'0000' "_iob"
+:SYM___set_app_type
+'0000' "__set_app_type"
+:SYM__controlfp
+'0000' "_controlfp"
+:SYM___argc
+'0000' "__argc"
+:SYM___argv
+'0000' "__argv"
+:SYM__environ
+'0000' "_environ"
+:SYM___getmainargs
+'0000' "__getmainargs"
+:SYM__XcptFilter
+'0000' "_XcptFilter"
+:SYM__exit
+'0000' "_exit"
+:SYM__except_handler3
+'0000' "_except_handler3"
+
+:DLLNAME_kernel32.dll
+"kernel32.dll"
+
+:SYM_SetUnhandledExceptionFilter
+'0000' "SetUnhandledExceptionFilter"
+:SYM_VirtualAlloc
+'0000' "VirtualAlloc"
+
+'00 0000'
+:_dowildcard
+# 000019e0:
+'0000 0000 0000 0000 0000 0000 0000 0000'
+# 000019f0:
+'0000 0000 0000 0000 0000 0000 0000 0000'
+:.data_end

@@ -1,0 +1,74 @@
+Thinking a bit about "layered" bootstrapping. Imagine if a C compiler was built
+in layers a bit like this:
+
+# make sure cc0.c can be compiled with gcc (and a range of other C compilers)
+gcc -c cc0.c ; gcc -c cc1_stubs.c ; gcc cc0.o cc1_stubs.o -o cc0_boot ;
+# make sure cc0 is self hosted
+cc0_boot -c cc0.c ; cc0_boot -c cc1_stubs.c ; cc0_boot cc0.o cc1_stubs.o -o cc0 ;
+# walk up the ccX versions. New features can be used as they are introduced
+cc0 -c cc1.c ; cc0 -c cc2_stubs.c ; cc0 cc1.o cc2_stubs.o -o cc1 ;
+cc1 -c cc2.c ; cc1 -c cc3_stubs.c ; cc1 cc1.o cc2_stubs.o cc3_stubs.o -o cc2;
+cc2 -c cc3.c ; cc2 -c cc4_stubs.c ; cc2 cc1.o cc2.o cc3.o cc4_stubs.o -o cc3;
+cc3 -c cc4.c ; cc3 -c cc4_stubs.c ; cc3 cc1.o cc2.o cc3.o cc4.o cc5_stubs.o -o cc4;
+
+The ccX.c files are implementations of a subset of C (more specifically they
+implement the difference between the X dialect and the X+1 dialect, in terms of
+the X-1 dialect). Higher values of X indicate a larger subset. The ccX_stubs.c
+files are stubbed out versions of the X+2 dialect. For example ccX_stubs.c may
+contain a stub function like this:
+
+int ccX_foo(a, b, c) {
+  puts("ccX_foo not implemented.");
+  exit(1);
+} 
+
+and the ccX.c file would contain the real implementation of ccX_foo.
+
+cc0.c is the "base" dialect of C. It will also be a self hosted compiler.
+
+Also imagine if we had a -stc=.. flag like GCC. That would mean that running:
+
+cc4 -std=cc0 -c foo.c
+
+Would support exactly the same dialect as:
+
+cc0 -c foo.c
+
+It should also be possible to compile ccX itself in a single step with some kind
+of unified build eg:
+
+ccX_unified.c :
+
+#include "cc0.c"
+#include "cc1.c"
+...
+#include "ccX.c"
+#include "ccX+1_stubs.c"
+
+and the running:
+
+ccX ccX_unified.c -o ccX_unified.exe
+
+Further, this also has another interesting property. If you compile
+ccX_unified.c with gcc and gcov, and then build and earlier version you should
+see in your gcov report that the only files with active functions are the ones
+needed to build that version. For example:
+
+ccX_unified.exe -std=cc3 cc3_unified.c
+
+In your gcov report you should only see lines being hit in cc0.c,  cc1.c,  and
+cc2.c . Note in theory this will be the case, but in practice things might not
+quite work out like that (eg if an optimizer was added in a later cc version
+then lines from the optimizer may be hit even when using earlier dialects).
+
+Benefits
+========
+
+* No "throw away" compilers. This will just be a refactored version of tcc that
+  means only one codebase will need to be studied. Compare this with other
+  bootstrap paths where there are different version of a specific C compiler,
+  or there are multiple independent implementations of compilers. All off the
+  intermediate compilers are then discarded at the end of the bootstrap process.
+  This means more code must be studied to understand if the bootstrap chain can
+  be trusted. With a single refactored codebase only one codebase needs to be
+  studied.

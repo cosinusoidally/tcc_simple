@@ -235,9 +235,8 @@ int vm_open() {
     if(t) {
       r = new_fd(t);
     } else {
-      trap_syscalls_off();
-      printf("file not found %s\n", filename);
-      exit(1);
+      r = -1;
+      printf("vm_open: file not found %s returning -1\n", filename);
     }
   }
   printf("open: fd %d\n", r);
@@ -342,6 +341,29 @@ int vm_exit_() {
     extract_file("../artifacts/boot0/unified-libc.c", "artifacts/unified-libc.c");
     extract_file("/m0.exe", "artifacts/m0.exe");
     extract_file("/hex2.exe", "artifacts/hex2.exe");
+    extract_file("artifacts/libtcc1_26.o", "artifacts/libtcc1_26.o");
+    extract_file("artifacts/tcc_26.o", "artifacts/tcc_26.o");
+    extract_file("artifacts/libc_boot3_26.o", "artifacts/libc_boot3_26.o");
+    extract_file("artifacts/libc_static_26.o", "artifacts/libc_static_26.o");
+    extract_file("m2min_v2_full.c", "artifacts/m2min_v2_full.c");
+    extract_file("m2min_v2.exe-0.hex2", "artifacts/m2min_v2.exe-0.hex2");
+    extract_file("m2min_v2.exe.M1", "artifacts/m2min_v2.exe.M1");
+    extract_file("m2min_v2.exe", "artifacts/m2min_v2.exe");
+    extract_file("M2_tcc_js_simple.exe.M1", "artifacts/M2_tcc_js_simple.exe.M1");
+    extract_file("M2_tcc_js_simple.exe", "artifacts/M2_tcc_js_simple.exe");
+    extract_file("elf_loader.M1", "artifacts/elf_loader.M1");
+    extract_file("elf_loader_cc_x86.exe", "artifacts/elf_loader_cc_x86.exe");
+    extract_file("artifacts/tcc_27.o", "artifacts/tcc_27.o");
+    extract_file("artifacts/tcc_27_boot_static2.exe", "artifacts/tcc_27_boot_static2.exe");
+    extract_file("artifacts/tcc_27_boot_static3.exe", "artifacts/tcc_27_boot_static3.exe");
+    extract_file("artifacts/tcc_27_boot_static4.exe", "artifacts/tcc_27_boot_static4.exe");
+    extract_file("artifacts/tcc_27_boot_static5.exe", "artifacts/tcc_27_boot_static5.exe");
+    extract_file("artifacts/libc_boot4_27_4.o", "artifacts/libc_boot4_27_4.o");
+    extract_file("artifacts/libc_static_27_4.o", "artifacts/libc_static_27_4.o");
+    extract_file("artifacts/libtcc1_27_4.o", "artifacts/libtcc1_27_4.o");
+    extract_file("artifacts/tcc_27_4.o", "artifacts/tcc_27_4.o");
+    extract_file("artifacts/otccelf_cc_x86_min.exe", "artifacts/otccelf_cc_x86_min.exe");
+    extract_file("artifacts/elf_loader.exe", "artifacts/elf_loader.exe");
     exit(error_code);
   }
 }
@@ -356,6 +378,7 @@ int vm_mmap() {
   if(loc == 0) {
     r = vm_brk();
     printf("brk: %x\n",r);
+/* FIXME I think this is buggy */
     vm_brk(r+size);
   } else {
     printf("mmap addr must be null\n");

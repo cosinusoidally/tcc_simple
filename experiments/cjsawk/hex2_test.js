@@ -105,12 +105,17 @@ function chmod() {
   /* dummy */
 }
 
+var extra_args;
+
 function go() {
   var args;
+  if(!extra_args) {
+    extra_args = "";
+  }
   if(!fname) {
     fname="artifacts/builds/hex2_test/cjsawk3.exe-0.hex2";
   }
-  args=mk_args("cjsawk.exe " + fname + " ./artifacts/blah.hex2");
+  args=mk_args("cjsawk.exe " + fname + " ./artifacts/blah.hex2" + extra_args);
   main(args[0], args[1]);
 /* FIXME should not use nodejs specific code */
   print(new Buffer(out_file).toString("base64"));
