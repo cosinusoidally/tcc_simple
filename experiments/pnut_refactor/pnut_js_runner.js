@@ -14,7 +14,8 @@ trace= true;
 
 function trace_msg(s) {
     if (trace) {
-        printErr(s);
+        console.log(s);
+//        printErr(s);
     }
 }
 
