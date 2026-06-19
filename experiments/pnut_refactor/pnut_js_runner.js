@@ -10,6 +10,7 @@ var nextFd = 3;
 var stdoutBytes = [];
 var stringCache = {};
 var trace = os.getenv("PNUT_JS_TRACE");
+trace= true;
 
 function trace_msg(s) {
     if (trace) {
@@ -194,58 +195,6 @@ function shl(a, b) { return (a << b) | 0; }
 function SHL(a, b) { return (a << b) | 0; }
 function shr(a, b) { return a >> b; }
 function SHR(a, b) { return a >> b; }
-
-load("mawkcc_self.c");
-
-if (trace) {
-    var old_read_source = read_source;
-    read_source = function(path) {
-        trace_msg("read_source");
-        var r = old_read_source(path);
-        trace_msg("read_source done src_len=" + src_len);
-        return r;
-    };
-    var old_init_lexer = init_lexer;
-    init_lexer = function() {
-        trace_msg("init_lexer");
-        return old_init_lexer();
-    };
-    var old_code_reset = code_reset;
-    code_reset = function() {
-        trace_msg("code_reset");
-        return old_code_reset();
-    };
-    var old_next_tok = next_tok;
-    next_tok = function() {
-        var r = old_next_tok();
-        trace_msg("next_tok tok=" + tok + " idx=" + idx_pos);
-        return r;
-    };
-    var old_parse_program = parse_program;
-    parse_program = function() {
-        trace_msg("parse_program");
-        var r = old_parse_program();
-        trace_msg("parse_program done");
-        return r;
-    };
-    var old_patch_calls = patch_calls;
-    patch_calls = function() {
-        trace_msg("patch_calls");
-        return old_patch_calls();
-    };
-    var old_build_binary = build_binary;
-    build_binary = function() {
-        trace_msg("build_binary");
-        var r = old_build_binary();
-        trace_msg("build_binary done bin_len=" + bin_len);
-        return r;
-    };
-    var old_emit_binary = emit_binary;
-    emit_binary = function() {
-        trace_msg("emit_binary");
-        return old_emit_binary();
-    };
-}
 
 var argv = brk(8);
 wi32(argv, mks("pnut.exe"));
