@@ -182,7 +182,7 @@ function fgetc(stream) {
     if (!file) {
         return -1;
     }
-    if(file.pos > file.data.length) {
+    if(file.pos >= file.data.length) {
       return -1;
     } else {
       r = file.data[file.pos];
