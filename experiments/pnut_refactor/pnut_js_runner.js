@@ -173,28 +173,37 @@ function exit(status) {
     quit(status);
 }
 
-fget_dbg =[];
-
-
+fgetc_dbg =[];
 
 function fgetc(stream) {
     var file = files[stream];
     var r;
+    var t;
     if (!file) {
         return -1;
     }
-    file.pos = file.pos + 1;
     if(file.pos > file.data.length) {
       return -1;
     } else {
       r = file.data[file.pos];
-      fget_dbg.push(String.fromCharCode(r));
+      t = String.fromCharCode(r);
+      fgetc_dbg.push(t);
+      file.pos = file.pos + 1;
       return r;
     }
 }
 
+putchar_dbg = [];
+
 function putchar(c) {
-  console.log(String.fromCharCode(c));
+  var t;
+  t = String.fromCharCode(c);
+  if(t==="\n") {
+    console.log("putchar_dbg: "+putchar_dbg.join(""));
+    putchar_dbg=[];
+  } else {
+    putchar_dbg.push(t);
+  }
 }
 
 
@@ -202,6 +211,7 @@ function add(a, b) { return (a + b) | 0; }
 function sub(a, b) { return (a - b) | 0; }
 function mul(a, b) { return Math.imul(a, b) | 0; }
 function div(a, b) { return (a / b) | 0; }
+div_ = div;
 function mod(a, b) { return (a % b) | 0; }
 function neg(a) { return (-a) | 0; }
 function not(a) { return a ? 0 : 1; }
