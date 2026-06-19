@@ -6,6 +6,7 @@ function init() {
 
 function quit(c) {
   console.log("quit, exit code: "+c);
+  throw "quit";
 }
 
 vfs = {};

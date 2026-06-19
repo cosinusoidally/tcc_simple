@@ -121,6 +121,7 @@ function open(path, flags, mode) {
     return fd;
 }
 
+
 function read(fd, buf, len) {
     var file = files[fd];
     var n;
@@ -171,6 +172,24 @@ function close(fd) {
 function exit(status) {
     quit(status);
 }
+
+function fgetc(stream) {
+    var file = files[stream];
+    if (!file) {
+        return -1;
+    }
+    file.pos = file.pos + 1;
+    if(file.pos > file.data.length) {
+      return -1;
+    } else {
+      return file.data[file.pos];
+    }
+}
+
+function putchar(c) {
+  console.log(String.fromCharCode(c));
+}
+
 
 function add(a, b) { return (a + b) | 0; }
 function sub(a, b) { return (a - b) | 0; }
