@@ -173,41 +173,24 @@ function exit(status) {
 }
 
 function add(a, b) { return (a + b) | 0; }
-function ADD(a, b) { return (a + b) | 0; }
 function sub(a, b) { return (a - b) | 0; }
-function SUB(a, b) { return (a - b) | 0; }
 function mul(a, b) { return Math.imul(a, b) | 0; }
-function MUL(a, b) { return Math.imul(a, b) | 0; }
 function div(a, b) { return (a / b) | 0; }
-function DIV(a, b) { return (a / b) | 0; }
 function mod(a, b) { return (a % b) | 0; }
-function MOD(a, b) { return (a % b) | 0; }
 function neg(a) { return (-a) | 0; }
-function NEG(a) { return (-a) | 0; }
 function not(a) { return a ? 0 : 1; }
-function NOT(a) { return a ? 0 : 1; }
 function eq(a, b) { return a === b ? 1 : 0; }
-function EQ(a, b) { return a === b ? 1 : 0; }
 function neq(a, b) { return a !== b ? 1 : 0; }
-function NE(a, b) { return a !== b ? 1 : 0; }
 function lt(a, b) { return a < b ? 1 : 0; }
-function LT(a, b) { return a < b ? 1 : 0; }
-function le(a, b) { return a <= b ? 1 : 0; }
-function LE(a, b) { return a <= b ? 1 : 0; }
+function lte(a, b) { return a <= b ? 1 : 0; }
 function gte(a, b) { return a > b ? 1 : 0; }
 function gt(a, b) { return a > b ? 1 : 0; }
 function ge(a, b) { return a >= b ? 1 : 0; }
-function GE(a, b) { return a >= b ? 1 : 0; }
 function and(a, b) { return (a & b) | 0; }
-function AND(a, b) { return (a & b) | 0; }
 function or(a, b) { return (a | b) | 0; }
-function OR(a, b) { return (a | b) | 0; }
 function xor(a, b) { return (a ^ b) | 0; }
-function XOR(a, b) { return (a ^ b) | 0; }
 function shl(a, b) { return (a << b) | 0; }
-function SHL(a, b) { return (a << b) | 0; }
 function shr(a, b) { return a >> b; }
-function SHR(a, b) { return a >> b; }
 
 var argv = brk(8);
 wi32(argv, mks("pnut.exe"));
