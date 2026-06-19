@@ -173,8 +173,13 @@ function exit(status) {
     quit(status);
 }
 
+fget_dbg =[];
+
+
+
 function fgetc(stream) {
     var file = files[stream];
+    var r;
     if (!file) {
         return -1;
     }
@@ -182,7 +187,9 @@ function fgetc(stream) {
     if(file.pos > file.data.length) {
       return -1;
     } else {
-      return file.data[file.pos];
+      r = file.data[file.pos];
+      fget_dbg.push(String.fromCharCode(r));
+      return r;
     }
 }
 
