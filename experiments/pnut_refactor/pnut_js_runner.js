@@ -187,7 +187,12 @@ function fgetc(stream) {
     } else {
       r = file.data[file.pos];
       t = String.fromCharCode(r);
-      fgetc_dbg.push(t);
+      if(t==="\n") {
+        console.log("fgetc_dbg: "+fgetc_dbg.join(""));
+        fgetc_dbg=[];
+      } else {
+        fgetc_dbg.push(t);
+      }
       file.pos = file.pos + 1;
       return r;
     }
