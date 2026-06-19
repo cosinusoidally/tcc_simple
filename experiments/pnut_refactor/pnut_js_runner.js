@@ -3,8 +3,6 @@ var writeTypedArrayToFile = os.file.writeTypedArrayToFile;
 var sourcePath = scriptArgs[0];
 var outputPath = scriptArgs[1];
 
-var heap = new Uint8Array(1048576);
-var heapTop = 1;
 var files = {};
 var nextFd = 3;
 var stdoutBytes = [];
@@ -19,6 +17,9 @@ function trace_msg(s) {
     }
 }
 
+(function (){
+var heap = new Uint8Array(1048576);
+var heapTop = 1;
 function ensure_heap(needed) {
     var next;
     var old;
@@ -35,7 +36,7 @@ function ensure_heap(needed) {
     return 0;
 }
 
-function cstr(ptr) {
+function cstr_(ptr) {
     var chars = [];
     var i = ptr;
     while (heap[i] !== 0) {
@@ -45,28 +46,28 @@ function cstr(ptr) {
     return chars.join("");
 }
 
-function brk(n) {
+function brk_(n) {
     var p = heapTop;
     heapTop = heapTop + n;
     ensure_heap(heapTop + 1);
     return p;
 }
 
-function ri8(p) {
+function ri8_(p) {
     return heap[p] | 0;
 }
 
-function wi8(p, v) {
+function wi8_(p, v) {
     ensure_heap(p + 1);
     heap[p] = v & 255;
     return v & 255;
 }
 
-function ri32(p) {
+function ri32_(p) {
     return (heap[p] | (heap[p + 1] << 8) | (heap[p + 2] << 16) | (heap[p + 3] << 24)) | 0;
 }
 
-function wi32(p, v) {
+function wi32_(p, v) {
     ensure_heap(p + 4);
     heap[p] = v & 255;
     heap[p + 1] = (v >>> 8) & 255;
@@ -74,6 +75,17 @@ function wi32(p, v) {
     heap[p + 3] = (v >>> 24) & 255;
     return v | 0;
 }
+
+wi32=wi32_;
+ri32=ri32_;
+wi8=wi8_;
+ri8=ri8_;
+
+brk=brk_;
+
+cstr = cstr_;
+
+})();
 
 function mks(s) {
     if (Object.prototype.hasOwnProperty.call(stringCache, s)) {
@@ -90,7 +102,7 @@ function mks(s) {
     return p;
 }
 
-function mkC(s) {
+function mkc(s) {
     return s.charCodeAt(0) | 0;
 }
 
@@ -176,14 +188,14 @@ function not(a) { return a ? 0 : 1; }
 function NOT(a) { return a ? 0 : 1; }
 function eq(a, b) { return a === b ? 1 : 0; }
 function EQ(a, b) { return a === b ? 1 : 0; }
-function ne(a, b) { return a !== b ? 1 : 0; }
+function neq(a, b) { return a !== b ? 1 : 0; }
 function NE(a, b) { return a !== b ? 1 : 0; }
 function lt(a, b) { return a < b ? 1 : 0; }
 function LT(a, b) { return a < b ? 1 : 0; }
 function le(a, b) { return a <= b ? 1 : 0; }
 function LE(a, b) { return a <= b ? 1 : 0; }
+function gte(a, b) { return a > b ? 1 : 0; }
 function gt(a, b) { return a > b ? 1 : 0; }
-function GT(a, b) { return a > b ? 1 : 0; }
 function ge(a, b) { return a >= b ? 1 : 0; }
 function GE(a, b) { return a >= b ? 1 : 0; }
 function and(a, b) { return (a & b) | 0; }
