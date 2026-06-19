@@ -6,8 +6,27 @@
   </head>
   <body>
     <h2>
-      This is the web version of pnut_js. Drive it from the devtools console.<br>
-      IMPORTANT MAKE SURE YOU DISABLE CACHING IN THE NETWORK TAB OR YOU MIGHT GET STALE VERSIONS OF CODE CAUSING CONFUSION DURING DEV
+      This is the web version of pnut_js. Drive it from your web browser
+ devtools console.<br>
+In devtools run:
+<pre>
+go();
+</pre>
+If this is successful then a link should appear to allow you to download the
+freshly built pnut.exe file. Download this file, rename it to pnut-exe, make
+it executable and place it in ../artifacts (the dir above the pnut_refactor
+ dir).
+From the experiments dir you can then run:
+<pre>
+./mk_tcc-boot-mes
+</pre>
+From the experiments dir in order to build tcc-boot-mes .
+<br>
+Tip, you can run a web browser on localhost for testing with:
+<pre>
+python3 -m http.server
+</pre>
+      IMPORTANT MAKE SURE YOU DISABLE CACHING IN THE NETWORK TAB OF YOUR BROWSER DEVTOOLS OR YOU MIGHT GET STALE VERSIONS OF CODE CAUSING CONFUSION DURING DEV
     </h2>
   </body>
 </html>

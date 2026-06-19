@@ -232,6 +232,22 @@ function xor(a, b) { return (a ^ b) | 0; }
 function shl(a, b) { return (a << b) | 0; }
 function shr(a, b) { return a >> b; }
 
+/* the purpose of this is to fix a self hosting bug in pnut since
+   RT_HEAP_SIZE is too small by default to build pnut with a self built pnut */
+function fixup_pnut() {
+  t = init_globals.toString().split("\n");
+  if(t[61] === "  RT_HEAP_SIZE = 1048576;") {
+    console.log(t[61]);
+    t[61] = "  RT_HEAP_SIZE = 104857600;";
+  } else {
+    throw "error fixup_pnut";
+  }
+  eval.call(this, t.join("\n"));
+}
+
+fixup_pnut();
+console.log(init_globals.toString().split("\n")[61])
+
 var argv = brk(8);
 wi32(argv, mks("pnut.exe"));
 wi32(argv + 4, mks(sourcePath));
