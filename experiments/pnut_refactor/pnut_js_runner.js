@@ -200,7 +200,7 @@ function SHR(a, b) { return a >> b; }
 var argv = brk(8);
 wi32(argv, mks("pnut.exe"));
 wi32(argv + 4, mks(sourcePath));
-
+function go() {
 trace_msg("calling main");
 var status = main(2, argv);
 trace_msg("main returned " + status);
@@ -208,5 +208,7 @@ if (status !== 0) {
     quit(status);
 }
 
+
 trace_msg("writing " + stdoutBytes.length + " bytes");
 writeTypedArrayToFile(outputPath, new Uint8Array(stdoutBytes));
+}
