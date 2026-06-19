@@ -224,9 +224,8 @@ function eq(a, b) { return a === b ? 1 : 0; }
 function neq(a, b) { return a !== b ? 1 : 0; }
 function lt(a, b) { return a < b ? 1 : 0; }
 function lte(a, b) { return a <= b ? 1 : 0; }
-function gte(a, b) { return a > b ? 1 : 0; }
+function gte(a, b) { return a >= b ? 1 : 0; }
 function gt(a, b) { return a > b ? 1 : 0; }
-function ge(a, b) { return a >= b ? 1 : 0; }
 function and(a, b) { return (a & b) | 0; }
 function or(a, b) { return (a | b) | 0; }
 function xor(a, b) { return (a ^ b) | 0; }
