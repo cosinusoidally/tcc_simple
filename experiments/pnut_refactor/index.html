@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <script src="pnut_web.js"></script>
+    <script id="self_code" src="pnut.js"></script>
+    <script id="self_code" src="support.js"></script>
+  </head>
+  <body>
+    <h2>
+<a href="https://github.com/cosinusoidally/tcc_simple/tree/master/experiments/pnut_refactor/">pnut_js</a>
+</h2>
+      This is the web version of pnut_js (a C99 compiler that has been ported to
+a subset of C that is also valid JS). Drive it from your web browser
+ devtools console.<br>
+In devtools run:
+<pre>
+go();
+</pre>
+If this is successful then a link should appear at the bottom of this page to
+allow you to download the freshly built pnut.exe file. Download this file,
+rename it to pnut-exe, make it executable and place it in ../artifacts
+(the dir above the pnut_refactor dir).
+<br>
+From the experiments dir you can then run:
+<pre>
+./mk_tcc-boot-mes
+</pre>
+Which will build tcc-boot-mes (a bootstrappable version of the tcc compiler).
+<br>
+<p>
+Tip, you can run a web browser on localhost for testing with:
+</p>
+<pre>
+python3 -m http.server
+</pre>
+      IMPORTANT MAKE SURE YOU DISABLE CACHING IN THE NETWORK TAB OF YOUR BROWSER DEVTOOLS OR YOU MIGHT GET STALE VERSIONS OF CODE CAUSING CONFUSION DURING DEV
+<br>
+  </body>
+</html>

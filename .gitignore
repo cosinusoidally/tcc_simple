@@ -16,3 +16,5 @@
 !experiments/cjsawk/artifacts/placeholder
 /experiments/xp_linux/artifacts/*
 !experiments/xp_linux/artifacts/placeholder
+/experiments/pnut_refactor/artifacts/*
+!experiments/pnut_refactor/artifacts/placeholder
