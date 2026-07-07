@@ -51,4 +51,4 @@ compile_self artifacts/deps/hex2_full.c $BLD_DIR/hex2_2.exe
 
 sha1sum $BLD_DIR/*exe | sort
 
-echo "DONE full mawkcc"
+echo "DONE full pscc"
