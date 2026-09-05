@@ -3,3 +3,5 @@
 set -xe
 
 node csharp.js > artifacts/cjsawk.c
+
+cat pre.cs artifacts/cjsawk.c post.cs > artifacts/cjsawk.cs
