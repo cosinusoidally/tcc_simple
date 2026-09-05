@@ -32,10 +32,17 @@ public class Program
   static bool TO_BOOL(int a) { return false; }
 
   static int v_fgetc(int a) { return 0; }
+  static int v_fputs(int a, int b) { return 0; }
+  static int v_fopen(int a, int b) { return 0; }
+  static int v_fclose(int a) { return 0; }
 
   static int v_calloc(int a, int b) { return 0; }
   static int v_free(int a) { return 0; }
 
+  static int v_exit(int a) { return 0; }
+
   static int mkC(string a) { return 0; }
+
+  static int init_support() { return 0; }
 
   static bool LTRUE = true;
