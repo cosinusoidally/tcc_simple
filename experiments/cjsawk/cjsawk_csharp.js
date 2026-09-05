@@ -1,6 +1,7 @@
 function docs() {
   mks("This file must be valid C, JS, and AWK. See cjsawk_docs.txt since");
   mks("AWK does not support C style comments so we can't use comments here.");
+  return 0;
 }
 
 var TRUE;
@@ -73,6 +74,7 @@ function wi32(o, v) {
   wi8(add(o, 2), AND(v, 255));
   v = shr(v, 8);
   wi8(add(o, 3), AND(v, 255));
+  return 0;
 }
 
 function smatch(a, b) {
@@ -90,7 +92,7 @@ function smatch_(a, b,    i) {
   }
 
   i = SUB(0, 1);
-  while(1) {
+  while(LTRUE) {
     i = add(i, 1);
     if(neq(ri8(add(a, i)), ri8(add(b, i)))) {
       return FALSE;
@@ -122,10 +124,12 @@ function decrease_indent() {
   if(lt(indent,0)) {
     indent = 0;
   }
+  return 0;
 }
 
 function increase_indent() {
   indent = add(indent, 2);
+  return 0;
 }
 
 function nc() {
@@ -184,7 +188,7 @@ function eat_comment() {
     } else {
       return 0;
     }
-    while(1) {
+    while(LTRUE) {
       while(neq(ch, mkC("*"))) {
         nc();
       }
@@ -581,7 +585,7 @@ function string_escape_(s,    c, c2, t) {
   t = ra_new();
   ra_push8(t, ch_dquote);
   s = add(s,1);
-  while(1) {
+  while(LTRUE) {
     c = ri8(s);
     if(eq(ch_dquote, c)) {
       break;
@@ -698,7 +702,7 @@ function int_str_(a,    b, d, o, t) {
   }
   b = v_calloc(34,1);
   o = add(b,32);
-  while(1) {
+  while(LTRUE) {
     t = mod(a,10);
     wi8(o,add(48,t));
     a = div(SUB(a,t),10);

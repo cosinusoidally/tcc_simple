@@ -13,6 +13,12 @@ public class Program
   static int add(int a, int b) { return 0; }
   static int SUB(int a, int b) { return 0; }
 
-  static bool eq(int a, int b) { return false; }
+  static bool AND(bool a, bool b) { return false; }
+
   static bool neq(int a, int b) { return false; }
   static bool lt(int a, int b) { return false; }
+
+  static bool eq(int a, int b) { return false; }
+  static bool eq(int a, bool b) { return false; }
+
+  static bool LTRUE = true;
