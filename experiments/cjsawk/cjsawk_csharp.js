@@ -142,11 +142,13 @@ function nc() {
   if(eq(ch, SUB(0,1))) {
     eof = TRUE;
   }
+  return 0;
 }
 
 function nch() {
   ra_push8(hold_string, ch);
   nc();
+  return 0;
 }
 
 function char0() {
@@ -164,9 +166,10 @@ function is_whitespace() {
 }
 
 function eat_whitespace() {
-  while(is_whitespace()) {
+  while(TO_BOOL(is_whitespace())) {
     nc();
   }
+  return 0;
 }
 
 function is_comment() {
