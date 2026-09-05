@@ -580,10 +580,10 @@ function primary_expr_variable_(    s, i) {
   if(TO_BOOL(smatch(tok, mks("(")))) {
     return function_call(s);
   }
-  if(find_var(args, s)) {
+  if(TO_BOOL(find_var(args, s))) {
     return variable_load(s, TRUE);
   }
-  if(find_var(locals, s)) {
+  if(TO_BOOL(find_var(locals, s))) {
     return variable_load(s, FALSE);
   }
 
@@ -756,6 +756,7 @@ function cleanup_locals_(    c) {
     emit_out(mks(" "));
     no_indent = 1;
   }
+  return 0;
 }
 
 function return_result() {
@@ -766,6 +767,7 @@ function return_result() {
   cleanup_locals();
   indented_emit_out(mks("ret\n"));
   nt();
+  return 0;
 }
 
 function uniqueID(id, l) {
@@ -773,10 +775,12 @@ function uniqueID(id, l) {
   emit(mks("_"), l);
   emit(id, l);
   emit(mks("\n"), l);
+  return 0;
 }
 
 function uniqueID_out(id) {
   uniqueID(id, output_list);
+  return 0;
 }
 
 function process_while() {
@@ -803,6 +807,7 @@ function process_while_(    number_string, nested_break_num) {
   emit_out(mks(":END_WHILE_"));
   uniqueID_out(number_string);
   break_target_num = nested_break_num;
+  return 0;
 }
 
 function process_if() {
@@ -830,6 +835,7 @@ function process_if_(    number_string) {
   }
   emit_out(mks(":_END_IF_"));
   uniqueID_out(number_string);
+  return 0;
 }
 
 function process_break() {
@@ -841,6 +847,7 @@ function process_break() {
   emit_out(break_target_num);
   emit_out(mks("\n"));
   skip(mks(";"));
+  return 0;
 }
 
 function process_asm() {
@@ -853,6 +860,7 @@ function process_asm() {
   }
   skip(mks(")"));
   skip(mks(";"));
+  return 0;
 }
 
 function statement() {
@@ -862,7 +870,7 @@ function statement() {
       statement();
     }
     skip(mks("}"));
-  } else if(OR(smatch(tok, mks("var")), smatch(tok, mks("int")))) {
+  } else if(TO_BOOL(OR(smatch(tok, mks("var")), smatch(tok, mks("int"))))) {
     collect_local();
   } else if(TO_BOOL(smatch(tok, mks("if")))) {
     process_if();
@@ -878,6 +886,7 @@ function statement() {
     expression();
     skip(mks(";"));
   }
+  return 0;
 }
 
 function declare_function(t) {
@@ -919,10 +928,12 @@ function declare_function_(t,    i) {
     }
     decrease_indent();
   }
+  return 0;
 }
 
 function error() {
   v_exit(200);
+  return 0;
 }
 
 function program() {
@@ -933,8 +944,8 @@ function program_(    ltok) {
   nt();
 
   while(eq(0,eof)) {
-    if(OR(smatch(tok, mks("int")), OR(smatch(tok, mks("var")),
-          smatch(tok, mks("function"))))) {
+    if(TO_BOOL(OR(smatch(tok, mks("int")), OR(smatch(tok, mks("var")),
+          smatch(tok, mks("function")))))) {
       nt(); ltok = tok;
       nt();
 
@@ -949,6 +960,7 @@ function program_(    ltok) {
       error();
     }
   }
+  return 0;
 }
 
 function init_globals() {
@@ -988,6 +1000,7 @@ function init_globals() {
   ch_dquote = 34;
   str_dquote = v_calloc(2,1);
   wi8(str_dquote, ch_dquote);
+  return 0;
 }
 
 function print_list(l) {
@@ -999,6 +1012,7 @@ function print_list_(l,    o, i, len) {
     v_fputs(ra_get32(l, i), fo);
     i = add(i,1);
   }
+  return 0;
 }
 
 function main(argc, argv) {
