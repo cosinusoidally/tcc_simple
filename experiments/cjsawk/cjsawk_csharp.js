@@ -108,7 +108,7 @@ function indented_emit_out(s) {
   return indented_emit_out_(s, 0);
 }
 function indented_emit_out_(s,    c) {
-  if(no_indent) {
+  if(TO_BOOL(no_indent)) {
     no_indent = 0;
   } else {
     while(lt(c, indent)) {
@@ -117,6 +117,7 @@ function indented_emit_out_(s,    c) {
     }
   }
   emit_out(s);
+  return 0;
 }
 
 function decrease_indent() {

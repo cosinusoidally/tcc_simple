@@ -21,4 +21,6 @@ public class Program
   static bool eq(int a, int b) { return false; }
   static bool eq(int a, bool b) { return false; }
 
+  static bool TO_BOOL(int a) { return false; }
+
   static bool LTRUE = true;
