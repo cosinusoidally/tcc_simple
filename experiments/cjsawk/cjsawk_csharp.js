@@ -246,16 +246,18 @@ function is_string() {
 
 function get_id() {
   tt = tt_identifier;
-  while(OR(is_num(), is_id())) {
+  while(TO_BOOL(OR(is_num(), is_id()))) {
     nch();
   }
+  return 0;
 }
 
 function get_num() {
   tt = tt_number;
-  while(OR(is_num(), is_id())) {
+  while(TO_BOOL(OR(is_num(), is_id()))) {
     nch();
   }
+  return 0;
 }
 
 function get_other() {
@@ -288,28 +290,28 @@ function get_string() {
 }
 
 function nt() {
-  while(OR(is_whitespace(), is_comment())) {
-    if(is_whitespace()) {
+  while(TO_BOOL(OR(is_whitespace(), is_comment()))) {
+    if(TO_BOOL(is_whitespace())) {
       eat_whitespace();
-    } else if(is_comment()) {
+    } else if(TO_BOOL(is_comment())) {
       eat_comment();
     }
   }
 
   hold_string = ra_new();
 
-  if(is_id()) {
+  if(TO_BOOL(is_id())) {
     get_id();
-  } else if(is_num()) {
+  } else if(TO_BOOL(is_num())) {
     get_num();
-  } else if(is_other()) {
+  } else if(TO_BOOL(is_other())) {
     get_other();
-  } else if(is_char()) {
+  } else if(TO_BOOL(is_char())) {
     get_char();
-  } else if(is_string()) {
+  } else if(TO_BOOL(is_string())) {
     get_string();
     return TRUE;
-  } else if(eof){
+  } else if(TO_BOOL(eof)){
     return FALSE;
   } else {
     error();
@@ -320,15 +322,17 @@ function nt() {
 }
 
 function skip(s) {
-  if(smatch(tok, s)) {
+  if(TO_BOOL(smatch(tok, s))) {
     nt();
     return 0;
   }
   error();
+  return 0;
 }
 
 function emit(s, l) {
   ra_push32(l, s);
+  return 0;
 }
 
 function declare_global(t) {
@@ -336,10 +340,12 @@ function declare_global(t) {
   emit(t, globals_list);
   emit(mks("\nNULL\n"), globals_list);
   skip(mks(";"));
+  return 0;
 }
 
 function emit_out(s) {
   emit(s, output_list);
+  return 0;
 }
 
 function ra_new() {
