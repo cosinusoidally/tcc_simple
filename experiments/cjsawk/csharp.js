@@ -17,14 +17,19 @@ for(i=0;i<f.length;i++) {
     t=t.split("(");
     t2=t[1].split(")")[0];
     t2=t2.split(",");
-    t2=t2.map(function(x){x=x.split(" ").join(""); return "int "+x});
+    t2=t2.map(function(x){x=x.split(" ").join(""); return x});
+    if(t2[0]!=="") {
+      t2=t2.map(function(x){return "int "+x});
+    }
     t = t[0] +"("+t2.join(", ")+") {";
-    console.log("----");
-    console.log(to);
+//    console.log("----");
+//    console.log(to);
     console.log(t);
   } else if(t[0]==="var") {
     t.shift();
     t="static int "+t.join(" ");
     console.log(t);
+  } else {
+    console.log(t.join(" "));
   }
 }

@@ -2,4 +2,4 @@
 
 set -xe
 
-node csharp.js
+node csharp.js > artifacts/cjsawk.c
