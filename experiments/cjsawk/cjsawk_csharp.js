@@ -476,10 +476,11 @@ function to_hex_le_(a,    o, i, d1o, d2o) {
 }
 
 function emit_m1_strict_prefix() {
-  if(m1_strict) {
+  if(TO_BOOL(m1_strict)) {
     emit_out(current_function);
     emit_out(mks("_"));
   }
+  return 0;
 }
 
 function collect_local() {
@@ -512,6 +513,7 @@ function variable_load(a, is_arg) {
     no_indent = 1;
     emit_out(mks("load "));
   }
+  return 0;
 }
 
 function function_call(s) {
@@ -528,7 +530,7 @@ function function_call_(s,    passed) {
     expression();
     indented_emit_out(mks("push_arg\n"));
     passed = 1;
-    while(smatch(tok, mks(","))) {
+    while(TO_BOOL(smatch(tok, mks(",")))) {
       nt();
       expression();
       indented_emit_out(mks("push_arg\n"));
@@ -551,6 +553,7 @@ function function_call_(s,    passed) {
   }
   decrease_indent();
   indented_emit_out(mks(")\n"));
+  return 0;
 }
 
 function find_var(ra, s) {
@@ -592,6 +595,7 @@ function primary_expr_variable_(    s, i) {
   }
   no_indent = 1;
   emit_out(mks("load "));
+  return 0;
 }
 
 function primary_expr_number() {
@@ -599,6 +603,7 @@ function primary_expr_number() {
   emit_out(tok);
   emit_out(mks(" ")); no_indent = 1;
   nt();
+  return 0;
 }
 
 function string_escape(s) {
@@ -669,6 +674,7 @@ function primary_expr_char() {
   emit_out(int_str(escape_lookup(add(tok, 1))));
   emit_out(mks(" "));
   nt();
+  return 0;
 }
 
 function primary_expr_string() {
@@ -689,6 +695,7 @@ function primary_expr_string_(    number_string) {
   uniqueID_out(number_string);
 
   nt();
+  return 0;
 }
 
 function expression() {
@@ -714,6 +721,7 @@ function expression() {
     expression();
     indented_emit_out(mks("store\n"));
   }
+  return 0;
 }
 
 function int_str(a) {

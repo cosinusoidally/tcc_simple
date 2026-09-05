@@ -18,6 +18,7 @@ public class Program
   static int SUB(int a, int b) { return 0; }
   static int mul(int a, int b) { return 0; }
   static int div(int a, int b) { return 0; }
+  static int mod(int a, int b) { return 0; }
 
   static bool neq(int a, int b) { return false; }
   static bool lt(int a, int b) { return false; }
