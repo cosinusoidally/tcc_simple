@@ -562,7 +562,7 @@ function find_var(ra, s) {
 function find_var_(ra, s,    i, l) {
   l = ra_len32(ra);
   while(lt(i, l)) {
-    if(smatch(ra_get32(ra, i), s)) {
+    if(TO_BOOL(smatch(ra_get32(ra, i), s))) {
       return TRUE;
     }
     i = add(i, 1);
@@ -577,7 +577,7 @@ function primary_expr_variable_(    s, i) {
   s = tok;
   nt();
 
-  if(smatch(tok, mks("("))) {
+  if(TO_BOOL(smatch(tok, mks("(")))) {
     return function_call(s);
   }
   if(find_var(args, s)) {
@@ -590,7 +590,7 @@ function primary_expr_variable_(    s, i) {
   indented_emit_out(mks("global &GLOBAL_"));
   emit_out(s);
   emit_out(mks(" "));
-  if(smatch(tok, mks("="))) {
+  if(TO_BOOL(smatch(tok, mks("=")))) {
     return 0;
   }
   no_indent = 1;
@@ -824,7 +824,7 @@ function process_if_(    number_string) {
   uniqueID_out(number_string);
   emit_out(mks(":ELSE_"));
   uniqueID_out(number_string);
-  if(smatch(tok, mks("else"))) {
+  if(TO_BOOL(smatch(tok, mks("else")))) {
     nt();
     statement();
   }
@@ -856,7 +856,7 @@ function process_asm() {
 }
 
 function statement() {
-  if(smatch(tok, mks("{"))) {
+  if(TO_BOOL(smatch(tok, mks("{")))) {
     nt();
     while(eq(0, smatch(tok, mks("}")))) {
       statement();
@@ -864,15 +864,15 @@ function statement() {
     skip(mks("}"));
   } else if(OR(smatch(tok, mks("var")), smatch(tok, mks("int")))) {
     collect_local();
-  } else if(smatch(tok, mks("if"))) {
+  } else if(TO_BOOL(smatch(tok, mks("if")))) {
     process_if();
-  } else if(smatch(tok, mks("while"))) {
+  } else if(TO_BOOL(smatch(tok, mks("while")))) {
     process_while();
-  } else if(smatch(tok, mks("asm"))) {
+  } else if(TO_BOOL(smatch(tok, mks("asm")))) {
     process_asm();
-  } else if(smatch(tok, mks("return"))) {
+  } else if(TO_BOOL(smatch(tok, mks("return")))) {
     return_result();
-  } else if(smatch(tok, mks("break"))) {
+  } else if(TO_BOOL(smatch(tok, mks("break")))) {
     process_break();
   } else {
     expression();
@@ -887,16 +887,16 @@ function declare_function_(t,    i) {
   ra_reset(locals);
   current_count = 0;
   current_function = t;
-  if(smatch(t, mks("main"))) {
+  if(TO_BOOL(smatch(t, mks("main")))) {
     frame_bias = 1;
   } else {
     frame_bias = 0;
   }
   collect_arguments();
   nt();
-  if(smatch(tok, mks(";"))) {
+  if(TO_BOOL(smatch(tok, mks(";")))) {
     nt();
-  } else if(smatch(tok, mks("{"))) {
+  } else if(TO_BOOL(smatch(tok, mks("{")))) {
     emit_out(mks(":FUNCTION_"));
     emit_out(current_function);
     increase_indent();
@@ -938,9 +938,9 @@ function program_(    ltok) {
       nt(); ltok = tok;
       nt();
 
-      if(smatch(tok, mks(";"))) {
+      if(TO_BOOL(smatch(tok, mks(";")))) {
         declare_global(ltok);
-      } else if(smatch(tok, mks("("))) {
+      } else if(TO_BOOL(smatch(tok, mks("(")))) {
         declare_function(ltok);
       } else {
         error();
@@ -1005,7 +1005,7 @@ function main(argc, argv) {
   init_support();
   init_globals();
 
-  if(smatch(ri32(add(4,argv)),mks("--m1-strict"))) {
+  if(TO_BOOL(smatch(ri32(add(4,argv)),mks("--m1-strict")))) {
     m1_strict = TRUE;
     argc = SUB(argc, 1);
     argv = add(argv, 4);
