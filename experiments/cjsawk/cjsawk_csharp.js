@@ -365,6 +365,7 @@ function ra_capacity_g(r) {
 
 function ra_capacity_s(r, v) {
   wi32(add(r,ra_capacity_o), v);
+  return 0;
 }
 
 function ra_len8_g(r) {
@@ -373,6 +374,7 @@ function ra_len8_g(r) {
 
 function ra_len8_s(r, v) {
   wi32(add(r,ra_len8_o), v);
+  return 0;
 }
 
 function ra_data_g(r) {
@@ -381,6 +383,7 @@ function ra_data_g(r) {
 
 function ra_data_s(r, v) {
   wi32(add(r,ra_data_o), v);
+  return 0;
 }
 
 function ra_grow(r) {
@@ -398,10 +401,12 @@ function ra_grow_(r,    sd, dd, c1, c2, o) {
   ra_data_s(r, dd);
   ra_capacity_s(r,c2);
   v_free(sd);
+  return 0;
 }
 
 function ra_reset(r) {
   ra_len8_s(r, 0);
+  return 0;
 }
 
 function ra_push32(r, v) {
@@ -410,6 +415,7 @@ function ra_push32(r, v) {
   }
   wi32(add(ra_data_g(r), ra_len8_g(r)), v);
   ra_len8_s(r, add(ra_len8_g(r), 4));
+  return 0;
 }
 
 function ra_push8(r, v) {
@@ -418,6 +424,7 @@ function ra_push8(r, v) {
   }
   wi32(add(ra_data_g(r), ra_len8_g(r)), AND(v, 255));
   ra_len8_s(r, add(ra_len8_g(r), 1));
+  return 0;
 }
 
 function ra_get32(r, o) {
@@ -439,6 +446,7 @@ function collect_arguments() {
     }
     nt();
   }
+  return 0;
 }
 
 function to_hex_digit(a) {
@@ -487,6 +495,7 @@ function collect_local() {
   indented_emit_out(mks("reserve_stack_slot\n"));
   nt();
   skip(mks(";"));
+  return 0;
 }
 
 function variable_load(a, is_arg) {
