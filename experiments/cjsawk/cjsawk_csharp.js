@@ -203,6 +203,7 @@ function eat_comment() {
       }
     }
   }
+  return 0;
 }
 
 function is_id() {
@@ -260,6 +261,7 @@ function get_num() {
 function get_other() {
   tt = tt_other;
   nch();
+  return 0;
 }
 
 function get_char() {
@@ -270,6 +272,7 @@ function get_char() {
   }
   nch();
   nc();
+  return 0;
 }
 
 function get_string() {
@@ -281,6 +284,7 @@ function get_string() {
   nch();
   tok = ra_data_g(hold_string);
   tok = string_escape(tok);
+  return 0;
 }
 
 function nt() {

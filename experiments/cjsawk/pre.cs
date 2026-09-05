@@ -23,10 +23,13 @@ public class Program
 
   static bool eq(int a, int b) { return false; }
   static bool eq(int a, bool b) { return false; }
+  static bool gte(int a, int b) { return false; }
+  static bool lte(int a, int b) { return false; }
 
   static bool TO_BOOL(int a) { return false; }
 
-
   static int v_fgetc(int a) { return 0; }
+
+  static int mkC(string a) { return 0; }
 
   static bool LTRUE = true;
