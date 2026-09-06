@@ -61,8 +61,7 @@ public class Program
   static bool TO_BOOL(int a) { return Convert.ToBoolean(a); }
 
   static int v_fgetc(int a) {
-    not_impl("v_fgetc");
-    return 0;
+    return fgetc(a);
   }
   static int v_fputs(int a, int b) {
     not_impl("v_fputs");
@@ -167,6 +166,21 @@ public class Program
     return f;
   }
 
+  static int fgetc(int f) {
+    int c;
+    if(f == in_file_num) {
+      if(in_file_offset < in_file_bytes.Length) {
+        c = in_file_bytes[in_file_offset];
+        in_file_offset++;
+        return c;
+      } else {
+        return -1;
+      }
+    } else {
+      throw new Exception("fgetc invalid file descriptor: "+f);
+    }
+  }
+
   static int mkc(int c) {
     Console.WriteLine("mkc: "+c);
     return c;
@@ -174,6 +188,8 @@ public class Program
 
   static int in_file_num = 5;
   static byte[] in_file_bytes;
+  static int in_file_offset = 0;
+
   static int out_file_num = 6;
 
   static int open(int pathname, int flags, int mode) {
