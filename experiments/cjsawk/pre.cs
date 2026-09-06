@@ -175,6 +175,8 @@ public class Program
   static int out_file_num = 6;
 
   static int open(int pathname, int flags, int mode) {
+    string path = mk_cs_string(pathname);
+    Console.WriteLine("open name: "+ path + " flags: "+flags+" mode: "+mode);
     not_impl("open");
     return 0;
   }
