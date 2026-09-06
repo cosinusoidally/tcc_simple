@@ -6,14 +6,27 @@ public class Program
     Console.WriteLine("Test: "+a);
     Environment.Exit(1);
   }
-  static int mks(string a) { return 0; }
+  static int mks(string a) {
+    not_impl("mks");
+    return 0;
+  }
+  static int ri8(int a) {
+    not_impl("ri8");
+    return 0;
+  }
+  static int wi8(int a, int b) {
+    not_impl("wi8");
+    return 0;
+  }
 
-  static int ri8(int a) { return 0; }
-
-  static int wi8(int a, int b) { return 0; }
-
-  static int OR(int a, int b) { return 0; }
-  static bool OR(bool a, bool b) { return false; }
+  static int OR(int a, int b) {
+    not_impl("OR int int");
+    return 0;
+  }
+  static bool OR(bool a, bool b) {
+    not_impl("OR bool bool");
+    return false;
+  }
 
   static int AND(int a, int b) { return 0; }
   static bool AND(bool a, bool b) { return false; }
