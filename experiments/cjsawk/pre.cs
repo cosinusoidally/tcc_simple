@@ -30,12 +30,10 @@ public class Program
   }
 
   static int OR(int a, int b) {
-    not_impl("OR int int");
-    return 0;
+    return a | b;
   }
   static bool OR(bool a, bool b) {
-    not_impl("OR bool bool");
-    return false;
+    return a | b;
   }
 
   static int AND(int a, int b) { return a & b; }
