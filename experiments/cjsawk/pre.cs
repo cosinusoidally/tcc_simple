@@ -79,7 +79,7 @@ public class Program
   }
 
   static int v_calloc(int a, int b) {
-    not_impl("v_fcalloc");
+    not_impl("v_calloc");
     return 0;
   }
   static int v_free(int a) {
