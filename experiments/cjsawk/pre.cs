@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 public class Program
 {
@@ -172,6 +173,7 @@ public class Program
   }
 
   static int in_file_num = 5;
+  static byte[] in_file_bytes;
   static int out_file_num = 6;
 
   static int open(int pathname, int flags, int mode) {
@@ -179,6 +181,7 @@ public class Program
     Console.WriteLine("open name: "+ path + " flags: "+flags+" mode: "+mode);
     if((flags == 0 ) && (mode == 0)) {
       Console.WriteLine("Opening " + path + " for reading");
+      in_file_bytes=File.ReadAllBytes(path);
       return in_file_num;
     } else if((flags == 577 ) && (mode == 384)) {
       Console.WriteLine("Opening " + path + " for writing");
