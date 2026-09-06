@@ -64,14 +64,15 @@ public class Program
     return fgetc(a);
   }
   static int v_fputs(int a, int b) {
-    not_impl("v_fputs");
+    Console.Write(mk_cs_string(a));
+//    not_impl("v_fputs");
     return 0;
   }
   static int v_fopen(int a, int b) {
     return fopen(a, b);
   }
   static int v_fclose(int a) {
-    not_impl("v_fclose");
+//    Console.WriteLine("close: "+a);
     return 0;
   }
 
@@ -79,7 +80,6 @@ public class Program
     return calloc(a, b);
   }
   static int v_free(int a) {
-    not_impl("v_free");
     return 0;
   }
 
@@ -89,8 +89,9 @@ public class Program
   }
 
   static int mkC(string a) {
-    not_impl("mkC");
-    return 0;
+    int c = char.ConvertToUtf32(a,0);
+//    Console.WriteLine(a+" " +c);
+    return c;
   }
 
   static int init_support() {
@@ -182,7 +183,6 @@ public class Program
   }
 
   static int mkc(int c) {
-    Console.WriteLine("mkc: "+c);
     return c;
   }
 
@@ -194,26 +194,23 @@ public class Program
 
   static int open(int pathname, int flags, int mode) {
     string path = mk_cs_string(pathname);
-    Console.WriteLine("open name: "+ path + " flags: "+flags+" mode: "+mode);
+//    Console.WriteLine("open name: "+ path + " flags: "+flags+" mode: "+mode);
     if((flags == 0 ) && (mode == 0)) {
-      Console.WriteLine("Opening " + path + " for reading");
+//      Console.WriteLine("Opening " + path + " for reading");
       in_file_bytes=File.ReadAllBytes(path);
       return in_file_num;
     } else if((flags == 577 ) && (mode == 384)) {
-      Console.WriteLine("Opening " + path + " for writing");
+//      Console.WriteLine("Opening " + path + " for writing");
       return out_file_num;
     } else {
       throw new Exception("open");
     }
-    not_impl("open");
-    return 0;
   }
 
   static string mk_cs_string(int p) {
-    int i=0;
     int c;
     string t = "";
-    Console.WriteLine(p);
+//    Console.WriteLine(p);
     c = ri8(p);
     while(c!=0) {
 /* FIXME quadratic */
@@ -226,7 +223,7 @@ public class Program
   }
 
   static void init_cs() {
-    Console.WriteLine("init_cs called");
+//    Console.WriteLine("init_cs called");
     heap = new byte[16*1024*1024];
     brk_ptr = 128*1024;
   }

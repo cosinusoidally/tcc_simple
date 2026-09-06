@@ -1,5 +1,5 @@
   public static int Main(string[] args) {
-    Console.WriteLine("Hello world");
+//    Console.WriteLine("Hello world");
 //    not_impl("blah");
     init_cs();
     int cmd=mks("cjsawk.exe");
