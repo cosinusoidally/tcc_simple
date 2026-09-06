@@ -171,16 +171,24 @@ public class Program
     return c;
   }
 
-  static int in_file = 5;
+  static int in_file_num = 5;
   static int out_file_num = 6;
 
   static int open(int pathname, int flags, int mode) {
     string path = mk_cs_string(pathname);
     Console.WriteLine("open name: "+ path + " flags: "+flags+" mode: "+mode);
+    if((flags == 0 ) && (mode == 0)) {
+      Console.WriteLine("Opening " + path + " for reading");
+      return in_file_num;
+    } else if((flags == 577 ) && (mode == 384)) {
+      Console.WriteLine("Opening " + path + " for writing");
+      return out_file_num;
+    } else {
+      throw new Exception("open");
+    }
     not_impl("open");
     return 0;
   }
-
 
   static string mk_cs_string(int p) {
     int i=0;
