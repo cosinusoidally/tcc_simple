@@ -14,7 +14,7 @@ public class Program
     int i;
     int p = malloc(a.Length+1);
     for(i=0; i<a.Length; i++) {
-      wi8(p, char.ConvertToUtf32(a,i));
+      wi8(p+i, char.ConvertToUtf32(a,i));
 //      Console.WriteLine(i+":"+char.ConvertToUtf32(a,i));
     }
     wi8(p+i,0);
@@ -22,8 +22,7 @@ public class Program
     return p;
   }
   static int ri8(int a) {
-    not_impl("ri8");
-    return 0;
+    return heap[a];
   }
   static int wi8(int a, int b) {
     heap[a]=(byte)(b & 255);
@@ -130,6 +129,22 @@ public class Program
       brk_ptr = addr;
       return addr;
     }
+  }
+
+  static string mk_cs_string(int p) {
+    int i=0;
+    int c;
+    string t = "";
+    Console.WriteLine(p);
+    c = ri8(p);
+    while(c!=0) {
+/* FIXME quadratic */
+      t = t + ((char)c).ToString();
+//      Console.WriteLine(t); 
+      p=p+1;
+      c=ri8(p);
+    }
+    return t;
   }
 
   static void init_cs() {
