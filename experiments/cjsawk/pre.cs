@@ -68,8 +68,7 @@ public class Program
     return 0;
   }
   static int v_fopen(int a, int b) {
-    not_impl("v_fopen");
-    return 0;
+    return fopen(a, b);
   }
   static int v_fclose(int a) {
     not_impl("v_fclose");
@@ -148,6 +147,34 @@ public class Program
       return addr;
     }
   }
+
+  static int fopen(int filename, int mode) {
+    int f;
+    if(eq(mkc('w'), ri8(mode))) {
+      /* 577 is O_WRONLY|O_CREAT|O_TRUNC, 384 is 600 in octal */
+      f = open(filename, 577 , 384);
+    } else {
+      /* Everything else is a read */
+      f = open(filename, 0, 0);
+    }
+
+    /* Negative numbers are error codes */
+    if(gt(0, f)) {
+      return 0;
+    }
+    return f;
+  }
+
+  static int mkc(int c) {
+    Console.WriteLine("mkc: "+c);
+    return c;
+  }
+
+  static int open(int pathname, int flags, int mode) {
+    not_impl("open");
+    return 0;
+  }
+
 
   static string mk_cs_string(int p) {
     int i=0;
