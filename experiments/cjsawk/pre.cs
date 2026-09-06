@@ -2,8 +2,10 @@ using System;
 
 public class Program
 {
+  static bool LTRUE = true;
+
   static void not_impl(string a) {
-    Console.WriteLine("Test: "+a);
+    Console.WriteLine("not_impl: "+a);
     Environment.Exit(1);
   }
   static int mks(string a) {
@@ -64,4 +66,8 @@ public class Program
 
   static int init_support() { return 0; }
 
-  static bool LTRUE = true;
+
+  static void init_cs() {
+    Console.WriteLine("init_cs called");
+
+  }
