@@ -48,14 +48,14 @@ public class Program
   static int div(int a, int b) { return a / b; }
   static int mod(int a, int b) { return a % b; }
 
-  static bool neq(int a, int b) { return false; }
-  static bool lt(int a, int b) { return false; }
+  static bool neq(int a, int b) { return a != b; }
+  static bool lt(int a, int b) { return a < b; }
 
-  static bool eq(int a, int b) { return false; }
-  static bool eq(int a, bool b) { return false; }
-  static bool gt(int a, int b) { return false; }
-  static bool gte(int a, int b) { return false; }
-  static bool lte(int a, int b) { return false; }
+  static bool eq(int a, int b) { return a == b; }
+  static bool eq(int a, bool b) { return Convert.ToBoolean(a) == b; }
+  static bool gt(int a, int b) { return a > b; }
+  static bool gte(int a, int b) { return a >= b; }
+  static bool lte(int a, int b) { return a <= b; }
 
   static bool TO_BOOL(int a) { return false; }
 
