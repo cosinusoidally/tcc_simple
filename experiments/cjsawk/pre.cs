@@ -79,8 +79,7 @@ public class Program
   }
 
   static int v_calloc(int a, int b) {
-    not_impl("v_calloc");
-    return 0;
+    return calloc(a, b);
   }
   static int v_free(int a) {
     not_impl("v_free");
@@ -120,6 +119,27 @@ public class Program
     old_malloc = _malloc_ptr;
     _malloc_ptr = add(_malloc_ptr, size);
     return old_malloc;
+  }
+
+  static int memset(int ptr, int value, int num) {
+    int s;
+    s = ptr;
+    while(lt(0, num)) {
+      wi8(s, value);
+      s = add(s, 1);
+      num = sub(num, 1);
+    }
+    return 0;
+  }
+
+  static int calloc(int count, int size) {
+    int ret;
+    ret = malloc(mul(count, size));
+    if(eq(NULL, ret)) {
+            return NULL;
+    }
+    memset(ret, 0, mul(count, size));
+    return ret;
   }
 
   static int brk(int addr) {
