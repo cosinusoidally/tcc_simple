@@ -1,5 +1,11 @@
+using System;
+
 public class Program
 {
+  static void not_impl(string a) {
+    Console.WriteLine("Test: "+a);
+    Environment.Exit(1);
+  }
   static int mks(string a) { return 0; }
 
   static int ri8(int a) { return 0; }
