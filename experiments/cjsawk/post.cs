@@ -1,7 +1,8 @@
   public static int Main(string[] args) {
 //    Console.WriteLine("Hello world");
 //    not_impl("blah");
-    Console.OutputEncoding=new System.Text.Encoding.UTF8Encoding(false);
+/* to avoid UTF-8 output having a BOM */
+    Console.OutputEncoding=new System.Text.UTF8Encoding(false);
     init_cs();
     int cmd=mks("cjsawk.exe");
     int inp=mks(args[0]);
