@@ -148,6 +148,7 @@ public class Program
     }
   }
 
+
   static int fopen(int filename, int mode) {
     int f;
     if(eq(mkc('w'), ri8(mode))) {
@@ -169,6 +170,9 @@ public class Program
     Console.WriteLine("mkc: "+c);
     return c;
   }
+
+  static int in_file = 5;
+  static int out_file_num = 6;
 
   static int open(int pathname, int flags, int mode) {
     not_impl("open");
