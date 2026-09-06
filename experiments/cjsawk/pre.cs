@@ -3,12 +3,17 @@ using System;
 public class Program
 {
   static bool LTRUE = true;
+  static byte[] heap;
+  static int brk_ptr;
 
   static void not_impl(string a) {
     Console.WriteLine("not_impl: "+a);
     Environment.Exit(1);
   }
   static int mks(string a) {
+    for(int i=0; i<a.Length; i++) {
+      Console.WriteLine(i+":"+char.ConvertToUtf32(a,i));
+    }
     not_impl("mks");
     return 0;
   }
@@ -66,8 +71,8 @@ public class Program
 
   static int init_support() { return 0; }
 
-
   static void init_cs() {
     Console.WriteLine("init_cs called");
-
+    heap = new byte[16*1024*1024];
+    brk_ptr = 128*1024;
   }
