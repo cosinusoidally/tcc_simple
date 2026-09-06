@@ -66,18 +66,42 @@ public class Program
     not_impl("v_fgetc");
     return 0;
   }
-  static int v_fputs(int a, int b) { return 0; }
-  static int v_fopen(int a, int b) { return 0; }
-  static int v_fclose(int a) { return 0; }
+  static int v_fputs(int a, int b) {
+    not_impl("v_fputs");
+    return 0;
+  }
+  static int v_fopen(int a, int b) {
+    not_impl("v_fopen");
+    return 0;
+  }
+  static int v_fclose(int a) {
+    not_impl("v_fclose");
+    return 0;
+  }
 
-  static int v_calloc(int a, int b) { return 0; }
-  static int v_free(int a) { return 0; }
+  static int v_calloc(int a, int b) {
+    not_impl("v_fcalloc");
+    return 0;
+  }
+  static int v_free(int a) {
+    not_impl("v_free");
+    return 0;
+  }
 
-  static int v_exit(int a) { return 0; }
+  static int v_exit(int a) {
+    not_impl("v_exit");
+    return 0;
+  }
 
-  static int mkC(string a) { return 0; }
+  static int mkC(string a) {
+    not_impl("mkC");
+    return 0;
+  }
 
-  static int init_support() { return 0; }
+  static int init_support() {
+    Console.WriteLine("init_support called");
+    return 0;
+  }
 
   static int _malloc_ptr;
   static int _brk_ptr;
