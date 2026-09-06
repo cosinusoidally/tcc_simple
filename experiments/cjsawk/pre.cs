@@ -95,7 +95,7 @@ public class Program
   }
 
   static int init_support() {
-    Console.WriteLine("init_support called");
+//    Console.WriteLine("init_support called");
     return 0;
   }
 
