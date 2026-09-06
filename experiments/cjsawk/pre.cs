@@ -36,8 +36,8 @@ public class Program
     return false;
   }
 
-  static int AND(int a, int b) { return 0; }
-  static bool AND(bool a, bool b) { return false; }
+  static int AND(int a, int b) { return a & b; }
+  static bool AND(bool a, bool b) { return a & b; }
 
   static int shl(int a, int b) { return a << b; }
   static int shr(int a, int b) { return a >> b; }
@@ -57,9 +57,12 @@ public class Program
   static bool gte(int a, int b) { return a >= b; }
   static bool lte(int a, int b) { return a <= b; }
 
-  static bool TO_BOOL(int a) { return false; }
+  static bool TO_BOOL(int a) { return Convert.ToBoolean(a); }
 
-  static int v_fgetc(int a) { return 0; }
+  static int v_fgetc(int a) {
+    not_impl("v_fgetc");
+    return 0;
+  }
   static int v_fputs(int a, int b) { return 0; }
   static int v_fopen(int a, int b) { return 0; }
   static int v_fclose(int a) { return 0; }
