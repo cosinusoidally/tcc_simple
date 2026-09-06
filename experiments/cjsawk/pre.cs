@@ -11,19 +11,22 @@ public class Program
     Environment.Exit(1);
   }
   static int mks(string a) {
-    int p = malloc(a.Length);
-    for(int i=0; i<a.Length; i++) {
-      Console.WriteLine(i+":"+char.ConvertToUtf32(a,i));
+    int i;
+    int p = malloc(a.Length+1);
+    for(i=0; i<a.Length; i++) {
+      wi8(p, char.ConvertToUtf32(a,i));
+//      Console.WriteLine(i+":"+char.ConvertToUtf32(a,i));
     }
-    not_impl("mks");
-    return 0;
+    wi8(p+i,0);
+//    not_impl("mks");
+    return p;
   }
   static int ri8(int a) {
     not_impl("ri8");
     return 0;
   }
   static int wi8(int a, int b) {
-    not_impl("wi8");
+    heap[a]=(byte)(b & 255);
     return 0;
   }
 
