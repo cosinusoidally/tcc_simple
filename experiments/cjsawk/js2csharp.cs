@@ -37,13 +37,15 @@ public class Program
         }
         t2=String.Join(",", t2a);
         ta[i] = ts + "("+t2+") {";
-      } else {
+      } else if(tl[0]=="var"){
+        tl[0] = "static int";
+        ta[i] = String.Join(" ", tl);
       }
     }
 
     t = String.Join("\n",ta);
     o[1] = t;
     f= String.Join("\n", o);
-    File.WriteAllText(args[1],f);
+    File.WriteAllText(args[1], f, Encoding.ASCII);
   }
 }
