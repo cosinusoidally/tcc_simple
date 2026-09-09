@@ -26,9 +26,17 @@ public class Program
         tl[0] = "static int";
         ts = String.Join(" ", tl);
         tl = ts.Split("(");
+        ts = tl[0];
         string t2 = tl[1].Split(")")[0];
         t2 = String.Join("", t2.Split(" "));
-        ta[i] = ts + "// "+t2;
+        string[] t2a = t2.Split(",");
+        if(t2a[0] != "") {
+          for(int j=0 ; j<t2a.Length ; j++) {
+            t2a[j]="int "+t2a[j];
+          }
+        }
+        t2=String.Join(",", t2a);
+        ta[i] = ts + "("+t2+") {";
       } else {
       }
     }
