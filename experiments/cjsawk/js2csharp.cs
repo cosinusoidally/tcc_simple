@@ -12,6 +12,14 @@ public class Program
     }
     o[0]=File.ReadAllText("pre.cs");
     o[2]=File.ReadAllText("post.cs");
+
+    string t = File.ReadAllText(args[0]);
+
+    string[] ta;
+    ta = t.Split("\n");
+
+    t = String.Join("\n",ta);
+    o[1] = t;
     f= String.Join("\n", o);
     File.WriteAllText(args[1],f);
   }
