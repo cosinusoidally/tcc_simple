@@ -71,7 +71,7 @@ public class Program
     }
     string s = mk_cs_string(a);
     out_file_strings.Add(s);
-    Console.Write(s);
+//    Console.Write(s);
 //    not_impl("v_fputs");
     return 0;
   }
