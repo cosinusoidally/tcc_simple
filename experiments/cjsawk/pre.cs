@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 public class Program
 {
@@ -65,7 +66,12 @@ public class Program
     return fgetc(a);
   }
   static int v_fputs(int a, int b) {
-    Console.Write(mk_cs_string(a));
+    if(b!=out_file_num) {
+      throw new Exception("out_file_num invalid: "+out_file_num);
+    }
+    string s = mk_cs_string(a);
+    out_file_strings.Add(s);
+    Console.Write(s);
 //    not_impl("v_fputs");
     return 0;
   }
@@ -192,6 +198,7 @@ public class Program
   static int in_file_offset = 0;
 
   static int out_file_num = 6;
+  static List<string> out_file_strings = new List<string>();
 
   static int open(int pathname, int flags, int mode) {
     string path = mk_cs_string(pathname);
