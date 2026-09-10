@@ -16,7 +16,7 @@ public class Program
     string t = File.ReadAllText(args[0]);
 
     string[] ta;
-    ta = t.Split("\n");
+    ta = t.Split('\n');
 
     for(int i=0;i<ta.Length;i++) {
       string[] tl;
