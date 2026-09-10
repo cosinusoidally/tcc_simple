@@ -80,6 +80,9 @@ public class Program
   }
   static int v_fclose(int a) {
 //    Console.WriteLine("close: "+a);
+    if(a == out_file_num) {
+      File.WriteAllText("out3.M1", string.Concat(out_file_strings), Encoding.ASCII);
+    }
     return 0;
   }
 
