@@ -21,15 +21,15 @@ public class Program
     for(int i=0;i<ta.Length;i++) {
       string[] tl;
       string ts;
-      tl=ta[i].Split(" ");
+      tl=ta[i].Split(' ');
       if(tl[0]=="function") {
         tl[0] = "static int";
         ts = String.Join(" ", tl);
-        tl = ts.Split("(");
+        tl = ts.Split('(');
         ts = tl[0];
-        string t2 = tl[1].Split(")")[0];
-        t2 = String.Join("", t2.Split(" "));
-        string[] t2a = t2.Split(",");
+        string t2 = tl[1].Split(')')[0];
+        t2 = t2.Replace(" ", "");
+        string[] t2a = t2.Split(',');
         if(t2a[0] != "") {
           for(int j=0 ; j<t2a.Length ; j++) {
             t2a[j]="int "+t2a[j];
