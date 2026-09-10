@@ -81,7 +81,7 @@ public class Program
   static int v_fclose(int a) {
 //    Console.WriteLine("close: "+a);
     if(a == out_file_num) {
-      File.WriteAllText("out3.M1", string.Concat(out_file_strings), Encoding.ASCII);
+      File.WriteAllText(out_file_name, string.Concat(out_file_strings), Encoding.ASCII);
     }
     return 0;
   }
@@ -202,6 +202,7 @@ public class Program
 
   static int out_file_num = 6;
   static List<string> out_file_strings = new List<string>();
+  static string out_file_name;
 
   static int open(int pathname, int flags, int mode) {
     string path = mk_cs_string(pathname);
@@ -212,6 +213,7 @@ public class Program
       return in_file_num;
     } else if((flags == 577 ) && (mode == 384)) {
 //      Console.WriteLine("Opening " + path + " for writing");
+      out_file_name = path;
       return out_file_num;
     } else {
       throw new Exception("open");
