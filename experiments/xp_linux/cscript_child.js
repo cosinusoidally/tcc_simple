@@ -1,9 +1,5 @@
 print("hello world from child");
 
-print("cwd: "+getcwd());
-chdir("../cjsawk");
-print("cwd: "+getcwd());
-
 Uint8Array=Array;
 
 read_ =read;
@@ -21,17 +17,36 @@ read = function(x,y){
   return t;
 }
 
-fname="../xp_linux/min_win32_asm.M1";
-load("m0_test.js");
+var tool;
+if(tool == ("m0")) {
+  load("m0_test.js");
+} else if(tool == "hex2") {
+  load("hex2_test.js");
+} else {
+  throw "unsupported tool";
+}
 
-gen_out = function(){
-  print("in gen_out");
-  for(var i=0;i<out_file.length;i++){
-     out_file[i]=String.fromCharCode(out_file[i]);
+gen_out = function(f){
+  print("in gen_out writing: "+f);
+//  print(out_file);
+  if(tool == "m0") {
+    for(var i=0;i<out_file.length;i++){
+      out_file[i]=String.fromCharCode(out_file[i]);
+    }
+    out_file = out_file.join("");
+    writeFile(f, out_file);
+    return out_file;
+  } else if(tool == "hex2") {
+    for(var i =0;i<out_file.length;i++) {
+      out_file[i]=("0000"+(out_file[i]&0xFF).toString(16)).slice(-2);
+      if((((i+1)%16) == 0)) {out_file[i]=out_file[i]+"\n"}
+    }
+    out_file=out_file.join("");
+    writeFile(f, out_file);
+  } else {
+    print("not supported tool");
+    throw "error";
   }
-  out_file = out_file.join("");
-  writeFile("../xp_linux/artifacts/result.hex2", out_file);
-  return out_file;
 }
 
 mkc_= mkc;
@@ -51,4 +66,9 @@ mkC=function(x){
   return mkc(x);
 }
 
-go();
+go = function(cmdline) {
+  var args;
+  args=mk_args(cmdline);
+  main(args[0], args[1]);
+  gen_out(cmdline.split(" ")[2]);
+}
