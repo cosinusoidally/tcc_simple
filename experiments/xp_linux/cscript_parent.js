@@ -47,61 +47,48 @@ var engine = new ActiveXObject("MSScriptControl.ScriptControl");
 engine.Language = "JScript";
 load_order=[];
 function load(x) {
-    print("Loading: " + x);
-    var code = read(x);
-//print(code);
-load_order.push([x,code.split("\n").length+1]);
-if(x=="m0_test.js") {
-  print("apply hack");
-  code=code.split("\n");
-  code.pop();
-  code.pop();
-  code=code.join("\n");
-  print(code);
-}
+  print("Loading: " + x);
+  var code = read(x);
+
+  if(x=="m0_test.js") {
+    print("apply hack (to not run go() straight away)");
+    code=code.split("\n");
+    code.pop();
+    code.pop();
+    code=code.join("\n");
+    print(code);
+  }
     
-    // This executes your file code directly in the engine's global scope
-    try{
+  // This executes your file code directly in the engine's global scope
+  try{
     engine.AddCode(code);
-    } catch(e) {
-//      print(engine.Error);
-            var err = engine.Error;
+  } catch(e) {
+    var err = engine.Error;
+           
+    // 2. Format a comprehensive error message
+    /* FIXME the line number is nonesense */
+    var errorLog = "\n=== ENGINE ENGINE ERROR ===\n" +
+                   "File:        " + x + "\n" +
+                   "Line Number: " + err.Line + "\n" +
+                   "Character:   " + err.Column + "\n" +
+                   "Description: " + err.Description + "\n";
             
-            // 2. Format a comprehensive error message
-            var errorLog = "\n=== ENGINE ENGINE ERROR ===\n" +
-                           "File:        " + x + "\n" +
-                           "Line Number: " + err.Line + "\n" +
-                           "Character:   " + err.Column + "\n" +
-                           "Description: " + err.Description + "\n";
-            
-            // Add the specific source code snippet if available
-            if (err.Text) {
-                errorLog += "Source Code: " + err.Text + "\n";
-            }
-            errorLog += "===========================\n";
-            
-            // 3. Output the debug log to the console
-            WScript.Echo(errorLog);
-            
-            // 4. Clear the engine error state so it doesn't leak into subsequent loads
-for(var i =0;i<load_order.length;i++){
-  print(load_order[i]);
-}
-var t = err.Line;
-print(t);
-var j=0;
-i=load_order[j][1];
-while(t>i){
-t=t-i;
-j++;
-i=load_order[j][1];
-}
-print(load_order[j][0]+":" +t);
-            engine.Error.Clear();
-            WScript.Quit();
+    // Add the specific source code snippet if available
+    if (err.Text) {
+      errorLog += "Source Code: " + err.Text + "\n";
     }
+    errorLog += "===========================\n";
+            
+    // 3. Output the debug log to the console
+    WScript.Echo(errorLog);
+            
+    // 4. Clear the engine error state so it doesn't leak into subsequent loads
+    engine.Error.Clear();
+            WScript.Quit();
+  }
 }
 
+/* thse functions are exposed to the child */
 hostBridge = {
   print: function(x) {print(x)},
   load: load,
