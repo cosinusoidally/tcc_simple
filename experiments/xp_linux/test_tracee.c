@@ -364,6 +364,8 @@ int vm_exit_() {
     extract_file("artifacts/tcc_27_4.o", "artifacts/tcc_27_4.o");
     extract_file("artifacts/otccelf_cc_x86_min.exe", "artifacts/otccelf_cc_x86_min.exe");
     extract_file("artifacts/elf_loader.exe", "artifacts/elf_loader.exe");
+    extract_file("stubs.o", "artifacts/stubs.o");
+    extract_file("my_libc.o", "artifacts/my_libc.o");
     exit(error_code);
   }
 }
