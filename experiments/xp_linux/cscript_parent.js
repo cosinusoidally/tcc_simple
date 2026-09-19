@@ -119,4 +119,51 @@ function run(cmdline) {
 run("m0 ../xp_linux/min_win32_asm.M1 ../xp_linux/artifacts/min_win32_cscript.hex2");
 run("hex2 ../xp_linux/artifacts/min_win32_cscript.hex2 ../xp_linux/artifacts/min_win32_cscript1.exe.tmp dummy");
 run("hex2 ../xp_linux/artifacts/min_win32_cscript.hex2 ../xp_linux/artifacts/min_win32_cscript2.exe.tmp dummy dummy");
+
+out=[];
+
+out1 = readFile("../xp_linux/artifacts/min_win32_cscript1.exe.tmp");
+out1 = out1.split("\n").join("").split("");
+out2 = readFile("../xp_linux/artifacts/min_win32_cscript2.exe.tmp");
+out2 = out2.split("\n").join("").split("");
+
+//print(out1);
+//print(out2);
+
+var i = 0;
+
+while(i<1024) {
+  out[i] =out1[i];
+  i=i+1;
+}
+
+while(i<2*(5.2*1024)) {
+  out[i]= out2[i];
+  i = i + 1;
+}
+
+while(i < 2*(6.5*1024)) {
+  out[i] = out1[i];
+  i = i + 1;
+}
+
+for(i=0;i<out.length;i++) {
+  if(((i+1) % 32) == 0) { out[i]=out[i]+"\n"; }
+}
+
+out = out.join("");
+
+//print(out);
+
+writeFile("../xp_linux/artifacts/bin.hex", out);
+
+var shell = new ActiveXObject("WScript.Shell");
+var command = "certutil -decodehex ../xp_linux/artifacts/bin.hex ../xp_linux/artifacts/bin.exe";
+res=shell.Run(command, 0, true);
+if (res === 0) {
+  print("Success: Binary file created successfully.");
+} else {
+  print("Error: certutil failed with exit code: " + res);
+}
+
 print("got here");
