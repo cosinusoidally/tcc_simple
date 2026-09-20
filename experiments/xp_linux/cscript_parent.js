@@ -52,7 +52,7 @@ function new_engine() {
     print("Loading: " + x);
     var code = read(x);
 
-    if((x=="m0_test.js") || (x == "hex2_test.js")) {
+    if((x=="m0_test.js") || (x == "hex2_test.js") || (x == "cjsawk_test.js")) {
       print("apply hack (to not run go() straight away)");
       code=code.split("\n");
       code.pop();
@@ -116,6 +116,17 @@ function run(cmdline) {
   e.engine.AddCode('go("'+cmdline+'")');
 }
 
+function hex2bin(file_in, file_out) {
+  var shell = new ActiveXObject("WScript.Shell");
+  var command = "certutil -decodehex "+file_in+" "+file_out;
+  var res=shell.Run(command, 0, true);
+  if (res === 0) {
+    print("Success: Binary file created successfully: "+file_out);
+  } else {
+    print("Error: certutil failed with exit code: " + res);
+  }
+}
+
 run("m0 ../xp_linux/min_win32_asm.M1 ../xp_linux/artifacts/min_win32_cscript.hex2");
 run("hex2 ../xp_linux/artifacts/min_win32_cscript.hex2 ../xp_linux/artifacts/min_win32_cscript1.exe.tmp dummy");
 run("hex2 ../xp_linux/artifacts/min_win32_cscript.hex2 ../xp_linux/artifacts/min_win32_cscript2.exe.tmp dummy dummy");
@@ -157,13 +168,37 @@ out = out.join("");
 
 writeFile("../xp_linux/artifacts/bin.hex", out);
 
-var shell = new ActiveXObject("WScript.Shell");
-var command = "certutil -decodehex ../xp_linux/artifacts/bin.hex ../xp_linux/artifacts/bin.exe";
-res=shell.Run(command, 0, true);
-if (res === 0) {
-  print("Success: Binary file created successfully.");
-} else {
-  print("Error: certutil failed with exit code: " + res);
+hex2bin("../xp_linux/artifacts/bin.hex", "../xp_linux/artifacts/bin.exe");
+
+function concat(a) {
+  var t =[];
+  for(var i=0; i<a.length;i++){
+    t.push(readFile(a[i]));
+  }
+  return t.join("");
 }
+
+print("cwd: "+getcwd());
+tmp = concat(["../xp_linux/globals.js", "../xp_linux/xp_linux.js"]);
+
+writeFile("../xp_linux/artifacts/xp_linux_full_cscript.js", tmp);
+
+run("cjsawk ../xp_linux/artifacts/xp_linux_full_cscript.js ../xp_linux/artifacts/xp_linux.exe.cscript.M1");
+
+tmp = concat(["../m2min_v3/simple_asm_defs.M1",
+              "../m2min_v3/x86_defs.M1",
+              "../m2min_v3/libc-core.M1",
+              "../xp_linux/artifacts/xp_linux.exe.cscript.M1"]);
+writeFile("../xp_linux/artifacts/xp_linux.exe-0.cscript.M1", tmp);
+
+run("m0 ../xp_linux/artifacts/xp_linux.exe-0.cscript.M1 ../xp_linux/artifacts/xp_linux.exe.cscript.hex2");
+
+tmp = concat(["../m2min_v3/ELF-i386.hex2",
+              "../xp_linux/artifacts/xp_linux.exe.cscript.hex2"]);
+writeFile("../xp_linux/artifacts/xp_linux.exe-0.cscript.hex2", tmp);
+
+run("hex2 ../xp_linux/artifacts/xp_linux.exe-0.cscript.hex2 ../xp_linux/artifacts/xp_linux.cscript.exe.hexdump");
+
+hex2bin("../xp_linux/artifacts/xp_linux.cscript.exe.hexdump", "../xp_linux/artifacts/xp_linux.cscript.exe");
 
 print("got here");

@@ -22,8 +22,11 @@ if(tool == ("m0")) {
   load("m0_test.js");
 } else if(tool == "hex2") {
   load("hex2_test.js");
+} else if(tool == "cjsawk") {
+  load("cjsawk_test.js");
 } else {
-  throw "unsupported tool";
+  print("unsupported tool");
+  throw "error";
 }
 
 gen_out = function(f){
@@ -43,6 +46,13 @@ gen_out = function(f){
     }
     out_file=out_file.join("");
     writeFile(f, out_file);
+  } else if(tool == "cjsawk") {
+    for(var i=0;i<out_file.length;i++){
+      out_file[i]=String.fromCharCode(out_file[i]);
+    }
+    out_file = out_file.join("");
+    writeFile(f, out_file);
+    return out_file;
   } else {
     print("not supported tool");
     throw "error";
