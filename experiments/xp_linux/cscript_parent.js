@@ -118,12 +118,14 @@ function run(cmdline) {
 
 function hex2bin(file_in, file_out) {
   var shell = new ActiveXObject("WScript.Shell");
-  var command = "certutil -decodehex "+file_in+" "+file_out;
+//  var command = "certutil -decodehex "+file_in+" "+file_out;
+// use vbs hex2bin since certutil isn't available everywhere (eg in winpe/xp)
+  var command = "cscript ../xp_linux/hex2bin.vbs "+file_in+" "+file_out;
   var res=shell.Run(command, 0, true);
   if (res === 0) {
     print("Success: Binary file created successfully: "+file_out);
   } else {
-    print("Error: certutil failed with exit code: " + res);
+    print("Error: hex2bin failed with exit code: " + res);
   }
 }
 
